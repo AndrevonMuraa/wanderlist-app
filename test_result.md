@@ -101,3 +101,325 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Rebuild WanderList as an Expo/React Native app suitable for App Store publishing with comprehensive features including authentication, landmark tracking, visits with camera, user-suggested landmarks, leaderboard, and friends system."
+
+backend:
+  - task: "Database seeding with countries and landmarks"
+    implemented: true
+    working: "NA"
+    file: "backend/seed_data.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Created seed_data.py with 10 countries and 100 landmarks (10 per country) including Norway with 'The Old Town of Fredrikstad'"
+  
+  - task: "Authentication - JWT email/password"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented register, login endpoints with JWT tokens. Password hashing with bcrypt."
+
+  - task: "Authentication - Google OAuth (Emergent)"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented Google OAuth callback endpoint, session management with httpOnly cookies"
+
+  - task: "Countries API endpoints"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "GET /api/countries endpoint with landmark counts"
+
+  - task: "Landmarks API endpoints"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "GET /api/landmarks (with filters), GET /api/landmarks/:id, POST /api/landmarks (user-suggested), POST /api/landmarks/:id/upvote"
+
+  - task: "Visits API endpoints"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "GET /api/visits, POST /api/visits with photo base64, comments, diary notes"
+
+  - task: "Leaderboard API endpoint"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "GET /api/leaderboard with premium (global) and freemium (friends-only) support"
+
+  - task: "Friends API endpoints"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "GET /api/friends, POST /api/friends/request, POST /api/friends/:id/accept, GET /api/friends/pending"
+
+  - task: "Stats API endpoint"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "GET /api/stats returning total_visits, countries_visited, continents_visited, friends_count"
+
+frontend:
+  - task: "Authentication Context with Google and JWT"
+    implemented: true
+    working: "NA"
+    file: "frontend/contexts/AuthContext.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented AuthContext with login, register, loginWithGoogle, logout, refreshUser functions. Platform-specific OAuth handling for mobile and web."
+
+  - task: "Login and Register screens"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/(auth)/login.tsx, frontend/app/(auth)/register.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created login and register screens with Material Design (react-native-paper), Google OAuth button, form validation"
+
+  - task: "Main navigation with tabs"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/(tabs)/_layout.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "4 tabs: Explore, My Journey, Leaderboard, Profile with proper icons and styling"
+
+  - task: "Explore screen with countries"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/(tabs)/explore.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Country list with continent filters, search, landmark counts, navigation to landmarks"
+
+  - task: "Landmarks screen by country"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/landmarks/[country_id].tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Display 10 landmarks per country with images, descriptions, navigation to details"
+
+  - task: "Landmark detail screen"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/landmark-detail/[landmark_id].tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Full landmark details with upvote functionality for user-suggested landmarks, Mark as Visited button"
+
+  - task: "Add visit screen with camera"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/add-visit/[landmark_id].tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Camera and gallery picker with expo-image-picker, base64 storage, comments and diary notes fields"
+
+  - task: "My Journey screen"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/(tabs)/journey.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Displays user's visits with photos, stats (visits, countries, continents), progress bar"
+
+  - task: "Leaderboard screen"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/(tabs)/leaderboard.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Shows global leaderboard for premium users, friends leaderboard for freemium users. Trophy badges for top 3."
+
+  - task: "Profile screen"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/(tabs)/profile.tsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "User profile with avatar, stats grid, premium badge, logout button, navigation to friends"
+
+  - task: "User-suggested landmarks screen"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/user-landmarks.tsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "List of community-suggested landmarks with upvote counts, FAB to suggest new landmark"
+
+  - task: "Suggest landmark screen"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/suggest-landmark.tsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Form to suggest new landmarks with name, country picker, description, image URL, image preview"
+
+  - task: "Friends screen"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/friends.tsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Add friends by email, view friend list, pending requests section, accept friend requests"
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Database seeding"
+    - "Authentication endpoints (both JWT and Google OAuth)"
+    - "Countries API"
+    - "Landmarks API (official and user-suggested)"
+    - "Visits API"
+    - "Leaderboard API"
+    - "Friends API"
+    - "Stats API"
+  stuck_tasks: []
+  test_all: true
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Built complete WanderList Expo/React Native app with:
+    
+    BACKEND (FastAPI):
+    - Dual authentication: JWT email/password + Google OAuth (Emergent)
+    - 10 countries with 100 landmarks (10 each), including Norway with 'The Old Town of Fredrikstad'
+    - Official landmarks + user-suggested landmarks system
+    - Visit tracking with base64 photo storage, comments, diary notes
+    - Leaderboard system: Premium users see global rankings, Freemium users see friends rankings
+    - Friends system: Send requests, accept, view friends list
+    - Stats API for user progress
+    - All MongoDB queries exclude _id field per best practices
+    - User-suggested landmarks have upvote functionality
+    
+    FRONTEND (Expo/React Native):
+    - Material Design UI with react-native-paper
+    - Bottom tab navigation: Explore, My Journey, Leaderboard, Profile
+    - Auth flow with login, register, Google OAuth
+    - Explore countries by continent with search
+    - View 10 landmarks per country with details
+    - Add visits with camera/gallery picker (expo-image-picker)
+    - Track personal journey with stats and progress
+    - Leaderboard with premium/freemium tiers
+    - Suggest landmarks with country picker and image preview
+    - Friends management system
+    
+    READY FOR BACKEND TESTING. All endpoints need to be tested with curl including:
+    - Registration and login
+    - Token authentication
+    - CRUD operations on landmarks, visits, friends
+    - Leaderboard calculations
+    - Stats aggregation"
