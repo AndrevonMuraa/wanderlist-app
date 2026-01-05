@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, Image, Dimensions } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, Image, Dimensions, Platform } from 'react-native';
 import { Text, Searchbar, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -12,6 +12,15 @@ import theme from '../../styles/theme';
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2; // 2 columns with spacing
+
+// Helper to get token (works on both web and native)
+const getToken = async (): Promise<string | null> => {
+  if (Platform.OS === 'web') {
+    return localStorage.getItem('auth_token');
+  } else {
+    return await SecureStore.getItemAsync('auth_token');
+  }
+};
 
 interface Country {
   country_id: string;
