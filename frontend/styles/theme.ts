@@ -1,49 +1,52 @@
-// WanderList Design System - Ultra Light & Airy Aesthetic
+// WanderList Design System - Luxury Travel Magazine Aesthetic
+// Inspired by editorial travel magazines with Maldivean ocean vibes
 
 export const colors = {
-  // Primary Colors - Ultra Light
-  primary: '#A8C5A8',        // Very light sage - soft, natural
-  primaryDark: '#8BAF8B',    // Muted sage
-  primaryLight: '#C8DBC8',   // Almost white sage
+  // Primary Colors - Maldivean Ocean Blues
+  primary: '#4DB8D8',        // Maldivean turquoise - vibrant ocean
+  primaryDark: '#2E9AB5',    // Deep ocean blue
+  primaryLight: '#7DCBE3',   // Light tropical water
   
-  // Secondary Colors - Soft Tones
-  secondary: '#B5D4D3',      // Pale aqua - very light ocean
-  secondaryLight: '#D4E8E7', // Almost white aqua
+  // Secondary Colors - Warm Beach Tones
+  secondary: '#E8DCC8',      // Warm sand
+  secondaryLight: '#F5F0E8', // Light sand
   
-  // Accent Colors - Subtle Gold
-  accent: '#E5D5B7',         // Pale gold - very subtle
-  accentWarm: '#E8DCC8',     // Barely-there terracotta
+  // Luxury Accent Colors
+  accent: '#C9A961',         // Rich gold - luxury touch
+  accentBronze: '#B8956A',   // Bronze
+  accentCopper: '#D4A574',   // Copper warmth
   
-  // Neutrals - Ultra Light
-  background: '#FDFCFA',     // Almost white cream
-  surface: '#FFFFFF',        // Pure white
+  // Neutrals - Editorial Sophistication
+  background: '#F5F3F0',     // Warm cream background
+  surface: '#FFFFFF',        // Pure white cards
   surfaceElevated: '#FFFFFF',
-  surfaceTinted: '#F8F6F4',  // Barely tinted
+  surfaceTinted: '#FAF8F5',  // Subtle cream tint
   
-  // Text - Softer
-  text: '#5A5A5A',           // Soft charcoal (lighter)
-  textSecondary: '#8A8A8A',  // Light gray
-  textLight: '#B5B5B5',      // Very light gray
-  textInverse: '#FFFFFF',    // White on dark
+  // Text - Editorial Quality
+  text: '#2A2A2A',           // Deep charcoal - strong contrast
+  textSecondary: '#6B6B6B',  // Medium gray
+  textLight: '#9B9B9B',      // Light gray
+  textInverse: '#FFFFFF',    // White on images
   
-  // Status Colors (ultra muted)
-  success: '#A8C5A8',
-  warning: '#E8DCC8',
-  error: '#D4B5B5',
-  info: '#B5C5D4',
+  // Status Colors
+  success: '#4DB8D8',
+  warning: '#C9A961',
+  error: '#D4747E',
+  info: '#4DB8D8',
   
-  // Tier Colors - Softer
-  free: '#B5B5B5',           // Light gray
-  basic: '#B5C5D4',          // Soft blue
-  premium: '#E5D5B7',        // Pale gold
+  // Tier Colors - Luxury
+  free: '#9B9B9B',           // Gray
+  basic: '#4DB8D8',          // Ocean blue
+  premium: '#C9A961',        // Gold
   
-  // Overlays - Lighter
-  overlay: 'rgba(0, 0, 0, 0.3)',
-  overlayLight: 'rgba(0, 0, 0, 0.15)',
+  // Overlays - For text on images
+  overlay: 'rgba(0, 0, 0, 0.5)',
+  overlayLight: 'rgba(0, 0, 0, 0.25)',
+  overlayStrong: 'rgba(0, 0, 0, 0.65)',
   
-  // Borders - Ultra Subtle
-  border: '#F0EDE8',
-  borderLight: '#F8F6F3',
+  // Borders - Subtle
+  border: '#E8E4DF',
+  borderLight: '#F0EDE8',
   
   // Country-specific accent colors (for national effects)
   countryAccents: {
