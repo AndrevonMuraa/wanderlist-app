@@ -99,44 +99,50 @@ export default function JourneyScreen() {
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#6200ee" />
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
   }
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+      <LinearGradient
+        colors={[theme.colors.primary, theme.colors.secondary]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.header}
+      >
         <Text style={styles.headerTitle}>My Journey</Text>
         <Text style={styles.headerSubtitle}>Your travel memories</Text>
-      </View>
+      </LinearGradient>
 
       {stats && (
         <Surface style={styles.statsCard}>
+          <Text style={styles.statsCardTitle}>Your Progress</Text>
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
-              <Ionicons name="flag" size={24} color="#6200ee" />
+              <Ionicons name="flag-outline" size={28} color={theme.colors.primary} />
               <Text style={styles.statNumber}>{stats.total_visits}</Text>
               <Text style={styles.statLabel}>Visits</Text>
             </View>
             <View style={styles.statItem}>
-              <Ionicons name="map" size={24} color="#6200ee" />
+              <Ionicons name="map-outline" size={28} color={theme.colors.secondary} />
               <Text style={styles.statNumber}>{stats.countries_visited}</Text>
               <Text style={styles.statLabel}>Countries</Text>
             </View>
             <View style={styles.statItem}>
-              <Ionicons name="earth" size={24} color="#6200ee" />
+              <Ionicons name="earth-outline" size={28} color={theme.colors.accent} />
               <Text style={styles.statNumber}>{stats.continents_visited}</Text>
               <Text style={styles.statLabel}>Continents</Text>
             </View>
           </View>
           <ProgressBar
-            progress={stats.total_visits / 100}
-            color="#6200ee"
+            progress={stats.total_visits / 200}
+            color={theme.colors.primary}
             style={styles.progressBar}
           />
           <Text style={styles.progressText}>
-            {stats.total_visits} of 100+ landmarks visited
+            {stats.total_visits} of 200 landmarks visited
           </Text>
         </Surface>
       )}
