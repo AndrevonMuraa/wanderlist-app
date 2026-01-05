@@ -44,11 +44,11 @@ LANDMARKS_DATA = {
         {
             "name": "The Old Town of Fredrikstad", 
             "description": "A well-preserved fortified town with cobblestone streets and historic buildings.", 
-            "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800",
+            "image_url": "https://images.pexels.com/photos/4178799/pexels-photo-4178799.jpeg?auto=compress&cs=tinysrgb&w=800",
             "images": [
-                "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800",
-                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800",
-                "https://images.unsplash.com/photo-1601439678777-b2d6962c6e3f?w=800"
+                "https://images.pexels.com/photos/4178799/pexels-photo-4178799.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/2910597/pexels-photo-2910597.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/35530841/pexels-photo-35530841.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
             "facts": [
                 {
