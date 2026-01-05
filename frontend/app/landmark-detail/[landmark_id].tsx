@@ -20,6 +20,12 @@ const getToken = async (): Promise<string | null> => {
   }
 };
 
+interface LandmarkFact {
+  title: string;
+  text: string;
+  icon: string;
+}
+
 interface Landmark {
   landmark_id: string;
   name: string;
@@ -27,6 +33,11 @@ interface Landmark {
   continent: string;
   description: string;
   image_url: string;
+  images?: string[];
+  facts?: LandmarkFact[];
+  best_time_to_visit?: string;
+  duration?: string;
+  difficulty?: string;
   category: string;
   upvotes: number;
 }
