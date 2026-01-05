@@ -134,10 +134,11 @@ LANDMARKS_DATA = {
         {
             "name": "Nidaros Cathedral", 
             "description": "Norway's national sanctuary, built over the burial site of St. Olav.", 
-            "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800",
+            "image_url": "https://images.pexels.com/photos/28260199/pexels-photo-28260199.jpeg?auto=compress&cs=tinysrgb&w=800",
             "images": [
-                "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800",
-                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800"
+                "https://images.pexels.com/photos/28260199/pexels-photo-28260199.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/28257504/pexels-photo-28257504.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/1900202/pexels-photo-1900202.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
             "facts": [
                 {
