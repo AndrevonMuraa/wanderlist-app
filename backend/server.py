@@ -50,7 +50,34 @@ class UserPublic(BaseModel):
     email: str
     name: str
     picture: Optional[str] = None
-    is_premium: bool = False
+    is_premium: bool = False  # Deprecated
+    subscription_tier: str = "free"
+
+class Badge(BaseModel):
+    badge_id: str
+    name: str
+    description: str
+    icon: str
+    tier_required: str  # "free", "basic", "premium"
+    created_at: datetime
+
+class UserBadge(BaseModel):
+    user_badge_id: str
+    user_id: str
+    badge_id: str
+    earned_at: datetime
+    progress: str  # e.g., "5/10"
+
+class Challenge(BaseModel):
+    challenge_id: str
+    name: str
+    description: str
+    start_date: datetime
+    end_date: datetime
+    tier_required: str  # "basic" or "premium"
+    reward_badge_id: Optional[str] = None
+    target_landmarks: List[str]
+    target_count: int
 
 class RegisterRequest(BaseModel):
     email: str
