@@ -41,7 +41,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (sessionId) {
         console.log('Found session_id in URL:', sessionId);
-        handleOAuthCallback(sessionId);
+        handleOAuthCallback(sessionId).finally(() => {
+          setLoading(false);
+        });
       } else {
         checkAuth();
       }
