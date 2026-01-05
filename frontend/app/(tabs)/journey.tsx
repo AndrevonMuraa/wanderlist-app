@@ -107,7 +107,7 @@ export default function JourneyScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <LinearGradient
-        colors={[theme.colors.primary, theme.colors.secondary]}
+        colors={[theme.colors.primary, theme.colors.primaryDark]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.header}
@@ -121,17 +121,23 @@ export default function JourneyScreen() {
           <Text style={styles.statsCardTitle}>Your Progress</Text>
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
-              <Ionicons name="flag-outline" size={28} color={theme.colors.primary} />
+              <View style={[styles.iconCircle, { backgroundColor: theme.colors.primary + '20' }]}>
+                <Ionicons name="flag-outline" size={24} color={theme.colors.primary} />
+              </View>
               <Text style={styles.statNumber}>{stats.total_visits}</Text>
               <Text style={styles.statLabel}>Visits</Text>
             </View>
             <View style={styles.statItem}>
-              <Ionicons name="map-outline" size={28} color={theme.colors.secondary} />
+              <View style={[styles.iconCircle, { backgroundColor: theme.colors.accent + '20' }]}>
+                <Ionicons name="map-outline" size={24} color={theme.colors.accent} />
+              </View>
               <Text style={styles.statNumber}>{stats.countries_visited}</Text>
               <Text style={styles.statLabel}>Countries</Text>
             </View>
             <View style={styles.statItem}>
-              <Ionicons name="earth-outline" size={28} color={theme.colors.accent} />
+              <View style={[styles.iconCircle, { backgroundColor: theme.colors.accentBronze + '20' }]}>
+                <Ionicons name="earth-outline" size={24} color={theme.colors.accentBronze} />
+              </View>
               <Text style={styles.statNumber}>{stats.continents_visited}</Text>
               <Text style={styles.statLabel}>Continents</Text>
             </View>
