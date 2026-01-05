@@ -126,6 +126,7 @@ class Visit(BaseModel):
     user_id: str
     landmark_id: str
     photo_base64: str
+    points_earned: int = 10  # Points earned for this visit
     comments: Optional[str] = None
     diary_notes: Optional[str] = None
     visited_at: datetime
