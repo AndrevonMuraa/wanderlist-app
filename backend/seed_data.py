@@ -74,11 +74,11 @@ LANDMARKS_DATA = {
         {
             "name": "Preikestolen (Pulpit Rock)", 
             "description": "A steep cliff that rises 604 meters above Lysefjorden, offering breathtaking views.", 
-            "image_url": "https://images.unsplash.com/photo-1557409518-691ebcd96038?w=800",
+            "image_url": "https://images.unsplash.com/photo-1607343562353-a31c9ea753aa?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1557409518-691ebcd96038?w=800",
-                "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800",
-                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800"
+                "https://images.unsplash.com/photo-1607343562353-a31c9ea753aa?w=800",
+                "https://images.unsplash.com/photo-1536683402757-75f8d0dfa419?w=800",
+                "https://images.unsplash.com/photo-1558091579-31593a62efdc?w=800"
             ],
             "facts": [
                 {
