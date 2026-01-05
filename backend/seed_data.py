@@ -222,11 +222,11 @@ LANDMARKS_DATA = {
         {
             "name": "Northern Lights", 
             "description": "Natural light display in Arctic skies, best seen in Northern Norway.", 
-            "image_url": "https://images.unsplash.com/photo-1483347756197-71ef80e95f73?w=800",
+            "image_url": "https://images.pexels.com/photos/1562058/pexels-photo-1562058.jpeg?auto=compress&cs=tinysrgb&w=800",
             "images": [
-                "https://images.unsplash.com/photo-1483347756197-71ef80e95f73?w=800",
-                "https://images.unsplash.com/photo-1579033461380-adb47c3eb938?w=800",
-                "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800"
+                "https://images.pexels.com/photos/1562058/pexels-photo-1562058.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/360912/pexels-photo-360912.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/1933239/pexels-photo-1933239.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
             "facts": [
                 {
