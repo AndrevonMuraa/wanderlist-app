@@ -5,6 +5,8 @@ import { useRouter } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import theme from '../../styles/theme';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
