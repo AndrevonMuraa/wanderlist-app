@@ -211,7 +211,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     const data = await response.json();
-    await SecureStore.setItemAsync('auth_token', data.access_token);
+    await setToken(data.access_token);
     setUser(data.user);
   };
 
@@ -230,7 +230,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     const data = await response.json();
-    await SecureStore.setItemAsync('auth_token', data.access_token);
+    await setToken(data.access_token);
     setUser(data.user);
   };
 
@@ -265,7 +265,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
       if (token) {
         await fetch(`${BACKEND_URL}/api/auth/logout`, {
           method: 'POST',
@@ -277,7 +277,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       console.error('Error logging out:', error);
     } finally {
-      await SecureStore.deleteItemAsync('auth_token');
+      await removeToken();
       setUser(null);
     }
   };
