@@ -349,6 +349,10 @@ async def get_landmark(landmark_id: str, current_user: User = Depends(get_curren
 
 @api_router.post("/landmarks", response_model=Landmark)
 async def create_landmark(data: LandmarkCreate, current_user: User = Depends(get_current_user)):
+    # Check if user is premium
+    if not current_user.is_premium:
+        raise HTTPException(status_code=403, detail="Premium subscription required to suggest landmarks")
+    
     # Get country info
     country = await db.countries.find_one({"country_id": data.country_id}, {"_id": 0})
     if not country:
