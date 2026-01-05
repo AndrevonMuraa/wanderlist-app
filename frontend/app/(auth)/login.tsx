@@ -149,7 +149,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: theme.colors.background,
   },
   keyboardView: {
     flex: 1,
@@ -157,54 +157,77 @@ const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1,
     justifyContent: 'center',
-    padding: 16,
+    padding: theme.spacing.md,
+  },
+  gradientBackground: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: theme.spacing.xl,
+  },
+  iconCircle: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: theme.colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: theme.spacing.lg,
+    ...theme.shadows.md,
   },
   surface: {
-    padding: 24,
-    borderRadius: 12,
-    elevation: 4,
-  },
-  icon: {
-    alignSelf: 'center',
-    marginBottom: 16,
+    padding: theme.spacing.xl,
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.md,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    ...theme.typography.h2,
+    color: theme.colors.text,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: theme.spacing.sm,
   },
   subtitle: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
-    color: '#666',
-    marginBottom: 24,
   },
   input: {
-    marginBottom: 16,
+    marginBottom: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
   },
   button: {
-    marginTop: 8,
+    marginTop: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
+  },
+  googleButton: {
+    borderColor: theme.colors.border,
+    borderWidth: 1.5,
+    borderRadius: theme.borderRadius.md,
   },
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 24,
+    marginVertical: theme.spacing.lg,
   },
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#ddd',
+    backgroundColor: theme.colors.border,
   },
   dividerText: {
-    marginHorizontal: 16,
-    color: '#666',
+    marginHorizontal: theme.spacing.md,
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
   },
   linkContainer: {
-    marginTop: 16,
+    marginTop: theme.spacing.md,
     alignItems: 'center',
   },
   linkText: {
-    color: '#6200ee',
-    fontSize: 14,
+    ...theme.typography.body,
+    color: theme.colors.primary,
   },
 });
