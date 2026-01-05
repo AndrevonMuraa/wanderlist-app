@@ -108,8 +108,9 @@ class Landmark(BaseModel):
     country_name: str
     continent: str
     description: str
-    category: str  # "official" or "user_suggested"
+    category: str  # "official", "premium", or "user_suggested"
     image_url: str
+    points: int = 10  # Points awarded for visiting (10 for official, 25 for premium)
     upvotes: int = 0
     created_by: Optional[str] = None
     created_at: datetime
