@@ -5,6 +5,8 @@ import { useRouter } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import theme from '../../styles/theme';
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
@@ -46,55 +48,75 @@ export default function RegisterScreen() {
         style={styles.keyboardView}
       >
         <ScrollView contentContainerStyle={styles.scrollView}>
-          <Surface style={styles.surface}>
-            <Ionicons name="person-add" size={64} color="#6200ee" style={styles.icon} />
-            <Title style={styles.title}>Create Account</Title>
-            <Text style={styles.subtitle}>Join WanderList and start your journey</Text>
+          <LinearGradient
+            colors={[theme.colors.background, theme.colors.surfaceTinted]}
+            style={styles.gradientBackground}
+          >
+            <View style={styles.logoContainer}>
+              <View style={styles.iconCircle}>
+                <Ionicons name="person-add-outline" size={64} color={theme.colors.primary} />
+              </View>
+              <Title style={styles.title}>Create Account</Title>
+              <Text style={styles.subtitle}>Join WanderList and start your journey</Text>
+            </View>
 
-            <TextInput
-              label="Full Name"
-              value={name}
-              onChangeText={setName}
-              mode="outlined"
-              style={styles.input}
-            />
+            <Surface style={styles.surface}>
+              <TextInput
+                label="Full Name"
+                value={name}
+                onChangeText={setName}
+                mode="outlined"
+                style={styles.input}
+                outlineColor={theme.colors.border}
+                activeOutlineColor={theme.colors.primary}
+                textColor={theme.colors.text}
+              />
 
-            <TextInput
-              label="Email"
-              value={email}
-              onChangeText={setEmail}
-              mode="outlined"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              style={styles.input}
-            />
+              <TextInput
+                label="Email"
+                value={email}
+                onChangeText={setEmail}
+                mode="outlined"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                style={styles.input}
+                outlineColor={theme.colors.border}
+                activeOutlineColor={theme.colors.primary}
+                textColor={theme.colors.text}
+              />
 
-            <TextInput
-              label="Password"
-              value={password}
-              onChangeText={setPassword}
-              mode="outlined"
-              secureTextEntry
-              style={styles.input}
-            />
+              <TextInput
+                label="Password"
+                value={password}
+                onChangeText={setPassword}
+                mode="outlined"
+                secureTextEntry
+                style={styles.input}
+                outlineColor={theme.colors.border}
+                activeOutlineColor={theme.colors.primary}
+                textColor={theme.colors.text}
+              />
 
-            <Button
-              mode="contained"
-              onPress={handleRegister}
-              loading={loading}
-              disabled={loading}
-              style={styles.button}
-            >
-              Sign Up
-            </Button>
+              <Button
+                mode="contained"
+                onPress={handleRegister}
+                loading={loading}
+                disabled={loading}
+                style={styles.button}
+                buttonColor={theme.colors.primary}
+                textColor="#fff"
+              >
+                Sign Up
+              </Button>
 
-            <TouchableOpacity
-              onPress={() => router.back()}
-              style={styles.linkContainer}
-            >
-              <Text style={styles.linkText}>Already have an account? Login</Text>
-            </TouchableOpacity>
-          </Surface>
+              <TouchableOpacity
+                onPress={() => router.back()}
+                style={styles.linkContainer}
+              >
+                <Text style={styles.linkText}>Already have an account? Login</Text>
+              </TouchableOpacity>
+            </Surface>
+          </LinearGradient>
         </ScrollView>
       </KeyboardAvoidingView>
 
@@ -102,6 +124,7 @@ export default function RegisterScreen() {
         visible={!!error}
         onDismiss={() => setError('')}
         duration={3000}
+        style={{ backgroundColor: theme.colors.error }}
       >
         {error}
       </Snackbar>
@@ -112,7 +135,7 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: theme.colors.background,
   },
   keyboardView: {
     flex: 1,
@@ -120,40 +143,57 @@ const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1,
     justifyContent: 'center',
-    padding: 16,
+    padding: theme.spacing.md,
+  },
+  gradientBackground: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: theme.spacing.xl,
+  },
+  iconCircle: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: theme.colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: theme.spacing.lg,
+    ...theme.shadows.md,
   },
   surface: {
-    padding: 24,
-    borderRadius: 12,
-    elevation: 4,
-  },
-  icon: {
-    alignSelf: 'center',
-    marginBottom: 16,
+    padding: theme.spacing.xl,
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.md,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    ...theme.typography.h2,
+    color: theme.colors.text,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: theme.spacing.sm,
   },
   subtitle: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
-    color: '#666',
-    marginBottom: 24,
   },
   input: {
-    marginBottom: 16,
+    marginBottom: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
   },
   button: {
-    marginTop: 8,
+    marginTop: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
   },
   linkContainer: {
-    marginTop: 16,
+    marginTop: theme.spacing.md,
     alignItems: 'center',
   },
   linkText: {
-    color: '#6200ee',
-    fontSize: 14,
+    ...theme.typography.body,
+    color: theme.colors.primary,
   },
 });

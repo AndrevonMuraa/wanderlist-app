@@ -5,6 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import theme from '../../styles/theme';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 
@@ -69,12 +71,12 @@ export default function LandmarksScreen() {
           source={{ uri: item.image_url }}
           style={styles.landmarkImage}
         />
-        <View style={styles.landmarkContent}>
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.6)']}
+          style={styles.imageOverlay}
+        >
           <Text style={styles.landmarkName}>{item.name}</Text>
-          <Text style={styles.landmarkDescription} numberOfLines={2}>
-            {item.description}
-          </Text>
-        </View>
+        </LinearGradient>
       </Surface>
     </TouchableOpacity>
   );
@@ -82,14 +84,19 @@ export default function LandmarksScreen() {
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#6200ee" />
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
   }
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+      <LinearGradient
+        colors={[theme.colors.primary, theme.colors.secondary]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.header}
+      >
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
@@ -97,7 +104,7 @@ export default function LandmarksScreen() {
           <Text style={styles.headerTitle}>{name}</Text>
           <Text style={styles.headerSubtitle}>{landmarks.length} Landmarks</Text>
         </View>
-      </View>
+      </LinearGradient>
 
       <FlatList
         data={landmarks}
@@ -105,11 +112,15 @@ export default function LandmarksScreen() {
         keyExtractor={(item) => item.landmark_id}
         contentContainerStyle={styles.listContainer}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={onRefresh}
+            tintColor={theme.colors.primary}
+          />
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Ionicons name="location" size={64} color="#ccc" />
+            <Ionicons name="location-outline" size={64} color={theme.colors.border} />
             <Text style={styles.emptyText}>No landmarks found</Text>
           </View>
         }
@@ -121,70 +132,73 @@ export default function LandmarksScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: theme.colors.background,
   },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: theme.colors.background,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#6200ee',
+    padding: theme.spacing.md,
+    paddingTop: theme.spacing.lg,
+    paddingBottom: theme.spacing.lg,
   },
   backButton: {
-    marginRight: 16,
-    padding: 8,
+    marginRight: theme.spacing.md,
+    padding: theme.spacing.sm,
   },
   headerContent: {
     flex: 1,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    ...theme.typography.h2,
     color: '#fff',
-    marginBottom: 4,
+    marginBottom: theme.spacing.xs,
   },
   headerSubtitle: {
-    fontSize: 14,
-    color: '#e0d0ff',
+    ...theme.typography.bodySmall,
+    color: 'rgba(255,255,255,0.9)',
   },
   listContainer: {
-    padding: 16,
+    padding: theme.spacing.md,
   },
   landmarkCard: {
-    marginBottom: 16,
-    borderRadius: 12,
+    marginBottom: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
-    elevation: 2,
+    height: 200,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.sm,
   },
   landmarkImage: {
     width: '100%',
-    height: 200,
+    height: '100%',
+    position: 'absolute',
   },
-  landmarkContent: {
-    padding: 16,
+  imageOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: theme.spacing.md,
+    justifyContent: 'flex-end',
   },
   landmarkName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  landmarkDescription: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 20,
+    ...theme.typography.h3,
+    color: '#fff',
   },
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 48,
+    paddingVertical: theme.spacing.xxl,
   },
   emptyText: {
-    fontSize: 16,
-    color: '#999',
-    marginTop: 16,
+    ...theme.typography.body,
+    color: theme.colors.textLight,
+    marginTop: theme.spacing.md,
   },
 });
