@@ -178,6 +178,19 @@ export default function ProfileScreen() {
 
         <Text style={styles.versionText}>WanderList v1.0.0</Text>
       </ScrollView>
+
+      <Portal>
+        <Dialog visible={showLogoutDialog} onDismiss={() => setShowLogoutDialog(false)}>
+          <Dialog.Title>Logout</Dialog.Title>
+          <Dialog.Content>
+            <Text>Are you sure you want to logout?</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowLogoutDialog(false)}>Cancel</Button>
+            <Button onPress={confirmLogout}>Logout</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </SafeAreaView>
   );
 }
