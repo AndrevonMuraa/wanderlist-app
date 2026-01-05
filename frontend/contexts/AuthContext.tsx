@@ -33,20 +33,69 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    checkAuth();
-    
-    // Handle deep links for Google OAuth callback
-    const subscription = Linking.addEventListener('url', handleDeepLink);
-    
-    // Check initial URL (cold start)
-    Linking.getInitialURL().then(url => {
-      if (url) handleUrl(url);
-    });
+    // Check for OAuth callback on page load (web)
+    if (Platform.OS === 'web') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const sessionId = urlParams.get('session_id') || hashParams.get('session_id');
+      
+      if (sessionId) {
+        console.log('Found session_id in URL:', sessionId);
+        handleOAuthCallback(sessionId);
+      } else {
+        checkAuth();
+      }
+    } else {
+      checkAuth();
+      
+      // Handle deep links for mobile
+      const subscription = Linking.addEventListener('url', handleDeepLink);
+      
+      // Check initial URL (cold start)
+      Linking.getInitialURL().then(url => {
+        if (url) handleUrl(url);
+      });
 
-    return () => {
-      subscription.remove();
-    };
+      return () => {
+        subscription.remove();
+      };
+    }
   }, []);
+
+  const handleOAuthCallback = async (sessionId: string) => {
+    try {
+      console.log('Processing OAuth callback with session_id:', sessionId);
+      const response = await fetch(`${BACKEND_URL}/api/auth/google/callback?session_id=${sessionId}`, {
+        method: 'POST',
+        credentials: 'include'  // Include cookies
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('OAuth callback successful:', data);
+        
+        // Store token
+        if (Platform.OS === 'web') {
+          // For web, use localStorage as fallback
+          localStorage.setItem('auth_token', data.session_token);
+        } else {
+          await SecureStore.setItemAsync('auth_token', data.session_token);
+        }
+        
+        // Clean URL
+        if (Platform.OS === 'web') {
+          window.history.replaceState({}, document.title, '/');
+        }
+        
+        // Refresh user data
+        await refreshUser();
+      } else {
+        console.error('OAuth callback failed:', response.status);
+      }
+    } catch (error) {
+      console.error('Error processing Google OAuth callback:', error);
+    }
+  };
 
   const handleDeepLink = (event: { url: string }) => {
     handleUrl(event.url);
