@@ -47,8 +47,7 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1751914783171-84246b0cfda0?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1751914783171-84246b0cfda0?w=800",
-                "https://images.pexels.com/photos/35532473/pexels-photo-35532473.jpeg?auto=compress&cs=tinysrgb&w=800",
-                "https://images.pexels.com/photos/35532476/pexels-photo-35532476.jpeg?auto=compress&cs=tinysrgb&w=800"
+                "https://images.unsplash.com/photo-1661160200625-0ea567722801?w=800"
             ],
             "facts": [
                 {
