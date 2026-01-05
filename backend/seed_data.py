@@ -104,11 +104,11 @@ LANDMARKS_DATA = {
         {
             "name": "Bryggen", 
             "description": "Colorful wooden houses on the waterfront in Bergen, a UNESCO World Heritage site.", 
-            "image_url": "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800",
+            "image_url": "https://images.pexels.com/photos/33583896/pexels-photo-33583896.jpeg?auto=compress&cs=tinysrgb&w=800",
             "images": [
-                "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800",
-                "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800",
-                "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800"
+                "https://images.pexels.com/photos/33583896/pexels-photo-33583896.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/3580098/pexels-photo-3580098.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/2910597/pexels-photo-2910597.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
             "facts": [
                 {
