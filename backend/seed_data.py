@@ -256,8 +256,8 @@ LANDMARKS_DATA = {
             "image_url": "https://images.pexels.com/photos/1933239/pexels-photo-1933239.jpeg?auto=compress&cs=tinysrgb&w=800",
             "images": [
                 "https://images.pexels.com/photos/1933239/pexels-photo-1933239.jpeg?auto=compress&cs=tinysrgb&w=800",
-                "https://images.pexels.com/photos/1933316/pexels-photo-1933316.jpeg?auto=compress&cs=tinysrgb&w=800",
-                "https://images.pexels.com/photos/1933320/pexels-photo-1933320.jpeg?auto=compress&cs=tinysrgb&w=800"
+                "https://images.unsplash.com/photo-1653900783556-dc505f3f0a85?w=800",
+                "https://images.unsplash.com/photo-1663428520845-056989f8a664?w=800"
             ],
             "facts": [
                 {
