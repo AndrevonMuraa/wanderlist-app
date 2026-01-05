@@ -128,9 +128,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const getToken = async (): Promise<string | null> => {
+    if (Platform.OS === 'web') {
+      return localStorage.getItem('auth_token');
+    } else {
+      return await SecureStore.getItemAsync('auth_token');
+    }
+  };
+
+  const setToken = async (token: string) => {
+    if (Platform.OS === 'web') {
+      localStorage.setItem('auth_token', token);
+    } else {
+      await SecureStore.setItemAsync('auth_token', token);
+    }
+  };
+
+  const removeToken = async () => {
+    if (Platform.OS === 'web') {
+      localStorage.removeItem('auth_token');
+    } else {
+      await SecureStore.deleteItemAsync('auth_token');
+    }
+  };
+
   const checkAuth = async () => {
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
       if (token) {
         const response = await fetch(`${BACKEND_URL}/api/auth/me`, {
           headers: {
@@ -142,7 +166,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const userData = await response.json();
           setUser(userData);
         } else {
-          await SecureStore.deleteItemAsync('auth_token');
+          await removeToken();
         }
       }
     } catch (error) {
@@ -154,7 +178,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const refreshUser = async () => {
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
       if (token) {
         const response = await fetch(`${BACKEND_URL}/api/auth/me`, {
           headers: {
