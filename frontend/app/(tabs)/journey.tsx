@@ -153,11 +153,15 @@ export default function JourneyScreen() {
         keyExtractor={(item) => item.visit_id}
         contentContainerStyle={styles.listContainer}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={onRefresh}
+            tintColor={theme.colors.primary}
+          />
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Ionicons name="compass" size={64} color="#ccc" />
+            <Ionicons name="compass-outline" size={64} color={theme.colors.border} />
             <Text style={styles.emptyText}>No visits yet</Text>
             <Text style={styles.emptySubtext}>Start exploring and mark your first landmark!</Text>
           </View>
@@ -170,100 +174,109 @@ export default function JourneyScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: theme.colors.background,
   },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: theme.colors.background,
   },
   header: {
-    padding: 16,
-    backgroundColor: '#6200ee',
+    padding: theme.spacing.lg,
+    paddingTop: theme.spacing.xl,
+    paddingBottom: theme.spacing.xl,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    ...theme.typography.h1,
     color: '#fff',
-    marginBottom: 4,
+    marginBottom: theme.spacing.xs,
   },
   headerSubtitle: {
-    fontSize: 14,
-    color: '#e0d0ff',
+    ...theme.typography.bodySmall,
+    color: 'rgba(255,255,255,0.9)',
   },
   statsCard: {
-    margin: 16,
-    padding: 16,
-    borderRadius: 12,
-    elevation: 2,
+    margin: theme.spacing.md,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.sm,
+  },
+  statsCardTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.md,
   },
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 16,
+    marginBottom: theme.spacing.md,
   },
   statItem: {
     alignItems: 'center',
   },
   statNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#6200ee',
-    marginTop: 4,
+    ...theme.typography.h2,
+    color: theme.colors.text,
+    marginTop: theme.spacing.xs,
   },
   statLabel: {
-    fontSize: 12,
-    color: '#666',
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    marginTop: theme.spacing.xs,
   },
   progressBar: {
     height: 8,
-    borderRadius: 4,
-    marginBottom: 8,
+    borderRadius: theme.borderRadius.sm,
+    marginBottom: theme.spacing.sm,
+    backgroundColor: theme.colors.surfaceTinted,
   },
   progressText: {
-    fontSize: 12,
-    color: '#666',
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
   },
   listContainer: {
-    padding: 16,
+    padding: theme.spacing.md,
   },
   visitCard: {
-    marginBottom: 16,
-    borderRadius: 12,
+    marginBottom: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
-    elevation: 2,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.sm,
   },
   visitImage: {
     width: '100%',
     height: 200,
   },
   visitContent: {
-    padding: 12,
+    padding: theme.spacing.md,
   },
   visitComment: {
-    fontSize: 14,
-    marginBottom: 8,
-    color: '#333',
+    ...theme.typography.body,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.sm,
   },
   visitDate: {
-    fontSize: 12,
-    color: '#999',
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
   },
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 48,
+    paddingVertical: theme.spacing.xxl,
   },
   emptyText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#999',
-    marginTop: 16,
+    ...theme.typography.h3,
+    color: theme.colors.textLight,
+    marginTop: theme.spacing.md,
   },
   emptySubtext: {
-    fontSize: 14,
-    color: '#ccc',
-    marginTop: 8,
+    ...theme.typography.bodySmall,
+    color: theme.colors.textLight,
+    marginTop: theme.spacing.sm,
+    textAlign: 'center',
   },
 });
