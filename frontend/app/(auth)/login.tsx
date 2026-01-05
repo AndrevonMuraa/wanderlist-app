@@ -55,82 +55,77 @@ export default function LoginScreen() {
         style={styles.keyboardView}
       >
         <ScrollView contentContainerStyle={styles.scrollView}>
-          <LinearGradient
-            colors={[theme.colors.background, theme.colors.surfaceTinted]}
-            style={styles.gradientBackground}
-          >
-            <View style={styles.logoContainer}>
-              <View style={styles.iconCircle}>
-                <Ionicons name="earth-outline" size={64} color={theme.colors.primary} />
-              </View>
-              <Title style={styles.title}>Welcome to WanderList</Title>
-              <Text style={styles.subtitle}>Explore iconic landmarks across the world</Text>
+          <View style={styles.logoContainer}>
+            <View style={styles.iconCircle}>
+              <Ionicons name="earth" size={56} color={theme.colors.primary} />
+            </View>
+            <Text style={styles.title}>Welcome to WanderList</Text>
+            <Text style={styles.subtitle}>Explore iconic landmarks across the world</Text>
+          </View>
+
+          <Surface style={styles.surface}>
+            <TextInput
+              label="Email"
+              value={email}
+              onChangeText={setEmail}
+              mode="outlined"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              style={styles.input}
+              outlineColor={theme.colors.border}
+              activeOutlineColor={theme.colors.primary}
+              textColor={theme.colors.text}
+            />
+
+            <TextInput
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+              mode="outlined"
+              secureTextEntry
+              style={styles.input}
+              outlineColor={theme.colors.border}
+              activeOutlineColor={theme.colors.primary}
+              textColor={theme.colors.text}
+            />
+
+            <Button
+              mode="contained"
+              onPress={handleLogin}
+              loading={loading}
+              disabled={loading}
+              style={styles.button}
+              buttonColor={theme.colors.primary}
+              textColor="#fff"
+            >
+              Login
+            </Button>
+
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>OR</Text>
+              <View style={styles.dividerLine} />
             </View>
 
-            <Surface style={styles.surface}>
-              <TextInput
-                label="Email"
-                value={email}
-                onChangeText={setEmail}
-                mode="outlined"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                style={styles.input}
-                outlineColor={theme.colors.border}
-                activeOutlineColor={theme.colors.primary}
-                textColor={theme.colors.text}
-              />
+            <Button
+              mode="outlined"
+              onPress={handleGoogleLogin}
+              disabled={loading}
+              icon="google"
+              style={styles.googleButton}
+              textColor={theme.colors.text}
+              buttonColor={theme.colors.surface}
+            >
+              Continue with Google
+            </Button>
 
-              <TextInput
-                label="Password"
-                value={password}
-                onChangeText={setPassword}
-                mode="outlined"
-                secureTextEntry
-                style={styles.input}
-                outlineColor={theme.colors.border}
-                activeOutlineColor={theme.colors.primary}
-                textColor={theme.colors.text}
-              />
-
-              <Button
-                mode="contained"
-                onPress={handleLogin}
-                loading={loading}
-                disabled={loading}
-                style={styles.button}
-                buttonColor={theme.colors.primary}
-                textColor="#fff"
-              >
-                Login
-              </Button>
-
-              <View style={styles.divider}>
-                <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>OR</Text>
-                <View style={styles.dividerLine} />
-              </View>
-
-              <Button
-                mode="outlined"
-                onPress={handleGoogleLogin}
-                disabled={loading}
-                icon="google"
-                style={styles.googleButton}
-                textColor={theme.colors.text}
-                buttonColor={theme.colors.surface}
-              >
-                Continue with Google
-              </Button>
-
-              <TouchableOpacity
-                onPress={() => router.push('/(auth)/register')}
-                style={styles.linkContainer}
-              >
-                <Text style={styles.linkText}>Don't have an account? Sign up</Text>
-              </TouchableOpacity>
-            </Surface>
-          </LinearGradient>
+            <TouchableOpacity
+              onPress={() => router.push('/(auth)/register')}
+              style={styles.linkContainer}
+            >
+              <Text style={styles.linkText}>Don't have an account? Sign up</Text>
+            </TouchableOpacity>
+          </Surface>
         </ScrollView>
       </KeyboardAvoidingView>
 
