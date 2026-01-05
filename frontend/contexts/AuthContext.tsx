@@ -163,9 +163,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithGoogle = async () => {
     try {
+      // For web, use current window location
+      // For mobile, use deep linking URL
       const redirectUrl = Platform.OS === 'web' 
-        ? `${BACKEND_URL}/` 
+        ? window.location.origin 
         : Linking.createURL('/');
+      
+      console.log('Google OAuth Redirect URL:', redirectUrl);
       
       const authUrl = `${AUTH_URL}/?redirect=${encodeURIComponent(redirectUrl)}`;
 
