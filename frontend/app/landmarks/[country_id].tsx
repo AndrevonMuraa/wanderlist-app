@@ -43,7 +43,9 @@ export default function LandmarksScreen() {
 
   const fetchLandmarks = async () => {
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
+      console.log('Fetching landmarks for country:', country_id);
+      
       const response = await fetch(
         `${BACKEND_URL}/api/landmarks?country_id=${country_id}&category=official`,
         {
@@ -53,9 +55,16 @@ export default function LandmarksScreen() {
         }
       );
 
+      console.log('Landmarks API response status:', response.status);
+
       if (response.ok) {
         const data = await response.json();
+        console.log('Landmarks fetched:', data.length);
         setLandmarks(data);
+      } else {
+        console.error('Failed to fetch landmarks:', response.status);
+        const errorText = await response.text();
+        console.error('Error details:', errorText);
       }
     } catch (error) {
       console.error('Error fetching landmarks:', error);
