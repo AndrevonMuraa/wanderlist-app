@@ -103,7 +103,7 @@ const LANDMARK_ENHANCEMENTS: Record<string, {
       },
       {
         title: 'Hanseatic Legacy',
-        text: 'From 1360 to 1754, Bryggen was the center of the Hanseatic League's trading empire in Norway. German merchants lived and worked here, controlling Bergen's trade.',
+        text: 'From 1360 to 1754, Bryggen was the center of the Hanseatic League\'s trading empire in Norway. German merchants lived and worked here, controlling Bergen\'s trade.',
         icon: 'boat-outline'
       },
       {
