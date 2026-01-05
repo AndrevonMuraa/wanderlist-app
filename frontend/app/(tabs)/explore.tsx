@@ -162,10 +162,28 @@ export default function ExploreScreen() {
 
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => router.push('/user-landmarks')}
+        onPress={() => {
+          if (user?.is_premium) {
+            router.push('/user-landmarks');
+          } else {
+            Alert.alert(
+              'Premium Feature',
+              'Suggesting landmarks is a Premium feature. Upgrade to Premium to suggest your favorite places!',
+              [
+                { text: 'Maybe Later', style: 'cancel' },
+                { text: 'Learn More', onPress: () => {} }
+              ]
+            );
+          }
+        }}
         activeOpacity={0.8}
       >
         <Ionicons name="add" size={24} color="#fff" />
+        {!user?.is_premium && (
+          <View style={styles.premiumBadgeOnFab}>
+            <Ionicons name="star" size={12} color="#FFD700" />
+          </View>
+        )}
       </TouchableOpacity>
     </SafeAreaView>
   );
