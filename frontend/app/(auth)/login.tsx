@@ -154,10 +154,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: theme.spacing.md,
   },
-  gradientBackground: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   logoContainer: {
     alignItems: 'center',
     marginBottom: theme.spacing.xl,
@@ -170,13 +166,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: theme.spacing.lg,
-    ...theme.shadows.md,
+    ...theme.shadows.lg,
   },
   surface: {
     padding: theme.spacing.xl,
-    borderRadius: theme.borderRadius.lg,
+    borderRadius: theme.borderRadius.xxl,
     backgroundColor: theme.colors.surface,
-    ...theme.shadows.md,
+    ...theme.shadows.card,
   },
   title: {
     ...theme.typography.h2,
@@ -196,11 +192,13 @@ const styles = StyleSheet.create({
   button: {
     marginTop: theme.spacing.sm,
     borderRadius: theme.borderRadius.md,
+    paddingVertical: theme.spacing.xs,
   },
   googleButton: {
     borderColor: theme.colors.border,
     borderWidth: 1.5,
     borderRadius: theme.borderRadius.md,
+    paddingVertical: theme.spacing.xs,
   },
   divider: {
     flexDirection: 'row',
@@ -224,5 +222,6 @@ const styles = StyleSheet.create({
   linkText: {
     ...theme.typography.body,
     color: theme.colors.primary,
+    fontWeight: '600',
   },
 });
