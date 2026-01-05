@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity } from 'react-native';
-import { Text, TextInput, Button, Surface, Title, Snackbar } from 'react-native-paper';
+import { Text, TextInput, Button, Surface, Snackbar } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 
 export default function LoginScreen() {
