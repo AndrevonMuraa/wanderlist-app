@@ -162,14 +162,14 @@ export default function LandmarkDetailScreen() {
         </View>
 
         {/* Image Gallery Thumbnails */}
-        {enhancement.images.length > 1 && (
+        {images.length > 1 && (
           <ScrollView 
             horizontal 
             showsHorizontalScrollIndicator={false}
             style={styles.thumbnailContainer}
             contentContainerStyle={styles.thumbnailContent}
           >
-            {enhancement.images.map((img, index) => (
+            {images.map((img, index) => (
               <TouchableOpacity
                 key={index}
                 onPress={() => setSelectedImageIndex(index)}
@@ -192,17 +192,17 @@ export default function LandmarkDetailScreen() {
           <View style={styles.quickInfoCard}>
             <Ionicons name="time-outline" size={24} color={theme.colors.primary} />
             <Text style={styles.quickInfoLabel}>Duration</Text>
-            <Text style={styles.quickInfoValue}>{enhancement.duration}</Text>
+            <Text style={styles.quickInfoValue}>{duration}</Text>
           </View>
           <View style={styles.quickInfoCard}>
             <Ionicons name="calendar-outline" size={24} color={theme.colors.accent} />
             <Text style={styles.quickInfoLabel}>Best Time</Text>
-            <Text style={styles.quickInfoValue}>{enhancement.bestTimeToVisit}</Text>
+            <Text style={styles.quickInfoValue}>{bestTimeToVisit}</Text>
           </View>
           <View style={styles.quickInfoCard}>
             <Ionicons name="speedometer-outline" size={24} color={theme.colors.accentBronze} />
             <Text style={styles.quickInfoLabel}>Difficulty</Text>
-            <Text style={styles.quickInfoValue}>{enhancement.difficulty}</Text>
+            <Text style={styles.quickInfoValue}>{difficulty}</Text>
           </View>
         </View>
 
@@ -215,7 +215,7 @@ export default function LandmarkDetailScreen() {
         {/* Historical & Cultural Facts */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Discover More</Text>
-          {enhancement.facts.map((fact, index) => (
+          {facts.map((fact, index) => (
             <View key={index} style={styles.factCard}>
               <View style={styles.factHeader}>
                 <View style={[styles.factIcon, { backgroundColor: theme.colors.primary + '20' }]}>
