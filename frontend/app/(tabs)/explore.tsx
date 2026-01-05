@@ -105,19 +105,26 @@ export default function ExploreScreen() {
 
   const fetchCountries = async () => {
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
+      console.log('Fetching countries with token:', token ? 'Token exists' : 'No token');
+      
       const response = await fetch(`${BACKEND_URL}/api/countries`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
 
+      console.log('Countries API response status:', response.status);
+
       if (response.ok) {
         const data = await response.json();
+        console.log('Countries fetched:', data.length);
         setCountries(data);
         setFilteredCountries(data);
       } else {
         console.error('Failed to fetch countries:', response.status);
+        const errorText = await response.text();
+        console.error('Error details:', errorText);
       }
     } catch (error) {
       console.error('Error fetching countries:', error);
