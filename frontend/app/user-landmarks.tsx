@@ -135,7 +135,20 @@ export default function UserLandmarksScreen() {
       <FAB
         icon="plus"
         style={styles.fab}
-        onPress={() => router.push('/suggest-landmark')}
+        onPress={() => {
+          if (user?.is_premium) {
+            router.push('/suggest-landmark');
+          } else {
+            Alert.alert(
+              'Premium Feature',
+              'Suggesting landmarks is a Premium feature. Upgrade to Premium to suggest your favorite places!',
+              [
+                { text: 'Maybe Later', style: 'cancel' },
+                { text: 'Learn More', onPress: () => {} }
+              ]
+            );
+          }
+        }}
         label="Suggest"
       />
     </SafeAreaView>
