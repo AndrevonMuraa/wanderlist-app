@@ -66,31 +66,38 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView>
-        <View style={styles.header}>
+        <LinearGradient
+          colors={[theme.colors.primary, theme.colors.secondary]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.header}
+        >
           <Text style={styles.headerTitle}>Profile</Text>
-        </View>
+        </LinearGradient>
 
         <Surface style={styles.profileCard}>
           {user?.picture ? (
             <Image source={{ uri: user.picture }} style={styles.profileImage} />
           ) : (
             <View style={[styles.profileImage, styles.defaultProfileImage]}>
-              <Ionicons name="person" size={48} color="#666" />
+              <Ionicons name="person-outline" size={48} color={theme.colors.textSecondary} />
             </View>
           )}
           <Text style={styles.userName}>{user?.name}</Text>
           <Text style={styles.userEmail}>{user?.email}</Text>
 
-          <View style={styles.premiumBadge}>
+          <View style={[styles.premiumBadge, {
+            backgroundColor: user?.is_premium ? theme.colors.premium + '20' : theme.colors.surfaceTinted
+          }]}>
             {user?.is_premium ? (
               <>
-                <Ionicons name="star" size={16} color="#FFD700" />
-                <Text style={styles.premiumText}>Premium Member</Text>
+                <Ionicons name="star" size={16} color={theme.colors.premium} />
+                <Text style={[styles.premiumText, { color: theme.colors.premium }]}>Premium Member</Text>
               </>
             ) : (
               <>
-                <Ionicons name="person" size={16} color="#666" />
-                <Text style={styles.freemiumText}>Freemium Member</Text>
+                <Ionicons name="person-outline" size={16} color={theme.colors.textSecondary} />
+                <Text style={styles.freemiumText}>Free Member</Text>
               </>
             )}
           </View>
@@ -101,22 +108,22 @@ export default function ProfileScreen() {
             <Text style={styles.sectionTitle}>Your Stats</Text>
             <View style={styles.statsGrid}>
               <View style={styles.statBox}>
-                <Ionicons name="flag" size={32} color="#6200ee" />
+                <Ionicons name="flag-outline" size={32} color={theme.colors.primary} />
                 <Text style={styles.statNumber}>{stats.total_visits}</Text>
                 <Text style={styles.statLabel}>Total Visits</Text>
               </View>
               <View style={styles.statBox}>
-                <Ionicons name="map" size={32} color="#6200ee" />
+                <Ionicons name="map-outline" size={32} color={theme.colors.secondary} />
                 <Text style={styles.statNumber}>{stats.countries_visited}</Text>
                 <Text style={styles.statLabel}>Countries</Text>
               </View>
               <View style={styles.statBox}>
-                <Ionicons name="earth" size={32} color="#6200ee" />
+                <Ionicons name="earth-outline" size={32} color={theme.colors.accent} />
                 <Text style={styles.statNumber}>{stats.continents_visited}</Text>
                 <Text style={styles.statLabel}>Continents</Text>
               </View>
               <View style={styles.statBox}>
-                <Ionicons name="people" size={32} color="#6200ee" />
+                <Ionicons name="people-outline" size={32} color={theme.colors.accentWarm} />
                 <Text style={styles.statNumber}>{stats.friends_count}</Text>
                 <Text style={styles.statLabel}>Friends</Text>
               </View>
@@ -128,17 +135,21 @@ export default function ProfileScreen() {
           <List.Item
             title="Friends"
             description="Manage your friend connections"
-            left={props => <List.Icon {...props} icon="account-group" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
+            left={props => <List.Icon {...props} icon="account-group-outline" color={theme.colors.primary} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
             onPress={() => router.push('/friends')}
+            titleStyle={styles.listItemTitle}
+            descriptionStyle={styles.listItemDescription}
           />
-          <Divider />
+          <Divider style={styles.divider} />
           <List.Item
             title="Settings"
             description="App preferences"
-            left={props => <List.Icon {...props} icon="cog" />}
-            right={props => <List.Icon {...props} icon="chevron-right" />}
+            left={props => <List.Icon {...props} icon="cog-outline" color={theme.colors.primary} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
             onPress={() => {}}
+            titleStyle={styles.listItemTitle}
+            descriptionStyle={styles.listItemDescription}
           />
         </Surface>
 
@@ -147,7 +158,8 @@ export default function ProfileScreen() {
           onPress={handleLogout}
           icon="logout"
           style={styles.logoutButton}
-          textColor="#d32f2f"
+          textColor={theme.colors.error}
+          buttonColor={theme.colors.surface}
         >
           Logout
         </Button>
