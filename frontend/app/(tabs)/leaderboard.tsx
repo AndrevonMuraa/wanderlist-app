@@ -58,11 +58,11 @@ export default function LeaderboardScreen() {
     const isCurrentUser = item.user_id === user?.user_id;
     const topThree = item.rank <= 3;
 
-    // Medal colors for top 3 with ultra-light aesthetic
+    // Luxury medal colors
     const getMedalColor = (rank: number) => {
-      if (rank === 1) return '#E5D5B7'; // Pale gold
-      if (rank === 2) return '#D4D4D4'; // Soft silver
-      return '#D4A58B'; // Soft bronze
+      if (rank === 1) return theme.colors.accent; // Rich gold
+      if (rank === 2) return '#C0C0C0'; // Silver
+      return theme.colors.accentBronze; // Bronze
     };
 
     return (
@@ -70,7 +70,7 @@ export default function LeaderboardScreen() {
         <View style={styles.rankContainer}>
           {topThree ? (
             <View style={[styles.trophy, { backgroundColor: getMedalColor(item.rank) }]}>
-              <Ionicons name="trophy" size={20} color="#fff" />
+              <Ionicons name="trophy" size={22} color="#fff" />
             </View>
           ) : (
             <Text style={styles.rankText}>#{item.rank}</Text>
@@ -114,7 +114,7 @@ export default function LeaderboardScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <LinearGradient
-        colors={[theme.colors.primary, theme.colors.secondary]}
+        colors={[theme.colors.primary, theme.colors.primaryDark]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.header}
@@ -127,10 +127,13 @@ export default function LeaderboardScreen() {
 
       {!user?.is_premium && (
         <Surface style={styles.premiumBanner}>
-          <Ionicons name="star" size={24} color={theme.colors.accent} />
+          <View style={styles.premiumIcon}>
+            <Ionicons name="star" size={24} color={theme.colors.accent} />
+          </View>
           <Text style={styles.premiumText}>
             Upgrade to Premium to see global rankings
           </Text>
+          <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
         </Surface>
       )}
 
