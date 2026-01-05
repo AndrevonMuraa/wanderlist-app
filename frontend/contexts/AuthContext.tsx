@@ -93,9 +93,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         await refreshUser();
       } else {
         console.error('OAuth callback failed:', response.status);
+        const errorData = await response.json().catch(() => ({ detail: 'OAuth callback failed' }));
+        throw new Error(errorData.detail || 'OAuth callback failed');
       }
     } catch (error) {
       console.error('Error processing Google OAuth callback:', error);
+      // Don't throw - just log the error so app doesn't crash
+      // User will stay on login screen
     }
   };
 
