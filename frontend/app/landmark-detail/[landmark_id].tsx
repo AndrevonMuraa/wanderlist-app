@@ -113,9 +113,9 @@ const LANDMARK_ENHANCEMENTS: Record<string, {
       }
     ],
     images: [
-      'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=800',
-      'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800',
-      'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800'
+      'https://source.unsplash.com/800x600/?bryggen,bergen,norway,colorful,wooden',
+      'https://source.unsplash.com/800x600/?bergen,norway,waterfront,houses',
+      'https://source.unsplash.com/800x600/?norway,wharf,historic,architecture'
     ],
     bestTimeToVisit: 'May-September',
     duration: '2-3 hours',
@@ -140,9 +140,9 @@ const LANDMARK_ENHANCEMENTS: Record<string, {
       }
     ],
     images: [
-      'https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800',
-      'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800',
-      'https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=800'
+      'https://source.unsplash.com/800x600/?trolltunga,norway,rock,tongue,hiking',
+      'https://source.unsplash.com/800x600/?norway,troll,tongue,cliff,adventure',
+      'https://source.unsplash.com/800x600/?norway,mountain,hike,extreme'
     ],
     bestTimeToVisit: 'June-September',
     duration: '10-12 hours',
@@ -167,9 +167,9 @@ const LANDMARK_ENHANCEMENTS: Record<string, {
       }
     ],
     images: [
-      'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800',
-      'https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=800',
-      'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800'
+      'https://source.unsplash.com/800x600/?geirangerfjord,norway,fjord,waterfall',
+      'https://source.unsplash.com/800x600/?norway,fjord,cruise,mountains',
+      'https://source.unsplash.com/800x600/?geiranger,norway,seven,sisters'
     ],
     bestTimeToVisit: 'May-September',
     duration: '4-6 hours (cruise)',
@@ -194,9 +194,9 @@ const LANDMARK_ENHANCEMENTS: Record<string, {
       }
     ],
     images: [
-      'https://images.unsplash.com/photo-1483347756197-71ef80e95f73?w=800',
-      'https://images.unsplash.com/photo-1579033461380-adb47c3eb938?w=800',
-      'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800'
+      'https://source.unsplash.com/800x600/?northern,lights,aurora,borealis,norway',
+      'https://source.unsplash.com/800x600/?aurora,norway,arctic,green,lights',
+      'https://source.unsplash.com/800x600/?norway,northern,lights,tromso'
     ],
     bestTimeToVisit: 'September-March',
     duration: 'All night',
@@ -221,9 +221,9 @@ const LANDMARK_ENHANCEMENTS: Record<string, {
       }
     ],
     images: [
-      'https://images.unsplash.com/photo-1517639493569-5666a7556424?w=800',
-      'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800',
-      'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800'
+      'https://source.unsplash.com/800x600/?lofoten,islands,norway,fishing,village',
+      'https://source.unsplash.com/800x600/?norway,lofoten,rorbu,red,cabins',
+      'https://source.unsplash.com/800x600/?lofoten,norway,arctic,mountains'
     ],
     bestTimeToVisit: 'May-September',
     duration: '3-5 days',
