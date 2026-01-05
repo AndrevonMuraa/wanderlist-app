@@ -39,7 +39,7 @@ const LANDMARK_ENHANCEMENTS: Record<string, {
   duration: string;
   difficulty: string;
 }> = {
-  // Norway
+  // Norway - Complete enhancement data
   'The Old Town of Fredrikstad': {
     facts: [
       {
@@ -59,13 +59,175 @@ const LANDMARK_ENHANCEMENTS: Record<string, {
       }
     ],
     images: [
-      'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=800',
+      'https://images.unsplash.com/photo-1519832979-6e818b863f67?w=800',
       'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800',
       'https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=800'
     ],
-    bestTimeToVisit: 'June-August (midnight sun)',
+    bestTimeToVisit: 'June-August',
     duration: '3-4 hours',
     difficulty: 'Easy'
+  },
+  'Preikestolen (Pulpit Rock)': {
+    facts: [
+      {
+        title: 'Iconic Cliff Formation',
+        text: 'Pulpit Rock rises 604 meters above Lysefjorden, featuring a flat-topped cliff approximately 25x25 meters. Formed during the Ice Age by glacial erosion about 10,000 years ago.',
+        icon: 'triangle-outline'
+      },
+      {
+        title: 'Popular Hiking Destination',
+        text: 'The 8km round-trip hike takes 4-5 hours and attracts over 300,000 visitors annually. The trail offers stunning views of the fjord and surrounding mountains.',
+        icon: 'walk-outline'
+      },
+      {
+        title: 'Natural Wonder',
+        text: "Despite appearing precarious, geologists say there's no immediate risk of the rock falling. However, the spectacular drop creates an unforgettable experience for visitors.",
+        icon: 'warning-outline'
+      }
+    ],
+    images: [
+      'https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=800',
+      'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800',
+      'https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800'
+    ],
+    bestTimeToVisit: 'May-September',
+    duration: '4-5 hours',
+    difficulty: 'Moderate'
+  },
+  'Bryggen': {
+    facts: [
+      {
+        title: 'UNESCO World Heritage',
+        text: 'Bryggen (the wharf) has been a UNESCO World Heritage site since 1979. These colorful wooden buildings date back to the 14th century and represent the Hanseatic League trading post.',
+        icon: 'ribbon-outline'
+      },
+      {
+        title: 'Hanseatic Legacy',
+        text: 'From 1360 to 1754, Bryggen was the center of the Hanseatic League's trading empire in Norway. German merchants lived and worked here, controlling Bergen's trade.',
+        icon: 'boat-outline'
+      },
+      {
+        title: 'Survived Many Fires',
+        text: 'Despite being rebuilt numerous times after devastating fires (most recently in 1955), the area maintains its medieval street plan and distinctive wooden architecture.',
+        icon: 'flame-outline'
+      }
+    ],
+    images: [
+      'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=800',
+      'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800',
+      'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800'
+    ],
+    bestTimeToVisit: 'May-September',
+    duration: '2-3 hours',
+    difficulty: 'Easy'
+  },
+  'Trolltunga': {
+    facts: [
+      {
+        title: 'Dramatic Rock Formation',
+        text: 'Trolltunga (Troll\'s Tongue) is a piece of rock jutting horizontally out from a mountain 700 meters above Lake Ringedalsvatnet. Formed during the Ice Age when glaciers carved the landscape.',
+        icon: 'flash-outline'
+      },
+      {
+        title: 'Challenging Hike',
+        text: 'The 28km round-trip hike takes 10-12 hours and is one of Norway\'s most spectacular but demanding trails. The route includes steep climbs and exposed sections.',
+        icon: 'fitness-outline'
+      },
+      {
+        title: 'Instagram Famous',
+        text: 'Once a hidden gem, Trolltunga has become one of Norway\'s most photographed landmarks. Over 80,000 hikers attempt the journey annually, despite the challenge.',
+        icon: 'camera-outline'
+      }
+    ],
+    images: [
+      'https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800',
+      'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800',
+      'https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=800'
+    ],
+    bestTimeToVisit: 'June-September',
+    duration: '10-12 hours',
+    difficulty: 'Challenging'
+  },
+  'Geirangerfjord': {
+    facts: [
+      {
+        title: 'UNESCO Fjord',
+        text: 'Geirangerfjord is a UNESCO World Heritage site, renowned as one of the most beautiful fjords in the world. The 15km fjord features cascading waterfalls and snow-capped peaks.',
+        icon: 'water-outline'
+      },
+      {
+        title: 'Seven Sisters Waterfall',
+        text: 'The fjord is home to the famous Seven Sisters waterfall (De syv søstrene), which plunges 250 meters into the fjord, along with the "Bridal Veil" and "Suitor" waterfalls.',
+        icon: 'rainy-outline'
+      },
+      {
+        title: 'Abandoned Farms',
+        text: 'Steep mountainsides feature abandoned farms perched on narrow ledges, accessible only by arduous paths. These farms tell stories of hardy people who once called this dramatic landscape home.',
+        icon: 'home-outline'
+      }
+    ],
+    images: [
+      'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800',
+      'https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=800',
+      'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800'
+    ],
+    bestTimeToVisit: 'May-September',
+    duration: '4-6 hours (cruise)',
+    difficulty: 'Easy'
+  },
+  'Northern Lights': {
+    facts: [
+      {
+        title: 'Aurora Borealis Magic',
+        text: 'The Northern Lights (Aurora Borealis) occur when solar particles collide with gases in Earth\'s atmosphere, creating colorful light displays. Northern Norway offers some of the world\'s best viewing opportunities.',
+        icon: 'sparkles-outline'
+      },
+      {
+        title: 'Best Viewing Season',
+        text: 'From late September to late March, the polar night in Northern Norway provides ideal darkness for viewing. Tromsø, often called the "Gateway to the Arctic," is a premier viewing location.',
+        icon: 'moon-outline'
+      },
+      {
+        title: 'Colors and Myths',
+        text: 'The lights appear in shades of green, pink, red, yellow, and violet. Ancient Norse mythology believed the lights were reflections from the armor of the Valkyries leading warriors to Valhalla.',
+        icon: 'star-outline'
+      }
+    ],
+    images: [
+      'https://images.unsplash.com/photo-1483347756197-71ef80e95f73?w=800',
+      'https://images.unsplash.com/photo-1579033461380-adb47c3eb938?w=800',
+      'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800'
+    ],
+    bestTimeToVisit: 'September-March',
+    duration: 'All night',
+    difficulty: 'Easy'
+  },
+  'Lofoten Islands': {
+    facts: [
+      {
+        title: 'Arctic Archipelago',
+        text: 'The Lofoten Islands are an archipelago within the Arctic Circle, known for dramatic scenery with jagged peaks rising directly from the sea, creating a spectacular landscape.',
+        icon: 'snow-outline'
+      },
+      {
+        title: 'Fishing Villages',
+        text: 'Traditional red fishing cabins (rorbu) dot the coastline. Lofoten has been a fishing center for over 1,000 years, with cod fishing still central to the local economy and culture.',
+        icon: 'fish-outline'
+      },
+      {
+        title: 'Midnight Sun',
+        text: 'From late May to mid-July, the sun never sets, creating unique opportunities for hiking, kayaking, and photography in 24-hour daylight. Winter brings the magical polar night.',
+        icon: 'sunny-outline'
+      }
+    ],
+    images: [
+      'https://images.unsplash.com/photo-1517639493569-5666a7556424?w=800',
+      'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800',
+      'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800'
+    ],
+    bestTimeToVisit: 'May-September',
+    duration: '3-5 days',
+    difficulty: 'Easy-Moderate'
   },
   // More landmarks can be added here with similar structure
 };
