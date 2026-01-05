@@ -21,6 +21,7 @@ interface UserStats {
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
   const [stats, setStats] = useState<UserStats | null>(null);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
