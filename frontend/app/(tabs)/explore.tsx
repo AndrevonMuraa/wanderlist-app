@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, Image, Alert, Animated } from 'react-native';
-import { Text, Searchbar, Chip, ActivityIndicator } from 'react-native-paper';
+import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, Image, Alert, Dimensions } from 'react-native';
+import { Text, Searchbar, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
@@ -10,6 +10,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
+const { width } = Dimensions.get('window');
+const CARD_WIDTH = (width - 48) / 2; // 2 columns with spacing
 
 interface Country {
   country_id: string;
@@ -18,37 +20,20 @@ interface Country {
   landmark_count: number;
 }
 
-const CONTINENTS = ['All', 'Europe', 'Asia', 'Africa', 'North America', 'South America', 'Oceania'];
-
-// Country flag emojis
-const COUNTRY_FLAGS: Record<string, string> = {
-  norway: '🇳🇴',
-  france: '🇫🇷',
-  italy: '🇮🇹',
-  japan: '🇯🇵',
-  egypt: '🇪🇬',
-  peru: '🇵🇪',
-  australia: '🇦🇺',
-  usa: '🇺🇸',
-  uk: '🇬🇧',
-  china: '🇨🇳',
-  spain: '🇪🇸',
-  greece: '🇬🇷',
-  thailand: '🇹🇭',
-  india: '🇮🇳',
-  brazil: '🇧🇷',
-  mexico: '🇲🇽',
-  uae: '🇦🇪',
-  germany: '🇩🇪',
-  canada: '🇨🇦',
-  south_africa: '🇿🇦',
+// Group countries by continent
+const CONTINENT_IMAGES: Record<string, string> = {
+  'Africa': 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800',
+  'Asia': 'https://images.unsplash.com/photo-1480796927426-f609979314bd?w=800',
+  'Europe': 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800',
+  'North America': 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800',
+  'South America': 'https://images.unsplash.com/photo-1589802829982-cc4628e7b2b8?w=800',
+  'Oceania': 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800',
 };
 
 export default function ExploreScreen() {
   const { user } = useAuth();
   const [countries, setCountries] = useState<Country[]>([]);
-  const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
-  const [selectedContinent, setSelectedContinent] = useState('All');
+  const [continents, setContinents] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -57,10 +42,6 @@ export default function ExploreScreen() {
   useEffect(() => {
     fetchCountries();
   }, []);
-
-  useEffect(() => {
-    filterCountries();
-  }, [countries, selectedContinent, searchQuery]);
 
   const fetchCountries = async () => {
     try {
@@ -74,6 +55,23 @@ export default function ExploreScreen() {
       if (response.ok) {
         const data = await response.json();
         setCountries(data);
+        
+        // Group by continent
+        const continentMap = new Map();
+        data.forEach((country: Country) => {
+          if (!continentMap.has(country.continent)) {
+            continentMap.set(country.continent, {
+              continent: country.continent,
+              count: 0,
+              countries: []
+            });
+          }
+          const cont = continentMap.get(country.continent);
+          cont.count += country.landmark_count;
+          cont.countries.push(country);
+        });
+        
+        setContinents(Array.from(continentMap.values()));
       }
     } catch (error) {
       console.error('Error fetching countries:', error);
@@ -83,68 +81,51 @@ export default function ExploreScreen() {
     }
   };
 
-  const filterCountries = () => {
-    let filtered = countries;
-
-    if (selectedContinent !== 'All') {
-      filtered = filtered.filter(c => c.continent === selectedContinent);
-    }
-
-    if (searchQuery) {
-      filtered = filtered.filter(c => 
-        c.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    setFilteredCountries(filtered);
-  };
-
   const onRefresh = () => {
     setRefreshing(true);
     fetchCountries();
   };
 
-  const getCountryAccent = (countryId: string): string => {
-    return theme.colors.countryAccents[countryId as keyof typeof theme.colors.countryAccents] || theme.colors.primary;
-  };
-
-  const renderCountry = ({ item, index }: { item: Country; index: number }) => {
-    const countryAccent = getCountryAccent(item.country_id);
-    const flag = COUNTRY_FLAGS[item.country_id] || '🌍';
-
+  const renderContinentCard = ({ item, index }: { item: any; index: number }) => {
     return (
       <TouchableOpacity
-        onPress={() => router.push(`/landmarks/${item.country_id}?name=${item.name}`)}
-        activeOpacity={0.7}
-        style={styles.countryCardWrapper}
+        onPress={() => router.push(`/continent/${item.continent}`)}
+        activeOpacity={0.9}
+        style={styles.continentCardWrapper}
       >
-        <View style={[styles.countryCard, { borderLeftColor: countryAccent, borderLeftWidth: 4 }]}>
+        <View style={styles.continentCard}>
+          <Image
+            source={{ uri: CONTINENT_IMAGES[item.continent] || CONTINENT_IMAGES['Asia'] }}
+            style={styles.continentImage}
+          />
           <LinearGradient
-            colors={[countryAccent + '15', countryAccent + '05']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.countryGradient}
+            colors={['transparent', 'rgba(0,0,0,0.7)']}
+            style={styles.continentOverlay}
           >
-            <View style={styles.countryContent}>
-              <View style={styles.countryHeader}>
-                <Text style={styles.countryFlag}>{flag}</Text>
-                <View style={styles.countryInfo}>
-                  <Text style={styles.countryName}>{item.name}</Text>
-                  <View style={styles.countryMeta}>
-                    <Ionicons name="location-outline" size={14} color={theme.colors.textSecondary} />
-                    <Text style={styles.continentText}>{item.continent}</Text>
-                  </View>
-                </View>
-              </View>
-              <View style={[styles.countryBadge, { backgroundColor: countryAccent }]}>
-                <Text style={styles.countBadgeText}>{item.landmark_count}</Text>
-              </View>
-            </View>
+            <Text style={styles.continentName}>{item.continent}</Text>
+            <Text style={styles.continentCount}>{item.count} landmarks</Text>
           </LinearGradient>
         </View>
       </TouchableOpacity>
     );
   };
+
+  const renderFeatureCard = (icon: string, title: string, subtitle: string, onPress: () => void, accentColor: string) => (
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.9}
+      style={styles.featureCard}
+    >
+      <View style={[styles.featureIcon, { backgroundColor: accentColor + '15' }]}>
+        <Ionicons name={icon as any} size={32} color={accentColor} />
+      </View>
+      <View style={styles.featureContent}>
+        <Text style={styles.featureTitle}>{title}</Text>
+        <Text style={styles.featureSubtitle}>{subtitle}</Text>
+      </View>
+      <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+    </TouchableOpacity>
+  );
 
   if (loading) {
     return (
@@ -156,58 +137,78 @@ export default function ExploreScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <LinearGradient
-        colors={[theme.colors.primary, theme.colors.secondary]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.header}
-      >
-        <Text style={styles.headerTitle}>Discover</Text>
-        <Text style={styles.headerSubtitle}>200 landmarks across 20 countries</Text>
-      </LinearGradient>
-
-      <View style={styles.searchContainer}>
-        <Searchbar
-          placeholder="Search countries..."
-          onChangeText={setSearchQuery}
-          value={searchQuery}
-          style={styles.searchBar}
-          iconColor={theme.colors.primary}
-          inputStyle={styles.searchInput}
-          placeholderTextColor={theme.colors.textLight}
-        />
-      </View>
-
-      <View style={styles.chipsContainer}>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={CONTINENTS}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => (
-            <Chip
-              selected={selectedContinent === item}
-              onPress={() => setSelectedContinent(item)}
-              style={[
-                styles.chip,
-                selectedContinent === item && styles.chipSelected
-              ]}
-              textStyle={[
-                styles.chipText,
-                selectedContinent === item && styles.chipTextSelected
-              ]}
-              mode={selectedContinent === item ? 'flat' : 'outlined'}
-            >
-              {item}
-            </Chip>
-          )}
-        />
+      <View style={styles.header}>
+        <View style={styles.logoContainer}>
+          <Ionicons name="earth" size={32} color={theme.colors.primary} />
+          <Text style={styles.logo}>WanderList</Text>
+        </View>
+        <TouchableOpacity style={styles.profileButton}>
+          <View style={styles.profileCircle}>
+            <Text style={styles.profileInitial}>
+              {user?.name?.charAt(0).toUpperCase() || 'U'}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
 
       <FlatList
-        data={filteredCountries}
-        renderItem={renderCountry}
-        keyExtractor={(item) => item.country_id}
+        data={[]}
+        renderItem={() => null}
+        ListHeaderComponent={
+          <>
+            <View style={styles.searchContainer}>
+              <Searchbar
+                placeholder="Search destinations..."
+                onChangeText={setSearchQuery}
+                value={searchQuery}
+                style={styles.searchBar}
+                iconColor={theme.colors.primary}
+                inputStyle={styles.searchInput}
+                placeholderTextColor={theme.colors.textLight}
+                elevation={0}
+              />
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Explore by Continent</Text>
+              <View style={styles.continentsGrid}>
+                {continents.map((continent, index) => (
+                  <View key={continent.continent} style={{ width: CARD_WIDTH }}>
+                    {renderContinentCard({ item: continent, index })}
+                  </View>
+                ))}
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Features</Text>
+              
+              {renderFeatureCard(
+                'compass',
+                'AI Trip Planner',
+                'Plan your next adventure',
+                () => {},
+                theme.colors.primary
+              )}
+              
+              {renderFeatureCard(
+                'trophy',
+                'Leaderboard',
+                "See who's leading",
+                () => router.push('/(tabs)/leaderboard'),
+                theme.colors.accent
+              )}
+              
+              {renderFeatureCard(
+                'ribbon',
+                'Achievements',
+                'View your badges',
+                () => {},
+                theme.colors.accentBronze
+              )}
+            </View>
+          </>
+        }
         contentContainerStyle={styles.listContainer}
         refreshControl={
           <RefreshControl 
@@ -216,39 +217,7 @@ export default function ExploreScreen() {
             tintColor={theme.colors.primary}
           />
         }
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Ionicons name="search-outline" size={64} color={theme.colors.border} />
-            <Text style={styles.emptyText}>No countries found</Text>
-          </View>
-        }
       />
-
-      <TouchableOpacity
-        style={[styles.fab, !user?.is_premium && styles.fabWithBadge]}
-        onPress={() => {
-          if (user?.is_premium || user?.subscription_tier === 'premium' || user?.subscription_tier === 'basic') {
-            router.push('/user-landmarks');
-          } else {
-            Alert.alert(
-              'Premium Feature',
-              'Suggesting landmarks is a Premium feature. Upgrade to Premium to suggest your favorite places!',
-              [
-                { text: 'Maybe Later', style: 'cancel' },
-                { text: 'Learn More', onPress: () => {} }
-              ]
-            );
-          }
-        }}
-        activeOpacity={0.8}
-      >
-        <Ionicons name="add" size={24} color="#fff" />
-        {!user?.is_premium && user?.subscription_tier === 'free' && (
-          <View style={styles.premiumBadgeOnFab}>
-            <Ionicons name="star" size={12} color={theme.colors.accent} />
-          </View>
-        )}
-      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -265,146 +234,126 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   header: {
-    padding: theme.spacing.lg,
-    paddingTop: theme.spacing.xl,
-    paddingBottom: theme.spacing.xl,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
   },
-  headerTitle: {
-    ...theme.typography.h1,
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logo: {
+    ...theme.typography.h2,
+    color: theme.colors.text,
+    marginLeft: theme.spacing.sm,
+    fontWeight: '700',
+  },
+  profileButton: {
+    padding: theme.spacing.xs,
+  },
+  profileCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: theme.colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileInitial: {
+    ...theme.typography.h4,
     color: '#fff',
-    marginBottom: theme.spacing.xs,
-  },
-  headerSubtitle: {
-    ...theme.typography.bodySmall,
-    color: 'rgba(255,255,255,0.9)',
+    fontWeight: '700',
   },
   searchContainer: {
-    padding: theme.spacing.md,
+    paddingHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.lg,
   },
   searchBar: {
     backgroundColor: theme.colors.surface,
     borderRadius: theme.borderRadius.xl,
-    elevation: 0,
     ...theme.shadows.sm,
   },
   searchInput: {
     ...theme.typography.body,
     color: theme.colors.text,
   },
-  chipsContainer: {
-    paddingHorizontal: theme.spacing.md,
-    marginBottom: theme.spacing.sm,
-  },
-  chip: {
-    marginRight: theme.spacing.sm,
-    backgroundColor: theme.colors.surface,
-    borderColor: theme.colors.border,
-    borderWidth: 1,
-  },
-  chipSelected: {
-    backgroundColor: theme.colors.primary,
-    borderColor: theme.colors.primary,
-  },
-  chipText: {
-    color: theme.colors.text,
-    ...theme.typography.labelSmall,
-  },
-  chipTextSelected: {
-    color: '#fff',
-  },
   listContainer: {
-    padding: theme.spacing.md,
+    paddingBottom: theme.spacing.xl,
   },
-  countryCardWrapper: {
+  section: {
+    marginBottom: theme.spacing.xl,
+  },
+  sectionTitle: {
+    ...theme.typography.h2,
+    color: theme.colors.text,
+    paddingHorizontal: theme.spacing.md,
     marginBottom: theme.spacing.md,
   },
-  countryCard: {
-    borderRadius: theme.borderRadius.lg,
-    overflow: 'hidden',
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
-  },
-  countryGradient: {
-    width: '100%',
-  },
-  countryContent: {
+  continentsGrid: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexWrap: 'wrap',
+    paddingHorizontal: theme.spacing.md,
+    gap: theme.spacing.md,
+  },
+  continentCardWrapper: {
+    marginBottom: theme.spacing.md,
+  },
+  continentCard: {
+    height: 160,
+    borderRadius: theme.borderRadius.xxl,
+    overflow: 'hidden',
+    ...theme.shadows.card,
+  },
+  continentImage: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+  },
+  continentOverlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
     padding: theme.spacing.md,
   },
-  countryHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  countryFlag: {
-    fontSize: 32,
-    marginRight: theme.spacing.md,
-  },
-  countryInfo: {
-    flex: 1,
-  },
-  countryName: {
-    ...theme.typography.h4,
-    color: theme.colors.text,
-    marginBottom: theme.spacing.xs,
-  },
-  countryMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  continentText: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    marginLeft: theme.spacing.xs,
-  },
-  countryBadge: {
-    borderRadius: theme.borderRadius.md,
-    padding: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.md,
-    minWidth: 50,
-    alignItems: 'center',
-  },
-  countBadgeText: {
+  continentName: {
     ...theme.typography.h3,
     color: '#fff',
-    fontWeight: '600',
+    fontWeight: '700',
+    marginBottom: theme.spacing.xs,
   },
-  emptyContainer: {
+  continentCount: {
+    ...theme.typography.bodySmall,
+    color: 'rgba(255,255,255,0.9)',
+  },
+  featureCard: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: theme.spacing.xxl,
+    backgroundColor: theme.colors.surface,
+    marginHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    ...theme.shadows.sm,
   },
-  emptyText: {
-    ...theme.typography.body,
-    color: theme.colors.textLight,
-    marginTop: theme.spacing.md,
-  },
-  fab: {
-    position: 'absolute',
-    right: theme.spacing.md,
-    bottom: theme.spacing.md,
+  featureIcon: {
     width: 56,
     height: 56,
-    borderRadius: 28,
-    backgroundColor: theme.colors.primary,
+    borderRadius: theme.borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
-    ...theme.shadows.lg,
+    marginRight: theme.spacing.md,
   },
-  fabWithBadge: {},
-  premiumBadgeOnFab: {
-    position: 'absolute',
-    top: -4,
-    right: -4,
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: theme.colors.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: theme.colors.primary,
+  featureContent: {
+    flex: 1,
+  },
+  featureTitle: {
+    ...theme.typography.h4,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.xs / 2,
+  },
+  featureSubtitle: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
   },
 });
