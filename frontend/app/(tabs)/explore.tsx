@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, Image, Alert } from 'react-native';
-import { Text, Searchbar, Chip, ActivityIndicator, Surface, Divider } from 'react-native-paper';
+import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, Image, Alert, Animated } from 'react-native';
+import { Text, Searchbar, Chip, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../contexts/AuthContext';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import theme from '../../styles/theme';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 
@@ -17,6 +19,30 @@ interface Country {
 }
 
 const CONTINENTS = ['All', 'Europe', 'Asia', 'Africa', 'North America', 'South America', 'Oceania'];
+
+// Country flag emojis
+const COUNTRY_FLAGS: Record<string, string> = {
+  norway: '🇳🇴',
+  france: '🇫🇷',
+  italy: '🇮🇹',
+  japan: '🇯🇵',
+  egypt: '🇪🇬',
+  peru: '🇵🇪',
+  australia: '🇦🇺',
+  usa: '🇺🇸',
+  uk: '🇬🇧',
+  china: '🇨🇳',
+  spain: '🇪🇸',
+  greece: '🇬🇷',
+  thailand: '🇹🇭',
+  india: '🇮🇳',
+  brazil: '🇧🇷',
+  mexico: '🇲🇽',
+  uae: '🇦🇪',
+  germany: '🇩🇪',
+  canada: '🇨🇦',
+  south_africa: '🇿🇦',
+};
 
 export default function ExploreScreen() {
   const { user } = useAuth();
@@ -78,43 +104,67 @@ export default function ExploreScreen() {
     fetchCountries();
   };
 
-  const renderCountry = ({ item }: { item: Country }) => (
-    <TouchableOpacity
-      onPress={() => router.push(`/landmarks/${item.country_id}?name=${item.name}`)}
-      activeOpacity={0.7}
-    >
-      <Surface style={styles.countryCard}>
-        <View style={styles.countryContent}>
-          <View style={styles.countryInfo}>
-            <Text style={styles.countryName}>{item.name}</Text>
-            <View style={styles.countryMeta}>
-              <Ionicons name="location" size={14} color="#666" />
-              <Text style={styles.continentText}>{item.continent}</Text>
+  const getCountryAccent = (countryId: string): string => {
+    return theme.colors.countryAccents[countryId as keyof typeof theme.colors.countryAccents] || theme.colors.primary;
+  };
+
+  const renderCountry = ({ item, index }: { item: Country; index: number }) => {
+    const countryAccent = getCountryAccent(item.country_id);
+    const flag = COUNTRY_FLAGS[item.country_id] || '🌍';
+
+    return (
+      <TouchableOpacity
+        onPress={() => router.push(`/landmarks/${item.country_id}?name=${item.name}`)}
+        activeOpacity={0.7}
+        style={styles.countryCardWrapper}
+      >
+        <View style={[styles.countryCard, { borderLeftColor: countryAccent, borderLeftWidth: 4 }]}>
+          <LinearGradient
+            colors={[countryAccent + '15', countryAccent + '05']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.countryGradient}
+          >
+            <View style={styles.countryContent}>
+              <View style={styles.countryHeader}>
+                <Text style={styles.countryFlag}>{flag}</Text>
+                <View style={styles.countryInfo}>
+                  <Text style={styles.countryName}>{item.name}</Text>
+                  <View style={styles.countryMeta}>
+                    <Ionicons name="location-outline" size={14} color={theme.colors.textSecondary} />
+                    <Text style={styles.continentText}>{item.continent}</Text>
+                  </View>
+                </View>
+              </View>
+              <View style={[styles.countryBadge, { backgroundColor: countryAccent }]}>
+                <Text style={styles.countBadgeText}>{item.landmark_count}</Text>
+              </View>
             </View>
-          </View>
-          <View style={styles.countryBadge}>
-            <Text style={styles.countBadgeText}>{item.landmark_count}</Text>
-            <Text style={styles.landmarkLabel}>landmarks</Text>
-          </View>
+          </LinearGradient>
         </View>
-      </Surface>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#6200ee" />
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
   }
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Explore Landmarks</Text>
-        <Text style={styles.headerSubtitle}>Discover iconic places around the world</Text>
-      </View>
+      <LinearGradient
+        colors={[theme.colors.primary, theme.colors.secondary]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.header}
+      >
+        <Text style={styles.headerTitle}>Discover</Text>
+        <Text style={styles.headerSubtitle}>200 landmarks across 20 countries</Text>
+      </LinearGradient>
 
       <View style={styles.searchContainer}>
         <Searchbar
@@ -122,6 +172,9 @@ export default function ExploreScreen() {
           onChangeText={setSearchQuery}
           value={searchQuery}
           style={styles.searchBar}
+          iconColor={theme.colors.primary}
+          inputStyle={styles.searchInput}
+          placeholderTextColor={theme.colors.textLight}
         />
       </View>
 
@@ -135,7 +188,14 @@ export default function ExploreScreen() {
             <Chip
               selected={selectedContinent === item}
               onPress={() => setSelectedContinent(item)}
-              style={styles.chip}
+              style={[
+                styles.chip,
+                selectedContinent === item && styles.chipSelected
+              ]}
+              textStyle={[
+                styles.chipText,
+                selectedContinent === item && styles.chipTextSelected
+              ]}
               mode={selectedContinent === item ? 'flat' : 'outlined'}
             >
               {item}
@@ -150,20 +210,24 @@ export default function ExploreScreen() {
         keyExtractor={(item) => item.country_id}
         contentContainerStyle={styles.listContainer}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={onRefresh}
+            tintColor={theme.colors.primary}
+          />
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Ionicons name="search" size={64} color="#ccc" />
+            <Ionicons name="search-outline" size={64} color={theme.colors.border} />
             <Text style={styles.emptyText}>No countries found</Text>
           </View>
         }
       />
 
       <TouchableOpacity
-        style={styles.fab}
+        style={[styles.fab, !user?.is_premium && styles.fabWithBadge]}
         onPress={() => {
-          if (user?.is_premium) {
+          if (user?.is_premium || user?.subscription_tier === 'premium' || user?.subscription_tier === 'basic') {
             router.push('/user-landmarks');
           } else {
             Alert.alert(
@@ -179,9 +243,9 @@ export default function ExploreScreen() {
         activeOpacity={0.8}
       >
         <Ionicons name="add" size={24} color="#fff" />
-        {!user?.is_premium && (
+        {!user?.is_premium && user?.subscription_tier === 'free' && (
           <View style={styles.premiumBadgeOnFab}>
-            <Ionicons name="star" size={12} color="#FFD700" />
+            <Ionicons name="star" size={12} color={theme.colors.accent} />
           </View>
         )}
       </TouchableOpacity>
@@ -192,114 +256,144 @@ export default function ExploreScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: theme.colors.background,
   },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: theme.colors.background,
   },
   header: {
-    padding: 16,
-    backgroundColor: '#6200ee',
+    padding: theme.spacing.lg,
+    paddingTop: theme.spacing.xl,
+    paddingBottom: theme.spacing.xl,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    ...theme.typography.h1,
     color: '#fff',
-    marginBottom: 4,
+    marginBottom: theme.spacing.xs,
   },
   headerSubtitle: {
-    fontSize: 14,
-    color: '#e0d0ff',
+    ...theme.typography.bodySmall,
+    color: 'rgba(255,255,255,0.9)',
   },
   searchContainer: {
-    padding: 16,
+    padding: theme.spacing.md,
   },
   searchBar: {
-    elevation: 2,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.xl,
+    elevation: 0,
+    ...theme.shadows.sm,
+  },
+  searchInput: {
+    ...theme.typography.body,
+    color: theme.colors.text,
   },
   chipsContainer: {
-    paddingHorizontal: 16,
-    marginBottom: 8,
+    paddingHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
   },
   chip: {
-    marginRight: 8,
+    marginRight: theme.spacing.sm,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
+    borderWidth: 1,
+  },
+  chipSelected: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
+  },
+  chipText: {
+    color: theme.colors.text,
+    ...theme.typography.labelSmall,
+  },
+  chipTextSelected: {
+    color: '#fff',
   },
   listContainer: {
-    padding: 16,
+    padding: theme.spacing.md,
+  },
+  countryCardWrapper: {
+    marginBottom: theme.spacing.md,
   },
   countryCard: {
-    marginBottom: 12,
-    borderRadius: 12,
-    elevation: 2,
+    borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.sm,
+  },
+  countryGradient: {
+    width: '100%',
   },
   countryContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
+    padding: theme.spacing.md,
+  },
+  countryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  countryFlag: {
+    fontSize: 32,
+    marginRight: theme.spacing.md,
   },
   countryInfo: {
     flex: 1,
   },
   countryName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
+    ...theme.typography.h4,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.xs,
   },
   countryMeta: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   continentText: {
-    fontSize: 14,
-    color: '#666',
-    marginLeft: 4,
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    marginLeft: theme.spacing.xs,
   },
   countryBadge: {
-    backgroundColor: '#6200ee',
-    borderRadius: 8,
-    padding: 12,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    minWidth: 50,
     alignItems: 'center',
-    minWidth: 60,
   },
   countBadgeText: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    ...theme.typography.h3,
     color: '#fff',
-  },
-  landmarkLabel: {
-    fontSize: 10,
-    color: '#e0d0ff',
+    fontWeight: '600',
   },
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 48,
+    paddingVertical: theme.spacing.xxl,
   },
   emptyText: {
-    fontSize: 16,
-    color: '#999',
-    marginTop: 16,
+    ...theme.typography.body,
+    color: theme.colors.textLight,
+    marginTop: theme.spacing.md,
   },
   fab: {
     position: 'absolute',
-    right: 16,
-    bottom: 16,
+    right: theme.spacing.md,
+    bottom: theme.spacing.md,
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#6200ee',
+    backgroundColor: theme.colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    ...theme.shadows.lg,
   },
+  fabWithBadge: {},
   premiumBadgeOnFab: {
     position: 'absolute',
     top: -4,
@@ -307,10 +401,10 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#6200ee',
+    borderColor: theme.colors.primary,
   },
 });
