@@ -14,6 +14,7 @@ db = client[os.environ['DB_NAME']]
 
 # Countries and their continents
 COUNTRIES_DATA = [
+    # Original 10 countries
     {"country_id": "norway", "name": "Norway", "continent": "Europe"},
     {"country_id": "france", "name": "France", "continent": "Europe"},
     {"country_id": "italy", "name": "Italy", "continent": "Europe"},
@@ -24,6 +25,17 @@ COUNTRIES_DATA = [
     {"country_id": "usa", "name": "United States", "continent": "North America"},
     {"country_id": "uk", "name": "United Kingdom", "continent": "Europe"},
     {"country_id": "china", "name": "China", "continent": "Asia"},
+    # New 10 countries
+    {"country_id": "spain", "name": "Spain", "continent": "Europe"},
+    {"country_id": "greece", "name": "Greece", "continent": "Europe"},
+    {"country_id": "thailand", "name": "Thailand", "continent": "Asia"},
+    {"country_id": "india", "name": "India", "continent": "Asia"},
+    {"country_id": "brazil", "name": "Brazil", "continent": "South America"},
+    {"country_id": "mexico", "name": "Mexico", "continent": "North America"},
+    {"country_id": "uae", "name": "United Arab Emirates", "continent": "Asia"},
+    {"country_id": "germany", "name": "Germany", "continent": "Europe"},
+    {"country_id": "canada", "name": "Canada", "continent": "North America"},
+    {"country_id": "south_africa", "name": "South Africa", "continent": "Africa"},
 ]
 
 # 10 landmarks per country
