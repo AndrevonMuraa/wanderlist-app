@@ -89,7 +89,13 @@ export default function ExploreScreen() {
   const renderContinentCard = ({ item, index }: { item: any; index: number }) => {
     return (
       <TouchableOpacity
-        onPress={() => router.push(`/continent/${item.continent}`)}
+        onPress={() => {
+          // Navigate to first country in this continent
+          if (item.countries && item.countries.length > 0) {
+            const firstCountry = item.countries[0];
+            router.push(`/landmarks/${firstCountry.country_id}?name=${encodeURIComponent(firstCountry.name)}`);
+          }
+        }}
         activeOpacity={0.9}
         style={styles.continentCardWrapper}
       >
@@ -103,7 +109,7 @@ export default function ExploreScreen() {
             style={styles.continentOverlay}
           >
             <Text style={styles.continentName}>{item.continent}</Text>
-            <Text style={styles.continentCount}>{item.count} landmarks</Text>
+            <Text style={styles.continentCount}>{item.countries?.length || 0} countries • {item.count} landmarks</Text>
           </LinearGradient>
         </View>
       </TouchableOpacity>
