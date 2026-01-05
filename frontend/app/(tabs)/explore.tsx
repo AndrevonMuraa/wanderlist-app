@@ -3,6 +3,7 @@ import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, Image } f
 import { Text, Searchbar, Chip, ActivityIndicator, Surface, Divider } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { useAuth } from '../../contexts/AuthContext';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -18,6 +19,7 @@ interface Country {
 const CONTINENTS = ['All', 'Europe', 'Asia', 'Africa', 'North America', 'South America', 'Oceania'];
 
 export default function ExploreScreen() {
+  const { user } = useAuth();
   const [countries, setCountries] = useState<Country[]>([]);
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
   const [selectedContinent, setSelectedContinent] = useState('All');
