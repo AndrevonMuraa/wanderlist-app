@@ -98,10 +98,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const handleDeepLink = (event: { url: string }) => {
+    console.log('Deep link received:', event.url);
     handleUrl(event.url);
   };
 
   const handleUrl = async (url: string) => {
+    console.log('Processing URL:', url);
     // Parse session_id from URL (both hash and query)
     let sessionId = null;
     
@@ -112,19 +114,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     if (sessionId) {
-      try {
-        const response = await fetch(`${BACKEND_URL}/api/auth/google/callback?session_id=${sessionId}`, {
-          method: 'POST'
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          await SecureStore.setItemAsync('auth_token', data.session_token);
-          await refreshUser();
-        }
-      } catch (error) {
-        console.error('Error processing Google OAuth:', error);
-      }
+      console.log('Found session_id in deep link:', sessionId);
+      await handleOAuthCallback(sessionId);
     }
   };
 
