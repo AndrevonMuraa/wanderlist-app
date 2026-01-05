@@ -47,21 +47,24 @@ export default function ProfileScreen() {
   };
 
   const handleLogout = async () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { 
-          text: 'Logout', 
-          onPress: async () => {
-            await logout();
-            router.replace('/(auth)/login');
-          }, 
-          style: 'destructive' 
-        },
-      ]
-    );
+    if (Platform.OS === 'web') {
+      // For web, use native confirm dialog
+      const confirmed = window.confirm('Are you sure you want to logout?');
+      if (confirmed) {
+        await logout();
+        // Force page reload to clear all state
+        window.location.href = '/';
+      }
+    } else {
+      // For mobile, use Dialog
+      setShowLogoutDialog(true);
+    }
+  };
+
+  const confirmLogout = async () => {
+    setShowLogoutDialog(false);
+    await logout();
+    router.replace('/(auth)/login');
   };
 
   return (
