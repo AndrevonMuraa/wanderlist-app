@@ -314,11 +314,11 @@ LANDMARKS_DATA = {
         {
             "name": "Trolltunga", 
             "description": "A rock formation jutting horizontally out of a mountain 700 meters above sea level.", 
-            "image_url": "https://images.pexels.com/photos/28386054/pexels-photo-28386054.jpeg?auto=compress&cs=tinysrgb&w=800",
+            "image_url": "https://images.unsplash.com/photo-1505312917212-9db5bde78aff?w=800",
             "images": [
-                "https://images.pexels.com/photos/28386054/pexels-photo-28386054.jpeg?auto=compress&cs=tinysrgb&w=800",
-                "https://images.pexels.com/photos/3533013/pexels-photo-3533013.jpeg?auto=compress&cs=tinysrgb&w=800",
-                "https://images.pexels.com/photos/35467646/pexels-photo-35467646.jpeg?auto=compress&cs=tinysrgb&w=800"
+                "https://images.unsplash.com/photo-1505312917212-9db5bde78aff?w=800",
+                "https://images.unsplash.com/photo-1502021680532-838cfc650323?w=800",
+                "https://images.pexels.com/photos/3533013/pexels-photo-3533013.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
             "facts": [
                 {
