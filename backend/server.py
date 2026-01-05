@@ -40,7 +40,8 @@ class User(BaseModel):
     email: str
     name: str
     picture: Optional[str] = None
-    is_premium: bool = False
+    is_premium: bool = False  # Deprecated, kept for backward compatibility
+    subscription_tier: str = "free"  # "free", "basic", "premium"
     password_hash: Optional[str] = None
     created_at: datetime
 
