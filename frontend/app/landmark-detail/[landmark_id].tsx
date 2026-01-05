@@ -86,9 +86,9 @@ const LANDMARK_ENHANCEMENTS: Record<string, {
       }
     ],
     images: [
-      'https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=800',
-      'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800',
-      'https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800'
+      'https://source.unsplash.com/800x600/?preikestolen,pulpit,rock,cliff,norway',
+      'https://source.unsplash.com/800x600/?norway,fjord,lysefjorden,hiking',
+      'https://source.unsplash.com/800x600/?norway,cliff,mountain,dramatic'
     ],
     bestTimeToVisit: 'May-September',
     duration: '4-5 hours',
