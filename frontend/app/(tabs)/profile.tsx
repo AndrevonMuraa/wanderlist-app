@@ -11,7 +11,7 @@ import theme from '../../styles/theme';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 
-interface Stats {
+interface UserStats {
   total_visits: number;
   countries_visited: number;
   continents_visited: number;
@@ -20,7 +20,7 @@ interface Stats {
 
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
-  const [stats, setStats] = useState<Stats | null>(null);
+  const [stats, setStats] = useState<UserStats | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -51,14 +51,7 @@ export default function ProfileScreen() {
       'Are you sure you want to logout?',
       [
         { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            await logout();
-            router.replace('/(auth)/login');
-          },
-        },
+        { text: 'Logout', onPress: () => logout(), style: 'destructive' },
       ]
     );
   };
@@ -67,7 +60,7 @@ export default function ProfileScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView>
         <LinearGradient
-          colors={[theme.colors.primary, theme.colors.secondary]}
+          colors={[theme.colors.primary, theme.colors.primaryDark]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.header}
@@ -80,23 +73,23 @@ export default function ProfileScreen() {
             <Image source={{ uri: user.picture }} style={styles.profileImage} />
           ) : (
             <View style={[styles.profileImage, styles.defaultProfileImage]}>
-              <Ionicons name="person-outline" size={48} color={theme.colors.textSecondary} />
+              <Ionicons name="person-outline" size={56} color={theme.colors.textSecondary} />
             </View>
           )}
           <Text style={styles.userName}>{user?.name}</Text>
           <Text style={styles.userEmail}>{user?.email}</Text>
 
           <View style={[styles.premiumBadge, {
-            backgroundColor: user?.is_premium ? theme.colors.premium + '20' : theme.colors.surfaceTinted
+            backgroundColor: user?.is_premium ? theme.colors.accent + '20' : theme.colors.surfaceTinted
           }]}>
             {user?.is_premium ? (
               <>
-                <Ionicons name="star" size={16} color={theme.colors.premium} />
-                <Text style={[styles.premiumText, { color: theme.colors.premium }]}>Premium Member</Text>
+                <Ionicons name="star" size={18} color={theme.colors.accent} />
+                <Text style={[styles.premiumText, { color: theme.colors.accent }]}>Premium Member</Text>
               </>
             ) : (
               <>
-                <Ionicons name="person-outline" size={16} color={theme.colors.textSecondary} />
+                <Ionicons name="person-outline" size={18} color={theme.colors.textSecondary} />
                 <Text style={styles.freemiumText}>Free Member</Text>
               </>
             )}
@@ -108,22 +101,30 @@ export default function ProfileScreen() {
             <Text style={styles.sectionTitle}>Your Stats</Text>
             <View style={styles.statsGrid}>
               <View style={styles.statBox}>
-                <Ionicons name="flag-outline" size={32} color={theme.colors.primary} />
+                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.primary + '20' }]}>
+                  <Ionicons name="flag-outline" size={28} color={theme.colors.primary} />
+                </View>
                 <Text style={styles.statNumber}>{stats.total_visits}</Text>
                 <Text style={styles.statLabel}>Total Visits</Text>
               </View>
               <View style={styles.statBox}>
-                <Ionicons name="map-outline" size={32} color={theme.colors.secondary} />
+                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.accent + '20' }]}>
+                  <Ionicons name="map-outline" size={28} color={theme.colors.accent} />
+                </View>
                 <Text style={styles.statNumber}>{stats.countries_visited}</Text>
                 <Text style={styles.statLabel}>Countries</Text>
               </View>
               <View style={styles.statBox}>
-                <Ionicons name="earth-outline" size={32} color={theme.colors.accent} />
+                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.accentBronze + '20' }]}>
+                  <Ionicons name="earth-outline" size={28} color={theme.colors.accentBronze} />
+                </View>
                 <Text style={styles.statNumber}>{stats.continents_visited}</Text>
                 <Text style={styles.statLabel}>Continents</Text>
               </View>
               <View style={styles.statBox}>
-                <Ionicons name="people-outline" size={32} color={theme.colors.accentWarm} />
+                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.primaryLight + '20' }]}>
+                  <Ionicons name="people-outline" size={28} color={theme.colors.primaryLight} />
+                </View>
                 <Text style={styles.statNumber}>{stats.friends_count}</Text>
                 <Text style={styles.statLabel}>Friends</Text>
               </View>
@@ -187,9 +188,9 @@ const styles = StyleSheet.create({
   profileCard: {
     margin: theme.spacing.md,
     padding: theme.spacing.xl,
-    borderRadius: theme.borderRadius.lg,
+    borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
+    ...theme.shadows.card,
     alignItems: 'center',
   },
   profileImage: {
@@ -223,21 +224,21 @@ const styles = StyleSheet.create({
   premiumText: {
     marginLeft: theme.spacing.xs,
     ...theme.typography.labelSmall,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   freemiumText: {
     marginLeft: theme.spacing.xs,
     ...theme.typography.labelSmall,
-    fontWeight: '600',
+    fontWeight: '700',
     color: theme.colors.textSecondary,
   },
   statsCard: {
     margin: theme.spacing.md,
     marginTop: 0,
     padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
+    borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
+    ...theme.shadows.card,
   },
   sectionTitle: {
     ...theme.typography.h3,
@@ -254,13 +255,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: theme.spacing.md,
     backgroundColor: theme.colors.surfaceTinted,
-    borderRadius: theme.borderRadius.md,
+    borderRadius: theme.borderRadius.lg,
     marginBottom: theme.spacing.md,
+  },
+  statIconCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: theme.spacing.sm,
   },
   statNumber: {
     ...theme.typography.h2,
     color: theme.colors.text,
-    marginTop: theme.spacing.sm,
+    marginTop: theme.spacing.xs,
   },
   statLabel: {
     ...theme.typography.caption,
@@ -270,14 +279,15 @@ const styles = StyleSheet.create({
   menuCard: {
     margin: theme.spacing.md,
     marginTop: 0,
-    borderRadius: theme.borderRadius.lg,
+    borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
+    ...theme.shadows.card,
     overflow: 'hidden',
   },
   listItemTitle: {
     ...theme.typography.body,
     color: theme.colors.text,
+    fontWeight: '600',
   },
   listItemDescription: {
     ...theme.typography.caption,
@@ -289,7 +299,8 @@ const styles = StyleSheet.create({
   logoutButton: {
     margin: theme.spacing.md,
     borderColor: theme.colors.error,
-    borderWidth: 1,
+    borderWidth: 1.5,
+    borderRadius: theme.borderRadius.md,
   },
   versionText: {
     textAlign: 'center',
