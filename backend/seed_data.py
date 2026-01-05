@@ -284,10 +284,11 @@ LANDMARKS_DATA = {
         {
             "name": "Akershus Fortress", 
             "description": "Medieval castle and fortress in Oslo, built to protect the capital.", 
-            "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800",
+            "image_url": "https://images.pexels.com/photos/2360682/pexels-photo-2360682.jpeg?auto=compress&cs=tinysrgb&w=800",
             "images": [
-                "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800",
-                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800"
+                "https://images.pexels.com/photos/2360682/pexels-photo-2360682.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/32097915/pexels-photo-32097915.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/2360666/pexels-photo-2360666.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
             "facts": [
                 {
