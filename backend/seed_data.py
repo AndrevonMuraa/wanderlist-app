@@ -78,7 +78,7 @@ LANDMARKS_DATA = {
             "images": [
                 "https://images.unsplash.com/photo-1607343562353-a31c9ea753aa?w=800",
                 "https://images.unsplash.com/photo-1536683402757-75f8d0dfa419?w=800",
-                "https://images.unsplash.com/photo-1558091579-31593a62efdc?w=800"
+                "https://images.pexels.com/photos/1647962/pexels-photo-1647962.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
             "facts": [
                 {
