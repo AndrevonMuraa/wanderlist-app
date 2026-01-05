@@ -45,13 +45,20 @@ export default function ProfileScreen() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     Alert.alert(
       'Logout',
       'Are you sure you want to logout?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Logout', onPress: () => logout(), style: 'destructive' },
+        { 
+          text: 'Logout', 
+          onPress: async () => {
+            await logout();
+            router.replace('/(auth)/login');
+          }, 
+          style: 'destructive' 
+        },
       ]
     );
   };
