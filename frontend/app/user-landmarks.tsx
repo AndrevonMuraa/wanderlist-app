@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Image, RefreshControl, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, FlatList, Image, RefreshControl, TouchableOpacity, Alert } from 'react-native';
 import { Text, ActivityIndicator, Surface, FAB, Searchbar, Chip } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { useAuth } from '../contexts/AuthContext';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 
