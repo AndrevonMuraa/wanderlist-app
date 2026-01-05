@@ -58,11 +58,18 @@ export default function LeaderboardScreen() {
     const isCurrentUser = item.user_id === user?.user_id;
     const topThree = item.rank <= 3;
 
+    // Medal colors for top 3 with ultra-light aesthetic
+    const getMedalColor = (rank: number) => {
+      if (rank === 1) return '#E5D5B7'; // Pale gold
+      if (rank === 2) return '#D4D4D4'; // Soft silver
+      return '#D4A58B'; // Soft bronze
+    };
+
     return (
       <Surface style={[styles.entryCard, isCurrentUser && styles.currentUserCard]}>
         <View style={styles.rankContainer}>
           {topThree ? (
-            <View style={[styles.trophy, { backgroundColor: item.rank === 1 ? '#FFD700' : item.rank === 2 ? '#C0C0C0' : '#CD7F32' }]}>
+            <View style={[styles.trophy, { backgroundColor: getMedalColor(item.rank) }]}>
               <Ionicons name="trophy" size={20} color="#fff" />
             </View>
           ) : (
@@ -75,13 +82,13 @@ export default function LeaderboardScreen() {
             <Image source={{ uri: item.picture }} style={styles.avatar} />
           ) : (
             <View style={[styles.avatar, styles.defaultAvatar]}>
-              <Ionicons name="person" size={24} color="#666" />
+              <Ionicons name="person-outline" size={24} color={theme.colors.textSecondary} />
             </View>
           )}
           <View style={styles.nameContainer}>
             <Text style={styles.userName}>{item.name}</Text>
             {isCurrentUser && (
-              <Chip mode="outlined" compact style={styles.chip}>
+              <Chip mode="flat" compact style={styles.chip} textStyle={styles.chipText}>
                 You
               </Chip>
             )}
@@ -99,23 +106,28 @@ export default function LeaderboardScreen() {
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#6200ee" />
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
   }
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+      <LinearGradient
+        colors={[theme.colors.primary, theme.colors.secondary]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.header}
+      >
         <Text style={styles.headerTitle}>Leaderboard</Text>
         <Text style={styles.headerSubtitle}>
           {user?.is_premium ? 'Global Rankings' : 'Friends Rankings'}
         </Text>
-      </View>
+      </LinearGradient>
 
       {!user?.is_premium && (
         <Surface style={styles.premiumBanner}>
-          <Ionicons name="star" size={24} color="#FFD700" />
+          <Ionicons name="star" size={24} color={theme.colors.accent} />
           <Text style={styles.premiumText}>
             Upgrade to Premium to see global rankings
           </Text>
