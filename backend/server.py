@@ -151,7 +151,7 @@ class LeaderboardEntry(BaseModel):
     user_id: str
     name: str
     picture: Optional[str] = None
-    visit_count: int
+    total_points: int  # Changed from visit_count to total_points
     rank: int
 
 # ============= AUTH HELPERS =============
