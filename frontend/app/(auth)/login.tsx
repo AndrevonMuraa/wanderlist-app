@@ -40,9 +40,10 @@ export default function LoginScreen() {
 
     try {
       await loginWithGoogle();
+      // Note: On web, this will redirect away, so loading state doesn't matter
+      // On mobile, the loading will be cleared when callback is handled
     } catch (err: any) {
-      setError('Google login failed');
-    } finally {
+      setError('Google login failed. Please try again.');
       setLoading(false);
     }
   };
