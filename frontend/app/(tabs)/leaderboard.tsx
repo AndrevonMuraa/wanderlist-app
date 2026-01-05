@@ -140,11 +140,15 @@ export default function LeaderboardScreen() {
         keyExtractor={(item) => item.user_id}
         contentContainerStyle={styles.listContainer}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={onRefresh}
+            tintColor={theme.colors.primary}
+          />
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Ionicons name="people" size={64} color="#ccc" />
+            <Ionicons name="people-outline" size={64} color={theme.colors.border} />
             <Text style={styles.emptyText}>No rankings yet</Text>
             <Text style={styles.emptySubtext}>
               {user?.is_premium 
@@ -161,60 +165,63 @@ export default function LeaderboardScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: theme.colors.background,
   },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: theme.colors.background,
   },
   header: {
-    padding: 16,
-    backgroundColor: '#6200ee',
+    padding: theme.spacing.lg,
+    paddingTop: theme.spacing.xl,
+    paddingBottom: theme.spacing.xl,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    ...theme.typography.h1,
     color: '#fff',
-    marginBottom: 4,
+    marginBottom: theme.spacing.xs,
   },
   headerSubtitle: {
-    fontSize: 14,
-    color: '#e0d0ff',
+    ...theme.typography.bodySmall,
+    color: 'rgba(255,255,255,0.9)',
   },
   premiumBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
-    margin: 16,
-    borderRadius: 8,
-    elevation: 2,
+    padding: theme.spacing.md,
+    margin: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.sm,
   },
   premiumText: {
     flex: 1,
-    marginLeft: 12,
-    fontSize: 14,
-    color: '#666',
+    marginLeft: theme.spacing.md,
+    ...theme.typography.bodySmall,
+    color: theme.colors.textSecondary,
   },
   listContainer: {
-    padding: 16,
+    padding: theme.spacing.md,
   },
   entryCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    marginBottom: 12,
-    borderRadius: 12,
-    elevation: 2,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.sm,
   },
   currentUserCard: {
     borderWidth: 2,
-    borderColor: '#6200ee',
+    borderColor: theme.colors.accent,
   },
   rankContainer: {
     width: 40,
     alignItems: 'center',
-    marginRight: 12,
+    marginRight: theme.spacing.md,
   },
   trophy: {
     width: 32,
@@ -224,9 +231,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rankText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#666',
+    ...theme.typography.h4,
+    color: theme.colors.textSecondary,
   },
   userInfo: {
     flex: 1,
@@ -237,10 +243,10 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginRight: 12,
+    marginRight: theme.spacing.md,
   },
   defaultAvatar: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: theme.colors.surfaceTinted,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -250,40 +256,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   userName: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginRight: 8,
+    ...theme.typography.body,
+    color: theme.colors.text,
+    marginRight: theme.spacing.sm,
   },
   chip: {
     height: 24,
+    backgroundColor: theme.colors.surfaceTinted,
+  },
+  chipText: {
+    color: theme.colors.primary,
+    fontSize: 10,
   },
   scoreContainer: {
     alignItems: 'flex-end',
   },
   scoreText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#6200ee',
+    ...theme.typography.h3,
+    color: theme.colors.primary,
   },
   scoreLabel: {
-    fontSize: 12,
-    color: '#666',
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
   },
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 48,
+    paddingVertical: theme.spacing.xxl,
   },
   emptyText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#999',
-    marginTop: 16,
+    ...theme.typography.h3,
+    color: theme.colors.textLight,
+    marginTop: theme.spacing.md,
   },
   emptySubtext: {
-    fontSize: 14,
-    color: '#ccc',
-    marginTop: 8,
+    ...theme.typography.bodySmall,
+    color: theme.colors.textLight,
+    marginTop: theme.spacing.sm,
     textAlign: 'center',
   },
 });
