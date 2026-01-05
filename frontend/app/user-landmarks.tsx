@@ -21,6 +21,7 @@ interface Landmark {
 }
 
 export default function UserLandmarksScreen() {
+  const { user } = useAuth();
   const [landmarks, setLandmarks] = useState<Landmark[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
