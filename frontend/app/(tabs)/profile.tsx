@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
-import { Text, Surface, Button, Divider, Switch, List } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform } from 'react-native';
+import { Text, Surface, Button, Divider, Switch, List, Dialog, Portal } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../contexts/AuthContext';
 import { useRouter } from 'expo-router';
