@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
-import { Text, Surface, Button, ActivityIndicator } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, Platform } from 'react-native';
+import { Text, ActivityIndicator, Chip } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import theme from '../../styles/theme';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
+const { width } = Dimensions.get('window');
+
+// Helper to get token
+const getToken = async (): Promise<string | null> => {
+  if (Platform.OS === 'web') {
+    return localStorage.getItem('auth_token');
+  } else {
+    return await SecureStore.getItemAsync('auth_token');
+  }
+};
 
 interface Landmark {
   landmark_id: string;
@@ -19,11 +31,50 @@ interface Landmark {
   upvotes: number;
 }
 
+// Enhanced landmark information with historical facts and images
+const LANDMARK_ENHANCEMENTS: Record<string, {
+  facts: Array<{ title: string; text: string; icon: string }>;
+  images: string[];
+  bestTimeToVisit: string;
+  duration: string;
+  difficulty: string;
+}> = {
+  // Norway
+  'The Old Town of Fredrikstad': {
+    facts: [
+      {
+        title: 'Historic Fortress City',
+        text: 'Founded in 1567 by King Frederick II, Fredrikstad is the best-preserved fortified town in Scandinavia. The star-shaped fortress remains intact with its original moat and ramparts.',
+        icon: 'shield-outline'
+      },
+      {
+        title: 'Cobblestone Streets',
+        text: 'Walk through charming cobblestone streets lined with 17th-century buildings, artisan shops, and cozy cafés. The old town has been continuously inhabited for over 450 years.',
+        icon: 'home-outline'
+      },
+      {
+        title: 'Living History',
+        text: 'The fortress walls host cultural events, festivals, and theatrical performances. Local artisans still practice traditional crafts in workshops within the old town.',
+        icon: 'people-outline'
+      }
+    ],
+    images: [
+      'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=800',
+      'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800',
+      'https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=800'
+    ],
+    bestTimeToVisit: 'June-August (midnight sun)',
+    duration: '3-4 hours',
+    difficulty: 'Easy'
+  },
+  // More landmarks can be added here with similar structure
+};
+
 export default function LandmarkDetailScreen() {
   const { landmark_id } = useLocalSearchParams();
   const [landmark, setLandmark] = useState<Landmark | null>(null);
   const [loading, setLoading] = useState(true);
-  const [upvoted, setUpvoted] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -32,42 +83,28 @@ export default function LandmarkDetailScreen() {
 
   const fetchLandmark = async () => {
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
+      console.log('Fetching landmark:', landmark_id);
+      
       const response = await fetch(`${BACKEND_URL}/api/landmarks/${landmark_id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
 
+      console.log('Landmark API response:', response.status);
+
       if (response.ok) {
         const data = await response.json();
+        console.log('Landmark loaded:', data.name);
         setLandmark(data);
+      } else {
+        console.error('Failed to fetch landmark:', response.status);
       }
     } catch (error) {
       console.error('Error fetching landmark:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleUpvote = async () => {
-    try {
-      const token = await SecureStore.getItemAsync('auth_token');
-      const response = await fetch(`${BACKEND_URL}/api/landmarks/${landmark_id}/upvote`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUpvoted(data.upvoted);
-        // Refresh landmark data
-        fetchLandmark();
-      }
-    } catch (error) {
-      console.error('Error upvoting:', error);
     }
   };
 
@@ -78,74 +115,183 @@ export default function LandmarkDetailScreen() {
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#6200ee" />
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
   }
 
   if (!landmark) {
     return (
-      <View style={styles.centerContainer}>
-        <Text>Landmark not found</Text>
-      </View>
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <View style={styles.centerContainer}>
+          <Ionicons name="location-outline" size={64} color={theme.colors.border} />
+          <Text style={styles.notFoundText}>Landmark not found</Text>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backToExploreButton}>
+            <Text style={styles.backToExploreText}>Back to Explore</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     );
   }
 
+  // Get enhanced content or use defaults
+  const enhancement = LANDMARK_ENHANCEMENTS[landmark.name] || {
+    facts: [
+      {
+        title: 'Historic Significance',
+        text: landmark.description || 'A remarkable landmark with rich cultural heritage and historical importance.',
+        icon: 'book-outline'
+      },
+      {
+        title: 'Architectural Marvel',
+        text: 'Known for its distinctive architecture and design that reflects the cultural identity of the region.',
+        icon: 'business-outline'
+      },
+      {
+        title: 'Cultural Heritage',
+        text: 'A testament to human creativity and ingenuity, attracting visitors from around the world.',
+        icon: 'star-outline'
+      }
+    ],
+    images: [landmark.image_url],
+    bestTimeToVisit: 'Year-round',
+    duration: '2-3 hours',
+    difficulty: 'Easy'
+  };
+
+  const currentImage = enhancement.images[selectedImageIndex] || landmark.image_url;
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView>
-        <Image
-          source={{ uri: landmark.image_url }}
-          style={styles.heroImage}
-        />
-
-        <Surface style={styles.contentCard}>
-          <Text style={styles.landmarkName}>{landmark.name}</Text>
-          
-          <View style={styles.metaRow}>
-            <View style={styles.metaItem}>
-              <Ionicons name="location" size={16} color="#666" />
-              <Text style={styles.metaText}>{landmark.country_name}</Text>
-            </View>
-            <View style={styles.metaItem}>
-              <Ionicons name="earth" size={16} color="#666" />
-              <Text style={styles.metaText}>{landmark.continent}</Text>
-            </View>
-          </View>
-
-          <Text style={styles.description}>{landmark.description}</Text>
-
-          {landmark.category === 'user_suggested' && (
-            <View style={styles.upvoteContainer}>
-              <TouchableOpacity
-                style={styles.upvoteButton}
-                onPress={handleUpvote}
-              >
-                <Ionicons
-                  name={upvoted ? 'heart' : 'heart-outline'}
-                  size={24}
-                  color={upvoted ? '#d32f2f' : '#666'}
-                />
-                <Text style={styles.upvoteText}>{landmark.upvotes} upvotes</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          <Button
-            mode="contained"
-            onPress={handleMarkAsVisited}
-            icon="camera"
-            style={styles.visitButton}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Hero Image with Overlay */}
+        <View style={styles.heroContainer}>
+          <Image
+            source={{ uri: currentImage }}
+            style={styles.heroImage}
+          />
+          <LinearGradient
+            colors={['transparent', 'rgba(0,0,0,0.8)']}
+            style={styles.heroOverlay}
           >
-            Mark as Visited
-          </Button>
-        </Surface>
+            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+              <View style={styles.backButtonCircle}>
+                <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
+              </View>
+            </TouchableOpacity>
+            
+            <View style={styles.heroContent}>
+              <Text style={styles.landmarkName}>{landmark.name}</Text>
+              <View style={styles.locationRow}>
+                <Ionicons name="location" size={16} color="rgba(255,255,255,0.9)" />
+                <Text style={styles.locationText}>{landmark.country_name}</Text>
+              </View>
+            </View>
+          </LinearGradient>
+        </View>
+
+        {/* Image Gallery Thumbnails */}
+        {enhancement.images.length > 1 && (
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            style={styles.thumbnailContainer}
+            contentContainerStyle={styles.thumbnailContent}
+          >
+            {enhancement.images.map((img, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => setSelectedImageIndex(index)}
+                activeOpacity={0.7}
+              >
+                <Image
+                  source={{ uri: img }}
+                  style={[
+                    styles.thumbnail,
+                    selectedImageIndex === index && styles.thumbnailSelected
+                  ]}
+                />
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        )}
+
+        {/* Quick Info Cards */}
+        <View style={styles.quickInfoContainer}>
+          <View style={styles.quickInfoCard}>
+            <Ionicons name="time-outline" size={24} color={theme.colors.primary} />
+            <Text style={styles.quickInfoLabel}>Duration</Text>
+            <Text style={styles.quickInfoValue}>{enhancement.duration}</Text>
+          </View>
+          <View style={styles.quickInfoCard}>
+            <Ionicons name="calendar-outline" size={24} color={theme.colors.accent} />
+            <Text style={styles.quickInfoLabel}>Best Time</Text>
+            <Text style={styles.quickInfoValue}>{enhancement.bestTimeToVisit}</Text>
+          </View>
+          <View style={styles.quickInfoCard}>
+            <Ionicons name="speedometer-outline" size={24} color={theme.colors.accentBronze} />
+            <Text style={styles.quickInfoLabel}>Difficulty</Text>
+            <Text style={styles.quickInfoValue}>{enhancement.difficulty}</Text>
+          </View>
+        </View>
+
+        {/* Description */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>About</Text>
+          <Text style={styles.descriptionText}>{landmark.description}</Text>
+        </View>
+
+        {/* Historical & Cultural Facts */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Discover More</Text>
+          {enhancement.facts.map((fact, index) => (
+            <View key={index} style={styles.factCard}>
+              <View style={styles.factHeader}>
+                <View style={[styles.factIcon, { backgroundColor: theme.colors.primary + '20' }]}>
+                  <Ionicons name={fact.icon as any} size={24} color={theme.colors.primary} />
+                </View>
+                <Text style={styles.factTitle}>{fact.title}</Text>
+              </View>
+              <Text style={styles.factText}>{fact.text}</Text>
+            </View>
+          ))}
+        </View>
+
+        {/* Tips for Visitors */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Visitor Tips</Text>
+          <View style={styles.tipCard}>
+            <Ionicons name="camera-outline" size={20} color={theme.colors.accent} />
+            <Text style={styles.tipText}>Best photo spots at sunrise and sunset</Text>
+          </View>
+          <View style={styles.tipCard}>
+            <Ionicons name="wallet-outline" size={20} color={theme.colors.accent} />
+            <Text style={styles.tipText}>Check for local tour guides for deeper insights</Text>
+          </View>
+          <View style={styles.tipCard}>
+            <Ionicons name="shirt-outline" size={20} color={theme.colors.accent} />
+            <Text style={styles.tipText}>Dress appropriately and respect local customs</Text>
+          </View>
+        </View>
+
+        {/* Action Button */}
+        <View style={styles.actionContainer}>
+          <TouchableOpacity
+            onPress={handleMarkAsVisited}
+            style={styles.visitButton}
+            activeOpacity={0.8}
+          >
+            <LinearGradient
+              colors={[theme.colors.primary, theme.colors.primaryDark]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.visitButtonGradient}
+            >
+              <Ionicons name="checkmark-circle-outline" size={24} color="#fff" />
+              <Text style={styles.visitButtonText}>Mark as Visited</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -154,80 +300,202 @@ export default function LandmarkDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: theme.colors.background,
   },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: theme.spacing.xl,
   },
-  header: {
+  notFoundText: {
+    ...theme.typography.h3,
+    color: theme.colors.textLight,
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.lg,
+  },
+  backToExploreButton: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+    backgroundColor: theme.colors.primary,
+    borderRadius: theme.borderRadius.md,
+  },
+  backToExploreText: {
+    ...theme.typography.body,
+    color: '#fff',
+    fontWeight: '600',
+  },
+  heroContainer: {
+    height: 400,
+    position: 'relative',
+  },
+  heroImage: {
+    width: '100%',
+    height: '100%',
+  },
+  heroOverlay: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    zIndex: 10,
-    padding: 16,
+    bottom: 0,
+    justifyContent: 'space-between',
+    padding: theme.spacing.md,
   },
   backButton: {
+    alignSelf: 'flex-start',
+  },
+  backButtonCircle: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: theme.colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
+    ...theme.shadows.sm,
   },
-  heroImage: {
-    width: '100%',
-    height: 300,
-  },
-  contentCard: {
-    margin: 16,
-    padding: 20,
-    borderRadius: 12,
-    elevation: 2,
+  heroContent: {
+    marginBottom: theme.spacing.md,
   },
   landmarkName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 12,
+    ...theme.typography.display,
+    color: '#fff',
+    marginBottom: theme.spacing.sm,
   },
-  metaRow: {
-    flexDirection: 'row',
-    marginBottom: 16,
-  },
-  metaItem: {
+  locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 16,
   },
-  metaText: {
-    fontSize: 14,
-    color: '#666',
-    marginLeft: 4,
+  locationText: {
+    ...theme.typography.body,
+    color: 'rgba(255,255,255,0.9)',
+    marginLeft: theme.spacing.xs,
   },
-  description: {
-    fontSize: 16,
+  thumbnailContainer: {
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+  },
+  thumbnailContent: {
+    paddingHorizontal: theme.spacing.md,
+    gap: theme.spacing.sm,
+  },
+  thumbnail: {
+    width: 80,
+    height: 80,
+    borderRadius: theme.borderRadius.md,
+    marginRight: theme.spacing.sm,
+    opacity: 0.6,
+  },
+  thumbnailSelected: {
+    opacity: 1,
+    borderWidth: 3,
+    borderColor: theme.colors.primary,
+  },
+  quickInfoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.lg,
+  },
+  quickInfoCard: {
+    alignItems: 'center',
+    backgroundColor: theme.colors.surface,
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    flex: 1,
+    marginHorizontal: theme.spacing.xs,
+    ...theme.shadows.sm,
+  },
+  quickInfoLabel: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    marginTop: theme.spacing.xs,
+  },
+  quickInfoValue: {
+    ...theme.typography.labelSmall,
+    color: theme.colors.text,
+    fontWeight: '600',
+    marginTop: theme.spacing.xs / 2,
+    textAlign: 'center',
+  },
+  section: {
+    paddingHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.xl,
+  },
+  sectionTitle: {
+    ...theme.typography.h2,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.md,
+  },
+  descriptionText: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
     lineHeight: 24,
-    color: '#333',
-    marginBottom: 16,
   },
-  upvoteContainer: {
-    marginBottom: 16,
+  factCard: {
+    backgroundColor: theme.colors.surface,
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    marginBottom: theme.spacing.md,
+    ...theme.shadows.sm,
   },
-  upvoteButton: {
+  factHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
-    borderRadius: 8,
-    backgroundColor: '#f5f5f5',
+    marginBottom: theme.spacing.sm,
   },
-  upvoteText: {
-    marginLeft: 8,
-    fontSize: 16,
-    color: '#666',
+  factIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: theme.spacing.md,
+  },
+  factTitle: {
+    ...theme.typography.h4,
+    color: theme.colors.text,
+    flex: 1,
+  },
+  factText: {
+    ...theme.typography.bodySmall,
+    color: theme.colors.textSecondary,
+    lineHeight: 22,
+  },
+  tipCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.surfaceTinted,
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.md,
+    marginBottom: theme.spacing.sm,
+  },
+  tipText: {
+    ...theme.typography.bodySmall,
+    color: theme.colors.text,
+    marginLeft: theme.spacing.md,
+    flex: 1,
+  },
+  actionContainer: {
+    padding: theme.spacing.md,
+    paddingBottom: theme.spacing.xl,
   },
   visitButton: {
-    marginTop: 8,
+    borderRadius: theme.borderRadius.xl,
+    overflow: 'hidden',
+    ...theme.shadows.md,
+  },
+  visitButtonGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
+  },
+  visitButtonText: {
+    ...theme.typography.h4,
+    color: '#fff',
+    marginLeft: theme.spacing.sm,
+    fontWeight: '600',
   },
 });
