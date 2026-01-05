@@ -41,16 +41,16 @@ COUNTRIES_DATA = [
 # 10 landmarks per country
 LANDMARKS_DATA = {
     "norway": [
-        {"name": "The Old Town of Fredrikstad", "description": "A well-preserved fortified town with cobblestone streets and historic buildings.", "image_url": "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600"},
-        {"name": "Preikestolen (Pulpit Rock)", "description": "A steep cliff that rises 604 meters above Lysefjorden, offering breathtaking views.", "image_url": "https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=600"},
-        {"name": "Bryggen", "description": "Colorful wooden houses on the waterfront in Bergen, a UNESCO World Heritage site.", "image_url": "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600"},
-        {"name": "Nidaros Cathedral", "description": "Norway's national sanctuary, built over the burial site of St. Olav.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=600"},
-        {"name": "Geirangerfjord", "description": "A stunning fjord known for its deep blue waters and majestic waterfalls.", "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600"},
-        {"name": "Vigeland Sculpture Park", "description": "The world's largest sculpture park made by a single artist, Gustav Vigeland.", "image_url": "https://images.unsplash.com/photo-1581791538302-03537b9e46bd?w=600"},
-        {"name": "Northern Lights", "description": "Natural light display in Arctic skies, best seen in Northern Norway.", "image_url": "https://images.unsplash.com/photo-1483347756197-71ef80e95f73?w=600"},
-        {"name": "Lofoten Islands", "description": "Dramatic peaks, open sea, and sheltered bays in Arctic waters.", "image_url": "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=600"},
-        {"name": "Akershus Fortress", "description": "Medieval castle and fortress in Oslo, built to protect the capital.", "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=600"},
-        {"name": "Trolltunga", "description": "A rock formation jutting horizontally out of a mountain 700 meters above sea level.", "image_url": "https://images.unsplash.com/photo-1586469479969-2fef2476c6b1?w=600"},
+        {"name": "The Old Town of Fredrikstad", "description": "A well-preserved fortified town with cobblestone streets and historic buildings.", "image_url": "https://images.unsplash.com/photo-1519832979-6e818b863f67?w=800"},
+        {"name": "Preikestolen (Pulpit Rock)", "description": "A steep cliff that rises 604 meters above Lysefjorden, offering breathtaking views.", "image_url": "https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=800"},
+        {"name": "Bryggen", "description": "Colorful wooden houses on the waterfront in Bergen, a UNESCO World Heritage site.", "image_url": "https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=800"},
+        {"name": "Nidaros Cathedral", "description": "Norway's national sanctuary, built over the burial site of St. Olav.", "image_url": "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800"},
+        {"name": "Geirangerfjord", "description": "A stunning fjord known for its deep blue waters and majestic waterfalls.", "image_url": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800"},
+        {"name": "Vigeland Sculpture Park", "description": "The world's largest sculpture park made by a single artist, Gustav Vigeland.", "image_url": "https://images.unsplash.com/photo-1538646441578-a9f6e1f94a42?w=800"},
+        {"name": "Northern Lights", "description": "Natural light display in Arctic skies, best seen in Northern Norway.", "image_url": "https://images.unsplash.com/photo-1483347756197-71ef80e95f73?w=800"},
+        {"name": "Lofoten Islands", "description": "Dramatic peaks, open sea, and sheltered bays in Arctic waters.", "image_url": "https://images.unsplash.com/photo-1517639493569-5666a7556424?w=800"},
+        {"name": "Akershus Fortress", "description": "Medieval castle and fortress in Oslo, built to protect the capital.", "image_url": "https://images.unsplash.com/photo-1602675809614-6a17f8de4f1b?w=800"},
+        {"name": "Trolltunga", "description": "A rock formation jutting horizontally out of a mountain 700 meters above sea level.", "image_url": "https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800"},
     ],
     "france": [
         {"name": "Eiffel Tower", "description": "Iconic iron lattice tower in Paris, symbol of France.", "image_url": "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=600"},
