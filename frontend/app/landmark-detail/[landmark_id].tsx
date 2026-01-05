@@ -59,9 +59,9 @@ const LANDMARK_ENHANCEMENTS: Record<string, {
       }
     ],
     images: [
-      'https://images.unsplash.com/photo-1519832979-6e818b863f67?w=800',
-      'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800',
-      'https://images.unsplash.com/photo-1530841377377-3ff06c0ca713?w=800'
+      'https://source.unsplash.com/800x600/?fredrikstad,norway,fortress,old,town',
+      'https://source.unsplash.com/800x600/?norway,historic,fortress,cobblestone',
+      'https://source.unsplash.com/800x600/?norway,medieval,town,architecture'
     ],
     bestTimeToVisit: 'June-August',
     duration: '3-4 hours',
