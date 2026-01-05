@@ -48,28 +48,28 @@ export const colors = {
   border: '#E8E4DF',
   borderLight: '#F0EDE8',
   
-  // Country-specific accent colors (for national effects)
+  // Country-specific accent colors (vibrant travel photography tones)
   countryAccents: {
-    norway: '#B5C5D4',      // Nordic blue
-    france: '#C8B5D4',      // Lavender
-    italy: '#D4C5B5',       // Tuscan tan
-    japan: '#E8C8C8',       // Cherry blossom
-    egypt: '#E5D5B7',       // Sand
-    peru: '#D4A58B',        // Terracotta
-    australia: '#E8D4A8',   // Outback gold
-    usa: '#B5C5D4',         // Liberty blue
-    uk: '#C8A8A8',          // Royal rose
-    china: '#E8B5B5',       // Vermillion
-    spain: '#E8D4A8',       // Golden
-    greece: '#B5C8D4',      // Aegean
-    thailand: '#E8C8D4',    // Orchid
-    india: '#E5C8A8',       // Spice
-    brazil: '#A8D4A8',      // Rainforest
-    mexico: '#E8C8A8',      // Adobe
-    uae: '#E5D5B7',         // Desert gold
-    germany: '#C8C8C8',     // Silver
-    canada: '#D4B5B5',      // Maple
-    south_africa: '#E8D4A8', // Savanna
+    norway: '#4A90A4',      // Nordic fjord blue
+    france: '#9B7EBE',      // Provence lavender
+    italy: '#C8956A',       // Tuscan sunset
+    japan: '#E8879E',       // Cherry blossom
+    egypt: '#D4A574',       // Desert gold
+    peru: '#8B6F47',        // Andes earth
+    australia: '#E89B5C',   // Outback sunset
+    usa: '#5B8FA3',         // Grand Canyon blue
+    uk: '#7A8E7E',          // English countryside
+    china: '#D4534D',       // Vermillion
+    spain: '#E8A05C',       // Mediterranean sun
+    greece: '#4DB8D8',      // Aegean blue
+    thailand: '#8FBC8F',    // Tropical green
+    india: '#D4956A',       // Spice market
+    brazil: '#5FB85F',      // Rainforest
+    mexico: '#E8A872',      // Sunset orange
+    uae: '#C9A961',         // Desert gold
+    germany: '#6B8E99',     // Rhine blue
+    canada: '#D46B6B',      // Maple
+    south_africa: '#C8854D', // Safari sunset
   },
 };
 
@@ -80,46 +80,61 @@ export const spacing = {
   lg: 24,
   xl: 32,
   xxl: 48,
+  xxxl: 64,
 };
 
 export const borderRadius = {
   sm: 8,
   md: 12,
   lg: 16,
-  xl: 24,
+  xl: 20,
+  xxl: 24,  // Large rounded cards like in the design
   round: 999,
 };
 
 export const typography = {
-  // Headings - Lighter weight
+  // Display - Editorial Headlines (Serif feel)
+  display: {
+    fontSize: 36,
+    fontWeight: '700' as const,
+    lineHeight: 44,
+    letterSpacing: -0.5,
+  },
+  
+  // Headings - Strong & Bold
   h1: {
     fontSize: 32,
-    fontWeight: '600' as const,  // Lighter than before (was 700)
+    fontWeight: '700' as const,
     lineHeight: 40,
     letterSpacing: -0.5,
   },
   h2: {
-    fontSize: 24,
-    fontWeight: '600' as const,  // Lighter
-    lineHeight: 32,
+    fontSize: 26,
+    fontWeight: '700' as const,
+    lineHeight: 34,
     letterSpacing: -0.3,
   },
   h3: {
-    fontSize: 20,
-    fontWeight: '500' as const,  // Lighter
-    lineHeight: 28,
+    fontSize: 22,
+    fontWeight: '600' as const,
+    lineHeight: 30,
   },
   h4: {
     fontSize: 18,
-    fontWeight: '500' as const,
+    fontWeight: '600' as const,
     lineHeight: 24,
   },
   
-  // Body
+  // Body - Clean & Readable
   body: {
     fontSize: 16,
     fontWeight: '400' as const,
     lineHeight: 24,
+  },
+  bodyLarge: {
+    fontSize: 18,
+    fontWeight: '400' as const,
+    lineHeight: 28,
   },
   bodySmall: {
     fontSize: 14,
@@ -130,12 +145,12 @@ export const typography = {
   // Labels
   label: {
     fontSize: 14,
-    fontWeight: '500' as const,
+    fontWeight: '600' as const,
     lineHeight: 20,
   },
   labelSmall: {
     fontSize: 12,
-    fontWeight: '500' as const,
+    fontWeight: '600' as const,
     lineHeight: 16,
   },
   
@@ -148,27 +163,35 @@ export const typography = {
 };
 
 export const shadows = {
-  // Much lighter shadows
+  // Soft, elegant shadows
   sm: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  md: {
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.08,
     shadowRadius: 4,
     elevation: 2,
   },
-  lg: {
+  md: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.12,
     shadowRadius: 8,
-    elevation: 3,
+    elevation: 4,
+  },
+  lg: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.16,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  // Special shadow for image cards
+  card: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
   },
 };
 
