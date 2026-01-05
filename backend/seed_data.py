@@ -194,10 +194,11 @@ LANDMARKS_DATA = {
         {
             "name": "Vigeland Sculpture Park", 
             "description": "The world's largest sculpture park made by a single artist, Gustav Vigeland.", 
-            "image_url": "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800",
+            "image_url": "https://images.pexels.com/photos/892226/pexels-photo-892226.jpeg?auto=compress&cs=tinysrgb&w=800",
             "images": [
-                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800",
-                "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800"
+                "https://images.pexels.com/photos/892226/pexels-photo-892226.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/892228/pexels-photo-892228.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/35531113/pexels-photo-35531113.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
             "facts": [
                 {
