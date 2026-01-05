@@ -101,6 +101,11 @@ class Country(BaseModel):
     continent: str
     landmark_count: int = 0
 
+class LandmarkFact(BaseModel):
+    title: str
+    text: str
+    icon: str
+
 class Landmark(BaseModel):
     landmark_id: str
     name: str
@@ -110,6 +115,11 @@ class Landmark(BaseModel):
     description: str
     category: str  # "official", "premium", or "user_suggested"
     image_url: str
+    images: Optional[List[str]] = []  # Array of image URLs for gallery
+    facts: Optional[List[LandmarkFact]] = []  # Historical/cultural facts
+    best_time_to_visit: Optional[str] = "Year-round"
+    duration: Optional[str] = "2-3 hours"
+    difficulty: Optional[str] = "Easy"
     points: int = 10  # Points awarded for visiting (10 for official, 25 for premium)
     upvotes: int = 0
     created_by: Optional[str] = None
