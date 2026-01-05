@@ -163,11 +163,11 @@ LANDMARKS_DATA = {
         {
             "name": "Geirangerfjord", 
             "description": "A stunning fjord known for its deep blue waters and majestic waterfalls.", 
-            "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+            "image_url": "https://images.pexels.com/photos/6272373/pexels-photo-6272373.jpeg?auto=compress&cs=tinysrgb&w=800",
             "images": [
-                "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
-                "https://images.unsplash.com/photo-1523496922380-91d5afba98a3?w=800",
-                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800"
+                "https://images.pexels.com/photos/6272373/pexels-photo-6272373.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/355749/pexels-photo-355749.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://images.pexels.com/photos/6272372/pexels-photo-6272372.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
             "facts": [
                 {
