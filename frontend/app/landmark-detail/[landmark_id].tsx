@@ -42,206 +42,6 @@ interface Landmark {
   upvotes: number;
 }
 
-// Enhanced landmark information with historical facts and images
-const LANDMARK_ENHANCEMENTS: Record<string, {
-  facts: Array<{ title: string; text: string; icon: string }>;
-  images: string[];
-  bestTimeToVisit: string;
-  duration: string;
-  difficulty: string;
-}> = {
-  // Norway - Complete enhancement data
-  'The Old Town of Fredrikstad': {
-    facts: [
-      {
-        title: 'Historic Fortress City',
-        text: 'Founded in 1567 by King Frederick II, Fredrikstad is the best-preserved fortified town in Scandinavia. The star-shaped fortress remains intact with its original moat and ramparts.',
-        icon: 'shield-outline'
-      },
-      {
-        title: 'Cobblestone Streets',
-        text: 'Walk through charming cobblestone streets lined with 17th-century buildings, artisan shops, and cozy cafés. The old town has been continuously inhabited for over 450 years.',
-        icon: 'home-outline'
-      },
-      {
-        title: 'Living History',
-        text: 'The fortress walls host cultural events, festivals, and theatrical performances. Local artisans still practice traditional crafts in workshops within the old town.',
-        icon: 'people-outline'
-      }
-    ],
-    images: [
-      'https://source.unsplash.com/800x600/?fredrikstad,norway,fortress,old,town',
-      'https://source.unsplash.com/800x600/?norway,historic,fortress,cobblestone',
-      'https://source.unsplash.com/800x600/?norway,medieval,town,architecture'
-    ],
-    bestTimeToVisit: 'June-August',
-    duration: '3-4 hours',
-    difficulty: 'Easy'
-  },
-  'Preikestolen (Pulpit Rock)': {
-    facts: [
-      {
-        title: 'Iconic Cliff Formation',
-        text: 'Pulpit Rock rises 604 meters above Lysefjorden, featuring a flat-topped cliff approximately 25x25 meters. Formed during the Ice Age by glacial erosion about 10,000 years ago.',
-        icon: 'triangle-outline'
-      },
-      {
-        title: 'Popular Hiking Destination',
-        text: 'The 8km round-trip hike takes 4-5 hours and attracts over 300,000 visitors annually. The trail offers stunning views of the fjord and surrounding mountains.',
-        icon: 'walk-outline'
-      },
-      {
-        title: 'Natural Wonder',
-        text: "Despite appearing precarious, geologists say there's no immediate risk of the rock falling. However, the spectacular drop creates an unforgettable experience for visitors.",
-        icon: 'warning-outline'
-      }
-    ],
-    images: [
-      'https://source.unsplash.com/800x600/?preikestolen,pulpit,rock,cliff,norway',
-      'https://source.unsplash.com/800x600/?norway,fjord,lysefjorden,hiking',
-      'https://source.unsplash.com/800x600/?norway,cliff,mountain,dramatic'
-    ],
-    bestTimeToVisit: 'May-September',
-    duration: '4-5 hours',
-    difficulty: 'Moderate'
-  },
-  'Bryggen': {
-    facts: [
-      {
-        title: 'UNESCO World Heritage',
-        text: 'Bryggen (the wharf) has been a UNESCO World Heritage site since 1979. These colorful wooden buildings date back to the 14th century and represent the Hanseatic League trading post.',
-        icon: 'ribbon-outline'
-      },
-      {
-        title: 'Hanseatic Legacy',
-        text: 'From 1360 to 1754, Bryggen was the center of the Hanseatic League\'s trading empire in Norway. German merchants lived and worked here, controlling Bergen\'s trade.',
-        icon: 'boat-outline'
-      },
-      {
-        title: 'Survived Many Fires',
-        text: 'Despite being rebuilt numerous times after devastating fires (most recently in 1955), the area maintains its medieval street plan and distinctive wooden architecture.',
-        icon: 'flame-outline'
-      }
-    ],
-    images: [
-      'https://source.unsplash.com/800x600/?bryggen,bergen,norway,colorful,wooden',
-      'https://source.unsplash.com/800x600/?bergen,norway,waterfront,houses',
-      'https://source.unsplash.com/800x600/?norway,wharf,historic,architecture'
-    ],
-    bestTimeToVisit: 'May-September',
-    duration: '2-3 hours',
-    difficulty: 'Easy'
-  },
-  'Trolltunga': {
-    facts: [
-      {
-        title: 'Dramatic Rock Formation',
-        text: 'Trolltunga (Troll\'s Tongue) is a piece of rock jutting horizontally out from a mountain 700 meters above Lake Ringedalsvatnet. Formed during the Ice Age when glaciers carved the landscape.',
-        icon: 'flash-outline'
-      },
-      {
-        title: 'Challenging Hike',
-        text: 'The 28km round-trip hike takes 10-12 hours and is one of Norway\'s most spectacular but demanding trails. The route includes steep climbs and exposed sections.',
-        icon: 'fitness-outline'
-      },
-      {
-        title: 'Instagram Famous',
-        text: 'Once a hidden gem, Trolltunga has become one of Norway\'s most photographed landmarks. Over 80,000 hikers attempt the journey annually, despite the challenge.',
-        icon: 'camera-outline'
-      }
-    ],
-    images: [
-      'https://source.unsplash.com/800x600/?trolltunga,norway,rock,tongue,hiking',
-      'https://source.unsplash.com/800x600/?norway,troll,tongue,cliff,adventure',
-      'https://source.unsplash.com/800x600/?norway,mountain,hike,extreme'
-    ],
-    bestTimeToVisit: 'June-September',
-    duration: '10-12 hours',
-    difficulty: 'Challenging'
-  },
-  'Geirangerfjord': {
-    facts: [
-      {
-        title: 'UNESCO Fjord',
-        text: 'Geirangerfjord is a UNESCO World Heritage site, renowned as one of the most beautiful fjords in the world. The 15km fjord features cascading waterfalls and snow-capped peaks.',
-        icon: 'water-outline'
-      },
-      {
-        title: 'Seven Sisters Waterfall',
-        text: 'The fjord is home to the famous Seven Sisters waterfall (De syv søstrene), which plunges 250 meters into the fjord, along with the "Bridal Veil" and "Suitor" waterfalls.',
-        icon: 'rainy-outline'
-      },
-      {
-        title: 'Abandoned Farms',
-        text: 'Steep mountainsides feature abandoned farms perched on narrow ledges, accessible only by arduous paths. These farms tell stories of hardy people who once called this dramatic landscape home.',
-        icon: 'home-outline'
-      }
-    ],
-    images: [
-      'https://source.unsplash.com/800x600/?geirangerfjord,norway,fjord,waterfall',
-      'https://source.unsplash.com/800x600/?norway,fjord,cruise,mountains',
-      'https://source.unsplash.com/800x600/?geiranger,norway,seven,sisters'
-    ],
-    bestTimeToVisit: 'May-September',
-    duration: '4-6 hours (cruise)',
-    difficulty: 'Easy'
-  },
-  'Northern Lights': {
-    facts: [
-      {
-        title: 'Aurora Borealis Magic',
-        text: 'The Northern Lights (Aurora Borealis) occur when solar particles collide with gases in Earth\'s atmosphere, creating colorful light displays. Northern Norway offers some of the world\'s best viewing opportunities.',
-        icon: 'sparkles-outline'
-      },
-      {
-        title: 'Best Viewing Season',
-        text: 'From late September to late March, the polar night in Northern Norway provides ideal darkness for viewing. Tromsø, often called the "Gateway to the Arctic," is a premier viewing location.',
-        icon: 'moon-outline'
-      },
-      {
-        title: 'Colors and Myths',
-        text: 'The lights appear in shades of green, pink, red, yellow, and violet. Ancient Norse mythology believed the lights were reflections from the armor of the Valkyries leading warriors to Valhalla.',
-        icon: 'star-outline'
-      }
-    ],
-    images: [
-      'https://source.unsplash.com/800x600/?northern,lights,aurora,borealis,norway',
-      'https://source.unsplash.com/800x600/?aurora,norway,arctic,green,lights',
-      'https://source.unsplash.com/800x600/?norway,northern,lights,tromso'
-    ],
-    bestTimeToVisit: 'September-March',
-    duration: 'All night',
-    difficulty: 'Easy'
-  },
-  'Lofoten Islands': {
-    facts: [
-      {
-        title: 'Arctic Archipelago',
-        text: 'The Lofoten Islands are an archipelago within the Arctic Circle, known for dramatic scenery with jagged peaks rising directly from the sea, creating a spectacular landscape.',
-        icon: 'snow-outline'
-      },
-      {
-        title: 'Fishing Villages',
-        text: 'Traditional red fishing cabins (rorbu) dot the coastline. Lofoten has been a fishing center for over 1,000 years, with cod fishing still central to the local economy and culture.',
-        icon: 'fish-outline'
-      },
-      {
-        title: 'Midnight Sun',
-        text: 'From late May to mid-July, the sun never sets, creating unique opportunities for hiking, kayaking, and photography in 24-hour daylight. Winter brings the magical polar night.',
-        icon: 'sunny-outline'
-      }
-    ],
-    images: [
-      'https://source.unsplash.com/800x600/?lofoten,islands,norway,fishing,village',
-      'https://source.unsplash.com/800x600/?norway,lofoten,rorbu,red,cabins',
-      'https://source.unsplash.com/800x600/?lofoten,norway,arctic,mountains'
-    ],
-    bestTimeToVisit: 'May-September',
-    duration: '3-5 days',
-    difficulty: 'Easy-Moderate'
-  },
-  // More landmarks can be added here with similar structure
-};
 
 export default function LandmarkDetailScreen() {
   const { landmark_id } = useLocalSearchParams();
@@ -307,32 +107,30 @@ export default function LandmarkDetailScreen() {
     );
   }
 
-  // Get enhanced content or use defaults
-  const enhancement = LANDMARK_ENHANCEMENTS[landmark.name] || {
-    facts: [
-      {
-        title: 'Historic Significance',
-        text: landmark.description || 'A remarkable landmark with rich cultural heritage and historical importance.',
-        icon: 'book-outline'
-      },
-      {
-        title: 'Architectural Marvel',
-        text: 'Known for its distinctive architecture and design that reflects the cultural identity of the region.',
-        icon: 'business-outline'
-      },
-      {
-        title: 'Cultural Heritage',
-        text: 'A testament to human creativity and ingenuity, attracting visitors from around the world.',
-        icon: 'star-outline'
-      }
-    ],
-    images: [landmark.image_url],
-    bestTimeToVisit: 'Year-round',
-    duration: '2-3 hours',
-    difficulty: 'Easy'
-  };
+  // Get data from API or use defaults
+  const images = landmark.images && landmark.images.length > 0 ? landmark.images : [landmark.image_url];
+  const facts = landmark.facts && landmark.facts.length > 0 ? landmark.facts : [
+    {
+      title: 'Historic Significance',
+      text: landmark.description || 'A remarkable landmark with rich cultural heritage and historical importance.',
+      icon: 'book-outline'
+    },
+    {
+      title: 'Architectural Marvel',
+      text: 'Known for its distinctive architecture and design that reflects the cultural identity of the region.',
+      icon: 'business-outline'
+    },
+    {
+      title: 'Cultural Heritage',
+      text: 'A testament to human creativity and ingenuity, attracting visitors from around the world.',
+      icon: 'star-outline'
+    }
+  ];
+  const bestTimeToVisit = landmark.best_time_to_visit || 'Year-round';
+  const duration = landmark.duration || '2-3 hours';
+  const difficulty = landmark.difficulty || 'Easy';
 
-  const currentImage = enhancement.images[selectedImageIndex] || landmark.image_url;
+  const currentImage = images[selectedImageIndex] || landmark.image_url;
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
