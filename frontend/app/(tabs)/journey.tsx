@@ -205,9 +205,9 @@ const styles = StyleSheet.create({
   statsCard: {
     margin: theme.spacing.md,
     padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.lg,
+    borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
+    ...theme.shadows.card,
   },
   statsCardTitle: {
     ...theme.typography.h3,
@@ -217,10 +217,18 @@ const styles = StyleSheet.create({
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.lg,
   },
   statItem: {
     alignItems: 'center',
+  },
+  iconCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: theme.spacing.sm,
   },
   statNumber: {
     ...theme.typography.h2,
@@ -248,14 +256,14 @@ const styles = StyleSheet.create({
   },
   visitCard: {
     marginBottom: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
+    borderRadius: theme.borderRadius.xl,
     overflow: 'hidden',
     backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
+    ...theme.shadows.card,
   },
   visitImage: {
     width: '100%',
-    height: 200,
+    height: 220,
   },
   visitContent: {
     padding: theme.spacing.md,
