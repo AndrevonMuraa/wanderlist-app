@@ -112,33 +112,88 @@ export default function LandmarksScreen() {
       activeOpacity={0.7}
     >
       <Surface style={styles.landmarkCard}>
+        {/* Image with blur for locked content */}
         <Image
           source={{ uri: item.image_url }}
-          style={styles.landmarkImage}
+          style={[
+            styles.landmarkImage,
+            item.is_locked && styles.blurredImage
+          ]}
+          blurRadius={item.is_locked ? 8 : 0}
         />
-        {/* Premium Badge */}
+        
+        {/* Enhanced Premium Badge - Top Right */}
         {item.category === 'premium' && (
-          <View style={styles.premiumBadge}>
-            <Ionicons name="diamond" size={12} color="#FFD700" />
-            <Text style={styles.premiumText}>PREMIUM</Text>
+          <View style={styles.premiumBadgeEnhanced}>
+            <LinearGradient
+              colors={['#FFD700', '#FFA500']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.premiumBadgeGradient}
+            >
+              <Ionicons name="diamond" size={16} color="#fff" />
+              <Text style={styles.premiumTextEnhanced}>PREMIUM</Text>
+            </LinearGradient>
           </View>
         )}
-        {/* Lock Overlay for Locked Landmarks */}
+        
+        {/* Enhanced Lock Overlay for Locked Landmarks */}
         {item.is_locked && (
-          <View style={styles.lockOverlay}>
-            <Ionicons name="lock-closed" size={48} color="#FFD700" />
-            <Text style={styles.lockText}>Premium Only</Text>
+          <View style={styles.lockOverlayEnhanced}>
+            {/* Animated pulse effect background */}
+            <LinearGradient
+              colors={['rgba(255,215,0,0.15)', 'rgba(255,165,0,0.25)', 'rgba(255,215,0,0.15)']}
+              style={styles.pulseGradient}
+            />
+            
+            {/* Lock Icon with glow */}
+            <View style={styles.lockIconContainer}>
+              <View style={styles.lockIconGlow} />
+              <Ionicons name="lock-closed" size={56} color="#FFD700" />
+            </View>
+            
+            {/* Upgrade CTA */}
+            <View style={styles.upgradeCTA}>
+              <Text style={styles.upgradeTitle}>Unlock Premium</Text>
+              <Text style={styles.upgradeSubtitle}>Tap to explore exclusive content</Text>
+              
+              {/* Points highlight */}
+              <View style={styles.premiumPointsHighlight}>
+                <Ionicons name="star" size={20} color="#FFD700" />
+                <Text style={styles.premiumPointsText}>Worth {item.points || 25} points!</Text>
+              </View>
+            </View>
           </View>
         )}
+        
+        {/* Bottom gradient with info */}
         <LinearGradient
-          colors={['transparent', 'rgba(0,0,0,0.6)']}
+          colors={['transparent', item.is_locked ? 'rgba(0,0,0,0.85)' : 'rgba(0,0,0,0.6)']}
           style={styles.imageOverlay}
         >
-          <Text style={styles.landmarkName}>{item.name}</Text>
-          {/* Points Display */}
-          <View style={styles.pointsBadge}>
-            <Ionicons name="star" size={14} color="#FFD700" />
-            <Text style={styles.pointsText}>{item.points || 10} pts</Text>
+          <Text style={[styles.landmarkName, item.is_locked && styles.landmarkNameLocked]}>
+            {item.name}
+          </Text>
+          
+          {/* Points Display - Enhanced for premium */}
+          <View style={[
+            styles.pointsBadge,
+            item.category === 'premium' && styles.pointsBadgePremium
+          ]}>
+            <Ionicons 
+              name={item.category === 'premium' ? "star" : "star-outline"} 
+              size={16} 
+              color={item.category === 'premium' ? "#FFD700" : "#FFD700"} 
+            />
+            <Text style={[
+              styles.pointsText,
+              item.category === 'premium' && styles.pointsTextPremium
+            ]}>
+              {item.points || 10} pts
+            </Text>
+            {item.category === 'premium' && (
+              <Ionicons name="diamond" size={12} color="#FFD700" style={{ marginLeft: 4 }} />
+            )}
           </View>
         </LinearGradient>
       </Surface>
