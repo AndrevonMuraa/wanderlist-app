@@ -726,10 +726,11 @@ LANDMARKS_DATA = {
         {
             "name": "Egyptian Museum", 
             "description": "Home to extensive collection of ancient Egyptian antiquities.", 
-            "image_url": "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800",
+            "image_url": "https://images.unsplash.com/photo-1572252821143-035a024857ac?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800",
-                "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800"
+                "https://images.unsplash.com/photo-1572252821143-035a024857ac?w=800",
+                "https://images.unsplash.com/photo-1569960561082-7b89b9dd5600?w=800",
+                "https://images.unsplash.com/photo-1592236139498-c48fd44c9e3b?w=800"
             ],
             "latitude": 30.0478, "longitude": 31.2336
         },
