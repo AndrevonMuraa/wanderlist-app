@@ -7,6 +7,7 @@ import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
+import LandmarkMap from '../../components/LandmarkMap';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 const { width } = Dimensions.get('window');
