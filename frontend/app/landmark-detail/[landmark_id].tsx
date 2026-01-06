@@ -10,7 +10,11 @@ import theme from '../../styles/theme';
 import LandmarkMap from '../../components/LandmarkMap';
 import { MapView, Marker } from '../../components/MapComponents';
 
-const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
+// For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
+// For mobile, use the external URL
+const BACKEND_URL = Platform.OS === 'web' 
+  ? '' 
+  : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
 const { width } = Dimensions.get('window');
 
 // Helper to get token
