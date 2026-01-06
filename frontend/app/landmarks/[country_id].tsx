@@ -87,6 +87,24 @@ export default function LandmarksScreen() {
     fetchLandmarks();
   };
 
+  const handleLandmarkPress = (landmark: Landmark) => {
+    if (landmark.is_locked) {
+      // Show upgrade modal for locked landmarks
+      setShowUpgradeModal(true);
+    } else {
+      // Navigate to landmark detail for unlocked landmarks
+      router.push(`/landmark-detail/${landmark.landmark_id}`);
+    }
+  };
+
+  const handleUpgrade = (tier: 'basic' | 'premium') => {
+    // In a real app, this would trigger payment flow
+    // For now, just close the modal
+    setShowUpgradeModal(false);
+    // TODO: Integrate with payment provider (Stripe/RevenueCat)
+    console.log('User wants to upgrade to:', tier);
+  };
+
   const renderLandmark = ({ item }: { item: Landmark }) => (
     <TouchableOpacity
       onPress={() => router.push(`/landmark-detail/${item.landmark_id}`)}
