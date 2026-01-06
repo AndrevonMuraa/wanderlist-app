@@ -366,9 +366,9 @@ LANDMARKS_DATA = {
             "description": "Iconic iron lattice tower in Paris, symbol of France.", 
             "image_url": "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=800",
+                "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=800",
                 "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?w=800",
-                "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800"
+                "https://images.unsplash.com/photo-1503174971373-b1f69850bded?w=800"
             ],
             "latitude": 48.8584, "longitude": 2.2945
         },
@@ -378,7 +378,7 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800",
-                "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?w=800"
+                "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?w=800",
             ],
             "latitude": 48.8606, "longitude": 2.3376
         },
@@ -398,8 +398,8 @@ LANDMARKS_DATA = {
             "description": "Island commune topped by medieval monastery.", 
             "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800",
-                "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800"
+                "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800",
+                "https://images.unsplash.com/photo-1576253387211-9c71a5b621a6?w=800",
             ],
             "latitude": 48.6361, "longitude": -1.5115
         },
@@ -451,8 +451,8 @@ LANDMARKS_DATA = {
             "description": "Stunning basilica on the summit of Montmartre in Paris.", 
             "image_url": "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800",
-                "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800"
+                "https://images.unsplash.com/photo-1544639795-1dd4b71d42e3?w=800",
+                "https://images.unsplash.com/photo-1594770385973-5ac7bb6c41be?w=800",
             ],
             "latitude": 48.8867, "longitude": 2.3431
         },
@@ -473,9 +473,9 @@ LANDMARKS_DATA = {
             "description": "Ancient amphitheater in Rome, largest ever built.", 
             "image_url": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800",
                 "https://images.unsplash.com/photo-1548585744-c5f0eac5f0de?w=800",
-                "https://images.unsplash.com/photo-1520466809213-7b9a56adcd45?w=800"
+                "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800",
+                "https://images.unsplash.com/photo-1529260830199-42c24126f198?w=800"
             ],
             "latitude": 41.8902, "longitude": 12.4922
         },
@@ -484,8 +484,8 @@ LANDMARKS_DATA = {
             "description": "Freestanding bell tower known for its unintended tilt.", 
             "image_url": "https://images.unsplash.com/photo-1572025442646-866d16c84a54?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1572025442646-866d16c84a54?w=800",
-                "https://images.unsplash.com/photo-1549690483-fd78c3fd7d71?w=800"
+                "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800",
+                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
             ],
             "latitude": 43.7230, "longitude": 10.3966
         },
@@ -494,9 +494,9 @@ LANDMARKS_DATA = {
             "description": "Romantic waterways through historic Venice.", 
             "image_url": "https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=800",
                 "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800",
-                "https://images.unsplash.com/photo-1541877944-ac82a091518a?w=800"
+                "https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=800",
+                "https://images.unsplash.com/photo-1548898475-70f5f7ddbb41?w=800"
             ],
             "latitude": 45.4408, "longitude": 12.3155
         },
@@ -505,8 +505,8 @@ LANDMARKS_DATA = {
             "description": "Smallest country, home to St. Peter's Basilica and the Pope.", 
             "image_url": "https://images.unsplash.com/photo-1557409518-691ebcd96038?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1557409518-691ebcd96038?w=800",
-                "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800"
+                "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800",
+                "https://images.unsplash.com/photo-1590232820396-0653525c0e41?w=800",
             ],
             "latitude": 41.9029, "longitude": 12.4534
         },
@@ -535,8 +535,8 @@ LANDMARKS_DATA = {
             "description": "Five colorful villages on rugged Italian Riviera coastline.", 
             "image_url": "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800",
             "images": [
+                "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800",
                 "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800",
-                "https://images.unsplash.com/photo-1558477360-cf1a7827c5be?w=800"
             ],
             "latitude": 44.1267, "longitude": 9.6967
         },
@@ -555,8 +555,8 @@ LANDMARKS_DATA = {
             "description": "Ancient city preserved by volcanic ash from Mt. Vesuvius.", 
             "image_url": "https://images.unsplash.com/photo-1581544291234-31340be4b1b8?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1581544291234-31340be4b1b8?w=800",
-                "https://images.unsplash.com/photo-1590585116825-36f423244c6f?w=800"
+                "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?w=800",
+                "https://images.unsplash.com/photo-1530530043309-79e9d3799841?w=800",
             ],
             "latitude": 40.7489, "longitude": 14.4853
         },
@@ -577,9 +577,9 @@ LANDMARKS_DATA = {
             "description": "Japan's highest mountain and iconic snow-capped volcano.", 
             "image_url": "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=800",
             "images": [
+                "https://images.unsplash.com/photo-1576598993197-1d71ad7a3ed2?w=800",
                 "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=800",
-                "https://images.unsplash.com/photo-1578271887552-5ac3a72752bc?w=800",
-                "https://images.unsplash.com/photo-1576675466308-e979b5adf7e4?w=800"
+                "https://images.unsplash.com/photo-1607630223270-1dd6e416b560?w=800"
             ],
             "latitude": 35.3606, "longitude": 138.7274
         },
@@ -588,8 +588,8 @@ LANDMARKS_DATA = {
             "description": "Shrine famous for thousands of vermillion torii gates.", 
             "image_url": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
-                "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800"
+                "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800",
+                "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800",
             ],
             "latitude": 34.9671, "longitude": 135.7727
         },
@@ -598,8 +598,8 @@ LANDMARKS_DATA = {
             "description": "Communications tower inspired by Eiffel Tower.", 
             "image_url": "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=800",
-                "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800"
+                "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800",
+                "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=800",
             ],
             "latitude": 35.6586, "longitude": 139.7454
         },
@@ -608,8 +608,8 @@ LANDMARKS_DATA = {
             "description": "Zen temple covered in gold leaf in Kyoto.", 
             "image_url": "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800",
-                "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800"
+                "https://images.unsplash.com/photo-1624253321743-c94f0dacb472?w=800",
+                "https://images.unsplash.com/photo-1586829505799-8b93f6c89b7e?w=800",
             ],
             "latitude": 35.0394, "longitude": 135.7292
         },
@@ -807,8 +807,8 @@ LANDMARKS_DATA = {
             "description": "Ancient geoglyphs etched into desert sands.", 
             "image_url": "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800",
-                "https://images.unsplash.com/photo-1517512006864-7ebd8bbdbd91?w=800"
+                "https://images.unsplash.com/photo-1531065208531-4036c0dba3ca?w=800",
+                "https://images.unsplash.com/photo-1502933691298-84fc14542831?w=800",
             ],
             "latitude": -14.7390, "longitude": -75.1300
         },
@@ -963,8 +963,8 @@ LANDMARKS_DATA = {
             "description": "Popular beach and surfing spot in Sydney.", 
             "image_url": "https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=800",
-                "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800"
+                "https://images.unsplash.com/photo-1489914169085-9b54fdd8f2a2?w=800",
+                "https://images.unsplash.com/photo-1579362243576-c03d87a1c84f?w=800",
             ],
             "latitude": -33.8908, "longitude": 151.2743
         },
@@ -1008,9 +1008,9 @@ LANDMARKS_DATA = {
             "description": "Colossal neoclassical sculpture on Liberty Island, New York.", 
             "image_url": "https://images.unsplash.com/photo-1508567473203-bc6c657c0d86?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1508567473203-bc6c657c0d86?w=800",
-                "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=800",
-                "https://images.unsplash.com/photo-1560720902-2d939b258f31?w=800"
+                "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800",
+                "https://images.unsplash.com/photo-1575478601664-96c2e5a59c20?w=800",
+                "https://images.unsplash.com/photo-1619472351888-f844a0b38a94?w=800"
             ],
             "latitude": 40.6892, "longitude": -74.0445
         },
@@ -1020,7 +1020,7 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=800",
-                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800"
+                "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800",
             ],
             "latitude": 36.1069, "longitude": -112.1129
         },
@@ -1029,8 +1029,8 @@ LANDMARKS_DATA = {
             "description": "First national park, known for geothermal features.", 
             "image_url": "https://images.unsplash.com/photo-1583486176154-07e7d30b1940?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1583486176154-07e7d30b1940?w=800",
-                "https://images.unsplash.com/photo-1490971524970-4a1b06d2c947?w=800"
+                "https://images.unsplash.com/photo-1484308313977-fa686a4bc2ed?w=800",
+                "https://images.unsplash.com/photo-1548264378-8d9e86b04fdb?w=800",
             ],
             "latitude": 44.4280, "longitude": -110.5885
         },
@@ -1081,7 +1081,7 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800",
-                "https://images.unsplash.com/photo-1605468179938-252fa7f06a5c?w=800"
+                "https://images.unsplash.com/photo-1606840032851-c18fd6e75f88?w=800",
             ],
             "latitude": 43.0779, "longitude": -79.0747
         },
@@ -1090,8 +1090,8 @@ LANDMARKS_DATA = {
             "description": "Official residence and workplace of U.S. President.", 
             "image_url": "https://images.unsplash.com/photo-1551269901-5c5e14c25df7?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1551269901-5c5e14c25df7?w=800",
-                "https://images.unsplash.com/photo-1591608516485-484d7d1e4ea7?w=800"
+                "https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=800",
+                "https://images.unsplash.com/photo-1595958222706-b71ab2eeaf7b?w=800",
             ],
             "latitude": 38.8977, "longitude": -77.0365
         },
@@ -1133,8 +1133,8 @@ LANDMARKS_DATA = {
             "description": "Prehistoric monument consisting of ring of standing stones.", 
             "image_url": "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800",
-                "https://images.unsplash.com/photo-1576678927484-cc907957058d?w=800"
+                "https://images.unsplash.com/photo-1567213502106-37e04c56a106?w=800",
+                "https://images.unsplash.com/photo-1574875276767-4f8da1f05b6a?w=800",
             ],
             "latitude": 51.1789, "longitude": -1.8262
         },
@@ -1143,8 +1143,8 @@ LANDMARKS_DATA = {
             "description": "London residence and administrative headquarters of monarch.", 
             "image_url": "https://images.unsplash.com/photo-1543871958-7d8f34e1f19c?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1543871958-7d8f34e1f19c?w=800",
-                "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800"
+                "https://images.unsplash.com/photo-1529655683954-c3e81c7c2ed7?w=800",
+                "https://images.unsplash.com/photo-1534967635-a2e3e6fc20f1?w=800",
             ],
             "latitude": 51.5014, "longitude": -0.1419
         },
@@ -1163,8 +1163,8 @@ LANDMARKS_DATA = {
             "description": "Combined bascule and suspension bridge in London.", 
             "image_url": "https://images.unsplash.com/photo-1592939027858-e6d0c0a0b5b6?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1592939027858-e6d0c0a0b5b6?w=800",
-                "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=800"
+                "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=800",
+                "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800",
             ],
             "latitude": 51.5055, "longitude": -0.0754
         },
@@ -1183,8 +1183,8 @@ LANDMARKS_DATA = {
             "description": "Public museum dedicated to human history, art and culture.", 
             "image_url": "https://images.unsplash.com/photo-1591270619710-0be1e8819e4b?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1591270619710-0be1e8819e4b?w=800",
-                "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800"
+                "https://images.unsplash.com/photo-1571847944006-c8e74436286b?w=800",
+                "https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=800",
             ],
             "latitude": 51.5194, "longitude": -0.1270
         },
@@ -1216,8 +1216,8 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800",
-                "https://images.unsplash.com/photo-1525490829609-d166ddb58678?w=800",
-                "https://images.unsplash.com/photo-1570873248552-dde614b6f01a?w=800"
+                "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800",
+                "https://images.unsplash.com/photo-1568112441717-1623846b8d29?w=800"
             ],
             "latitude": 40.4319, "longitude": 116.5704
         },
@@ -1226,8 +1226,8 @@ LANDMARKS_DATA = {
             "description": "Palace complex in central Beijing, home to Chinese emperors.", 
             "image_url": "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=800",
-                "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800"
+                "https://images.unsplash.com/photo-1533997192802-1dfd36d0e32a?w=800",
+                "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800",
             ],
             "latitude": 39.9163, "longitude": 116.3972
         },
@@ -1267,7 +1267,7 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1537887858907-3b3687e70ca0?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1537887858907-3b3687e70ca0?w=800",
-                "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=800"
+                "https://images.unsplash.com/photo-1474181487882-5abf3f0ba6c2?w=800",
             ],
             "latitude": 31.2397, "longitude": 121.4909
         },
@@ -1435,9 +1435,9 @@ LANDMARKS_DATA = {
             "description": "Iconic white-washed villages with blue domes on volcanic cliffs.", 
             "image_url": "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800",
-                "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800",
-                "https://images.unsplash.com/photo-1548013146-72479768bada?w=800"
+                "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800",
+                "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800",
+                "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800"
             ],
             "latitude": 36.3932, "longitude": 25.4615
         },
@@ -1446,8 +1446,8 @@ LANDMARKS_DATA = {
             "description": "Monasteries built on top of towering rock pillars.", 
             "image_url": "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800",
-                "https://images.unsplash.com/photo-1555864326-5cf22ef123cf?w=800"
+                "https://images.unsplash.com/photo-1581791534721-e599df4417d7?w=800",
+                "https://images.unsplash.com/photo-1593306446357-c69d76cdeb04?w=800",
             ],
             "latitude": 39.7217, "longitude": 21.6306
         },
@@ -1456,8 +1456,8 @@ LANDMARKS_DATA = {
             "description": "Ancient sanctuary and archaeological site, once home to Oracle.", 
             "image_url": "https://images.unsplash.com/photo-1585783336122-b0c3e6760067?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1585783336122-b0c3e6760067?w=800",
-                "https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=800"
+                "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800",
+                "https://images.unsplash.com/photo-1628432136678-43ff9be34064?w=800",
             ],
             "latitude": 38.4824, "longitude": 22.5009
         },
@@ -1466,9 +1466,9 @@ LANDMARKS_DATA = {
             "description": "Cosmopolitan island with windmills, beaches and nightlife.", 
             "image_url": "https://images.unsplash.com/photo-1613326079584-56f8f9f6b13e?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1613326079584-56f8f9f6b13e?w=800",
-                "https://images.unsplash.com/photo-1562611499-89c3a18ada4b?w=800",
-                "https://images.unsplash.com/photo-1601581987742-2fceffa3b1d8?w=800"
+                "https://images.unsplash.com/photo-1601581875309-a2c49c6a7e9f?w=800",
+                "https://images.unsplash.com/photo-1573330339528-7b61b55c9b8a?w=800",
+                "https://images.unsplash.com/photo-1604660370040-6d395d0f3491?w=800"
             ],
             "latitude": 37.4467, "longitude": 25.3289
         },
@@ -1540,8 +1540,8 @@ LANDMARKS_DATA = {
             "description": "Temple with giant 46-meter reclining Buddha in Bangkok.", 
             "image_url": "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800",
-                "https://images.unsplash.com/photo-1559094994-59eae4fa2b6b?w=800"
+                "https://images.unsplash.com/photo-1600623595480-b6e5f8b0c0e1?w=800",
+                "https://images.unsplash.com/photo-1601104691-2b92b78ca5ac?w=800",
             ],
             "latitude": 13.7465, "longitude": 100.4927
         },
@@ -1550,9 +1550,9 @@ LANDMARKS_DATA = {
             "description": "Stunning limestone islands in the Andaman Sea.", 
             "image_url": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
             "images": [
+                "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?w=800",
                 "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
-                "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=800",
-                "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800"
+                "https://images.unsplash.com/photo-1564465799935-1a7d48e849c5?w=800"
             ],
             "latitude": 7.7407, "longitude": 98.7784
         },
@@ -1635,7 +1635,7 @@ LANDMARKS_DATA = {
             "images": [
                 "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800",
                 "https://images.unsplash.com/photo-1548013146-72479768bada?w=800",
-                "https://images.unsplash.com/photo-1587135010402-16e3c7f5be4f?w=800"
+                "https://images.unsplash.com/photo-1609137144368-2ad0630c0cdb?w=800"
             ],
             "latitude": 27.1751, "longitude": 78.0421
         },
@@ -1655,8 +1655,8 @@ LANDMARKS_DATA = {
             "description": "Holiest Gurdwara of Sikhism in Amritsar, covered in gold.", 
             "image_url": "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800",
-                "https://images.unsplash.com/photo-1606125602941-49e60b5d5a5e?w=800"
+                "https://images.unsplash.com/photo-1577416412292-747c6607f055?w=800",
+                "https://images.unsplash.com/photo-1591029996904-c57136beea42?w=800",
             ],
             "latitude": 31.6200, "longitude": 74.8765
         },
@@ -1665,8 +1665,8 @@ LANDMARKS_DATA = {
             "description": "Historic fortified palace in Old Delhi, Mughal architecture.", 
             "image_url": "https://images.unsplash.com/photo-1597075933515-c6449e2a8a60?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1597075933515-c6449e2a8a60?w=800",
-                "https://images.unsplash.com/photo-1624623278313-a930126a11c3?w=800"
+                "https://images.unsplash.com/photo-1542759666-96a0e19b19c7?w=800",
+                "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800",
             ],
             "latitude": 28.6562, "longitude": 77.2410
         },
@@ -1697,8 +1697,8 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800",
-                "https://images.unsplash.com/photo-1620766165457-b9f3e3e6fc55?w=800",
-                "https://images.unsplash.com/photo-1532664189809-02133fee698d?w=800"
+                "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800",
+                "https://images.unsplash.com/photo-1532120935409-f0e7f2a6e5e2?w=800"
             ],
             "latitude": 25.3176, "longitude": 83.0103
         },
@@ -1761,9 +1761,9 @@ LANDMARKS_DATA = {
             "description": "Massive waterfalls system on Argentina-Brazil border.", 
             "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
-                "https://images.unsplash.com/photo-1589802829985-817e51171b92?w=800",
-                "https://images.unsplash.com/photo-1621736500723-7e52cc6e8d80?w=800"
+                "https://images.unsplash.com/photo-1473163928189-364b2c4e1135?w=800",
+                "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800",
+                "https://images.unsplash.com/photo-1560807707-8cc77767d783?w=800"
             ],
             "latitude": -25.6953, "longitude": -54.4367
         },
@@ -1954,9 +1954,9 @@ LANDMARKS_DATA = {
             "description": "World's tallest building at 828 meters in Dubai.", 
             "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
             "images": [
+                "https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?w=800",
                 "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
-                "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800",
-                "https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=800"
+                "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800"
             ],
             "latitude": 25.1972, "longitude": 55.2744
         },
@@ -2135,8 +2135,8 @@ LANDMARKS_DATA = {
             "description": "Preserved sections of the Cold War barrier dividing East and West.", 
             "image_url": "https://images.unsplash.com/photo-1528728329032-2972f65dfb3f?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1528728329032-2972f65dfb3f?w=800",
-                "https://images.unsplash.com/photo-1595867818082-083862f3d630?w=800"
+                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
+                "https://images.unsplash.com/photo-1587330979470-3595ac045ab2?w=800",
             ],
             "latitude": 52.5351, "longitude": 13.3903
         },
@@ -2191,7 +2191,7 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800",
-                "https://images.unsplash.com/photo-1519674047642-ce7ba6c97b18?w=800"
+                "https://images.unsplash.com/photo-1507992781348-310259076fe0?w=800",
             ],
             "latitude": 43.6426, "longitude": -79.3871
         },
@@ -2272,9 +2272,9 @@ LANDMARKS_DATA = {
             "description": "Flat-topped mountain overlooking Cape Town, cable car access.", 
             "image_url": "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=800",
-                "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800",
-                "https://images.unsplash.com/photo-1576485290814-1c72aa4534a6?w=800"
+                "https://images.unsplash.com/photo-1563656353898-febc9270a0f5?w=800",
+                "https://images.unsplash.com/photo-1591634788319-043832b355f1?w=800",
+                "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800"
             ],
             "latitude": -33.9628, "longitude": 18.4098
         },
