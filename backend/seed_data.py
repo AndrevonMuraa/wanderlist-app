@@ -1098,10 +1098,10 @@ LANDMARKS_DATA = {
         {
             "name": "Tower of London", 
             "description": "Historic castle on the north bank of River Thames.", 
-            "image_url": "https://images.unsplash.com/photo-1529679997670-ebbbcf9f30e2?w=800",
+            "image_url": "https://images.unsplash.com/photo-1534351450181-ea9f78427fe8?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1529679997670-ebbbcf9f30e2?w=800",
-                "https://images.unsplash.com/photo-1534351450181-ea9f78427fe8?w=800"
+                "https://images.unsplash.com/photo-1534351450181-ea9f78427fe8?w=800",
+                "https://images.unsplash.com/photo-1592939027009-agreatimage123?w=800"
             ],
             "latitude": 51.5081, "longitude": -0.0759
         },
@@ -1111,7 +1111,7 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800",
-                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800"
+                "https://images.unsplash.com/photo-1576678927484-cc907957058d?w=800"
             ],
             "latitude": 51.1789, "longitude": -1.8262
         },
@@ -1121,7 +1121,7 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1543871958-7d8f34e1f19c?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1543871958-7d8f34e1f19c?w=800",
-                "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=800"
+                "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800"
             ],
             "latitude": 51.5014, "longitude": -0.1419
         },
@@ -1138,10 +1138,10 @@ LANDMARKS_DATA = {
         {
             "name": "Tower Bridge", 
             "description": "Combined bascule and suspension bridge in London.", 
-            "image_url": "https://images.unsplash.com/photo-1534351450181-ea9f78427fe8?w=800",
+            "image_url": "https://images.unsplash.com/photo-1592939027858-e6d0c0a0b5b6?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1534351450181-ea9f78427fe8?w=800",
-                "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800"
+                "https://images.unsplash.com/photo-1592939027858-e6d0c0a0b5b6?w=800",
+                "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=800"
             ],
             "latitude": 51.5055, "longitude": -0.0754
         },
@@ -1151,37 +1151,37 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1606408311223-bc79e3ebff06?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1606408311223-bc79e3ebff06?w=800",
-                "https://images.unsplash.com/photo-1543871958-7d8f34e1f19c?w=800"
+                "https://images.unsplash.com/photo-1576678927484-cc907957058d?w=800"
             ],
             "latitude": 51.4839, "longitude": -0.6044
         },
         {
             "name": "British Museum", 
             "description": "Public museum dedicated to human history, art and culture.", 
-            "image_url": "https://images.unsplash.com/photo-1529679997670-ebbbcf9f30e2?w=800",
+            "image_url": "https://images.unsplash.com/photo-1591270619710-0be1e8819e4b?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1529679997670-ebbbcf9f30e2?w=800",
-                "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800"
+                "https://images.unsplash.com/photo-1591270619710-0be1e8819e4b?w=800",
+                "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800"
             ],
             "latitude": 51.5194, "longitude": -0.1270
         },
         {
             "name": "London Eye", 
             "description": "Giant Ferris wheel on the South Bank of River Thames.", 
-            "image_url": "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800",
+            "image_url": "https://images.unsplash.com/photo-1529606255656-64d5f1dee679?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800",
-                "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=800"
+                "https://images.unsplash.com/photo-1529606255656-64d5f1dee679?w=800",
+                "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=800"
             ],
             "latitude": 51.5033, "longitude": -0.1195
         },
         {
             "name": "Westminster Abbey", 
             "description": "Gothic abbey church in City of Westminster, London.", 
-            "image_url": "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800",
+            "image_url": "https://images.unsplash.com/photo-1592939026975-84d0b5c87dc9?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800",
-                "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800"
+                "https://images.unsplash.com/photo-1592939026975-84d0b5c87dc9?w=800",
+                "https://images.unsplash.com/photo-1591270619710-0be1e8819e4b?w=800"
             ],
             "latitude": 51.4993, "longitude": -0.1273
         },
