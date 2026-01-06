@@ -723,7 +723,8 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=800",
-                "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800"
+                "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800",
+                "https://images.unsplash.com/photo-1611433875450-96e1160c5a47?w=800"
             ],
             "latitude": 22.3372, "longitude": 31.6258
         },
