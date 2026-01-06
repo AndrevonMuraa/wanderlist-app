@@ -1793,8 +1793,9 @@ LANDMARKS_DATA = {
             "description": "White sand dunes with crystal turquoise lagoons.", 
             "image_url": "https://images.unsplash.com/photo-1621736500723-7e52cc6e8d80?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1605640840605-14ac1855827b?w=800",
-                "https://images.unsplash.com/photo-1616023973649-dae31b0d2c6d?w=800",
+                "https://images.unsplash.com/photo-1621736500723-7e52cc6e8d80?w=800",
+                "https://images.unsplash.com/photo-1544551763-46a013bb70d6?w=800",
+                "https://images.unsplash.com/photo-1583365216988-4f8d9c7a0f3e?w=800"
             ],
             "latitude": -2.4858, "longitude": -43.1289
         },
