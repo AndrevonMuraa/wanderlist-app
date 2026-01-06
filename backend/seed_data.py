@@ -385,8 +385,9 @@ LANDMARKS_DATA = {
         {
             "name": "Notre-Dame Cathedral", 
             "description": "Medieval Catholic cathedral, masterpiece of French Gothic architecture.", 
-            "image_url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800",
+            "image_url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800",
             "images": [
+                "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800",
                 "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800",
                 "https://images.unsplash.com/photo-1548013146-72479768bada?w=800"
             ],
