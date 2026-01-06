@@ -1929,9 +1929,9 @@ LANDMARKS_DATA = {
             "description": "Twin-spired cathedral in historic center of Guadalajara.", 
             "image_url": "https://images.unsplash.com/photo-1635178977722-30fd3e9f9d52?w=800",
             "images": [
+                "https://images.unsplash.com/photo-1635178977722-30fd3e9f9d52?w=800",
                 "https://images.unsplash.com/photo-1636330666710-e3d0f0dcda46?w=800",
-                "https://images.unsplash.com/photo-1519659528534-7fd733a832a0?w=800",
-                "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800"
+                "https://images.unsplash.com/photo-1519659528534-7fd733a832a0?w=800"
             ],
             "latitude": 20.6797, "longitude": -103.3463
         },
