@@ -218,8 +218,8 @@ export default function AddVisitScreen() {
             )}
           </Surface>
 
-          {/* Northern Lights Location Picker */}
-          {landmark?.name === 'Northern Lights' && (
+          {/* Northern Lights Location Picker - Native Only */}
+          {landmark?.name === 'Northern Lights' && Platform.OS !== 'web' && MapView && (
             <Surface style={styles.mapSection}>
               <Text style={styles.sectionTitle}>
                 📍 Pin Your Observation Location
@@ -256,6 +256,61 @@ export default function AddVisitScreen() {
                   {locationMarker 
                     ? `Lat: ${locationMarker.latitude.toFixed(4)}, Lon: ${locationMarker.longitude.toFixed(4)}`
                     : 'No location selected'
+                  }
+                </Text>
+              </View>
+            </Surface>
+          )}
+
+          {/* Northern Lights Location Input - Web Fallback */}
+          {landmark?.name === 'Northern Lights' && Platform.OS === 'web' && (
+            <Surface style={styles.mapSection}>
+              <Text style={styles.sectionTitle}>
+                📍 Northern Lights Location
+              </Text>
+              <Text style={styles.sectionSubtext}>
+                Enter the coordinates where you observed the Northern Lights
+              </Text>
+              <View style={styles.webLocationInputs}>
+                <TextInput
+                  label="Latitude"
+                  value={locationMarker?.latitude?.toString() || ''}
+                  onChangeText={(text) => {
+                    const lat = parseFloat(text);
+                    if (!isNaN(lat)) {
+                      setLocationMarker(prev => ({
+                        latitude: lat,
+                        longitude: prev?.longitude || 0
+                      }));
+                    }
+                  }}
+                  keyboardType="numeric"
+                  style={styles.webInput}
+                  mode="outlined"
+                />
+                <TextInput
+                  label="Longitude"
+                  value={locationMarker?.longitude?.toString() || ''}
+                  onChangeText={(text) => {
+                    const lon = parseFloat(text);
+                    if (!isNaN(lon)) {
+                      setLocationMarker(prev => ({
+                        latitude: prev?.latitude || 0,
+                        longitude: lon
+                      }));
+                    }
+                  }}
+                  keyboardType="numeric"
+                  style={styles.webInput}
+                  mode="outlined"
+                />
+              </View>
+              <View style={styles.locationInfo}>
+                <Ionicons name="location" size={16} color="#6200ee" />
+                <Text style={styles.locationText}>
+                  {locationMarker 
+                    ? `Lat: ${locationMarker.latitude.toFixed(4)}, Lon: ${locationMarker.longitude.toFixed(4)}`
+                    : 'No location entered'
                   }
                 </Text>
               </View>
