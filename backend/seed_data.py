@@ -897,16 +897,108 @@ LANDMARKS_DATA = {
         },
     ],
     "mexico": [
-        {"name": "Chichen Itza", "description": "Ancient Mayan city with iconic pyramid El Castillo.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=600", "latitude": 20.6843, "longitude": -88.5678},
-        {"name": "Teotihuacan", "description": "Pyramid of the Sun and Moon near Mexico City.", "image_url": "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=600", "latitude": 19.6925, "longitude": -98.8438},
-        {"name": "Tulum", "description": "Mayan ruins on Caribbean cliffside with stunning beach.", "image_url": "https://images.unsplash.com/photo-1569165003085-e8a1066f1cb8?w=600", "latitude": 20.2114, "longitude": -87.4286},
-        {"name": "Palenque", "description": "Ancient Mayan city in Chiapas jungle with pyramid temples.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=600", "latitude": 17.4840, "longitude": -92.0459},
-        {"name": "Frida Kahlo Museum", "description": "Blue House in Mexico City, former home of iconic artist.", "image_url": "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=600", "latitude": 19.3551, "longitude": -99.1622},
-        {"name": "Copper Canyon", "description": "Series of canyons larger and deeper than Grand Canyon.", "image_url": "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=600", "latitude": 27.4466, "longitude": -107.7263},
-        {"name": "Cabo San Lucas Arch", "description": "Natural rock formation at Land's End where oceans meet.", "image_url": "https://images.unsplash.com/photo-1569165003085-e8a1066f1cb8?w=600", "latitude": 22.8733, "longitude": -109.8900},
-        {"name": "Cenotes of Yucatan", "description": "Natural sinkholes with crystal-clear water for swimming.", "image_url": "https://images.unsplash.com/photo-1569165003085-e8a1066f1cb8?w=600", "latitude": 20.8440, "longitude": -87.7181},
-        {"name": "Zócalo", "description": "Main square in Mexico City, one of world's largest plazas.", "image_url": "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=600", "latitude": 19.4326, "longitude": -99.1332},
-        {"name": "Guadalajara Cathedral", "description": "Twin-spired cathedral in historic center of Guadalajara.", "image_url": "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=600", "latitude": 20.6797, "longitude": -103.3463},
+        {
+            "name": "Chichen Itza", 
+            "description": "Ancient Mayan city with iconic pyramid El Castillo.", 
+            "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800",
+                "https://images.unsplash.com/photo-1571168243754-37f0cb04fb79?w=800",
+                "https://images.unsplash.com/photo-1591361895545-78651b0b5c2d?w=800"
+            ],
+            "latitude": 20.6843, "longitude": -88.5678
+        },
+        {
+            "name": "Teotihuacan", 
+            "description": "Pyramid of the Sun and Moon near Mexico City.", 
+            "image_url": "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800",
+                "https://images.unsplash.com/photo-1585464835-b61dc53be3de?w=800"
+            ],
+            "latitude": 19.6925, "longitude": -98.8438
+        },
+        {
+            "name": "Tulum", 
+            "description": "Mayan ruins on Caribbean cliffside with stunning beach.", 
+            "image_url": "https://images.unsplash.com/photo-1569165003085-e8a1066f1cb8?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1569165003085-e8a1066f1cb8?w=800",
+                "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
+                "https://images.unsplash.com/photo-1601581875309-fafbf2d3ed3a?w=800"
+            ],
+            "latitude": 20.2114, "longitude": -87.4286
+        },
+        {
+            "name": "Palenque", 
+            "description": "Ancient Mayan city in Chiapas jungle with pyramid temples.", 
+            "image_url": "https://images.unsplash.com/photo-1591361895545-78651b0b5c2d?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1591361895545-78651b0b5c2d?w=800",
+                "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800"
+            ],
+            "latitude": 17.4840, "longitude": -92.0459
+        },
+        {
+            "name": "Frida Kahlo Museum", 
+            "description": "Blue House in Mexico City, former home of iconic artist.", 
+            "image_url": "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800",
+                "https://images.unsplash.com/photo-1585464835-b61dc53be3de?w=800"
+            ],
+            "latitude": 19.3551, "longitude": -99.1622
+        },
+        {
+            "name": "Copper Canyon", 
+            "description": "Series of canyons larger and deeper than Grand Canyon.", 
+            "image_url": "https://images.unsplash.com/photo-1591361895545-78651b0b5c2d?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1591361895545-78651b0b5c2d?w=800",
+                "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800"
+            ],
+            "latitude": 27.4466, "longitude": -107.7263
+        },
+        {
+            "name": "Cabo San Lucas Arch", 
+            "description": "Natural rock formation at Land's End where oceans meet.", 
+            "image_url": "https://images.unsplash.com/photo-1569165003085-e8a1066f1cb8?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1569165003085-e8a1066f1cb8?w=800",
+                "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800"
+            ],
+            "latitude": 22.8733, "longitude": -109.8900
+        },
+        {
+            "name": "Cenotes of Yucatan", 
+            "description": "Natural sinkholes with crystal-clear water for swimming.", 
+            "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
+                "https://images.unsplash.com/photo-1569165003085-e8a1066f1cb8?w=800"
+            ],
+            "latitude": 20.8440, "longitude": -87.7181
+        },
+        {
+            "name": "Zócalo", 
+            "description": "Main square in Mexico City, one of world's largest plazas.", 
+            "image_url": "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800",
+                "https://images.unsplash.com/photo-1585464835-b61dc53be3de?w=800"
+            ],
+            "latitude": 19.4326, "longitude": -99.1332
+        },
+        {
+            "name": "Guadalajara Cathedral", 
+            "description": "Twin-spired cathedral in historic center of Guadalajara.", 
+            "image_url": "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800",
+                "https://images.unsplash.com/photo-1585464835-b61dc53be3de?w=800"
+            ],
+            "latitude": 20.6797, "longitude": -103.3463
+        },
     ],
     "uae": [
         {"name": "Burj Khalifa", "description": "World's tallest building at 828 meters in Dubai.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600", "latitude": 25.1972, "longitude": 55.2744},
