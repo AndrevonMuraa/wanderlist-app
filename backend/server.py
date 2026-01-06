@@ -170,6 +170,96 @@ class LeaderboardEntry(BaseModel):
     total_points: int  # Changed from visit_count to total_points
     rank: int
 
+# ============= ENHANCED FEATURES MODELS =============
+
+class Achievement(BaseModel):
+    achievement_id: str
+    user_id: str
+    badge_type: str  # "first_visit", "country_complete", "continent_complete", "streak_7", "milestone_10", etc.
+    badge_name: str
+    badge_description: str
+    badge_icon: str
+    earned_at: datetime
+    is_featured: bool = False
+
+class UserStreak(BaseModel):
+    user_id: str
+    current_streak: int = 0
+    longest_streak: int = 0
+    last_visit_date: Optional[datetime] = None
+
+class UserLevel(BaseModel):
+    user_id: str
+    level: int = 1  # Bronze=1, Silver=2, Gold=3, Platinum=4, Diamond=5
+    level_name: str = "Bronze Traveler"
+    total_points: int = 0
+    visits_count: int = 0
+    countries_count: int = 0
+    continents_count: int = 0
+
+class Challenge(BaseModel):
+    challenge_id: str
+    title: str
+    description: str
+    challenge_type: str  # "weekly", "monthly", "special"
+    target_count: int
+    target_landmarks: List[str]  # landmark_ids or "any"
+    reward_points: int
+    start_date: datetime
+    end_date: datetime
+    is_active: bool = True
+
+class UserChallenge(BaseModel):
+    user_id: str
+    challenge_id: str
+    progress: int = 0
+    completed: bool = False
+    completed_at: Optional[datetime] = None
+
+class ActivityFeed(BaseModel):
+    activity_id: str
+    user_id: str
+    username: str
+    user_name: str
+    user_picture: Optional[str] = None
+    activity_type: str  # "visit", "achievement", "level_up", "friend_added"
+    landmark_id: Optional[str] = None
+    landmark_name: Optional[str] = None
+    landmark_image: Optional[str] = None
+    achievement_badge: Optional[str] = None
+    content: str  # Activity description
+    likes_count: int = 0
+    comments_count: int = 0
+    created_at: datetime
+
+class ActivityLike(BaseModel):
+    activity_id: str
+    user_id: str
+    created_at: datetime
+
+class ActivityComment(BaseModel):
+    comment_id: str
+    activity_id: str
+    user_id: str
+    username: str
+    user_name: str
+    user_picture: Optional[str] = None
+    comment_text: str
+    created_at: datetime
+
+class TripPlan(BaseModel):
+    trip_id: str
+    user_id: str
+    title: str
+    description: Optional[str] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
+    landmark_ids: List[str] = []
+    budget: Optional[float] = None
+    is_public: bool = False
+    created_at: datetime
+    updated_at: datetime
+
 # ============= AUTH HELPERS =============
 
 def hash_password(password: str) -> str:
