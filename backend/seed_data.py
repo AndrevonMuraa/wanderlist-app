@@ -768,10 +768,11 @@ LANDMARKS_DATA = {
         {
             "name": "Alexandria Library", 
             "description": "Modern library commemorating ancient Library of Alexandria.", 
-            "image_url": "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=800",
+            "image_url": "https://images.unsplash.com/photo-1569155216-f4f70e5fff14?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=800",
-                "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800"
+                "https://images.unsplash.com/photo-1569155216-f4f70e5fff14?w=800",
+                "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=800",
+                "https://images.unsplash.com/photo-1608555855762-9eb50c22f7f8?w=800"
             ],
             "latitude": 31.2084, "longitude": 29.9087
         },
