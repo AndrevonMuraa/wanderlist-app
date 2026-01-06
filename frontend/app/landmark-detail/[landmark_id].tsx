@@ -51,6 +51,7 @@ export default function LandmarkDetailScreen() {
   const [landmark, setLandmark] = useState<Landmark | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [northernLightsVisits, setNorthernLightsVisits] = useState<any[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -74,6 +75,11 @@ export default function LandmarkDetailScreen() {
         const data = await response.json();
         console.log('Landmark loaded:', data.name);
         setLandmark(data);
+        
+        // If Northern Lights, fetch user's visits
+        if (data.name === 'Northern Lights') {
+          fetchNorthernLightsVisits(token);
+        }
       } else {
         console.error('Failed to fetch landmark:', response.status);
       }
@@ -81,6 +87,30 @@ export default function LandmarkDetailScreen() {
       console.error('Error fetching landmark:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchNorthernLightsVisits = async (token: string | null) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/visits`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const visits = await response.json();
+        // Filter visits for Northern Lights that have location data
+        const nlVisits = visits.filter((visit: any) => 
+          visit.landmark_id === landmark_id && 
+          visit.visit_location && 
+          visit.visit_location.latitude && 
+          visit.visit_location.longitude
+        );
+        setNorthernLightsVisits(nlVisits);
+      }
+    } catch (error) {
+      console.error('Error fetching visits:', error);
     }
   };
 
