@@ -1001,16 +1001,107 @@ LANDMARKS_DATA = {
         },
     ],
     "uae": [
-        {"name": "Burj Khalifa", "description": "World's tallest building at 828 meters in Dubai.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600", "latitude": 25.1972, "longitude": 55.2744},
-        {"name": "Sheikh Zayed Grand Mosque", "description": "Stunning white marble mosque in Abu Dhabi, one of world's largest.", "image_url": "https://images.unsplash.com/photo-1580674587303-66b78bc87691?w=600", "latitude": 24.4129, "longitude": 54.4747},
-        {"name": "Palm Jumeirah", "description": "Artificial archipelago in shape of palm tree in Dubai.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600", "latitude": 25.1124, "longitude": 55.1390},
-        {"name": "Burj Al Arab", "description": "Luxury hotel on artificial island, iconic sail-shaped design.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600", "latitude": 25.1413, "longitude": 55.1853},
-        {"name": "Dubai Mall", "description": "World's largest shopping mall with aquarium and ice rink.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600", "latitude": 25.1975, "longitude": 55.2796},
-        {"name": "Dubai Fountain", "description": "World's largest choreographed fountain system.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600", "latitude": 25.1952, "longitude": 55.2746},
-        {"name": "Desert Safari Dunes", "description": "Red sand dunes of Arabian Desert, popular safari destination.", "image_url": "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?w=600", "latitude": 25.0155, "longitude": 55.7215},
-        {"name": "Louvre Abu Dhabi", "description": "Art and civilization museum with iconic dome architecture.", "image_url": "https://images.unsplash.com/photo-1580674587303-66b78bc87691?w=600", "latitude": 24.5338, "longitude": 54.3984},
-        {"name": "Dubai Marina", "description": "Canal city carved along Persian Gulf shoreline.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600", "latitude": 25.0805, "longitude": 55.1400},
-        {"name": "Al Fahidi Historical District", "description": "Heritage village with traditional wind-tower architecture.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600", "latitude": 25.2631, "longitude": 55.2972},
+        {
+            "name": "Burj Khalifa", 
+            "description": "World's tallest building at 828 meters in Dubai.", 
+            "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+                "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800",
+                "https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=800"
+            ],
+            "latitude": 25.1972, "longitude": 55.2744
+        },
+        {
+            "name": "Sheikh Zayed Grand Mosque", 
+            "description": "Stunning white marble mosque in Abu Dhabi, one of world's largest.", 
+            "image_url": "https://images.unsplash.com/photo-1580674587303-66b78bc87691?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1580674587303-66b78bc87691?w=800",
+                "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800"
+            ],
+            "latitude": 24.4129, "longitude": 54.4747
+        },
+        {
+            "name": "Palm Jumeirah", 
+            "description": "Artificial archipelago in shape of palm tree in Dubai.", 
+            "image_url": "https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=800",
+                "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800"
+            ],
+            "latitude": 25.1124, "longitude": 55.1390
+        },
+        {
+            "name": "Burj Al Arab", 
+            "description": "Luxury hotel on artificial island, iconic sail-shaped design.", 
+            "image_url": "https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=800",
+                "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800"
+            ],
+            "latitude": 25.1413, "longitude": 55.1853
+        },
+        {
+            "name": "Dubai Mall", 
+            "description": "World's largest shopping mall with aquarium and ice rink.", 
+            "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+                "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800"
+            ],
+            "latitude": 25.1975, "longitude": 55.2796
+        },
+        {
+            "name": "Dubai Fountain", 
+            "description": "World's largest choreographed fountain system.", 
+            "image_url": "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800",
+                "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800"
+            ],
+            "latitude": 25.1952, "longitude": 55.2746
+        },
+        {
+            "name": "Desert Safari Dunes", 
+            "description": "Red sand dunes of Arabian Desert, popular safari destination.", 
+            "image_url": "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?w=800",
+                "https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=800"
+            ],
+            "latitude": 25.0155, "longitude": 55.7215
+        },
+        {
+            "name": "Louvre Abu Dhabi", 
+            "description": "Art and civilization museum with iconic dome architecture.", 
+            "image_url": "https://images.unsplash.com/photo-1580674587303-66b78bc87691?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1580674587303-66b78bc87691?w=800",
+                "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800"
+            ],
+            "latitude": 24.5338, "longitude": 54.3984
+        },
+        {
+            "name": "Dubai Marina", 
+            "description": "Canal city carved along Persian Gulf shoreline.", 
+            "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+                "https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=800"
+            ],
+            "latitude": 25.0805, "longitude": 55.1400
+        },
+        {
+            "name": "Al Fahidi Historical District", 
+            "description": "Heritage village with traditional wind-tower architecture.", 
+            "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+                "https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=800"
+            ],
+            "latitude": 25.2631, "longitude": 55.2972
+        },
     ],
     "germany": [
         {"name": "Neuschwanstein Castle", "description": "Fairytale castle that inspired Disney's Sleeping Beauty Castle.", "image_url": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600", "latitude": 47.5576, "longitude": 10.7498},
