@@ -16,7 +16,7 @@ const BACKEND_URL = Platform.OS === 'web'
 
 interface User {
   user_id: string;
-  email: string;
+  username: string;
   name: string;
   picture?: string;
   is_premium: boolean;
