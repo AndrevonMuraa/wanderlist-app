@@ -1802,8 +1802,9 @@ LANDMARKS_DATA = {
         {
             "name": "Fernando de Noronha", 
             "description": "Remote archipelago with pristine beaches and marine life.", 
-            "image_url": "https://images.unsplash.com/photo-1591977860134-2c49af55ed13?w=800",
+            "image_url": "https://images.unsplash.com/photo-1539606328352-637f4aa160b9?w=800",
             "images": [
+                "https://images.unsplash.com/photo-1539606328352-637f4aa160b9?w=800",
                 "https://images.unsplash.com/photo-1591977860134-2c49af55ed13?w=800",
                 "https://images.unsplash.com/photo-1516996087931-5ae405802f9f?w=800"
             ],
