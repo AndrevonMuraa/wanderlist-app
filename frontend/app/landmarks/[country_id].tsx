@@ -93,11 +93,30 @@ export default function LandmarksScreen() {
           source={{ uri: item.image_url }}
           style={styles.landmarkImage}
         />
+        {/* Premium Badge */}
+        {item.category === 'premium' && (
+          <View style={styles.premiumBadge}>
+            <Ionicons name="diamond" size={12} color="#FFD700" />
+            <Text style={styles.premiumText}>PREMIUM</Text>
+          </View>
+        )}
+        {/* Lock Overlay for Locked Landmarks */}
+        {item.is_locked && (
+          <View style={styles.lockOverlay}>
+            <Ionicons name="lock-closed" size={48} color="#FFD700" />
+            <Text style={styles.lockText}>Premium Only</Text>
+          </View>
+        )}
         <LinearGradient
           colors={['transparent', 'rgba(0,0,0,0.6)']}
           style={styles.imageOverlay}
         >
           <Text style={styles.landmarkName}>{item.name}</Text>
+          {/* Points Display */}
+          <View style={styles.pointsBadge}>
+            <Ionicons name="star" size={14} color="#FFD700" />
+            <Text style={styles.pointsText}>{item.points || 10} pts</Text>
+          </View>
         </LinearGradient>
       </Surface>
     </TouchableOpacity>
