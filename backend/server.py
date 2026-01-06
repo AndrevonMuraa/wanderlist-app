@@ -478,6 +478,7 @@ async def create_visit(data: VisitCreate, current_user: User = Depends(get_curre
         "landmark_id": data.landmark_id,
         "photo_base64": data.photo_base64,
         "comments": data.comments,
+        "visit_location": data.visit_location,
         "diary_notes": data.diary_notes,
         "visited_at": datetime.now(timezone.utc)
     }
