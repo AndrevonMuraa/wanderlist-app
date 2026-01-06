@@ -107,7 +107,7 @@ export default function LandmarksScreen() {
 
   const renderLandmark = ({ item }: { item: Landmark }) => (
     <TouchableOpacity
-      onPress={() => router.push(`/landmark-detail/${item.landmark_id}`)}
+      onPress={() => handleLandmarkPress(item)}
       activeOpacity={0.7}
     >
       <Surface style={styles.landmarkCard}>
