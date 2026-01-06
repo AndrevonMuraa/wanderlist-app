@@ -210,6 +210,50 @@ export default function AddVisitScreen() {
             )}
           </Surface>
 
+          {/* Northern Lights Location Picker */}
+          {landmark?.name === 'Northern Lights' && (
+            <Surface style={styles.mapSection}>
+              <Text style={styles.sectionTitle}>
+                📍 Pin Your Observation Location
+              </Text>
+              <Text style={styles.sectionSubtext}>
+                Tap on the map to mark exactly where you observed the Northern Lights
+              </Text>
+              
+              {locationMarker && (
+                <MapView
+                  style={styles.map}
+                  initialRegion={{
+                    latitude: locationMarker.latitude,
+                    longitude: locationMarker.longitude,
+                    latitudeDelta: 10,
+                    longitudeDelta: 10,
+                  }}
+                  onPress={(e) => {
+                    setLocationMarker(e.nativeEvent.coordinate);
+                  }}
+                >
+                  <Marker
+                    coordinate={locationMarker}
+                    title="Northern Lights Observation"
+                    description="Tap map to move pin"
+                    pinColor="#00ff00"
+                  />
+                </MapView>
+              )}
+              
+              <View style={styles.locationInfo}>
+                <Ionicons name="location" size={16} color="#6200ee" />
+                <Text style={styles.locationText}>
+                  {locationMarker 
+                    ? `Lat: ${locationMarker.latitude.toFixed(4)}, Lon: ${locationMarker.longitude.toFixed(4)}`
+                    : 'No location selected'
+                  }
+                </Text>
+              </View>
+            </Surface>
+          )}
+
           <Surface style={styles.inputSection}>
             <Text style={styles.sectionTitle}>Comments</Text>
             <TextInput
