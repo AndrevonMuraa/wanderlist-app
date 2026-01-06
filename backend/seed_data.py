@@ -49,6 +49,8 @@ LANDMARKS_DATA = {
                 "https://t3.ftcdn.net/jpg/02/81/49/00/240_F_281490037_7iwTdXvUzfawRcYiH3RkCXjeUxja1J9y.jpg",
                 "https://ems.dimu.org/image/03348x7Fiuxi?dimension=800x800"
             ],
+            "latitude": 59.2167,
+            "longitude": 10.9500,
             "facts": [
                 {
                     "title": "Historic Fortress City",
