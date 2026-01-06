@@ -787,8 +787,8 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800",
-                "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800",
-                "https://images.unsplash.com/photo-1548013146-72479768bada?w=800"
+                "https://images.unsplash.com/photo-1548013146-72479768bada?w=800",
+                "https://images.unsplash.com/photo-1587135010402-16e3c7f5be4f?w=800"
             ],
             "latitude": 27.1751, "longitude": 78.0421
         },
@@ -798,7 +798,8 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800",
-                "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=800"
+                "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=800",
+                "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800"
             ],
             "latitude": 26.9855, "longitude": 75.8513
         },
@@ -808,27 +809,27 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800",
-                "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800"
+                "https://images.unsplash.com/photo-1606125602941-49e60b5d5a5e?w=800"
             ],
             "latitude": 31.6200, "longitude": 74.8765
         },
         {
             "name": "Red Fort", 
             "description": "Historic fortified palace in Old Delhi, Mughal architecture.", 
-            "image_url": "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800",
+            "image_url": "https://images.unsplash.com/photo-1597075933515-c6449e2a8a60?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800",
-                "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800"
+                "https://images.unsplash.com/photo-1597075933515-c6449e2a8a60?w=800",
+                "https://images.unsplash.com/photo-1624623278313-a930126a11c3?w=800"
             ],
             "latitude": 28.6562, "longitude": 77.2410
         },
         {
             "name": "Hawa Mahal", 
             "description": "Palace of Winds with iconic honeycomb facade in Jaipur.", 
-            "image_url": "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800",
+            "image_url": "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800",
-                "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=800"
+                "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=800",
+                "https://images.unsplash.com/photo-1542781497-f006d15a6ceе?w=800"
             ],
             "latitude": 26.9239, "longitude": 75.8267
         },
@@ -838,7 +839,8 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=800",
-                "https://images.unsplash.com/photo-1595436260400-134f41b14e94?w=800"
+                "https://images.unsplash.com/photo-1595436260400-134f41b14e94?w=800",
+                "https://images.unsplash.com/photo-1567157577867-05ccb1388e66?w=800"
             ],
             "latitude": 18.9220, "longitude": 72.8347
         },
@@ -848,7 +850,8 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800",
-                "https://images.unsplash.com/photo-1620766165457-b9f3e3e6fc55?w=800"
+                "https://images.unsplash.com/photo-1620766165457-b9f3e3e6fc55?w=800",
+                "https://images.unsplash.com/photo-1532664189809-02133fee698d?w=800"
             ],
             "latitude": 25.3176, "longitude": 83.0103
         },
@@ -858,27 +861,28 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800",
-                "https://images.unsplash.com/photo-1588609710098-16a6c5451b0e?w=800"
+                "https://images.unsplash.com/photo-1588609710098-16a6c5451b0e?w=800",
+                "https://images.unsplash.com/photo-1590073844006-33379778ae09?w=800"
             ],
             "latitude": 9.4981, "longitude": 76.3388
         },
         {
             "name": "Mysore Palace", 
             "description": "Indo-Saracenic palace, former seat of Wodeyar dynasty.", 
-            "image_url": "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800",
+            "image_url": "https://images.unsplash.com/photo-1580137189272-c9379f8864fd?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800",
-                "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800"
+                "https://images.unsplash.com/photo-1580137189272-c9379f8864fd?w=800",
+                "https://images.unsplash.com/photo-1609149865936-a79e9f6f4b5f?w=800"
             ],
             "latitude": 12.3052, "longitude": 76.6552
         },
         {
             "name": "Ajanta & Ellora Caves", 
             "description": "Ancient rock-cut cave temples with intricate carvings.", 
-            "image_url": "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800",
+            "image_url": "https://images.unsplash.com/photo-1609416921946-a62f96d50be0?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800",
-                "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800"
+                "https://images.unsplash.com/photo-1609416921946-a62f96d50be0?w=800",
+                "https://images.unsplash.com/photo-1626091764535-0296f8691b56?w=800"
             ],
             "latitude": 20.5519, "longitude": 75.7033
         },
