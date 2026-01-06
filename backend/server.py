@@ -104,7 +104,7 @@ class Country(BaseModel):
     landmark_count: int = 0
 
 class LandmarkFact(BaseModel):
-    title: str
+    title: Optional[str] = None
     text: str
     icon: str
 
