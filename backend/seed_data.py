@@ -2289,10 +2289,11 @@ LANDMARKS_DATA = {
         {
             "name": "Garden Route", 
             "description": "Scenic 300km coastal stretch with forests and lagoons.", 
-            "image_url": "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
+            "image_url": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
-                "https://images.unsplash.com/photo-1547970810-dc1eac37d174?w=800"
+                "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800",
+                "https://images.unsplash.com/photo-1563299796-17596ed6b017?w=800",
+                "https://images.unsplash.com/photo-1609137144568-f4c90f1b5b4b?w=800"
             ],
             "latitude": -33.9649, "longitude": 22.4577
         },
