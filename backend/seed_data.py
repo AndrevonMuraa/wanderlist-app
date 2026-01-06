@@ -1199,16 +1199,107 @@ LANDMARKS_DATA = {
         },
     ],
     "spain": [
-        {"name": "Sagrada Família", "description": "Gaudí's unfinished basilica, Barcelona's most iconic landmark.", "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600", "latitude": 41.4036, "longitude": 2.1744},
-        {"name": "Alhambra", "description": "Moorish palace and fortress complex in Granada.", "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=600", "latitude": 37.1773, "longitude": -3.5886},
-        {"name": "Park Güell", "description": "Colorful mosaic park designed by Antoni Gaudí.", "image_url": "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=600", "latitude": 41.4145, "longitude": 2.1527},
-        {"name": "Prado Museum", "description": "World-renowned art museum in Madrid.", "image_url": "https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?w=600", "latitude": 40.4138, "longitude": -3.6921},
-        {"name": "La Rambla", "description": "Famous tree-lined pedestrian street in Barcelona.", "image_url": "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=600", "latitude": 41.3808, "longitude": 2.1753},
-        {"name": "Seville Cathedral", "description": "Largest Gothic cathedral in the world with Giralda tower.", "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=600", "latitude": 37.3859, "longitude": -5.9933},
-        {"name": "Plaza Mayor Madrid", "description": "Central square in Madrid surrounded by historic buildings.", "image_url": "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=600", "latitude": 40.4155, "longitude": -3.7074},
-        {"name": "Royal Palace Madrid", "description": "Official residence of Spanish Royal Family.", "image_url": "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=600", "latitude": 40.4180, "longitude": -3.7142},
-        {"name": "Mezquita Cordoba", "description": "Former mosque converted to cathedral, architectural marvel.", "image_url": "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=600", "latitude": 37.8790, "longitude": -4.7793},
-        {"name": "Casa Batlló", "description": "Gaudí's surreal modernist building in Barcelona.", "image_url": "https://images.unsplash.com/photo-1588968864314-35e71c4493e7?w=600", "latitude": 41.3916, "longitude": 2.1649},
+        {
+            "name": "Sagrada Família", 
+            "description": "Gaudí's unfinished basilica, Barcelona's most iconic landmark.", 
+            "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800",
+                "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800",
+                "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=800"
+            ],
+            "latitude": 41.4036, "longitude": 2.1744
+        },
+        {
+            "name": "Alhambra", 
+            "description": "Moorish palace and fortress complex in Granada.", 
+            "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
+                "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800"
+            ],
+            "latitude": 37.1773, "longitude": -3.5886
+        },
+        {
+            "name": "Park Güell", 
+            "description": "Colorful mosaic park designed by Antoni Gaudí.", 
+            "image_url": "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800",
+                "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=800"
+            ],
+            "latitude": 41.4145, "longitude": 2.1527
+        },
+        {
+            "name": "Prado Museum", 
+            "description": "World-renowned art museum in Madrid.", 
+            "image_url": "https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?w=800",
+                "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=800"
+            ],
+            "latitude": 40.4138, "longitude": -3.6921
+        },
+        {
+            "name": "La Rambla", 
+            "description": "Famous tree-lined pedestrian street in Barcelona.", 
+            "image_url": "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
+                "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800"
+            ],
+            "latitude": 41.3808, "longitude": 2.1753
+        },
+        {
+            "name": "Seville Cathedral", 
+            "description": "Largest Gothic cathedral in the world with Giralda tower.", 
+            "image_url": "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
+                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800"
+            ],
+            "latitude": 37.3859, "longitude": -5.9933
+        },
+        {
+            "name": "Plaza Mayor Madrid", 
+            "description": "Central square in Madrid surrounded by historic buildings.", 
+            "image_url": "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=800",
+                "https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?w=800"
+            ],
+            "latitude": 40.4155, "longitude": -3.7074
+        },
+        {
+            "name": "Royal Palace Madrid", 
+            "description": "Official residence of Spanish Royal Family.", 
+            "image_url": "https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?w=800",
+                "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=800"
+            ],
+            "latitude": 40.4180, "longitude": -3.7142
+        },
+        {
+            "name": "Mezquita Cordoba", 
+            "description": "Former mosque converted to cathedral, architectural marvel.", 
+            "image_url": "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
+                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800"
+            ],
+            "latitude": 37.8790, "longitude": -4.7793
+        },
+        {
+            "name": "Casa Batlló", 
+            "description": "Gaudí's surreal modernist building in Barcelona.", 
+            "image_url": "https://images.unsplash.com/photo-1588968864314-35e71c4493e7?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1588968864314-35e71c4493e7?w=800",
+                "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=800"
+            ],
+            "latitude": 41.3916, "longitude": 2.1649
+        },
     ],
     "greece": [
         {
