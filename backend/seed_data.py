@@ -586,16 +586,108 @@ LANDMARKS_DATA = {
         },
     ],
     "thailand": [
-        {"name": "Grand Palace", "description": "Complex of buildings in Bangkok, former home to Thai kings.", "image_url": "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=600", "latitude": 13.7500, "longitude": 100.4913},
-        {"name": "Wat Pho", "description": "Temple with giant 46-meter reclining Buddha in Bangkok.", "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=600", "latitude": 13.7465, "longitude": 100.4927},
-        {"name": "Phi Phi Islands", "description": "Stunning limestone islands in the Andaman Sea.", "image_url": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600", "latitude": 7.7407, "longitude": 98.7784},
-        {"name": "Wat Arun", "description": "Temple of Dawn with iconic spires on Chao Phraya River.", "image_url": "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=600", "latitude": 13.7437, "longitude": 100.4887},
-        {"name": "Ayutthaya", "description": "Ancient city and archaeological site, UNESCO World Heritage.", "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=600", "latitude": 14.3532, "longitude": 100.5775},
-        {"name": "Chiang Mai Old City", "description": "Historic walled city with hundreds of temples.", "image_url": "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=600", "latitude": 18.7883, "longitude": 98.9853},
-        {"name": "Railay Beach", "description": "Secluded beach accessible only by boat, limestone cliffs.", "image_url": "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=600", "latitude": 8.0113, "longitude": 98.8396},
-        {"name": "Floating Markets", "description": "Traditional markets on Bangkok's canals and waterways.", "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=600", "latitude": 13.5221, "longitude": 100.0121},
-        {"name": "Sukhothai Historical Park", "description": "Ruins of the first capital of Siam in 13th century.", "image_url": "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=600", "latitude": 17.0083, "longitude": 99.7078},
-        {"name": "James Bond Island", "description": "Iconic limestone karst in Phang Nga Bay, featured in 007 film.", "image_url": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600", "latitude": 8.2752, "longitude": 98.5004},
+        {
+            "name": "Grand Palace", 
+            "description": "Complex of buildings in Bangkok, former home to Thai kings.", 
+            "image_url": "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=800",
+                "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800",
+                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800"
+            ],
+            "latitude": 13.7500, "longitude": 100.4913
+        },
+        {
+            "name": "Wat Pho", 
+            "description": "Temple with giant 46-meter reclining Buddha in Bangkok.", 
+            "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+                "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800"
+            ],
+            "latitude": 13.7465, "longitude": 100.4927
+        },
+        {
+            "name": "Phi Phi Islands", 
+            "description": "Stunning limestone islands in the Andaman Sea.", 
+            "image_url": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
+                "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=800",
+                "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800"
+            ],
+            "latitude": 7.7407, "longitude": 98.7784
+        },
+        {
+            "name": "Wat Arun", 
+            "description": "Temple of Dawn with iconic spires on Chao Phraya River.", 
+            "image_url": "https://images.unsplash.com/photo-1551264691-98b174bcbe3c?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1551264691-98b174bcbe3c?w=800",
+                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800"
+            ],
+            "latitude": 13.7437, "longitude": 100.4887
+        },
+        {
+            "name": "Ayutthaya", 
+            "description": "Ancient city and archaeological site, UNESCO World Heritage.", 
+            "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+                "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=800"
+            ],
+            "latitude": 14.3532, "longitude": 100.5775
+        },
+        {
+            "name": "Chiang Mai Old City", 
+            "description": "Historic walled city with hundreds of temples.", 
+            "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+                "https://images.unsplash.com/photo-1591815681165-61d0e88f5c27?w=800"
+            ],
+            "latitude": 18.7883, "longitude": 98.9853
+        },
+        {
+            "name": "Railay Beach", 
+            "description": "Secluded beach accessible only by boat, limestone cliffs.", 
+            "image_url": "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=800",
+                "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?w=800"
+            ],
+            "latitude": 8.0113, "longitude": 98.8396
+        },
+        {
+            "name": "Floating Markets", 
+            "description": "Traditional markets on Bangkok's canals and waterways.", 
+            "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+                "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=800"
+            ],
+            "latitude": 13.5221, "longitude": 100.0121
+        },
+        {
+            "name": "Sukhothai Historical Park", 
+            "description": "Ruins of the first capital of Siam in 13th century.", 
+            "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+                "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=800"
+            ],
+            "latitude": 17.0083, "longitude": 99.7078
+        },
+        {
+            "name": "James Bond Island", 
+            "description": "Iconic limestone karst in Phang Nga Bay, featured in 007 film.", 
+            "image_url": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
+                "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?w=800"
+            ],
+            "latitude": 8.2752, "longitude": 98.5004
+        },
     ],
     "india": [
         {"name": "Taj Mahal", "description": "White marble mausoleum, one of world's most beautiful buildings.", "image_url": "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600", "latitude": 27.1751, "longitude": 78.0421},
