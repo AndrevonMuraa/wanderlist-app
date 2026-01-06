@@ -2300,10 +2300,11 @@ LANDMARKS_DATA = {
         {
             "name": "Blyde River Canyon", 
             "description": "One of world's largest green canyons with dramatic views.", 
-            "image_url": "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
+            "image_url": "https://images.unsplash.com/photo-1609137144732-c97db72b1e07?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
-                "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800"
+                "https://images.unsplash.com/photo-1609137144732-c97db72b1e07?w=800",
+                "https://images.unsplash.com/photo-1611348524140-53c9a25263d6?w=800",
+                "https://images.unsplash.com/photo-1624024242887-bfee9f7f47ad?w=800"
             ],
             "latitude": -24.5597, "longitude": 30.7975
         },
