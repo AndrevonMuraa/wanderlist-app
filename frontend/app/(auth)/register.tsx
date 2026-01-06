@@ -85,6 +85,19 @@ export default function RegisterScreen() {
               />
 
               <TextInput
+                label="Username"
+                value={username}
+                onChangeText={setUsername}
+                mode="outlined"
+                autoCapitalize="none"
+                style={styles.input}
+                outlineColor={theme.colors.border}
+                activeOutlineColor={theme.colors.primary}
+                textColor={theme.colors.text}
+                placeholder="e.g., john_doe123"
+              />
+
+              <TextInput
                 label="Email"
                 value={email}
                 onChangeText={setEmail}
