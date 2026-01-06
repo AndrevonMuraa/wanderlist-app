@@ -1447,10 +1447,9 @@ LANDMARKS_DATA = {
         {
             "name": "Ayutthaya", 
             "description": "Ancient city and archaeological site, UNESCO World Heritage.", 
-            "image_url": "https://images.unsplash.com/photo-1600623595480-b6e5f8b0c0e1?w=800",
+            "image_url": "https://images.unsplash.com/photo-1600707438034-eb1c28e3cab3?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1550674021-75da5a641745?w=800",
-                "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"
+                "https://images.unsplash.com/photo-1600707438034-eb1c28e3cab3?w=800"
             ],
             "latitude": 14.3532, "longitude": 100.5775
         },
