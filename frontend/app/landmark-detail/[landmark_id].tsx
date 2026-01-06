@@ -8,19 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 import LandmarkMap from '../../components/LandmarkMap';
-
-// Conditionally import MapView only for native platforms
-let MapView: any = null;
-let Marker: any = null;
-if (Platform.OS !== 'web') {
-  try {
-    const Maps = require('react-native-maps');
-    MapView = Maps.default;
-    Marker = Maps.Marker;
-  } catch (error) {
-    console.warn('react-native-maps not available, map features disabled');
-  }
-}
+import { MapView, Marker } from '../../components/MapComponents';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 const { width } = Dimensions.get('window');
