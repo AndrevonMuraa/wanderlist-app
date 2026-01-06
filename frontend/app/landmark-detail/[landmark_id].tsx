@@ -259,15 +259,74 @@ export default function LandmarkDetailScreen() {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>🌌 Your Observation Locations</Text>
             <Text style={styles.northernLightsInfo}>
-              The Northern Lights (Aurora Borealis) can be observed from various locations in the Arctic region. 
-              When you mark your visit, you can pin the exact location where you witnessed this spectacular phenomenon!
+              The Northern Lights can be observed from various Arctic locations. 
+              {northernLightsVisits.length > 0 
+                ? ` You've logged ${northernLightsVisits.length} observation${northernLightsVisits.length > 1 ? 's' : ''}!`
+                : ' Mark your first visit to pin your observation point!'}
             </Text>
-            <View style={styles.northernLightsCard}>
-              <Ionicons name="location" size={24} color={theme.colors.primary} />
-              <Text style={styles.northernLightsCardText}>
-                Mark your visit to pin your observation point on the map
-              </Text>
+            
+            {/* Native Map View */}
+            {Platform.OS !== 'web' && MapView && (
+              <View style={styles.observationMapContainer}>
+                <MapView
+                  style={styles.observationMap}
+                  initialRegion={{
+                    latitude: landmark.latitude || 69.6492,
+                    longitude: landmark.longitude || 18.9553,
+                    latitudeDelta: 30,
+                    longitudeDelta: 30,
+                  }}
+                >
+                  {northernLightsVisits.map((visit, index) => (
+                    <Marker
+                      key={visit.visit_id}
+                      coordinate={{
+                        latitude: visit.visit_location.latitude,
+                        longitude: visit.visit_location.longitude,
+                      }}
+                      title={`Observation ${index + 1}`}
+                      description={visit.comments || 'Northern Lights sighting'}
+                      pinColor="#00ff00"
+                    />
+                  ))}
+                </MapView>
+              </View>
+            )}
+            
+            {/* Web Fallback */}
+            {Platform.OS === 'web' && (
+              <View style={styles.webMapPlaceholder}>
+                <Ionicons name="map" size={48} color={theme.colors.primary} />
+                <Text style={styles.webMapText}>
+                  Interactive map available on mobile devices
+                </Text>
+              </View>
+            )}
+            
+            {/* Observation Stats */}
+            <View style={styles.observationStats}>
+              <View style={styles.statCard}>
+                <Ionicons name="location" size={24} color={theme.colors.primary} />
+                <Text style={styles.statNumber}>{northernLightsVisits.length}</Text>
+                <Text style={styles.statLabel}>Observations</Text>
+              </View>
+              <View style={styles.statCard}>
+                <Ionicons name="pin" size={24} color={theme.colors.accent} />
+                <Text style={styles.statNumber}>
+                  {northernLightsVisits.length > 0 ? 'Active' : 'Pending'}
+                </Text>
+                <Text style={styles.statLabel}>Map Status</Text>
+              </View>
             </View>
+            
+            {northernLightsVisits.length === 0 && (
+              <View style={styles.northernLightsCard}>
+                <Ionicons name="add-circle" size={24} color={theme.colors.primary} />
+                <Text style={styles.northernLightsCardText}>
+                  Click "Mark as Visited" below to add your first observation point!
+                </Text>
+              </View>
+            )}
           </View>
         ) : (
           <View style={styles.section}>
