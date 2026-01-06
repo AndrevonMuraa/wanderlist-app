@@ -145,7 +145,9 @@ class Visit(BaseModel):
     comments: Optional[str] = None
     visit_location: Optional[dict] = None  # For Northern Lights: {"latitude": float, "longitude": float, "region": str}
     diary_notes: Optional[str] = None
+    status: str = "accepted"
     visited_at: datetime
+    created_at: datetime
 
 class VisitCreate(BaseModel):
     landmark_id: str
