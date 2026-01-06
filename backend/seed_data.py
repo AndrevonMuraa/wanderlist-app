@@ -47,7 +47,7 @@ LANDMARKS_DATA = {
             "image_url": "https://ems.dimu.org/image/03348x7Fiuxi?dimension=800x800",
             "images": [
                 "https://ems.dimu.org/image/03348x7Fiuxi?dimension=800x800",
-                "https://images.unsplash.com/photo-1617910025160-e2702fa64abf?w=800"
+                "https://t3.ftcdn.net/jpg/02/81/49/00/240_F_281490037_7iwTdXvUzfawRcYiH3RkCXjeUxja1J9y.jpg"
             ],
             "facts": [
                 {
