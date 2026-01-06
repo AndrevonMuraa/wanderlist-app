@@ -140,7 +140,7 @@ class Visit(BaseModel):
     photo_base64: str
     points_earned: int = 10  # Points earned for this visit
     comments: Optional[str] = None
-    visit_location: Optional[str] = None  # City/region for Northern Lights sightings
+    visit_location: Optional[dict] = None  # For Northern Lights: {"latitude": float, "longitude": float, "region": str}
     diary_notes: Optional[str] = None
     visited_at: datetime
 
@@ -148,7 +148,7 @@ class VisitCreate(BaseModel):
     landmark_id: str
     photo_base64: str
     comments: Optional[str] = None
-    visit_location: Optional[str] = None  # City/region for Northern Lights sightings
+    visit_location: Optional[dict] = None  # For Northern Lights: {"latitude": float, "longitude": float, "region": str}
     diary_notes: Optional[str] = None
 
 class Friend(BaseModel):
