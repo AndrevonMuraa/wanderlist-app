@@ -1304,20 +1304,20 @@ LANDMARKS_DATA = {
         {
             "name": "Alhambra", 
             "description": "Moorish palace and fortress complex in Granada.", 
-            "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
+            "image_url": "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
-                "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800"
+                "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
+                "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800"
             ],
             "latitude": 37.1773, "longitude": -3.5886
         },
         {
             "name": "Park Güell", 
             "description": "Colorful mosaic park designed by Antoni Gaudí.", 
-            "image_url": "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800",
+            "image_url": "https://images.unsplash.com/photo-1579282240050-352db0a14c21?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800",
-                "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=800"
+                "https://images.unsplash.com/photo-1579282240050-352db0a14c21?w=800",
+                "https://images.unsplash.com/photo-1578070181910-f1e514afdd08?w=800"
             ],
             "latitude": 41.4145, "longitude": 2.1527
         },
@@ -1334,50 +1334,50 @@ LANDMARKS_DATA = {
         {
             "name": "La Rambla", 
             "description": "Famous tree-lined pedestrian street in Barcelona.", 
-            "image_url": "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
+            "image_url": "https://images.unsplash.com/photo-1578070181910-f1e514afdd08?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
-                "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800"
+                "https://images.unsplash.com/photo-1578070181910-f1e514afdd08?w=800",
+                "https://images.unsplash.com/photo-1579282240050-352db0a14c21?w=800"
             ],
             "latitude": 41.3808, "longitude": 2.1753
         },
         {
             "name": "Seville Cathedral", 
             "description": "Largest Gothic cathedral in the world with Giralda tower.", 
-            "image_url": "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
+            "image_url": "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
-                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800"
+                "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
+                "https://images.unsplash.com/photo-1578070181910-f1e514afdd08?w=800"
             ],
             "latitude": 37.3859, "longitude": -5.9933
         },
         {
             "name": "Plaza Mayor Madrid", 
             "description": "Central square in Madrid surrounded by historic buildings.", 
-            "image_url": "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=800",
+            "image_url": "https://images.unsplash.com/photo-1558642891-54be180ea339?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=800",
-                "https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?w=800"
+                "https://images.unsplash.com/photo-1558642891-54be180ea339?w=800",
+                "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=800"
             ],
             "latitude": 40.4155, "longitude": -3.7074
         },
         {
             "name": "Royal Palace Madrid", 
             "description": "Official residence of Spanish Royal Family.", 
-            "image_url": "https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?w=800",
+            "image_url": "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?w=800",
-                "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=800"
+                "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=800",
+                "https://images.unsplash.com/photo-1558642891-54be180ea339?w=800"
             ],
             "latitude": 40.4180, "longitude": -3.7142
         },
         {
             "name": "Mezquita Cordoba", 
             "description": "Former mosque converted to cathedral, architectural marvel.", 
-            "image_url": "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
+            "image_url": "https://images.unsplash.com/photo-1579282240050-352db0a14c21?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
-                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800"
+                "https://images.unsplash.com/photo-1579282240050-352db0a14c21?w=800",
+                "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800"
             ],
             "latitude": 37.8790, "longitude": -4.7793
         },
@@ -1387,7 +1387,7 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1588968864314-35e71c4493e7?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1588968864314-35e71c4493e7?w=800",
-                "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=800"
+                "https://images.unsplash.com/photo-1578070181910-f1e514afdd08?w=800"
             ],
             "latitude": 41.3916, "longitude": 2.1649
         },
