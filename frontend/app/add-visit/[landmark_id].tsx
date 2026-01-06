@@ -119,10 +119,27 @@ export default function AddVisitScreen() {
       return;
     }
 
+    // For Northern Lights, require location pin
+    if (landmark?.name === 'Northern Lights' && !locationMarker) {
+      Alert.alert('Location Required', 'Please pin the exact location where you observed the Northern Lights');
+      return;
+    }
+
     setSubmitting(true);
 
     try {
       const token = await SecureStore.getItemAsync('auth_token');
+      
+      // Prepare visit location data for Northern Lights
+      let visit_location = null;
+      if (landmark?.name === 'Northern Lights' && locationMarker) {
+        visit_location = {
+          latitude: locationMarker.latitude,
+          longitude: locationMarker.longitude,
+          region: 'Custom location' // Could add reverse geocoding here
+        };
+      }
+      
       const response = await fetch(`${BACKEND_URL}/api/visits`, {
         method: 'POST',
         headers: {
@@ -133,7 +150,8 @@ export default function AddVisitScreen() {
           landmark_id,
           photo_base64: photoBase64,
           comments,
-          diary_notes: diaryNotes
+          diary_notes: diaryNotes,
+          visit_location
         })
       });
 
