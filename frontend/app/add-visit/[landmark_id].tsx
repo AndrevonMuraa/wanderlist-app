@@ -9,7 +9,11 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { MapView, Marker } from '../../components/MapComponents';
 
-const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
+// For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
+// For mobile, use the external URL
+const BACKEND_URL = Platform.OS === 'web' 
+  ? '' 
+  : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
 
 export default function AddVisitScreen() {
   const { landmark_id } = useLocalSearchParams();
