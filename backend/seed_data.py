@@ -568,16 +568,107 @@ LANDMARKS_DATA = {
         },
     ],
     "japan": [
-        {"name": "Mount Fuji", "description": "Japan's highest mountain and iconic snow-capped volcano.", "image_url": "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=600", "latitude": 35.3606, "longitude": 138.7274},
-        {"name": "Fushimi Inari Shrine", "description": "Shrine famous for thousands of vermillion torii gates.", "image_url": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600", "latitude": 34.9671, "longitude": 135.7727},
-        {"name": "Tokyo Tower", "description": "Communications tower inspired by Eiffel Tower.", "image_url": "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=600", "latitude": 35.6586, "longitude": 139.7454},
-        {"name": "Kinkaku-ji (Golden Pavilion)", "description": "Zen temple covered in gold leaf in Kyoto.", "image_url": "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=600", "latitude": 35.0394, "longitude": 135.7292},
-        {"name": "Hiroshima Peace Memorial", "description": "Monument to the atomic bombing victims.", "image_url": "https://images.unsplash.com/photo-1574873101598-00fb4c2f7eac?w=600", "latitude": 34.3955, "longitude": 132.4536},
-        {"name": "Osaka Castle", "description": "Historic castle that played a major role in Japanese unification.", "image_url": "https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=600", "latitude": 34.6873, "longitude": 135.5262},
-        {"name": "Arashiyama Bamboo Grove", "description": "Serene bamboo forest in western Kyoto.", "image_url": "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600", "latitude": 35.0170, "longitude": 135.6726},
-        {"name": "Senso-ji Temple", "description": "Tokyo's oldest temple, founded in 628 AD.", "image_url": "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=600", "latitude": 35.7148, "longitude": 139.7967},
-        {"name": "Shibuya Crossing", "description": "World's busiest pedestrian crossing in Tokyo.", "image_url": "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600", "latitude": 35.6595, "longitude": 139.7004},
-        {"name": "Nara Park", "description": "Park where over 1,000 wild deer roam freely.", "image_url": "https://images.unsplash.com/photo-1528164344705-47542687000d?w=600", "latitude": 34.6851, "longitude": 135.8048},
+        {
+            "name": "Mount Fuji", 
+            "description": "Japan's highest mountain and iconic snow-capped volcano.", 
+            "image_url": "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=800",
+                "https://images.unsplash.com/photo-1578271887552-5ac3a72752bc?w=800",
+                "https://images.unsplash.com/photo-1576675466308-e979b5adf7e4?w=800"
+            ],
+            "latitude": 35.3606, "longitude": 138.7274
+        },
+        {
+            "name": "Fushimi Inari Shrine", 
+            "description": "Shrine famous for thousands of vermillion torii gates.", 
+            "image_url": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
+                "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800"
+            ],
+            "latitude": 34.9671, "longitude": 135.7727
+        },
+        {
+            "name": "Tokyo Tower", 
+            "description": "Communications tower inspired by Eiffel Tower.", 
+            "image_url": "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=800",
+                "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800"
+            ],
+            "latitude": 35.6586, "longitude": 139.7454
+        },
+        {
+            "name": "Kinkaku-ji (Golden Pavilion)", 
+            "description": "Zen temple covered in gold leaf in Kyoto.", 
+            "image_url": "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800",
+                "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800"
+            ],
+            "latitude": 35.0394, "longitude": 135.7292
+        },
+        {
+            "name": "Hiroshima Peace Memorial", 
+            "description": "Monument to the atomic bombing victims.", 
+            "image_url": "https://images.unsplash.com/photo-1574873101598-00fb4c2f7eac?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1574873101598-00fb4c2f7eac?w=800",
+                "https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800"
+            ],
+            "latitude": 34.3955, "longitude": 132.4536
+        },
+        {
+            "name": "Osaka Castle", 
+            "description": "Historic castle that played a major role in Japanese unification.", 
+            "image_url": "https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=800",
+                "https://images.unsplash.com/photo-1578271887552-5ac3a72752bc?w=800"
+            ],
+            "latitude": 34.6873, "longitude": 135.5262
+        },
+        {
+            "name": "Arashiyama Bamboo Grove", 
+            "description": "Serene bamboo forest in western Kyoto.", 
+            "image_url": "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800",
+                "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800"
+            ],
+            "latitude": 35.0170, "longitude": 135.6726
+        },
+        {
+            "name": "Senso-ji Temple", 
+            "description": "Tokyo's oldest temple, founded in 628 AD.", 
+            "image_url": "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=800",
+                "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800"
+            ],
+            "latitude": 35.7148, "longitude": 139.7967
+        },
+        {
+            "name": "Shibuya Crossing", 
+            "description": "World's busiest pedestrian crossing in Tokyo.", 
+            "image_url": "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800",
+                "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=800"
+            ],
+            "latitude": 35.6595, "longitude": 139.7004
+        },
+        {
+            "name": "Nara Park", 
+            "description": "Park where over 1,000 wild deer roam freely.", 
+            "image_url": "https://images.unsplash.com/photo-1528164344705-47542687000d?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1528164344705-47542687000d?w=800",
+                "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800"
+            ],
+            "latitude": 34.6851, "longitude": 135.8048
+        },
     ],
     "egypt": [
         {"name": "Great Pyramids of Giza", "description": "Ancient pyramids, one of the Seven Wonders of the Ancient World.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=600", "latitude": 29.9792, "longitude": 31.1342},
