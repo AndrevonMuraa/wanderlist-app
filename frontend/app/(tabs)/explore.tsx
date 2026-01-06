@@ -165,6 +165,7 @@ export default function ExploreScreen() {
             <Image
               source={{ uri: COUNTRY_IMAGES[item.name] || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600' }}
               style={styles.countryImage}
+              resizeMode="cover"
             />
             <LinearGradient
               colors={['transparent', 'rgba(0,0,0,0.7)']}
