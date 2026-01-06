@@ -120,6 +120,8 @@ class Landmark(BaseModel):
     best_time_to_visit: Optional[str] = "Year-round"
     duration: Optional[str] = "2-3 hours"
     difficulty: Optional[str] = "Easy"
+    latitude: Optional[float] = None  # GPS latitude
+    longitude: Optional[float] = None  # GPS longitude
     points: int = 10  # Points awarded for visiting (10 for official, 25 for premium)
     upvotes: int = 0
     created_by: Optional[str] = None
