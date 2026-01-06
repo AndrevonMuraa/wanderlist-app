@@ -559,9 +559,9 @@ LANDMARKS_DATA = {
         {
             "name": "Fushimi Inari Shrine", 
             "description": "Shrine famous for thousands of vermillion torii gates.", 
-            "image_url": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
+            "image_url": "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800"
+                "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800"
             ],
             "latitude": 34.9671, "longitude": 135.7727
         },
