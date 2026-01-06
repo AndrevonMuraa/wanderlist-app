@@ -1493,10 +1493,9 @@ LANDMARKS_DATA = {
         {
             "name": "James Bond Island", 
             "description": "Iconic limestone karst in Phang Nga Bay, featured in 007 film.", 
-            "image_url": "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?w=800",
+            "image_url": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1616183577078-a90b8bfb3808?w=800",
-                "https://images.unsplash.com/photo-1586201375761-83865001e31d?w=800",
+                "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800"
             ],
             "latitude": 8.2752, "longitude": 98.5004
         },
