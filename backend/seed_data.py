@@ -781,11 +781,11 @@ LANDMARKS_DATA = {
         {
             "name": "Machu Picchu", 
             "description": "15th-century Inca citadel set high in the Andes Mountains.", 
-            "image_url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800",
+            "image_url": "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800",
                 "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=800",
-                "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?w=800"
+                "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?w=800",
+                "https://images.unsplash.com/photo-1542259009477-d625272157b7?w=800"
             ],
             "latitude": -13.1631, "longitude": -72.5450
         },
