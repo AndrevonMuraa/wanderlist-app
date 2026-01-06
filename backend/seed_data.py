@@ -1879,8 +1879,9 @@ LANDMARKS_DATA = {
         {
             "name": "Frida Kahlo Museum", 
             "description": "Blue House in Mexico City, former home of iconic artist.", 
-            "image_url": "https://images.unsplash.com/photo-1585464835-b61dc53be3de?w=800",
+            "image_url": "https://images.unsplash.com/photo-1503174971373-b1f69850bded?w=800",
             "images": [
+                "https://images.unsplash.com/photo-1503174971373-b1f69850bded?w=800",
                 "https://images.unsplash.com/photo-1585464835-b61dc53be3de?w=800",
                 "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800"
             ],
