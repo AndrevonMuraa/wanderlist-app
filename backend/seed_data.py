@@ -208,6 +208,8 @@ LANDMARKS_DATA = {
                 "https://images.pexels.com/photos/892228/pexels-photo-892228.jpeg?auto=compress&cs=tinysrgb&w=800",
                 "https://images.pexels.com/photos/35531113/pexels-photo-35531113.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
+            "latitude": 59.9270,
+            "longitude": 10.7007,
             "facts": [
                 {
                     "title": "World's Largest Sculpture Park",
@@ -238,6 +240,8 @@ LANDMARKS_DATA = {
                 "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800",
                 "https://images.unsplash.com/photo-1516466723877-e4ec1d736c8a?w=800"
             ],
+            "latitude": 69.6492,
+            "longitude": 18.9553,
             "facts": [
                 {
                     "title": "Aurora Borealis Magic",
@@ -268,6 +272,8 @@ LANDMARKS_DATA = {
                 "https://images.unsplash.com/photo-1653900783556-dc505f3f0a85?w=800",
                 "https://images.unsplash.com/photo-1663428520845-056989f8a664?w=800"
             ],
+            "latitude": 68.2155,
+            "longitude": 13.6090,
             "facts": [
                 {
                     "title": "Arctic Archipelago",
@@ -298,6 +304,8 @@ LANDMARKS_DATA = {
                 "https://images.pexels.com/photos/32097915/pexels-photo-32097915.jpeg?auto=compress&cs=tinysrgb&w=800",
                 "https://images.pexels.com/photos/33686131/pexels-photo-33686131.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
+            "latitude": 59.9075,
+            "longitude": 10.7360,
             "facts": [
                 {
                     "title": "Medieval Stronghold",
@@ -328,6 +336,8 @@ LANDMARKS_DATA = {
                 "https://images.unsplash.com/photo-1502021680532-838cfc650323?w=800",
                 "https://images.pexels.com/photos/3533013/pexels-photo-3533013.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
+            "latitude": 60.1242,
+            "longitude": 6.7400,
             "facts": [
                 {
                     "title": "Dramatic Rock Formation",
