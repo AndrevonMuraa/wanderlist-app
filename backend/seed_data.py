@@ -1345,10 +1345,11 @@ LANDMARKS_DATA = {
         {
             "name": "Seville Cathedral", 
             "description": "Largest Gothic cathedral in the world with Giralda tower.", 
-            "image_url": "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
+            "image_url": "https://images.unsplash.com/photo-1569074187119-c87815b476da?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
-                "https://images.unsplash.com/photo-1578070181910-f1e514afdd08?w=800"
+                "https://images.unsplash.com/photo-1569074187119-c87815b476da?w=800",
+                "https://images.unsplash.com/photo-1583313652347-c5902df09fd8?w=800",
+                "https://images.unsplash.com/photo-1610395219696-f5975d1c0e99?w=800"
             ],
             "latitude": 37.3859, "longitude": -5.9933
         },
