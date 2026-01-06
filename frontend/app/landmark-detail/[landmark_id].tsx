@@ -13,9 +13,13 @@ import LandmarkMap from '../../components/LandmarkMap';
 let MapView: any = null;
 let Marker: any = null;
 if (Platform.OS !== 'web') {
-  const Maps = require('react-native-maps');
-  MapView = Maps.default;
-  Marker = Maps.Marker;
+  try {
+    const Maps = require('react-native-maps');
+    MapView = Maps.default;
+    Marker = Maps.Marker;
+  } catch (error) {
+    console.warn('react-native-maps not available, map features disabled');
+  }
 }
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
