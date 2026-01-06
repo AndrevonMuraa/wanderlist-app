@@ -215,6 +215,17 @@ export default function LandmarkDetailScreen() {
           <Text style={styles.descriptionText}>{landmark.description}</Text>
         </View>
 
+        {/* Location Map */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>📍 Location</Text>
+          <LandmarkMap 
+            latitude={landmark.latitude}
+            longitude={landmark.longitude}
+            landmarkName={landmark.name}
+            height={250}
+          />
+        </View>
+
         {/* Historical & Cultural Facts */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Discover More</Text>
