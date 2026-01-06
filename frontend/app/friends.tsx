@@ -195,7 +195,7 @@ export default function FriendsScreen() {
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Friends</Text>
-      </View>
+      </LinearGradient>
 
       <Surface style={styles.searchCard}>
         <Text style={styles.sectionTitle}>Add Friend</Text>
