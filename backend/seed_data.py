@@ -793,16 +793,108 @@ LANDMARKS_DATA = {
         },
     ],
     "brazil": [
-        {"name": "Christ the Redeemer", "description": "Iconic 30-meter statue overlooking Rio de Janeiro.", "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=600", "latitude": -22.9519, "longitude": -43.2105},
-        {"name": "Sugarloaf Mountain", "description": "Cable car to granite peak with panoramic Rio views.", "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=600", "latitude": -22.9486, "longitude": -43.1566},
-        {"name": "Iguazu Falls", "description": "Massive waterfalls system on Argentina-Brazil border.", "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600", "latitude": -25.6953, "longitude": -54.4367},
-        {"name": "Copacabana Beach", "description": "Famous 4km beach in Rio de Janeiro.", "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=600", "latitude": -22.9711, "longitude": -43.1822},
-        {"name": "Amazon Rainforest", "description": "World's largest tropical rainforest, biodiversity hotspot.", "image_url": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600", "latitude": -3.4653, "longitude": -62.2159},
-        {"name": "Pelourinho", "description": "Historic colonial center of Salvador with colorful buildings.", "image_url": "https://images.unsplash.com/photo-1516996087931-5ae405802f9f?w=600", "latitude": -12.9718, "longitude": -38.5108},
-        {"name": "Lençóis Maranhenses", "description": "White sand dunes with crystal turquoise lagoons.", "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600", "latitude": -2.4858, "longitude": -43.1289},
-        {"name": "Fernando de Noronha", "description": "Remote archipelago with pristine beaches and marine life.", "image_url": "https://images.unsplash.com/photo-1516996087931-5ae405802f9f?w=600", "latitude": -3.8540, "longitude": -32.4268},
-        {"name": "Pantanal", "description": "World's largest tropical wetland area, wildlife paradise.", "image_url": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600", "latitude": -17.7304, "longitude": -57.4966},
-        {"name": "São Paulo Cathedral", "description": "Neo-Gothic metropolitan cathedral in Brazil's largest city.", "image_url": "https://images.unsplash.com/photo-1516996087931-5ae405802f9f?w=600", "latitude": -23.5506, "longitude": -46.6333},
+        {
+            "name": "Christ the Redeemer", 
+            "description": "Iconic 30-meter statue overlooking Rio de Janeiro.", 
+            "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800",
+                "https://images.unsplash.com/photo-1518623001395-125242310d0c?w=800",
+                "https://images.unsplash.com/photo-1516834474-2c480c60c50f?w=800"
+            ],
+            "latitude": -22.9519, "longitude": -43.2105
+        },
+        {
+            "name": "Sugarloaf Mountain", 
+            "description": "Cable car to granite peak with panoramic Rio views.", 
+            "image_url": "https://images.unsplash.com/photo-1516834474-2c480c60c50f?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1516834474-2c480c60c50f?w=800",
+                "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800"
+            ],
+            "latitude": -22.9486, "longitude": -43.1566
+        },
+        {
+            "name": "Iguazu Falls", 
+            "description": "Massive waterfalls system on Argentina-Brazil border.", 
+            "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+                "https://images.unsplash.com/photo-1589802829985-817e51171b92?w=800",
+                "https://images.unsplash.com/photo-1621736500723-7e52cc6e8d80?w=800"
+            ],
+            "latitude": -25.6953, "longitude": -54.4367
+        },
+        {
+            "name": "Copacabana Beach", 
+            "description": "Famous 4km beach in Rio de Janeiro.", 
+            "image_url": "https://images.unsplash.com/photo-1516834474-2c480c60c50f?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1516834474-2c480c60c50f?w=800",
+                "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800"
+            ],
+            "latitude": -22.9711, "longitude": -43.1822
+        },
+        {
+            "name": "Amazon Rainforest", 
+            "description": "World's largest tropical rainforest, biodiversity hotspot.", 
+            "image_url": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800",
+                "https://images.unsplash.com/photo-1589802829985-817e51171b92?w=800"
+            ],
+            "latitude": -3.4653, "longitude": -62.2159
+        },
+        {
+            "name": "Pelourinho", 
+            "description": "Historic colonial center of Salvador with colorful buildings.", 
+            "image_url": "https://images.unsplash.com/photo-1516996087931-5ae405802f9f?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1516996087931-5ae405802f9f?w=800",
+                "https://images.unsplash.com/photo-1589802829985-817e51171b92?w=800"
+            ],
+            "latitude": -12.9718, "longitude": -38.5108
+        },
+        {
+            "name": "Lençóis Maranhenses", 
+            "description": "White sand dunes with crystal turquoise lagoons.", 
+            "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+                "https://images.unsplash.com/photo-1621736500723-7e52cc6e8d80?w=800"
+            ],
+            "latitude": -2.4858, "longitude": -43.1289
+        },
+        {
+            "name": "Fernando de Noronha", 
+            "description": "Remote archipelago with pristine beaches and marine life.", 
+            "image_url": "https://images.unsplash.com/photo-1516996087931-5ae405802f9f?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1516996087931-5ae405802f9f?w=800",
+                "https://images.unsplash.com/photo-1589802829985-817e51171b92?w=800"
+            ],
+            "latitude": -3.8540, "longitude": -32.4268
+        },
+        {
+            "name": "Pantanal", 
+            "description": "World's largest tropical wetland area, wildlife paradise.", 
+            "image_url": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800",
+                "https://images.unsplash.com/photo-1589802829985-817e51171b92?w=800"
+            ],
+            "latitude": -17.7304, "longitude": -57.4966
+        },
+        {
+            "name": "São Paulo Cathedral", 
+            "description": "Neo-Gothic metropolitan cathedral in Brazil's largest city.", 
+            "image_url": "https://images.unsplash.com/photo-1516996087931-5ae405802f9f?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1516996087931-5ae405802f9f?w=800",
+                "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800"
+            ],
+            "latitude": -23.5506, "longitude": -46.6333
+        },
     ],
     "mexico": [
         {"name": "Chichen Itza", "description": "Ancient Mayan city with iconic pyramid El Castillo.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=600", "latitude": 20.6843, "longitude": -88.5678},
