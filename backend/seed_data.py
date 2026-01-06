@@ -390,9 +390,9 @@ LANDMARKS_DATA = {
         {
             "name": "Mont Saint-Michel", 
             "description": "Island commune topped by medieval monastery.", 
-            "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800",
+            "image_url": "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800"
+                "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800"
             ],
             "latitude": 48.6361, "longitude": -1.5115
         },
@@ -828,9 +828,9 @@ LANDMARKS_DATA = {
         {
             "name": "Huacachina Oasis", 
             "description": "Desert oasis surrounded by sand dunes.", 
-            "image_url": "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800",
+            "image_url": "https://images.unsplash.com/photo-1616083707673-5e8f55ed53f3?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800"
+                "https://images.unsplash.com/photo-1616083707673-5e8f55ed53f3?w=800"
             ],
             "latitude": -14.0877, "longitude": -75.7639
         },
@@ -1226,9 +1226,9 @@ LANDMARKS_DATA = {
         {
             "name": "Alhambra", 
             "description": "Moorish palace and fortress complex in Granada.", 
-            "image_url": "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
+            "image_url": "https://images.unsplash.com/photo-1592839147723-e51ba61b77c7?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800"
+                "https://images.unsplash.com/photo-1592839147723-e51ba61b77c7?w=800"
             ],
             "latitude": 37.1773, "longitude": -3.5886
         },
@@ -1476,9 +1476,9 @@ LANDMARKS_DATA = {
         {
             "name": "Floating Markets", 
             "description": "Traditional markets on Bangkok's canals and waterways.", 
-            "image_url": "https://images.unsplash.com/photo-1600623595480-b6e5f8b0c0e1?w=800",
+            "image_url": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1600623595480-b6e5f8b0c0e1?w=800"
+                "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800"
             ],
             "latitude": 13.5221, "longitude": 100.0121
         },
@@ -1722,9 +1722,9 @@ LANDMARKS_DATA = {
         {
             "name": "Tulum", 
             "description": "Mayan ruins on Caribbean cliffside with stunning beach.", 
-            "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
+            "image_url": "https://images.unsplash.com/photo-1621881982584-b45a5ef5d9e4?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800"
+                "https://images.unsplash.com/photo-1621881982584-b45a5ef5d9e4?w=800"
             ],
             "latitude": 20.2114, "longitude": -87.4286
         },
