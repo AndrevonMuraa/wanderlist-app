@@ -2109,10 +2109,11 @@ LANDMARKS_DATA = {
         {
             "name": "Oktoberfest Grounds", 
             "description": "World's largest folk festival held annually in Munich.", 
-            "image_url": "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
+            "image_url": "https://images.unsplash.com/photo-1569498286946-7a4d5c9a1d6d?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
-                "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800"
+                "https://images.unsplash.com/photo-1569498286946-7a4d5c9a1d6d?w=800",
+                "https://images.unsplash.com/photo-1531838887653-e3e5234cd277?w=800",
+                "https://images.unsplash.com/photo-1604709177225-055f99402ea3?w=800"
             ],
             "latitude": 48.1315, "longitude": 11.5497
         },
