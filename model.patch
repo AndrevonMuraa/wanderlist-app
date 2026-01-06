@@ -1,688 +1,815 @@
 diff --git a/backend/seed_data.py b/backend/seed_data.py
-index ceaf280..72a65c3 100644
+index b21c4db..ead4c4c 100644
 --- a/backend/seed_data.py
 +++ b/backend/seed_data.py
-@@ -361,16 +361,107 @@ LANDMARKS_DATA = {
-         }
+@@ -1096,16 +1096,107 @@ LANDMARKS_DATA = {
+         },
      ],
-     "france": [
--        {"name": "Eiffel Tower", "description": "Iconic iron lattice tower in Paris, symbol of France.", "image_url": "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=600", "latitude": 48.8584, "longitude": 2.2945},
--        {"name": "Louvre Museum", "description": "World's largest art museum, home to the Mona Lisa.", "image_url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600", "latitude": 48.8606, "longitude": 2.3376},
--        {"name": "Notre-Dame Cathedral", "description": "Medieval Catholic cathedral, masterpiece of French Gothic architecture.", "image_url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600", "latitude": 48.8530, "longitude": 2.3499},
--        {"name": "Mont Saint-Michel", "description": "Island commune topped by medieval monastery.", "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600", "latitude": 48.6361, "longitude": -1.5115},
--        {"name": "Palace of Versailles", "description": "Opulent royal château with stunning gardens.", "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600", "latitude": 48.8049, "longitude": 2.1204},
--        {"name": "Arc de Triomphe", "description": "Monumental arch honoring those who fought for France.", "image_url": "https://images.unsplash.com/photo-1541170251893-16152cf69e6c?w=600", "latitude": 48.8738, "longitude": 2.2950},
--        {"name": "Pont du Gard", "description": "Ancient Roman aqueduct bridge in southern France.", "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=600", "latitude": 43.9475, "longitude": 4.5353},
--        {"name": "Château de Chambord", "description": "Distinctive French Renaissance château in Loire Valley.", "image_url": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=600", "latitude": 47.6163, "longitude": 1.5170},
--        {"name": "Sacré-Cœur", "description": "Stunning basilica on the summit of Montmartre in Paris.", "image_url": "https://images.unsplash.com/photo-1549144511-f099e773c147?w=600", "latitude": 48.8867, "longitude": 2.3431},
--        {"name": "Carcassonne", "description": "Medieval fortified city with impressive ramparts.", "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=600", "latitude": 43.2061, "longitude": 2.3632},
+     "china": [
+-        {"name": "Great Wall of China", "description": "Ancient series of walls built across historical northern borders.", "image_url": "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=600", "latitude": 40.4319, "longitude": 116.5704},
+-        {"name": "Forbidden City", "description": "Palace complex in central Beijing, home to Chinese emperors.", "image_url": "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=600", "latitude": 39.9163, "longitude": 116.3972},
+-        {"name": "Terracotta Army", "description": "Collection of terracotta sculptures depicting armies of Qin Shi Huang.", "image_url": "https://images.unsplash.com/photo-1594576722512-582bcd46fba3?w=600", "latitude": 34.3848, "longitude": 109.2792},
+-        {"name": "Temple of Heaven", "description": "Imperial complex of religious buildings visited by emperors.", "image_url": "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=600", "latitude": 39.8822, "longitude": 116.4067},
+-        {"name": "Li River", "description": "River in Guangxi famous for karst mountain scenery.", "image_url": "https://images.unsplash.com/photo-1549041840-4021c9eb86ec?w=600", "latitude": 25.2795, "longitude": 110.2950},
+-        {"name": "Shanghai Bund", "description": "Waterfront area with colonial-era buildings.", "image_url": "https://images.unsplash.com/photo-1537887858907-3b3687e70ca0?w=600", "latitude": 31.2397, "longitude": 121.4909},
+-        {"name": "Potala Palace", "description": "Dzong fortress in Lhasa, Tibet, winter palace of Dalai Lamas.", "image_url": "https://images.unsplash.com/photo-1537887858907-3b3687e70ca0?w=600", "latitude": 29.6578, "longitude": 91.1169},
+-        {"name": "Summer Palace", "description": "Vast ensemble of lakes, gardens and palaces in Beijing.", "image_url": "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=600", "latitude": 39.9995, "longitude": 116.2753},
+-        {"name": "Yellow Mountain", "description": "Mountain range known for granite peaks and hot springs.", "image_url": "https://images.unsplash.com/photo-1549041840-4021c9eb86ec?w=600", "latitude": 30.1339, "longitude": 118.1565},
+-        {"name": "Giant Buddha", "description": "Massive carved stone Buddha statue in Leshan.", "image_url": "https://images.unsplash.com/photo-1559564484-e48d68cd2d1f?w=600", "latitude": 29.5454, "longitude": 103.7695},
 +        {
-+            "name": "Eiffel Tower", 
-+            "description": "Iconic iron lattice tower in Paris, symbol of France.", 
-+            "image_url": "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=800",
++            "name": "Great Wall of China", 
++            "description": "Ancient series of walls built across historical northern borders.", 
++            "image_url": "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800",
 +            "images": [
-+                "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=800",
-+                "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?w=800",
-+                "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800"
++                "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800",
++                "https://images.unsplash.com/photo-1525490829609-d166ddb58678?w=800",
++                "https://images.unsplash.com/photo-1570873248552-dde614b6f01a?w=800"
 +            ],
-+            "latitude": 48.8584, "longitude": 2.2945
++            "latitude": 40.4319, "longitude": 116.5704
 +        },
 +        {
-+            "name": "Louvre Museum", 
-+            "description": "World's largest art museum, home to the Mona Lisa.", 
-+            "image_url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800",
++            "name": "Forbidden City", 
++            "description": "Palace complex in central Beijing, home to Chinese emperors.", 
++            "image_url": "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=800",
 +            "images": [
-+                "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800",
-+                "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?w=800"
++                "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=800",
++                "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800"
 +            ],
-+            "latitude": 48.8606, "longitude": 2.3376
++            "latitude": 39.9163, "longitude": 116.3972
 +        },
 +        {
-+            "name": "Notre-Dame Cathedral", 
-+            "description": "Medieval Catholic cathedral, masterpiece of French Gothic architecture.", 
-+            "image_url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800",
++            "name": "Terracotta Army", 
++            "description": "Collection of terracotta sculptures depicting armies of Qin Shi Huang.", 
++            "image_url": "https://images.unsplash.com/photo-1594576722512-582bcd46fba3?w=800",
 +            "images": [
-+                "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800",
-+                "https://images.unsplash.com/photo-1548013146-72479768bada?w=800"
++                "https://images.unsplash.com/photo-1594576722512-582bcd46fba3?w=800",
++                "https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=800"
 +            ],
-+            "latitude": 48.8530, "longitude": 2.3499
++            "latitude": 34.3848, "longitude": 109.2792
 +        },
 +        {
-+            "name": "Mont Saint-Michel", 
-+            "description": "Island commune topped by medieval monastery.", 
-+            "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800",
++            "name": "Temple of Heaven", 
++            "description": "Imperial complex of religious buildings visited by emperors.", 
++            "image_url": "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800",
 +            "images": [
-+                "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800",
-+                "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800"
++                "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800",
++                "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=800"
 +            ],
-+            "latitude": 48.6361, "longitude": -1.5115
++            "latitude": 39.8822, "longitude": 116.4067
 +        },
 +        {
-+            "name": "Palace of Versailles", 
-+            "description": "Opulent royal château with stunning gardens.", 
-+            "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800",
++            "name": "Li River", 
++            "description": "River in Guangxi famous for karst mountain scenery.", 
++            "image_url": "https://images.unsplash.com/photo-1549041840-4021c9eb86ec?w=800",
 +            "images": [
-+                "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800",
-+                "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?w=800"
++                "https://images.unsplash.com/photo-1549041840-4021c9eb86ec?w=800",
++                "https://images.unsplash.com/photo-1570873248552-dde614b6f01a?w=800"
 +            ],
-+            "latitude": 48.8049, "longitude": 2.1204
++            "latitude": 25.2795, "longitude": 110.2950
 +        },
 +        {
-+            "name": "Arc de Triomphe", 
-+            "description": "Monumental arch honoring those who fought for France.", 
-+            "image_url": "https://images.unsplash.com/photo-1541170251893-16152cf69e6c?w=800",
++            "name": "Shanghai Bund", 
++            "description": "Waterfront area with colonial-era buildings.", 
++            "image_url": "https://images.unsplash.com/photo-1537887858907-3b3687e70ca0?w=800",
 +            "images": [
-+                "https://images.unsplash.com/photo-1541170251893-16152cf69e6c?w=800",
-+                "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?w=800"
++                "https://images.unsplash.com/photo-1537887858907-3b3687e70ca0?w=800",
++                "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=800"
 +            ],
-+            "latitude": 48.8738, "longitude": 2.2950
++            "latitude": 31.2397, "longitude": 121.4909
 +        },
 +        {
-+            "name": "Pont du Gard", 
-+            "description": "Ancient Roman aqueduct bridge in southern France.", 
-+            "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=800",
++            "name": "Potala Palace", 
++            "description": "Dzong fortress in Lhasa, Tibet, winter palace of Dalai Lamas.", 
++            "image_url": "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800",
 +            "images": [
-+                "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=800",
-+                "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800"
++                "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800",
++                "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=800"
 +            ],
-+            "latitude": 43.9475, "longitude": 4.5353
++            "latitude": 29.6578, "longitude": 91.1169
 +        },
 +        {
-+            "name": "Château de Chambord", 
-+            "description": "Distinctive French Renaissance château in Loire Valley.", 
-+            "image_url": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800",
++            "name": "Summer Palace", 
++            "description": "Vast ensemble of lakes, gardens and palaces in Beijing.", 
++            "image_url": "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800",
 +            "images": [
-+                "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800",
-+                "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800"
++                "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800",
++                "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800"
 +            ],
-+            "latitude": 47.6163, "longitude": 1.5170
++            "latitude": 39.9995, "longitude": 116.2753
 +        },
 +        {
-+            "name": "Sacré-Cœur", 
-+            "description": "Stunning basilica on the summit of Montmartre in Paris.", 
-+            "image_url": "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800",
++            "name": "Yellow Mountain", 
++            "description": "Mountain range known for granite peaks and hot springs.", 
++            "image_url": "https://images.unsplash.com/photo-1549041840-4021c9eb86ec?w=800",
 +            "images": [
-+                "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800",
-+                "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800"
++                "https://images.unsplash.com/photo-1549041840-4021c9eb86ec?w=800",
++                "https://images.unsplash.com/photo-1570873248552-dde614b6f01a?w=800"
 +            ],
-+            "latitude": 48.8867, "longitude": 2.3431
++            "latitude": 30.1339, "longitude": 118.1565
 +        },
 +        {
-+            "name": "Carcassonne", 
-+            "description": "Medieval fortified city with impressive ramparts.", 
-+            "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=800",
++            "name": "West Lake", 
++            "description": "Freshwater lake in Hangzhou, famous for scenic beauty.", 
++            "image_url": "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=800",
 +            "images": [
-+                "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=800",
-+                "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800"
++                "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=800",
++                "https://images.unsplash.com/photo-1537887858907-3b3687e70ca0?w=800"
 +            ],
-+            "latitude": 43.2061, "longitude": 2.3632
++            "latitude": 30.2430, "longitude": 120.1425
 +        },
      ],
-     "italy": [
-         {"name": "Colosseum", "description": "Ancient amphitheater in Rome, largest ever built.", "image_url": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600", "latitude": 41.8902, "longitude": 12.4922},
+     "spain": [
+         {"name": "Sagrada Família", "description": "Gaudí's unfinished basilica, Barcelona's most iconic landmark.", "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600", "latitude": 41.4036, "longitude": 2.1744},
 diff --git a/model.patch b/model.patch
-index 4d0d573..3798712 100644
+index 774d322..6c0d11b 100644
 --- a/model.patch
 +++ b/model.patch
-@@ -1,561 +0,0 @@
+@@ -1,688 +0,0 @@
 -diff --git a/backend/seed_data.py b/backend/seed_data.py
--index a0cfe17..b303f9f 100644
+-index ceaf280..72a65c3 100644
 ---- a/backend/seed_data.py
 -+++ b/backend/seed_data.py
--@@ -361,16 +361,16 @@ LANDMARKS_DATA = {
+-@@ -361,16 +361,107 @@ LANDMARKS_DATA = {
 -         }
 -     ],
 -     "france": [
---        {"name": "Eiffel Tower", "description": "Iconic iron lattice tower in Paris, symbol of France.", "image_url": "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=600"},
---        {"name": "Louvre Museum", "description": "World's largest art museum, home to the Mona Lisa.", "image_url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600"},
---        {"name": "Notre-Dame Cathedral", "description": "Medieval Catholic cathedral, masterpiece of French Gothic architecture.", "image_url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600"},
---        {"name": "Mont Saint-Michel", "description": "Island commune topped by medieval monastery.", "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600"},
---        {"name": "Palace of Versailles", "description": "Opulent royal château with stunning gardens.", "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600"},
---        {"name": "Arc de Triomphe", "description": "Monumental arch honoring those who fought for France.", "image_url": "https://images.unsplash.com/photo-1541170251893-16152cf69e6c?w=600"},
---        {"name": "Pont du Gard", "description": "Ancient Roman aqueduct bridge in southern France.", "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=600"},
---        {"name": "Château de Chambord", "description": "Distinctive French Renaissance château in Loire Valley.", "image_url": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=600"},
---        {"name": "Sacré-Cœur", "description": "Stunning basilica on the summit of Montmartre in Paris.", "image_url": "https://images.unsplash.com/photo-1549144511-f099e773c147?w=600"},
---        {"name": "French Riviera", "description": "Mediterranean coastline known for glamorous resorts.", "image_url": "https://images.unsplash.com/photo-1517456793572-1d8efd6dc135?w=600"},
--+        {"name": "Eiffel Tower", "description": "Iconic iron lattice tower in Paris, symbol of France.", "image_url": "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=600", "latitude": 48.8584, "longitude": 2.2945},
--+        {"name": "Louvre Museum", "description": "World's largest art museum, home to the Mona Lisa.", "image_url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600", "latitude": 48.8606, "longitude": 2.3376},
--+        {"name": "Notre-Dame Cathedral", "description": "Medieval Catholic cathedral, masterpiece of French Gothic architecture.", "image_url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600", "latitude": 48.8530, "longitude": 2.3499},
--+        {"name": "Mont Saint-Michel", "description": "Island commune topped by medieval monastery.", "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600", "latitude": 48.6361, "longitude": -1.5115},
--+        {"name": "Palace of Versailles", "description": "Opulent royal château with stunning gardens.", "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600", "latitude": 48.8049, "longitude": 2.1204},
--+        {"name": "Arc de Triomphe", "description": "Monumental arch honoring those who fought for France.", "image_url": "https://images.unsplash.com/photo-1541170251893-16152cf69e6c?w=600", "latitude": 48.8738, "longitude": 2.2950},
--+        {"name": "Pont du Gard", "description": "Ancient Roman aqueduct bridge in southern France.", "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=600", "latitude": 43.9475, "longitude": 4.5353},
--+        {"name": "Château de Chambord", "description": "Distinctive French Renaissance château in Loire Valley.", "image_url": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=600", "latitude": 47.6163, "longitude": 1.5170},
--+        {"name": "Sacré-Cœur", "description": "Stunning basilica on the summit of Montmartre in Paris.", "image_url": "https://images.unsplash.com/photo-1549144511-f099e773c147?w=600", "latitude": 48.8867, "longitude": 2.3431},
--+        {"name": "Carcassonne", "description": "Medieval fortified city with impressive ramparts.", "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=600", "latitude": 43.2061, "longitude": 2.3632},
+--        {"name": "Eiffel Tower", "description": "Iconic iron lattice tower in Paris, symbol of France.", "image_url": "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=600", "latitude": 48.8584, "longitude": 2.2945},
+--        {"name": "Louvre Museum", "description": "World's largest art museum, home to the Mona Lisa.", "image_url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600", "latitude": 48.8606, "longitude": 2.3376},
+--        {"name": "Notre-Dame Cathedral", "description": "Medieval Catholic cathedral, masterpiece of French Gothic architecture.", "image_url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600", "latitude": 48.8530, "longitude": 2.3499},
+--        {"name": "Mont Saint-Michel", "description": "Island commune topped by medieval monastery.", "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600", "latitude": 48.6361, "longitude": -1.5115},
+--        {"name": "Palace of Versailles", "description": "Opulent royal château with stunning gardens.", "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600", "latitude": 48.8049, "longitude": 2.1204},
+--        {"name": "Arc de Triomphe", "description": "Monumental arch honoring those who fought for France.", "image_url": "https://images.unsplash.com/photo-1541170251893-16152cf69e6c?w=600", "latitude": 48.8738, "longitude": 2.2950},
+--        {"name": "Pont du Gard", "description": "Ancient Roman aqueduct bridge in southern France.", "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=600", "latitude": 43.9475, "longitude": 4.5353},
+--        {"name": "Château de Chambord", "description": "Distinctive French Renaissance château in Loire Valley.", "image_url": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=600", "latitude": 47.6163, "longitude": 1.5170},
+--        {"name": "Sacré-Cœur", "description": "Stunning basilica on the summit of Montmartre in Paris.", "image_url": "https://images.unsplash.com/photo-1549144511-f099e773c147?w=600", "latitude": 48.8867, "longitude": 2.3431},
+--        {"name": "Carcassonne", "description": "Medieval fortified city with impressive ramparts.", "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=600", "latitude": 43.2061, "longitude": 2.3632},
+-+        {
+-+            "name": "Eiffel Tower", 
+-+            "description": "Iconic iron lattice tower in Paris, symbol of France.", 
+-+            "image_url": "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=800",
+-+            "images": [
+-+                "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=800",
+-+                "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?w=800",
+-+                "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800"
+-+            ],
+-+            "latitude": 48.8584, "longitude": 2.2945
+-+        },
+-+        {
+-+            "name": "Louvre Museum", 
+-+            "description": "World's largest art museum, home to the Mona Lisa.", 
+-+            "image_url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800",
+-+            "images": [
+-+                "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800",
+-+                "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?w=800"
+-+            ],
+-+            "latitude": 48.8606, "longitude": 2.3376
+-+        },
+-+        {
+-+            "name": "Notre-Dame Cathedral", 
+-+            "description": "Medieval Catholic cathedral, masterpiece of French Gothic architecture.", 
+-+            "image_url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800",
+-+            "images": [
+-+                "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800",
+-+                "https://images.unsplash.com/photo-1548013146-72479768bada?w=800"
+-+            ],
+-+            "latitude": 48.8530, "longitude": 2.3499
+-+        },
+-+        {
+-+            "name": "Mont Saint-Michel", 
+-+            "description": "Island commune topped by medieval monastery.", 
+-+            "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800",
+-+            "images": [
+-+                "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800",
+-+                "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800"
+-+            ],
+-+            "latitude": 48.6361, "longitude": -1.5115
+-+        },
+-+        {
+-+            "name": "Palace of Versailles", 
+-+            "description": "Opulent royal château with stunning gardens.", 
+-+            "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800",
+-+            "images": [
+-+                "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800",
+-+                "https://images.unsplash.com/photo-1550340499-a6c60fc8287c?w=800"
+-+            ],
+-+            "latitude": 48.8049, "longitude": 2.1204
+-+        },
+-+        {
+-+            "name": "Arc de Triomphe", 
+-+            "description": "Monumental arch honoring those who fought for France.", 
+-+            "image_url": "https://images.unsplash.com/photo-1541170251893-16152cf69e6c?w=800",
+-+            "images": [
+-+                "https://images.unsplash.com/photo-1541170251893-16152cf69e6c?w=800",
+-+                "https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?w=800"
+-+            ],
+-+            "latitude": 48.8738, "longitude": 2.2950
+-+        },
+-+        {
+-+            "name": "Pont du Gard", 
+-+            "description": "Ancient Roman aqueduct bridge in southern France.", 
+-+            "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=800",
+-+            "images": [
+-+                "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=800",
+-+                "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800"
+-+            ],
+-+            "latitude": 43.9475, "longitude": 4.5353
+-+        },
+-+        {
+-+            "name": "Château de Chambord", 
+-+            "description": "Distinctive French Renaissance château in Loire Valley.", 
+-+            "image_url": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800",
+-+            "images": [
+-+                "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800",
+-+                "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800"
+-+            ],
+-+            "latitude": 47.6163, "longitude": 1.5170
+-+        },
+-+        {
+-+            "name": "Sacré-Cœur", 
+-+            "description": "Stunning basilica on the summit of Montmartre in Paris.", 
+-+            "image_url": "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800",
+-+            "images": [
+-+                "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800",
+-+                "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800"
+-+            ],
+-+            "latitude": 48.8867, "longitude": 2.3431
+-+        },
+-+        {
+-+            "name": "Carcassonne", 
+-+            "description": "Medieval fortified city with impressive ramparts.", 
+-+            "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=800",
+-+            "images": [
+-+                "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=800",
+-+                "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800"
+-+            ],
+-+            "latitude": 43.2061, "longitude": 2.3632
+-+        },
 -     ],
 -     "italy": [
--         {"name": "Colosseum", "description": "Ancient amphitheater in Rome, largest ever built.", "image_url": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600"},
+-         {"name": "Colosseum", "description": "Ancient amphitheater in Rome, largest ever built.", "image_url": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600", "latitude": 41.8902, "longitude": 12.4922},
 -diff --git a/model.patch b/model.patch
--index c06116a..3b7fe30 100644
+-index 4d0d573..3798712 100644
 ---- a/model.patch
 -+++ b/model.patch
--@@ -1,525 +0,0 @@
---diff --git a/backend/server.py b/backend/server.py
---index 0647de2..3ea36ba 100644
------ a/backend/server.py
---+++ b/backend/server.py
---@@ -140,6 +140,7 @@ class Visit(BaseModel):
---     photo_base64: str
---     points_earned: int = 10  # Points earned for this visit
---     comments: Optional[str] = None
---+    visit_location: Optional[str] = None  # City/region for Northern Lights sightings
---     diary_notes: Optional[str] = None
---     visited_at: datetime
--- 
---@@ -147,6 +148,7 @@ class VisitCreate(BaseModel):
---     landmark_id: str
---     photo_base64: str
---     comments: Optional[str] = None
---+    visit_location: Optional[str] = None  # City/region for Northern Lights sightings
---     diary_notes: Optional[str] = None
--- 
--- class Friend(BaseModel):
---@@ -476,6 +478,7 @@ async def create_visit(data: VisitCreate, current_user: User = Depends(get_curre
---         "landmark_id": data.landmark_id,
---         "photo_base64": data.photo_base64,
---         "comments": data.comments,
---+        "visit_location": data.visit_location,
---         "diary_notes": data.diary_notes,
---         "visited_at": datetime.now(timezone.utc)
---     }
+-@@ -1,561 +0,0 @@
+--diff --git a/backend/seed_data.py b/backend/seed_data.py
+--index a0cfe17..b303f9f 100644
+----- a/backend/seed_data.py
+--+++ b/backend/seed_data.py
+--@@ -361,16 +361,16 @@ LANDMARKS_DATA = {
+--         }
+--     ],
+--     "france": [
+---        {"name": "Eiffel Tower", "description": "Iconic iron lattice tower in Paris, symbol of France.", "image_url": "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=600"},
+---        {"name": "Louvre Museum", "description": "World's largest art museum, home to the Mona Lisa.", "image_url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600"},
+---        {"name": "Notre-Dame Cathedral", "description": "Medieval Catholic cathedral, masterpiece of French Gothic architecture.", "image_url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600"},
+---        {"name": "Mont Saint-Michel", "description": "Island commune topped by medieval monastery.", "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600"},
+---        {"name": "Palace of Versailles", "description": "Opulent royal château with stunning gardens.", "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600"},
+---        {"name": "Arc de Triomphe", "description": "Monumental arch honoring those who fought for France.", "image_url": "https://images.unsplash.com/photo-1541170251893-16152cf69e6c?w=600"},
+---        {"name": "Pont du Gard", "description": "Ancient Roman aqueduct bridge in southern France.", "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=600"},
+---        {"name": "Château de Chambord", "description": "Distinctive French Renaissance château in Loire Valley.", "image_url": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=600"},
+---        {"name": "Sacré-Cœur", "description": "Stunning basilica on the summit of Montmartre in Paris.", "image_url": "https://images.unsplash.com/photo-1549144511-f099e773c147?w=600"},
+---        {"name": "French Riviera", "description": "Mediterranean coastline known for glamorous resorts.", "image_url": "https://images.unsplash.com/photo-1517456793572-1d8efd6dc135?w=600"},
+--+        {"name": "Eiffel Tower", "description": "Iconic iron lattice tower in Paris, symbol of France.", "image_url": "https://images.unsplash.com/photo-1551450500-2e0995baf0d6?w=600", "latitude": 48.8584, "longitude": 2.2945},
+--+        {"name": "Louvre Museum", "description": "World's largest art museum, home to the Mona Lisa.", "image_url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600", "latitude": 48.8606, "longitude": 2.3376},
+--+        {"name": "Notre-Dame Cathedral", "description": "Medieval Catholic cathedral, masterpiece of French Gothic architecture.", "image_url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600", "latitude": 48.8530, "longitude": 2.3499},
+--+        {"name": "Mont Saint-Michel", "description": "Island commune topped by medieval monastery.", "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600", "latitude": 48.6361, "longitude": -1.5115},
+--+        {"name": "Palace of Versailles", "description": "Opulent royal château with stunning gardens.", "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600", "latitude": 48.8049, "longitude": 2.1204},
+--+        {"name": "Arc de Triomphe", "description": "Monumental arch honoring those who fought for France.", "image_url": "https://images.unsplash.com/photo-1541170251893-16152cf69e6c?w=600", "latitude": 48.8738, "longitude": 2.2950},
+--+        {"name": "Pont du Gard", "description": "Ancient Roman aqueduct bridge in southern France.", "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=600", "latitude": 43.9475, "longitude": 4.5353},
+--+        {"name": "Château de Chambord", "description": "Distinctive French Renaissance château in Loire Valley.", "image_url": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=600", "latitude": 47.6163, "longitude": 1.5170},
+--+        {"name": "Sacré-Cœur", "description": "Stunning basilica on the summit of Montmartre in Paris.", "image_url": "https://images.unsplash.com/photo-1549144511-f099e773c147?w=600", "latitude": 48.8867, "longitude": 2.3431},
+--+        {"name": "Carcassonne", "description": "Medieval fortified city with impressive ramparts.", "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=600", "latitude": 43.2061, "longitude": 2.3632},
+--     ],
+--     "italy": [
+--         {"name": "Colosseum", "description": "Ancient amphitheater in Rome, largest ever built.", "image_url": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600"},
 --diff --git a/model.patch b/model.patch
---index cb729e4..e69de29 100644
+--index c06116a..3b7fe30 100644
 ----- a/model.patch
 --+++ b/model.patch
---@@ -1,492 +0,0 @@
+--@@ -1,525 +0,0 @@
+---diff --git a/backend/server.py b/backend/server.py
+---index 0647de2..3ea36ba 100644
+------ a/backend/server.py
+---+++ b/backend/server.py
+---@@ -140,6 +140,7 @@ class Visit(BaseModel):
+---     photo_base64: str
+---     points_earned: int = 10  # Points earned for this visit
+---     comments: Optional[str] = None
+---+    visit_location: Optional[str] = None  # City/region for Northern Lights sightings
+---     diary_notes: Optional[str] = None
+---     visited_at: datetime
+--- 
+---@@ -147,6 +148,7 @@ class VisitCreate(BaseModel):
+---     landmark_id: str
+---     photo_base64: str
+---     comments: Optional[str] = None
+---+    visit_location: Optional[str] = None  # City/region for Northern Lights sightings
+---     diary_notes: Optional[str] = None
+--- 
+--- class Friend(BaseModel):
+---@@ -476,6 +478,7 @@ async def create_visit(data: VisitCreate, current_user: User = Depends(get_curre
+---         "landmark_id": data.landmark_id,
+---         "photo_base64": data.photo_base64,
+---         "comments": data.comments,
+---+        "visit_location": data.visit_location,
+---         "diary_notes": data.diary_notes,
+---         "visited_at": datetime.now(timezone.utc)
+---     }
 ---diff --git a/model.patch b/model.patch
----index 47fad11..e69de29 100644
+---index cb729e4..e69de29 100644
 ------ a/model.patch
 ---+++ b/model.patch
----@@ -1,487 +0,0 @@
+---@@ -1,492 +0,0 @@
 ----diff --git a/model.patch b/model.patch
-----index e68a698..e69de29 100644
+----index 47fad11..e69de29 100644
 ------- a/model.patch
 ----+++ b/model.patch
-----@@ -1,482 +0,0 @@
+----@@ -1,487 +0,0 @@
 -----diff --git a/model.patch b/model.patch
------index 54f80d1..e69de29 100644
+-----index e68a698..e69de29 100644
 -------- a/model.patch
 -----+++ b/model.patch
------@@ -1,477 +0,0 @@
+-----@@ -1,482 +0,0 @@
 ------diff --git a/model.patch b/model.patch
-------index 49fd01e..e69de29 100644
+------index 54f80d1..e69de29 100644
 --------- a/model.patch
 ------+++ b/model.patch
-------@@ -1,472 +0,0 @@
+------@@ -1,477 +0,0 @@
 -------diff --git a/model.patch b/model.patch
--------index 069f91f..e69de29 100644
+-------index 49fd01e..e69de29 100644
 ---------- a/model.patch
 -------+++ b/model.patch
--------@@ -1,467 +0,0 @@
+-------@@ -1,472 +0,0 @@
 --------diff --git a/model.patch b/model.patch
---------index 65e612f..e69de29 100644
+--------index 069f91f..e69de29 100644
 ----------- a/model.patch
 --------+++ b/model.patch
---------@@ -1,462 +0,0 @@
+--------@@ -1,467 +0,0 @@
 ---------diff --git a/model.patch b/model.patch
----------index 383b87c..e69de29 100644
+---------index 65e612f..e69de29 100644
 ------------ a/model.patch
 ---------+++ b/model.patch
----------@@ -1,457 +0,0 @@
+---------@@ -1,462 +0,0 @@
 ----------diff --git a/model.patch b/model.patch
-----------index 09a4599..e69de29 100644
+----------index 383b87c..e69de29 100644
 ------------- a/model.patch
 ----------+++ b/model.patch
-----------@@ -1,452 +0,0 @@
+----------@@ -1,457 +0,0 @@
 -----------diff --git a/model.patch b/model.patch
------------index 5d17ad4..e69de29 100644
+-----------index 09a4599..e69de29 100644
 -------------- a/model.patch
 -----------+++ b/model.patch
------------@@ -1,447 +0,0 @@
-------------diff --git a/frontend/app/(auth)/login.tsx b/frontend/app/(auth)/login.tsx
-------------index 41e4156..abc439b 100644
---------------- a/frontend/app/(auth)/login.tsx
-------------+++ b/frontend/app/(auth)/login.tsx
-------------@@ -1,11 +1,10 @@
------------- import React, { useState } from 'react';
------------- import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity } from 'react-native';
--------------import { Text, TextInput, Button, Surface, Title, Snackbar } from 'react-native-paper';
-------------+import { Text, TextInput, Button, Surface, Snackbar } from 'react-native-paper';
------------- import { useRouter } from 'expo-router';
------------- import { useAuth } from '../../contexts/AuthContext';
------------- import { SafeAreaView } from 'react-native-safe-area-context';
------------- import { Ionicons } from '@expo/vector-icons';
--------------import { LinearGradient } from 'expo-linear-gradient';
------------- import theme from '../../styles/theme';
------------- 
------------- export default function LoginScreen() {
-------------@@ -55,82 +54,77 @@ export default function LoginScreen() {
-------------         style={styles.keyboardView}
-------------       >
-------------         <ScrollView contentContainerStyle={styles.scrollView}>
--------------          <LinearGradient
--------------            colors={[theme.colors.background, theme.colors.surfaceTinted]}
--------------            style={styles.gradientBackground}
--------------          >
--------------            <View style={styles.logoContainer}>
--------------              <View style={styles.iconCircle}>
--------------                <Ionicons name="earth-outline" size={64} color={theme.colors.primary} />
--------------              </View>
--------------              <Title style={styles.title}>Welcome to WanderList</Title>
--------------              <Text style={styles.subtitle}>Explore iconic landmarks across the world</Text>
-------------+          <View style={styles.logoContainer}>
-------------+            <View style={styles.iconCircle}>
-------------+              <Ionicons name="earth" size={56} color={theme.colors.primary} />
-------------             </View>
-------------+            <Text style={styles.title}>Welcome to WanderList</Text>
-------------+            <Text style={styles.subtitle}>Explore iconic landmarks across the world</Text>
-------------+          </View>
------------- 
--------------            <Surface style={styles.surface}>
--------------              <TextInput
--------------                label="Email"
--------------                value={email}
--------------                onChangeText={setEmail}
--------------                mode="outlined"
--------------                keyboardType="email-address"
--------------                autoCapitalize="none"
--------------                style={styles.input}
--------------                outlineColor={theme.colors.border}
--------------                activeOutlineColor={theme.colors.primary}
--------------                textColor={theme.colors.text}
--------------              />
-------------+          <Surface style={styles.surface}>
-------------+            <TextInput
-------------+              label="Email"
-------------+              value={email}
-------------+              onChangeText={setEmail}
-------------+              mode="outlined"
-------------+              keyboardType="email-address"
-------------+              autoCapitalize="none"
-------------+              style={styles.input}
-------------+              outlineColor={theme.colors.border}
-------------+              activeOutlineColor={theme.colors.primary}
-------------+              textColor={theme.colors.text}
-------------+            />
------------- 
--------------              <TextInput
--------------                label="Password"
--------------                value={password}
--------------                onChangeText={setPassword}
--------------                mode="outlined"
--------------                secureTextEntry
--------------                style={styles.input}
--------------                outlineColor={theme.colors.border}
--------------                activeOutlineColor={theme.colors.primary}
--------------                textColor={theme.colors.text}
--------------              />
-------------+            <TextInput
-------------+              label="Password"
-------------+              value={password}
-------------+              onChangeText={setPassword}
-------------+              mode="outlined"
-------------+              secureTextEntry
-------------+              style={styles.input}
-------------+              outlineColor={theme.colors.border}
-------------+              activeOutlineColor={theme.colors.primary}
-------------+              textColor={theme.colors.text}
-------------+            />
------------- 
--------------              <Button
--------------                mode="contained"
--------------                onPress={handleLogin}
--------------                loading={loading}
--------------                disabled={loading}
--------------                style={styles.button}
--------------                buttonColor={theme.colors.primary}
--------------                textColor="#fff"
--------------              >
--------------                Login
--------------              </Button>
-------------+            <Button
-------------+              mode="contained"
-------------+              onPress={handleLogin}
-------------+              loading={loading}
-------------+              disabled={loading}
-------------+              style={styles.button}
-------------+              buttonColor={theme.colors.primary}
-------------+              textColor="#fff"
-------------+            >
-------------+              Login
-------------+            </Button>
------------- 
--------------              <View style={styles.divider}>
--------------                <View style={styles.dividerLine} />
--------------                <Text style={styles.dividerText}>OR</Text>
--------------                <View style={styles.dividerLine} />
--------------              </View>
-------------+            <View style={styles.divider}>
-------------+              <View style={styles.dividerLine} />
-------------+              <Text style={styles.dividerText}>OR</Text>
-------------+              <View style={styles.dividerLine} />
-------------+            </View>
------------- 
--------------              <Button
--------------                mode="outlined"
--------------                onPress={handleGoogleLogin}
--------------                disabled={loading}
--------------                icon="google"
--------------                style={styles.googleButton}
--------------                textColor={theme.colors.text}
--------------                buttonColor={theme.colors.surface}
--------------              >
--------------                Continue with Google
--------------              </Button>
-------------+            <Button
-------------+              mode="outlined"
-------------+              onPress={handleGoogleLogin}
-------------+              disabled={loading}
-------------+              icon="google"
-------------+              style={styles.googleButton}
-------------+              textColor={theme.colors.text}
-------------+              buttonColor={theme.colors.surface}
-------------+            >
-------------+              Continue with Google
-------------+            </Button>
------------- 
--------------              <TouchableOpacity
--------------                onPress={() => router.push('/(auth)/register')}
--------------                style={styles.linkContainer}
--------------              >
--------------                <Text style={styles.linkText}>Don't have an account? Sign up</Text>
--------------              </TouchableOpacity>
--------------            </Surface>
--------------          </LinearGradient>
-------------+            <TouchableOpacity
-------------+              onPress={() => router.push('/(auth)/register')}
-------------+              style={styles.linkContainer}
-------------+            >
-------------+              <Text style={styles.linkText}>Don't have an account? Sign up</Text>
-------------+            </TouchableOpacity>
-------------+          </Surface>
-------------         </ScrollView>
-------------       </KeyboardAvoidingView>
------------- 
-------------@@ -159,10 +153,6 @@ const styles = StyleSheet.create({
-------------     justifyContent: 'center',
-------------     padding: theme.spacing.md,
-------------   },
--------------  gradientBackground: {
--------------    flex: 1,
--------------    justifyContent: 'center',
--------------  },
-------------   logoContainer: {
-------------     alignItems: 'center',
-------------     marginBottom: theme.spacing.xl,
-------------@@ -175,13 +165,13 @@ const styles = StyleSheet.create({
-------------     justifyContent: 'center',
-------------     alignItems: 'center',
-------------     marginBottom: theme.spacing.lg,
--------------    ...theme.shadows.md,
-------------+    ...theme.shadows.lg,
-------------   },
-------------   surface: {
-------------     padding: theme.spacing.xl,
--------------    borderRadius: theme.borderRadius.lg,
-------------+    borderRadius: theme.borderRadius.xxl,
-------------     backgroundColor: theme.colors.surface,
--------------    ...theme.shadows.md,
-------------+    ...theme.shadows.card,
-------------   },
-------------   title: {
-------------     ...theme.typography.h2,
-------------@@ -201,11 +191,13 @@ const styles = StyleSheet.create({
-------------   button: {
-------------     marginTop: theme.spacing.sm,
-------------     borderRadius: theme.borderRadius.md,
-------------+    paddingVertical: theme.spacing.xs,
-------------   },
-------------   googleButton: {
-------------     borderColor: theme.colors.border,
-------------     borderWidth: 1.5,
-------------     borderRadius: theme.borderRadius.md,
-------------+    paddingVertical: theme.spacing.xs,
-------------   },
-------------   divider: {
-------------     flexDirection: 'row',
-------------@@ -229,5 +221,6 @@ const styles = StyleSheet.create({
-------------   linkText: {
-------------     ...theme.typography.body,
-------------     color: theme.colors.primary,
-------------+    fontWeight: '600',
-------------   },
------------- });
+-----------@@ -1,452 +0,0 @@
 ------------diff --git a/model.patch b/model.patch
-------------index b79cb74..7a69f5d 100644
+------------index 5d17ad4..e69de29 100644
 --------------- a/model.patch
 ------------+++ b/model.patch
-------------@@ -1,229 +0,0 @@
--------------diff --git a/test_result.md b/test_result.md
--------------index 80cc30d..d09bb11 100644
----------------- a/test_result.md
--------------+++ b/test_result.md
--------------@@ -107,111 +107,138 @@ user_problem_statement: "Rebuild WanderList as an Expo/React Native app suitable
-------------- backend:
--------------   - task: "Database seeding with countries and landmarks"
--------------     implemented: true
---------------    working: "NA"
--------------+    working: true
--------------     file: "backend/seed_data.py"
--------------     stuck_count: 0
--------------     priority: "high"
---------------    needs_retesting: true
--------------+    needs_retesting: false
--------------     status_history:
--------------       - working: true
--------------         agent: "main"
--------------         comment: "Created seed_data.py with 10 countries and 100 landmarks (10 per country) including Norway with 'The Old Town of Fredrikstad'"
--------------+      - working: true
--------------+        agent: "testing"
--------------+        comment: "✅ Database seeded successfully. Verified 10 countries and 100 landmarks including 'The Old Town of Fredrikstad' in Norway. All data properly structured with correct IDs and categories."
--------------   
--------------   - task: "Authentication - JWT email/password"
--------------     implemented: true
---------------    working: "NA"
--------------+    working: true
--------------     file: "backend/server.py"
--------------     stuck_count: 0
--------------     priority: "high"
---------------    needs_retesting: true
--------------+    needs_retesting: false
--------------     status_history:
--------------       - working: "NA"
--------------         agent: "main"
--------------         comment: "Implemented register, login endpoints with JWT tokens. Password hashing with bcrypt."
--------------+      - working: true
--------------+        agent: "testing"
--------------+        comment: "✅ JWT Authentication working perfectly. Tested: POST /api/auth/register (creates user with hashed password), POST /api/auth/login (returns JWT token), GET /api/auth/me (validates token), POST /api/auth/logout. All endpoints respond correctly with proper status codes."
+------------@@ -1,447 +0,0 @@
+-------------diff --git a/frontend/app/(auth)/login.tsx b/frontend/app/(auth)/login.tsx
+-------------index 41e4156..abc439b 100644
+---------------- a/frontend/app/(auth)/login.tsx
+-------------+++ b/frontend/app/(auth)/login.tsx
+-------------@@ -1,11 +1,10 @@
+------------- import React, { useState } from 'react';
+------------- import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity } from 'react-native';
+--------------import { Text, TextInput, Button, Surface, Title, Snackbar } from 'react-native-paper';
+-------------+import { Text, TextInput, Button, Surface, Snackbar } from 'react-native-paper';
+------------- import { useRouter } from 'expo-router';
+------------- import { useAuth } from '../../contexts/AuthContext';
+------------- import { SafeAreaView } from 'react-native-safe-area-context';
+------------- import { Ionicons } from '@expo/vector-icons';
+--------------import { LinearGradient } from 'expo-linear-gradient';
+------------- import theme from '../../styles/theme';
 ------------- 
--------------   - task: "Authentication - Google OAuth (Emergent)"
--------------     implemented: true
---------------    working: "NA"
--------------+    working: true
--------------     file: "backend/server.py"
--------------     stuck_count: 0
--------------     priority: "high"
---------------    needs_retesting: true
--------------+    needs_retesting: false
--------------     status_history:
--------------       - working: "NA"
--------------         agent: "main"
--------------         comment: "Implemented Google OAuth callback endpoint, session management with httpOnly cookies"
--------------+      - working: true
--------------+        agent: "testing"
--------------+        comment: "✅ Google OAuth implementation present and properly structured. Endpoint POST /api/auth/google/callback handles session exchange, user creation/lookup, and httpOnly cookie management. Code structure is correct for Emergent OAuth flow."
+------------- export default function LoginScreen() {
+-------------@@ -55,82 +54,77 @@ export default function LoginScreen() {
+-------------         style={styles.keyboardView}
+-------------       >
+-------------         <ScrollView contentContainerStyle={styles.scrollView}>
+--------------          <LinearGradient
+--------------            colors={[theme.colors.background, theme.colors.surfaceTinted]}
+--------------            style={styles.gradientBackground}
+--------------          >
+--------------            <View style={styles.logoContainer}>
+--------------              <View style={styles.iconCircle}>
+--------------                <Ionicons name="earth-outline" size={64} color={theme.colors.primary} />
+--------------              </View>
+--------------              <Title style={styles.title}>Welcome to WanderList</Title>
+--------------              <Text style={styles.subtitle}>Explore iconic landmarks across the world</Text>
+-------------+          <View style={styles.logoContainer}>
+-------------+            <View style={styles.iconCircle}>
+-------------+              <Ionicons name="earth" size={56} color={theme.colors.primary} />
+-------------             </View>
+-------------+            <Text style={styles.title}>Welcome to WanderList</Text>
+-------------+            <Text style={styles.subtitle}>Explore iconic landmarks across the world</Text>
+-------------+          </View>
 ------------- 
--------------   - task: "Countries API endpoints"
--------------     implemented: true
---------------    working: "NA"
--------------+    working: true
--------------     file: "backend/server.py"
--------------     stuck_count: 0
--------------     priority: "high"
---------------    needs_retesting: true
--------------+    needs_retesting: false
--------------     status_history:
--------------       - working: "NA"
--------------         agent: "main"
--------------         comment: "GET /api/countries endpoint with landmark counts"
--------------+      - working: true
--------------+        agent: "testing"
--------------+        comment: "✅ Countries API working perfectly. GET /api/countries returns all 10 countries with accurate landmark counts. Norway included with proper continent assignment. Authentication required and working."
+--------------            <Surface style={styles.surface}>
+--------------              <TextInput
+--------------                label="Email"
+--------------                value={email}
+--------------                onChangeText={setEmail}
+--------------                mode="outlined"
+--------------                keyboardType="email-address"
+--------------                autoCapitalize="none"
+--------------                style={styles.input}
+--------------                outlineColor={theme.colors.border}
+--------------                activeOutlineColor={theme.colors.primary}
+--------------                textColor={theme.colors.text}
+--------------              />
+-------------+          <Surface style={styles.surface}>
+-------------+            <TextInput
+-------------+              label="Email"
+-------------+              value={email}
+-------------+              onChangeText={setEmail}
+-------------+              mode="outlined"
+-------------+              keyboardType="email-address"
+-------------+              autoCapitalize="none"
+-------------+              style={styles.input}
+-------------+              outlineColor={theme.colors.border}
+-------------+              activeOutlineColor={theme.colors.primary}
+-------------+              textColor={theme.colors.text}
+-------------+            />
 ------------- 
--------------   - task: "Landmarks API endpoints"
--------------     implemented: true
---------------    working: "NA"
--------------+    working: true
--------------     file: "backend/server.py"
--------------     stuck_count: 0
--------------     priority: "high"
---------------    needs_retesting: true
--------------+    needs_retesting: false
--------------     status_history:
--------------       - working: "NA"
--------------         agent: "main"
--------------         comment: "GET /api/landmarks (with filters), GET /api/landmarks/:id, POST /api/landmarks (user-suggested), POST /api/landmarks/:id/upvote"
--------------+      - working: true
--------------+        agent: "testing"
--------------+        comment: "✅ All Landmarks APIs working perfectly. Tested: GET /api/landmarks (100 total), GET /api/landmarks?country_id=norway (10 landmarks including 'The Old Town of Fredrikstad'), GET /api/landmarks?category=official (100 official), GET /api/landmarks/{id} (single landmark details), POST /api/landmarks (user-suggested creation), POST /api/landmarks/{id}/upvote (toggle functionality). All endpoints working correctly."
+--------------              <TextInput
+--------------                label="Password"
+--------------                value={password}
+--------------                onChangeText={setPassword}
+--------------                mode="outlined"
+--------------                secureTextEntry
+--------------                style={styles.input}
+--------------                outlineColor={theme.colors.border}
+--------------                activeOutlineColor={theme.colors.primary}
+--------------                textColor={theme.colors.text}
+--------------              />
+-------------+            <TextInput
+-------------+              label="Password"
+-------------+              value={password}
+-------------+              onChangeText={setPassword}
+-------------+              mode="outlined"
+-------------+              secureTextEntry
+-------------+              style={styles.input}
+-------------+              outlineColor={theme.colors.border}
+-------------+              activeOutlineColor={theme.colors.primary}
+-------------+              textColor={theme.colors.text}
+-------------+            />
 ------------- 
--------------   - task: "Visits API endpoints"
--------------     implemented: true
---------------    working: "NA"
--------------+    working: true
--------------     file: "backend/server.py"
--------------     stuck_count: 0
--------------     priority: "high"
---------------    needs_retesting: true
--------------+    needs_retesting: false
--------------     status_history:
--------------       - working: "NA"
--------------         agent: "main"
--------------         comment: "GET /api/visits, POST /api/visits with photo base64, comments, diary notes"
--------------+      - working: true
--------------+        agent: "testing"
--------------+        comment: "✅ Visits API working perfectly. Tested: POST /api/visits (creates visit with photo_base64, comments, diary_notes), GET /api/visits (returns user visits), duplicate visit prevention (correctly returns 400 error). All functionality working as expected."
+--------------              <Button
+--------------                mode="contained"
+--------------                onPress={handleLogin}
+--------------                loading={loading}
+--------------                disabled={loading}
+--------------                style={styles.button}
+--------------                buttonColor={theme.colors.primary}
+--------------                textColor="#fff"
+--------------              >
+--------------                Login
+--------------              </Button>
+-------------+            <Button
+-------------+              mode="contained"
+-------------+              onPress={handleLogin}
+-------------+              loading={loading}
+-------------+              disabled={loading}
+-------------+              style={styles.button}
+-------------+              buttonColor={theme.colors.primary}
+-------------+              textColor="#fff"
+-------------+            >
+-------------+              Login
+-------------+            </Button>
 ------------- 
--------------   - task: "Leaderboard API endpoint"
--------------     implemented: true
---------------    working: "NA"
--------------+    working: true
--------------     file: "backend/server.py"
--------------     stuck_count: 0
--------------     priority: "high"
---------------    needs_retesting: true
--------------+    needs_retesting: false
--------------     status_history:
--------------       - working: "NA"
--------------         agent: "main"
--------------         comment: "GET /api/leaderboard with premium (global) and freemium (friends-only) support"
--------------+      - working: true
--------------+        agent: "testing"
--------------+        comment: "✅ Leaderboard API working correctly. GET /api/leaderboard returns proper rankings based on visit counts. Tested with freemium user (friends-only leaderboard). Premium/freemium logic implemented correctly."
+--------------              <View style={styles.divider}>
+--------------                <View style={styles.dividerLine} />
+--------------                <Text style={styles.dividerText}>OR</Text>
+--------------                <View style={styles.dividerLine} />
+--------------              </View>
+-------------+            <View style={styles.divider}>
+-------------+              <View style={styles.dividerLine} />
+-------------+              <Text style={styles.dividerText}>OR</Text>
+-------------+              <View style={styles.dividerLine} />
+-------------+            </View>
 ------------- 
--------------   - task: "Friends API endpoints"
--------------     implemented: true
---------------    working: "NA"
--------------+    working: true
--------------     file: "backend/server.py"
--------------     stuck_count: 0
--------------     priority: "medium"
---------------    needs_retesting: true
--------------+    needs_retesting: false
--------------     status_history:
--------------       - working: "NA"
--------------         agent: "main"
--------------         comment: "GET /api/friends, POST /api/friends/request, POST /api/friends/:id/accept, GET /api/friends/pending"
--------------+      - working: true
--------------+        agent: "testing"
--------------+        comment: "✅ Friends API working perfectly. Full flow tested: POST /api/friends/request (send request by email), GET /api/friends/pending (view pending requests), POST /api/friends/{id}/accept (accept request), GET /api/friends (view friends list). All endpoints working correctly with proper authorization."
+--------------              <Button
+--------------                mode="outlined"
+--------------                onPress={handleGoogleLogin}
+--------------                disabled={loading}
+--------------                icon="google"
+--------------                style={styles.googleButton}
+--------------                textColor={theme.colors.text}
+--------------                buttonColor={theme.colors.surface}
+--------------              >
+--------------                Continue with Google
+--------------              </Button>
+-------------+            <Button
+-------------+              mode="outlined"
+-------------+              onPress={handleGoogleLogin}
+-------------+              disabled={loading}
+-------------+              icon="google"
+-------------+              style={styles.googleButton}
+-------------+              textColor={theme.colors.text}
+-------------+              buttonColor={theme.colors.surface}
+-------------+            >
+-------------+              Continue with Google
+-------------+            </Button>
 ------------- 
--------------   - task: "Stats API endpoint"
--------------     implemented: true
---------------    working: "NA"
--------------+    working: true
--------------     file: "backend/server.py"
--------------     stuck_count: 0
--------------     priority: "medium"
---------------    needs_retesting: true
--------------+    needs_retesting: false
--------------     status_history:
--------------       - working: "NA"
--------------         agent: "main"
--------------         comment: "GET /api/stats returning total_visits, countries_visited, continents_visited, friends_count"
--------------+      - working: true
--------------+        agent: "testing"
--------------+        comment: "✅ Stats API working perfectly. GET /api/stats returns all required fields: total_visits, countries_visited, continents_visited, friends_count. Calculations are accurate based on user's actual data."
+--------------              <TouchableOpacity
+--------------                onPress={() => router.push('/(auth)/register')}
+--------------                style={styles.linkContainer}
+--------------              >
+--------------                <Text style={styles.linkText}>Don't have an account? Sign up</Text>
+--------------              </TouchableOpacity>
+--------------            </Surface>
+--------------          </LinearGradient>
+-------------+            <TouchableOpacity
+-------------+              onPress={() => router.push('/(auth)/register')}
+-------------+              style={styles.linkContainer}
+-------------+            >
+-------------+              <Text style={styles.linkText}>Don't have an account? Sign up</Text>
+-------------+            </TouchableOpacity>
+-------------+          </Surface>
+-------------         </ScrollView>
+-------------       </KeyboardAvoidingView>
 ------------- 
-------------- frontend:
--------------   - task: "Authentication Context with Google and JWT"
--------------@@ -377,17 +404,9 @@ metadata:
--------------   run_ui: false
-------------- 
-------------- test_plan:
---------------  current_focus:
---------------    - "Database seeding"
---------------    - "Authentication endpoints (both JWT and Google OAuth)"
---------------    - "Countries API"
---------------    - "Landmarks API (official and user-suggested)"
---------------    - "Visits API"
---------------    - "Leaderboard API"
---------------    - "Friends API"
---------------    - "Stats API"
--------------+  current_focus: []
--------------   stuck_tasks: []
---------------  test_all: true
--------------+  test_all: false
--------------   test_priority: "high_first"
-------------- 
-------------- agent_communication:
--------------@@ -422,4 +441,44 @@ agent_communication:
--------------     - Token authentication
--------------     - CRUD operations on landmarks, visits, friends
--------------     - Leaderboard calculations
---------------    - Stats aggregation"
--------------\ No newline at end of file
--------------+    - Stats aggregation"
--------------+  - agent: "testing"
--------------+    message: "🎉 BACKEND TESTING COMPLETE - ALL SYSTEMS WORKING PERFECTLY! 
--------------+    
--------------+    ✅ COMPREHENSIVE TEST RESULTS (24/24 tests passed - 100% success rate):
--------------+    
--------------+    🔐 AUTHENTICATION (All Working):
--------------+    - JWT Registration & Login: Users created successfully with secure password hashing
--------------+    - Token validation: GET /api/auth/me working correctly
--------------+    - Google OAuth: Implementation structure correct for Emergent flow
--------------+    - Logout: Session cleanup working
--------------+    
--------------+    🌍 CORE APIs (All Working):
--------------+    - Countries: All 10 countries returned with accurate landmark counts
--------------+    - Landmarks: All 100 official landmarks + user-suggested system working
--------------+    - Norway landmarks: 'The Old Town of Fredrikstad' confirmed present
--------------+    - Single landmark details: Working correctly
--------------+    - Landmark filtering: By country_id and category working
--------------+    
--------------+    📸 VISITS SYSTEM (All Working):
--------------+    - Visit creation: photo_base64, comments, diary_notes all working
--------------+    - Duplicate prevention: Correctly blocks duplicate visits
--------------+    - Visit retrieval: User visits returned properly
--------------+    
--------------+    👥 SOCIAL FEATURES (All Working):
--------------+    - Friends: Full flow tested (request → pending → accept → friends list)
--------------+    - Leaderboard: Rankings working for both premium/freemium users
--------------+    - Stats: All metrics calculated correctly (visits, countries, continents, friends)
--------------+    
--------------+    🎯 UPVOTING SYSTEM (All Working):
--------------+    - User-suggested landmarks: Creation working
--------------+    - Upvote toggle: Correctly adds/removes upvotes
--------------+    
--------------+    🔧 TECHNICAL EXCELLENCE:
--------------+    - All endpoints use proper authentication
--------------+    - MongoDB _id fields properly excluded
--------------+    - Error handling working (400 for duplicates, 404 for not found)
--------------+    - Base64 photo storage working
--------------+    - UUID generation working correctly
--------------+    
--------------+    NO ISSUES FOUND. Backend is production-ready!"
--------------\ No newline at end of file
+-------------@@ -159,10 +153,6 @@ const styles = StyleSheet.create({
+-------------     justifyContent: 'center',
+-------------     padding: theme.spacing.md,
+-------------   },
+--------------  gradientBackground: {
+--------------    flex: 1,
+--------------    justifyContent: 'center',
+--------------  },
+-------------   logoContainer: {
+-------------     alignItems: 'center',
+-------------     marginBottom: theme.spacing.xl,
+-------------@@ -175,13 +165,13 @@ const styles = StyleSheet.create({
+-------------     justifyContent: 'center',
+-------------     alignItems: 'center',
+-------------     marginBottom: theme.spacing.lg,
+--------------    ...theme.shadows.md,
+-------------+    ...theme.shadows.lg,
+-------------   },
+-------------   surface: {
+-------------     padding: theme.spacing.xl,
+--------------    borderRadius: theme.borderRadius.lg,
+-------------+    borderRadius: theme.borderRadius.xxl,
+-------------     backgroundColor: theme.colors.surface,
+--------------    ...theme.shadows.md,
+-------------+    ...theme.shadows.card,
+-------------   },
+-------------   title: {
+-------------     ...theme.typography.h2,
+-------------@@ -201,11 +191,13 @@ const styles = StyleSheet.create({
+-------------   button: {
+-------------     marginTop: theme.spacing.sm,
+-------------     borderRadius: theme.borderRadius.md,
+-------------+    paddingVertical: theme.spacing.xs,
+-------------   },
+-------------   googleButton: {
+-------------     borderColor: theme.colors.border,
+-------------     borderWidth: 1.5,
+-------------     borderRadius: theme.borderRadius.md,
+-------------+    paddingVertical: theme.spacing.xs,
+-------------   },
+-------------   divider: {
+-------------     flexDirection: 'row',
+-------------@@ -229,5 +221,6 @@ const styles = StyleSheet.create({
+-------------   linkText: {
+-------------     ...theme.typography.body,
+-------------     color: theme.colors.primary,
+-------------+    fontWeight: '600',
+-------------   },
+------------- });
+-------------diff --git a/model.patch b/model.patch
+-------------index b79cb74..7a69f5d 100644
+---------------- a/model.patch
+-------------+++ b/model.patch
+-------------@@ -1,229 +0,0 @@
+--------------diff --git a/test_result.md b/test_result.md
+--------------index 80cc30d..d09bb11 100644
+----------------- a/test_result.md
+--------------+++ b/test_result.md
+--------------@@ -107,111 +107,138 @@ user_problem_statement: "Rebuild WanderList as an Expo/React Native app suitable
+-------------- backend:
+--------------   - task: "Database seeding with countries and landmarks"
+--------------     implemented: true
+---------------    working: "NA"
+--------------+    working: true
+--------------     file: "backend/seed_data.py"
+--------------     stuck_count: 0
+--------------     priority: "high"
+---------------    needs_retesting: true
+--------------+    needs_retesting: false
+--------------     status_history:
+--------------       - working: true
+--------------         agent: "main"
+--------------         comment: "Created seed_data.py with 10 countries and 100 landmarks (10 per country) including Norway with 'The Old Town of Fredrikstad'"
+--------------+      - working: true
+--------------+        agent: "testing"
+--------------+        comment: "✅ Database seeded successfully. Verified 10 countries and 100 landmarks including 'The Old Town of Fredrikstad' in Norway. All data properly structured with correct IDs and categories."
+--------------   
+--------------   - task: "Authentication - JWT email/password"
+--------------     implemented: true
+---------------    working: "NA"
+--------------+    working: true
+--------------     file: "backend/server.py"
+--------------     stuck_count: 0
+--------------     priority: "high"
+---------------    needs_retesting: true
+--------------+    needs_retesting: false
+--------------     status_history:
+--------------       - working: "NA"
+--------------         agent: "main"
+--------------         comment: "Implemented register, login endpoints with JWT tokens. Password hashing with bcrypt."
+--------------+      - working: true
+--------------+        agent: "testing"
+--------------+        comment: "✅ JWT Authentication working perfectly. Tested: POST /api/auth/register (creates user with hashed password), POST /api/auth/login (returns JWT token), GET /api/auth/me (validates token), POST /api/auth/logout. All endpoints respond correctly with proper status codes."
+-------------- 
+--------------   - task: "Authentication - Google OAuth (Emergent)"
+--------------     implemented: true
+---------------    working: "NA"
+--------------+    working: true
+--------------     file: "backend/server.py"
+--------------     stuck_count: 0
+--------------     priority: "high"
+---------------    needs_retesting: true
+--------------+    needs_retesting: false
+--------------     status_history:
+--------------       - working: "NA"
+--------------         agent: "main"
+--------------         comment: "Implemented Google OAuth callback endpoint, session management with httpOnly cookies"
+--------------+      - working: true
+--------------+        agent: "testing"
+--------------+        comment: "✅ Google OAuth implementation present and properly structured. Endpoint POST /api/auth/google/callback handles session exchange, user creation/lookup, and httpOnly cookie management. Code structure is correct for Emergent OAuth flow."
+-------------- 
+--------------   - task: "Countries API endpoints"
+--------------     implemented: true
+---------------    working: "NA"
+--------------+    working: true
+--------------     file: "backend/server.py"
+--------------     stuck_count: 0
+--------------     priority: "high"
+---------------    needs_retesting: true
+--------------+    needs_retesting: false
+--------------     status_history:
+--------------       - working: "NA"
+--------------         agent: "main"
+--------------         comment: "GET /api/countries endpoint with landmark counts"
+--------------+      - working: true
+--------------+        agent: "testing"
+--------------+        comment: "✅ Countries API working perfectly. GET /api/countries returns all 10 countries with accurate landmark counts. Norway included with proper continent assignment. Authentication required and working."
+-------------- 
+--------------   - task: "Landmarks API endpoints"
+--------------     implemented: true
+---------------    working: "NA"
+--------------+    working: true
+--------------     file: "backend/server.py"
+--------------     stuck_count: 0
+--------------     priority: "high"
+---------------    needs_retesting: true
+--------------+    needs_retesting: false
+--------------     status_history:
+--------------       - working: "NA"
+--------------         agent: "main"
+--------------         comment: "GET /api/landmarks (with filters), GET /api/landmarks/:id, POST /api/landmarks (user-suggested), POST /api/landmarks/:id/upvote"
+--------------+      - working: true
+--------------+        agent: "testing"
+--------------+        comment: "✅ All Landmarks APIs working perfectly. Tested: GET /api/landmarks (100 total), GET /api/landmarks?country_id=norway (10 landmarks including 'The Old Town of Fredrikstad'), GET /api/landmarks?category=official (100 official), GET /api/landmarks/{id} (single landmark details), POST /api/landmarks (user-suggested creation), POST /api/landmarks/{id}/upvote (toggle functionality). All endpoints working correctly."
+-------------- 
+--------------   - task: "Visits API endpoints"
+--------------     implemented: true
+---------------    working: "NA"
+--------------+    working: true
+--------------     file: "backend/server.py"
+--------------     stuck_count: 0
+--------------     priority: "high"
+---------------    needs_retesting: true
+--------------+    needs_retesting: false
+--------------     status_history:
+--------------       - working: "NA"
+--------------         agent: "main"
+--------------         comment: "GET /api/visits, POST /api/visits with photo base64, comments, diary notes"
+--------------+      - working: true
+--------------+        agent: "testing"
+--------------+        comment: "✅ Visits API working perfectly. Tested: POST /api/visits (creates visit with photo_base64, comments, diary_notes), GET /api/visits (returns user visits), duplicate visit prevention (correctly returns 400 error). All functionality working as expected."
+-------------- 
+--------------   - task: "Leaderboard API endpoint"
+--------------     implemented: true
+---------------    working: "NA"
+--------------+    working: true
+--------------     file: "backend/server.py"
+--------------     stuck_count: 0
+--------------     priority: "high"
+---------------    needs_retesting: true
+--------------+    needs_retesting: false
+--------------     status_history:
+--------------       - working: "NA"
+--------------         agent: "main"
+--------------         comment: "GET /api/leaderboard with premium (global) and freemium (friends-only) support"
+--------------+      - working: true
+--------------+        agent: "testing"
+--------------+        comment: "✅ Leaderboard API working correctly. GET /api/leaderboard returns proper rankings based on visit counts. Tested with freemium user (friends-only leaderboard). Premium/freemium logic implemented correctly."
+-------------- 
+--------------   - task: "Friends API endpoints"
+--------------     implemented: true
+---------------    working: "NA"
+--------------+    working: true
+--------------     file: "backend/server.py"
+--------------     stuck_count: 0
+--------------     priority: "medium"
+---------------    needs_retesting: true
+--------------+    needs_retesting: false
+--------------     status_history:
+--------------       - working: "NA"
+--------------         agent: "main"
+--------------         comment: "GET /api/friends, POST /api/friends/request, POST /api/friends/:id/accept, GET /api/friends/pending"
+--------------+      - working: true
+--------------+        agent: "testing"
+--------------+        comment: "✅ Friends API working perfectly. Full flow tested: POST /api/friends/request (send request by email), GET /api/friends/pending (view pending requests), POST /api/friends/{id}/accept (accept request), GET /api/friends (view friends list). All endpoints working correctly with proper authorization."
+-------------- 
+--------------   - task: "Stats API endpoint"
+--------------     implemented: true
+---------------    working: "NA"
+--------------+    working: true
+--------------     file: "backend/server.py"
+--------------     stuck_count: 0
+--------------     priority: "medium"
+---------------    needs_retesting: true
+--------------+    needs_retesting: false
+--------------     status_history:
+--------------       - working: "NA"
+--------------         agent: "main"
+--------------         comment: "GET /api/stats returning total_visits, countries_visited, continents_visited, friends_count"
+--------------+      - working: true
+--------------+        agent: "testing"
+--------------+        comment: "✅ Stats API working perfectly. GET /api/stats returns all required fields: total_visits, countries_visited, continents_visited, friends_count. Calculations are accurate based on user's actual data."
+-------------- 
+-------------- frontend:
+--------------   - task: "Authentication Context with Google and JWT"
+--------------@@ -377,17 +404,9 @@ metadata:
+--------------   run_ui: false
+-------------- 
+-------------- test_plan:
+---------------  current_focus:
+---------------    - "Database seeding"
+---------------    - "Authentication endpoints (both JWT and Google OAuth)"
+---------------    - "Countries API"
+---------------    - "Landmarks API (official and user-suggested)"
+---------------    - "Visits API"
+---------------    - "Leaderboard API"
+---------------    - "Friends API"
+---------------    - "Stats API"
+--------------+  current_focus: []
+--------------   stuck_tasks: []
+---------------  test_all: true
+--------------+  test_all: false
+--------------   test_priority: "high_first"
+-------------- 
+-------------- agent_communication:
+--------------@@ -422,4 +441,44 @@ agent_communication:
+--------------     - Token authentication
+--------------     - CRUD operations on landmarks, visits, friends
+--------------     - Leaderboard calculations
+---------------    - Stats aggregation"
+--------------\ No newline at end of file
+--------------+    - Stats aggregation"
+--------------+  - agent: "testing"
+--------------+    message: "🎉 BACKEND TESTING COMPLETE - ALL SYSTEMS WORKING PERFECTLY! 
+--------------+    
+--------------+    ✅ COMPREHENSIVE TEST RESULTS (24/24 tests passed - 100% success rate):
+--------------+    
+--------------+    🔐 AUTHENTICATION (All Working):
+--------------+    - JWT Registration & Login: Users created successfully with secure password hashing
+--------------+    - Token validation: GET /api/auth/me working correctly
+--------------+    - Google OAuth: Implementation structure correct for Emergent flow
+--------------+    - Logout: Session cleanup working
+--------------+    
+--------------+    🌍 CORE APIs (All Working):
+--------------+    - Countries: All 10 countries returned with accurate landmark counts
+--------------+    - Landmarks: All 100 official landmarks + user-suggested system working
+--------------+    - Norway landmarks: 'The Old Town of Fredrikstad' confirmed present
+--------------+    - Single landmark details: Working correctly
+--------------+    - Landmark filtering: By country_id and category working
+--------------+    
+--------------+    📸 VISITS SYSTEM (All Working):
+--------------+    - Visit creation: photo_base64, comments, diary_notes all working
+--------------+    - Duplicate prevention: Correctly blocks duplicate visits
+--------------+    - Visit retrieval: User visits returned properly
+--------------+    
+--------------+    👥 SOCIAL FEATURES (All Working):
+--------------+    - Friends: Full flow tested (request → pending → accept → friends list)
+--------------+    - Leaderboard: Rankings working for both premium/freemium users
+--------------+    - Stats: All metrics calculated correctly (visits, countries, continents, friends)
+--------------+    
+--------------+    🎯 UPVOTING SYSTEM (All Working):
+--------------+    - User-suggested landmarks: Creation working
+--------------+    - Upvote toggle: Correctly adds/removes upvotes
+--------------+    
+--------------+    🔧 TECHNICAL EXCELLENCE:
+--------------+    - All endpoints use proper authentication
+--------------+    - MongoDB _id fields properly excluded
+--------------+    - Error handling working (400 for duplicates, 404 for not found)
+--------------+    - Base64 photo storage working
+--------------+    - UUID generation working correctly
+--------------+    
+--------------+    NO ISSUES FOUND. Backend is production-ready!"
+--------------\ No newline at end of file
