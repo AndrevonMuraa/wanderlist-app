@@ -44,10 +44,10 @@ LANDMARKS_DATA = {
         {
             "name": "The Old Town of Fredrikstad", 
             "description": "A well-preserved fortified town with cobblestone streets and historic buildings.", 
-            "image_url": "https://ems.dimu.org/image/03348x7Fiuxi?dimension=800x800",
+            "image_url": "https://t3.ftcdn.net/jpg/02/81/49/00/240_F_281490037_7iwTdXvUzfawRcYiH3RkCXjeUxja1J9y.jpg",
             "images": [
-                "https://ems.dimu.org/image/03348x7Fiuxi?dimension=800x800",
-                "https://t3.ftcdn.net/jpg/02/81/49/00/240_F_281490037_7iwTdXvUzfawRcYiH3RkCXjeUxja1J9y.jpg"
+                "https://t3.ftcdn.net/jpg/02/81/49/00/240_F_281490037_7iwTdXvUzfawRcYiH3RkCXjeUxja1J9y.jpg",
+                "https://ems.dimu.org/image/03348x7Fiuxi?dimension=800x800"
             ],
             "facts": [
                 {
