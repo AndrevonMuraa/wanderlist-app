@@ -2220,6 +2220,43 @@ async def seed_database():
     await db.landmarks.insert_many(all_landmarks)
     print(f"Inserted {len(all_landmarks)} landmarks")
     
+    # Insert premium landmarks
+    premium_landmark_docs = []
+    for country_id, premium_landmarks in PREMIUM_LANDMARKS.items():
+        country_data = next((c for c in COUNTRIES_DATA if c["country_id"] == country_id), None)
+        if not country_data:
+            continue
+        
+        country_name = country_data["name"]
+        continent = country_data["continent"]
+        
+        for idx, landmark in enumerate(premium_landmarks):
+            premium_doc = {
+                "landmark_id": f"{country_id}_premium_{idx+1}",
+                "name": landmark["name"],
+                "country_id": country_id,
+                "country_name": country_name,
+                "continent": continent,
+                "description": landmark["description"],
+                "category": "premium",
+                "image_url": landmark["image_url"],
+                "images": [landmark["image_url"]],
+                "facts": [{"text": f"Worth {landmark['points']} points!", "icon": "star-outline"}],
+                "best_time_to_visit": "Year-round",
+                "duration": "Half day",
+                "difficulty": "Moderate",
+                "latitude": None,
+                "longitude": None,
+                "points": landmark["points"],
+                "upvotes": 0,
+                "created_by": None,
+                "created_at": datetime.now(timezone.utc)
+            }
+            premium_landmark_docs.append(premium_doc)
+    
+    await db.landmarks.insert_many(premium_landmark_docs)
+    print(f"Inserted {len(premium_landmark_docs)} premium landmarks")
+    
     print("Database seeding completed!")
 
 if __name__ == "__main__":
