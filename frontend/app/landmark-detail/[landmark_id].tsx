@@ -363,10 +363,6 @@ export default function LandmarkDetailScreen() {
             <Ionicons name="wallet-outline" size={20} color={theme.colors.accent} />
             <Text style={styles.tipText}>Check for local tour guides for deeper insights</Text>
           </View>
-          <View style={styles.tipCard}>
-            <Ionicons name="shirt-outline" size={20} color={theme.colors.accent} />
-            <Text style={styles.tipText}>Dress appropriately and respect local customs</Text>
-          </View>
         </View>
 
         {/* Action Button */}
