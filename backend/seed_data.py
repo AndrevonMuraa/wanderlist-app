@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 from datetime import datetime, timezone
+from premium_landmarks import PREMIUM_LANDMARKS
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
