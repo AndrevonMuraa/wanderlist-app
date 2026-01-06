@@ -10,6 +10,7 @@ import theme from '../../styles/theme';
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,8 +19,19 @@ export default function RegisterScreen() {
   const router = useRouter();
 
   const handleRegister = async () => {
-    if (!name || !email || !password) {
+    if (!name || !username || !email || !password) {
       setError('Please fill in all fields');
+      return;
+    }
+    
+    if (username.length < 3) {
+      setError('Username must be at least 3 characters');
+      return;
+    }
+    
+    // Validate username format (alphanumeric and underscore only)
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      setError('Username can only contain letters, numbers, and underscores');
       return;
     }
 
@@ -32,7 +44,7 @@ export default function RegisterScreen() {
     setError('');
 
     try {
-      await register(email, password, name);
+      await register(email, password, name, username);
       router.replace('/(tabs)/explore');
     } catch (err: any) {
       setError(err.message || 'Registration failed');
