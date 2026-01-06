@@ -335,6 +335,9 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
   },
+  blurredImage: {
+    opacity: 0.7,
+  },
   imageOverlay: {
     position: 'absolute',
     bottom: 0,
@@ -347,49 +350,167 @@ const styles = StyleSheet.create({
     ...theme.typography.h3,
     color: '#fff',
   },
-  premiumBadge: {
+  landmarkNameLocked: {
+    opacity: 0.9,
+  },
+  // Enhanced Premium Badge
+  premiumBadgeEnhanced: {
     position: 'absolute',
     top: theme.spacing.sm,
     right: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
+    overflow: 'hidden',
+    ...theme.shadows.md,
+  },
+  premiumBadgeGradient: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.7)',
     paddingHorizontal: theme.spacing.sm,
     paddingVertical: theme.spacing.xs,
-    borderRadius: theme.borderRadius.sm,
   },
-  premiumText: {
+  premiumTextEnhanced: {
     ...theme.typography.caption,
-    color: '#FFD700',
+    color: '#fff',
     fontWeight: 'bold',
     marginLeft: 4,
+    fontSize: 11,
+    letterSpacing: 0.5,
   },
-  lockOverlay: {
+  // Enhanced Lock Overlay
+  lockOverlayEnhanced: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  lockText: {
-    ...theme.typography.body,
+  pulseGradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  lockIconContainer: {
+    position: 'relative',
+    marginBottom: theme.spacing.md,
+  },
+  lockIconGlow: {
+    position: 'absolute',
+    top: -10,
+    left: -10,
+    right: -10,
+    bottom: -10,
+    backgroundColor: '#FFD700',
+    opacity: 0.3,
+    borderRadius: 50,
+    shadowColor: '#FFD700',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 20,
+    elevation: 10,
+  },
+  upgradeCTA: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+  },
+  upgradeTitle: {
+    ...theme.typography.h4,
+    color: '#fff',
+    fontWeight: 'bold',
+    marginBottom: theme.spacing.xs,
+  },
+  upgradeSubtitle: {
+    ...theme.typography.caption,
+    color: 'rgba(255,255,255,0.9)',
+    marginBottom: theme.spacing.sm,
+    textAlign: 'center',
+  },
+  premiumPointsHighlight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,215,0,0.2)',
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.xs,
+    borderRadius: theme.borderRadius.md,
+    borderWidth: 1,
+    borderColor: '#FFD700',
+  },
+  premiumPointsText: {
+    ...theme.typography.caption,
     color: '#FFD700',
     fontWeight: 'bold',
-    marginTop: theme.spacing.sm,
+    marginLeft: theme.spacing.xs,
   },
+  // Premium Banner
+  premiumBanner: {
+    marginHorizontal: theme.spacing.md,
+    marginTop: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    overflow: 'hidden',
+    ...theme.shadows.md,
+  },
+  premiumBannerGradient: {
+    padding: theme.spacing.md,
+  },
+  premiumBannerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  premiumBannerIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: theme.spacing.md,
+  },
+  premiumBannerTextContainer: {
+    flex: 1,
+  },
+  premiumBannerTitle: {
+    ...theme.typography.body,
+    color: '#fff',
+    fontWeight: 'bold',
+    marginBottom: 2,
+  },
+  premiumBannerSubtitle: {
+    ...theme.typography.caption,
+    color: 'rgba(255,255,255,0.95)',
+    fontSize: 12,
+  },
+  // Enhanced Points Badge
   pointsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: theme.spacing.xs,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 4,
+    borderRadius: theme.borderRadius.sm,
+    alignSelf: 'flex-start',
+  },
+  pointsBadgePremium: {
+    backgroundColor: 'rgba(255,215,0,0.3)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,215,0,0.5)',
   },
   pointsText: {
     ...theme.typography.caption,
     color: '#FFD700',
     fontWeight: 'bold',
     marginLeft: 4,
+  },
+  pointsTextPremium: {
+    fontSize: 13,
+    fontWeight: '800',
   },
   emptyContainer: {
     alignItems: 'center',
