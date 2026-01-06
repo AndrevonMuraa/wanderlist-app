@@ -477,11 +477,31 @@ async def get_landmarks(
     query = {}
     if country_id:
         query["country_id"] = country_id
+    
+    # Filter by category if specified
     if category:
         query["category"] = category
+    else:
+        # If no category specified, filter based on user subscription tier
+        user_tier = current_user.subscription_tier
+        if user_tier in ["free"]:
+            # Free users only see official landmarks
+            query["category"] = "official"
+        # Premium/basic users see all landmarks (no filter needed)
     
     landmarks = await db.landmarks.find(query, {"_id": 0}).sort("upvotes", -1).to_list(1000)
-    return [Landmark(**l) for l in landmarks]
+    
+    # Add locked status for premium landmarks if user is free tier
+    results = []
+    for l in landmarks:
+        landmark_dict = dict(l)
+        if current_user.subscription_tier == "free" and landmark_dict.get("category") == "premium":
+            landmark_dict["is_locked"] = True
+        else:
+            landmark_dict["is_locked"] = False
+        results.append(Landmark(**landmark_dict))
+    
+    return results
 
 @api_router.get("/landmarks/{landmark_id}", response_model=Landmark)
 async def get_landmark(landmark_id: str, current_user: User = Depends(get_current_user)):
