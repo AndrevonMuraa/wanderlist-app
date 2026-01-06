@@ -671,16 +671,107 @@ LANDMARKS_DATA = {
         },
     ],
     "egypt": [
-        {"name": "Great Pyramids of Giza", "description": "Ancient pyramids, one of the Seven Wonders of the Ancient World.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=600", "latitude": 29.9792, "longitude": 31.1342},
-        {"name": "Sphinx", "description": "Limestone statue of a reclining sphinx with human head.", "image_url": "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=600", "latitude": 29.9753, "longitude": 31.1376},
-        {"name": "Karnak Temple", "description": "Vast mix of temples, chapels, and other buildings in Luxor.", "image_url": "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=600", "latitude": 25.7188, "longitude": 32.6573},
-        {"name": "Valley of the Kings", "description": "Valley where tombs were constructed for pharaohs.", "image_url": "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=600", "latitude": 25.7402, "longitude": 32.6014},
-        {"name": "Abu Simbel", "description": "Massive rock temples built by Pharaoh Ramesses II.", "image_url": "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=600", "latitude": 22.3372, "longitude": 31.6258},
-        {"name": "Egyptian Museum", "description": "Home to extensive collection of ancient Egyptian antiquities.", "image_url": "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=600", "latitude": 30.0478, "longitude": 31.2336},
-        {"name": "Luxor Temple", "description": "Large Ancient Egyptian temple complex on the Nile's east bank.", "image_url": "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=600", "latitude": 25.6989, "longitude": 32.6392},
-        {"name": "Khan el-Khalili", "description": "Famous bazaar and souq in historic center of Cairo.", "image_url": "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=600", "latitude": 30.0475, "longitude": 31.2628},
-        {"name": "Philae Temple", "description": "Island temple dedicated to goddess Isis.", "image_url": "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=600", "latitude": 24.0256, "longitude": 32.8848},
-        {"name": "Alexandria Library", "description": "Modern library commemorating ancient Library of Alexandria.", "image_url": "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=600", "latitude": 31.2084, "longitude": 29.9087},
+        {
+            "name": "Great Pyramids of Giza", 
+            "description": "Ancient pyramids, one of the Seven Wonders of the Ancient World.", 
+            "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800",
+                "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=800",
+                "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800"
+            ],
+            "latitude": 29.9792, "longitude": 31.1342
+        },
+        {
+            "name": "Sphinx", 
+            "description": "Limestone statue of a reclining sphinx with human head.", 
+            "image_url": "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800",
+                "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800"
+            ],
+            "latitude": 29.9753, "longitude": 31.1376
+        },
+        {
+            "name": "Karnak Temple", 
+            "description": "Vast mix of temples, chapels, and other buildings in Luxor.", 
+            "image_url": "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
+                "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=800"
+            ],
+            "latitude": 25.7188, "longitude": 32.6573
+        },
+        {
+            "name": "Valley of the Kings", 
+            "description": "Valley where tombs were constructed for pharaohs.", 
+            "image_url": "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=800",
+                "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800"
+            ],
+            "latitude": 25.7402, "longitude": 32.6014
+        },
+        {
+            "name": "Abu Simbel", 
+            "description": "Massive rock temples built by Pharaoh Ramesses II.", 
+            "image_url": "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=800",
+                "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800"
+            ],
+            "latitude": 22.3372, "longitude": 31.6258
+        },
+        {
+            "name": "Egyptian Museum", 
+            "description": "Home to extensive collection of ancient Egyptian antiquities.", 
+            "image_url": "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800",
+                "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800"
+            ],
+            "latitude": 30.0478, "longitude": 31.2336
+        },
+        {
+            "name": "Luxor Temple", 
+            "description": "Large Ancient Egyptian temple complex on the Nile's east bank.", 
+            "image_url": "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
+                "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=800"
+            ],
+            "latitude": 25.6989, "longitude": 32.6392
+        },
+        {
+            "name": "Khan el-Khalili", 
+            "description": "Famous bazaar and souq in historic center of Cairo.", 
+            "image_url": "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=800",
+                "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800"
+            ],
+            "latitude": 30.0475, "longitude": 31.2628
+        },
+        {
+            "name": "Philae Temple", 
+            "description": "Island temple dedicated to goddess Isis.", 
+            "image_url": "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
+                "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=800"
+            ],
+            "latitude": 24.0256, "longitude": 32.8848
+        },
+        {
+            "name": "Alexandria Library", 
+            "description": "Modern library commemorating ancient Library of Alexandria.", 
+            "image_url": "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=800",
+                "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800"
+            ],
+            "latitude": 31.2084, "longitude": 29.9087
+        },
     ],
     "peru": [
         {"name": "Machu Picchu", "description": "15th-century Inca citadel set high in the Andes Mountains.", "image_url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=600", "latitude": -13.1631, "longitude": -72.5450},
