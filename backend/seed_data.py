@@ -80,6 +80,8 @@ LANDMARKS_DATA = {
                 "https://images.unsplash.com/photo-1607343562353-a31c9ea753aa?w=800",
                 "https://images.unsplash.com/photo-1767090551180-289e2b4223c7?w=800"
             ],
+            "latitude": 58.9863,
+            "longitude": 6.1909,
             "facts": [
                 {
                     "title": "Iconic Cliff Formation",
