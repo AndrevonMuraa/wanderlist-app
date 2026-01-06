@@ -1813,10 +1813,11 @@ LANDMARKS_DATA = {
         {
             "name": "Pantanal", 
             "description": "World's largest tropical wetland area, wildlife paradise.", 
-            "image_url": "https://images.unsplash.com/photo-1591977860134-2c49af55ed13?w=800",
+            "image_url": "https://images.unsplash.com/photo-1474524955719-b9f87c50ce47?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1591977860134-2c49af55ed13?w=800",
-                "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800"
+                "https://images.unsplash.com/photo-1474524955719-b9f87c50ce47?w=800",
+                "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800",
+                "https://images.unsplash.com/photo-1571708794784-8cc0f7d86c93?w=800"
             ],
             "latitude": -17.7304, "longitude": -57.4966
         },
