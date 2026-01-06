@@ -4,12 +4,8 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
+import { BACKEND_URL } from '../utils/config';
 
-// For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
-// For mobile, use the external URL
-const BACKEND_URL = Platform.OS === 'web' 
-  ? '' 
-  : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
 const AUTH_URL = 'https://auth.emergentagent.com';
 
 interface User {
