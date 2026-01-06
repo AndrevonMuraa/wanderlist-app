@@ -465,6 +465,14 @@ const styles = StyleSheet.create({
     color: '#333',
     fontFamily: 'monospace',
   },
+  webLocationInputs: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 12,
+  },
+  webInput: {
+    flex: 1,
+  },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
