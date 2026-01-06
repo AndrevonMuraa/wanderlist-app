@@ -7,13 +7,14 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <PaperProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(auth)/login" />
+          <Stack.Screen name="(auth)/register" />
+          <Stack.Screen name="(tabs)" />
+        </Stack>
         <AuthProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="(auth)/login" />
-            <Stack.Screen name="(auth)/register" />
-            <Stack.Screen name="(tabs)" />
-          </Stack>
+          {null}
         </AuthProvider>
       </PaperProvider>
     </SafeAreaProvider>
