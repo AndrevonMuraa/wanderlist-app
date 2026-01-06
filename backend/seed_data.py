@@ -426,10 +426,11 @@ LANDMARKS_DATA = {
         {
             "name": "Pont du Gard", 
             "description": "Ancient Roman aqueduct bridge in southern France.", 
-            "image_url": "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=800",
+            "image_url": "https://images.unsplash.com/photo-1590832543591-6413484b20b5?w=800",
             "images": [
+                "https://images.unsplash.com/photo-1590832543591-6413484b20b5?w=800",
                 "https://images.unsplash.com/photo-1586032653823-fb4e8c653278?w=800",
-                "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800"
+                "https://images.unsplash.com/photo-1597646543848-e9cf200ef55d?w=800"
             ],
             "latitude": 43.9475, "longitude": 4.5353
         },
