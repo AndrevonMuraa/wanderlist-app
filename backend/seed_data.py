@@ -625,6 +625,8 @@ async def seed_database():
                 "best_time_to_visit": landmark.get("best_time_to_visit", "Year-round"),
                 "duration": landmark.get("duration", "2-3 hours"),
                 "difficulty": landmark.get("difficulty", "Easy"),
+                "latitude": landmark.get("latitude"),
+                "longitude": landmark.get("longitude"),
                 "points": 10,
                 "upvotes": 0,
                 "created_by": None,
