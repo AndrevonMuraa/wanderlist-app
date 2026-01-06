@@ -257,7 +257,7 @@ export default function FriendsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: theme.colors.background,
   },
   centerContainer: {
     flex: 1,
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#6200ee',
+    paddingTop: 20,
   },
   backButton: {
     marginRight: 16,
