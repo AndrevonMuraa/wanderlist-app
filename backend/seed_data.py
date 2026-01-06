@@ -1104,16 +1104,107 @@ LANDMARKS_DATA = {
         },
     ],
     "germany": [
-        {"name": "Neuschwanstein Castle", "description": "Fairytale castle that inspired Disney's Sleeping Beauty Castle.", "image_url": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600", "latitude": 47.5576, "longitude": 10.7498},
-        {"name": "Brandenburg Gate", "description": "Iconic 18th-century neoclassical monument in Berlin.", "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=600", "latitude": 52.5163, "longitude": 13.3777},
-        {"name": "Cologne Cathedral", "description": "Gothic masterpiece, tallest twin-spired church in world.", "image_url": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=600", "latitude": 50.9413, "longitude": 6.9582},
-        {"name": "Reichstag Building", "description": "German parliament with modern glass dome offering city views.", "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=600", "latitude": 52.5186, "longitude": 13.3761},
-        {"name": "Heidelberg Castle", "description": "Romantic castle ruins overlooking Neckar River and old town.", "image_url": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600", "latitude": 49.4107, "longitude": 8.7157},
-        {"name": "Black Forest", "description": "Scenic mountainous region with dense forests and cuckoo clocks.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600", "latitude": 48.1363, "longitude": 8.2069},
-        {"name": "Romantic Road", "description": "Scenic route through medieval towns and fairytale castles.", "image_url": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600", "latitude": 49.0419, "longitude": 10.9010},
-        {"name": "Berlin Wall Memorial", "description": "Preserved sections of the Cold War barrier dividing East and West.", "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=600", "latitude": 52.5351, "longitude": 13.3903},
-        {"name": "Oktoberfest Grounds", "description": "World's largest folk festival held annually in Munich.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600", "latitude": 48.1315, "longitude": 11.5497},
-        {"name": "Miniatur Wunderland", "description": "World's largest model railway exhibition in Hamburg.", "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=600", "latitude": 53.5439, "longitude": 9.9886},
+        {
+            "name": "Neuschwanstein Castle", 
+            "description": "Fairytale castle that inspired Disney's Sleeping Beauty Castle.", 
+            "image_url": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
+                "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800",
+                "https://images.unsplash.com/photo-1530493823233-46536765a5dd?w=800"
+            ],
+            "latitude": 47.5576, "longitude": 10.7498
+        },
+        {
+            "name": "Brandenburg Gate", 
+            "description": "Iconic 18th-century neoclassical monument in Berlin.", 
+            "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
+                "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=800"
+            ],
+            "latitude": 52.5163, "longitude": 13.3777
+        },
+        {
+            "name": "Cologne Cathedral", 
+            "description": "Gothic masterpiece, tallest twin-spired church in world.", 
+            "image_url": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800",
+                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800"
+            ],
+            "latitude": 50.9413, "longitude": 6.9582
+        },
+        {
+            "name": "Reichstag Building", 
+            "description": "German parliament with modern glass dome offering city views.", 
+            "image_url": "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=800",
+                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800"
+            ],
+            "latitude": 52.5186, "longitude": 13.3761
+        },
+        {
+            "name": "Heidelberg Castle", 
+            "description": "Romantic castle ruins overlooking Neckar River and old town.", 
+            "image_url": "https://images.unsplash.com/photo-1530493823233-46536765a5dd?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1530493823233-46536765a5dd?w=800",
+                "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800"
+            ],
+            "latitude": 49.4107, "longitude": 8.7157
+        },
+        {
+            "name": "Black Forest", 
+            "description": "Scenic mountainous region with dense forests and cuckoo clocks.", 
+            "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+                "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800"
+            ],
+            "latitude": 48.1363, "longitude": 8.2069
+        },
+        {
+            "name": "Romantic Road", 
+            "description": "Scenic route through medieval towns and fairytale castles.", 
+            "image_url": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
+                "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800"
+            ],
+            "latitude": 49.0419, "longitude": 10.9010
+        },
+        {
+            "name": "Berlin Wall Memorial", 
+            "description": "Preserved sections of the Cold War barrier dividing East and West.", 
+            "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
+                "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=800"
+            ],
+            "latitude": 52.5351, "longitude": 13.3903
+        },
+        {
+            "name": "Oktoberfest Grounds", 
+            "description": "World's largest folk festival held annually in Munich.", 
+            "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800"
+            ],
+            "latitude": 48.1315, "longitude": 11.5497
+        },
+        {
+            "name": "Miniatur Wunderland", 
+            "description": "World's largest model railway exhibition in Hamburg.", 
+            "image_url": "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800",
+                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800"
+            ],
+            "latitude": 53.5439, "longitude": 9.9886
+        },
     ],
     "canada": [
         {"name": "Niagara Falls", "description": "Powerful waterfalls on Canada-US border, boat tours available.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=600", "latitude": 43.0896, "longitude": -79.0849},
