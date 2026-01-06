@@ -889,16 +889,108 @@ LANDMARKS_DATA = {
         {"name": "Kangaroo Island", "description": "Island sanctuary for Australian wildlife.", "image_url": "https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=600", "latitude": -35.7751, "longitude": 137.2142},
     ],
     "usa": [
-        {"name": "Statue of Liberty", "description": "Colossal neoclassical sculpture on Liberty Island, New York.", "image_url": "https://images.unsplash.com/photo-1508567473203-bc6c657c0d86?w=600", "latitude": 40.6892, "longitude": -74.0445},
-        {"name": "Grand Canyon", "description": "Steep-sided canyon carved by the Colorado River.", "image_url": "https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=600", "latitude": 36.1069, "longitude": -112.1129},
-        {"name": "Yellowstone National Park", "description": "First national park, known for geothermal features.", "image_url": "https://images.unsplash.com/photo-1583486176154-07e7d30b1940?w=600", "latitude": 44.4280, "longitude": -110.5885},
-        {"name": "Golden Gate Bridge", "description": "Iconic suspension bridge in San Francisco.", "image_url": "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=600", "latitude": 37.8199, "longitude": -122.4783},
-        {"name": "Mount Rushmore", "description": "Mountain sculpture featuring four U.S. presidents.", "image_url": "https://images.unsplash.com/photo-1523918066709-c6631ee3e139?w=600", "latitude": 43.8791, "longitude": -103.4591},
-        {"name": "Times Square", "description": "Major commercial intersection in Midtown Manhattan.", "image_url": "https://images.unsplash.com/photo-1560720902-2d939b258f31?w=600", "latitude": 40.7580, "longitude": -73.9855},
-        {"name": "Las Vegas Strip", "description": "Famous stretch of Las Vegas Boulevard with casinos and hotels.", "image_url": "https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=600", "latitude": 36.1147, "longitude": -115.1728},
-        {"name": "Niagara Falls", "description": "Group of three waterfalls on US-Canada border.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=600", "latitude": 43.0779, "longitude": -79.0747},
-        {"name": "White House", "description": "Official residence and workplace of U.S. President.", "image_url": "https://images.unsplash.com/photo-1551269901-5c5e14c25df7?w=600", "latitude": 38.8977, "longitude": -77.0365},
-        {"name": "Hollywood Sign", "description": "Iconic landmark in Hollywood Hills, Los Angeles.", "image_url": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=600", "latitude": 34.1341, "longitude": -118.3215},
+        {
+            "name": "Statue of Liberty", 
+            "description": "Colossal neoclassical sculpture on Liberty Island, New York.", 
+            "image_url": "https://images.unsplash.com/photo-1508567473203-bc6c657c0d86?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1508567473203-bc6c657c0d86?w=800",
+                "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=800",
+                "https://images.unsplash.com/photo-1560720902-2d939b258f31?w=800"
+            ],
+            "latitude": 40.6892, "longitude": -74.0445
+        },
+        {
+            "name": "Grand Canyon", 
+            "description": "Steep-sided canyon carved by the Colorado River.", 
+            "image_url": "https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=800",
+                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800"
+            ],
+            "latitude": 36.1069, "longitude": -112.1129
+        },
+        {
+            "name": "Yellowstone National Park", 
+            "description": "First national park, known for geothermal features.", 
+            "image_url": "https://images.unsplash.com/photo-1583486176154-07e7d30b1940?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1583486176154-07e7d30b1940?w=800",
+                "https://images.unsplash.com/photo-1490971524970-4a1b06d2c947?w=800"
+            ],
+            "latitude": 44.4280, "longitude": -110.5885
+        },
+        {
+            "name": "Golden Gate Bridge", 
+            "description": "Iconic suspension bridge in San Francisco.", 
+            "image_url": "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=800",
+                "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800",
+                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800"
+            ],
+            "latitude": 37.8199, "longitude": -122.4783
+        },
+        {
+            "name": "Mount Rushmore", 
+            "description": "Mountain sculpture featuring four U.S. presidents.", 
+            "image_url": "https://images.unsplash.com/photo-1523918066709-c6631ee3e139?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1523918066709-c6631ee3e139?w=800",
+                "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=800"
+            ],
+            "latitude": 43.8791, "longitude": -103.4591
+        },
+        {
+            "name": "Times Square", 
+            "description": "Major commercial intersection in Midtown Manhattan.", 
+            "image_url": "https://images.unsplash.com/photo-1560720902-2d939b258f31?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1560720902-2d939b258f31?w=800",
+                "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=800"
+            ],
+            "latitude": 40.7580, "longitude": -73.9855
+        },
+        {
+            "name": "Las Vegas Strip", 
+            "description": "Famous stretch of Las Vegas Boulevard with casinos and hotels.", 
+            "image_url": "https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=800",
+                "https://images.unsplash.com/photo-1605833556294-ea6c39b29498?w=800"
+            ],
+            "latitude": 36.1147, "longitude": -115.1728
+        },
+        {
+            "name": "Niagara Falls", 
+            "description": "Group of three waterfalls on US-Canada border.", 
+            "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800",
+                "https://images.unsplash.com/photo-1605468179938-252fa7f06a5c?w=800"
+            ],
+            "latitude": 43.0779, "longitude": -79.0747
+        },
+        {
+            "name": "White House", 
+            "description": "Official residence and workplace of U.S. President.", 
+            "image_url": "https://images.unsplash.com/photo-1551269901-5c5e14c25df7?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1551269901-5c5e14c25df7?w=800",
+                "https://images.unsplash.com/photo-1591608516485-484d7d1e4ea7?w=800"
+            ],
+            "latitude": 38.8977, "longitude": -77.0365
+        },
+        {
+            "name": "Hollywood Sign", 
+            "description": "Iconic landmark in Hollywood Hills, Los Angeles.", 
+            "image_url": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800",
+                "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800"
+            ],
+            "latitude": 34.1341, "longitude": -118.3215
+        },
     ],
     "uk": [
         {"name": "Big Ben", "description": "Great bell of the clock at Palace of Westminster in London.", "image_url": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600", "latitude": 51.5007, "longitude": -0.1246},
