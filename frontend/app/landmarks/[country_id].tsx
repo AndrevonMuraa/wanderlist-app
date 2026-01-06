@@ -7,6 +7,7 @@ import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
+import UpgradeModal from '../../components/UpgradeModal';
 
 // For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
 // For mobile, use the external URL
