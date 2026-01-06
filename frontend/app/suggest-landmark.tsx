@@ -8,7 +8,11 @@ import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 
-const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
+// For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
+// For mobile, use the external URL
+const BACKEND_URL = Platform.OS === 'web' 
+  ? '' 
+  : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
 
 interface Country {
   country_id: string;
