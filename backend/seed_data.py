@@ -1376,10 +1376,11 @@ LANDMARKS_DATA = {
         {
             "name": "Mezquita Cordoba", 
             "description": "Former mosque converted to cathedral, architectural marvel.", 
-            "image_url": "https://images.unsplash.com/photo-1579282240050-352db0a14c21?w=800",
+            "image_url": "https://images.unsplash.com/photo-1555421689-491a97ff2040?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1579282240050-352db0a14c21?w=800",
-                "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800"
+                "https://images.unsplash.com/photo-1555421689-491a97ff2040?w=800",
+                "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800",
+                "https://images.unsplash.com/photo-1592859600970-2f2c485e8849?w=800"
             ],
             "latitude": 37.8790, "longitude": -4.7793
         },
