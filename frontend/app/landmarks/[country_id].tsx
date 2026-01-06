@@ -188,6 +188,12 @@ export default function LandmarksScreen() {
           </View>
         }
       />
+
+      <UpgradeModal
+        visible={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        onUpgrade={handleUpgrade}
+      />
     </SafeAreaView>
   );
 }
