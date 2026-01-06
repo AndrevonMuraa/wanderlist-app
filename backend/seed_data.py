@@ -577,9 +577,9 @@ LANDMARKS_DATA = {
         {
             "name": "Kinkaku-ji (Golden Pavilion)", 
             "description": "Zen temple covered in gold leaf in Kyoto.", 
-            "image_url": "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800",
+            "image_url": "https://images.unsplash.com/photo-1624253321743-c94f0dacb472?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800"
+                "https://images.unsplash.com/photo-1624253321743-c94f0dacb472?w=800"
             ],
             "latitude": 35.0394, "longitude": 135.7292
         },
