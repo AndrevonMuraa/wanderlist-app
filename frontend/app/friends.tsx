@@ -142,7 +142,7 @@ export default function FriendsScreen() {
       )}
       <View style={styles.friendInfo}>
         <Text style={styles.friendName}>{item.name}</Text>
-        <Text style={styles.friendEmail}>{item.email}</Text>
+        <Text style={styles.friendEmail}>@{item.username}</Text>
       </View>
       {item.is_premium && (
         <Ionicons name="star" size={20} color="#FFD700" />
