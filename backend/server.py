@@ -128,6 +128,7 @@ class Landmark(BaseModel):
     upvotes: int = 0
     created_by: Optional[str] = None
     created_at: datetime
+    is_locked: bool = False  # True if premium landmark and user doesn't have access
 
 class LandmarkCreate(BaseModel):
     name: str
