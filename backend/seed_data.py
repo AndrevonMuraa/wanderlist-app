@@ -2067,10 +2067,11 @@ LANDMARKS_DATA = {
         {
             "name": "Heidelberg Castle", 
             "description": "Romantic castle ruins overlooking Neckar River and old town.", 
-            "image_url": "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
+            "image_url": "https://images.unsplash.com/photo-1593529467220-9d721ceb9a78?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
-                "https://images.unsplash.com/photo-1559564484-e48d68cd2d1f?w=800"
+                "https://images.unsplash.com/photo-1593529467220-9d721ceb9a78?w=800",
+                "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=800",
+                "https://images.unsplash.com/photo-1576856439474-7d7b8783c07b?w=800"
             ],
             "latitude": 49.4107, "longitude": 8.7157
         },
