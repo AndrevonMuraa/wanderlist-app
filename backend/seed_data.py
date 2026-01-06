@@ -1466,9 +1466,9 @@ LANDMARKS_DATA = {
         {
             "name": "Railay Beach", 
             "description": "Secluded beach accessible only by boat, limestone cliffs.", 
-            "image_url": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
+            "image_url": "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800"
+                "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?w=800"
             ],
             "latitude": 8.0113, "longitude": 98.8396
         },
