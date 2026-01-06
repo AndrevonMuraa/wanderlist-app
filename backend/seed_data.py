@@ -911,9 +911,9 @@ LANDMARKS_DATA = {
         {
             "name": "Twelve Apostles", 
             "description": "Collection of limestone stacks off the shore of Port Campbell.", 
-            "image_url": "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800",
+            "image_url": "https://images.unsplash.com/photo-1591299022036-c6c8b1ed5089?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800",
+                "https://images.unsplash.com/photo-1591299022036-c6c8b1ed5089?w=800",
                 "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800"
             ],
             "latitude": -38.6656, "longitude": 143.1046
@@ -931,39 +931,39 @@ LANDMARKS_DATA = {
         {
             "name": "Blue Mountains", 
             "description": "Mountainous region known for dramatic scenery.", 
-            "image_url": "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800",
+            "image_url": "https://images.unsplash.com/photo-1591299022036-c6c8b1ed5089?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800",
-                "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800"
+                "https://images.unsplash.com/photo-1591299022036-c6c8b1ed5089?w=800",
+                "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800"
             ],
             "latitude": -33.7320, "longitude": 150.3114
         },
         {
             "name": "Bondi Beach", 
             "description": "Popular beach and surfing spot in Sydney.", 
-            "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+            "image_url": "https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
-                "https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=800"
+                "https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=800",
+                "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800"
             ],
             "latitude": -33.8908, "longitude": 151.2743
         },
         {
             "name": "Great Ocean Road", 
             "description": "Scenic coastal drive with stunning ocean views.", 
-            "image_url": "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800",
+            "image_url": "https://images.unsplash.com/photo-1591299022036-c6c8b1ed5089?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800",
-                "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800"
+                "https://images.unsplash.com/photo-1591299022036-c6c8b1ed5089?w=800",
+                "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800"
             ],
             "latitude": -38.6814, "longitude": 143.3912
         },
         {
             "name": "Kakadu National Park", 
             "description": "Vast natural and cultural landscape with Aboriginal rock art.", 
-            "image_url": "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800",
+            "image_url": "https://images.unsplash.com/photo-1591299022036-c6c8b1ed5089?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800",
+                "https://images.unsplash.com/photo-1591299022036-c6c8b1ed5089?w=800",
                 "https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=800"
             ],
             "latitude": -12.6540, "longitude": 132.4315
@@ -971,9 +971,9 @@ LANDMARKS_DATA = {
         {
             "name": "Kangaroo Island", 
             "description": "Island sanctuary for Australian wildlife.", 
-            "image_url": "https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=800",
+            "image_url": "https://images.unsplash.com/photo-1591299022036-c6c8b1ed5089?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=800",
+                "https://images.unsplash.com/photo-1591299022036-c6c8b1ed5089?w=800",
                 "https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=800"
             ],
             "latitude": -35.7751, "longitude": 137.2142
