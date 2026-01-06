@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Image, RefreshControl, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, FlatList, Image, RefreshControl, TouchableOpacity, Platform } from 'react-native';
 import { Text, ActivityIndicator, Surface, ProgressBar } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as SecureStore from 'expo-secure-store';
@@ -8,7 +8,11 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 
-const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
+// For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
+// For mobile, use the external URL
+const BACKEND_URL = Platform.OS === 'web' 
+  ? '' 
+  : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
 
 interface Visit {
   visit_id: string;
