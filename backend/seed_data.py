@@ -1467,10 +1467,11 @@ LANDMARKS_DATA = {
         {
             "name": "Palace of Knossos", 
             "description": "Bronze Age archaeological site in Crete, Minoan civilization.", 
-            "image_url": "https://images.unsplash.com/photo-1594576722512-582bcd46fba3?w=800",
+            "image_url": "https://images.unsplash.com/photo-1562783912-b8ddb2fbf4d5?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1594576722512-582bcd46fba3?w=800",
-                "https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=800",
+                "https://images.unsplash.com/photo-1562783912-b8ddb2fbf4d5?w=800",
+                "https://images.unsplash.com/photo-1621883861398-56e13e49c9ee?w=800",
+                "https://images.unsplash.com/photo-1579606032821-4e6c1acb0b5f?w=800"
             ],
             "latitude": 35.2979, "longitude": 25.1631
         },
