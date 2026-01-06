@@ -993,16 +993,107 @@ LANDMARKS_DATA = {
         },
     ],
     "uk": [
-        {"name": "Big Ben", "description": "Great bell of the clock at Palace of Westminster in London.", "image_url": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600", "latitude": 51.5007, "longitude": -0.1246},
-        {"name": "Tower of London", "description": "Historic castle on the north bank of River Thames.", "image_url": "https://images.unsplash.com/photo-1529679997670-ebbbcf9f30e2?w=600", "latitude": 51.5081, "longitude": -0.0759},
-        {"name": "Stonehenge", "description": "Prehistoric monument consisting of ring of standing stones.", "image_url": "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=600", "latitude": 51.1789, "longitude": -1.8262},
-        {"name": "Buckingham Palace", "description": "London residence and administrative headquarters of monarch.", "image_url": "https://images.unsplash.com/photo-1543871958-7d8f34e1f19c?w=600", "latitude": 51.5014, "longitude": -0.1419},
-        {"name": "Edinburgh Castle", "description": "Historic fortress dominating skyline of Edinburgh.", "image_url": "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=600", "latitude": 55.9486, "longitude": -3.1999},
-        {"name": "Tower Bridge", "description": "Combined bascule and suspension bridge in London.", "image_url": "https://images.unsplash.com/photo-1534351450181-ea9f78427fe8?w=600", "latitude": 51.5055, "longitude": -0.0754},
-        {"name": "Windsor Castle", "description": "Royal residence and the oldest occupied castle in the world.", "image_url": "https://images.unsplash.com/photo-1606408311223-bc79e3ebff06?w=600", "latitude": 51.4839, "longitude": -0.6044},
-        {"name": "British Museum", "description": "Public museum dedicated to human history, art and culture.", "image_url": "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=600", "latitude": 51.5194, "longitude": -0.1270},
-        {"name": "London Eye", "description": "Giant Ferris wheel on the South Bank of River Thames.", "image_url": "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=600", "latitude": 51.5033, "longitude": -0.1195},
-        {"name": "Westminster Abbey", "description": "Gothic abbey church in City of Westminster, London.", "image_url": "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=600", "latitude": 51.4993, "longitude": -0.1273},
+        {
+            "name": "Big Ben", 
+            "description": "Great bell of the clock at Palace of Westminster in London.", 
+            "image_url": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800",
+                "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=800",
+                "https://images.unsplash.com/photo-1529679997670-ebbbcf9f30e2?w=800"
+            ],
+            "latitude": 51.5007, "longitude": -0.1246
+        },
+        {
+            "name": "Tower of London", 
+            "description": "Historic castle on the north bank of River Thames.", 
+            "image_url": "https://images.unsplash.com/photo-1529679997670-ebbbcf9f30e2?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1529679997670-ebbbcf9f30e2?w=800",
+                "https://images.unsplash.com/photo-1534351450181-ea9f78427fe8?w=800"
+            ],
+            "latitude": 51.5081, "longitude": -0.0759
+        },
+        {
+            "name": "Stonehenge", 
+            "description": "Prehistoric monument consisting of ring of standing stones.", 
+            "image_url": "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800",
+                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800"
+            ],
+            "latitude": 51.1789, "longitude": -1.8262
+        },
+        {
+            "name": "Buckingham Palace", 
+            "description": "London residence and administrative headquarters of monarch.", 
+            "image_url": "https://images.unsplash.com/photo-1543871958-7d8f34e1f19c?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1543871958-7d8f34e1f19c?w=800",
+                "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=800"
+            ],
+            "latitude": 51.5014, "longitude": -0.1419
+        },
+        {
+            "name": "Edinburgh Castle", 
+            "description": "Historic fortress dominating skyline of Edinburgh.", 
+            "image_url": "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800",
+                "https://images.unsplash.com/photo-1590502593747-42a996133562?w=800"
+            ],
+            "latitude": 55.9486, "longitude": -3.1999
+        },
+        {
+            "name": "Tower Bridge", 
+            "description": "Combined bascule and suspension bridge in London.", 
+            "image_url": "https://images.unsplash.com/photo-1534351450181-ea9f78427fe8?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1534351450181-ea9f78427fe8?w=800",
+                "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800"
+            ],
+            "latitude": 51.5055, "longitude": -0.0754
+        },
+        {
+            "name": "Windsor Castle", 
+            "description": "Royal residence and the oldest occupied castle in the world.", 
+            "image_url": "https://images.unsplash.com/photo-1606408311223-bc79e3ebff06?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1606408311223-bc79e3ebff06?w=800",
+                "https://images.unsplash.com/photo-1543871958-7d8f34e1f19c?w=800"
+            ],
+            "latitude": 51.4839, "longitude": -0.6044
+        },
+        {
+            "name": "British Museum", 
+            "description": "Public museum dedicated to human history, art and culture.", 
+            "image_url": "https://images.unsplash.com/photo-1529679997670-ebbbcf9f30e2?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1529679997670-ebbbcf9f30e2?w=800",
+                "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800"
+            ],
+            "latitude": 51.5194, "longitude": -0.1270
+        },
+        {
+            "name": "London Eye", 
+            "description": "Giant Ferris wheel on the South Bank of River Thames.", 
+            "image_url": "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800",
+                "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=800"
+            ],
+            "latitude": 51.5033, "longitude": -0.1195
+        },
+        {
+            "name": "Westminster Abbey", 
+            "description": "Gothic abbey church in City of Westminster, London.", 
+            "image_url": "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800",
+                "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800"
+            ],
+            "latitude": 51.4993, "longitude": -0.1273
+        },
     ],
     "china": [
         {"name": "Great Wall of China", "description": "Ancient series of walls built across historical northern borders.", "image_url": "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=600", "latitude": 40.4319, "longitude": 116.5704},
