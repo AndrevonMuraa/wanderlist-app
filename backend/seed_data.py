@@ -2311,10 +2311,11 @@ LANDMARKS_DATA = {
         {
             "name": "Boulder's Beach", 
             "description": "Beach home to colony of endangered African penguins.", 
-            "image_url": "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
+            "image_url": "https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
-                "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800"
+                "https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800",
+                "https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=800",
+                "https://images.unsplash.com/photo-1560071426-a3fc513064e9?w=800"
             ],
             "latitude": -34.1975, "longitude": 18.4503
         },
