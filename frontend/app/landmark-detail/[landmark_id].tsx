@@ -9,6 +9,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 import LandmarkMap from '../../components/LandmarkMap';
 
+// Conditionally import MapView only for native platforms
+let MapView: any = null;
+let Marker: any = null;
+if (Platform.OS !== 'web') {
+  const Maps = require('react-native-maps');
+  MapView = Maps.default;
+  Marker = Maps.Marker;
+}
+
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 const { width } = Dimensions.get('window');
 
