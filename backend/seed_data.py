@@ -2332,10 +2332,11 @@ LANDMARKS_DATA = {
         {
             "name": "Drakensberg Mountains", 
             "description": "Highest mountain range in South Africa with hiking trails.", 
-            "image_url": "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
+            "image_url": "https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
-                "https://images.unsplash.com/photo-1547970810-dc1eac37d174?w=800"
+                "https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=800",
+                "https://images.unsplash.com/photo-1607945579452-2d4c86473be0?w=800",
+                "https://images.unsplash.com/photo-1581795669633-91ef7c9356b5?w=800"
             ],
             "latitude": -28.7500, "longitude": 29.2500
         },
