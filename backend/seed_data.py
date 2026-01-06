@@ -176,6 +176,8 @@ LANDMARKS_DATA = {
                 "https://images.unsplash.com/photo-1725633785865-cc6fa7b75279?w=800",
                 "https://images.pexels.com/photos/355749/pexels-photo-355749.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
+            "latitude": 62.1009,
+            "longitude": 7.0940,
             "facts": [
                 {
                     "title": "UNESCO Fjord",
