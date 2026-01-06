@@ -805,10 +805,11 @@ LANDMARKS_DATA = {
         {
             "name": "Sacred Valley", 
             "description": "Valley in Andes of Peru, close to Inca capital of Cusco.", 
-            "image_url": "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=800",
+            "image_url": "https://images.unsplash.com/photo-1531065208531-4036c0dba3ca?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=800",
-                "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800"
+                "https://images.unsplash.com/photo-1531065208531-4036c0dba3ca?w=800",
+                "https://images.unsplash.com/photo-1502933691298-84fc14542831?w=800",
+                "https://images.unsplash.com/photo-1523090642-3d6b8b55a7f1?w=800"
             ],
             "latitude": -13.3211, "longitude": -72.1029
         },
