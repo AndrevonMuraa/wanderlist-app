@@ -148,6 +148,7 @@ class VisitCreate(BaseModel):
     landmark_id: str
     photo_base64: str
     comments: Optional[str] = None
+    visit_location: Optional[str] = None  # City/region for Northern Lights sightings
     diary_notes: Optional[str] = None
 
 class Friend(BaseModel):
