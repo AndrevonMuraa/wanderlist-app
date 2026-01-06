@@ -484,13 +484,8 @@ async def get_landmarks(
     # Filter by category if specified
     if category:
         query["category"] = category
-    else:
-        # If no category specified, filter based on user subscription tier
-        user_tier = current_user.subscription_tier
-        if user_tier in ["free"]:
-            # Free users only see official landmarks
-            query["category"] = "official"
-        # Premium/basic users see all landmarks (no filter needed)
+    # Otherwise, show all landmarks (official + premium)
+    # We'll mark premium ones as locked for free users below
     
     landmarks = await db.landmarks.find(query, {"_id": 0}).sort("upvotes", -1).to_list(1000)
     
