@@ -619,4 +619,51 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: '500',
   },
+  observationMapContainer: {
+    borderRadius: theme.borderRadius.md,
+    overflow: 'hidden',
+    marginBottom: theme.spacing.md,
+  },
+  observationMap: {
+    width: '100%',
+    height: 300,
+  },
+  webMapPlaceholder: {
+    height: 300,
+    backgroundColor: theme.colors.primary + '10',
+    borderRadius: theme.borderRadius.md,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: theme.spacing.md,
+  },
+  webMapText: {
+    ...theme.typography.body,
+    color: theme.colors.textLight,
+    marginTop: theme.spacing.sm,
+  },
+  observationStats: {
+    flexDirection: 'row',
+    gap: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+  },
+  statCard: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.md,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: theme.colors.primary + '20',
+  },
+  statNumber: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    marginTop: theme.spacing.xs,
+    fontWeight: '700',
+  },
+  statLabel: {
+    ...theme.typography.caption,
+    color: theme.colors.textLight,
+    marginTop: 4,
+  },
 });
