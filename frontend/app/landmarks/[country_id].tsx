@@ -8,7 +8,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 
-const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
+// For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
+// For mobile, use the external URL
+const BACKEND_URL = Platform.OS === 'web' 
+  ? '' 
+  : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
