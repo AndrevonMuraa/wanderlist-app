@@ -2034,10 +2034,10 @@ LANDMARKS_DATA = {
         {
             "name": "Brandenburg Gate", 
             "description": "Iconic 18th-century neoclassical monument in Berlin.", 
-            "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
+            "image_url": "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
-                "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=800"
+                "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=800",
+                "https://images.unsplash.com/photo-1587330979470-3595ac045ab2?w=800"
             ],
             "latitude": 52.5163, "longitude": 13.3777
         },
@@ -2047,27 +2047,27 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800",
-                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800"
+                "https://images.unsplash.com/photo-1559564484-e48d68cd2d1f?w=800"
             ],
             "latitude": 50.9413, "longitude": 6.9582
         },
         {
             "name": "Reichstag Building", 
             "description": "German parliament with modern glass dome offering city views.", 
-            "image_url": "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=800",
+            "image_url": "https://images.unsplash.com/photo-1595867818082-083862f3d630?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=800",
-                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800"
+                "https://images.unsplash.com/photo-1595867818082-083862f3d630?w=800",
+                "https://images.unsplash.com/photo-1587330979470-3595ac045ab2?w=800"
             ],
             "latitude": 52.5186, "longitude": 13.3761
         },
         {
             "name": "Heidelberg Castle", 
             "description": "Romantic castle ruins overlooking Neckar River and old town.", 
-            "image_url": "https://images.unsplash.com/photo-1530493823233-46536765a5dd?w=800",
+            "image_url": "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1530493823233-46536765a5dd?w=800",
-                "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800"
+                "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
+                "https://images.unsplash.com/photo-1559564484-e48d68cd2d1f?w=800"
             ],
             "latitude": 49.4107, "longitude": 8.7157
         },
@@ -2084,40 +2084,40 @@ LANDMARKS_DATA = {
         {
             "name": "Romantic Road", 
             "description": "Scenic route through medieval towns and fairytale castles.", 
-            "image_url": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
+            "image_url": "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
-                "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800"
+                "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
+                "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800"
             ],
             "latitude": 49.0419, "longitude": 10.9010
         },
         {
             "name": "Berlin Wall Memorial", 
             "description": "Preserved sections of the Cold War barrier dividing East and West.", 
-            "image_url": "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
+            "image_url": "https://images.unsplash.com/photo-1528728329032-2972f65dfb3f?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800",
-                "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=800"
+                "https://images.unsplash.com/photo-1528728329032-2972f65dfb3f?w=800",
+                "https://images.unsplash.com/photo-1595867818082-083862f3d630?w=800"
             ],
             "latitude": 52.5351, "longitude": 13.3903
         },
         {
             "name": "Oktoberfest Grounds", 
             "description": "World's largest folk festival held annually in Munich.", 
-            "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+            "image_url": "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800"
+                "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
+                "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800"
             ],
             "latitude": 48.1315, "longitude": 11.5497
         },
         {
             "name": "Miniatur Wunderland", 
             "description": "World's largest model railway exhibition in Hamburg.", 
-            "image_url": "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800",
+            "image_url": "https://images.unsplash.com/photo-1559269532-10e42a9e39e8?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800",
-                "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800"
+                "https://images.unsplash.com/photo-1559269532-10e42a9e39e8?w=800",
+                "https://images.unsplash.com/photo-1528728329032-2972f65dfb3f?w=800"
             ],
             "latitude": 53.5439, "longitude": 9.9886
         },
