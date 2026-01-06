@@ -2234,7 +2234,7 @@ LANDMARKS_DATA = {
             "images": [
                 "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=800",
                 "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800",
-                "https://images.unsplash.com/photo-1591608516485-484d7d1e4ea7?w=800"
+                "https://images.unsplash.com/photo-1576485290814-1c72aa4534a6?w=800"
             ],
             "latitude": -33.9628, "longitude": 18.4098
         },
@@ -2251,9 +2251,9 @@ LANDMARKS_DATA = {
         {
             "name": "Robben Island", 
             "description": "Former prison where Nelson Mandela was held for 18 years.", 
-            "image_url": "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+            "image_url": "https://images.unsplash.com/photo-1576485290814-1c72aa4534a6?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+                "https://images.unsplash.com/photo-1576485290814-1c72aa4534a6?w=800",
                 "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=800"
             ],
             "latitude": -33.8070, "longitude": 18.3710
@@ -2261,9 +2261,9 @@ LANDMARKS_DATA = {
         {
             "name": "Cape of Good Hope", 
             "description": "Dramatic headland at Africa's southwestern tip.", 
-            "image_url": "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+            "image_url": "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+                "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
                 "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800"
             ],
             "latitude": -34.3567, "longitude": 18.4966
@@ -2271,19 +2271,19 @@ LANDMARKS_DATA = {
         {
             "name": "Victoria & Alfred Waterfront", 
             "description": "Historic harbor and shopping area in Cape Town.", 
-            "image_url": "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+            "image_url": "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
-                "https://images.unsplash.com/photo-1591608516485-484d7d1e4ea7?w=800"
+                "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
+                "https://images.unsplash.com/photo-1576485290814-1c72aa4534a6?w=800"
             ],
             "latitude": -33.9025, "longitude": 18.4187
         },
         {
             "name": "Garden Route", 
             "description": "Scenic 300km coastal stretch with forests and lagoons.", 
-            "image_url": "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+            "image_url": "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+                "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
                 "https://images.unsplash.com/photo-1547970810-dc1eac37d174?w=800"
             ],
             "latitude": -33.9649, "longitude": 22.4577
@@ -2291,9 +2291,9 @@ LANDMARKS_DATA = {
         {
             "name": "Blyde River Canyon", 
             "description": "One of world's largest green canyons with dramatic views.", 
-            "image_url": "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+            "image_url": "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+                "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
                 "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800"
             ],
             "latitude": -24.5597, "longitude": 30.7975
@@ -2301,9 +2301,9 @@ LANDMARKS_DATA = {
         {
             "name": "Boulder's Beach", 
             "description": "Beach home to colony of endangered African penguins.", 
-            "image_url": "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+            "image_url": "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+                "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
                 "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800"
             ],
             "latitude": -34.1975, "longitude": 18.4503
@@ -2314,16 +2314,16 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1589553416260-f586c8f1514f?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1589553416260-f586c8f1514f?w=800",
-                "https://images.unsplash.com/photo-1591608516485-484d7d1e4ea7?w=800"
+                "https://images.unsplash.com/photo-1576485290814-1c72aa4534a6?w=800"
             ],
             "latitude": -26.2353, "longitude": 27.9759
         },
         {
             "name": "Drakensberg Mountains", 
             "description": "Highest mountain range in South Africa with hiking trails.", 
-            "image_url": "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+            "image_url": "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1598962147936-f2b0e57e60b9?w=800",
+                "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
                 "https://images.unsplash.com/photo-1547970810-dc1eac37d174?w=800"
             ],
             "latitude": -28.7500, "longitude": 29.2500
