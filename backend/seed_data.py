@@ -1824,10 +1824,11 @@ LANDMARKS_DATA = {
         {
             "name": "São Paulo Cathedral", 
             "description": "Neo-Gothic metropolitan cathedral in Brazil's largest city.", 
-            "image_url": "https://images.unsplash.com/photo-1591977860134-2c49af55ed13?w=800",
+            "image_url": "https://images.unsplash.com/photo-1548978796-9f6e4d3e0d1d?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1591977860134-2c49af55ed13?w=800",
-                "https://images.unsplash.com/photo-1516996087931-5ae405802f9f?w=800"
+                "https://images.unsplash.com/photo-1548978796-9f6e4d3e0d1d?w=800",
+                "https://images.unsplash.com/photo-1516996087931-5ae405802f9f?w=800",
+                "https://images.unsplash.com/photo-1623042680296-31086d716354?w=800"
             ],
             "latitude": -23.5506, "longitude": -46.6333
         },
