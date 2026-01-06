@@ -434,10 +434,10 @@ LANDMARKS_DATA = {
         },
         {
             "name": "Sacré-Cœur", 
-            "description": "Stunning basilica on the summit of Montmartre in Paris.", 
-            "image_url": "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800",
+            "description": "Romano-Byzantine basilica on Montmartre hill.", 
+            "image_url": "https://images.unsplash.com/photo-1544639795-1dd4b71d42e3?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1549144511-f099e773c147?w=800"
+                "https://images.unsplash.com/photo-1544639795-1dd4b71d42e3?w=800"
             ],
             "latitude": 48.8867, "longitude": 2.3431
         },
