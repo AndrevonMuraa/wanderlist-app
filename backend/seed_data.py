@@ -112,6 +112,8 @@ LANDMARKS_DATA = {
                 "https://images.unsplash.com/photo-1662544955227-4151d869000a?w=800",
                 "https://images.pexels.com/photos/33583896/pexels-photo-33583896.jpeg?auto=compress&cs=tinysrgb&w=800"
             ],
+            "latitude": 60.3975,
+            "longitude": 5.3245,
             "facts": [
                 {
                     "title": "UNESCO World Heritage",
