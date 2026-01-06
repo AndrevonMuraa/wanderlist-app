@@ -577,19 +577,14 @@ async def get_visits(current_user: User = Depends(get_current_user)):
     return [Visit(**v) for v in visits]
 
 @api_router.post("/visits", response_model=Visit)
-async def create_visit(data: VisitCreate, current_user: User = Depends(get_current_user)):
-    # Check if landmark exists
+async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_user)):
     landmark = await db.landmarks.find_one({"landmark_id": data.landmark_id}, {"_id": 0})
     if not landmark:
         raise HTTPException(status_code=404, detail="Landmark not found")
     
-    # Check if already visited
-    existing = await db.visits.find_one({
-        "user_id": current_user.user_id,
-        "landmark_id": data.landmark_id
-    })
-    if existing:
-        raise HTTPException(status_code=400, detail="Already visited this landmark")
+    # Check if landmark is premium and user has access
+    if landmark.get("category") == "premium" and current_user.subscription_tier == "free":
+        raise HTTPException(status_code=403, detail="Premium subscription required to visit this landmark")
     
     visit_id = f"visit_{uuid.uuid4().hex[:12]}"
     visit = {
@@ -597,14 +592,41 @@ async def create_visit(data: VisitCreate, current_user: User = Depends(get_curre
         "user_id": current_user.user_id,
         "landmark_id": data.landmark_id,
         "photo_base64": data.photo_base64,
+        "points_earned": landmark.get("points", 10),  # Use landmark's point value
         "comments": data.comments,
         "visit_location": data.visit_location,
         "diary_notes": data.diary_notes,
-        "visited_at": datetime.now(timezone.utc)
+        "status": "accepted",
+        "visited_at": datetime.now(timezone.utc),
+        "created_at": datetime.now(timezone.utc)
     }
     
     await db.visits.insert_one(visit)
     return Visit(**visit)
+
+# ============= ADMIN ENDPOINTS =============
+
+@api_router.put("/admin/users/{user_id}/tier")
+async def update_user_tier(
+    user_id: str,
+    tier: str,  # "free", "basic", or "premium"
+    current_user: User = Depends(get_current_user)
+):
+    """Admin endpoint to upgrade/downgrade user subscription tier"""
+    # In production, add proper admin authorization here
+    
+    if tier not in ["free", "basic", "premium"]:
+        raise HTTPException(status_code=400, detail="Invalid tier. Must be 'free', 'basic', or 'premium'")
+    
+    result = await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": {"subscription_tier": tier}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return {"message": f"User {user_id} upgraded to {tier} tier", "tier": tier}
 
 # ============= LEADERBOARD ENDPOINTS =============
 
