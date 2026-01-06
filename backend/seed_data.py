@@ -1512,10 +1512,10 @@ LANDMARKS_DATA = {
         {
             "name": "Wat Pho", 
             "description": "Temple with giant 46-meter reclining Buddha in Bangkok.", 
-            "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+            "image_url": "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
-                "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800"
+                "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800",
+                "https://images.unsplash.com/photo-1559094994-59eae4fa2b6b?w=800"
             ],
             "latitude": 13.7465, "longitude": 100.4927
         },
@@ -1536,27 +1536,27 @@ LANDMARKS_DATA = {
             "image_url": "https://images.unsplash.com/photo-1551264691-98b174bcbe3c?w=800",
             "images": [
                 "https://images.unsplash.com/photo-1551264691-98b174bcbe3c?w=800",
-                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800"
+                "https://images.unsplash.com/photo-1559094994-59eae4fa2b6b?w=800"
             ],
             "latitude": 13.7437, "longitude": 100.4887
         },
         {
             "name": "Ayutthaya", 
             "description": "Ancient city and archaeological site, UNESCO World Heritage.", 
-            "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+            "image_url": "https://images.unsplash.com/photo-1600623595480-b6e5f8b0c0e1?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
-                "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=800"
+                "https://images.unsplash.com/photo-1600623595480-b6e5f8b0c0e1?w=800",
+                "https://images.unsplash.com/photo-1600707438034-eb1c28e3cab3?w=800"
             ],
             "latitude": 14.3532, "longitude": 100.5775
         },
         {
             "name": "Chiang Mai Old City", 
             "description": "Historic walled city with hundreds of temples.", 
-            "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+            "image_url": "https://images.unsplash.com/photo-1591815681165-61d0e88f5c27?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
-                "https://images.unsplash.com/photo-1591815681165-61d0e88f5c27?w=800"
+                "https://images.unsplash.com/photo-1591815681165-61d0e88f5c27?w=800",
+                "https://images.unsplash.com/photo-1600707438034-eb1c28e3cab3?w=800"
             ],
             "latitude": 18.7883, "longitude": 98.9853
         },
@@ -1573,30 +1573,30 @@ LANDMARKS_DATA = {
         {
             "name": "Floating Markets", 
             "description": "Traditional markets on Bangkok's canals and waterways.", 
-            "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+            "image_url": "https://images.unsplash.com/photo-1600623595480-b6e5f8b0c0e1?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
-                "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=800"
+                "https://images.unsplash.com/photo-1600623595480-b6e5f8b0c0e1?w=800",
+                "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800"
             ],
             "latitude": 13.5221, "longitude": 100.0121
         },
         {
             "name": "Sukhothai Historical Park", 
             "description": "Ruins of the first capital of Siam in 13th century.", 
-            "image_url": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
+            "image_url": "https://images.unsplash.com/photo-1600707438034-eb1c28e3cab3?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=800",
-                "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=800"
+                "https://images.unsplash.com/photo-1600707438034-eb1c28e3cab3?w=800",
+                "https://images.unsplash.com/photo-1591815681165-61d0e88f5c27?w=800"
             ],
             "latitude": 17.0083, "longitude": 99.7078
         },
         {
             "name": "James Bond Island", 
             "description": "Iconic limestone karst in Phang Nga Bay, featured in 007 film.", 
-            "image_url": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
+            "image_url": "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
-                "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?w=800"
+                "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?w=800",
+                "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800"
             ],
             "latitude": 8.2752, "longitude": 98.5004
         },
