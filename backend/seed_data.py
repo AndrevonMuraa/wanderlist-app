@@ -464,16 +464,108 @@ LANDMARKS_DATA = {
         },
     ],
     "italy": [
-        {"name": "Colosseum", "description": "Ancient amphitheater in Rome, largest ever built.", "image_url": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600", "latitude": 41.8902, "longitude": 12.4922},
-        {"name": "Leaning Tower of Pisa", "description": "Freestanding bell tower known for its unintended tilt.", "image_url": "https://images.unsplash.com/photo-1572025442646-866d16c84a54?w=600", "latitude": 43.7230, "longitude": 10.3966},
-        {"name": "Venice Canals", "description": "Romantic waterways through historic Venice.", "image_url": "https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=600", "latitude": 45.4408, "longitude": 12.3155},
-        {"name": "Vatican City", "description": "Smallest country, home to St. Peter's Basilica and the Pope.", "image_url": "https://images.unsplash.com/photo-1557409518-691ebcd96038?w=600", "latitude": 41.9029, "longitude": 12.4534},
-        {"name": "Trevi Fountain", "description": "Baroque fountain, the largest in Rome.", "image_url": "https://images.unsplash.com/photo-1548585744-c5f0eac5f0de?w=600", "latitude": 41.9009, "longitude": 12.4833},
-        {"name": "Florence Cathedral", "description": "Gothic cathedral with iconic red-tiled dome.", "image_url": "https://images.unsplash.com/photo-1543429258-232e513c7881?w=600", "latitude": 43.7731, "longitude": 11.2560},
-        {"name": "Cinque Terre", "description": "Five colorful villages on rugged Italian Riviera coastline.", "image_url": "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=600", "latitude": 44.1267, "longitude": 9.6967},
-        {"name": "Amalfi Coast", "description": "Stunning coastline with cliffside villages.", "image_url": "https://images.unsplash.com/photo-1558477360-cf1a7827c5be?w=600", "latitude": 40.6340, "longitude": 14.6027},
-        {"name": "Pompeii", "description": "Ancient city preserved by volcanic ash from Mt. Vesuvius.", "image_url": "https://images.unsplash.com/photo-1581544291234-31340be4b1b8?w=600", "latitude": 40.7489, "longitude": 14.4853},
-        {"name": "Milan Cathedral", "description": "Magnificent Gothic cathedral in Milan's center.", "image_url": "https://images.unsplash.com/photo-1559564484-e48d68cd2d1f?w=600", "latitude": 45.4642, "longitude": 9.1900},
+        {
+            "name": "Colosseum", 
+            "description": "Ancient amphitheater in Rome, largest ever built.", 
+            "image_url": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800",
+                "https://images.unsplash.com/photo-1548585744-c5f0eac5f0de?w=800",
+                "https://images.unsplash.com/photo-1520466809213-7b9a56adcd45?w=800"
+            ],
+            "latitude": 41.8902, "longitude": 12.4922
+        },
+        {
+            "name": "Leaning Tower of Pisa", 
+            "description": "Freestanding bell tower known for its unintended tilt.", 
+            "image_url": "https://images.unsplash.com/photo-1572025442646-866d16c84a54?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1572025442646-866d16c84a54?w=800",
+                "https://images.unsplash.com/photo-1549690483-fd78c3fd7d71?w=800"
+            ],
+            "latitude": 43.7230, "longitude": 10.3966
+        },
+        {
+            "name": "Venice Canals", 
+            "description": "Romantic waterways through historic Venice.", 
+            "image_url": "https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=800",
+                "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800",
+                "https://images.unsplash.com/photo-1541877944-ac82a091518a?w=800"
+            ],
+            "latitude": 45.4408, "longitude": 12.3155
+        },
+        {
+            "name": "Vatican City", 
+            "description": "Smallest country, home to St. Peter's Basilica and the Pope.", 
+            "image_url": "https://images.unsplash.com/photo-1557409518-691ebcd96038?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1557409518-691ebcd96038?w=800",
+                "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800"
+            ],
+            "latitude": 41.9029, "longitude": 12.4534
+        },
+        {
+            "name": "Trevi Fountain", 
+            "description": "Baroque fountain, the largest in Rome.", 
+            "image_url": "https://images.unsplash.com/photo-1548585744-c5f0eac5f0de?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1548585744-c5f0eac5f0de?w=800",
+                "https://images.unsplash.com/photo-1525874684015-58379d421a52?w=800"
+            ],
+            "latitude": 41.9009, "longitude": 12.4833
+        },
+        {
+            "name": "Florence Cathedral", 
+            "description": "Gothic cathedral with iconic red-tiled dome.", 
+            "image_url": "https://images.unsplash.com/photo-1543429258-232e513c7881?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1543429258-232e513c7881?w=800",
+                "https://images.unsplash.com/photo-1549690483-fd78c3fd7d71?w=800"
+            ],
+            "latitude": 43.7731, "longitude": 11.2560
+        },
+        {
+            "name": "Cinque Terre", 
+            "description": "Five colorful villages on rugged Italian Riviera coastline.", 
+            "image_url": "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800",
+                "https://images.unsplash.com/photo-1558477360-cf1a7827c5be?w=800"
+            ],
+            "latitude": 44.1267, "longitude": 9.6967
+        },
+        {
+            "name": "Amalfi Coast", 
+            "description": "Stunning coastline with cliffside villages.", 
+            "image_url": "https://images.unsplash.com/photo-1558477360-cf1a7827c5be?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1558477360-cf1a7827c5be?w=800",
+                "https://images.unsplash.com/photo-1561489401-fc2876ced162?w=800"
+            ],
+            "latitude": 40.6340, "longitude": 14.6027
+        },
+        {
+            "name": "Pompeii", 
+            "description": "Ancient city preserved by volcanic ash from Mt. Vesuvius.", 
+            "image_url": "https://images.unsplash.com/photo-1581544291234-31340be4b1b8?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1581544291234-31340be4b1b8?w=800",
+                "https://images.unsplash.com/photo-1590585116825-36f423244c6f?w=800"
+            ],
+            "latitude": 40.7489, "longitude": 14.4853
+        },
+        {
+            "name": "Milan Cathedral", 
+            "description": "Magnificent Gothic cathedral in Milan's center.", 
+            "image_url": "https://images.unsplash.com/photo-1559564484-e48d68cd2d1f?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1559564484-e48d68cd2d1f?w=800",
+                "https://images.unsplash.com/photo-1513581166391-887a96ddeafd?w=800"
+            ],
+            "latitude": 45.4642, "longitude": 9.1900
+        },
     ],
     "japan": [
         {"name": "Mount Fuji", "description": "Japan's highest mountain and iconic snow-capped volcano.", "image_url": "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=600", "latitude": 35.3606, "longitude": 138.7274},
