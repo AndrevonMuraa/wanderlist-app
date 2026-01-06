@@ -11,7 +11,7 @@ from datetime import datetime
 import sys
 
 # Get backend URL from frontend .env
-BACKEND_URL = "https://wandermap-14.preview.emergentagent.com/api"
+BACKEND_URL = "https://premium-map.preview.emergentagent.com/api"
 
 class WanderListTester:
     def __init__(self):
