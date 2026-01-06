@@ -674,11 +674,11 @@ LANDMARKS_DATA = {
         {
             "name": "Great Pyramids of Giza", 
             "description": "Ancient pyramids, one of the Seven Wonders of the Ancient World.", 
-            "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800",
+            "image_url": "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800",
+                "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
                 "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=800",
-                "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800"
+                "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=800"
             ],
             "latitude": 29.9792, "longitude": 31.1342
         },
