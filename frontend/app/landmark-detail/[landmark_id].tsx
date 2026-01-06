@@ -215,16 +215,32 @@ export default function LandmarkDetailScreen() {
           <Text style={styles.descriptionText}>{landmark.description}</Text>
         </View>
 
-        {/* Location Map */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>📍 Location</Text>
-          <LandmarkMap 
-            latitude={landmark.latitude}
-            longitude={landmark.longitude}
-            landmarkName={landmark.name}
-            height={250}
-          />
-        </View>
+        {/* Location Map - Special handling for Northern Lights */}
+        {landmark.name === 'Northern Lights' ? (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>🌌 Your Observation Locations</Text>
+            <Text style={styles.northernLightsInfo}>
+              The Northern Lights (Aurora Borealis) can be observed from various locations in the Arctic region. 
+              When you mark your visit, you can pin the exact location where you witnessed this spectacular phenomenon!
+            </Text>
+            <View style={styles.northernLightsCard}>
+              <Ionicons name="location" size={24} color={theme.colors.primary} />
+              <Text style={styles.northernLightsCardText}>
+                Mark your visit to pin your observation point on the map
+              </Text>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>📍 Location</Text>
+            <LandmarkMap 
+              latitude={landmark.latitude}
+              longitude={landmark.longitude}
+              landmarkName={landmark.name}
+              height={250}
+            />
+          </View>
+        )}
 
         {/* Historical & Cultural Facts */}
         <View style={styles.section}>
