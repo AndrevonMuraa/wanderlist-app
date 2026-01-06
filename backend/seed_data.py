@@ -2088,10 +2088,11 @@ LANDMARKS_DATA = {
         {
             "name": "Romantic Road", 
             "description": "Scenic route through medieval towns and fairytale castles.", 
-            "image_url": "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
+            "image_url": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1590856029826-c7a73142bbf1?w=800",
-                "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800"
+                "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
+                "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800",
+                "https://images.unsplash.com/photo-1597690277547-7ddf1e69a73a?w=800"
             ],
             "latitude": 49.0419, "longitude": 10.9010
         },
