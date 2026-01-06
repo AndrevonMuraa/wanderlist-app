@@ -613,9 +613,9 @@ LANDMARKS_DATA = {
         {
             "name": "Senso-ji Temple", 
             "description": "Tokyo's oldest temple, founded in 628 AD.", 
-            "image_url": "https://images.unsplash.com/photo-1585121345976-2ec5e09b84e4?w=800",
+            "image_url": "https://images.unsplash.com/photo-1545931113-7bf0728c7541?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1624253321743-c94f0dacb471?w=800",
+                "https://images.unsplash.com/photo-1545931113-7bf0728c7541?w=800"
                 "https://images.unsplash.com/photo-1586829505799-8b93f6c89b7f?w=800"
             
                 "https://images.unsplash.com/photo-1585121345976-2ec5e09b84e4?w=800",
@@ -1219,7 +1219,7 @@ LANDMARKS_DATA = {
             "description": "Gaudí's unfinished basilica, Barcelona's most iconic landmark.", 
             "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1577191590629-f030c44686b4?w=800",
+                "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800"
                 "https://images.unsplash.com/photo-1615562183844-f71eb6bf9186?w=800",
                 "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800"
             ],
@@ -1237,9 +1237,9 @@ LANDMARKS_DATA = {
         {
             "name": "Park Güell", 
             "description": "Colorful mosaic park designed by Antoni Gaudí.", 
-            "image_url": "https://images.unsplash.com/photo-1579282240050-352db0a14c21?w=800",
+            "image_url": "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1579282240050-352db0a14c21?w=800"
+                "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800"
             ],
             "latitude": 41.4145, "longitude": 2.1527
         },
@@ -1255,9 +1255,9 @@ LANDMARKS_DATA = {
         {
             "name": "La Rambla", 
             "description": "Famous tree-lined pedestrian street in Barcelona.", 
-            "image_url": "https://images.unsplash.com/photo-1579282240050-352db0a14c21?w=800",
+            "image_url": "https://images.unsplash.com/photo-1551788558-3b5bbbd04526?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1579282240050-352db0a14c21?w=800"
+                "https://images.unsplash.com/photo-1551788558-3b5bbbd04526?w=800"
             ],
             "latitude": 41.3808, "longitude": 2.1753
         },
@@ -1422,9 +1422,9 @@ LANDMARKS_DATA = {
         {
             "name": "Wat Pho", 
             "description": "Temple with giant 46-meter reclining Buddha in Bangkok.", 
-            "image_url": "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800",
+            "image_url": "https://images.unsplash.com/photo-1600623595480-b6e5f8b0c0e1?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800"
+                "https://images.unsplash.com/photo-1600623595480-b6e5f8b0c0e1?w=800"
             ],
             "latitude": 13.7465, "longitude": 100.4927
         },
@@ -1487,9 +1487,9 @@ LANDMARKS_DATA = {
         {
             "name": "Sukhothai Historical Park", 
             "description": "Ruins of the first capital of Siam in 13th century.", 
-            "image_url": "https://images.unsplash.com/photo-1563492065213-38c78eb3ec1f?w=800",
+            "image_url": "https://images.unsplash.com/photo-1601104691-2b92b78ca5ac?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1563492065213-38c78eb3ec1f?w=800"
+                "https://images.unsplash.com/photo-1601104691-2b92b78ca5ac?w=800"
             ],
             "latitude": 17.0083, "longitude": 99.7078
         },
@@ -1570,7 +1570,7 @@ LANDMARKS_DATA = {
             "description": "Sacred steps along the Ganges River, holiest city in Hinduism.", 
             "image_url": "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800",
+                "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800"
                 "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800",
                 "https://images.unsplash.com/photo-1532120935409-f0e7f2a6e5e2?w=800"
             ],
@@ -1629,9 +1629,9 @@ LANDMARKS_DATA = {
         {
             "name": "Iguazu Falls", 
             "description": "Massive waterfalls system on Argentina-Brazil border.", 
-            "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+            "image_url": "https://images.unsplash.com/photo-1473163928189-364b2c4e1135?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800"
+                "https://images.unsplash.com/photo-1473163928189-364b2c4e1135?w=800"
             ],
             "latitude": -25.6953, "longitude": -54.4367
         },
@@ -1715,9 +1715,9 @@ LANDMARKS_DATA = {
         {
             "name": "Teotihuacan", 
             "description": "Pyramid of the Sun and Moon near Mexico City.", 
-            "image_url": "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800",
+            "image_url": "https://images.unsplash.com/photo-1518659233460-e2e097f8e5b7?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800"
+                "https://images.unsplash.com/photo-1518659233460-e2e097f8e5b7?w=800"
             ],
             "latitude": 19.6925, "longitude": -98.8438
         },
@@ -1761,9 +1761,9 @@ LANDMARKS_DATA = {
         {
             "name": "Cabo San Lucas Arch", 
             "description": "Natural rock formation at Land's End where oceans meet.", 
-            "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+            "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800"
+                "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800"
             ],
             "latitude": 22.8733, "longitude": -109.8900
         },
@@ -1781,7 +1781,7 @@ LANDMARKS_DATA = {
             "description": "Main square in Mexico City, one of world's largest plazas.", 
             "image_url": "https://images.unsplash.com/photo-1602002418082-a4443e081dd1?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1602002418082-a4443e081dd2?w=800",
+                "https://images.unsplash.com/photo-1602002418082-a4443e081dd1?w=800"
                 "https://images.unsplash.com/photo-1635178977722-30fd3e9f9d53?w=800",
                 "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800"
             ],
@@ -1801,9 +1801,9 @@ LANDMARKS_DATA = {
         {
             "name": "Burj Khalifa", 
             "description": "World's tallest building at 828 meters in Dubai.", 
-            "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+            "image_url": "https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800"
+                "https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?w=800"
             ],
             "latitude": 25.1972, "longitude": 55.2744
         },
@@ -1876,9 +1876,9 @@ LANDMARKS_DATA = {
         {
             "name": "Dubai Marina", 
             "description": "Canal city carved along Persian Gulf shoreline.", 
-            "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
+            "image_url": "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800"
+                "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=800"
             ],
             "latitude": 25.0805, "longitude": 55.1400
         },
@@ -1951,9 +1951,9 @@ LANDMARKS_DATA = {
         {
             "name": "Romantic Road", 
             "description": "Scenic route through medieval towns and fairytale castles.", 
-            "image_url": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
+            "image_url": "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800"
+                "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800"
             ],
             "latitude": 49.0419, "longitude": 10.9010
         },
@@ -2047,9 +2047,9 @@ LANDMARKS_DATA = {
         {
             "name": "Parliament Hill", 
             "description": "Gothic Revival complex housing Canadian government in Ottawa.", 
-            "image_url": "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800",
+            "image_url": "https://images.unsplash.com/photo-1519674047642-ce7ba6c97b18?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800"
+                "https://images.unsplash.com/photo-1519674047642-ce7ba6c97b18?w=800"
             ],
             "latitude": 45.4236, "longitude": -75.7009
         },
