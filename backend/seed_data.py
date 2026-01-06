@@ -774,16 +774,107 @@ LANDMARKS_DATA = {
         },
     ],
     "peru": [
-        {"name": "Machu Picchu", "description": "15th-century Inca citadel set high in the Andes Mountains.", "image_url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=600", "latitude": -13.1631, "longitude": -72.5450},
-        {"name": "Nazca Lines", "description": "Ancient geoglyphs etched into desert sands.", "image_url": "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=600", "latitude": -14.7390, "longitude": -75.1300},
-        {"name": "Sacred Valley", "description": "Valley in Andes of Peru, close to Inca capital of Cusco.", "image_url": "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=600", "latitude": -13.3211, "longitude": -72.1029},
-        {"name": "Lake Titicaca", "description": "Highest navigable lake in world, on Peru-Bolivia border.", "image_url": "https://images.unsplash.com/photo-1531804055935-76f44d7c3621?w=600", "latitude": -15.8422, "longitude": -69.4917},
-        {"name": "Colca Canyon", "description": "One of world's deepest canyons, home to Andean condors.", "image_url": "https://images.unsplash.com/photo-1517512006864-7ebd8bbdbd91?w=600", "latitude": -15.6082, "longitude": -71.8869},
-        {"name": "Rainbow Mountain", "description": "Mountain with naturally colorful layers of sediment.", "image_url": "https://images.unsplash.com/photo-1531804055935-76f44d7c3621?w=600", "latitude": -13.8689, "longitude": -71.3031},
-        {"name": "Sacsayhuamán", "description": "Citadel on northern outskirts of Cusco.", "image_url": "https://images.unsplash.com/photo-1531804055935-76f44d7c3621?w=600", "latitude": -13.5088, "longitude": -71.9816},
-        {"name": "Lima Historic Center", "description": "Colonial center with Plaza Mayor and Spanish architecture.", "image_url": "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=600", "latitude": -12.0464, "longitude": -77.0428},
-        {"name": "Amazon Rainforest", "description": "Peru's portion of the world's largest tropical rainforest.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=600", "latitude": -3.4653, "longitude": -62.2159},
-        {"name": "Huacachina Oasis", "description": "Desert oasis surrounded by sand dunes.", "image_url": "https://images.unsplash.com/photo-1531804055935-76f44d7c3621?w=600", "latitude": -14.0877, "longitude": -75.7639},
+        {
+            "name": "Machu Picchu", 
+            "description": "15th-century Inca citadel set high in the Andes Mountains.", 
+            "image_url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800",
+                "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=800",
+                "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?w=800"
+            ],
+            "latitude": -13.1631, "longitude": -72.5450
+        },
+        {
+            "name": "Nazca Lines", 
+            "description": "Ancient geoglyphs etched into desert sands.", 
+            "image_url": "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800",
+                "https://images.unsplash.com/photo-1517512006864-7ebd8bbdbd91?w=800"
+            ],
+            "latitude": -14.7390, "longitude": -75.1300
+        },
+        {
+            "name": "Sacred Valley", 
+            "description": "Valley in Andes of Peru, close to Inca capital of Cusco.", 
+            "image_url": "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=800",
+                "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800"
+            ],
+            "latitude": -13.3211, "longitude": -72.1029
+        },
+        {
+            "name": "Lake Titicaca", 
+            "description": "Highest navigable lake in world, on Peru-Bolivia border.", 
+            "image_url": "https://images.unsplash.com/photo-1531804055935-76f44d7c3621?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1531804055935-76f44d7c3621?w=800",
+                "https://images.unsplash.com/photo-1543059509-dad4e54340a6?w=800"
+            ],
+            "latitude": -15.8422, "longitude": -69.4917
+        },
+        {
+            "name": "Colca Canyon", 
+            "description": "One of world's deepest canyons, home to Andean condors.", 
+            "image_url": "https://images.unsplash.com/photo-1517512006864-7ebd8bbdbd91?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1517512006864-7ebd8bbdbd91?w=800",
+                "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=800"
+            ],
+            "latitude": -15.6082, "longitude": -71.8869
+        },
+        {
+            "name": "Rainbow Mountain", 
+            "description": "Mountain with naturally colorful layers of sediment.", 
+            "image_url": "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?w=800",
+                "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800"
+            ],
+            "latitude": -13.8689, "longitude": -71.3031
+        },
+        {
+            "name": "Sacsayhuamán", 
+            "description": "Citadel on northern outskirts of Cusco.", 
+            "image_url": "https://images.unsplash.com/photo-1543059509-dad4e54340a6?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1543059509-dad4e54340a6?w=800",
+                "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=800"
+            ],
+            "latitude": -13.5088, "longitude": -71.9816
+        },
+        {
+            "name": "Lima Historic Center", 
+            "description": "Colonial center with Plaza Mayor and Spanish architecture.", 
+            "image_url": "https://images.unsplash.com/photo-1562062033-2c14c6e5e6e0?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1562062033-2c14c6e5e6e0?w=800",
+                "https://images.unsplash.com/photo-1531968455001-5c5272a41129?w=800"
+            ],
+            "latitude": -12.0464, "longitude": -77.0428
+        },
+        {
+            "name": "Amazon Rainforest", 
+            "description": "Peru's portion of the world's largest tropical rainforest.", 
+            "image_url": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800",
+                "https://images.unsplash.com/photo-1589802829985-817e51171b92?w=800"
+            ],
+            "latitude": -3.4653, "longitude": -62.2159
+        },
+        {
+            "name": "Huacachina Oasis", 
+            "description": "Desert oasis surrounded by sand dunes.", 
+            "image_url": "https://images.unsplash.com/photo-1562062033-2c14c6e5e6e0?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1562062033-2c14c6e5e6e0?w=800",
+                "https://images.unsplash.com/photo-1517512006864-7ebd8bbdbd91?w=800"
+            ],
+            "latitude": -14.0877, "longitude": -75.7639
+        },
     ],
     "australia": [
         {"name": "Sydney Opera House", "description": "Multi-venue performing arts center with distinctive sail design.", "image_url": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=600", "latitude": -33.8568, "longitude": 151.2153},
