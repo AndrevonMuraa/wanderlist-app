@@ -1,20 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet, Platform, Linking, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import theme from '../styles/theme';
-
-// Only import MapView for native platforms
-let MapView: any;
-let Marker: any;
-let PROVIDER_GOOGLE: any;
-
-if (Platform.OS !== 'web') {
-  const RNMaps = require('react-native-maps');
-  MapView = RNMaps.default;
-  Marker = RNMaps.Marker;
-  PROVIDER_GOOGLE = RNMaps.PROVIDER_GOOGLE;
-}
 
 interface LandmarkMapProps {
   latitude?: number | null;
@@ -36,58 +24,39 @@ export default function LandmarkMap({ latitude, longitude, landmarkName, height 
     );
   }
 
-  // For web, show a static Google Maps image
-  if (Platform.OS === 'web') {
-    const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=13&size=600x${height}&markers=color:red%7C${latitude},${longitude}&key=AIzaSyDummyKeyForDisplay`;
+  const openInMaps = () => {
+    const url = Platform.select({
+      ios: `maps:0,0?q=${latitude},${longitude}`,
+      android: `geo:0,0?q=${latitude},${longitude}(${landmarkName})`,
+      default: `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`
+    });
     
-    return (
-      <View style={[styles.container, { height }]}>
-        <View style={styles.webMapContainer}>
-          <View style={styles.webMapPlaceholder}>
-            <Ionicons name="location" size={48} color={theme.colors.primary} />
-            <Text style={styles.webMapText}>{landmarkName}</Text>
-            <Text style={styles.webMapCoords}>
-              📍 {latitude.toFixed(4)}°, {longitude.toFixed(4)}°
-            </Text>
-            <Text style={styles.webMapLink}>
-              Tap to open in Google Maps
-            </Text>
-          </View>
-        </View>
-      </View>
-    );
-  }
-
-  // For native platforms, use react-native-maps
-  const region = {
-    latitude,
-    longitude,
-    latitudeDelta: 0.05,
-    longitudeDelta: 0.05,
+    if (url) {
+      Linking.openURL(url);
+    }
   };
 
+  // For web and all platforms, show a simple location card
   return (
-    <View style={[styles.container, { height }]}>
-      <MapView
-        style={styles.map}
-        initialRegion={region}
-        provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
-        showsUserLocation={false}
-        showsMyLocationButton={false}
-        zoomEnabled={true}
-        scrollEnabled={true}
-      >
-        <Marker
-          coordinate={{ latitude, longitude }}
-          title={landmarkName}
-          description="📍 Landmark Location"
-        >
-          <View style={styles.markerContainer}>
-            <Ionicons name="location" size={40} color={theme.colors.primary} />
-          </View>
-        </Marker>
-      </MapView>
-    </View>
+    <TouchableOpacity 
+      style={[styles.container, { height }]} 
+      onPress={openInMaps}
+      activeOpacity={0.8}
+    >
+      <View style={styles.mapPlaceholder}>
+        <View style={styles.iconContainer}>
+          <Ionicons name="location" size={64} color={theme.colors.primary} />
+        </View>
+        <Text style={styles.landmarkText}>{landmarkName}</Text>
+        <Text style={styles.coordsText}>
+          📍 {latitude.toFixed(4)}°, {longitude.toFixed(4)}°
+        </Text>
+        <View style={styles.openButton}>
+          <Ionicons name="map" size={20} color={theme.colors.primary} />
+          <Text style={styles.openButtonText}>Open in Maps</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
   );
 }
 
@@ -97,9 +66,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     backgroundColor: theme.colors.surface,
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   noLocationContainer: {
     flex: 1,
@@ -112,36 +80,40 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.textLight,
   },
-  markerContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  webMapContainer: {
-    flex: 1,
-    backgroundColor: theme.colors.surfaceVariant,
-  },
-  webMapPlaceholder: {
+  mapPlaceholder: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: theme.spacing.lg,
+    backgroundColor: theme.colors.surfaceVariant,
   },
-  webMapText: {
-    marginTop: theme.spacing.md,
+  iconContainer: {
+    marginBottom: theme.spacing.md,
+  },
+  landmarkText: {
     fontSize: 18,
     fontWeight: '600',
     color: theme.colors.text,
     textAlign: 'center',
+    marginBottom: theme.spacing.sm,
   },
-  webMapCoords: {
-    marginTop: theme.spacing.sm,
+  coordsText: {
     fontSize: 14,
     color: theme.colors.textLight,
+    marginBottom: theme.spacing.lg,
   },
-  webMapLink: {
-    marginTop: theme.spacing.md,
-    fontSize: 14,
+  openButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    backgroundColor: theme.colors.primary + '20',
+    borderRadius: 8,
+    gap: theme.spacing.sm,
+  },
+  openButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
     color: theme.colors.primary,
-    textDecorationLine: 'underline',
   },
 });
