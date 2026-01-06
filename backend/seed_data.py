@@ -2278,10 +2278,11 @@ LANDMARKS_DATA = {
         {
             "name": "Victoria & Alfred Waterfront", 
             "description": "Historic harbor and shopping area in Cape Town.", 
-            "image_url": "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
+            "image_url": "https://images.unsplash.com/photo-1580654712603-eb43273aff33?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
-                "https://images.unsplash.com/photo-1576485290814-1c72aa4534a6?w=800"
+                "https://images.unsplash.com/photo-1580654712603-eb43273aff33?w=800",
+                "https://images.unsplash.com/photo-1591634788319-043832b355f1?w=800",
+                "https://images.unsplash.com/photo-1623606107557-8fff9c17b53e?w=800"
             ],
             "latitude": -33.9025, "longitude": 18.4187
         },
