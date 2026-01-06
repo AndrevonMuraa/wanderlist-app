@@ -735,10 +735,10 @@ LANDMARKS_DATA = {
         {
             "name": "Luxor Temple", 
             "description": "Large Ancient Egyptian temple complex on the Nile's east bank.", 
-            "image_url": "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
+            "image_url": "https://images.unsplash.com/photo-1605358371862-57c38cc7b0f7?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
-                "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=800"
+                "https://images.unsplash.com/photo-1605358371862-57c38cc7b0f7?w=800",
+                "https://images.unsplash.com/photo-1611058714765-8ce084eea9e4?w=800"
             ],
             "latitude": 25.6989, "longitude": 32.6392
         },
@@ -755,10 +755,10 @@ LANDMARKS_DATA = {
         {
             "name": "Philae Temple", 
             "description": "Island temple dedicated to goddess Isis.", 
-            "image_url": "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
+            "image_url": "https://images.unsplash.com/photo-1591459125949-4fd79c646f01?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
-                "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=800"
+                "https://images.unsplash.com/photo-1591459125949-4fd79c646f01?w=800",
+                "https://images.unsplash.com/photo-1605358371862-57c38cc7b0f7?w=800"
             ],
             "latitude": 24.0256, "longitude": 32.8848
         },
