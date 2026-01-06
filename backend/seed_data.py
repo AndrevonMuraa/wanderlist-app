@@ -2267,10 +2267,11 @@ LANDMARKS_DATA = {
         {
             "name": "Cape of Good Hope", 
             "description": "Dramatic headland at Africa's southwestern tip.", 
-            "image_url": "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
+            "image_url": "https://images.unsplash.com/photo-1563656353898-febc9270a0f5?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1588161209373-0e6a195070d8?w=800",
-                "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800"
+                "https://images.unsplash.com/photo-1563656353898-febc9270a0f5?w=800",
+                "https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=800",
+                "https://images.unsplash.com/photo-1591608516485-484d7d1e4ea7?w=800"
             ],
             "latitude": -34.3567, "longitude": 18.4966
         },
