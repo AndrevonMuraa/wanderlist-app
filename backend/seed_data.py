@@ -709,10 +709,11 @@ LANDMARKS_DATA = {
         {
             "name": "Valley of the Kings", 
             "description": "Valley where tombs were constructed for pharaohs.", 
-            "image_url": "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=800",
+            "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=800",
-                "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800"
+                "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800",
+                "https://images.unsplash.com/photo-1596365997652-1c69f33c8ac7?w=800",
+                "https://images.unsplash.com/photo-1611241893603-3c359704e0ee?w=800"
             ],
             "latitude": 25.7402, "longitude": 32.6014
         },
