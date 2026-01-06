@@ -667,13 +667,11 @@ LANDMARKS_DATA = {
         {
             "name": "Nara Park", 
             "description": "Park where over 1,000 wild deer roam freely.", 
-            "image_url": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
+            "image_url": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1448630360778-d9b5c39b4e2d?w=800",
-                "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f2?w=800"
-            
-                "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800",
-                "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800"
+                "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800",
+                "https://images.unsplash.com/photo-1478436127897-769e1b3f0f37?w=800",
+                "https://images.unsplash.com/photo-1585555441863-1dedc1f3f6bd?w=800"
             ],
             "latitude": 34.6851, "longitude": 135.8048
         },
