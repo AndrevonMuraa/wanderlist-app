@@ -611,13 +611,14 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
 @api_router.put("/admin/users/{user_id}/tier")
 async def update_user_tier(
     user_id: str,
-    tier: str,  # "free", "basic", or "premium"
+    request: dict,  # {"tier": "free|basic|premium"}
     current_user: User = Depends(get_current_user)
 ):
     """Admin endpoint to upgrade/downgrade user subscription tier"""
     # In production, add proper admin authorization here
     
-    if tier not in ["free", "basic", "premium"]:
+    tier = request.get("tier")
+    if not tier or tier not in ["free", "basic", "premium"]:
         raise HTTPException(status_code=400, detail="Invalid tier. Must be 'free', 'basic', or 'premium'")
     
     result = await db.users.update_one(
