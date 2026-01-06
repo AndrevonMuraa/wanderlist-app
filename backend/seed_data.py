@@ -646,8 +646,8 @@ LANDMARKS_DATA = {
             "description": "Tokyo's oldest temple, founded in 628 AD.", 
             "image_url": "https://images.unsplash.com/photo-1585121345976-2ec5e09b84e4?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1588776814554-1aeb3f88b4e3?w=800",
-                "https://images.unsplash.com/photo-1603201667141-5a2d4c673380?w=800"
+                "https://images.unsplash.com/photo-1624253321743-c94f0dacb471?w=800",
+                "https://images.unsplash.com/photo-1586829505799-8b93f6c89b7f?w=800"
             
                 "https://images.unsplash.com/photo-1585121345976-2ec5e09b84e4?w=800",
                 "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800"
@@ -874,8 +874,8 @@ LANDMARKS_DATA = {
             "description": "Peru's portion of the world's largest tropical rainforest.", 
             "image_url": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1444723121867-7a241cacace9?w=800",
-                "https://images.unsplash.com/photo-1454165205744-3b78555e5572?w=800",
+                "https://images.unsplash.com/photo-1589802829985-817e51171b93?w=800",
+                "https://images.unsplash.com/photo-1571708794784-8cc0f7d86c94?w=800",
                 "https://images.unsplash.com/photo-1452626212852-811d58933cae?w=800"
             ],
             "latitude": -3.4653, "longitude": -62.2159
@@ -1128,8 +1128,8 @@ LANDMARKS_DATA = {
             "description": "Prehistoric monument consisting of ring of standing stones.", 
             "image_url": "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1488646953014-85cb44e25829?w=800",
-                "https://images.unsplash.com/photo-1484417894907-623942c8ee30?w=800",
+                "https://images.unsplash.com/photo-1567213502106-37e04c56a107?w=800",
+                "https://images.unsplash.com/photo-1574875276767-4f8da1f05b6b?w=800",
             ],
             "latitude": 51.1789, "longitude": -1.8262
         },
@@ -1323,9 +1323,9 @@ LANDMARKS_DATA = {
             "description": "Moorish palace and fortress complex in Granada.", 
             "image_url": "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1448630360778-d9b5c39b4e2c?w=800",
-                "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800",
-                "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800"
+                "https://images.unsplash.com/photo-1562883676-8c7feb83f09a?w=800",
+                "https://images.unsplash.com/photo-1592839147723-e51ba61b77c8?w=800",
+                "https://images.unsplash.com/photo-1558007685-5a1e0cf1aa5a?w=800"
             ],
             "latitude": 37.1773, "longitude": -3.5886
         },
@@ -1418,9 +1418,9 @@ LANDMARKS_DATA = {
             "description": "Ancient citadel and temple overlooking Athens.", 
             "image_url": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1604660370040-6d395d0f3491?w=800",
-                "https://images.unsplash.com/photo-1628432136678-43ff9be34064?w=800",
-                "https://images.unsplash.com/photo-1578470507481-aa64f2ee4b3e?w=800"
+                "https://images.unsplash.com/photo-1555993539-1732b0258236?w=800",
+                "https://images.unsplash.com/photo-1612430982775-ba0a00ffee48?w=800",
+                "https://images.unsplash.com/photo-1603565816030-6b389eeb23cc?w=800"
             ],
             "latitude": 37.9715, "longitude": 23.7257
         },
@@ -1919,8 +1919,8 @@ LANDMARKS_DATA = {
             "description": "Main square in Mexico City, one of world's largest plazas.", 
             "image_url": "https://images.unsplash.com/photo-1602002418082-a4443e081dd1?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1612987585176-4c3d9d8c7d27?w=800",
-                "https://images.unsplash.com/photo-1447526564797-52e98e8f7c80?w=800",
+                "https://images.unsplash.com/photo-1602002418082-a4443e081dd2?w=800",
+                "https://images.unsplash.com/photo-1635178977722-30fd3e9f9d53?w=800",
                 "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800"
             ],
             "latitude": 19.4326, "longitude": -99.1332
@@ -2047,8 +2047,8 @@ LANDMARKS_DATA = {
             "description": "Fairytale castle that inspired Disney's Sleeping Beauty Castle.", 
             "image_url": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1591696205602-2f950c417cb8?w=800",
-                "https://images.unsplash.com/photo-1548898475-70f5f7ddbb42?w=800",
+                "https://images.unsplash.com/photo-1467269204594-9661b134dd2c?w=800",
+                "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5c?w=800",
                 "https://images.unsplash.com/photo-1575550959106-5a7defe28b56?w=800"
             ],
             "latitude": 47.5576, "longitude": 10.7498
@@ -2068,8 +2068,8 @@ LANDMARKS_DATA = {
             "description": "Gothic masterpiece, tallest twin-spired church in world.", 
             "image_url": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1575550959106-5a7defe28b56?w=800",
-                "https://images.unsplash.com/photo-1593341646782-e0b495cff86d?w=800"
+                "https://images.unsplash.com/photo-1568084680786-a84f91d1153d?w=800",
+                "https://images.unsplash.com/photo-1559564484-e48d68cd2d1e?w=800",
             ],
             "latitude": 50.9413, "longitude": 6.9582
         },
