@@ -38,6 +38,7 @@ api_router = APIRouter(prefix="/api")
 class User(BaseModel):
     user_id: str
     email: str
+    username: str
     name: str
     picture: Optional[str] = None
     is_premium: bool = False  # Deprecated, kept for backward compatibility
@@ -47,7 +48,7 @@ class User(BaseModel):
 
 class UserPublic(BaseModel):
     user_id: str
-    email: str
+    username: str
     name: str
     picture: Optional[str] = None
     is_premium: bool = False  # Deprecated
