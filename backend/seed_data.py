@@ -144,6 +144,8 @@ LANDMARKS_DATA = {
                 "https://images.unsplash.com/photo-1625175767666-3b013d44c9ae?w=800",
                 "https://images.unsplash.com/photo-1657540860590-55a77f47082f?w=800"
             ],
+            "latitude": 63.4268,
+            "longitude": 10.3966,
             "facts": [
                 {
                     "title": "National Sanctuary",
