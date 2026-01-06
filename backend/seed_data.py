@@ -685,10 +685,11 @@ LANDMARKS_DATA = {
         {
             "name": "Sphinx", 
             "description": "Limestone statue of a reclining sphinx with human head.", 
-            "image_url": "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800",
+            "image_url": "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800",
-                "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800"
+                "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800",
+                "https://images.unsplash.com/photo-1565011523534-747a8601f10a?w=800",
+                "https://images.unsplash.com/photo-1572252821143-035a024857ac?w=800"
             ],
             "latitude": 29.9753, "longitude": 31.1376
         },
