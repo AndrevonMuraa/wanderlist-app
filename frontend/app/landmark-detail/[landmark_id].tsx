@@ -499,4 +499,26 @@ const styles = StyleSheet.create({
     marginLeft: theme.spacing.sm,
     fontWeight: '600',
   },
+  northernLightsInfo: {
+    ...theme.typography.body,
+    color: theme.colors.textLight,
+    lineHeight: 22,
+    marginBottom: theme.spacing.md,
+  },
+  northernLightsCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.primary + '15',
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.md,
+    borderLeftWidth: 4,
+    borderLeftColor: theme.colors.primary,
+  },
+  northernLightsCardText: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    marginLeft: theme.spacing.md,
+    flex: 1,
+    fontWeight: '500',
+  },
 });
