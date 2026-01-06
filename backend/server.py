@@ -239,18 +239,25 @@ async def get_current_user(request: Request, session_token: Optional[str] = Cook
 
 @api_router.post("/auth/register")
 async def register(data: RegisterRequest):
-    # Check if user exists
-    existing = await db.users.find_one({"email": data.email}, {"_id": 0})
-    if existing:
+    # Check if email exists
+    existing_email = await db.users.find_one({"email": data.email}, {"_id": 0})
+    if existing_email:
         raise HTTPException(status_code=400, detail="Email already registered")
+    
+    # Check if username exists (case-insensitive)
+    existing_username = await db.users.find_one({"username": {"$regex": f"^{data.username}$", "$options": "i"}}, {"_id": 0})
+    if existing_username:
+        raise HTTPException(status_code=400, detail="Username already taken")
     
     user_id = f"user_{uuid.uuid4().hex[:12]}"
     user = {
         "user_id": user_id,
         "email": data.email,
+        "username": data.username,
         "name": data.name,
         "password_hash": hash_password(data.password),
         "is_premium": False,
+        "subscription_tier": "free",
         "picture": None,
         "created_at": datetime.now(timezone.utc)
     }
