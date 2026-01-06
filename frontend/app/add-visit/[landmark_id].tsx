@@ -370,6 +370,38 @@ const styles = StyleSheet.create({
     elevation: 2,
     marginBottom: 16,
   },
+  mapSection: {
+    padding: 16,
+    borderRadius: 12,
+    elevation: 2,
+    marginBottom: 16,
+    backgroundColor: '#fff',
+  },
+  sectionSubtext: {
+    fontSize: 13,
+    color: '#666',
+    marginBottom: 12,
+    fontStyle: 'italic',
+  },
+  map: {
+    width: '100%',
+    height: 250,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  locationInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+  },
+  locationText: {
+    marginLeft: 8,
+    fontSize: 12,
+    color: '#333',
+    fontFamily: 'monospace',
+  },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
