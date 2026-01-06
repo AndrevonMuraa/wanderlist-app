@@ -1107,8 +1107,9 @@ LANDMARKS_DATA = {
             "description": "Great bell of the clock at Palace of Westminster in London.", 
             "image_url": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1484417894907-623942c8ee29?w=800",
-                "https://images.unsplash.com/photo-1488646953014-85cb44e25829?w=800"
+                "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800",
+                "https://images.unsplash.com/photo-1460101533999-39764fd23f3f?w=800",
+                "https://images.unsplash.com/photo-1534967635-a2e3e6fc20f2?w=800"
             ],
             "latitude": 51.5007, "longitude": -0.1246
         },
