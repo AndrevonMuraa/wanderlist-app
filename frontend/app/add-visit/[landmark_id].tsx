@@ -6,6 +6,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
+import MapView, { Marker } from 'react-native-maps';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 
@@ -15,11 +16,40 @@ export default function AddVisitScreen() {
   const [comments, setComments] = useState('');
   const [diaryNotes, setDiaryNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [landmark, setLandmark] = useState<any>(null);
+  const [locationMarker, setLocationMarker] = useState<{ latitude: number; longitude: number } | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     requestPermissions();
+    fetchLandmark();
   }, []);
+
+  const fetchLandmark = async () => {
+    try {
+      const token = await SecureStore.getItemAsync('auth_token');
+      const response = await fetch(`${BACKEND_URL}/api/landmarks/${landmark_id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setLandmark(data);
+        
+        // For Northern Lights, set default location to landmark location
+        if (data.name === 'Northern Lights' && data.latitude && data.longitude) {
+          setLocationMarker({
+            latitude: data.latitude,
+            longitude: data.longitude
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching landmark:', error);
+    }
+  };
 
   const requestPermissions = async () => {
     const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
