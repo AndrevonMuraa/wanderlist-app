@@ -325,13 +325,13 @@ export default function LandmarkDetailScreen() {
             )}
           </View>
         ) : (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>📍 Location</Text>
+          <View style={styles.locationSection}>
+            <Text style={styles.locationSectionTitle}>📍 Location</Text>
             <LandmarkMap 
               latitude={landmark.latitude}
               longitude={landmark.longitude}
               landmarkName={landmark.name}
-              height={250}
+              height={150}
             />
           </View>
         )}
