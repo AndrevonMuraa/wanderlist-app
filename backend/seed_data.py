@@ -877,16 +877,107 @@ LANDMARKS_DATA = {
         },
     ],
     "australia": [
-        {"name": "Sydney Opera House", "description": "Multi-venue performing arts center with distinctive sail design.", "image_url": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=600", "latitude": -33.8568, "longitude": 151.2153},
-        {"name": "Great Barrier Reef", "description": "World's largest coral reef system.", "image_url": "https://images.unsplash.com/photo-1582610116397-edb318620f90?w=600", "latitude": -18.2871, "longitude": 147.6992},
-        {"name": "Uluru (Ayers Rock)", "description": "Massive sandstone monolith in the heart of Northern Territory.", "image_url": "https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=600", "latitude": -25.3444, "longitude": 131.0369},
-        {"name": "Twelve Apostles", "description": "Collection of limestone stacks off the shore of Port Campbell.", "image_url": "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=600", "latitude": -38.6656, "longitude": 143.1046},
-        {"name": "Sydney Harbour Bridge", "description": "Steel through arch bridge across Sydney Harbour.", "image_url": "https://images.unsplash.com/photo-1549180030-48bf079fb38a?w=600", "latitude": -33.8523, "longitude": 151.2108},
-        {"name": "Blue Mountains", "description": "Mountainous region known for dramatic scenery.", "image_url": "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=600", "latitude": -33.7320, "longitude": 150.3114},
-        {"name": "Bondi Beach", "description": "Popular beach and surfing spot in Sydney.", "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600", "latitude": -33.8908, "longitude": 151.2743},
-        {"name": "Great Ocean Road", "description": "Scenic coastal drive with stunning ocean views.", "image_url": "https://images.unsplash.com/photo-1523918066709-c6631ee3e139?w=600", "latitude": -38.6814, "longitude": 143.3912},
-        {"name": "Kakadu National Park", "description": "Vast natural and cultural landscape with Aboriginal rock art.", "image_url": "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=600", "latitude": -12.6540, "longitude": 132.4315},
-        {"name": "Kangaroo Island", "description": "Island sanctuary for Australian wildlife.", "image_url": "https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=600", "latitude": -35.7751, "longitude": 137.2142},
+        {
+            "name": "Sydney Opera House", 
+            "description": "Multi-venue performing arts center with distinctive sail design.", 
+            "image_url": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800",
+                "https://images.unsplash.com/photo-1549180030-48bf079fb38a?w=800",
+                "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800"
+            ],
+            "latitude": -33.8568, "longitude": 151.2153
+        },
+        {
+            "name": "Great Barrier Reef", 
+            "description": "World's largest coral reef system.", 
+            "image_url": "https://images.unsplash.com/photo-1582610116397-edb318620f90?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1582610116397-edb318620f90?w=800",
+                "https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=800"
+            ],
+            "latitude": -18.2871, "longitude": 147.6992
+        },
+        {
+            "name": "Uluru (Ayers Rock)", 
+            "description": "Massive sandstone monolith in the heart of Northern Territory.", 
+            "image_url": "https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=800",
+                "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800"
+            ],
+            "latitude": -25.3444, "longitude": 131.0369
+        },
+        {
+            "name": "Twelve Apostles", 
+            "description": "Collection of limestone stacks off the shore of Port Campbell.", 
+            "image_url": "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800",
+                "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800"
+            ],
+            "latitude": -38.6656, "longitude": 143.1046
+        },
+        {
+            "name": "Sydney Harbour Bridge", 
+            "description": "Steel through arch bridge across Sydney Harbour.", 
+            "image_url": "https://images.unsplash.com/photo-1549180030-48bf079fb38a?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1549180030-48bf079fb38a?w=800",
+                "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800"
+            ],
+            "latitude": -33.8523, "longitude": 151.2108
+        },
+        {
+            "name": "Blue Mountains", 
+            "description": "Mountainous region known for dramatic scenery.", 
+            "image_url": "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800",
+                "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800"
+            ],
+            "latitude": -33.7320, "longitude": 150.3114
+        },
+        {
+            "name": "Bondi Beach", 
+            "description": "Popular beach and surfing spot in Sydney.", 
+            "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+                "https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=800"
+            ],
+            "latitude": -33.8908, "longitude": 151.2743
+        },
+        {
+            "name": "Great Ocean Road", 
+            "description": "Scenic coastal drive with stunning ocean views.", 
+            "image_url": "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800",
+                "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800"
+            ],
+            "latitude": -38.6814, "longitude": 143.3912
+        },
+        {
+            "name": "Kakadu National Park", 
+            "description": "Vast natural and cultural landscape with Aboriginal rock art.", 
+            "image_url": "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1506374322094-1253a7594180?w=800",
+                "https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=800"
+            ],
+            "latitude": -12.6540, "longitude": 132.4315
+        },
+        {
+            "name": "Kangaroo Island", 
+            "description": "Island sanctuary for Australian wildlife.", 
+            "image_url": "https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1589330273594-fade1ee91647?w=800",
+                "https://images.unsplash.com/photo-1587139223877-04cb899fa3e8?w=800"
+            ],
+            "latitude": -35.7751, "longitude": 137.2142
+        },
     ],
     "usa": [
         {
