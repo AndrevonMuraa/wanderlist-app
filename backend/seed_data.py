@@ -1217,11 +1217,9 @@ LANDMARKS_DATA = {
         {
             "name": "Sagrada Família", 
             "description": "Gaudí's unfinished basilica, Barcelona's most iconic landmark.", 
-            "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800",
+            "image_url": "https://images.unsplash.com/photo-1595880411481-41698d03c25a?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800"
-                "https://images.unsplash.com/photo-1615562183844-f71eb6bf9186?w=800",
-                "https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800"
+                "https://images.unsplash.com/photo-1595880411481-41698d03c25a?w=800"
             ],
             "latitude": 41.4036, "longitude": 2.1744
         },
