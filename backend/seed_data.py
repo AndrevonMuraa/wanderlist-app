@@ -481,16 +481,109 @@ LANDMARKS_DATA = {
         {"name": "Casa Batlló", "description": "Gaudí's surreal modernist building in Barcelona.", "image_url": "https://images.unsplash.com/photo-1588968864314-35e71c4493e7?w=600", "latitude": 41.3916, "longitude": 2.1649},
     ],
     "greece": [
-        {"name": "Acropolis & Parthenon", "description": "Ancient citadel and temple overlooking Athens.", "image_url": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=600", "latitude": 37.9715, "longitude": 23.7257},
-        {"name": "Santorini", "description": "Iconic white-washed villages with blue domes on volcanic cliffs.", "image_url": "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=600", "latitude": 36.3932, "longitude": 25.4615},
-        {"name": "Meteora", "description": "Monasteries built on top of towering rock pillars.", "image_url": "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600", "latitude": 39.7217, "longitude": 21.6306},
-        {"name": "Delphi", "description": "Ancient sanctuary and archaeological site, once home to Oracle.", "image_url": "https://images.unsplash.com/photo-1585783336122-b0c3e6760067?w=600", "latitude": 38.4824, "longitude": 22.5009},
-        {"name": "Mykonos", "description": "Cosmopolitan island with windmills, beaches and nightlife.", "image_url": "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600", "latitude": 37.4467, "longitude": 25.3289},
-        {"name": "Palace of Knossos", "description": "Bronze Age archaeological site in Crete, Minoan civilization.", "image_url": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=600", "latitude": 35.2979, "longitude": 25.1631},
-        {"name": "Rhodes Old Town", "description": "Medieval walled city, UNESCO World Heritage Site.", "image_url": "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600", "latitude": 36.4443, "longitude": 28.2253},
-        {"name": "Olympia", "description": "Birthplace of the Olympic Games in ancient Greece.", "image_url": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=600", "latitude": 37.6379, "longitude": 21.6300},
-        {"name": "Corfu Old Town", "description": "Venetian fortresses and elegant Italianate architecture.", "image_url": "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600", "latitude": 39.6242, "longitude": 19.9217},
-        {"name": "Temple of Poseidon", "description": "Ancient Greek temple at Cape Sounion overlooking the sea.", "image_url": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=600", "latitude": 37.6531, "longitude": 24.0255},
+        {
+            "name": "Acropolis & Parthenon", 
+            "description": "Ancient citadel and temple overlooking Athens.", 
+            "image_url": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800",
+                "https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?w=800",
+                "https://images.unsplash.com/photo-1601581875309-fafbf2d3ed3a?w=800"
+            ],
+            "latitude": 37.9715, "longitude": 23.7257
+        },
+        {
+            "name": "Santorini", 
+            "description": "Iconic white-washed villages with blue domes on volcanic cliffs.", 
+            "image_url": "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800",
+                "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800",
+                "https://images.unsplash.com/photo-1548013146-72479768bada?w=800"
+            ],
+            "latitude": 36.3932, "longitude": 25.4615
+        },
+        {
+            "name": "Meteora", 
+            "description": "Monasteries built on top of towering rock pillars.", 
+            "image_url": "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800",
+                "https://images.unsplash.com/photo-1555864326-5cf22ef123cf?w=800"
+            ],
+            "latitude": 39.7217, "longitude": 21.6306
+        },
+        {
+            "name": "Delphi", 
+            "description": "Ancient sanctuary and archaeological site, once home to Oracle.", 
+            "image_url": "https://images.unsplash.com/photo-1585783336122-b0c3e6760067?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1585783336122-b0c3e6760067?w=800",
+                "https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=800"
+            ],
+            "latitude": 38.4824, "longitude": 22.5009
+        },
+        {
+            "name": "Mykonos", 
+            "description": "Cosmopolitan island with windmills, beaches and nightlife.", 
+            "image_url": "https://images.unsplash.com/photo-1613326079584-56f8f9f6b13e?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1613326079584-56f8f9f6b13e?w=800",
+                "https://images.unsplash.com/photo-1562611499-89c3a18ada4b?w=800",
+                "https://images.unsplash.com/photo-1601581987742-2fceffa3b1d8?w=800"
+            ],
+            "latitude": 37.4467, "longitude": 25.3289
+        },
+        {
+            "name": "Palace of Knossos", 
+            "description": "Bronze Age archaeological site in Crete, Minoan civilization.", 
+            "image_url": "https://images.unsplash.com/photo-1594576722512-582bcd46fba3?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1594576722512-582bcd46fba3?w=800",
+                "https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=800"
+            ],
+            "latitude": 35.2979, "longitude": 25.1631
+        },
+        {
+            "name": "Rhodes Old Town", 
+            "description": "Medieval walled city, UNESCO World Heritage Site.", 
+            "image_url": "https://images.unsplash.com/photo-1592841200221-a6898f307baa?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1592841200221-a6898f307baa?w=800",
+                "https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=800"
+            ],
+            "latitude": 36.4443, "longitude": 28.2253
+        },
+        {
+            "name": "Olympia", 
+            "description": "Birthplace of the Olympic Games in ancient Greece.", 
+            "image_url": "https://images.unsplash.com/photo-1578063854666-b98a56ec53b2?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1578063854666-b98a56ec53b2?w=800",
+                "https://images.unsplash.com/photo-1601581875291-c2d44f4c6c95?w=800"
+            ],
+            "latitude": 37.6379, "longitude": 21.6300
+        },
+        {
+            "name": "Corfu Old Town", 
+            "description": "Venetian fortresses and elegant Italianate architecture.", 
+            "image_url": "https://images.unsplash.com/photo-1591608516485-484d7d1e4ea7?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1591608516485-484d7d1e4ea7?w=800",
+                "https://images.unsplash.com/photo-1580674587303-66b78bc87691?w=800"
+            ],
+            "latitude": 39.6242, "longitude": 19.9217
+        },
+        {
+            "name": "Temple of Poseidon", 
+            "description": "Ancient Greek temple at Cape Sounion overlooking the sea.", 
+            "image_url": "https://images.unsplash.com/photo-1601581875551-3c9e81f6dbbb?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1601581875551-3c9e81f6dbbb?w=800",
+                "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800"
+            ],
+            "latitude": 37.6531, "longitude": 24.0255
+        },
     ],
     "thailand": [
         {"name": "Grand Palace", "description": "Complex of buildings in Bangkok, former home to Thai kings.", "image_url": "https://images.unsplash.com/photo-1563492065599-3520f775eeed?w=600", "latitude": 13.7500, "longitude": 100.4913},
