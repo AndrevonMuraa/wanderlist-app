@@ -263,11 +263,11 @@ LANDMARKS_DATA = {
         {
             "name": "Lofoten Islands", 
             "description": "Dramatic peaks, open sea, and sheltered bays in Arctic waters.", 
-            "image_url": "https://images.pexels.com/photos/1933239/pexels-photo-1933239.jpeg?auto=compress&cs=tinysrgb&w=800",
+            "image_url": "https://images.unsplash.com/photo-1663428520845-056989f8a664?w=800",
             "images": [
+                "https://images.unsplash.com/photo-1663428520845-056989f8a664?w=800",
                 "https://images.pexels.com/photos/1933239/pexels-photo-1933239.jpeg?auto=compress&cs=tinysrgb&w=800",
-                "https://images.unsplash.com/photo-1653900783556-dc505f3f0a85?w=800",
-                "https://images.unsplash.com/photo-1663428520845-056989f8a664?w=800"
+                "https://images.unsplash.com/photo-1653900783556-dc505f3f0a85?w=800"
             ],
             "latitude": 68.2155,
             "longitude": 13.6090,
