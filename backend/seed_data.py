@@ -696,10 +696,11 @@ LANDMARKS_DATA = {
         {
             "name": "Karnak Temple", 
             "description": "Vast mix of temples, chapels, and other buildings in Luxor.", 
-            "image_url": "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
+            "image_url": "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1553913861-c0fddf2619ee?w=800",
-                "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=800"
+                "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=800",
+                "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800",
+                "https://images.unsplash.com/photo-1612365555248-e60dae4fc1c6?w=800"
             ],
             "latitude": 25.7188, "longitude": 32.6573
         },
