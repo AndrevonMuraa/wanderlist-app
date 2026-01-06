@@ -162,7 +162,7 @@ export default function FriendsScreen() {
         )}
         <View style={styles.requestText}>
           <Text style={styles.friendName}>{item.user.name}</Text>
-          <Text style={styles.friendEmail}>{item.user.email}</Text>
+          <Text style={styles.friendEmail}>@{item.user.username}</Text>
         </View>
       </View>
       <Button
