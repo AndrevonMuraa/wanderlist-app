@@ -1207,16 +1207,108 @@ LANDMARKS_DATA = {
         },
     ],
     "canada": [
-        {"name": "Niagara Falls", "description": "Powerful waterfalls on Canada-US border, boat tours available.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=600", "latitude": 43.0896, "longitude": -79.0849},
-        {"name": "Banff National Park", "description": "Stunning Rocky Mountain scenery with turquoise lakes.", "image_url": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=600", "latitude": 51.4968, "longitude": -115.9281},
-        {"name": "CN Tower", "description": "Iconic 553-meter communications tower in Toronto.", "image_url": "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=600", "latitude": 43.6426, "longitude": -79.3871},
-        {"name": "Old Quebec City", "description": "Historic fortified colonial city, UNESCO World Heritage.", "image_url": "https://images.unsplash.com/photo-1519276576360-d75a8c97c567?w=600", "latitude": 46.8139, "longitude": -71.2080},
-        {"name": "Moraine Lake", "description": "Glacially-fed lake with vibrant turquoise waters in Rockies.", "image_url": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=600", "latitude": 51.3318, "longitude": -116.1834},
-        {"name": "Butchart Gardens", "description": "World-famous 55-acre gardens in Victoria, BC.", "image_url": "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=600", "latitude": 48.5643, "longitude": -123.4673},
-        {"name": "Parliament Hill", "description": "Gothic Revival complex housing Canadian government in Ottawa.", "image_url": "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=600", "latitude": 45.4236, "longitude": -75.7009},
-        {"name": "Whistler", "description": "Premier ski resort in Coast Mountains of British Columbia.", "image_url": "https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=600", "latitude": 50.1163, "longitude": -122.9574},
-        {"name": "Bay of Fundy", "description": "Home to the highest tides in the world, up to 16 meters.", "image_url": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=600", "latitude": 45.1367, "longitude": -66.0497},
-        {"name": "Northern Lights Yukon", "description": "Prime aurora borealis viewing destination in northern Canada.", "image_url": "https://images.unsplash.com/photo-1483347756197-71ef80e95f73?w=600", "latitude": 64.2823, "longitude": -135.0000},
+        {
+            "name": "Niagara Falls", 
+            "description": "Powerful waterfalls on Canada-US border, boat tours available.", 
+            "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800",
+                "https://images.unsplash.com/photo-1605468179938-252fa7f06a5c?w=800",
+                "https://images.unsplash.com/photo-1558447268-7e2c83a31c5e?w=800"
+            ],
+            "latitude": 43.0896, "longitude": -79.0849
+        },
+        {
+            "name": "Banff National Park", 
+            "description": "Stunning Rocky Mountain scenery with turquoise lakes.", 
+            "image_url": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800",
+                "https://images.unsplash.com/photo-1568271675068-f76a83a1e2d6?w=800",
+                "https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800"
+            ],
+            "latitude": 51.4968, "longitude": -115.9281
+        },
+        {
+            "name": "CN Tower", 
+            "description": "Iconic 553-meter communications tower in Toronto.", 
+            "image_url": "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800",
+                "https://images.unsplash.com/photo-1519674047642-ce7ba6c97b18?w=800"
+            ],
+            "latitude": 43.6426, "longitude": -79.3871
+        },
+        {
+            "name": "Old Quebec City", 
+            "description": "Historic fortified colonial city, UNESCO World Heritage.", 
+            "image_url": "https://images.unsplash.com/photo-1519276576360-d75a8c97c567?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1519276576360-d75a8c97c567?w=800",
+                "https://images.unsplash.com/photo-1554825203-87532f89b2e8?w=800"
+            ],
+            "latitude": 46.8139, "longitude": -71.2080
+        },
+        {
+            "name": "Moraine Lake", 
+            "description": "Glacially-fed lake with vibrant turquoise waters in Rockies.", 
+            "image_url": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800",
+                "https://images.unsplash.com/photo-1568271675068-f76a83a1e2d6?w=800"
+            ],
+            "latitude": 51.3318, "longitude": -116.1834
+        },
+        {
+            "name": "Butchart Gardens", 
+            "description": "World-famous 55-acre gardens in Victoria, BC.", 
+            "image_url": "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800",
+                "https://images.unsplash.com/photo-1588360963617-574207e1c26b?w=800"
+            ],
+            "latitude": 48.5643, "longitude": -123.4673
+        },
+        {
+            "name": "Parliament Hill", 
+            "description": "Gothic Revival complex housing Canadian government in Ottawa.", 
+            "image_url": "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800",
+                "https://images.unsplash.com/photo-1519674047642-ce7ba6c97b18?w=800"
+            ],
+            "latitude": 45.4236, "longitude": -75.7009
+        },
+        {
+            "name": "Whistler", 
+            "description": "Premier ski resort in Coast Mountains of British Columbia.", 
+            "image_url": "https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=800",
+                "https://images.unsplash.com/photo-1551524164-687a55dd1126?w=800"
+            ],
+            "latitude": 50.1163, "longitude": -122.9574
+        },
+        {
+            "name": "Bay of Fundy", 
+            "description": "Home to the highest tides in the world, up to 16 meters.", 
+            "image_url": "https://images.unsplash.com/photo-1558447268-7e2c83a31c5e?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1558447268-7e2c83a31c5e?w=800",
+                "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800"
+            ],
+            "latitude": 45.1367, "longitude": -66.0497
+        },
+        {
+            "name": "Northern Lights Yukon", 
+            "description": "Prime aurora borealis viewing destination in northern Canada.", 
+            "image_url": "https://images.unsplash.com/photo-1483347756197-71ef80e95f73?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1483347756197-71ef80e95f73?w=800",
+                "https://images.unsplash.com/photo-1579033461380-adb47c3eb938?w=800"
+            ],
+            "latitude": 64.2823, "longitude": -135.0000
+        },
     ],
     "south_africa": [
         {"name": "Table Mountain", "description": "Flat-topped mountain overlooking Cape Town, cable car access.", "image_url": "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=600", "latitude": -33.9628, "longitude": 18.4098},
