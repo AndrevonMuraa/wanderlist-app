@@ -32,6 +32,8 @@ interface Landmark {
   image_url: string;
   category: string;
   upvotes: number;
+  points?: number;
+  is_locked?: boolean;
 }
 
 export default function LandmarksScreen() {
