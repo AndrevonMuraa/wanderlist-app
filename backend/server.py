@@ -48,7 +48,7 @@ class User(BaseModel):
 
 class UserPublic(BaseModel):
     user_id: str
-    username: str
+    username: Optional[str] = None  # Made optional for backwards compatibility
     name: str
     picture: Optional[str] = None
     is_premium: bool = False  # Deprecated
