@@ -2032,9 +2032,8 @@ LANDMARKS_DATA = {
         {
             "name": "Butchart Gardens", 
             "description": "World-famous 55-acre gardens in Victoria, BC.", 
-            "image_url": "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800",
+            "image_url": "https://images.unsplash.com/photo-1588360963617-574207e1c26b?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800",
                 "https://images.unsplash.com/photo-1588360963617-574207e1c26b?w=800"
             ],
             "latitude": 48.5643, "longitude": -123.4673
