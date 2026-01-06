@@ -1096,16 +1096,107 @@ LANDMARKS_DATA = {
         },
     ],
     "china": [
-        {"name": "Great Wall of China", "description": "Ancient series of walls built across historical northern borders.", "image_url": "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=600", "latitude": 40.4319, "longitude": 116.5704},
-        {"name": "Forbidden City", "description": "Palace complex in central Beijing, home to Chinese emperors.", "image_url": "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=600", "latitude": 39.9163, "longitude": 116.3972},
-        {"name": "Terracotta Army", "description": "Collection of terracotta sculptures depicting armies of Qin Shi Huang.", "image_url": "https://images.unsplash.com/photo-1594576722512-582bcd46fba3?w=600", "latitude": 34.3848, "longitude": 109.2792},
-        {"name": "Temple of Heaven", "description": "Imperial complex of religious buildings visited by emperors.", "image_url": "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=600", "latitude": 39.8822, "longitude": 116.4067},
-        {"name": "Li River", "description": "River in Guangxi famous for karst mountain scenery.", "image_url": "https://images.unsplash.com/photo-1549041840-4021c9eb86ec?w=600", "latitude": 25.2795, "longitude": 110.2950},
-        {"name": "Shanghai Bund", "description": "Waterfront area with colonial-era buildings.", "image_url": "https://images.unsplash.com/photo-1537887858907-3b3687e70ca0?w=600", "latitude": 31.2397, "longitude": 121.4909},
-        {"name": "Potala Palace", "description": "Dzong fortress in Lhasa, Tibet, winter palace of Dalai Lamas.", "image_url": "https://images.unsplash.com/photo-1537887858907-3b3687e70ca0?w=600", "latitude": 29.6578, "longitude": 91.1169},
-        {"name": "Summer Palace", "description": "Vast ensemble of lakes, gardens and palaces in Beijing.", "image_url": "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=600", "latitude": 39.9995, "longitude": 116.2753},
-        {"name": "Yellow Mountain", "description": "Mountain range known for granite peaks and hot springs.", "image_url": "https://images.unsplash.com/photo-1549041840-4021c9eb86ec?w=600", "latitude": 30.1339, "longitude": 118.1565},
-        {"name": "Giant Buddha", "description": "Massive carved stone Buddha statue in Leshan.", "image_url": "https://images.unsplash.com/photo-1559564484-e48d68cd2d1f?w=600", "latitude": 29.5454, "longitude": 103.7695},
+        {
+            "name": "Great Wall of China", 
+            "description": "Ancient series of walls built across historical northern borders.", 
+            "image_url": "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800",
+                "https://images.unsplash.com/photo-1525490829609-d166ddb58678?w=800",
+                "https://images.unsplash.com/photo-1570873248552-dde614b6f01a?w=800"
+            ],
+            "latitude": 40.4319, "longitude": 116.5704
+        },
+        {
+            "name": "Forbidden City", 
+            "description": "Palace complex in central Beijing, home to Chinese emperors.", 
+            "image_url": "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=800",
+                "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800"
+            ],
+            "latitude": 39.9163, "longitude": 116.3972
+        },
+        {
+            "name": "Terracotta Army", 
+            "description": "Collection of terracotta sculptures depicting armies of Qin Shi Huang.", 
+            "image_url": "https://images.unsplash.com/photo-1594576722512-582bcd46fba3?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1594576722512-582bcd46fba3?w=800",
+                "https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=800"
+            ],
+            "latitude": 34.3848, "longitude": 109.2792
+        },
+        {
+            "name": "Temple of Heaven", 
+            "description": "Imperial complex of religious buildings visited by emperors.", 
+            "image_url": "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800",
+                "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=800"
+            ],
+            "latitude": 39.8822, "longitude": 116.4067
+        },
+        {
+            "name": "Li River", 
+            "description": "River in Guangxi famous for karst mountain scenery.", 
+            "image_url": "https://images.unsplash.com/photo-1549041840-4021c9eb86ec?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1549041840-4021c9eb86ec?w=800",
+                "https://images.unsplash.com/photo-1570873248552-dde614b6f01a?w=800"
+            ],
+            "latitude": 25.2795, "longitude": 110.2950
+        },
+        {
+            "name": "Shanghai Bund", 
+            "description": "Waterfront area with colonial-era buildings.", 
+            "image_url": "https://images.unsplash.com/photo-1537887858907-3b3687e70ca0?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1537887858907-3b3687e70ca0?w=800",
+                "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=800"
+            ],
+            "latitude": 31.2397, "longitude": 121.4909
+        },
+        {
+            "name": "Potala Palace", 
+            "description": "Dzong fortress in Lhasa, Tibet, winter palace of Dalai Lamas.", 
+            "image_url": "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800",
+                "https://images.unsplash.com/photo-1537871518640-e82505ad8e73?w=800"
+            ],
+            "latitude": 29.6578, "longitude": 91.1169
+        },
+        {
+            "name": "Summer Palace", 
+            "description": "Vast ensemble of lakes, gardens and palaces in Beijing.", 
+            "image_url": "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=800",
+                "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800"
+            ],
+            "latitude": 39.9995, "longitude": 116.2753
+        },
+        {
+            "name": "Yellow Mountain", 
+            "description": "Mountain range known for granite peaks and hot springs.", 
+            "image_url": "https://images.unsplash.com/photo-1549041840-4021c9eb86ec?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1549041840-4021c9eb86ec?w=800",
+                "https://images.unsplash.com/photo-1570873248552-dde614b6f01a?w=800"
+            ],
+            "latitude": 30.1339, "longitude": 118.1565
+        },
+        {
+            "name": "West Lake", 
+            "description": "Freshwater lake in Hangzhou, famous for scenic beauty.", 
+            "image_url": "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=800",
+            "images": [
+                "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=800",
+                "https://images.unsplash.com/photo-1537887858907-3b3687e70ca0?w=800"
+            ],
+            "latitude": 30.2430, "longitude": 120.1425
+        },
     ],
     "spain": [
         {"name": "Sagrada Família", "description": "Gaudí's unfinished basilica, Barcelona's most iconic landmark.", "image_url": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=600", "latitude": 41.4036, "longitude": 2.1744},
