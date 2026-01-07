@@ -497,7 +497,7 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
   },
   cardContainer: {
-    width: '50%',
+    flex: 1,
     paddingBottom: theme.spacing.md,
   },
   firstColumnCard: {
