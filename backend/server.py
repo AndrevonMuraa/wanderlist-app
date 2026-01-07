@@ -140,18 +140,19 @@ class Visit(BaseModel):
     visit_id: str
     user_id: str
     landmark_id: str
-    photo_base64: str
+    photo_base64: Optional[str] = None  # Photo is now optional
     points_earned: int = 10  # Points earned for this visit
     comments: Optional[str] = None
     visit_location: Optional[dict] = None  # For Northern Lights: {"latitude": float, "longitude": float, "region": str}
     diary_notes: Optional[str] = None
     status: str = "accepted"
+    verified: bool = True  # True if has photo, False if no photo (friends-only)
     visited_at: datetime
     created_at: datetime
 
 class VisitCreate(BaseModel):
     landmark_id: str
-    photo_base64: str
+    photo_base64: Optional[str] = None  # Photo is now optional
     comments: Optional[str] = None
     visit_location: Optional[dict] = None  # For Northern Lights: {"latitude": float, "longitude": float, "region": str}
     diary_notes: Optional[str] = None
