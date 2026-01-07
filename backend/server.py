@@ -101,6 +101,7 @@ class Country(BaseModel):
     country_id: str
     name: str
     continent: str
+    image_url: Optional[str] = None
     landmark_count: int = 0
 
 class LandmarkFact(BaseModel):
