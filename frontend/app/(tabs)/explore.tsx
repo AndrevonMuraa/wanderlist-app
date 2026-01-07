@@ -325,9 +325,26 @@ export default function ExploreScreen() {
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-      </View>
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <View style={styles.welcomeSection}>
+          <Text style={styles.welcomeText}>Discover the World</Text>
+          <Text style={styles.welcomeSubtext}>Loading amazing destinations...</Text>
+        </View>
+        <View style={styles.skeletonContainer}>
+          <View style={styles.rowContainer}>
+            <CountryCardSkeleton />
+            <CountryCardSkeleton />
+          </View>
+          <View style={styles.rowContainer}>
+            <CountryCardSkeleton />
+            <CountryCardSkeleton />
+          </View>
+          <View style={styles.rowContainer}>
+            <CountryCardSkeleton />
+            <CountryCardSkeleton />
+          </View>
+        </View>
+      </SafeAreaView>
     );
   }
 
