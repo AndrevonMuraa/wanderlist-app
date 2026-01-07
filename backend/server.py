@@ -573,6 +573,32 @@ async def get_visits(current_user: User = Depends(get_current_user)):
     visits = await db.visits.find({"user_id": current_user.user_id}, {"_id": 0}).sort("visited_at", -1).to_list(1000)
     return [Visit(**v) for v in visits]
 
+@api_router.get("/visits/stats")
+async def get_visit_stats(current_user: User = Depends(get_current_user)):
+    """Get visit statistics including monthly count for free users"""
+    # Get start of current month
+    now = datetime.now(timezone.utc)
+    start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    
+    # Count visits this month
+    monthly_count = await db.visits.count_documents({
+        "user_id": current_user.user_id,
+        "visited_at": {"$gte": start_of_month}
+    })
+    
+    # Total visits all time
+    total_count = await db.visits.count_documents({"user_id": current_user.user_id})
+    
+    # Get limit based on tier
+    limit = 10 if current_user.subscription_tier == "free" else None
+    
+    return {
+        "monthly_visits": monthly_count,
+        "total_visits": total_count,
+        "monthly_limit": limit,
+        "tier": current_user.subscription_tier
+    }
+
 @api_router.post("/visits", response_model=Visit)
 async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_user)):
     # Check visit limits for free users
