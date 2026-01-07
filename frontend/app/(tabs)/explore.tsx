@@ -92,27 +92,42 @@ export default function ExploreScreen() {
   const [sections, setSections] = useState<ContinentSection[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [progressData, setProgressData] = useState<any>(null);
   const router = useRouter();
 
   useEffect(() => {
-    fetchCountries();
+    fetchData();
   }, []);
 
-  const fetchCountries = async () => {
+  const fetchData = async () => {
     try {
       const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/countries`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      
+      // Fetch countries and progress data in parallel
+      const [countriesResponse, progressResponse] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/countries`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${BACKEND_URL}/api/progress`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
 
-      if (response.ok) {
-        const data = await response.json();
+      if (countriesResponse.ok && progressResponse.ok) {
+        const countries = await countriesResponse.json();
+        const progress = await progressResponse.json();
+        setProgressData(progress);
+        
+        // Merge progress data with countries
+        const enrichedCountries = countries.map((country: Country) => ({
+          ...country,
+          visited: progress.countries[country.country_id]?.visited || 0,
+          percentage: progress.countries[country.country_id]?.percentage || 0,
+        }));
         
         // Group countries by continent
         const continentMap = new Map<string, Country[]>();
-        data.forEach((country: Country) => {
+        enrichedCountries.forEach((country: Country) => {
           if (!continentMap.has(country.continent)) {
             continentMap.set(country.continent, []);
           }
@@ -136,7 +151,7 @@ export default function ExploreScreen() {
         setSections(sectionList);
       }
     } catch (error) {
-      console.error('Error fetching countries:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -145,7 +160,7 @@ export default function ExploreScreen() {
 
   const onRefresh = () => {
     setRefreshing(true);
-    fetchCountries();
+    fetchData();
   };
 
   const renderCountryCard = ({ item }: { item: Country[] }) => {
