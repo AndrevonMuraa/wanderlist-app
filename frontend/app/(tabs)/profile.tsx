@@ -27,22 +27,15 @@ interface UserStats {
   friends_count: number;
 }
 
-interface VisitCount {
-  count: number;
-  limit: number;
-}
-
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
   const [stats, setStats] = useState<UserStats | null>(null);
-  const [visitCount, setVisitCount] = useState<VisitCount | null>(null);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     fetchStats();
-    fetchVisitCount();
   }, []);
 
   const fetchStats = async () => {
