@@ -124,8 +124,8 @@ export default function ProfileScreen() {
           </View>
         </Surface>
 
-        {/* Monetization Limits Card for Free Users */}
-        {user?.subscription_tier === 'free' && visitCount && (
+        {/* Friend Limit Card for Free Users */}
+        {user?.subscription_tier === 'free' && stats && (
           <Surface style={styles.limitsCard}>
             <View style={styles.limitHeader}>
               <Ionicons name="information-circle-outline" size={24} color={theme.colors.primary} />
@@ -134,49 +134,23 @@ export default function ProfileScreen() {
             
             <View style={styles.limitItem}>
               <View style={styles.limitInfo}>
-                <Ionicons name="calendar-outline" size={20} color={theme.colors.textSecondary} />
-                <Text style={styles.limitLabel}>Visits this month</Text>
-              </View>
-              <View style={styles.limitProgress}>
-                <Text style={[
-                  styles.limitValue,
-                  visitCount.count >= visitCount.limit && { color: theme.colors.error }
-                ]}>
-                  {visitCount.count}/{visitCount.limit}
-                </Text>
-                <View style={styles.progressBarContainer}>
-                  <View 
-                    style={[
-                      styles.progressBar,
-                      { 
-                        width: `${(visitCount.count / visitCount.limit) * 100}%`,
-                        backgroundColor: visitCount.count >= visitCount.limit ? theme.colors.error : theme.colors.primary
-                      }
-                    ]} 
-                  />
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.limitItem}>
-              <View style={styles.limitInfo}>
                 <Ionicons name="people-outline" size={20} color={theme.colors.textSecondary} />
                 <Text style={styles.limitLabel}>Friends</Text>
               </View>
               <View style={styles.limitProgress}>
                 <Text style={[
                   styles.limitValue,
-                  stats && stats.friends_count >= 5 && { color: theme.colors.error }
+                  stats.friends_count >= 5 && { color: theme.colors.error }
                 ]}>
-                  {stats?.friends_count || 0}/5
+                  {stats.friends_count}/5
                 </Text>
                 <View style={styles.progressBarContainer}>
                   <View 
                     style={[
                       styles.progressBar,
                       { 
-                        width: `${((stats?.friends_count || 0) / 5) * 100}%`,
-                        backgroundColor: stats && stats.friends_count >= 5 ? theme.colors.error : theme.colors.primary
+                        width: `${(stats.friends_count / 5) * 100}%`,
+                        backgroundColor: stats.friends_count >= 5 ? theme.colors.error : theme.colors.primary
                       }
                     ]} 
                   />
