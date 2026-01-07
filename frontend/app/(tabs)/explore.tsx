@@ -211,7 +211,9 @@ export default function ExploreScreen() {
   };
 
   const renderSectionHeader = ({ section }: { section: ContinentSection }) => {
-    const totalLandmarks = section.data.reduce((sum, country) => sum + country.landmark_count, 0);
+    // Flatten rows to get all countries for calculations
+    const allCountries = section.data.flat();
+    const totalLandmarks = allCountries.reduce((sum, country) => sum + country.landmark_count, 0);
     
     // Continent descriptions for visual richness
     const continentDescriptions: { [key: string]: string } = {
@@ -238,7 +240,7 @@ export default function ExploreScreen() {
                 <View style={styles.sectionHeaderTextContainer}>
                   <Text style={styles.sectionTitle}>{section.continent}</Text>
                   <Text style={styles.sectionSubtitle}>
-                    {section.data.length} countries • {totalLandmarks} landmarks
+                    {allCountries.length} countries • {totalLandmarks} landmarks
                   </Text>
                 </View>
               </View>
