@@ -199,19 +199,41 @@ export default function ExploreScreen() {
   const renderSectionHeader = ({ section }: { section: ContinentSection }) => {
     const totalLandmarks = section.data.reduce((sum, country) => sum + country.landmark_count, 0);
     
+    // Continent descriptions for visual richness
+    const continentDescriptions: { [key: string]: string } = {
+      'Europe': 'Rich history and diverse cultures await',
+      'Asia': 'Ancient traditions meet modern wonders',
+      'Africa': 'Wildlife, deserts, and vibrant cultures',
+      'North America': 'Natural beauty and urban adventures',
+      'South America': 'Rainforests, mountains, and ancient ruins',
+      'Oceania': 'Paradise islands and unique wildlife',
+    };
+    
     return (
-      <View style={styles.sectionHeader}>
-        <View style={styles.sectionHeaderContent}>
-          <View style={styles.sectionHeaderLeft}>
-            <Text style={styles.continentIcon}>{CONTINENT_ICONS[section.continent] || '🌍'}</Text>
-            <View>
-              <Text style={styles.sectionTitle}>{section.continent}</Text>
-              <Text style={styles.sectionSubtitle}>
-                {section.data.length} countries • {totalLandmarks} landmarks
-              </Text>
+      <View style={styles.sectionHeaderContainer}>
+        <LinearGradient
+          colors={['rgba(32, 178, 170, 0.08)', 'transparent']}
+          style={styles.sectionHeaderGradient}
+        >
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionHeaderContent}>
+              <View style={styles.sectionHeaderLeft}>
+                <View style={styles.continentIconCircle}>
+                  <Text style={styles.continentIcon}>{CONTINENT_ICONS[section.continent] || '🌍'}</Text>
+                </View>
+                <View style={styles.sectionHeaderTextContainer}>
+                  <Text style={styles.sectionTitle}>{section.continent}</Text>
+                  <Text style={styles.sectionSubtitle}>
+                    {section.data.length} countries • {totalLandmarks} landmarks
+                  </Text>
+                  <Text style={styles.continentDescription}>
+                    {continentDescriptions[section.continent] || 'Discover amazing places'}
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
-        </View>
+        </LinearGradient>
       </View>
     );
   };
