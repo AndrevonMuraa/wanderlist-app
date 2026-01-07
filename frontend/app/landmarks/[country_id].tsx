@@ -222,37 +222,6 @@ export default function LandmarksScreen() {
         </View>
       </LinearGradient>
 
-      {/* Premium Content Banner */}
-      {landmarks.filter(l => l.is_locked).length > 0 && (
-        <TouchableOpacity 
-          style={styles.premiumBanner}
-          onPress={() => setShowUpgradeModal(true)}
-          activeOpacity={0.8}
-        >
-          <LinearGradient
-            colors={['#FFD700', '#FFA500', '#FF8C00']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.premiumBannerGradient}
-          >
-            <View style={styles.premiumBannerContent}>
-              <View style={styles.premiumBannerIcon}>
-                <Ionicons name="diamond" size={24} color="#fff" />
-              </View>
-              <View style={styles.premiumBannerTextContainer}>
-                <Text style={styles.premiumBannerTitle}>
-                  {landmarks.filter(l => l.is_locked).length} Premium Landmark{landmarks.filter(l => l.is_locked).length > 1 ? 's' : ''} Available
-                </Text>
-                <Text style={styles.premiumBannerSubtitle}>
-                  Unlock exclusive content • Earn up to {landmarks.filter(l => l.is_locked).reduce((acc, l) => acc + (l.points || 25), 0)} bonus points
-                </Text>
-              </View>
-              <Ionicons name="chevron-forward" size={24} color="#fff" />
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
-      )}
-
       <FlatList
         data={landmarks}
         renderItem={renderLandmark}
