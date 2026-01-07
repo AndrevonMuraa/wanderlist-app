@@ -353,6 +353,7 @@ export default function LandmarkDetailScreen() {
         </View>
       </ScrollView>
     </SafeAreaView>
+  </View>
   );
 }
 
