@@ -162,12 +162,8 @@ export default function ContinentsScreen() {
                 colors={continent.gradient}
                 style={styles.cardGradient}
               >
-                {/* Top Row: Icon and Points Badge */}
+                {/* Top Row: Points Badge */}
                 <View style={styles.cardTopRow}>
-                  <View style={styles.cardIconContainer}>
-                    <Ionicons name={continent.icon as any} size={32} color="#fff" />
-                  </View>
-                  
                   <View style={styles.pointsBadge}>
                     <Ionicons name="star" size={14} color="#FFD700" />
                     <Text style={styles.pointsText}>{continent.totalPoints.toLocaleString()}</Text>
