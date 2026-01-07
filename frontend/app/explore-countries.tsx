@@ -115,9 +115,17 @@ export default function ExploreCountriesScreen() {
       ]);
 
       if (countriesResponse.ok && progressResponse.ok) {
-        const countries = await countriesResponse.json();
+        let countries = await countriesResponse.json();
         const progress = await progressResponse.json();
         setProgressData(progress);
+        
+        // Filter by continent if specified
+        if (continent) {
+          const continentFilter = (continent as string).toLowerCase();
+          countries = countries.filter((c: Country) => 
+            c.continent.toLowerCase() === continentFilter
+          );
+        }
         
         // Merge progress data with countries
         const enrichedCountries = countries.map((country: Country) => ({
@@ -136,7 +144,7 @@ export default function ExploreCountriesScreen() {
         });
 
         // Create sections with rows (2 countries per row)
-        const sectionList: ContinentSection[] = Array.from(continentMap.entries()).map(([continent, countries]) => {
+        const sectionList: ContinentSection[] = Array.from(continentMap.entries()).map(([continentName, countries]) => {
           // Group countries into rows of 2
           const rows: Country[][] = [];
           for (let i = 0; i < countries.length; i += 2) {
@@ -144,7 +152,7 @@ export default function ExploreCountriesScreen() {
           }
           
           return {
-            continent,
+            continent: continentName,
             data: rows as any // Cast to satisfy TypeScript
           };
         });
