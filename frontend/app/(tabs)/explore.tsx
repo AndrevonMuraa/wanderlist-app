@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
   },
   listContainer: {
-    paddingBottom: theme.spacing.xl,
+    paddingBottom: theme.spacing.md,
   },
   welcomeSection: {
     paddingHorizontal: theme.spacing.md,
