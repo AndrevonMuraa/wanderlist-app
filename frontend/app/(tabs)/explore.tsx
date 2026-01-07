@@ -241,27 +241,12 @@ export default function ExploreScreen() {
   );
 
   const renderListHeader = () => (
-    <>
-      <View style={styles.searchContainer}>
-        <Searchbar
-          placeholder="Search destinations..."
-          onChangeText={setSearchQuery}
-          value={searchQuery}
-          style={styles.searchBar}
-          iconColor={theme.colors.primary}
-          inputStyle={styles.searchInput}
-          placeholderTextColor={theme.colors.textLight}
-          elevation={0}
-        />
-      </View>
-
-      <View style={styles.welcomeSection}>
-        <Text style={styles.welcomeText}>Discover the World</Text>
-        <Text style={styles.welcomeSubtext}>
-          Explore {sections.reduce((sum, s) => sum + s.data.flat().reduce((total, c) => total + c.landmark_count, 0), 0)} landmarks across {sections.reduce((sum, s) => sum + s.data.flat().length, 0)} countries
-        </Text>
-      </View>
-    </>
+    <View style={styles.welcomeSection}>
+      <Text style={styles.welcomeText}>Discover the World</Text>
+      <Text style={styles.welcomeSubtext}>
+        Explore {sections.reduce((sum, s) => sum + s.data.flat().reduce((total, c) => total + c.landmark_count, 0), 0)} landmarks across {sections.reduce((sum, s) => sum + s.data.flat().length, 0)} countries
+      </Text>
+    </View>
   );
 
   const renderListFooter = () => (
