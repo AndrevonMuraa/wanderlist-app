@@ -502,4 +502,10 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     fontWeight: '600',
   },
+  messageButton: {
+    padding: 8,
+    marginLeft: 8,
+    borderRadius: 20,
+    backgroundColor: theme.colors.primary + '15',
+  },
 });
