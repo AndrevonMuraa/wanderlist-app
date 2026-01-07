@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
   },
   welcomeSection: {
     paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.lg,
+    paddingBottom: theme.spacing.md,
     paddingTop: theme.spacing.sm,
   },
   welcomeTextContainer: {
