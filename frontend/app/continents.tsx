@@ -142,7 +142,7 @@ export default function ContinentsScreen() {
         contentContainerStyle={styles.cardsContainer}
         showsVerticalScrollIndicator={false}
       >
-        {CONTINENTS.map((continent, index) => (
+        {continents.map((continent, index) => (
           <TouchableOpacity
             key={continent.id}
             style={styles.cardWrapper}
@@ -162,9 +162,16 @@ export default function ContinentsScreen() {
                 colors={continent.gradient}
                 style={styles.cardGradient}
               >
-                {/* Icon */}
-                <View style={styles.cardIconContainer}>
-                  <Ionicons name={continent.icon as any} size={32} color="#fff" />
+                {/* Top Row: Icon and Points Badge */}
+                <View style={styles.cardTopRow}>
+                  <View style={styles.cardIconContainer}>
+                    <Ionicons name={continent.icon as any} size={32} color="#fff" />
+                  </View>
+                  
+                  <View style={styles.pointsBadge}>
+                    <Ionicons name="star" size={14} color="#FFD700" />
+                    <Text style={styles.pointsText}>{continent.totalPoints.toLocaleString()}</Text>
+                  </View>
                 </View>
 
                 {/* Content */}
@@ -172,18 +179,34 @@ export default function ContinentsScreen() {
                   <Text style={styles.cardTitle}>{continent.name}</Text>
                   <Text style={styles.cardDescription}>{continent.description}</Text>
                   
-                  {/* Stats */}
-                  <View style={styles.cardStats}>
-                    <View style={styles.statItem}>
-                      <Text style={styles.statNumber}>{continent.countries}</Text>
-                      <Text style={styles.statLabel}>Countries</Text>
+                  {/* Progress Bar */}
+                  {continent.percentage !== undefined && continent.percentage > 0 ? (
+                    <View style={styles.progressSection}>
+                      <Text style={styles.progressLabel}>
+                        {continent.visited}/{continent.countries} countries visited
+                      </Text>
+                      <View style={styles.progressBarContainer}>
+                        <View 
+                          style={[
+                            styles.progressBarFill, 
+                            { width: `${continent.percentage}%` }
+                          ]} 
+                        />
+                      </View>
                     </View>
-                    <View style={styles.statDivider} />
-                    <View style={styles.statItem}>
-                      <Text style={styles.statNumber}>{continent.landmarks}</Text>
-                      <Text style={styles.statLabel}>Landmarks</Text>
+                  ) : (
+                    <View style={styles.cardStats}>
+                      <View style={styles.statItem}>
+                        <Text style={styles.statNumber}>{continent.countries}</Text>
+                        <Text style={styles.statLabel}>Countries</Text>
+                      </View>
+                      <View style={styles.statDivider} />
+                      <View style={styles.statItem}>
+                        <Text style={styles.statNumber}>{continent.landmarks}</Text>
+                        <Text style={styles.statLabel}>Landmarks</Text>
+                      </View>
                     </View>
-                  </View>
+                  )}
 
                   {/* Arrow Icon */}
                   <View style={styles.cardArrow}>
