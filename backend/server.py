@@ -693,8 +693,9 @@ async def update_user_tier(
 @api_router.get("/leaderboard", response_model=List[LeaderboardEntry])
 async def get_leaderboard(current_user: User = Depends(get_current_user)):
     if current_user.is_premium:
-        # Global leaderboard for premium users
+        # Global leaderboard for premium users - ONLY VERIFIED VISITS (with photos)
         pipeline = [
+            {"$match": {"verified": True}},  # Only count visits with photo proof
             {"$group": {"_id": "$user_id", "visit_count": {"$sum": 1}}},
             {"$sort": {"visit_count": -1}},
             {"$limit": 100}
@@ -714,7 +715,7 @@ async def get_leaderboard(current_user: User = Depends(get_current_user)):
                 ))
         return leaderboard
     else:
-        # Friends leaderboard for freemium users
+        # Friends leaderboard for freemium users - ALL VISITS (verified and unverified)
         # Get friend IDs
         friendships = await db.friends.find({
             "$or": [
