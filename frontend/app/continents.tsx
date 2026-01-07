@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   cardTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
     color: '#fff',
     marginBottom: theme.spacing.xs / 2,
@@ -309,9 +309,9 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
   cardDescription: {
-    fontSize: 13,
+    fontSize: 12,
     color: 'rgba(255, 255, 255, 0.9)',
-    marginBottom: theme.spacing.sm,
+    marginBottom: theme.spacing.xs,
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 2,
