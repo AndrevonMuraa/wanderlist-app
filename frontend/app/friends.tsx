@@ -103,10 +103,23 @@ export default function FriendsScreen() {
       return;
     }
 
+    // Check if at friend limit before sending request
+    if (isAtLimit) {
+      Alert.alert(
+        'Friend Limit Reached',
+        `You've reached your friend limit (${friendLimit} friends). Upgrade to add more friends!`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'View Plans', onPress: () => checkResponse({ status: 403, json: async () => ({ detail: `Friend limit reached (${friends.length}/${friendLimit})` }) } as any) }
+        ]
+      );
+      return;
+    }
+
     setSending(true);
 
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
       const response = await fetch(`${BACKEND_URL}/api/friends/request`, {
         method: 'POST',
         headers: {
@@ -115,6 +128,13 @@ export default function FriendsScreen() {
         },
         body: JSON.stringify({ friend_email: searchEmail })
       });
+
+      // Check for 403 (limit exceeded)
+      const canProceed = await checkResponse(response);
+      if (!canProceed) {
+        setSending(false);
+        return;
+      }
 
       if (response.ok) {
         Alert.alert('Success', 'Friend request sent!');
@@ -132,14 +152,33 @@ export default function FriendsScreen() {
   };
 
   const handleAcceptRequest = async (friendshipId: string) => {
+    // Check if at friend limit before accepting
+    if (isAtLimit) {
+      Alert.alert(
+        'Friend Limit Reached',
+        `You've reached your friend limit (${friendLimit} friends). Upgrade to accept more friend requests!`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'View Plans', onPress: () => checkResponse({ status: 403, json: async () => ({ detail: `Friend limit reached (${friends.length}/${friendLimit})` }) } as any) }
+        ]
+      );
+      return;
+    }
+
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
       const response = await fetch(`${BACKEND_URL}/api/friends/${friendshipId}/accept`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
+
+      // Check for 403 (limit exceeded)
+      const canProceed = await checkResponse(response);
+      if (!canProceed) {
+        return;
+      }
 
       if (response.ok) {
         Alert.alert('Success', 'Friend request accepted!');
