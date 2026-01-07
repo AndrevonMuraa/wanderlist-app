@@ -461,6 +461,18 @@ const styles = StyleSheet.create({
     paddingBottom: theme.spacing.md,
     paddingTop: theme.spacing.sm,
   },
+  backButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing.md,
+    gap: theme.spacing.xs,
+  },
+  backButtonText: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    fontSize: 16,
+    fontWeight: '600',
+  },
   welcomeTextContainer: {
     marginBottom: theme.spacing.md,
   },
