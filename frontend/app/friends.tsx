@@ -259,7 +259,21 @@ export default function FriendsScreen() {
       </LinearGradient>
 
       <Surface style={styles.searchCard}>
-        <Text style={styles.sectionTitle}>Add Friend</Text>
+        <View style={styles.searchHeader}>
+          <Text style={styles.sectionTitle}>Add Friend</Text>
+          {user?.subscription_tier === 'free' && (
+            <Chip 
+              icon={() => <Ionicons name="people" size={14} color={isAtLimit ? theme.colors.error : theme.colors.textSecondary} />}
+              style={[
+                styles.limitChip,
+                isAtLimit && styles.limitChipError
+              ]}
+              textStyle={styles.limitChipText}
+            >
+              {friends.length}/{friendLimit}
+            </Chip>
+          )}
+        </View>
         <View style={styles.searchRow}>
           <Searchbar
             placeholder="Enter email address"
@@ -273,12 +287,21 @@ export default function FriendsScreen() {
             mode="contained"
             onPress={handleSendRequest}
             loading={sending}
-            disabled={sending}
-            style={styles.sendButton}
+            disabled={sending || isAtLimit}
+            style={[styles.sendButton, isAtLimit && styles.sendButtonDisabled]}
           >
-            Send
+            {isAtLimit ? 'Limit' : 'Send'}
           </Button>
         </View>
+        {isAtLimit && (
+          <TouchableOpacity 
+            style={styles.upgradeHint}
+            onPress={() => checkResponse({ status: 403, json: async () => ({ detail: `Friend limit reached (${friends.length}/${friendLimit})` }) } as any)}
+          >
+            <Ionicons name="information-circle" size={16} color={theme.colors.primary} />
+            <Text style={styles.upgradeHintText}>Tap to view upgrade options</Text>
+          </TouchableOpacity>
+        )}
       </Surface>
 
       {pendingRequests.length > 0 && (
