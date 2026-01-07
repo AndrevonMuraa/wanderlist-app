@@ -496,4 +496,144 @@ LANDMARKS_DATA = {
         {"name": "Bardo National Museum", "description": "World's finest Roman mosaic collection, Carthaginian artifacts, Tunis palace.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
         {"name": "Tozeur Oasis", "description": "Desert oasis, palm groves, Berber architecture, Sahara gateway, date capital.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Easy"},
     ],
+    
+    # AMERICAS - USA
+    "usa": [
+        {"name": "Statue of Liberty", "description": "Iconic symbol of freedom, New York Harbor, torch and crown, gift from France.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Grand Canyon", "description": "Massive canyon carved by Colorado River, colorful layers, natural wonder.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Yellowstone National Park", "description": "Geysers, Old Faithful, hot springs, wildlife, first national park in world.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Golden Gate Bridge", "description": "Iconic red suspension bridge, San Francisco, fog, engineering marvel, photo spot.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Times Square NYC", "description": "Bright lights, billboards, Broadway, heart of Manhattan, electric energy.", "image_url": "https://images.unsplash.com/photo-1543716627-839b54c40519?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Disney World Florida", "description": "Magic Kingdom, theme parks, castles, family entertainment, happiest place.", "image_url": "https://images.unsplash.com/photo-1566266318593-e5c2b925af37?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Las Vegas Strip", "description": "Casinos, shows, neon lights, entertainment capital, desert oasis of excess.", "image_url": "https://images.unsplash.com/photo-1540259029706-0ea7272c8b54?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Mount Rushmore", "description": "Four presidents carved in granite, Black Hills, American symbol, monument.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Hawaii Volcanoes", "description": "Active lava flows, Kilauea, black sand beaches, tropical volcanic paradise.", "image_url": "https://images.unsplash.com/photo-1542259009477-d625272157b7?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Niagara Falls", "description": "Powerful waterfalls on US-Canada border, Maid of the Mist, natural spectacle.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AMERICAS - CANADA
+    "canada": [
+        {"name": "Banff National Park", "description": "Turquoise lakes, Rocky Mountains, glaciers, wildlife, pristine wilderness.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Niagara Falls", "description": "Horseshoe Falls, boat tours, illuminations, thundering water, natural wonder.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800&q=80", "difficulty": "Easy"},
+        {"name": "CN Tower Toronto", "description": "Iconic communications tower, glass floor, city views, Canadian landmark.", "image_url": "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Canadian Rockies", "description": "Majestic mountain range, hiking, Lake Louise, Moraine Lake, alpine beauty.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Old Quebec City", "description": "European charm, cobblestone streets, Château Frontenac, fortified city, UNESCO.", "image_url": "https://images.unsplash.com/photo-1519112232436-9923c6ba3d26?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Vancouver Stanley Park", "description": "Urban rainforest, seawall, totem poles, beaches, mountains meet ocean.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Churchill Polar Bears", "description": "Polar bear capital, tundra, beluga whales, northern lights, Arctic adventure.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Bay of Fundy", "description": "World's highest tides, dramatic coastline, fossil cliffs, tidal bore rafting.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Whistler", "description": "World-class ski resort, mountain biking, Peak 2 Peak gondola, alpine village.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Parliament Hill Ottawa", "description": "Gothic Revival buildings, Changing of Guard, capital city, Canadian government.", "image_url": "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AMERICAS - MEXICO
+    "mexico": [
+        {"name": "Chichen Itza", "description": "Mayan pyramid, UNESCO wonder, El Castillo, ancient astronomy, Kukulkan.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Cancun Beaches", "description": "White sand, turquoise Caribbean, resorts, nightlife, tropical paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Teotihuacan", "description": "Ancient city, Pyramid of Sun and Moon, Avenue of Dead, pre-Aztec mystery.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Copper Canyon", "description": "Network of canyons larger than Grand Canyon, indigenous Tarahumara, train ride.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Tulum Ruins", "description": "Mayan ruins on Caribbean cliff, beach, turquoise waters, bohemian town.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Mexico City Zócalo", "description": "Historic square, Aztec ruins, cathedral, National Palace, cultural heart.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Cenotes Yucatan", "description": "Natural sinkholes, crystal-clear water, swimming, diving, Mayan underworld.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Guanajuato", "description": "Colorful hillside city, underground streets, mummies, silver mining history.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Palenque Jungle Temples", "description": "Mayan ruins in rainforest, pyramids, howler monkeys, mysterious inscriptions.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Oaxaca Monte Alban", "description": "Zapotec ruins, mezcal, handicrafts, Day of Dead traditions, colonial city.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AMERICAS - BRAZIL
+    "brazil": [
+        {"name": "Christ the Redeemer", "description": "Iconic statue atop Corcovado, arms open wide, Rio symbol, panoramic views.", "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Iguazu Falls", "description": "275 waterfalls, Devil's Throat, rainforest, Argentina border, thundering beauty.", "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Amazon Rainforest", "description": "World's largest rainforest, biodiversity, indigenous tribes, river cruises, wildlife.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Copacabana Beach", "description": "Famous Rio beach, black and white mosaic, volleyball, samba, beach culture.", "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Sugarloaf Mountain", "description": "Cable car to granite peak, 360-degree Rio views, Guanabara Bay, sunset spot.", "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Pantanal Wetlands", "description": "World's largest wetland, jaguars, caimans, birding, wildlife photography paradise.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Fernando de Noronha", "description": "Pristine archipelago, dolphins, sea turtles, diving, protected marine park.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Salvador Pelourinho", "description": "Afro-Brazilian culture, colonial architecture, capoeira, music, colorful historic center.", "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Lençóis Maranhenses", "description": "White sand dunes with turquoise lagoons, desert meets water, unique ecosystem.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "São Paulo Avenida Paulista", "description": "Financial heart, museums, street art, dining, vibrant urban energy, cultural hub.", "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AMERICAS - PERU
+    "peru": [
+        {"name": "Machu Picchu", "description": "Lost city of Incas, mountain citadel, UNESCO wonder, mystical ruins in clouds.", "image_url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Nazca Lines", "description": "Mysterious geoglyphs, giant animal figures, ancient desert drawings, fly-over tours.", "image_url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Lake Titicaca", "description": "Highest navigable lake, floating Uros Islands, Inca mythology, Bolivia border.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Cusco Historic Center", "description": "Former Inca capital, Spanish colonial, Sacred Valley gateway, vibrant culture.", "image_url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Amazon Peru", "description": "Rainforest lodges, Iquitos, wildlife, ayahuasca ceremonies, river expeditions.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Colca Canyon", "description": "Second deepest canyon, Andean condors, terraced farming, hot springs, trekking.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Rainbow Mountain", "description": "Vinicunca, striped mountain, vibrant colors, high altitude hike, Instagram famous.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Sacred Valley", "description": "Inca ruins, Ollantaytambo, Pisac market, agricultural terraces, mountain scenery.", "image_url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Lima Historic Center", "description": "Colonial architecture, Plaza de Armas, catacombs, gastronomy capital, UNESCO.", "image_url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Huacachina Oasis", "description": "Desert oasis, sand dunes, sandboarding, dune buggies, palm-ringed lagoon.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AMERICAS - ARGENTINA
+    "argentina": [
+        {"name": "Iguazu Falls", "description": "Massive waterfall system, Devil's Throat, walkways, rainbows, natural wonder.", "image_url": "https://images.unsplash.com/photo-1494783367193-149034c05e8f?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Perito Moreno Glacier", "description": "Advancing glacier, blue ice, calving, walkways, Patagonia's crown jewel.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Buenos Aires Tango", "description": "European-style city, La Boca, tango shows, steak, wine, cosmopolitan culture.", "image_url": "https://images.unsplash.com/photo-1494783367193-149034c05e8f?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ushuaia End of World", "description": "Southernmost city, Tierra del Fuego, penguins, Antarctica gateway, dramatic scenery.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Mendoza Wine Region", "description": "Malbec vineyards, Andes backdrop, wineries, gourmet food, outdoor adventures.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Patagonia Torres del Paine", "description": "Granite peaks, glaciers, guanacos, W Trek, pristine wilderness, Chile border.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Recoleta Cemetery", "description": "Elaborate mausoleums, Eva Perón tomb, outdoor museum, Buenos Aires history.", "image_url": "https://images.unsplash.com/photo-1494783367193-149034c05e8f?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Bariloche Lake District", "description": "Swiss-style town, chocolate, Nahuel Huapi Lake, skiing, hiking, scenic beauty.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Valdes Peninsula", "description": "UNESCO reserve, whales, sea lions, penguins, elephant seals, wildlife watching.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Salta & Jujuy", "description": "Colonial architecture, colorful mountains, Humahuaca Gorge, high-altitude vineyards.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AMERICAS - CHILE
+    "chile": [
+        {"name": "Torres del Paine", "description": "Iconic granite towers, glaciers, pumas, W Circuit, Patagonia's masterpiece.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Atacama Desert", "description": "Driest desert on Earth, Valle de la Luna, geysers, stargazing, salt flats.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Easter Island Moai", "description": "Mysterious stone heads, Polynesian culture, remote island, archaeological wonder.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Valparaiso", "description": "Colorful hillside port city, funiculars, street art, bohemian, UNESCO heritage.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Chilean Lake District", "description": "Volcanoes, lakes, forests, hot springs, German influence, outdoor paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Marble Caves", "description": "Swirled blue marble caverns, General Carrera Lake, boat tours, natural wonder.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Santiago City", "description": "Modern capital, Andes views, wine tours, San Cristóbal Hill, urban sophistication.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Chiloé Island", "description": "Wooden churches, palafitos, mythology, seafood, unique architecture, UNESCO.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Lauca National Park", "description": "High-altitude park, vicuñas, Lake Chungará, volcanoes, flamingos, altiplano.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Viña del Mar", "description": "Garden city, beaches, Flower Clock, casino, coastal resort, Pacific views.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AMERICAS - COLOMBIA
+    "colombia": [
+        {"name": "Cartagena Old City", "description": "Walled colonial city, colorful buildings, Caribbean beaches, UNESCO, romantic.", "image_url": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Cocora Valley", "description": "World's tallest palm trees, Andean cloud forest, hiking, coffee region, surreal.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Tayrona National Park", "description": "Jungle meets Caribbean, pristine beaches, indigenous ruins, biodiversity, paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Bogotá La Candelaria", "description": "Historic district, Gold Museum, street art, Monserrate, cultural heart.", "image_url": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Coffee Triangle", "description": "Coffee plantations, fincas, rolling hills, coffee culture, UNESCO landscape.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Caño Cristales", "description": "Liquid Rainbow, river of five colors, aquatic plants, remote jungle, seasonal.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+        {"name": "San Andrés Island", "description": "Caribbean paradise, seven-color sea, coral reefs, diving, beach bliss.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Medellín Transformation", "description": "City of eternal spring, cable cars, Comuna 13 art, innovation, vibrant nightlife.", "image_url": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Salt Cathedral Zipaquirá", "description": "Underground cathedral carved in salt mine, illuminated, engineering marvel.", "image_url": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Los Nevados Park", "description": "Snow-capped volcanoes, páramo ecosystem, hot springs, Andean condors, trekking.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+    ],
+    
+    # AMERICAS - ECUADOR
+    "ecuador": [
+        {"name": "Galápagos Islands", "description": "Darwin's living laboratory, giant tortoises, marine iguanas, unique wildlife, UNESCO.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Quito Old Town", "description": "Best-preserved colonial center, UNESCO, churches, Plaza Grande, equator city.", "image_url": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Cotopaxi Volcano", "description": "Active snow-capped volcano, horseback riding, climbing, Avenue of Volcanoes.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Amazon Ecuador", "description": "Primary rainforest, indigenous communities, wildlife, lodges, Yasuni National Park.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Baños de Agua Santa", "description": "Adventure capital, waterfalls, hot springs, swings, rafting, Casa del Árbol.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Montañita Beach", "description": "Surf town, bohemian vibe, nightlife, backpacker paradise, Pacific coast.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Otavalo Market", "description": "Indigenous market, textiles, handicrafts, colorful, Andean culture, weekend bustle.", "image_url": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Cuenca Historic Center", "description": "Colonial architecture, Panama hats, riverside, UNESCO, charming cobblestone streets.", "image_url": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Quilotoa Crater Lake", "description": "Turquoise volcanic crater lake, hiking rim, indigenous villages, stunning views.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Mindo Cloud Forest", "description": "Birding paradise, hummingbirds, zip-lining, waterfalls, chocolate tours, biodiversity.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AMERICAS - COSTA RICA
+    "costa_rica": [
+        {"name": "Arenal Volcano", "description": "Perfect cone volcano, hot springs, zip-lining, hanging bridges, adventure hub.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Manuel Antonio", "description": "National park, beaches meet jungle, sloths, monkeys, biodiversity hotspot.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Monteverde Cloud Forest", "description": "Misty cloud forest, hanging bridges, quetzals, zip-lining, ecological reserve.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Tortuguero Canals", "description": "Canals through jungle, sea turtles nesting, wildlife, boat tours, Caribbean coast.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Tamarindo Beach", "description": "Surf town, sunset, nightlife, Pacific coast, sea turtles, beach life.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Poás Volcano", "description": "Active volcano, turquoise acid lake, easy access, cloud forest, crater views.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Rio Celeste Waterfall", "description": "Blue waterfall and river, chemical reaction, rainforest hike, natural wonder.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Corcovado National Park", "description": "Most biodiverse place on Earth, jaguars, tapirs, scarlet macaws, pristine wilderness.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Hard"},
+        {"name": "La Fortuna Waterfall", "description": "75m waterfall, swimming hole, stairs through jungle, photogenic, refreshing.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Cahuita National Park", "description": "Caribbean beaches, coral reef, sloths, howler monkeys, Afro-Caribbean culture.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+    ],
 }
