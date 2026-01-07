@@ -641,6 +641,9 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     if landmark.get("category") == "premium" and current_user.subscription_tier == "free":
         raise HTTPException(status_code=403, detail="Premium subscription required to visit this landmark")
     
+    # Determine if visit is verified (has photo proof)
+    is_verified = bool(data.photo_base64)
+    
     visit_id = f"visit_{uuid.uuid4().hex[:12]}"
     visit = {
         "visit_id": visit_id,
@@ -652,6 +655,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         "visit_location": data.visit_location,
         "diary_notes": data.diary_notes,
         "status": "accepted",
+        "verified": is_verified,  # True if has photo, False if not
         "visited_at": data.visited_at if data.visited_at else datetime.now(timezone.utc),
         "created_at": datetime.now(timezone.utc)
     }
