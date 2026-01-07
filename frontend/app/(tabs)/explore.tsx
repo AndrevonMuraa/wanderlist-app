@@ -99,12 +99,24 @@ export default function ExploreScreen() {
 
   useEffect(() => {
     if (searchQuery.trim()) {
-      const filtered = sections.map(section => ({
-        ...section,
-        data: section.data.filter(country =>
+      const filtered = sections.map(section => {
+        // Flatten rows to get all countries, filter them, then regroup into rows
+        const allCountries = section.data.flat();
+        const filteredCountries = allCountries.filter(country =>
           country.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      })).filter(section => section.data.length > 0);
+        );
+        
+        // Group filtered countries back into rows of 2
+        const rows: Country[][] = [];
+        for (let i = 0; i < filteredCountries.length; i += 2) {
+          rows.push(filteredCountries.slice(i, i + 2));
+        }
+        
+        return {
+          ...section,
+          data: rows
+        };
+      }).filter(section => section.data.length > 0);
       setFilteredSections(filtered);
     } else {
       setFilteredSections(sections);
