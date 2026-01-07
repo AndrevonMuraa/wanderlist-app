@@ -937,6 +937,81 @@ async def get_stats(current_user: User = Depends(get_current_user)):
         "friends_count": friend_count
     }
 
+# ============= PROGRESS STATISTICS ENDPOINT =============
+
+@api_router.get("/progress")
+async def get_progress_stats(current_user: User = Depends(get_current_user)):
+    """Get comprehensive progress statistics for user"""
+    
+    # Get all user's visits
+    visits = await db.visits.find({"user_id": current_user.user_id}, {"_id": 0}).to_list(10000)
+    visited_landmark_ids = {v["landmark_id"] for v in visits}
+    
+    # Get all landmarks and countries
+    all_landmarks = await db.landmarks.find({}, {"_id": 0}).to_list(10000)
+    all_countries = await db.countries.find({}, {"_id": 0}).to_list(100)
+    
+    # Calculate overall progress
+    total_landmarks = len(all_landmarks)
+    visited_landmarks = len(visited_landmark_ids)
+    overall_percentage = round((visited_landmarks / total_landmarks * 100) if total_landmarks > 0 else 0, 1)
+    
+    # Calculate continental progress
+    continental_progress = {}
+    continent_country_map = {}
+    
+    for country in all_countries:
+        continent = country["continent"]
+        if continent not in continent_country_map:
+            continent_country_map[continent] = []
+        continent_country_map[continent].append(country["country_id"])
+    
+    for continent, country_ids in continent_country_map.items():
+        # Count countries in this continent
+        total_countries = len(country_ids)
+        
+        # Count visited countries in this continent
+        visited_countries = set()
+        for landmark in all_landmarks:
+            if landmark["country_id"] in country_ids and landmark["landmark_id"] in visited_landmark_ids:
+                visited_countries.add(landmark["country_id"])
+        
+        visited_count = len(visited_countries)
+        percentage = round((visited_count / total_countries * 100) if total_countries > 0 else 0, 1)
+        
+        continental_progress[continent] = {
+            "visited": visited_count,
+            "total": total_countries,
+            "percentage": percentage
+        }
+    
+    # Calculate per-country progress
+    country_progress = {}
+    for country in all_countries:
+        country_id = country["country_id"]
+        country_landmarks = [l for l in all_landmarks if l["country_id"] == country_id]
+        total = len(country_landmarks)
+        visited = sum(1 for l in country_landmarks if l["landmark_id"] in visited_landmark_ids)
+        percentage = round((visited / total * 100) if total > 0 else 0, 1)
+        
+        country_progress[country_id] = {
+            "country_name": country["name"],
+            "continent": country["continent"],
+            "visited": visited,
+            "total": total,
+            "percentage": percentage
+        }
+    
+    return {
+        "overall": {
+            "visited": visited_landmarks,
+            "total": total_landmarks,
+            "percentage": overall_percentage
+        },
+        "continents": continental_progress,
+        "countries": country_progress
+    }
+
 # Include the router in the main app
 app.include_router(api_router)
 
