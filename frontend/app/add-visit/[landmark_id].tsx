@@ -113,20 +113,26 @@ export default function AddVisitScreen() {
   };
 
   const showImagePicker = () => {
-    Alert.alert(
-      'Add Photo',
-      'Choose a source',
-      [
-        { text: 'Camera', onPress: pickImageFromCamera },
-        { text: 'Gallery', onPress: pickImageFromGallery },
-        { text: 'Cancel', style: 'cancel' },
-      ]
-    );
+    if (Platform.OS === 'web') {
+      // For web, use simpler prompt
+      pickImageFromGallery();
+    } else {
+      Alert.alert(
+        'Add Photo',
+        'Choose a source',
+        [
+          { text: 'Camera', onPress: pickImageFromCamera },
+          { text: 'Gallery', onPress: pickImageFromGallery },
+          { text: 'Cancel', style: 'cancel' },
+        ]
+      );
+    }
   };
 
-  const handleSubmit = async () => {
-    if (!photoBase64) {
-      Alert.alert('Photo Required', 'Please add a photo as proof of your visit');
+  const handleSubmit = async (skipPhoto: boolean = false) => {
+    // Allow submission without photo if explicitly skipped
+    if (!skipPhoto && !photoBase64) {
+      Alert.alert('Photo Required', 'Please add a photo as proof of your visit, or choose "Skip Photo" to log this visit without verification.');
       return;
     }
 
@@ -139,7 +145,7 @@ export default function AddVisitScreen() {
     setSubmitting(true);
 
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
       
       // Prepare visit location data for Northern Lights
       let visit_location = null;
@@ -159,7 +165,7 @@ export default function AddVisitScreen() {
         },
         body: JSON.stringify({
           landmark_id,
-          photo_base64: photoBase64,
+          photo_base64: photoBase64 || null, // Send null if no photo
           comments,
           diary_notes: diaryNotes,
           visit_location
@@ -167,7 +173,12 @@ export default function AddVisitScreen() {
       });
 
       if (response.ok) {
-        Alert.alert('Success', 'Visit added successfully!', [
+        const visitType = photoBase64 ? 'verified' : 'unverified';
+        const message = photoBase64 
+          ? 'Visit added successfully! This verified visit will count towards your global leaderboard ranking.'
+          : 'Visit logged! Note: Unverified visits (without photo) only count towards your friends leaderboard, not the global leaderboard.';
+        
+        Alert.alert('Success', message, [
           { text: 'OK', onPress: () => router.back() }
         ]);
       } else {
@@ -180,6 +191,17 @@ export default function AddVisitScreen() {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const confirmSkipPhoto = () => {
+    Alert.alert(
+      'Skip Photo?',
+      'Visits without photos are unverified and won\'t count towards global leaderboards. They will only appear in your friends leaderboard.\n\nAre you sure you want to continue?',
+      [
+        { text: 'Add Photo', style: 'cancel' },
+        { text: 'Skip Photo', onPress: () => handleSubmit(true), style: 'destructive' }
+      ]
+    );
   };
 
   return (
