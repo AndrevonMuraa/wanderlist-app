@@ -311,13 +311,21 @@ export default function LandmarkDetailScreen() {
               <View style={styles.coordinateItem}>
                 <Ionicons name="navigate" size={16} color="rgba(255,255,255,0.7)" />
                 <Text style={styles.coordinateLabel}>Latitude</Text>
-                <Text style={styles.coordinateValue}>{landmark.latitude.toFixed(6)}°</Text>
+                <Text style={styles.coordinateValue}>
+                  {landmark.latitude !== null && landmark.latitude !== undefined 
+                    ? `${landmark.latitude.toFixed(6)}°` 
+                    : 'N/A'}
+                </Text>
               </View>
               <View style={styles.coordinateDivider} />
               <View style={styles.coordinateItem}>
                 <Ionicons name="compass" size={16} color="rgba(255,255,255,0.7)" />
                 <Text style={styles.coordinateLabel}>Longitude</Text>
-                <Text style={styles.coordinateValue}>{landmark.longitude.toFixed(6)}°</Text>
+                <Text style={styles.coordinateValue}>
+                  {landmark.longitude !== null && landmark.longitude !== undefined 
+                    ? `${landmark.longitude.toFixed(6)}°` 
+                    : 'N/A'}
+                </Text>
               </View>
             </View>
           </View>
