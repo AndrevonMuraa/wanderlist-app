@@ -19,6 +19,17 @@
 - Norway landmarks fixed (no duplicates)
 - Search removed from Explore page
 - Unified logout dialog
+- **Premium landmarks redesign (frosted glass)**
+- **High-quality images for Norway landmarks**
+
+**Design Changes (Added):**
+- Premium landmarks: Removed yellow/gold, added frosted glass effect
+- Lock icon: White/transparent (subtle, 40px)
+- Premium badge: Minimal white badge with diamond outline
+- Image blur: Applied to locked landmarks (iced window effect)
+- Norway card: Updated with stunning fjord image
+- Northern Lights: Crystal-clear aurora (q=80 quality)
+- Lofoten Islands: Mountain landscape (fixed broken image)
 
 **Files Created:**
 - `/app/frontend/app/messages/index.tsx`
@@ -30,11 +41,13 @@
 - `/app/BASELINE_UPDATE_LOG.md` (this file)
 
 **Files Modified:**
-- `/app/frontend/app/(tabs)/explore.tsx` (removed search, added skeletons)
+- `/app/frontend/app/(tabs)/explore.tsx` (removed search, added skeletons, Norway image)
 - `/app/frontend/app/(tabs)/profile.tsx` (unified dialog, removed visit counter)
 - `/app/frontend/app/friends.tsx` (added message button, friend limits UI)
 - `/app/frontend/app/add-visit/[landmark_id].tsx` (upgrade prompt integration)
+- `/app/frontend/app/landmarks/[country_id].tsx` (frosted glass premium design)
 - `/app/backend/server.py` (removed visit limits, fixed leaderboard)
+- `/app/backend/seed_data.py` (Northern Lights, Lofoten images updated)
 - `/app/backend/premium_landmarks.py` (fixed Norway duplicates)
 - `/app/WANDERLIST_BASELINE_MODEL.md` (updated to v2.0)
 - `/app/test_result.md` (updated status)
@@ -43,6 +56,7 @@
 - Backend: ✅ Passed
 - Frontend: ✅ Passed
 - Manual: ✅ Verified
+- Design: ✅ Frosted glass effect confirmed
 
 **User Approval:** ✅ Approved on January 7, 2026
 
