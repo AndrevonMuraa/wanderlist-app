@@ -354,7 +354,6 @@ export default function ExploreScreen() {
         contentContainerStyle={styles.listContainer}
         ListHeaderComponent={renderListHeader}
         ListFooterComponent={renderListFooter}
-        numColumns={2}
         stickySectionHeadersEnabled={false}
         refreshControl={
           <RefreshControl 
