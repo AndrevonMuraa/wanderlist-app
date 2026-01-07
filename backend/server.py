@@ -166,6 +166,18 @@ class Friend(BaseModel):
 class FriendRequest(BaseModel):
     friend_email: str
 
+class Message(BaseModel):
+    message_id: str
+    sender_id: str
+    receiver_id: str
+    content: str
+    created_at: datetime
+    read: bool = False
+
+class MessageCreate(BaseModel):
+    receiver_id: str
+    content: str
+
 class LeaderboardEntry(BaseModel):
     user_id: str
     name: str
