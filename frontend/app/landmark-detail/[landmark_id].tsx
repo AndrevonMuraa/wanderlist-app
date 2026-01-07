@@ -171,59 +171,40 @@ export default function LandmarkDetailScreen() {
   const currentImage = images[selectedImageIndex] || landmark.image_url;
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Hero Image with Overlay */}
-        <View style={styles.heroContainer}>
-          <Image
-            source={{ uri: currentImage }}
-            style={styles.heroImage}
-          />
-          <LinearGradient
-            colors={['transparent', 'rgba(0,0,0,0.8)']}
-            style={styles.heroOverlay}
-          >
-            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-              <View style={styles.backButtonCircle}>
-                <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
-              </View>
-            </TouchableOpacity>
-            
-            <View style={styles.heroContent}>
-              <Text style={styles.landmarkName}>{landmark.name}</Text>
-              <View style={styles.locationRow}>
-                <Ionicons name="location" size={16} color="rgba(255,255,255,0.9)" />
-                <Text style={styles.locationText}>{landmark.country_name}</Text>
-              </View>
-            </View>
-          </LinearGradient>
-        </View>
+    <View style={styles.container}>
+      {/* Background Image - Fixed */}
+      <Image
+        source={{ uri: currentImage }}
+        style={styles.backgroundImage}
+        blurRadius={0}
+      />
+      
+      {/* Dark overlay for readability */}
+      <LinearGradient
+        colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.9)']}
+        style={styles.backgroundOverlay}
+      />
 
-        {/* Image Gallery Thumbnails */}
-        {images.length > 1 && (
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false}
-            style={styles.thumbnailContainer}
-            contentContainerStyle={styles.thumbnailContent}
-          >
-            {images.map((img, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => setSelectedImageIndex(index)}
-                activeOpacity={0.7}
-              >
-                <Image
-                  source={{ uri: img }}
-                  style={[
-                    styles.thumbnail,
-                    selectedImageIndex === index && styles.thumbnailSelected
-                  ]}
-                />
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        )}
+      <SafeAreaView style={styles.safeArea} edges={['top']}>
+        {/* Back Button - Floating */}
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <View style={styles.backButtonCircle}>
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </View>
+        </TouchableOpacity>
+
+        <ScrollView 
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {/* Hero Section with Title */}
+          <View style={styles.heroSection}>
+            <Text style={styles.landmarkName}>{landmark.name}</Text>
+            <View style={styles.locationRow}>
+              <Ionicons name="location" size={18} color="rgba(255,255,255,0.9)" />
+              <Text style={styles.locationText}>{landmark.country_name}</Text>
+            </View>
+          </View>
 
         {/* Quick Info Cards */}
         <View style={styles.quickInfoContainer}>
