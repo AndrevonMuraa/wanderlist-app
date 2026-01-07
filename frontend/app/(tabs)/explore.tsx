@@ -617,4 +617,32 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: theme.spacing.md,
   },
+  progressContainer: {
+    marginTop: theme.spacing.xs,
+    width: '100%',
+  },
+  progressTextRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  progressText: {
+    fontSize: 11,
+    color: '#fff',
+    fontWeight: '600',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
+  miniProgressBar: {
+    height: 3,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  miniProgressFill: {
+    height: '100%',
+    borderRadius: 2,
+  },
 });
