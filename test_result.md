@@ -432,7 +432,15 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Login & Authentication"
+    - "Explore Page Layout"
+    - "Premium Content Teasers"
+    - "Profile Page - Friend Limits"
+    - "Friends Page - Limit Enforcement"
+    - "Add Visit - Verification System"
+    - "UpgradeModal Content"
+    - "Landmark Detail Page Design"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
