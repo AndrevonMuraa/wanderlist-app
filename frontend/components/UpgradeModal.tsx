@@ -38,7 +38,7 @@ export default function UpgradeModal({ visible, onClose, onUpgrade }: UpgradeMod
             <View style={styles.currentTier}>
               <Text style={styles.currentTierLabel}>Your Current Plan</Text>
               <Text style={styles.currentTierName}>Free Traveler</Text>
-              <Text style={styles.currentTierDesc}>10 visits/month • 5 friends max • Friends leaderboard only</Text>
+              <Text style={styles.currentTierDesc}>5 friends max • Friends leaderboard only</Text>
             </View>
 
             {/* Basic Tier */}
@@ -52,10 +52,6 @@ export default function UpgradeModal({ visible, onClose, onUpgrade }: UpgradeMod
               </View>
               
               <View style={styles.features}>
-                <View style={styles.feature}>
-                  <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
-                  <Text style={styles.featureText}>Unlimited visits</Text>
-                </View>
                 <View style={styles.feature}>
                   <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
                   <Text style={styles.featureText}>Up to 25 friends</Text>
