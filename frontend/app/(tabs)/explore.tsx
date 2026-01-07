@@ -494,6 +494,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.md,
+    gap: theme.spacing.sm,
   },
   cardContainer: {
     width: '50%',
