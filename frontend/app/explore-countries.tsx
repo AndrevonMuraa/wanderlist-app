@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, SectionList, TouchableOpacity, RefreshControl, Image, Dimensions, Platform } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { useAuth } from '../../contexts/AuthContext';
-import { BACKEND_URL } from '../../utils/config';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useAuth } from '../contexts/AuthContext';
+import { BACKEND_URL } from '../utils/config';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import theme from '../../styles/theme';
-import { CountryCardSkeleton } from '../../components/Skeleton';
+import theme from '../styles/theme';
+import { CountryCardSkeleton } from '../components/Skeleton';
 
 const { width } = Dimensions.get('window');
 // Responsive grid: mobile (2 cols), tablet (3 cols), desktop (4 cols)
