@@ -302,30 +302,32 @@ const styles = StyleSheet.create({
     opacity: 0.9,
   },
   // Enhanced Premium Badge
-  premiumBadgeEnhanced: {
+  // Subtle Premium Badge
+  premiumBadgeSubtle: {
     position: 'absolute',
     top: theme.spacing.sm,
     right: theme.spacing.sm,
     borderRadius: theme.borderRadius.md,
     overflow: 'hidden',
-    ...theme.shadows.md,
   },
-  premiumBadgeGradient: {
+  premiumBadgeBlur: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: theme.spacing.sm,
-    paddingVertical: theme.spacing.xs,
+    paddingVertical: theme.spacing.xs / 2,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    backdropFilter: 'blur(10px)',
   },
-  premiumTextEnhanced: {
+  premiumTextSubtle: {
     ...theme.typography.caption,
-    color: '#fff',
-    fontWeight: 'bold',
+    color: 'rgba(255,255,255,0.9)',
+    fontWeight: '600',
     marginLeft: 4,
-    fontSize: 11,
-    letterSpacing: 0.5,
+    fontSize: 10,
+    letterSpacing: 0.8,
   },
-  // Enhanced Lock Overlay
-  lockOverlayEnhanced: {
+  // Frosted Glass Overlay
+  frostedOverlay: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -333,67 +335,34 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    backdropFilter: 'blur(8px)',
   },
-  pulseGradient: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  lockIconContainer: {
-    position: 'relative',
+  lockIconSubtle: {
     marginBottom: theme.spacing.md,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 40,
+    padding: theme.spacing.md,
+    backdropFilter: 'blur(10px)',
   },
-  lockIconGlow: {
-    position: 'absolute',
-    top: -10,
-    left: -10,
-    right: -10,
-    bottom: -10,
-    backgroundColor: '#FFD700',
-    opacity: 0.3,
-    borderRadius: 50,
-    shadowColor: '#FFD700',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 20,
-    elevation: 10,
-  },
-  upgradeCTA: {
+  upgradeTextSubtle: {
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.7)',
+    backgroundColor: 'rgba(0,0,0,0.4)',
     paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
     borderRadius: theme.borderRadius.lg,
+    backdropFilter: 'blur(10px)',
   },
-  upgradeTitle: {
-    ...theme.typography.h4,
-    color: '#fff',
-    fontWeight: 'bold',
-    marginBottom: theme.spacing.xs,
+  upgradeTitleSubtle: {
+    ...theme.typography.body,
+    color: 'rgba(255,255,255,0.95)',
+    fontWeight: '600',
+    marginBottom: theme.spacing.xs / 2,
   },
-  upgradeSubtitle: {
+  upgradeSubtitleSubtle: {
     ...theme.typography.caption,
-    color: 'rgba(255,255,255,0.9)',
-    marginBottom: theme.spacing.sm,
-    textAlign: 'center',
-  },
-  premiumPointsHighlight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,215,0,0.2)',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.xs,
-    borderRadius: theme.borderRadius.md,
-    borderWidth: 1,
-    borderColor: '#FFD700',
-  },
-  premiumPointsText: {
-    ...theme.typography.caption,
-    color: '#FFD700',
-    fontWeight: 'bold',
-    marginLeft: theme.spacing.xs,
+    color: 'rgba(255,255,255,0.75)',
+    fontSize: 12,
   },
   // Premium Banner
   premiumBanner: {
