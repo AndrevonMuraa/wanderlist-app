@@ -424,9 +424,15 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     paddingHorizontal: theme.spacing.md,
-    paddingTop: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
+    paddingTop: theme.spacing.md,
+    paddingBottom: theme.spacing.sm,
     backgroundColor: theme.colors.background,
+  },
+  sectionHeaderContainer: {
+    marginBottom: theme.spacing.xs,
+  },
+  sectionHeaderGradient: {
+    paddingVertical: theme.spacing.xs,
   },
   sectionHeaderContent: {
     flexDirection: 'row',
@@ -437,13 +443,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  continentIcon: {
-    fontSize: 32,
+  continentIconCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(32, 178, 170, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: theme.spacing.md,
   },
+  continentIcon: {
+    fontSize: 24,
+  },
+  sectionHeaderTextContainer: {
+    flex: 1,
+  },
   sectionTitle: {
-    ...theme.typography.h2,
+    ...theme.typography.h3,
     color: theme.colors.text,
+    fontWeight: '700',
     marginBottom: theme.spacing.xs / 2,
   },
   sectionSubtitle: {
@@ -454,6 +472,14 @@ const styles = StyleSheet.create({
     width: '50%',
     paddingBottom: theme.spacing.md,
   },
+  firstColumnCard: {
+    paddingLeft: theme.spacing.md,
+    paddingRight: theme.spacing.xs / 2,
+  },
+  lastColumnCard: {
+    paddingRight: theme.spacing.md,
+    paddingLeft: theme.spacing.xs / 2,
+  },
   leftCard: {
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.xs,
@@ -463,9 +489,10 @@ const styles = StyleSheet.create({
     paddingLeft: theme.spacing.xs,
   },
   countryCard: {
-    height: 160,
+    height: 220,
     borderRadius: theme.borderRadius.xxl,
     overflow: 'hidden',
+    backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
   countryImage: {
@@ -479,18 +506,25 @@ const styles = StyleSheet.create({
     padding: theme.spacing.md,
   },
   countryFlag: {
-    fontSize: 32,
-    marginBottom: theme.spacing.xs,
+    fontSize: 36,
+    marginBottom: theme.spacing.sm,
   },
   countryName: {
-    ...theme.typography.h4,
+    ...theme.typography.h3,
     color: '#fff',
     fontWeight: '700',
     marginBottom: theme.spacing.xs / 2,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
   countryInfo: {
-    ...theme.typography.caption,
-    color: 'rgba(255,255,255,0.9)',
+    ...theme.typography.body,
+    color: 'rgba(255,255,255,0.95)',
+    fontWeight: '600',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
   accentBar: {
     position: 'absolute',
