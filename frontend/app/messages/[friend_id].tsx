@@ -5,11 +5,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BACKEND_URL } from '../../../utils/config';
-import theme from '../../../styles/theme';
-import { useAuth } from '../../../contexts/AuthContext';
-import { useUpgradePrompt } from '../../../hooks/useUpgradePrompt';
-import UpgradeModal from '../../../components/UpgradeModal';
+import { BACKEND_URL } from '../../utils/config';
+import theme from '../../styles/theme';
+import { useAuth } from '../../contexts/AuthContext';
+import { useUpgradePrompt } from '../../hooks/useUpgradePrompt';
+import UpgradeModal from '../../components/UpgradeModal';
 
 // Helper to get token
 const getToken = async (): Promise<string | null> => {
