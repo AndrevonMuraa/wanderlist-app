@@ -35,9 +35,10 @@ const CONTINENTS: Continent[] = [
     countries: 10,
     landmarks: 150,
     image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80',
-    gradient: ['rgba(52, 152, 219, 0.8)', 'rgba(41, 128, 185, 0.9)'],
+    gradient: ['rgba(0, 0, 0, 0.3)', 'rgba(52, 152, 219, 0.75)'],
     icon: 'business-outline',
-    description: 'Historic castles and cultural heritage'
+    description: 'Historic castles and cultural heritage',
+    totalPoints: 1875, // 10 free × 10 pts + 5 premium × 25 pts per country × 10 countries
   },
   {
     id: 'asia',
@@ -45,9 +46,10 @@ const CONTINENTS: Continent[] = [
     countries: 10,
     landmarks: 150,
     image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80',
-    gradient: ['rgba(231, 76, 60, 0.8)', 'rgba(192, 57, 43, 0.9)'],
+    gradient: ['rgba(0, 0, 0, 0.3)', 'rgba(231, 76, 60, 0.75)'],
     icon: 'earth-outline',
-    description: 'Ancient temples and modern wonders'
+    description: 'Ancient temples and modern wonders',
+    totalPoints: 1875,
   },
   {
     id: 'africa',
@@ -55,9 +57,10 @@ const CONTINENTS: Continent[] = [
     countries: 10,
     landmarks: 150,
     image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80',
-    gradient: ['rgba(243, 156, 18, 0.8)', 'rgba(211, 84, 0, 0.9)'],
+    gradient: ['rgba(0, 0, 0, 0.3)', 'rgba(243, 156, 18, 0.75)'],
     icon: 'sunny-outline',
-    description: 'Wild savannas and ancient civilizations'
+    description: 'Wild savannas and ancient civilizations',
+    totalPoints: 1875,
   },
   {
     id: 'americas',
@@ -65,9 +68,10 @@ const CONTINENTS: Continent[] = [
     countries: 10,
     landmarks: 150,
     image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80',
-    gradient: ['rgba(46, 204, 113, 0.8)', 'rgba(39, 174, 96, 0.9)'],
+    gradient: ['rgba(0, 0, 0, 0.3)', 'rgba(46, 204, 113, 0.75)'],
     icon: 'leaf-outline',
-    description: 'Rainforests to mountain peaks'
+    description: 'Rainforests to mountain peaks',
+    totalPoints: 1875,
   },
   {
     id: 'oceania',
@@ -75,14 +79,50 @@ const CONTINENTS: Continent[] = [
     countries: 8,
     landmarks: 120,
     image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800&q=80',
-    gradient: ['rgba(26, 188, 156, 0.8)', 'rgba(22, 160, 133, 0.9)'],
+    gradient: ['rgba(0, 0, 0, 0.3)', 'rgba(26, 188, 156, 0.75)'],
     icon: 'water-outline',
-    description: 'Tropical islands and coastal beauty'
+    description: 'Tropical islands and coastal beauty',
+    totalPoints: 1500, // 8 countries
   },
 ];
 
 export default function ContinentsScreen() {
   const router = useRouter();
+  const [continents, setContinents] = useState<Continent[]>(CONTINENTS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProgress();
+  }, []);
+
+  const fetchProgress = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/progress`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (response.ok) {
+        const progressData = await response.json();
+        
+        // Merge progress data with continents
+        const updatedContinents = CONTINENTS.map(continent => {
+          const continentProgress = progressData.continents[continent.name];
+          return {
+            ...continent,
+            visited: continentProgress?.visited || 0,
+            percentage: continentProgress?.percentage || 0,
+          };
+        });
+        
+        setContinents(updatedContinents);
+      }
+    } catch (error) {
+      console.error('Error fetching progress:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleContinentPress = (continentId: string) => {
     router.push(`/explore-countries?continent=${continentId}`);
