@@ -312,6 +312,19 @@ export default function ProfileScreen() {
           </Dialog.Actions>
         </Dialog>
       </Portal>
+
+      <UpgradeModal 
+        visible={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        onUpgrade={(tier) => {
+          setShowUpgradeModal(false);
+          if (Platform.OS === 'web') {
+            alert(`Upgrade to ${tier} would redirect to payment page`);
+          } else {
+            Alert.alert('Upgrade', `Upgrade to ${tier} would redirect to payment page`);
+          }
+        }}
+      />
     </SafeAreaView>
   );
 }
