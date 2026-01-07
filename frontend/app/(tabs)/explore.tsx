@@ -569,12 +569,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   featureTitle: {
-    ...theme.typography.h4,
+    ...theme.typography.body,
     color: theme.colors.text,
+    fontWeight: '700',
     marginBottom: theme.spacing.xs / 2,
   },
   featureSubtitle: {
     ...theme.typography.caption,
     color: theme.colors.textSecondary,
+    fontSize: 12,
   },
 });
