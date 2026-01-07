@@ -191,30 +191,28 @@ export default function ExploreScreen() {
                     <Text style={styles.countryName}>{country.name}</Text>
                     <Text style={styles.countryInfo}>{country.landmark_count} landmarks</Text>
                     
-                    {/* Progress Indicator */}
-                    {hasProgress && (
-                      <View style={styles.progressContainer}>
-                        <View style={styles.progressTextRow}>
-                          <Text style={styles.progressText}>
-                            {country.visited}/{country.landmark_count}
-                          </Text>
-                          {isComplete && (
-                            <Ionicons name="checkmark-circle" size={14} color="#4CAF50" />
-                          )}
-                        </View>
-                        <View style={styles.miniProgressBar}>
-                          <View 
-                            style={[
-                              styles.miniProgressFill, 
-                              { 
-                                width: `${country.percentage}%`,
-                                backgroundColor: isComplete ? '#4CAF50' : '#FFA726'
-                              }
-                            ]} 
-                          />
-                        </View>
+                    {/* Progress Indicator - Always visible */}
+                    <View style={styles.progressContainer}>
+                      <View style={styles.progressTextRow}>
+                        <Text style={styles.progressText}>
+                          {country.visited || 0}/{country.landmark_count}
+                        </Text>
+                        {isComplete && (
+                          <Ionicons name="checkmark-circle" size={14} color="#4CAF50" />
+                        )}
                       </View>
-                    )}
+                      <View style={styles.miniProgressBar}>
+                        <View 
+                          style={[
+                            styles.miniProgressFill, 
+                            { 
+                              width: `${country.percentage || 0}%`,
+                              backgroundColor: isComplete ? '#4CAF50' : '#FFA726'
+                            }
+                          ]} 
+                        />
+                      </View>
+                    </View>
                   </LinearGradient>
                   <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
                 </View>
