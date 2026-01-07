@@ -38,7 +38,7 @@ export default function UpgradeModal({ visible, onClose, onUpgrade }: UpgradeMod
             <View style={styles.currentTier}>
               <Text style={styles.currentTierLabel}>Your Current Plan</Text>
               <Text style={styles.currentTierName}>Free Traveler</Text>
-              <Text style={styles.currentTierDesc}>200 landmarks • 10 points per visit</Text>
+              <Text style={styles.currentTierDesc}>10 visits/month • 5 friends max • Friends leaderboard only</Text>
             </View>
 
             {/* Basic Tier */}
@@ -54,19 +54,19 @@ export default function UpgradeModal({ visible, onClose, onUpgrade }: UpgradeMod
               <View style={styles.features}>
                 <View style={styles.feature}>
                   <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
-                  <Text style={styles.featureText}>All 300 landmarks</Text>
+                  <Text style={styles.featureText}>Unlimited visits</Text>
                 </View>
                 <View style={styles.feature}>
                   <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
-                  <Text style={styles.featureText}>Enhanced statistics</Text>
+                  <Text style={styles.featureText}>Up to 25 friends</Text>
                 </View>
                 <View style={styles.feature}>
                   <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
-                  <Text style={styles.featureText}>Priority support</Text>
+                  <Text style={styles.featureText}>Direct messaging</Text>
                 </View>
                 <View style={styles.feature}>
                   <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
-                  <Text style={styles.featureText}>Ad-free experience</Text>
+                  <Text style={styles.featureText}>Friends leaderboard</Text>
                 </View>
               </View>
 
@@ -101,7 +101,7 @@ export default function UpgradeModal({ visible, onClose, onUpgrade }: UpgradeMod
                 </View>
                 <View style={styles.feature}>
                   <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
-                  <Text style={styles.featureText}>100 exclusive landmarks</Text>
+                  <Text style={styles.featureText}>Premium landmarks access</Text>
                 </View>
                 <View style={styles.feature}>
                   <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
@@ -109,15 +109,15 @@ export default function UpgradeModal({ visible, onClose, onUpgrade }: UpgradeMod
                 </View>
                 <View style={styles.feature}>
                   <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
-                  <Text style={styles.featureText}>Advanced achievements</Text>
+                  <Text style={styles.featureText}>Global leaderboard</Text>
                 </View>
                 <View style={styles.feature}>
                   <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
-                  <Text style={styles.featureText}>AI trip planning</Text>
+                  <Text style={styles.featureText">Unlimited friends</Text>
                 </View>
                 <View style={styles.feature}>
                   <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
-                  <Text style={styles.featureText}>Export journey as PDF</Text>
+                  <Text style={styles.featureText}>Priority support</Text>
                 </View>
               </View>
 
