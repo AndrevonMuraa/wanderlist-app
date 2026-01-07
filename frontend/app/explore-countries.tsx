@@ -291,25 +291,66 @@ export default function ExploreCountriesScreen() {
     </TouchableOpacity>
   );
 
-  const renderListHeader = () => (
-    <View style={styles.welcomeSection}>
-      {continent && (
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
-          <Text style={styles.backButtonText}>Back to Continents</Text>
-        </TouchableOpacity>
-      )}
-      <View style={styles.welcomeTextContainer}>
-        <Text style={styles.welcomeText}>Discover the world and conquer landmarks</Text>
-        <Text style={styles.welcomeSubtext}>
-          {continent ? `Exploring ${(continent as string).charAt(0).toUpperCase() + (continent as string).slice(1)}` : 'Explore 720 landmarks across 48 countries'}
-        </Text>
+  const renderListHeader = () => {
+    // Calculate stats for visual display
+    const totalCountries = sections.reduce((sum, section) => sum + section.data.flat().length, 0);
+    const totalLandmarks = sections.reduce((sum, section) => 
+      sum + section.data.flat().reduce((landmarkSum, country) => landmarkSum + country.landmark_count, 0), 0);
+    const totalVisited = sections.reduce((sum, section) => 
+      sum + section.data.flat().reduce((visitedSum, country) => visitedSum + (country.visited || 0), 0), 0);
+    const totalPoints = progressData?.totalPoints || 0;
+
+    return (
+      <View style={styles.welcomeSection}>
+        {continent && (
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
+            <Text style={styles.backButtonText}>Back to Continents</Text>
+          </TouchableOpacity>
+        )}
+        <View style={styles.welcomeTextContainer}>
+          <Text style={styles.welcomeText}>Discover the world and conquer landmarks</Text>
+          <Text style={styles.welcomeSubtext}>
+            {continent ? `Exploring ${(continent as string).charAt(0).toUpperCase() + (continent as string).slice(1)}` : 'Explore 720 landmarks across 48 countries'}
+          </Text>
+        </View>
+
+        {/* Visual Stats Section */}
+        <View style={styles.statsContainer}>
+          <View style={styles.statBox}>
+            <View style={styles.statIconContainer}>
+              <Ionicons name="flag" size={20} color={theme.colors.primary} />
+            </View>
+            <Text style={styles.statNumber}>{totalCountries}</Text>
+            <Text style={styles.statLabel}>Countries</Text>
+          </View>
+          
+          <View style={styles.statDivider} />
+          
+          <View style={styles.statBox}>
+            <View style={styles.statIconContainer}>
+              <Ionicons name="location" size={20} color={theme.colors.accent} />
+            </View>
+            <Text style={styles.statNumber}>{totalLandmarks}</Text>
+            <Text style={styles.statLabel}>Landmarks</Text>
+          </View>
+          
+          <View style={styles.statDivider} />
+          
+          <View style={styles.statBox}>
+            <View style={styles.statIconContainer}>
+              <Ionicons name="trophy" size={20} color={theme.colors.accentBronze} />
+            </View>
+            <Text style={styles.statNumber}>{totalPoints}</Text>
+            <Text style={styles.statLabel}>Points</Text>
+          </View>
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   const renderListFooter = () => (
     <View style={styles.featuresSection}>
