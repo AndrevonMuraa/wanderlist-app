@@ -570,11 +570,10 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   factCard: {
-    backgroundColor: theme.colors.surface,
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
     marginBottom: theme.spacing.md,
-    ...theme.shadows.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
+    paddingBottom: theme.spacing.md,
   },
   factHeader: {
     flexDirection: 'row',
@@ -592,13 +591,15 @@ const styles = StyleSheet.create({
   },
   factTitle: {
     ...theme.typography.h4,
-    color: theme.colors.text,
+    color: '#fff',
     flex: 1,
+    fontWeight: '600',
   },
   factText: {
-    ...theme.typography.bodySmall,
-    color: theme.colors.textSecondary,
+    ...theme.typography.body,
+    color: 'rgba(255, 255, 255, 0.85)',
     lineHeight: 22,
+    paddingLeft: 48 + theme.spacing.md, // Align with title
   },
   tipCard: {
     flexDirection: 'row',
