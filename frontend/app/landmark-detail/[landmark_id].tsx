@@ -564,14 +564,45 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginBottom: theme.spacing.md,
   },
-  locationSection: {
-    paddingHorizontal: theme.spacing.md,
+  // Coordinates Card Styles
+  coordinatesCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.12)',
+    backdropFilter: 'blur(10px)',
+    borderRadius: theme.borderRadius.lg,
+    marginHorizontal: theme.spacing.md,
     marginBottom: theme.spacing.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.25)',
+    overflow: 'hidden',
   },
-  locationSectionTitle: {
-    ...theme.typography.h3,
-    color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
+  coordinateRow: {
+    flexDirection: 'row',
+    padding: theme.spacing.md,
+  },
+  coordinateItem: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: theme.spacing.sm,
+  },
+  coordinateDivider: {
+    width: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    marginHorizontal: theme.spacing.sm,
+  },
+  coordinateLabel: {
+    ...theme.typography.caption,
+    color: 'rgba(255, 255, 255, 0.7)',
+    marginTop: theme.spacing.xs,
+    fontSize: 11,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  coordinateValue: {
+    ...theme.typography.body,
+    color: '#fff',
+    fontWeight: '600',
+    marginTop: 4,
+    fontSize: 15,
   },
   descriptionText: {
     ...theme.typography.body,
