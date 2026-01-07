@@ -487,4 +487,42 @@ const styles = StyleSheet.create({
     color: theme.colors.textLight,
     marginTop: theme.spacing.md,
   },
+  progressHeader: {
+    margin: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
+  progressHeaderContent: {
+    width: '100%',
+  },
+  progressHeaderTextRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xs,
+  },
+  progressHeaderTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '700',
+  },
+  progressStatsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  progressStatsText: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    fontWeight: '600',
+  },
+  congratsText: {
+    ...theme.typography.body,
+    color: '#4CAF50',
+    fontWeight: '600',
+    textAlign: 'center',
+    marginTop: theme.spacing.sm,
+  },
 });
