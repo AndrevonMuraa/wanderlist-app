@@ -57,24 +57,14 @@ export default function ProfileScreen() {
   };
 
   const handleLogout = async () => {
-    if (Platform.OS === 'web') {
-      // For web, use native confirm dialog
-      const confirmed = window.confirm('Are you sure you want to logout?');
-      if (confirmed) {
-        await logout();
-        // Force page reload to clear all state
-        window.location.href = '/';
-      }
-    } else {
-      // For mobile, use Dialog
-      setShowLogoutDialog(true);
-    }
+    // Use custom dialog for mobile
+    setShowLogoutDialog(true);
   };
 
   const confirmLogout = async () => {
     setShowLogoutDialog(false);
     await logout();
-    router.replace('/(auth)/login');
+    router.replace('/');
   };
 
   return (
