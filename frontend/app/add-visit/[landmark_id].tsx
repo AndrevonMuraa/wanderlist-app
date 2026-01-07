@@ -184,6 +184,13 @@ export default function AddVisitScreen() {
         })
       });
 
+      // Check for 403 (limit exceeded)
+      const canProceed = await checkResponse(response);
+      if (!canProceed) {
+        setSubmitting(false);
+        return;
+      }
+
       if (response.ok) {
         const visitType = photoBase64 ? 'verified' : 'unverified';
         const message = photoBase64 
