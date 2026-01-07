@@ -88,8 +88,6 @@ const CONTINENT_ICONS: Record<string, string> = {
 export default function ExploreScreen() {
   const { user } = useAuth();
   const [sections, setSections] = useState<ContinentSection[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredSections, setFilteredSections] = useState<ContinentSection[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const router = useRouter();
@@ -97,32 +95,6 @@ export default function ExploreScreen() {
   useEffect(() => {
     fetchCountries();
   }, []);
-
-  useEffect(() => {
-    if (searchQuery.trim()) {
-      const filtered = sections.map(section => {
-        // Flatten rows to get all countries, filter them, then regroup into rows
-        const allCountries = section.data.flat();
-        const filteredCountries = allCountries.filter(country =>
-          country.name.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        
-        // Group filtered countries back into rows of 2
-        const rows: Country[][] = [];
-        for (let i = 0; i < filteredCountries.length; i += 2) {
-          rows.push(filteredCountries.slice(i, i + 2));
-        }
-        
-        return {
-          ...section,
-          data: rows
-        };
-      }).filter(section => section.data.length > 0);
-      setFilteredSections(filtered);
-    } else {
-      setFilteredSections(sections);
-    }
-  }, [searchQuery, sections]);
 
   const fetchCountries = async () => {
     try {
