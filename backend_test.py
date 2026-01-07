@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 WanderList Backend API Testing Suite
-Tests all backend endpoints systematically
+Focus: Monetization features, limits enforcement, and verification system
 """
 
 import requests
@@ -9,9 +9,14 @@ import json
 import base64
 from datetime import datetime
 import sys
+import uuid
 
 # Get backend URL from frontend .env
 BACKEND_URL = "https://wandervision.preview.emergentagent.com/api"
+
+# Test account credentials from review request
+TEST_EMAIL = "mobile@test.com"
+TEST_PASSWORD = "test123"
 
 class WanderListTester:
     def __init__(self):
