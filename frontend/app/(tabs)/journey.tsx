@@ -170,10 +170,129 @@ export default function JourneyScreen() {
           />
         }
         ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Ionicons name="compass-outline" size={64} color={theme.colors.border} />
-            <Text style={styles.emptyText}>No visits yet</Text>
-            <Text style={styles.emptySubtext}>Start exploring and mark your first landmark!</Text>
+          <View style={styles.emptyStateContainer}>
+            {/* Hero Section */}
+            <LinearGradient
+              colors={['rgba(32, 178, 170, 0.1)', 'rgba(32, 178, 170, 0.05)']}
+              style={styles.emptyHero}
+            >
+              <Ionicons name="earth" size={80} color={theme.colors.primary} />
+              <Text style={styles.emptyHeroTitle}>Your Journey Awaits</Text>
+              <Text style={styles.emptyHeroSubtitle}>
+                Every great journey begins with a single step
+              </Text>
+            </LinearGradient>
+
+            {/* Inspiring Quote */}
+            <View style={styles.quoteCard}>
+              <Ionicons name="chatbox-ellipses" size={32} color={theme.colors.accent} style={styles.quoteIcon} />
+              <Text style={styles.quoteText}>
+                "The world is a book, and those who do not travel read only one page."
+              </Text>
+              <Text style={styles.quoteAuthor}>— Saint Augustine</Text>
+            </View>
+
+            {/* Quick Stats / Motivation */}
+            <View style={styles.motivationSection}>
+              <Text style={styles.sectionTitle}>Why Travel?</Text>
+              <View style={styles.benefitsList}>
+                <View style={styles.benefitItem}>
+                  <Ionicons name="sparkles" size={24} color="#FFD700" />
+                  <Text style={styles.benefitText}>Create lasting memories</Text>
+                </View>
+                <View style={styles.benefitItem}>
+                  <Ionicons name="people" size={24} color={theme.colors.accent} />
+                  <Text style={styles.benefitText}>Meet new cultures</Text>
+                </View>
+                <View style={styles.benefitItem}>
+                  <Ionicons name="trophy" size={24} color={theme.colors.accentBronze} />
+                  <Text style={styles.benefitText}>Challenge yourself</Text>
+                </View>
+                <View style={styles.benefitItem}>
+                  <Ionicons name="camera" size={24} color={theme.colors.primary} />
+                  <Text style={styles.benefitText}>Capture amazing moments</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Featured Destinations */}
+            <View style={styles.featuredSection}>
+              <Text style={styles.sectionTitle}>Popular First Destinations</Text>
+              <Text style={styles.sectionSubtitle}>Start your journey with these favorites</Text>
+              
+              <TouchableOpacity
+                style={styles.featuredCard}
+                onPress={() => router.push('/landmarks/norway?name=Norway')}
+                activeOpacity={0.8}
+              >
+                <Image
+                  source={{ uri: 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=600' }}
+                  style={styles.featuredImage}
+                />
+                <LinearGradient
+                  colors={['transparent', 'rgba(0,0,0,0.8)']}
+                  style={styles.featuredOverlay}
+                >
+                  <Text style={styles.featuredFlag}>🇳🇴</Text>
+                  <Text style={styles.featuredName}>Norway</Text>
+                  <Text style={styles.featuredInfo}>15 landmarks • Northern Lights</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.featuredCard}
+                onPress={() => router.push('/landmarks/japan?name=Japan')}
+                activeOpacity={0.8}
+              >
+                <Image
+                  source={{ uri: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600' }}
+                  style={styles.featuredImage}
+                />
+                <LinearGradient
+                  colors={['transparent', 'rgba(0,0,0,0.8)']}
+                  style={styles.featuredOverlay}
+                >
+                  <Text style={styles.featuredFlag}>🇯🇵</Text>
+                  <Text style={styles.featuredName}>Japan</Text>
+                  <Text style={styles.featuredInfo}>15 landmarks • Ancient temples</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+
+            {/* CTA Button */}
+            <TouchableOpacity
+              style={styles.ctaButton}
+              onPress={() => router.push('/(tabs)/explore')}
+              activeOpacity={0.9}
+            >
+              <LinearGradient
+                colors={[theme.colors.primary, theme.colors.primaryDark]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.ctaGradient}
+              >
+                <Ionicons name="compass" size={24} color="#fff" />
+                <Text style={styles.ctaText}>Start Exploring</Text>
+                <Ionicons name="arrow-forward" size={20} color="#fff" />
+              </LinearGradient>
+            </TouchableOpacity>
+
+            {/* Travel Tips */}
+            <View style={styles.tipsSection}>
+              <Text style={styles.sectionTitle}>Travel Tips</Text>
+              <View style={styles.tipCard}>
+                <Ionicons name="bulb" size={20} color={theme.colors.accent} />
+                <Text style={styles.tipText}>
+                  You can mark visits with or without photos. Photos count for official leaderboards!
+                </Text>
+              </View>
+              <View style={styles.tipCard}>
+                <Ionicons name="star" size={20} color="#FFD700" />
+                <Text style={styles.tipText}>
+                  Earn points by visiting landmarks. Premium locations award 25 points each!
+                </Text>
+              </View>
+            </View>
           </View>
         }
       />
