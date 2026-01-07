@@ -500,14 +500,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: theme.spacing.md,
   },
-  firstColumnCard: {
-    paddingLeft: theme.spacing.md,
-    paddingRight: theme.spacing.xs / 2,
-  },
-  lastColumnCard: {
-    paddingRight: theme.spacing.md,
-    paddingLeft: theme.spacing.xs / 2,
-  },
   leftCard: {
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.xs,
