@@ -413,6 +413,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     elevation: 2,
   },
+  friendInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
   requestCard: {
     flexDirection: 'row',
     alignItems: 'center',
