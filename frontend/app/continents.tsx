@@ -226,18 +226,18 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.sm,
   },
   headerTitle: {
     ...theme.typography.h1,
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: '800',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs / 2,
   },
   headerSubtitle: {
     ...theme.typography.body,
-    fontSize: 15,
+    fontSize: 14,
     color: theme.colors.textSecondary,
   },
   scrollView: {
@@ -245,13 +245,13 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.xl,
+    paddingBottom: theme.spacing.lg,
   },
   cardWrapper: {
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
   },
   card: {
-    height: 140,
+    height: 115,
     borderRadius: theme.borderRadius.xl,
     overflow: 'hidden',
     ...theme.shadows.card,
