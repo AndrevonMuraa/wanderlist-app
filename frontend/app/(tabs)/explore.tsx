@@ -53,7 +53,7 @@ const COUNTRY_FLAGS: Record<string, string> = {
 
 // Country images
 const COUNTRY_IMAGES: Record<string, string> = {
-  'Norway': 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=600',
+  'Norway': 'https://images.unsplash.com/photo-1601439678777-b2b3c56fa627?w=600',
   'France': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600',
   'Italy': 'https://images.unsplash.com/photo-1520175480921-4edfa2983e0f?w=600',
   'Japan': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600',
