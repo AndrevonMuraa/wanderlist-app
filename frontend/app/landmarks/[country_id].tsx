@@ -119,46 +119,28 @@ export default function LandmarksScreen() {
           blurRadius={item.is_locked ? 8 : 0}
         />
         
-        {/* Enhanced Premium Badge - Top Right */}
+        {/* Subtle Premium Badge - Top Right */}
         {item.category === 'premium' && (
-          <View style={styles.premiumBadgeEnhanced}>
-            <LinearGradient
-              colors={['#FFD700', '#FFA500']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.premiumBadgeGradient}
-            >
-              <Ionicons name="diamond" size={16} color="#fff" />
-              <Text style={styles.premiumTextEnhanced}>PREMIUM</Text>
-            </LinearGradient>
+          <View style={styles.premiumBadgeSubtle}>
+            <View style={styles.premiumBadgeBlur}>
+              <Ionicons name="diamond-outline" size={14} color="rgba(255,255,255,0.9)" />
+              <Text style={styles.premiumTextSubtle}>PREMIUM</Text>
+            </View>
           </View>
         )}
         
-        {/* Enhanced Lock Overlay for Locked Landmarks */}
+        {/* Frosted Glass Overlay for Locked Landmarks */}
         {item.is_locked && (
-          <View style={styles.lockOverlayEnhanced}>
-            {/* Animated pulse effect background */}
-            <LinearGradient
-              colors={['rgba(255,215,0,0.15)', 'rgba(255,165,0,0.25)', 'rgba(255,215,0,0.15)']}
-              style={styles.pulseGradient}
-            />
-            
-            {/* Lock Icon with glow */}
-            <View style={styles.lockIconContainer}>
-              <View style={styles.lockIconGlow} />
-              <Ionicons name="lock-closed" size={56} color="#FFD700" />
+          <View style={styles.frostedOverlay}>
+            {/* Subtle Lock Icon - White/Transparent */}
+            <View style={styles.lockIconSubtle}>
+              <Ionicons name="lock-closed" size={40} color="rgba(255,255,255,0.85)" />
             </View>
             
-            {/* Upgrade CTA */}
-            <View style={styles.upgradeCTA}>
-              <Text style={styles.upgradeTitle}>Unlock Premium</Text>
-              <Text style={styles.upgradeSubtitle}>Tap to explore exclusive content</Text>
-              
-              {/* Points highlight */}
-              <View style={styles.premiumPointsHighlight}>
-                <Ionicons name="star" size={20} color="#FFD700" />
-                <Text style={styles.premiumPointsText}>Worth {item.points || 25} points!</Text>
-              </View>
+            {/* Minimal Upgrade Text */}
+            <View style={styles.upgradeTextSubtle}>
+              <Text style={styles.upgradeTitleSubtle}>Premium Content</Text>
+              <Text style={styles.upgradeSubtitleSubtle}>Tap to unlock</Text>
             </View>
           </View>
         )}
