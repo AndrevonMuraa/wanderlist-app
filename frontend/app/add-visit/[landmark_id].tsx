@@ -542,7 +542,43 @@ const styles = StyleSheet.create({
   textInput: {
     marginBottom: 16,
   },
+  verificationBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 16,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: theme.colors.primary + '30',
+  },
+  verificationIcon: {
+    marginRight: 12,
+  },
+  verificationTextContainer: {
+    flex: 1,
+  },
+  verificationTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: 4,
+  },
+  verificationSubtext: {
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+  },
+  buttonContainer: {
+    gap: 12,
+  },
   submitButton: {
+    marginBottom: 0,
+  },
+  primaryButton: {
+    elevation: 2,
+  },
+  secondaryButton: {
     marginBottom: 32,
+    borderColor: theme.colors.textSecondary + '40',
   },
 });
