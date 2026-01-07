@@ -40,41 +40,59 @@ export default function LandmarksScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [countryProgress, setCountryProgress] = useState<{visited: number; total: number; percentage: number} | null>(null);
+  const [visitedLandmarkIds, setVisitedLandmarkIds] = useState<Set<string>>(new Set());
   const router = useRouter();
 
   useEffect(() => {
-    fetchLandmarks();
+    fetchData();
   }, []);
 
-  const fetchLandmarks = async () => {
+  const fetchData = async () => {
     try {
       const token = await getToken();
       console.log('Fetching landmarks for country:', country_id);
       
-      // Fetch ALL landmarks (official + premium)
-      // Backend will mark premium as locked for free users
-      const response = await fetch(
-        `${BACKEND_URL}/api/landmarks?country_id=${country_id}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
+      // Fetch landmarks and progress in parallel
+      const [landmarksResponse, progressResponse, visitsResponse] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/landmarks?country_id=${country_id}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${BACKEND_URL}/api/progress`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${BACKEND_URL}/api/visits`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
 
-      console.log('Landmarks API response status:', response.status);
+      console.log('Landmarks API response status:', landmarksResponse.status);
 
-      if (response.ok) {
-        const data = await response.json();
+      if (landmarksResponse.ok) {
+        const data = await landmarksResponse.json();
         console.log('Landmarks fetched:', data.length, 'including', data.filter((l: Landmark) => l.is_locked).length, 'locked premium');
         setLandmarks(data);
-      } else {
-        console.error('Failed to fetch landmarks:', response.status);
-        const errorText = await response.text();
-        console.error('Error details:', errorText);
+      }
+      
+      if (progressResponse.ok) {
+        const progressData = await progressResponse.json();
+        const countryData = progressData.countries[country_id as string];
+        if (countryData) {
+          setCountryProgress({
+            visited: countryData.visited,
+            total: countryData.total,
+            percentage: countryData.percentage
+          });
+        }
+      }
+      
+      if (visitsResponse.ok) {
+        const visitsData = await visitsResponse.json();
+        const visitedIds = new Set(visitsData.map((v: any) => v.landmark_id));
+        setVisitedLandmarkIds(visitedIds);
       }
     } catch (error) {
-      console.error('Error fetching landmarks:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -83,7 +101,7 @@ export default function LandmarksScreen() {
 
   const onRefresh = () => {
     setRefreshing(true);
-    fetchLandmarks();
+    fetchData();
   };
 
   const handleLandmarkPress = (landmark: Landmark) => {
