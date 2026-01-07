@@ -132,11 +132,19 @@ export default function ExploreScreen() {
           continentMap.get(country.continent)!.push(country);
         });
 
-        // Create sections
-        const sectionList: ContinentSection[] = Array.from(continentMap.entries()).map(([continent, countries]) => ({
-          continent,
-          data: countries
-        }));
+        // Create sections with rows (2 countries per row)
+        const sectionList: ContinentSection[] = Array.from(continentMap.entries()).map(([continent, countries]) => {
+          // Group countries into rows of 2
+          const rows: Country[][] = [];
+          for (let i = 0; i < countries.length; i += 2) {
+            rows.push(countries.slice(i, i + 2));
+          }
+          
+          return {
+            continent,
+            data: rows as any // Cast to satisfy TypeScript
+          };
+        });
 
         setSections(sectionList);
         setFilteredSections(sectionList);
