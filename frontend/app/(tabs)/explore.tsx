@@ -477,11 +477,12 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
   },
   welcomeText: {
-    ...theme.typography.h1,
+    ...theme.typography.h2,
     color: theme.colors.text,
-    fontSize: 28,
-    fontWeight: '800',
-    lineHeight: 34,
+    fontSize: 22,
+    fontWeight: '700',
+    lineHeight: 28,
+    marginBottom: theme.spacing.xs / 2,
   },
   welcomeTextAccent: {
     ...theme.typography.h1,
@@ -493,6 +494,7 @@ const styles = StyleSheet.create({
   welcomeSubtext: {
     ...theme.typography.body,
     color: theme.colors.textSecondary,
+    fontSize: 15,
     lineHeight: 20,
   },
   statsContainer: {
