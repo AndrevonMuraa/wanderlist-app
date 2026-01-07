@@ -906,4 +906,117 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.9)',
     lineHeight: 24,
   },
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.xl,
+    padding: theme.spacing.xl,
+    width: width * 0.9,
+    maxWidth: 400,
+    ...theme.shadows.lg,
+  },
+  modalTitle: {
+    ...theme.typography.h2,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.xs,
+    textAlign: 'center',
+  },
+  modalSubtitle: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.lg,
+    textAlign: 'center',
+  },
+  modalOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: theme.spacing.md,
+    backgroundColor: theme.colors.background,
+    borderRadius: theme.borderRadius.md,
+    marginBottom: theme.spacing.md,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  modalOptionIcon: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: theme.colors.background,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: theme.spacing.md,
+  },
+  modalOptionText: {
+    flex: 1,
+  },
+  modalOptionTitle: {
+    ...theme.typography.h4,
+    color: theme.colors.text,
+    marginBottom: 2,
+  },
+  modalOptionDesc: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+  },
+  modalCancelButton: {
+    padding: theme.spacing.md,
+    alignItems: 'center',
+    marginTop: theme.spacing.sm,
+  },
+  modalCancelText: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    fontWeight: '600',
+  },
+  // Date Picker Styles
+  datePickerContainer: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.xl,
+    padding: theme.spacing.xl,
+    width: width * 0.9,
+    maxWidth: 400,
+    ...theme.shadows.lg,
+  },
+  datePicker: {
+    width: '100%',
+    marginVertical: theme.spacing.md,
+  },
+  datePickerButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: theme.spacing.md,
+  },
+  datePickerCancel: {
+    flex: 1,
+    padding: theme.spacing.md,
+    marginRight: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.background,
+    alignItems: 'center',
+  },
+  datePickerCancelText: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    fontWeight: '600',
+  },
+  datePickerConfirm: {
+    flex: 1,
+    padding: theme.spacing.md,
+    marginLeft: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.primary,
+    alignItems: 'center',
+  },
+  datePickerConfirmText: {
+    ...theme.typography.body,
+    color: '#fff',
+    fontWeight: '600',
+  },
 });
+
