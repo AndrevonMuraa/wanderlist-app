@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 WanderList Backend API Testing Suite
-Focus: Monetization features, limits enforcement, and verification system
+Focus: Global Content Expansion - 48 countries, 480 landmarks
+Testing the massive database expansion across all continents
 """
 
 import requests
