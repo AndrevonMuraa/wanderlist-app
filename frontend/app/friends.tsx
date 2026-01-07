@@ -42,6 +42,21 @@ export default function FriendsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [sending, setSending] = useState(false);
   const router = useRouter();
+  const { user } = useAuth();
+  
+  const { showUpgradeModal, upgradeReason, checkResponse, handleUpgrade, closeModal } = useUpgradePrompt({
+    onUpgrade: (tier) => {
+      if (Platform.OS === 'web') {
+        alert(`Upgrade to ${tier} would redirect to payment page`);
+      } else {
+        Alert.alert('Upgrade', `Upgrade to ${tier} would redirect to payment page`);
+      }
+    }
+  });
+  
+  // Get friend limit based on tier
+  const friendLimit = user?.subscription_tier === 'free' ? 5 : (user?.subscription_tier === 'basic' ? 25 : 999);
+  const isAtLimit = friends.length >= friendLimit && user?.subscription_tier !== 'premium';
 
   useEffect(() => {
     fetchData();
