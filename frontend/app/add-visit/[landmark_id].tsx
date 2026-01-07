@@ -8,6 +8,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BACKEND_URL } from '../../utils/config';
 import theme from '../../styles/theme';
+import UpgradeModal from '../../components/UpgradeModal';
+import { useUpgradePrompt } from '../../hooks/useUpgradePrompt';
 
 import { MapView, Marker } from '../../components/MapComponents';
 
