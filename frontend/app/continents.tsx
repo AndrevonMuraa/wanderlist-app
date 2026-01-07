@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import theme from '../styles/theme';
+import { ProgressBar } from '../components/ProgressBar';
+import { BACKEND_URL } from '../utils/config';
+import * as SecureStore from 'expo-secure-store';
 
 const { width, height } = Dimensions.get('window');
+
+const getToken = async () => {
+  return await SecureStore.getItemAsync('token');
+};
 
 interface Continent {
   id: string;
@@ -16,6 +23,9 @@ interface Continent {
   gradient: string[];
   icon: string;
   description: string;
+  visited?: number;
+  percentage?: number;
+  totalPoints: number;
 }
 
 const CONTINENTS: Continent[] = [
