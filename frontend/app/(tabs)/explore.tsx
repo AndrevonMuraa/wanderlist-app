@@ -35,6 +35,8 @@ interface Country {
   name: string;
   continent: string;
   landmark_count: number;
+  visited?: number; // Progress data
+  percentage?: number;
 }
 
 interface ContinentSection {
