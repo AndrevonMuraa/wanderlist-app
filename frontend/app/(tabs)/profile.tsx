@@ -10,6 +10,8 @@ import { BACKEND_URL } from '../../utils/config';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
 import UpgradeModal from '../../components/UpgradeModal';
+import { CircularProgress } from '../../components/CircularProgress';
+import { ProgressBar } from '../../components/ProgressBar';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
