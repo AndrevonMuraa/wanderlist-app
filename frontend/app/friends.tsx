@@ -64,7 +64,7 @@ export default function FriendsScreen() {
 
   const fetchData = async () => {
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
       
       const [friendsRes, requestsRes] = await Promise.all([
         fetch(`${BACKEND_URL}/api/friends`, {
