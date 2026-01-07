@@ -4,16 +4,22 @@ import { Text, TextInput, Button, Surface, ActivityIndicator } from 'react-nativ
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
-import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { BACKEND_URL } from '../../utils/config';
+import theme from '../../styles/theme';
 
 import { MapView, Marker } from '../../components/MapComponents';
 
-// For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
-// For mobile, use the external URL
-const BACKEND_URL = Platform.OS === 'web' 
-  ? '' 
-  : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
+// Helper to get token (works on both web and native)
+const getToken = async (): Promise<string | null> => {
+  if (Platform.OS === 'web') {
+    return localStorage.getItem('auth_token');
+  } else {
+    const SecureStore = await import('expo-secure-store');
+    return await SecureStore.getItemAsync('auth_token');
+  }
+};
 
 export default function AddVisitScreen() {
   const { landmark_id } = useLocalSearchParams();
