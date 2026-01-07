@@ -132,7 +132,6 @@ export default function ExploreScreen() {
         });
 
         setSections(sectionList);
-        setFilteredSections(sectionList);
       }
     } catch (error) {
       console.error('Error fetching countries:', error);
