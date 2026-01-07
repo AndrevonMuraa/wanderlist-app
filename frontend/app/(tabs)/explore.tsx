@@ -411,16 +411,20 @@ const styles = StyleSheet.create({
   },
   welcomeSection: {
     paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.lg,
+    paddingBottom: theme.spacing.md,
+    paddingTop: theme.spacing.sm,
   },
   welcomeText: {
     ...theme.typography.h1,
     color: theme.colors.text,
-    marginBottom: theme.spacing.xs,
+    marginBottom: theme.spacing.xs / 2,
+    fontSize: 28,
+    fontWeight: '800',
   },
   welcomeSubtext: {
-    ...theme.typography.bodySmall,
+    ...theme.typography.body,
     color: theme.colors.textSecondary,
+    lineHeight: 20,
   },
   sectionHeader: {
     paddingHorizontal: theme.spacing.md,
