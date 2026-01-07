@@ -3,9 +3,13 @@
 > **IMPORTANT**: This document MUST be read at the start of EVERY session, including forked sessions.
 > These are not suggestions - they are required patterns to prevent recurring issues.
 
+> **NEW**: Also read `/app/WANDERLIST_BASELINE_MODEL.md` for complete app state documentation.
+
 ## 🚨 MANDATORY: Read This First on Every Session Start
 
-**FOR AI AGENTS**: Before making ANY code changes, review this document to avoid repeating fixed mistakes.
+**FOR AI AGENTS**: Before making ANY code changes, review BOTH documents:
+1. This file (CRITICAL_FIXES_AND_PATTERNS.md)
+2. `/app/WANDERLIST_BASELINE_MODEL.md` - Complete app state and feature list
 
 ---
 
