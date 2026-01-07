@@ -1,4 +1,24 @@
 #====================================================================================================
+# ⚠️ CRITICAL: READ BEFORE STARTING ANY SESSION (INCLUDING FORKS)
+#====================================================================================================
+#
+# MANDATORY FIRST STEP: Read /app/CRITICAL_FIXES_AND_PATTERNS.md
+# 
+# This file contains:
+# - Known issues and their fixes (DO NOT reintroduce)
+# - Required patterns (BACKEND_URL, imports, etc.)
+# - Cross-platform compatibility requirements
+# - Session start checklist
+#
+# Failure to follow patterns in that document will result in:
+# - Mobile API connectivity failures
+# - Premium content not displaying
+# - Login issues on remote URLs
+# - Duplicate code and maintenance nightmares
+#
+# READ IT FIRST. EVERY TIME. NO EXCEPTIONS.
+#
+#====================================================================================================
 # START - Testing Protocol - DO NOT EDIT OR REMOVE THIS SECTION
 #====================================================================================================
 
