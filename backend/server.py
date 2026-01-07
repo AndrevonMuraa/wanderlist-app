@@ -155,6 +155,7 @@ class VisitCreate(BaseModel):
     comments: Optional[str] = None
     visit_location: Optional[dict] = None  # For Northern Lights: {"latitude": float, "longitude": float, "region": str}
     diary_notes: Optional[str] = None
+    visited_at: Optional[datetime] = None  # Allow custom date for past visits
 
 class Friend(BaseModel):
     friendship_id: str
