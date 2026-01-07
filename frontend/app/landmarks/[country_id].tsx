@@ -50,8 +50,10 @@ export default function LandmarksScreen() {
       const token = await getToken();
       console.log('Fetching landmarks for country:', country_id);
       
+      // Fetch ALL landmarks (official + premium)
+      // Backend will mark premium as locked for free users
       const response = await fetch(
-        `${BACKEND_URL}/api/landmarks?country_id=${country_id}&category=official`,
+        `${BACKEND_URL}/api/landmarks?country_id=${country_id}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -63,7 +65,7 @@ export default function LandmarksScreen() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Landmarks fetched:', data.length);
+        console.log('Landmarks fetched:', data.length, 'including', data.filter((l: Landmark) => l.is_locked).length, 'locked premium');
         setLandmarks(data);
       } else {
         console.error('Failed to fetch landmarks:', response.status);
