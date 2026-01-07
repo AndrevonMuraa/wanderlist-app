@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import theme from '../../styles/theme';
 import UpgradeModal from '../../components/UpgradeModal';
+import { BACKEND_URL } from '../../utils/config';
 
 // For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
 // For mobile, use the external URL
