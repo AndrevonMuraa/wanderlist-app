@@ -29,15 +29,37 @@ interface UserStats {
   friends_count: number;
 }
 
+interface ProgressStats {
+  overall: {
+    visited: number;
+    total: number;
+    percentage: number;
+  };
+  continents: Record<string, {
+    visited: number;
+    total: number;
+    percentage: number;
+  }>;
+  countries: Record<string, {
+    country_name: string;
+    continent: string;
+    visited: number;
+    total: number;
+    percentage: number;
+  }>;
+}
+
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
   const [stats, setStats] = useState<UserStats | null>(null);
+  const [progressStats, setProgressStats] = useState<ProgressStats | null>(null);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     fetchStats();
+    fetchProgressStats();
   }, []);
 
   const fetchStats = async () => {
@@ -55,6 +77,24 @@ export default function ProfileScreen() {
       }
     } catch (error) {
       console.error('Error fetching stats:', error);
+    }
+  };
+
+  const fetchProgressStats = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/progress`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProgressStats(data);
+      }
+    } catch (error) {
+      console.error('Error fetching progress stats:', error);
     }
   };
 
