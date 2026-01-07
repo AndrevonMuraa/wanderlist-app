@@ -194,17 +194,25 @@ export default function FriendsScreen() {
 
   const renderFriend = ({ item }: { item: User }) => (
     <Surface style={styles.friendCard}>
-      {item.picture ? (
-        <Image source={{ uri: item.picture }} style={styles.avatar} />
-      ) : (
-        <View style={[styles.avatar, styles.defaultAvatar]}>
-          <Ionicons name="person" size={24} color="#666" />
-        </View>
-      )}
       <View style={styles.friendInfo}>
-        <Text style={styles.friendName}>{item.name}</Text>
-        <Text style={styles.friendEmail}>@{item.username}</Text>
+        {item.picture ? (
+          <Image source={{ uri: item.picture }} style={styles.avatar} />
+        ) : (
+          <View style={[styles.avatar, styles.defaultAvatar]}>
+            <Ionicons name="person" size={24} color="#666" />
+          </View>
+        )}
+        <View style={{ flex: 1 }}>
+          <Text style={styles.friendName}>{item.name}</Text>
+          <Text style={styles.friendEmail}>@{item.username}</Text>
+        </View>
       </View>
+      <TouchableOpacity 
+        onPress={() => router.push(`/messages/${item.user_id}?name=${encodeURIComponent(item.name)}`)}
+        style={styles.messageButton}
+      >
+        <Ionicons name="chatbubble-outline" size={20} color={theme.colors.primary} />
+      </TouchableOpacity>
       {item.is_premium && (
         <Ionicons name="star" size={20} color="#FFD700" />
       )}
