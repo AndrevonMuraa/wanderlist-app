@@ -57,9 +57,6 @@ export default function LandmarkDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [northernLightsVisits, setNorthernLightsVisits] = useState<any[]>([]);
-  const [showVisitTypeModal, setShowVisitTypeModal] = useState(false);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const router = useRouter();
 
   useEffect(() => {
