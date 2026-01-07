@@ -400,6 +400,153 @@ const styles = StyleSheet.create({
     ...theme.typography.caption,
     color: theme.colors.textSecondary,
   },
+  // Enhanced Empty State Styles
+  emptyStateContainer: {
+    padding: theme.spacing.lg,
+    paddingBottom: theme.spacing.xxl,
+  },
+  emptyHero: {
+    alignItems: 'center',
+    padding: theme.spacing.xl,
+    borderRadius: theme.borderRadius.xl,
+    marginBottom: theme.spacing.lg,
+  },
+  emptyHeroTitle: {
+    ...theme.typography.h1,
+    color: theme.colors.text,
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.xs,
+  },
+  emptyHeroSubtitle: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+  },
+  quoteCard: {
+    backgroundColor: theme.colors.surface,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.lg,
+    marginBottom: theme.spacing.lg,
+    borderLeftWidth: 4,
+    borderLeftColor: theme.colors.accent,
+    ...theme.shadows.sm,
+  },
+  quoteIcon: {
+    marginBottom: theme.spacing.sm,
+    opacity: 0.7,
+  },
+  quoteText: {
+    ...theme.typography.body,
+    fontStyle: 'italic',
+    color: theme.colors.text,
+    marginBottom: theme.spacing.sm,
+    lineHeight: 24,
+  },
+  quoteAuthor: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    textAlign: 'right',
+  },
+  motivationSection: {
+    marginBottom: theme.spacing.lg,
+  },
+  sectionTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.md,
+  },
+  sectionSubtitle: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.md,
+  },
+  benefitsList: {
+    gap: theme.spacing.sm,
+  },
+  benefitItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.md,
+    ...theme.shadows.sm,
+  },
+  benefitText: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    marginLeft: theme.spacing.md,
+  },
+  featuredSection: {
+    marginBottom: theme.spacing.lg,
+  },
+  featuredCard: {
+    height: 160,
+    borderRadius: theme.borderRadius.lg,
+    overflow: 'hidden',
+    marginBottom: theme.spacing.md,
+    ...theme.shadows.md,
+  },
+  featuredImage: {
+    width: '100%',
+    height: '100%',
+  },
+  featuredOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: theme.spacing.md,
+  },
+  featuredFlag: {
+    fontSize: 32,
+    marginBottom: theme.spacing.xs,
+  },
+  featuredName: {
+    ...theme.typography.h3,
+    color: '#fff',
+    marginBottom: 2,
+  },
+  featuredInfo: {
+    ...theme.typography.caption,
+    color: 'rgba(255,255,255,0.9)',
+  },
+  ctaButton: {
+    borderRadius: theme.borderRadius.lg,
+    overflow: 'hidden',
+    marginBottom: theme.spacing.lg,
+    ...theme.shadows.lg,
+  },
+  ctaGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: theme.spacing.md,
+    gap: theme.spacing.sm,
+  },
+  ctaText: {
+    ...theme.typography.h4,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  tipsSection: {
+    marginBottom: theme.spacing.lg,
+  },
+  tipCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    padding: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.md,
+    marginBottom: theme.spacing.sm,
+    ...theme.shadows.sm,
+  },
+  tipText: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    marginLeft: theme.spacing.md,
+    flex: 1,
+    lineHeight: 20,
+  },
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
