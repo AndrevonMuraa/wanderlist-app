@@ -615,24 +615,6 @@ async def get_visit_stats(current_user: User = Depends(get_current_user)):
 
 @api_router.post("/visits", response_model=Visit)
 async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_user)):
-    # Check visit limits for free users
-    if current_user.subscription_tier == "free":
-        # Get start of current month
-        now = datetime.now(timezone.utc)
-        start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        
-        # Count visits this month
-        visit_count = await db.visits.count_documents({
-            "user_id": current_user.user_id,
-            "visited_at": {"$gte": start_of_month}
-        })
-        
-        if visit_count >= 10:
-            raise HTTPException(
-                status_code=403,
-                detail="Monthly visit limit reached (10/month). Upgrade to Basic for unlimited visits!"
-            )
-    
     landmark = await db.landmarks.find_one({"landmark_id": data.landmark_id}, {"_id": 0})
     if not landmark:
         raise HTTPException(status_code=404, detail="Landmark not found")
