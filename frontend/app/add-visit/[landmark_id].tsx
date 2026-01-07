@@ -366,16 +366,51 @@ export default function AddVisitScreen() {
             />
           </Surface>
 
-          <Button
-            mode="contained"
-            onPress={handleSubmit}
-            loading={submitting}
-            disabled={submitting || !photoBase64}
-            style={styles.submitButton}
-            icon="check"
-          >
-            Add Visit
-          </Button>
+          {/* Verification Info Banner */}
+          <Surface style={styles.verificationBanner}>
+            <View style={styles.verificationIcon}>
+              <Ionicons name={photoBase64 ? "shield-checkmark" : "information-circle"} size={24} color={photoBase64 ? theme.colors.primary : theme.colors.textSecondary} />
+            </View>
+            <View style={styles.verificationTextContainer}>
+              <Text style={styles.verificationTitle}>
+                {photoBase64 ? '✓ Verified Visit' : 'Unverified Visit'}
+              </Text>
+              <Text style={styles.verificationSubtext}>
+                {photoBase64 
+                  ? 'This visit will count towards global leaderboards'
+                  : 'Add a photo to verify your visit for global leaderboards'
+                }
+              </Text>
+            </View>
+          </Surface>
+
+          {/* Submit Buttons */}
+          <View style={styles.buttonContainer}>
+            <Button
+              mode="contained"
+              onPress={() => handleSubmit(false)}
+              loading={submitting}
+              disabled={submitting || !photoBase64}
+              style={[styles.submitButton, styles.primaryButton]}
+              icon="check"
+              buttonColor={theme.colors.primary}
+            >
+              {photoBase64 ? 'Add Verified Visit' : 'Add Photo First'}
+            </Button>
+
+            {!photoBase64 && (
+              <Button
+                mode="outlined"
+                onPress={confirmSkipPhoto}
+                disabled={submitting}
+                style={[styles.submitButton, styles.secondaryButton]}
+                icon="calendar-outline"
+                textColor={theme.colors.textSecondary}
+              >
+                Skip Photo (Unverified)
+              </Button>
+            )}
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
