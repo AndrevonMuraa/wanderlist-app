@@ -285,8 +285,10 @@ export default function ExploreScreen() {
   const renderListHeader = () => (
     <View style={styles.welcomeSection}>
       <View style={styles.welcomeTextContainer}>
-        <Text style={styles.welcomeText}>Discover the world</Text>
-        <Text style={styles.welcomeTextAccent}>and conquer landmarks</Text>
+        <Text style={styles.welcomeText}>Discover the world and conquer landmarks</Text>
+        <Text style={styles.welcomeSubtext}>
+          Explore 720 landmarks across 48 countries
+        </Text>
       </View>
       
       <View style={styles.statsContainer}>
