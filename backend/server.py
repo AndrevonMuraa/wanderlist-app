@@ -692,7 +692,7 @@ async def get_leaderboard(current_user: User = Depends(get_current_user)):
                     user_id=user["user_id"],
                     name=user["name"],
                     picture=user.get("picture"),
-                    visit_count=entry["visit_count"],
+                    total_points=entry["visit_count"],
                     rank=idx + 1
                 ))
         return leaderboard
@@ -729,7 +729,7 @@ async def get_leaderboard(current_user: User = Depends(get_current_user)):
                     user_id=user["user_id"],
                     name=user["name"],
                     picture=user.get("picture"),
-                    visit_count=entry["visit_count"],
+                    total_points=entry["visit_count"],
                     rank=idx + 1
                 ))
         return leaderboard
