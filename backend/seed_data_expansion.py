@@ -89,6 +89,11 @@ LANDMARKS_DATA = {
         {"name": "French Riviera", "description": "Glamorous coastline with azure waters, beaches, and Mediterranean charm.", "image_url": "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=800&q=80", "difficulty": "Easy"},
         {"name": "Provence Lavender Fields", "description": "Purple fields stretching to horizon, quintessential French countryside.", "image_url": "https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=800&q=80", "difficulty": "Easy"},
         {"name": "Sacré-Cœur Basilica", "description": "White-domed basilica atop Montmartre, offering breathtaking views of Paris.", "image_url": "https://images.unsplash.com/photo-1508050919630-b135583b29ab?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Champagne Vineyards", "description": "Rolling hillside vineyards, historic cellars, world's finest sparkling wine region.", "image_url": "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=800&q=80", "difficulty": "Easy"},
+        {"name": "D-Day Beaches Normandy", "description": "Historic WWII landing beaches, museums, memorials, and Allied victory sites.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Catacombs of Paris", "description": "Underground ossuary holding remains of 6 million people, eerie subterranean tunnels.", "image_url": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Gorges du Verdon", "description": "Europe's Grand Canyon, turquoise river, dramatic cliffs, kayaking paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Château de Chenonceau", "description": "Elegant Renaissance castle spanning River Cher, stunning gardens, ladies' castle.", "image_url": "https://images.unsplash.com/photo-1590559865826-eb206e24cbd6?w=800&q=80", "difficulty": "Easy"},
     ],
     
     # EUROPE - ITALY
