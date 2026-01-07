@@ -290,36 +290,6 @@ export default function ExploreScreen() {
           Explore 720 landmarks across 48 countries
         </Text>
       </View>
-      
-      <View style={styles.statsContainer}>
-        <View style={styles.statBox}>
-          <View style={styles.statIconContainer}>
-            <Ionicons name="location" size={24} color={theme.colors.primary} />
-          </View>
-          <Text style={styles.statNumber}>720</Text>
-          <Text style={styles.statLabel}>Landmarks</Text>
-        </View>
-        
-        <View style={styles.statDivider} />
-        
-        <View style={styles.statBox}>
-          <View style={styles.statIconContainer}>
-            <Ionicons name="earth" size={24} color={theme.colors.accent} />
-          </View>
-          <Text style={styles.statNumber}>48</Text>
-          <Text style={styles.statLabel}>Countries</Text>
-        </View>
-        
-        <View style={styles.statDivider} />
-        
-        <View style={styles.statBox}>
-          <View style={styles.statIconContainer}>
-            <Ionicons name="globe" size={24} color={theme.colors.accentBronze} />
-          </View>
-          <Text style={styles.statNumber}>5</Text>
-          <Text style={styles.statLabel}>Continents</Text>
-        </View>
-      </View>
     </View>
   );
 
