@@ -613,4 +613,8 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     fontSize: 12,
   },
+  skeletonContainer: {
+    flex: 1,
+    paddingTop: theme.spacing.md,
+  },
 });
