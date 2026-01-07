@@ -284,10 +284,40 @@ export default function ExploreScreen() {
 
   const renderListHeader = () => (
     <View style={styles.welcomeSection}>
-      <Text style={styles.welcomeText}>Discover the World</Text>
-      <Text style={styles.welcomeSubtext}>
-        Explore {sections.reduce((sum, s) => sum + s.data.flat().reduce((total, c) => total + c.landmark_count, 0), 0)} landmarks across {sections.reduce((sum, s) => sum + s.data.flat().length, 0)} countries
-      </Text>
+      <View style={styles.welcomeTextContainer}>
+        <Text style={styles.welcomeText}>Discover the world</Text>
+        <Text style={styles.welcomeTextAccent}>and conquer landmarks</Text>
+      </View>
+      
+      <View style={styles.statsContainer}>
+        <View style={styles.statBox}>
+          <View style={styles.statIconContainer}>
+            <Ionicons name="location" size={24} color={theme.colors.primary} />
+          </View>
+          <Text style={styles.statNumber}>720</Text>
+          <Text style={styles.statLabel}>Landmarks</Text>
+        </View>
+        
+        <View style={styles.statDivider} />
+        
+        <View style={styles.statBox}>
+          <View style={styles.statIconContainer}>
+            <Ionicons name="earth" size={24} color={theme.colors.accent} />
+          </View>
+          <Text style={styles.statNumber}>48</Text>
+          <Text style={styles.statLabel}>Countries</Text>
+        </View>
+        
+        <View style={styles.statDivider} />
+        
+        <View style={styles.statBox}>
+          <View style={styles.statIconContainer}>
+            <Ionicons name="globe" size={24} color={theme.colors.accentBronze} />
+          </View>
+          <Text style={styles.statNumber}>5</Text>
+          <Text style={styles.statLabel}>Continents</Text>
+        </View>
+      </View>
     </View>
   );
 
