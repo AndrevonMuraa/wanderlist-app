@@ -460,4 +460,38 @@ const styles = StyleSheet.create({
     color: '#ccc',
     marginTop: 8,
   },
+  searchHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  limitChip: {
+    backgroundColor: theme.colors.surface,
+    height: 28,
+  },
+  limitChipError: {
+    backgroundColor: theme.colors.error + '15',
+  },
+  limitChipText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  sendButtonDisabled: {
+    opacity: 0.5,
+  },
+  upgradeHint: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    padding: 8,
+    backgroundColor: theme.colors.primary + '10',
+    borderRadius: 8,
+  },
+  upgradeHintText: {
+    fontSize: 13,
+    color: theme.colors.primary,
+    marginLeft: 6,
+    fontWeight: '600',
+  },
 });
