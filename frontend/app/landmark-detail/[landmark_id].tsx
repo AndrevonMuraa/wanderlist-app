@@ -206,29 +206,29 @@ export default function LandmarkDetailScreen() {
             </View>
           </View>
 
-        {/* Quick Info Cards */}
+        {/* Quick Info Cards - Frosted Glass */}
         <View style={styles.quickInfoContainer}>
           <View style={styles.quickInfoCard}>
-            <Ionicons name="time-outline" size={24} color={theme.colors.primary} />
+            <Ionicons name="time-outline" size={24} color="#fff" />
             <Text style={styles.quickInfoLabel}>Duration</Text>
             <Text style={styles.quickInfoValue}>{duration}</Text>
           </View>
           <View style={styles.quickInfoCard}>
-            <Ionicons name="calendar-outline" size={24} color={theme.colors.accent} />
+            <Ionicons name="calendar-outline" size={24} color="#fff" />
             <Text style={styles.quickInfoLabel}>Best Time</Text>
             <Text style={styles.quickInfoValue}>{bestTimeToVisit}</Text>
           </View>
           <View style={styles.quickInfoCard}>
-            <Ionicons name="speedometer-outline" size={24} color={theme.colors.accentBronze} />
+            <Ionicons name="speedometer-outline" size={24} color="#fff" />
             <Text style={styles.quickInfoLabel}>Difficulty</Text>
             <Text style={styles.quickInfoValue}>{difficulty}</Text>
           </View>
         </View>
 
-        {/* Description */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>About</Text>
-          <Text style={styles.descriptionText}>{landmark.description}</Text>
+        {/* Description - Frosted Glass Card */}
+        <View style={styles.contentCard}>
+          <Text style={styles.cardTitle}>About</Text>
+          <Text style={styles.cardText}>{landmark.description}</Text>
         </View>
 
         {/* Location Map - Special handling for Northern Lights */}
