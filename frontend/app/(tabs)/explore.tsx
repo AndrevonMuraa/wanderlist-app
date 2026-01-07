@@ -286,7 +286,7 @@ export default function ExploreScreen() {
       <View style={styles.welcomeSection}>
         <Text style={styles.welcomeText}>Discover the World</Text>
         <Text style={styles.welcomeSubtext}>
-          Explore {sections.reduce((sum, s) => sum + s.data.reduce((total, c) => total + c.landmark_count, 0), 0)} landmarks across {sections.reduce((sum, s) => sum + s.data.length, 0)} countries
+          Explore {sections.reduce((sum, s) => sum + s.data.flat().reduce((total, c) => total + c.landmark_count, 0), 0)} landmarks across {sections.reduce((sum, s) => sum + s.data.flat().length, 0)} countries
         </Text>
       </View>
     </>
