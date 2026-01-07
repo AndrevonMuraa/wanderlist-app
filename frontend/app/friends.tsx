@@ -334,6 +334,13 @@ export default function FriendsScreen() {
           }
         />
       </View>
+
+      <UpgradeModal 
+        visible={showUpgradeModal}
+        onClose={closeModal}
+        onUpgrade={handleUpgrade}
+        reason={upgradeReason}
+      />
     </SafeAreaView>
   );
 }
