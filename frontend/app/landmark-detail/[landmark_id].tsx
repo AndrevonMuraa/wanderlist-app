@@ -648,4 +648,27 @@ const styles = StyleSheet.create({
     color: theme.colors.textLight,
     marginTop: 4,
   },
+  // Frosted Glass Styles
+  contentCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backdropFilter: 'blur(10px)',
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    marginHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    ...theme.shadows.md,
+  },
+  cardTitle: {
+    ...theme.typography.h2,
+    color: '#fff',
+    marginBottom: theme.spacing.md,
+    fontWeight: '600',
+  },
+  cardText: {
+    ...theme.typography.body,
+    color: 'rgba(255, 255, 255, 0.9)',
+    lineHeight: 24,
+  },
 });
