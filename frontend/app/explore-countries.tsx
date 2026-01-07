@@ -293,10 +293,19 @@ export default function ExploreCountriesScreen() {
 
   const renderListHeader = () => (
     <View style={styles.welcomeSection}>
+      {continent && (
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
+          <Text style={styles.backButtonText}>Back to Continents</Text>
+        </TouchableOpacity>
+      )}
       <View style={styles.welcomeTextContainer}>
         <Text style={styles.welcomeText}>Discover the world and conquer landmarks</Text>
         <Text style={styles.welcomeSubtext}>
-          Explore 720 landmarks across 48 countries
+          {continent ? `Exploring ${(continent as string).charAt(0).toUpperCase() + (continent as string).slice(1)}` : 'Explore 720 landmarks across 48 countries'}
         </Text>
       </View>
     </View>
