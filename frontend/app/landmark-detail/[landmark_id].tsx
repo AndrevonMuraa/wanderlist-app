@@ -306,14 +306,20 @@ export default function LandmarkDetailScreen() {
             )}
           </View>
         ) : (
-          <View style={styles.locationSection}>
-            <Text style={styles.locationSectionTitle}>📍 Location</Text>
-            <LandmarkMap 
-              latitude={landmark.latitude}
-              longitude={landmark.longitude}
-              landmarkName={landmark.name}
-              height={150}
-            />
+          <View style={styles.coordinatesCard}>
+            <View style={styles.coordinateRow}>
+              <View style={styles.coordinateItem}>
+                <Ionicons name="navigate" size={20} color="rgba(255,255,255,0.8)" />
+                <Text style={styles.coordinateLabel}>Latitude</Text>
+                <Text style={styles.coordinateValue}>{landmark.latitude.toFixed(6)}°</Text>
+              </View>
+              <View style={styles.coordinateDivider} />
+              <View style={styles.coordinateItem}>
+                <Ionicons name="compass" size={20} color="rgba(255,255,255,0.8)" />
+                <Text style={styles.coordinateLabel}>Longitude</Text>
+                <Text style={styles.coordinateValue}>{landmark.longitude.toFixed(6)}°</Text>
+              </View>
+            </View>
           </View>
         )}
 
