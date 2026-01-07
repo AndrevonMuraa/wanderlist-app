@@ -113,7 +113,7 @@ export default function UpgradeModal({ visible, onClose, onUpgrade }: UpgradeMod
                 </View>
                 <View style={styles.feature}>
                   <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
-                  <Text style={styles.featureText">Unlimited friends</Text>
+                  <Text style={styles.featureText}>Unlimited friends</Text>
                 </View>
                 <View style={styles.feature}>
                   <Ionicons name="checkmark-circle" size={20} color={theme.colors.primary} />
