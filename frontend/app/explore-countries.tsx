@@ -87,8 +87,9 @@ const CONTINENT_ICONS: Record<string, string> = {
   'Oceania': '🌏',
 };
 
-export default function ExploreScreen() {
+export default function ExploreCountriesScreen() {
   const { user } = useAuth();
+  const { continent } = useLocalSearchParams();
   const [sections, setSections] = useState<ContinentSection[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -97,7 +98,7 @@ export default function ExploreScreen() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [continent]);
 
   const fetchData = async () => {
     try {
