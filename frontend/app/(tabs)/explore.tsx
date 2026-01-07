@@ -168,6 +168,8 @@ export default function ExploreScreen() {
       <View style={styles.rowContainer}>
         {item.map((country) => {
           const accentColor = (theme.colors.countryAccents as any)[country.name.toLowerCase().replace(' ', '_')] || theme.colors.primary;
+          const isComplete = country.percentage === 100;
+          const hasProgress = (country.visited || 0) > 0;
           
           return (
             <View key={country.country_id} style={styles.cardContainer}>
@@ -188,6 +190,31 @@ export default function ExploreScreen() {
                     <Text style={styles.countryFlag}>{COUNTRY_FLAGS[country.name] || '🌍'}</Text>
                     <Text style={styles.countryName}>{country.name}</Text>
                     <Text style={styles.countryInfo}>{country.landmark_count} landmarks</Text>
+                    
+                    {/* Progress Indicator */}
+                    {hasProgress && (
+                      <View style={styles.progressContainer}>
+                        <View style={styles.progressTextRow}>
+                          <Text style={styles.progressText}>
+                            {country.visited}/{country.landmark_count}
+                          </Text>
+                          {isComplete && (
+                            <Ionicons name="checkmark-circle" size={14} color="#4CAF50" />
+                          )}
+                        </View>
+                        <View style={styles.miniProgressBar}>
+                          <View 
+                            style={[
+                              styles.miniProgressFill, 
+                              { 
+                                width: `${country.percentage}%`,
+                                backgroundColor: isComplete ? '#4CAF50' : '#FFA726'
+                              }
+                            ]} 
+                          />
+                        </View>
+                      </View>
+                    )}
                   </LinearGradient>
                   <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
                 </View>
