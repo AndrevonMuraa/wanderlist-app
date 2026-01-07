@@ -35,16 +35,19 @@ interface VisitCount {
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
   const [stats, setStats] = useState<UserStats | null>(null);
+  const [visitCount, setVisitCount] = useState<VisitCount | null>(null);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     fetchStats();
+    fetchVisitCount();
   }, []);
 
   const fetchStats = async () => {
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
       const response = await fetch(`${BACKEND_URL}/api/stats`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -57,6 +60,24 @@ export default function ProfileScreen() {
       }
     } catch (error) {
       console.error('Error fetching stats:', error);
+    }
+  };
+
+  const fetchVisitCount = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/users/me/visits/count`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setVisitCount(data);
+      }
+    } catch (error) {
+      console.error('Error fetching visit count:', error);
     }
   };
 
