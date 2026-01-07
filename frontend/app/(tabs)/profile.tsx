@@ -574,4 +574,59 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
   },
+  progressCard: {
+    margin: theme.spacing.md,
+    padding: theme.spacing.xl,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
+  overallProgressContainer: {
+    alignItems: 'center',
+    marginTop: theme.spacing.lg,
+    marginBottom: theme.spacing.xl,
+  },
+  progressDescription: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+    marginTop: theme.spacing.md,
+    maxWidth: '80%',
+  },
+  continentalSection: {
+    marginTop: theme.spacing.md,
+  },
+  subsectionTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '700',
+    marginBottom: theme.spacing.md,
+  },
+  continentItem: {
+    marginBottom: theme.spacing.md,
+  },
+  continentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xs,
+  },
+  continentNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+  },
+  continentName: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    fontWeight: '600',
+  },
+  continentCount: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    fontWeight: '500',
+  },
+  continentProgressBar: {
+    marginTop: theme.spacing.xs / 2,
+  },
 });
