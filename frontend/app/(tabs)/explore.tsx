@@ -222,9 +222,6 @@ export default function ExploreScreen() {
                   <Text style={styles.sectionSubtitle}>
                     {section.data.length} countries • {totalLandmarks} landmarks
                   </Text>
-                  <Text style={styles.continentDescription}>
-                    {continentDescriptions[section.continent] || 'Discover amazing places'}
-                  </Text>
                 </View>
               </View>
             </View>
