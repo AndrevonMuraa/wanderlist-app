@@ -108,7 +108,12 @@ LANDMARKS_DATA = {
         {"name": "Trevi Fountain", "description": "Baroque fountain in Rome, legend says coins thrown guarantee return to city.", "image_url": "https://images.unsplash.com/photo-1548585744-7e3c1e8167f4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Pompeii Ruins", "description": "Ancient Roman city frozen in time by Vesuvius eruption in 79 AD.", "image_url": "https://images.unsplash.com/photo-1590559889047-c0b9766e24b7?w=800&q=80", "difficulty": "Easy"},
         {"name": "Lake Como", "description": "Stunning alpine lake surrounded by mountains, elegant villas, and gardens.", "image_url": "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Italy Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Italy experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Italy Wine & Dine", "description": "Premium dining experience featuring Italy cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Italy Heritage Pass", "description": "Skip-the-line access to Italy's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Italy Adventure", "description": "Multi-day premium adventure package including unique Italy activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Italy Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # EUROPE - SPAIN
     "spain": [
@@ -122,7 +127,12 @@ LANDMARKS_DATA = {
         {"name": "Toledo Historic City", "description": "Medieval walled city, three cultures (Christian, Muslim, Jewish) heritage.", "image_url": "https://images.unsplash.com/photo-1560091528-c0e3bfb28369?w=800&q=80", "difficulty": "Easy"},
         {"name": "Ibiza Beaches", "description": "Crystal-clear waters, white sand beaches, vibrant nightlife, UNESCO heritage.", "image_url": "https://images.unsplash.com/photo-1563789031959-4c02bcb41319?w=800&q=80", "difficulty": "Easy"},
         {"name": "Royal Palace Madrid", "description": "Official residence of Spanish Royal Family, lavish interiors, 3,418 rooms.", "image_url": "https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Spain Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Spain experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Spain Wine & Dine", "description": "Premium dining experience featuring Spain cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Spain Heritage Pass", "description": "Skip-the-line access to Spain's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Spain Adventure", "description": "Multi-day premium adventure package including unique Spain activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Spain Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # EUROPE - UK
     "uk": [
@@ -136,7 +146,12 @@ LANDMARKS_DATA = {
         {"name": "Windsor Castle", "description": "Oldest occupied castle in world, royal residence for 1000 years.", "image_url": "https://images.unsplash.com/photo-1533669955142-6a73332af4db?w=800&q=80", "difficulty": "Easy"},
         {"name": "Giant's Causeway", "description": "40,000 interlocking basalt columns, dramatic Northern Ireland coastline.", "image_url": "https://images.unsplash.com/photo-1549556289-54411a5c8c9b?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Oxford University", "description": "Oldest university in English-speaking world, dreaming spires and colleges.", "image_url": "https://images.unsplash.com/photo-1553452118-621ada46db6c?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Uk Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Uk experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Uk Wine & Dine", "description": "Premium dining experience featuring Uk cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Uk Heritage Pass", "description": "Skip-the-line access to Uk's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Uk Adventure", "description": "Multi-day premium adventure package including unique Uk activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Uk Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # EUROPE - GERMANY
     "germany": [
@@ -150,7 +165,12 @@ LANDMARKS_DATA = {
         {"name": "Oktoberfest Munich", "description": "World's largest beer festival, Bavarian culture, traditional celebrations.", "image_url": "https://images.unsplash.com/photo-1618411640897-1f6bb0128ec6?w=800&q=80", "difficulty": "Easy"},
         {"name": "Rhine Valley", "description": "UNESCO valley with vineyards, castles, and picturesque river towns.", "image_url": "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800&q=80", "difficulty": "Easy"},
         {"name": "Reichstag Building", "description": "Historic parliament building with modern glass dome, panoramic Berlin views.", "image_url": "https://images.unsplash.com/photo-1587330979470-3595ac045ab7?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Germany Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Germany experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Germany Wine & Dine", "description": "Premium dining experience featuring Germany cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Germany Heritage Pass", "description": "Skip-the-line access to Germany's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Germany Adventure", "description": "Multi-day premium adventure package including unique Germany activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Germany Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # EUROPE - GREECE
     "greece": [
@@ -164,7 +184,12 @@ LANDMARKS_DATA = {
         {"name": "Rhodes Old Town", "description": "Medieval walled city, Palace of Grand Masters, Knights Hospitaller history.", "image_url": "https://images.unsplash.com/photo-1592519651770-916c0ad21e6d?w=800&q=80", "difficulty": "Easy"},
         {"name": "Navagio Beach", "description": "Shipwreck Beach on Zakynthos, turquoise waters, dramatic white cliffs.", "image_url": "https://images.unsplash.com/photo-1561409106-7f2ae077fa7e?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Mount Athos", "description": "Holy Mountain, monastic republic, Byzantine treasures and spirituality.", "image_url": "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800&q=80", "difficulty": "Hard"},
-    ],
+        {"name": "Private Greece Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Greece experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Greece Wine & Dine", "description": "Premium dining experience featuring Greece cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Greece Heritage Pass", "description": "Skip-the-line access to Greece's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Greece Adventure", "description": "Multi-day premium adventure package including unique Greece activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Greece Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # EUROPE - NORWAY
     "norway": [
@@ -178,7 +203,12 @@ LANDMARKS_DATA = {
         {"name": "Atlantic Road", "description": "Scenic highway across islets, dramatic bridges, named world's best road trip.", "image_url": "https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=800&q=80", "difficulty": "Easy"},
         {"name": "Nidaros Cathedral", "description": "Norway's national sanctuary, Gothic masterpiece in Trondheim, pilgrimage site.", "image_url": "https://images.unsplash.com/photo-1578895101408-1a36b834405b?w=800&q=80", "difficulty": "Easy"},
         {"name": "Svalbard Arctic", "description": "Remote archipelago, polar bears, glaciers, northernmost settlement on Earth.", "image_url": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&q=80", "difficulty": "Hard"},
-    ],
+        {"name": "Private Norway Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Norway experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Norway Wine & Dine", "description": "Premium dining experience featuring Norway cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Norway Heritage Pass", "description": "Skip-the-line access to Norway's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Norway Adventure", "description": "Multi-day premium adventure package including unique Norway activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Norway Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # EUROPE - SWITZERLAND
     "switzerland": [
@@ -192,7 +222,12 @@ LANDMARKS_DATA = {
         {"name": "Bern Old Town", "description": "Medieval city center, UNESCO site, arcades, Zytglogge clock tower.", "image_url": "https://images.unsplash.com/photo-1546422904-90eab23c3d7e?w=800&q=80", "difficulty": "Easy"},
         {"name": "Zermatt Village", "description": "Car-free Alpine village at Matterhorn's base, traditional chalets, mountain culture.", "image_url": "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80", "difficulty": "Easy"},
         {"name": "Lake Lugano", "description": "Mediterranean-style lake on Swiss-Italian border, palm trees, mountain backdrop.", "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Switzerland Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Switzerland experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Switzerland Wine & Dine", "description": "Premium dining experience featuring Switzerland cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Switzerland Heritage Pass", "description": "Skip-the-line access to Switzerland's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Switzerland Adventure", "description": "Multi-day premium adventure package including unique Switzerland activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Switzerland Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # EUROPE - NETHERLANDS
     "netherlands": [
@@ -206,7 +241,12 @@ LANDMARKS_DATA = {
         {"name": "Delft Blue Pottery", "description": "Royal Delft factory, hand-painted ceramics, centuries-old Dutch tradition.", "image_url": "https://images.unsplash.com/photo-1544126592-807ade215a0b?w=800&q=80", "difficulty": "Easy"},
         {"name": "Hoge Veluwe Park", "description": "National park with forests, heathlands, Kröller-Müller Museum, free bikes.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Zaanse Schans", "description": "Historic village with working windmills, green houses, cheese, clogs, crafts.", "image_url": "https://images.unsplash.com/photo-1469796466635-455ede028aca?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Netherlands Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Netherlands experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Netherlands Wine & Dine", "description": "Premium dining experience featuring Netherlands cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Netherlands Heritage Pass", "description": "Skip-the-line access to Netherlands's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Netherlands Adventure", "description": "Multi-day premium adventure package including unique Netherlands activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Netherlands Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # EUROPE - PORTUGAL
     "portugal": [
@@ -220,7 +260,12 @@ LANDMARKS_DATA = {
         {"name": "Cabo da Roca", "description": "Westernmost point of continental Europe, dramatic cliffs, lighthouse, ocean views.", "image_url": "https://images.unsplash.com/photo-1563789031959-4c02bcb41319?w=800&q=80", "difficulty": "Easy"},
         {"name": "Óbidos Medieval Town", "description": "Walled village with whitewashed houses, castle, cherry liqueur tradition.", "image_url": "https://images.unsplash.com/photo-1588453251771-cd19dc5aa89b?w=800&q=80", "difficulty": "Easy"},
         {"name": "Azores Islands", "description": "Volcanic archipelago, crater lakes, hot springs, whales, lush green landscapes.", "image_url": "https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=800&q=80", "difficulty": "Moderate"},
-    ],
+        {"name": "Private Portugal Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Portugal experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Portugal Wine & Dine", "description": "Premium dining experience featuring Portugal cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Portugal Heritage Pass", "description": "Skip-the-line access to Portugal's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Portugal Adventure", "description": "Multi-day premium adventure package including unique Portugal activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Portugal Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # ASIA - JAPAN
     "japan": [
@@ -234,7 +279,12 @@ LANDMARKS_DATA = {
         {"name": "Osaka Castle", "description": "Historic castle with massive stone walls, cherry blossoms, samurai history.", "image_url": "https://images.unsplash.com/photo-1590559900499-d2d0e7e8f725?w=800&q=80", "difficulty": "Easy"},
         {"name": "Hakone Hot Springs", "description": "Natural onsen baths with Mount Fuji views, traditional ryokan experience.", "image_url": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80", "difficulty": "Easy"},
         {"name": "Miyajima Island", "description": "Floating torii gate at high tide, sacred island, wild deer, spiritual beauty.", "image_url": "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Japan Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Japan experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Japan Wine & Dine", "description": "Premium dining experience featuring Japan cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Japan Heritage Pass", "description": "Skip-the-line access to Japan's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Japan Adventure", "description": "Multi-day premium adventure package including unique Japan activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Japan Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # ASIA - CHINA
     "china": [
@@ -248,7 +298,12 @@ LANDMARKS_DATA = {
         {"name": "Yangshuo Countryside", "description": "Idyllic rural landscape, bamboo rafting, rice paddies, traditional village life.", "image_url": "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80", "difficulty": "Easy"},
         {"name": "Summer Palace Beijing", "description": "Imperial garden, Kunming Lake, ornate pavilions, masterpiece of Chinese design.", "image_url": "https://images.unsplash.com/photo-1537185334-eba0d45c0a92?w=800&q=80", "difficulty": "Easy"},
         {"name": "Jiuzhaigou Valley", "description": "UNESCO nature reserve, colorful lakes, waterfalls, pristine forests, Tibetan culture.", "image_url": "https://images.unsplash.com/photo-1537185334-eba0d45c0a92?w=800&q=80", "difficulty": "Moderate"},
-    ],
+        {"name": "Private China Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic China experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury China Wine & Dine", "description": "Premium dining experience featuring China cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP China Heritage Pass", "description": "Skip-the-line access to China's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate China Adventure", "description": "Multi-day premium adventure package including unique China activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret China Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # ASIA - THAILAND
     "thailand": [
@@ -262,7 +317,12 @@ LANDMARKS_DATA = {
         {"name": "Erawan Waterfalls", "description": "Seven-tiered emerald waterfall, natural pools, jungle setting, swimming paradise.", "image_url": "https://images.unsplash.com/photo-1542640244-7e672d6cef4e?w=800&q=80", "difficulty": "Moderate"},
         {"name": "White Temple Chiang Rai", "description": "Dazzling white temple covered in mirrors, contemporary Buddhist art, unique vision.", "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80", "difficulty": "Easy"},
         {"name": "Sukhothai Historical Park", "description": "First capital of Siam, Buddha images, lotus ponds, dawn of Thai civilization.", "image_url": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Thailand Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Thailand experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Thailand Wine & Dine", "description": "Premium dining experience featuring Thailand cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Thailand Heritage Pass", "description": "Skip-the-line access to Thailand's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Thailand Adventure", "description": "Multi-day premium adventure package including unique Thailand activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Thailand Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # ASIA - INDIA
     "india": [
@@ -276,7 +336,12 @@ LANDMARKS_DATA = {
         {"name": "Khajuraho Temples", "description": "Medieval Hindu and Jain temples with intricate erotic sculptures, UNESCO site.", "image_url": "https://images.unsplash.com/photo-1588523736859-2f14e2c5a3cb?w=800&q=80", "difficulty": "Easy"},
         {"name": "Agra Fort", "description": "Massive red sandstone fortress, Mughal emperors' seat, near Taj Mahal.", "image_url": "https://images.unsplash.com/photo-1523469432922-3eaf1b00f6f2?w=800&q=80", "difficulty": "Easy"},
         {"name": "Goa Beaches", "description": "Tropical paradise, Portuguese heritage, beach shacks, hippie culture, sunset parties.", "image_url": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private India Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic India experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury India Wine & Dine", "description": "Premium dining experience featuring India cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP India Heritage Pass", "description": "Skip-the-line access to India's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate India Adventure", "description": "Multi-day premium adventure package including unique India activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret India Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # ASIA - UAE
     "uae": [
@@ -290,7 +355,12 @@ LANDMARKS_DATA = {
         {"name": "Burj Al Arab", "description": "Iconic sail-shaped luxury hotel, man-made island, Dubai's symbol.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80", "difficulty": "Easy"},
         {"name": "Dubai Fountain", "description": "World's largest choreographed fountain, water ballet with music and lights.", "image_url": "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&q=80", "difficulty": "Easy"},
         {"name": "Al Fahidi Historical District", "description": "Old Dubai quarter with wind towers, museums, souks, traditional architecture.", "image_url": "https://images.unsplash.com/photo-1549180030-48bf079fb38a?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Uae Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Uae experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Uae Wine & Dine", "description": "Premium dining experience featuring Uae cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Uae Heritage Pass", "description": "Skip-the-line access to Uae's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Uae Adventure", "description": "Multi-day premium adventure package including unique Uae activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Uae Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # ASIA - SINGAPORE
     "singapore": [
@@ -304,7 +374,12 @@ LANDMARKS_DATA = {
         {"name": "Clarke Quay", "description": "Riverside dining and nightlife, colorful colonial buildings, vibrant atmosphere.", "image_url": "https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=800&q=80", "difficulty": "Easy"},
         {"name": "Jewel Changi", "description": "Airport complex with indoor waterfall, forest valley, shopping, architectural wonder.", "image_url": "https://images.unsplash.com/photo-1543731068-5b6b1b9ab0b4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Little India", "description": "Colorful neighborhood, temples, spice shops, Indian culture and cuisine.", "image_url": "https://images.unsplash.com/photo-1562416231-1d0e1dba9064?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Singapore Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Singapore experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Singapore Wine & Dine", "description": "Premium dining experience featuring Singapore cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Singapore Heritage Pass", "description": "Skip-the-line access to Singapore's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Singapore Adventure", "description": "Multi-day premium adventure package including unique Singapore activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Singapore Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # ASIA - INDONESIA
     "indonesia": [
@@ -318,7 +393,12 @@ LANDMARKS_DATA = {
         {"name": "Gili Islands", "description": "Three tiny islands, no cars, turtles, coral gardens, laid-back paradise.", "image_url": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Ubud Monkey Forest", "description": "Sacred sanctuary with 700 long-tailed macaques, temple complex, nature walk.", "image_url": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Lake Toba", "description": "Volcanic lake, largest in Southeast Asia, Samosir Island, Batak culture.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Indonesia Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Indonesia experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Indonesia Wine & Dine", "description": "Premium dining experience featuring Indonesia cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Indonesia Heritage Pass", "description": "Skip-the-line access to Indonesia's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Indonesia Adventure", "description": "Multi-day premium adventure package including unique Indonesia activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Indonesia Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # ASIA - SOUTH KOREA
     "south_korea": [
@@ -332,7 +412,12 @@ LANDMARKS_DATA = {
         {"name": "Boseong Tea Fields", "description": "Rolling green tea plantations, walking paths, serene rural landscape.", "image_url": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&q=80", "difficulty": "Easy"},
         {"name": "Changdeokgung Palace", "description": "UNESCO palace with secret garden, traditional architecture, royal history.", "image_url": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&q=80", "difficulty": "Easy"},
         {"name": "Gamcheon Culture Village", "description": "Colorful hillside village, street art, maze of stairs, Busan's Santorini.", "image_url": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private South Korea Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic South Korea experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury South Korea Wine & Dine", "description": "Premium dining experience featuring South Korea cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP South Korea Heritage Pass", "description": "Skip-the-line access to South Korea's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate South Korea Adventure", "description": "Multi-day premium adventure package including unique South Korea activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret South Korea Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # ASIA - VIETNAM
     "vietnam": [
@@ -346,7 +431,12 @@ LANDMARKS_DATA = {
         {"name": "Phu Quoc Island", "description": "Tropical beaches, diving, fish sauce, pearl farms, island paradise.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
         {"name": "Hanoi Old Quarter", "description": "36 ancient streets, motorbike chaos, street food, colonial architecture.", "image_url": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&q=80", "difficulty": "Easy"},
         {"name": "Bai Tu Long Bay", "description": "Less crowded than Ha Long, pristine islands, kayaking, authentic experience.", "image_url": "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80", "difficulty": "Moderate"},
-    ],
+        {"name": "Private Vietnam Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Vietnam experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Vietnam Wine & Dine", "description": "Premium dining experience featuring Vietnam cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Vietnam Heritage Pass", "description": "Skip-the-line access to Vietnam's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Vietnam Adventure", "description": "Multi-day premium adventure package including unique Vietnam activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Vietnam Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # ASIA - MALAYSIA
     "malaysia": [
@@ -360,7 +450,12 @@ LANDMARKS_DATA = {
         {"name": "Malacca Historic City", "description": "Portuguese and Dutch colonial heritage, Jonker Street, UNESCO site.", "image_url": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&q=80", "difficulty": "Easy"},
         {"name": "Taman Negara", "description": "Ancient rainforest, 130 million years old, canopy walk, wildlife spotting.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Kuala Lumpur Tower", "description": "Communications tower, observation deck, revolving restaurant, city panoramas.", "image_url": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Malaysia Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Malaysia experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Malaysia Wine & Dine", "description": "Premium dining experience featuring Malaysia cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Malaysia Heritage Pass", "description": "Skip-the-line access to Malaysia's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Malaysia Adventure", "description": "Multi-day premium adventure package including unique Malaysia activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Malaysia Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AFRICA - EGYPT
     "egypt": [
@@ -374,7 +469,12 @@ LANDMARKS_DATA = {
         {"name": "Red Sea Riviera", "description": "World-class diving, coral reefs, resort towns, turquoise waters, marine life.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Khan el-Khalili Bazaar", "description": "Historic market, spices, perfumes, jewelry, authentic Cairo experience since 1382.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
         {"name": "Siwa Oasis", "description": "Remote desert oasis, salt lakes, mud-brick fortress, dates, olive groves.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
-    ],
+        {"name": "Private Egypt Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Egypt experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Egypt Wine & Dine", "description": "Premium dining experience featuring Egypt cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Egypt Heritage Pass", "description": "Skip-the-line access to Egypt's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Egypt Adventure", "description": "Multi-day premium adventure package including unique Egypt activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Egypt Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AFRICA - MOROCCO
     "morocco": [
@@ -388,7 +488,12 @@ LANDMARKS_DATA = {
         {"name": "Essaouira Coast", "description": "Coastal town, whitewashed medina, seafood, windsurfing, laid-back vibe.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Todra Gorge", "description": "Dramatic canyon, 300m limestone walls, rock climbing, river, desert scenery.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Rabat Kasbah", "description": "Fortified citadel, blue and white streets, ocean views, capital's historic heart.", "image_url": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Morocco Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Morocco experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Morocco Wine & Dine", "description": "Premium dining experience featuring Morocco cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Morocco Heritage Pass", "description": "Skip-the-line access to Morocco's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Morocco Adventure", "description": "Multi-day premium adventure package including unique Morocco activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Morocco Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AFRICA - SOUTH AFRICA
     "south_africa": [
@@ -402,7 +507,12 @@ LANDMARKS_DATA = {
         {"name": "Drakensberg Mountains", "description": "UNESCO mountain range, hiking, rock art, waterfalls, Giant's Castle, scenery.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Winelands Stellenbosch", "description": "Cape Dutch architecture, vineyards, wine tasting, gourmet food, mountain backdrop.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Apartheid Museum", "description": "Powerful museum documenting South Africa's segregation history and triumph.", "image_url": "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private South Africa Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic South Africa experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury South Africa Wine & Dine", "description": "Premium dining experience featuring South Africa cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP South Africa Heritage Pass", "description": "Skip-the-line access to South Africa's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate South Africa Adventure", "description": "Multi-day premium adventure package including unique South Africa activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret South Africa Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AFRICA - KENYA
     "kenya": [
@@ -416,7 +526,12 @@ LANDMARKS_DATA = {
         {"name": "Hell's Gate National Park", "description": "Dramatic gorge, geothermal activity, cycling, rock climbing, inspired Lion King.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Great Rift Valley", "description": "Geological marvel, escarpments, lakes, volcanic formations, viewpoints.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
         {"name": "Nairobi National Park", "description": "Wildlife park with city skyline backdrop, lions, rhinos, giraffe center nearby.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Kenya Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Kenya experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Kenya Wine & Dine", "description": "Premium dining experience featuring Kenya cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Kenya Heritage Pass", "description": "Skip-the-line access to Kenya's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Kenya Adventure", "description": "Multi-day premium adventure package including unique Kenya activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Kenya Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AFRICA - TANZANIA
     "tanzania": [
@@ -430,7 +545,12 @@ LANDMARKS_DATA = {
         {"name": "Mafia Island", "description": "Diving paradise, whale sharks, pristine reefs, laid-back, off-beaten path.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Olduvai Gorge", "description": "Cradle of Mankind, early human fossils, archaeological site, paleoanthropology.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
         {"name": "Pemba Island", "description": "Clove island, unspoiled beaches, diving, spice plantations, quiet escape.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Tanzania Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Tanzania experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Tanzania Wine & Dine", "description": "Premium dining experience featuring Tanzania cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Tanzania Heritage Pass", "description": "Skip-the-line access to Tanzania's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Tanzania Adventure", "description": "Multi-day premium adventure package including unique Tanzania activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Tanzania Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AFRICA - MAURITIUS
     "mauritius": [
@@ -444,7 +564,12 @@ LANDMARKS_DATA = {
         {"name": "Pamplemousses Garden", "description": "Botanical garden, giant water lilies, exotic plants, colonial history, peaceful oasis.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Blue Bay Marine Park", "description": "Snorkeling paradise, glass-bottom boats, coral gardens, protected marine area.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Rodrigues Island", "description": "Remote volcanic island, pristine nature, Creole culture, caves, lagoon.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Mauritius Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Mauritius experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Mauritius Wine & Dine", "description": "Premium dining experience featuring Mauritius cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Mauritius Heritage Pass", "description": "Skip-the-line access to Mauritius's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Mauritius Adventure", "description": "Multi-day premium adventure package including unique Mauritius activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Mauritius Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AFRICA - SEYCHELLES
     "seychelles": [
@@ -458,7 +583,12 @@ LANDMARKS_DATA = {
         {"name": "Curieuse Island", "description": "Giant tortoise breeding, mangrove forests, BBQ beaches, day excursions.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
         {"name": "Victoria Clock Tower", "description": "Mini Big Ben, capital city landmark, colorful market, Creole culture.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
         {"name": "Sainte Anne Marine Park", "description": "First marine park, snorkeling, glass-bottom boats, protected reefs, sea turtles.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Seychelles Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Seychelles experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Seychelles Wine & Dine", "description": "Premium dining experience featuring Seychelles cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Seychelles Heritage Pass", "description": "Skip-the-line access to Seychelles's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Seychelles Adventure", "description": "Multi-day premium adventure package including unique Seychelles activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Seychelles Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AFRICA - BOTSWANA
     "botswana": [
@@ -472,7 +602,12 @@ LANDMARKS_DATA = {
         {"name": "Linyanti Wildlife Reserve", "description": "Remote wetlands, wild dogs, elephants, exclusive safari experience.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
         {"name": "Nxai Pan National Park", "description": "Ancient baobabs, springbok migration, dramatic landscapes, seasonal floods.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Kubu Island", "description": "Rocky outcrop in salt pan, ancient baobabs, camping, remote adventure.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
-    ],
+        {"name": "Private Botswana Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Botswana experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Botswana Wine & Dine", "description": "Premium dining experience featuring Botswana cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Botswana Heritage Pass", "description": "Skip-the-line access to Botswana's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Botswana Adventure", "description": "Multi-day premium adventure package including unique Botswana activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Botswana Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AFRICA - NAMIBIA
     "namibia": [
@@ -486,7 +621,12 @@ LANDMARKS_DATA = {
         {"name": "Damaraland", "description": "Desert elephants, rock engravings, petrified forest, rugged wilderness.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Kolmanskop Ghost Town", "description": "Abandoned diamond mining town, sand-filled houses, photographer paradise.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Easy"},
         {"name": "Waterberg Plateau", "description": "Sandstone cliffs, rare species sanctuary, hiking, prehistoric rock art.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
-    ],
+        {"name": "Private Namibia Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Namibia experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Namibia Wine & Dine", "description": "Premium dining experience featuring Namibia cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Namibia Heritage Pass", "description": "Skip-the-line access to Namibia's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Namibia Adventure", "description": "Multi-day premium adventure package including unique Namibia activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Namibia Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AFRICA - TUNISIA
     "tunisia": [
@@ -500,7 +640,12 @@ LANDMARKS_DATA = {
         {"name": "Hammamet Beach", "description": "Popular resort, white sand, turquoise water, medina, golf, family destination.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Bardo National Museum", "description": "World's finest Roman mosaic collection, Carthaginian artifacts, Tunis palace.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
         {"name": "Tozeur Oasis", "description": "Desert oasis, palm groves, Berber architecture, Sahara gateway, date capital.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Tunisia Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Tunisia experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Tunisia Wine & Dine", "description": "Premium dining experience featuring Tunisia cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Tunisia Heritage Pass", "description": "Skip-the-line access to Tunisia's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Tunisia Adventure", "description": "Multi-day premium adventure package including unique Tunisia activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Tunisia Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AMERICAS - USA
     "usa": [
@@ -514,7 +659,12 @@ LANDMARKS_DATA = {
         {"name": "Mount Rushmore", "description": "Four presidents carved in granite, Black Hills, American symbol, monument.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
         {"name": "Hawaii Volcanoes", "description": "Active lava flows, Kilauea, black sand beaches, tropical volcanic paradise.", "image_url": "https://images.unsplash.com/photo-1542259009477-d625272157b7?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Niagara Falls", "description": "Powerful waterfalls on US-Canada border, Maid of the Mist, natural spectacle.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Usa Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Usa experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Usa Wine & Dine", "description": "Premium dining experience featuring Usa cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Usa Heritage Pass", "description": "Skip-the-line access to Usa's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Usa Adventure", "description": "Multi-day premium adventure package including unique Usa activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Usa Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AMERICAS - CANADA
     "canada": [
@@ -528,7 +678,12 @@ LANDMARKS_DATA = {
         {"name": "Bay of Fundy", "description": "World's highest tides, dramatic coastline, fossil cliffs, tidal bore rafting.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Whistler", "description": "World-class ski resort, mountain biking, Peak 2 Peak gondola, alpine village.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Parliament Hill Ottawa", "description": "Gothic Revival buildings, Changing of Guard, capital city, Canadian government.", "image_url": "https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Canada Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Canada experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Canada Wine & Dine", "description": "Premium dining experience featuring Canada cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Canada Heritage Pass", "description": "Skip-the-line access to Canada's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Canada Adventure", "description": "Multi-day premium adventure package including unique Canada activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Canada Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AMERICAS - MEXICO
     "mexico": [
@@ -542,7 +697,12 @@ LANDMARKS_DATA = {
         {"name": "Guanajuato", "description": "Colorful hillside city, underground streets, mummies, silver mining history.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800&q=80", "difficulty": "Easy"},
         {"name": "Palenque Jungle Temples", "description": "Mayan ruins in rainforest, pyramids, howler monkeys, mysterious inscriptions.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800&q=80", "difficulty": "Easy"},
         {"name": "Oaxaca Monte Alban", "description": "Zapotec ruins, mezcal, handicrafts, Day of Dead traditions, colonial city.", "image_url": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Mexico Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Mexico experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Mexico Wine & Dine", "description": "Premium dining experience featuring Mexico cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Mexico Heritage Pass", "description": "Skip-the-line access to Mexico's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Mexico Adventure", "description": "Multi-day premium adventure package including unique Mexico activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Mexico Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AMERICAS - BRAZIL
     "brazil": [
@@ -556,7 +716,12 @@ LANDMARKS_DATA = {
         {"name": "Salvador Pelourinho", "description": "Afro-Brazilian culture, colonial architecture, capoeira, music, colorful historic center.", "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80", "difficulty": "Easy"},
         {"name": "Lençóis Maranhenses", "description": "White sand dunes with turquoise lagoons, desert meets water, unique ecosystem.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
         {"name": "São Paulo Avenida Paulista", "description": "Financial heart, museums, street art, dining, vibrant urban energy, cultural hub.", "image_url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Brazil Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Brazil experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Brazil Wine & Dine", "description": "Premium dining experience featuring Brazil cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Brazil Heritage Pass", "description": "Skip-the-line access to Brazil's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Brazil Adventure", "description": "Multi-day premium adventure package including unique Brazil activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Brazil Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AMERICAS - PERU
     "peru": [
@@ -570,7 +735,12 @@ LANDMARKS_DATA = {
         {"name": "Sacred Valley", "description": "Inca ruins, Ollantaytambo, Pisac market, agricultural terraces, mountain scenery.", "image_url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80", "difficulty": "Easy"},
         {"name": "Lima Historic Center", "description": "Colonial architecture, Plaza de Armas, catacombs, gastronomy capital, UNESCO.", "image_url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80", "difficulty": "Easy"},
         {"name": "Huacachina Oasis", "description": "Desert oasis, sand dunes, sandboarding, dune buggies, palm-ringed lagoon.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Peru Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Peru experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Peru Wine & Dine", "description": "Premium dining experience featuring Peru cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Peru Heritage Pass", "description": "Skip-the-line access to Peru's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Peru Adventure", "description": "Multi-day premium adventure package including unique Peru activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Peru Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AMERICAS - ARGENTINA
     "argentina": [
@@ -584,7 +754,12 @@ LANDMARKS_DATA = {
         {"name": "Bariloche Lake District", "description": "Swiss-style town, chocolate, Nahuel Huapi Lake, skiing, hiking, scenic beauty.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Valdes Peninsula", "description": "UNESCO reserve, whales, sea lions, penguins, elephant seals, wildlife watching.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Salta & Jujuy", "description": "Colonial architecture, colorful mountains, Humahuaca Gorge, high-altitude vineyards.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Argentina Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Argentina experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Argentina Wine & Dine", "description": "Premium dining experience featuring Argentina cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Argentina Heritage Pass", "description": "Skip-the-line access to Argentina's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Argentina Adventure", "description": "Multi-day premium adventure package including unique Argentina activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Argentina Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AMERICAS - CHILE
     "chile": [
@@ -598,7 +773,12 @@ LANDMARKS_DATA = {
         {"name": "Chiloé Island", "description": "Wooden churches, palafitos, mythology, seafood, unique architecture, UNESCO.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Lauca National Park", "description": "High-altitude park, vicuñas, Lake Chungará, volcanoes, flamingos, altiplano.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Viña del Mar", "description": "Garden city, beaches, Flower Clock, casino, coastal resort, Pacific views.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Chile Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Chile experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Chile Wine & Dine", "description": "Premium dining experience featuring Chile cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Chile Heritage Pass", "description": "Skip-the-line access to Chile's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Chile Adventure", "description": "Multi-day premium adventure package including unique Chile activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Chile Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AMERICAS - COLOMBIA
     "colombia": [
@@ -612,7 +792,12 @@ LANDMARKS_DATA = {
         {"name": "Medellín Transformation", "description": "City of eternal spring, cable cars, Comuna 13 art, innovation, vibrant nightlife.", "image_url": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80", "difficulty": "Easy"},
         {"name": "Salt Cathedral Zipaquirá", "description": "Underground cathedral carved in salt mine, illuminated, engineering marvel.", "image_url": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80", "difficulty": "Easy"},
         {"name": "Los Nevados Park", "description": "Snow-capped volcanoes, páramo ecosystem, hot springs, Andean condors, trekking.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
-    ],
+        {"name": "Private Colombia Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Colombia experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Colombia Wine & Dine", "description": "Premium dining experience featuring Colombia cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Colombia Heritage Pass", "description": "Skip-the-line access to Colombia's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Colombia Adventure", "description": "Multi-day premium adventure package including unique Colombia activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Colombia Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AMERICAS - ECUADOR
     "ecuador": [
@@ -626,7 +811,12 @@ LANDMARKS_DATA = {
         {"name": "Cuenca Historic Center", "description": "Colonial architecture, Panama hats, riverside, UNESCO, charming cobblestone streets.", "image_url": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80", "difficulty": "Easy"},
         {"name": "Quilotoa Crater Lake", "description": "Turquoise volcanic crater lake, hiking rim, indigenous villages, stunning views.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Mindo Cloud Forest", "description": "Birding paradise, hummingbirds, zip-lining, waterfalls, chocolate tours, biodiversity.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Ecuador Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Ecuador experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Ecuador Wine & Dine", "description": "Premium dining experience featuring Ecuador cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Ecuador Heritage Pass", "description": "Skip-the-line access to Ecuador's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Ecuador Adventure", "description": "Multi-day premium adventure package including unique Ecuador activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Ecuador Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # AMERICAS - COSTA RICA
     "costa_rica": [
@@ -640,7 +830,12 @@ LANDMARKS_DATA = {
         {"name": "Corcovado National Park", "description": "Most biodiverse place on Earth, jaguars, tapirs, scarlet macaws, pristine wilderness.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Hard"},
         {"name": "La Fortuna Waterfall", "description": "75m waterfall, swimming hole, stairs through jungle, photogenic, refreshing.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800&q=80", "difficulty": "Easy"},
         {"name": "Cahuita National Park", "description": "Caribbean beaches, coral reef, sloths, howler monkeys, Afro-Caribbean culture.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Costa Rica Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Costa Rica experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Costa Rica Wine & Dine", "description": "Premium dining experience featuring Costa Rica cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Costa Rica Heritage Pass", "description": "Skip-the-line access to Costa Rica's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Costa Rica Adventure", "description": "Multi-day premium adventure package including unique Costa Rica activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Costa Rica Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # OCEANIA - AUSTRALIA
     "australia": [
@@ -654,7 +849,12 @@ LANDMARKS_DATA = {
         {"name": "Daintree Rainforest", "description": "Ancient rainforest meets reef, World Heritage, wildlife, Cape Tribulation.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Tasmania Wilderness", "description": "Pristine wilderness, Cradle Mountain, convict history, wildlife, hiking trails.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Bondi Beach", "description": "Famous surf beach, coastal walk, beach culture, cafes, Sydney's playground.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Australia Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Australia experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Australia Wine & Dine", "description": "Premium dining experience featuring Australia cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Australia Heritage Pass", "description": "Skip-the-line access to Australia's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Australia Adventure", "description": "Multi-day premium adventure package including unique Australia activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Australia Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # OCEANIA - NEW ZEALAND
     "new_zealand": [
@@ -668,7 +868,12 @@ LANDMARKS_DATA = {
         {"name": "Abel Tasman Park", "description": "Golden beaches, coastal track, kayaking, seals, crystal waters, paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Lake Tekapo", "description": "Turquoise lake, Church of Good Shepherd, stargazing, lupins, Southern Alps.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
         {"name": "Wellington Te Papa Museum", "description": "National museum, Maori treasures, interactive, capital city, cultural hub.", "image_url": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private New Zealand Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic New Zealand experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury New Zealand Wine & Dine", "description": "Premium dining experience featuring New Zealand cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP New Zealand Heritage Pass", "description": "Skip-the-line access to New Zealand's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate New Zealand Adventure", "description": "Multi-day premium adventure package including unique New Zealand activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret New Zealand Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # OCEANIA - FIJI
     "fiji": [
@@ -682,7 +887,12 @@ LANDMARKS_DATA = {
         {"name": "Taveuni Waterfalls", "description": "Garden Island, waterfalls, diving, rainforest, 180th meridian, natural beauty.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Sigatoka Sand Dunes", "description": "Archaeological site, coastal dunes, hiking, ancient burial grounds, geology.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Easy"},
         {"name": "Kula Eco Park", "description": "Wildlife park, native species, birds, iguanas, conservation, educational.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Fiji Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Fiji experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Fiji Wine & Dine", "description": "Premium dining experience featuring Fiji cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Fiji Heritage Pass", "description": "Skip-the-line access to Fiji's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Fiji Adventure", "description": "Multi-day premium adventure package including unique Fiji activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Fiji Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # OCEANIA - FRENCH POLYNESIA
     "french_polynesia": [
@@ -696,7 +906,12 @@ LANDMARKS_DATA = {
         {"name": "Maupiti Island", "description": "Bora Bora's little sister, authentic, fewer tourists, lagoon, traditional life.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Raiatea Sacred Sites", "description": "Sacred island, marae temples, Polynesian culture, Mount Temehani, history.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Marquesas Islands", "description": "Remote volcanic islands, tikis, horses, dramatic landscapes, Paul Gauguin.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
-    ],
+        {"name": "Private French Polynesia Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic French Polynesia experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury French Polynesia Wine & Dine", "description": "Premium dining experience featuring French Polynesia cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP French Polynesia Heritage Pass", "description": "Skip-the-line access to French Polynesia's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate French Polynesia Adventure", "description": "Multi-day premium adventure package including unique French Polynesia activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret French Polynesia Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # OCEANIA - COOK ISLANDS
     "cook_islands": [
@@ -710,7 +925,12 @@ LANDMARKS_DATA = {
         {"name": "Punanga Nui Market", "description": "Saturday market, local produce, crafts, food, live music, community gathering.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
         {"name": "Titikaveka Beach", "description": "Best beach for snorkeling, coral gardens, fish, peaceful, crystal clear.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Maire Nui Gardens", "description": "Tropical gardens, orchids, cultural shows, traditional plants, peaceful oasis.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Cook Islands Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Cook Islands experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Cook Islands Wine & Dine", "description": "Premium dining experience featuring Cook Islands cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Cook Islands Heritage Pass", "description": "Skip-the-line access to Cook Islands's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Cook Islands Adventure", "description": "Multi-day premium adventure package including unique Cook Islands activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Cook Islands Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # OCEANIA - SAMOA
     "samoa": [
@@ -724,7 +944,12 @@ LANDMARKS_DATA = {
         {"name": "Robert Louis Stevenson Museum", "description": "Author's former home, colonial mansion, history, panoramic views, cultural site.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
         {"name": "Falealupo Canopy Walk", "description": "Treetop walkway, rainforest, bird watching, conservation, stunning views.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Manono Island", "description": "Car-free island, traditional life, beaches, walking trails, peaceful escape.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Samoa Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Samoa experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Samoa Wine & Dine", "description": "Premium dining experience featuring Samoa cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Samoa Heritage Pass", "description": "Skip-the-line access to Samoa's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Samoa Adventure", "description": "Multi-day premium adventure package including unique Samoa activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Samoa Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # OCEANIA - VANUATU
     "vanuatu": [
@@ -738,7 +963,12 @@ LANDMARKS_DATA = {
         {"name": "Pentecost Land Diving", "description": "Ancient bungee jumping, vines, ritual, cultural experience, seasonal.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Hideaway Island", "description": "Marine sanctuary, snorkeling, underwater post office, coral, beach resort.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
         {"name": "Tanna Culture", "description": "Custom villages, traditional life, kastom dances, authentic Melanesian culture.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Vanuatu Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Vanuatu experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Vanuatu Wine & Dine", "description": "Premium dining experience featuring Vanuatu cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Vanuatu Heritage Pass", "description": "Skip-the-line access to Vanuatu's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Vanuatu Adventure", "description": "Multi-day premium adventure package including unique Vanuatu activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Vanuatu Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
     
     # OCEANIA - TONGA
     "tonga": [
@@ -752,7 +982,12 @@ LANDMARKS_DATA = {
         {"name": "Ene'io Botanical Garden", "description": "Native plants, walking trails, birdwatching, conservation, educational.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
         {"name": "Swallows Cave", "description": "Sea cave, snorkeling, light shafts, cliff jumping, dramatic, boat access.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Royal Tombs", "description": "Burial site of Tongan royalty, historical, cultural significance, red sand.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
-    ],
+        {"name": "Private Tonga Cultural Tour", "description": "Exclusive guided tour with local experts, visiting hidden cultural sites and authentic Tonga experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxury Tonga Wine & Dine", "description": "Premium dining experience featuring Tonga cuisine, wine tasting, and gourmet culinary journey.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "VIP Tonga Heritage Pass", "description": "Skip-the-line access to Tonga's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ultimate Tonga Adventure", "description": "Multi-day premium adventure package including unique Tonga activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Secret Tonga Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+],
 }
 
 # Now add country image URLs for all countries
