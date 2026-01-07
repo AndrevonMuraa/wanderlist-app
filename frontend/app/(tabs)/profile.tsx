@@ -56,24 +56,6 @@ export default function ProfileScreen() {
     }
   };
 
-  const fetchVisitCount = async () => {
-    try {
-      const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/users/me/visits/count`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setVisitCount(data);
-      }
-    } catch (error) {
-      console.error('Error fetching visit count:', error);
-    }
-  };
-
   const handleLogout = async () => {
     if (Platform.OS === 'web') {
       // For web, use native confirm dialog
