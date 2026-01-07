@@ -15,7 +15,14 @@ const BACKEND_URL = Platform.OS === 'web'
   ? '' 
   : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
 const { width } = Dimensions.get('window');
-const CARD_WIDTH = (width - 48) / 2; // 2 columns with spacing
+// Responsive grid: mobile (2 cols), tablet (3 cols), desktop (4 cols)
+const getColumns = () => {
+  if (width >= 1200) return 4; // Desktop
+  if (width >= 768) return 3;  // Tablet
+  return 2; // Mobile
+};
+const COLUMNS = getColumns();
+const CARD_WIDTH = (width - (16 * (COLUMNS + 1))) / COLUMNS; // Dynamic width with spacing
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
