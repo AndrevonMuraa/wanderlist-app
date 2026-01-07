@@ -333,25 +333,27 @@ export default function LandmarkDetailScreen() {
           ))}
         </View>
 
-        {/* Action Button */}
-        <View style={styles.actionContainer}>
-          <TouchableOpacity
-            onPress={handleMarkAsVisited}
-            style={styles.visitButton}
-            activeOpacity={0.8}
-          >
-            <LinearGradient
-              colors={[theme.colors.primary, theme.colors.primaryDark]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.visitButtonGradient}
-            >
-              <Ionicons name="checkmark-circle-outline" size={24} color="#fff" />
-              <Text style={styles.visitButtonText}>Mark as Visited</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
+
+      {/* Floating Action Button - Mark as Visited */}
+      <View style={styles.floatingButtonContainer}>
+        <TouchableOpacity
+          onPress={handleMarkAsVisited}
+          style={styles.floatingButton}
+          activeOpacity={0.9}
+        >
+          <LinearGradient
+            colors={[theme.colors.primary, theme.colors.primaryDark]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.floatingButtonGradient}
+          >
+            <Ionicons name="checkmark-circle" size={28} color="#fff" />
+            <Text style={styles.floatingButtonText}>Mark as Visited</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
+
     </SafeAreaView>
   </View>
   );
