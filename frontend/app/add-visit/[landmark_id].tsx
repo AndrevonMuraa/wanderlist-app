@@ -432,6 +432,13 @@ export default function AddVisitScreen() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <UpgradeModal 
+        visible={showUpgradeModal}
+        onClose={closeModal}
+        onUpgrade={handleUpgrade}
+        reason={upgradeReason}
+      />
     </SafeAreaView>
   );
 }
