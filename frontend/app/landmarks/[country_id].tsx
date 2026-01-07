@@ -11,12 +11,6 @@ import theme from '../../styles/theme';
 import UpgradeModal from '../../components/UpgradeModal';
 import { BACKEND_URL } from '../../utils/config';
 
-// For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
-// For mobile, use the external URL
-const BACKEND_URL = Platform.OS === 'web' 
-  ? '' 
-  : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
-
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
