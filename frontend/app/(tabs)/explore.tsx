@@ -154,40 +154,38 @@ export default function ExploreScreen() {
     fetchCountries();
   };
 
-  const renderCountryCard = ({ item, index, section }: { item: Country; index: number; section: ContinentSection }) => {
-    const accentColor = (theme.colors.countryAccents as any)[item.name.toLowerCase().replace(' ', '_')] || theme.colors.primary;
-    const columnIndex = index % COLUMNS;
-    const isFirstColumn = columnIndex === 0;
-    const isLastColumn = columnIndex === COLUMNS - 1;
-    
+  const renderCountryCard = ({ item }: { item: Country[] }) => {
     return (
-      <View style={[
-        styles.cardContainer,
-        { width: CARD_WIDTH },
-        isFirstColumn && styles.firstColumnCard,
-        isLastColumn && styles.lastColumnCard
-      ]}>
-        <TouchableOpacity
-          onPress={() => router.push(`/landmarks/${item.country_id}?name=${encodeURIComponent(item.name)}`)}
-          activeOpacity={0.9}
-        >
-          <View style={styles.countryCard}>
-            <Image
-              source={{ uri: COUNTRY_IMAGES[item.name] || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600' }}
-              style={styles.countryImage}
-              resizeMode="cover"
-            />
-            <LinearGradient
-              colors={['transparent', 'rgba(0,0,0,0.7)']}
-              style={styles.countryOverlay}
-            >
-              <Text style={styles.countryFlag}>{COUNTRY_FLAGS[item.name] || '🌍'}</Text>
-              <Text style={styles.countryName}>{item.name}</Text>
-              <Text style={styles.countryInfo}>{item.landmark_count} landmarks</Text>
-            </LinearGradient>
-            <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
-          </View>
-        </TouchableOpacity>
+      <View style={styles.rowContainer}>
+        {item.map((country) => {
+          const accentColor = (theme.colors.countryAccents as any)[country.name.toLowerCase().replace(' ', '_')] || theme.colors.primary;
+          
+          return (
+            <View key={country.country_id} style={styles.cardContainer}>
+              <TouchableOpacity
+                onPress={() => router.push(`/landmarks/${country.country_id}?name=${encodeURIComponent(country.name)}`)}
+                activeOpacity={0.9}
+              >
+                <View style={styles.countryCard}>
+                  <Image
+                    source={{ uri: COUNTRY_IMAGES[country.name] || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600' }}
+                    style={styles.countryImage}
+                    resizeMode="cover"
+                  />
+                  <LinearGradient
+                    colors={['transparent', 'rgba(0,0,0,0.7)']}
+                    style={styles.countryOverlay}
+                  >
+                    <Text style={styles.countryFlag}>{COUNTRY_FLAGS[country.name] || '🌍'}</Text>
+                    <Text style={styles.countryName}>{country.name}</Text>
+                    <Text style={styles.countryInfo}>{country.landmark_count} landmarks</Text>
+                  </LinearGradient>
+                  <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          );
+        })}
       </View>
     );
   };
