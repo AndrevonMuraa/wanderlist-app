@@ -636,4 +636,240 @@ LANDMARKS_DATA = {
         {"name": "La Fortuna Waterfall", "description": "75m waterfall, swimming hole, stairs through jungle, photogenic, refreshing.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800&q=80", "difficulty": "Easy"},
         {"name": "Cahuita National Park", "description": "Caribbean beaches, coral reef, sloths, howler monkeys, Afro-Caribbean culture.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
     ],
+    
+    # OCEANIA - AUSTRALIA
+    "australia": [
+        {"name": "Sydney Opera House", "description": "Iconic sail-shaped building, harbor, performing arts, Sydney symbol, UNESCO.", "image_url": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Great Barrier Reef", "description": "World's largest coral reef system, diving, snorkeling, marine life, natural wonder.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Uluru Ayers Rock", "description": "Sacred red monolith, Aboriginal culture, sunrise/sunset, outback, spiritual.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Great Ocean Road", "description": "Scenic coastal drive, Twelve Apostles, cliffs, shipwrecks, stunning views.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Blue Mountains", "description": "Sandstone cliffs, Three Sisters, eucalyptus forest, waterfalls, hiking, scenic railway.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Whitsunday Islands", "description": "74 tropical islands, Whitehaven Beach, sailing, coral reefs, turquoise waters.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Kakadu National Park", "description": "Aboriginal rock art, wetlands, crocodiles, waterfalls, cultural heritage, wildlife.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Daintree Rainforest", "description": "Ancient rainforest meets reef, World Heritage, wildlife, Cape Tribulation.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Tasmania Wilderness", "description": "Pristine wilderness, Cradle Mountain, convict history, wildlife, hiking trails.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Bondi Beach", "description": "Famous surf beach, coastal walk, beach culture, cafes, Sydney's playground.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # OCEANIA - NEW ZEALAND
+    "new_zealand": [
+        {"name": "Milford Sound", "description": "Fiordland, waterfalls, rainforest, dolphins, cruises, Mitre Peak, pristine beauty.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Hobbiton Movie Set", "description": "Lord of the Rings film set, Shire, hobbit holes, rolling green hills, fantasy come alive.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Queenstown", "description": "Adventure capital, bungee jumping, skiing, Remarkables, adrenaline, stunning lakeside.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Tongariro Crossing", "description": "Alpine crossing, emerald lakes, Mount Doom, volcanic landscape, day hike.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Rotorua Geothermal", "description": "Geysers, hot springs, mud pools, Maori culture, thermal wonderland, unique.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Bay of Islands", "description": "150 subtropical islands, dolphins, sailing, historic Waitangi, pristine waters.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Franz Josef Glacier", "description": "Walk on glacier, ice climbing, rainforest to ice, West Coast beauty.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Abel Tasman Park", "description": "Golden beaches, coastal track, kayaking, seals, crystal waters, paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Lake Tekapo", "description": "Turquoise lake, Church of Good Shepherd, stargazing, lupins, Southern Alps.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Wellington Te Papa Museum", "description": "National museum, Maori treasures, interactive, capital city, cultural hub.", "image_url": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # OCEANIA - FIJI
+    "fiji": [
+        {"name": "Coral Coast", "description": "White sand beaches, coral reefs, snorkeling, traditional villages, paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Mamanuca Islands", "description": "Resort islands, crystal waters, surfing, Cast Away island, tropical bliss.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Yasawa Islands", "description": "Remote volcanic islands, pristine beaches, cave swimming, traditional Fijian culture.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Garden of Sleeping Giant", "description": "Orchid collection, tropical garden, rainforest, peaceful botanical paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Suva City", "description": "Capital, markets, colonial architecture, museums, cultural heart, urban Pacific.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Navua River", "description": "Bamboo rafting, jungle gorge, waterfalls, village visits, adventure.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Beqa Lagoon", "description": "World-class diving, shark diving, soft coral capital, marine biodiversity.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Taveuni Waterfalls", "description": "Garden Island, waterfalls, diving, rainforest, 180th meridian, natural beauty.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Sigatoka Sand Dunes", "description": "Archaeological site, coastal dunes, hiking, ancient burial grounds, geology.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Kula Eco Park", "description": "Wildlife park, native species, birds, iguanas, conservation, educational.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # OCEANIA - FRENCH POLYNESIA
+    "french_polynesia": [
+        {"name": "Bora Bora Lagoon", "description": "Overwater bungalows, turquoise lagoon, Mount Otemanu, luxury paradise, honeymooners' dream.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Moorea", "description": "Heart-shaped island, snorkeling with rays, pineapple plantations, volcanic peaks.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Tahiti Papeete Market", "description": "Colorful market, tropical fruits, handicrafts, Polynesian culture, vibrant.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Fakarava Atoll", "description": "UNESCO biosphere, diving paradise, shark wall, pristine coral, Tuamotu atolls.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Rangiroa", "description": "Second largest atoll in world, diving, dolphins, lagoon, blue water infinity.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Huahine", "description": "Garden of Eden, sacred eels, vanilla plantations, archaeological sites, authentic.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Tikehau Pink Sand", "description": "Pink sand beaches, pearl farms, bird island, snorkeling, secluded paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Maupiti Island", "description": "Bora Bora's little sister, authentic, fewer tourists, lagoon, traditional life.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Raiatea Sacred Sites", "description": "Sacred island, marae temples, Polynesian culture, Mount Temehani, history.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Marquesas Islands", "description": "Remote volcanic islands, tikis, horses, dramatic landscapes, Paul Gauguin.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+    ],
+    
+    # OCEANIA - COOK ISLANDS
+    "cook_islands": [
+        {"name": "Aitutaki Lagoon", "description": "World's most beautiful lagoon, turquoise water, One Foot Island, paradise.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Rarotonga", "description": "Main island, jungle interior, coastal road, snorkeling, Polynesian culture.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Muri Lagoon", "description": "Protected lagoon, kayaking, stand-up paddle, sandbars, water activities.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Cross Island Trek", "description": "Jungle hike across Rarotonga, Te Rua Manga needle, rainforest, adventure.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Avarua Town", "description": "Capital, markets, colonial architecture, cafes, cultural center, relaxed vibe.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Wigmore's Waterfall", "description": "Jungle waterfall, swimming hole, tropical setting, hiking trail, refreshing.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Atiu Caves", "description": "Limestone caves, kopeka birds, underground streams, traditional island.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Punanga Nui Market", "description": "Saturday market, local produce, crafts, food, live music, community gathering.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Titikaveka Beach", "description": "Best beach for snorkeling, coral gardens, fish, peaceful, crystal clear.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Maire Nui Gardens", "description": "Tropical gardens, orchids, cultural shows, traditional plants, peaceful oasis.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # OCEANIA - SAMOA
+    "samoa": [
+        {"name": "To Sua Ocean Trench", "description": "30m swimming hole connected to ocean, ladder descent, stunning natural pool.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Lalomanu Beach", "description": "White sand, turquoise water, palm trees, fales, paradise beach, snorkeling.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Piula Cave Pool", "description": "Freshwater pool in cave, swim through to ocean, unique, refreshing.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Savai'i Island", "description": "Larger island, lava fields, blowholes, traditional villages, less touristy.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Apia Market", "description": "Colorful produce, handicrafts, local culture, fresh fish, authentic Samoan life.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Togitogiga Waterfall", "description": "Waterfall with natural pools, jungle setting, swimming, picnic spot, popular.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Alofaaga Blowholes", "description": "Ocean water shooting high through lava rocks, dramatic, natural spectacle.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Robert Louis Stevenson Museum", "description": "Author's former home, colonial mansion, history, panoramic views, cultural site.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Falealupo Canopy Walk", "description": "Treetop walkway, rainforest, bird watching, conservation, stunning views.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Manono Island", "description": "Car-free island, traditional life, beaches, walking trails, peaceful escape.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # OCEANIA - VANUATU
+    "vanuatu": [
+        {"name": "Mount Yasur Volcano", "description": "Active volcano, glowing lava, night visits, accessible crater, thrilling experience.", "image_url": "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Champagne Beach", "description": "Powder white sand, crystal water, underwater bubbles, pristine, paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Blue Hole Espiritu Santo", "description": "Natural swimming hole, blue water, rope swing, jungle, refreshing.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "SS President Coolidge", "description": "Wreck diving, WWII luxury liner, accessible wreck, marine life, historic.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Millennium Cave", "description": "Jungle trek, cave exploration, canyon, waterfall, adventure, remote.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Port Vila Markets", "description": "Fresh produce, handicrafts, kava bars, local life, vibrant atmosphere.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Mele Cascades", "description": "Waterfall with pools, jungle walk, swimming, family-friendly, popular.", "image_url": "https://images.unsplash.com/photo-1489447068241-b3490214e879?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Pentecost Land Diving", "description": "Ancient bungee jumping, vines, ritual, cultural experience, seasonal.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Hideaway Island", "description": "Marine sanctuary, snorkeling, underwater post office, coral, beach resort.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Tanna Culture", "description": "Custom villages, traditional life, kastom dances, authentic Melanesian culture.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # OCEANIA - TONGA
+    "tonga": [
+        {"name": "Swimming with Whales", "description": "Humpback whales, July-October, snorkeling with giants, bucket-list, ethical.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ha'amonga'a Maui Trilithon", "description": "Ancient stone structure, Stonehenge of Pacific, 1200 AD, historical mystery.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Mapu'a 'a Vaea Blowholes", "description": "Coastal blowholes, water shooting up, dramatic, natural phenomenon, popular.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Anahulu Cave", "description": "Limestone cave, swimming in freshwater pool, stalactites, accessible, atmospheric.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Nuku'alofa Capital", "description": "Royal palace, markets, churches, friendly locals, Polynesian culture, relaxed.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Vava'u Islands", "description": "Sailing paradise, anchorages, coral gardens, caves, pristine, yachting.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ha'apai Beaches", "description": "Remote white sand beaches, crystal water, few tourists, authentic, peaceful.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ene'io Botanical Garden", "description": "Native plants, walking trails, birdwatching, conservation, educational.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Swallows Cave", "description": "Sea cave, snorkeling, light shafts, cliff jumping, dramatic, boat access.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Royal Tombs", "description": "Burial site of Tongan royalty, historical, cultural significance, red sand.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
+    ],
 }
+
+# Now add country image URLs for all countries
+COUNTRY_IMAGES = {
+    "france": "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=800&q=80",
+    "italy": "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80",
+    "spain": "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800&q=80",
+    "uk": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80",
+    "germany": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80",
+    "greece": "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800&q=80",
+    "norway": "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=800&q=80",
+    "switzerland": "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&q=80",
+    "netherlands": "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&q=80",
+    "portugal": "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800&q=80",
+    "japan": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80",
+    "china": "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800&q=80",
+    "thailand": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80",
+    "india": "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&q=80",
+    "uae": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80",
+    "singapore": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800&q=80",
+    "indonesia": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80",
+    "south_korea": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&q=80",
+    "vietnam": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&q=80",
+    "malaysia": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&q=80",
+    "egypt": "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=800&q=80",
+    "morocco": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80",
+    "south_africa": "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=800&q=80",
+    "kenya": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
+    "tanzania": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80",
+    "mauritius": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&q=80",
+    "seychelles": "https://images.unsplash.com/photo-1502933691298-84fc14542831?w=800&q=80",
+    "botswana": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
+    "namibia": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80",
+    "tunisia": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80",
+    "usa": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80",
+    "canada": "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800&q=80",
+    "mexico": "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=800&q=80",
+    "brazil": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80",
+    "peru": "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80",
+    "argentina": "https://images.unsplash.com/photo-1494783367193-149034c05e8f?w=800&q=80",
+    "chile": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    "colombia": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80",
+    "ecuador": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
+    "costa_rica": "https://images.unsplash.com/photo-1552047155-090ba9b7f2e9?w=800&q=80",
+    "australia": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800&q=80",
+    "new_zealand": "https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=800&q=80",
+    "fiji": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80",
+    "french_polynesia": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80",
+    "cook_islands": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80",
+    "samoa": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80",
+    "vanuatu": "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800&q=80",
+    "tonga": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80",
+}
+
+# Update countries with image URLs
+for country in COUNTRIES_DATA:
+    country["image_url"] = COUNTRY_IMAGES[country["country_id"]]
+
+
+async def seed_database():
+    """Seed database with 48 countries and their landmarks"""
+    try:
+        print("🌍 Starting global content expansion...")
+        print(f"📊 Target: {len(COUNTRIES_DATA)} countries, ~{len(COUNTRIES_DATA) * 10} landmarks\n")
+        
+        # Clear existing data
+        print("🗑️  Clearing existing data...")
+        await db.countries.delete_many({})
+        await db.landmarks.delete_many({})
+        print("✅ Old data cleared\n")
+        
+        # Insert countries
+        print("📍 Inserting countries...")
+        await db.countries.insert_many(COUNTRIES_DATA)
+        print(f"✅ {len(COUNTRIES_DATA)} countries added\n")
+        
+        # Insert landmarks with category distribution
+        print("🏛️  Inserting landmarks...")
+        total_landmarks = 0
+        official_count = 0
+        premium_count = 0
+        
+        for country_id, landmarks in LANDMARKS_DATA.items():
+            # First 7 landmarks are official (free), last 3 are premium
+            for idx, landmark in enumerate(landmarks):
+                landmark_doc = {
+                    "landmark_id": f"{country_id}_{landmark['name'].lower().replace(' ', '_')}",
+                    "country_id": country_id,
+                    "name": landmark["name"],
+                    "description": landmark["description"],
+                    "images": [landmark["image_url"]],
+                    "difficulty": landmark["difficulty"],
+                    "category": "premium" if idx >= 7 else "official"
+                }
+                await db.landmarks.insert_one(landmark_doc)
+                total_landmarks += 1
+                if idx >= 7:
+                    premium_count += 1
+                else:
+                    official_count += 1
+            
+            print(f"  ✓ {country_id}: {len(landmarks)} landmarks")
+        
+        print(f"\n🎉 SUCCESS! Database seeded with:")
+        print(f"   • {len(COUNTRIES_DATA)} countries")
+        print(f"   • {total_landmarks} total landmarks")
+        print(f"   • {official_count} free landmarks")
+        print(f"   • {premium_count} premium landmarks")
+        
+        # Print continent distribution
+        print(f"\n🌐 Continental Distribution:")
+        continents = {}
+        for country in COUNTRIES_DATA:
+            continent = country["continent"]
+            continents[continent] = continents.get(continent, 0) + 1
+        for continent, count in sorted(continents.items()):
+            print(f"   • {continent}: {count} countries")
+        
+    except Exception as e:
+        print(f"❌ Error seeding database: {e}")
+        raise
+
+
+if __name__ == "__main__":
+    asyncio.run(seed_database())
