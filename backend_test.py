@@ -51,17 +51,23 @@ class WanderListTester:
             
         try:
             if method.upper() == "GET":
-                response = self.session.get(url, headers=req_headers)
+                response = self.session.get(url, headers=req_headers, timeout=30)
             elif method.upper() == "POST":
-                response = self.session.post(url, json=data, headers=req_headers)
+                response = self.session.post(url, json=data, headers=req_headers, timeout=30)
             elif method.upper() == "PUT":
-                response = self.session.put(url, json=data, headers=req_headers)
+                response = self.session.put(url, json=data, headers=req_headers, timeout=30)
             else:
                 raise ValueError(f"Unsupported method: {method}")
                 
             return response
+        except requests.exceptions.Timeout:
+            print(f"Request timeout for {method} {url}")
+            return None
+        except requests.exceptions.ConnectionError as e:
+            print(f"Connection error for {method} {url}: {e}")
+            return None
         except Exception as e:
-            print(f"Request failed: {e}")
+            print(f"Request failed for {method} {url}: {e}")
             return None
             
     def test_authentication_p0(self):
