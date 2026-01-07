@@ -126,21 +126,107 @@ export default function ProfileScreen() {
           <Text style={styles.userEmail}>{user?.email}</Text>
 
           <View style={[styles.premiumBadge, {
-            backgroundColor: user?.is_premium ? theme.colors.accent + '20' : theme.colors.surfaceTinted
+            backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '20' : 
+                             user?.subscription_tier === 'basic' ? theme.colors.primary + '20' : 
+                             theme.colors.surfaceTinted
           }]}>
-            {user?.is_premium ? (
+            {user?.subscription_tier === 'premium' ? (
               <>
-                <Ionicons name="star" size={18} color={theme.colors.accent} />
-                <Text style={[styles.premiumText, { color: theme.colors.accent }]}>Premium Member</Text>
+                <Ionicons name="diamond" size={18} color={theme.colors.accent} />
+                <Text style={[styles.premiumText, { color: theme.colors.accent }]}>Premium Traveler</Text>
+              </>
+            ) : user?.subscription_tier === 'basic' ? (
+              <>
+                <Ionicons name="ribbon" size={18} color={theme.colors.primary} />
+                <Text style={[styles.premiumText, { color: theme.colors.primary }]}>Basic Traveler</Text>
               </>
             ) : (
               <>
                 <Ionicons name="person-outline" size={18} color={theme.colors.textSecondary} />
-                <Text style={styles.freemiumText}>Free Member</Text>
+                <Text style={styles.freemiumText}>Free Traveler</Text>
               </>
             )}
           </View>
         </Surface>
+
+        {/* Monetization Limits Card for Free Users */}
+        {user?.subscription_tier === 'free' && visitCount && (
+          <Surface style={styles.limitsCard}>
+            <View style={styles.limitHeader}>
+              <Ionicons name="information-circle-outline" size={24} color={theme.colors.primary} />
+              <Text style={styles.limitTitle}>Your Plan Limits</Text>
+            </View>
+            
+            <View style={styles.limitItem}>
+              <View style={styles.limitInfo}>
+                <Ionicons name="calendar-outline" size={20} color={theme.colors.textSecondary} />
+                <Text style={styles.limitLabel}>Visits this month</Text>
+              </View>
+              <View style={styles.limitProgress}>
+                <Text style={[
+                  styles.limitValue,
+                  visitCount.count >= visitCount.limit && { color: theme.colors.error }
+                ]}>
+                  {visitCount.count}/{visitCount.limit}
+                </Text>
+                <View style={styles.progressBarContainer}>
+                  <View 
+                    style={[
+                      styles.progressBar,
+                      { 
+                        width: `${(visitCount.count / visitCount.limit) * 100}%`,
+                        backgroundColor: visitCount.count >= visitCount.limit ? theme.colors.error : theme.colors.primary
+                      }
+                    ]} 
+                  />
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.limitItem}>
+              <View style={styles.limitInfo}>
+                <Ionicons name="people-outline" size={20} color={theme.colors.textSecondary} />
+                <Text style={styles.limitLabel}>Friends</Text>
+              </View>
+              <View style={styles.limitProgress}>
+                <Text style={[
+                  styles.limitValue,
+                  stats && stats.friends_count >= 5 && { color: theme.colors.error }
+                ]}>
+                  {stats?.friends_count || 0}/5
+                </Text>
+                <View style={styles.progressBarContainer}>
+                  <View 
+                    style={[
+                      styles.progressBar,
+                      { 
+                        width: `${((stats?.friends_count || 0) / 5) * 100}%`,
+                        backgroundColor: stats && stats.friends_count >= 5 ? theme.colors.error : theme.colors.primary
+                      }
+                    ]} 
+                  />
+                </View>
+              </View>
+            </View>
+
+            <TouchableOpacity 
+              style={styles.upgradeButton} 
+              onPress={() => setShowUpgradeModal(true)}
+              activeOpacity={0.8}
+            >
+              <LinearGradient
+                colors={[theme.colors.primary, theme.colors.primaryDark]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.upgradeGradient}
+              >
+                <Ionicons name="rocket-outline" size={20} color="#fff" />
+                <Text style={styles.upgradeButtonText}>Upgrade Plan</Text>
+                <Ionicons name="arrow-forward" size={18} color="#fff" />
+              </LinearGradient>
+            </TouchableOpacity>
+          </Surface>
+        )}
 
         {stats && (
           <Surface style={styles.statsCard}>
