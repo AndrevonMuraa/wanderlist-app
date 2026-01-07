@@ -38,7 +38,7 @@ export default function AddVisitScreen() {
 
   const fetchLandmark = async () => {
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
       const response = await fetch(`${BACKEND_URL}/api/landmarks/${landmark_id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
