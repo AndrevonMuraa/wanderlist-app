@@ -350,7 +350,7 @@ export default function ExploreScreen() {
         sections={filteredSections}
         renderItem={renderCountryCard}
         renderSectionHeader={renderSectionHeader}
-        keyExtractor={(item) => item.country_id}
+        keyExtractor={(item, index) => `row-${index}-${item.map(c => c.country_id).join('-')}`}
         contentContainerStyle={styles.listContainer}
         ListHeaderComponent={renderListHeader}
         ListFooterComponent={renderListFooter}
