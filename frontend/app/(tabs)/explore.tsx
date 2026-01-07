@@ -321,7 +321,7 @@ export default function ExploreScreen() {
       </View>
 
       <SectionList
-        sections={filteredSections}
+        sections={sections}
         renderItem={renderCountryCard}
         renderSectionHeader={renderSectionHeader}
         keyExtractor={(item, index) => `row-${index}-${item.map(c => c.country_id).join('-')}`}
