@@ -32,6 +32,16 @@ export default function AddVisitScreen() {
   const [landmark, setLandmark] = useState<any>(null);
   const [locationMarker, setLocationMarker] = useState<{ latitude: number; longitude: number } | null>(null);
   const router = useRouter();
+  
+  const { showUpgradeModal, upgradeReason, checkResponse, handleUpgrade, closeModal } = useUpgradePrompt({
+    onUpgrade: (tier) => {
+      if (Platform.OS === 'web') {
+        alert(`Upgrade to ${tier} would redirect to payment page`);
+      } else {
+        Alert.alert('Upgrade', `Upgrade to ${tier} would redirect to payment page`);
+      }
+    }
+  });
 
   useEffect(() => {
     requestPermissions();
