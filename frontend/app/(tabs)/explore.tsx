@@ -296,14 +296,6 @@ export default function ExploreScreen() {
       <Text style={styles.featuresSectionTitle}>Features</Text>
       
       {renderFeatureCard(
-        'compass',
-        'AI Trip Planner',
-        'Plan your next adventure',
-        () => {},
-        theme.colors.primary
-      )}
-      
-      {renderFeatureCard(
         'trophy',
         'Leaderboard',
         "See who's leading",
