@@ -618,27 +618,35 @@ const styles = StyleSheet.create({
     marginLeft: theme.spacing.md,
     flex: 1,
   },
-  actionContainer: {
-    padding: theme.spacing.md,
-    paddingBottom: theme.spacing.xl,
+  // Floating Action Button Styles
+  floatingButtonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: theme.spacing.md,
+    paddingBottom: Platform.OS === 'ios' ? theme.spacing.lg : theme.spacing.md,
+    paddingTop: theme.spacing.md,
+    backgroundColor: 'transparent',
   },
-  visitButton: {
+  floatingButton: {
     borderRadius: theme.borderRadius.xl,
     overflow: 'hidden',
-    ...theme.shadows.md,
+    ...theme.shadows.lg,
   },
-  visitButtonGradient: {
+  floatingButtonGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: theme.spacing.md,
+    paddingVertical: theme.spacing.md + 4,
     paddingHorizontal: theme.spacing.lg,
   },
-  visitButtonText: {
+  floatingButtonText: {
     ...theme.typography.h4,
     color: '#fff',
     marginLeft: theme.spacing.sm,
-    fontWeight: '600',
+    fontWeight: '700',
+    fontSize: 18,
   },
   northernLightsInfo: {
     ...theme.typography.body,
