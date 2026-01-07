@@ -1,25 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform } from 'react-native';
+import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform, Alert } from 'react-native';
 import { Text, Surface, Button, Divider, Switch, List, Dialog, Portal } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BACKEND_URL } from '../../utils/config';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
+import UpgradeModal from '../../components/UpgradeModal';
 
-// For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
-// For mobile, use the external URL
-const BACKEND_URL = Platform.OS === 'web' 
-  ? '' 
-  : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
+// Helper to get token (works on both web and native)
+const getToken = async (): Promise<string | null> => {
+  if (Platform.OS === 'web') {
+    return localStorage.getItem('auth_token');
+  } else {
+    return await SecureStore.getItemAsync('auth_token');
+  }
+};
 
 interface UserStats {
   total_visits: number;
   countries_visited: number;
   continents_visited: number;
   friends_count: number;
+}
+
+interface VisitCount {
+  count: number;
+  limit: number;
 }
 
 export default function ProfileScreen() {
