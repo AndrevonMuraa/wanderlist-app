@@ -38,7 +38,7 @@ interface Country {
 
 interface ContinentSection {
   continent: string;
-  data: Country[];
+  data: Country[][];
 }
 
 // Country flag emojis
