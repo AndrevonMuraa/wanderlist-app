@@ -356,4 +356,144 @@ LANDMARKS_DATA = {
         {"name": "Taman Negara", "description": "Ancient rainforest, 130 million years old, canopy walk, wildlife spotting.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Kuala Lumpur Tower", "description": "Communications tower, observation deck, revolving restaurant, city panoramas.", "image_url": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&q=80", "difficulty": "Easy"},
     ],
+    
+    # AFRICA - EGYPT
+    "egypt": [
+        {"name": "Pyramids of Giza", "description": "Ancient wonders, Great Pyramid, Sphinx, only surviving Seven Wonders.", "image_url": "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Valley of the Kings", "description": "Pharaoh tombs, Tutankhamun's burial place, hieroglyphs, desert necropolis.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Abu Simbel Temples", "description": "Colossal rock-cut temples, Ramses II statues, Lake Nasser, UNESCO rescue.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Karnak Temple", "description": "Massive ancient complex, towering columns, hieroglyphs, Sound and Light show.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Egyptian Museum Cairo", "description": "World's largest Pharaonic collection, Tutankhamun treasures, mummies, artifacts.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Nile River Cruise", "description": "Sail past temples, villages, history along world's longest river.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Luxor Temple", "description": "Ancient temple complex, Avenue of Sphinxes, illuminated at night, majestic columns.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Red Sea Riviera", "description": "World-class diving, coral reefs, resort towns, turquoise waters, marine life.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Khan el-Khalili Bazaar", "description": "Historic market, spices, perfumes, jewelry, authentic Cairo experience since 1382.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Siwa Oasis", "description": "Remote desert oasis, salt lakes, mud-brick fortress, dates, olive groves.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
+    ],
+    
+    # AFRICA - MOROCCO
+    "morocco": [
+        {"name": "Marrakech Medina", "description": "Labyrinth of souks, Jemaa el-Fnaa square, snake charmers, aromatic spices.", "image_url": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Sahara Desert", "description": "Golden dunes, camel treks, Berber camps, starry nights, endless sand seas.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Chefchaouen Blue City", "description": "Entire town painted blue, mountain setting, peaceful atmosphere, photo paradise.", "image_url": "https://images.unsplash.com/photo-1548013146-72479768bada?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Hassan II Mosque", "description": "Stunning seaside mosque, world's tallest minaret, intricate mosaics, Casablanca.", "image_url": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Fes Medina", "description": "Medieval walled city, UNESCO site, oldest university, tanneries, maze of alleys.", "image_url": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ait Benhaddou", "description": "Fortified village, earthen clay architecture, Game of Thrones filming location.", "image_url": "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Atlas Mountains", "description": "Snow-capped peaks, Berber villages, trekking, valleys, North Africa's roof.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Essaouira Coast", "description": "Coastal town, whitewashed medina, seafood, windsurfing, laid-back vibe.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Todra Gorge", "description": "Dramatic canyon, 300m limestone walls, rock climbing, river, desert scenery.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Rabat Kasbah", "description": "Fortified citadel, blue and white streets, ocean views, capital's historic heart.", "image_url": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AFRICA - SOUTH AFRICA
+    "south_africa": [
+        {"name": "Table Mountain", "description": "Flat-topped mountain, cable car, hiking, panoramic Cape Town and ocean views.", "image_url": "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Kruger National Park", "description": "Big Five safari, largest game reserve, diverse wildlife, self-drive adventures.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Cape of Good Hope", "description": "Dramatic cliffs at Africa's southwestern tip, meeting of two oceans, penguins.", "image_url": "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Robben Island", "description": "Historic prison where Mandela was held, UNESCO site, symbol of freedom.", "image_url": "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Garden Route", "description": "Scenic coastal drive, forests, lagoons, beaches, charming towns, nature paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Blyde River Canyon", "description": "Green canyon, third largest in world, Three Rondavels, waterfalls, viewpoints.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Victoria & Alfred Waterfront", "description": "Bustling harbor, shopping, dining, aquarium, seal colony, Cape Town hotspot.", "image_url": "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Drakensberg Mountains", "description": "UNESCO mountain range, hiking, rock art, waterfalls, Giant's Castle, scenery.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Winelands Stellenbosch", "description": "Cape Dutch architecture, vineyards, wine tasting, gourmet food, mountain backdrop.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Apartheid Museum", "description": "Powerful museum documenting South Africa's segregation history and triumph.", "image_url": "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AFRICA - KENYA
+    "kenya": [
+        {"name": "Maasai Mara Reserve", "description": "Great Migration, Big Five, savanna, hot air balloons, Maasai culture.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Mount Kenya", "description": "Africa's second-highest peak, glaciers, alpine zones, trekking, UNESCO site.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Diani Beach", "description": "White sand, turquoise waters, coral reefs, water sports, coastal paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Amboseli National Park", "description": "Elephant herds with Mount Kilimanjaro backdrop, swamps, dry lake bed, photography.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Lake Nakuru", "description": "Pink flamingos, rhino sanctuary, baboons, diverse birdlife, soda lake.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Lamu Old Town", "description": "Swahili architecture, UNESCO site, donkeys not cars, dhow boats, timeless island.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Tsavo National Park", "description": "Red elephants, Mzima Springs, vast wilderness, lion history, Kenya's largest park.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Hell's Gate National Park", "description": "Dramatic gorge, geothermal activity, cycling, rock climbing, inspired Lion King.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Great Rift Valley", "description": "Geological marvel, escarpments, lakes, volcanic formations, viewpoints.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Nairobi National Park", "description": "Wildlife park with city skyline backdrop, lions, rhinos, giraffe center nearby.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AFRICA - TANZANIA
+    "tanzania": [
+        {"name": "Mount Kilimanjaro", "description": "Africa's highest peak, snow-capped summit, trekking routes, bucket-list climb.", "image_url": "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Serengeti National Park", "description": "Endless plains, Great Migration, Big Five, wildebeest, UNESCO wildlife paradise.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Zanzibar Beaches", "description": "White sand, turquoise Indian Ocean, spice tours, Stone Town, island paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ngorongoro Crater", "description": "World's largest intact caldera, dense wildlife, natural amphitheater, UNESCO gem.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Stone Town", "description": "Historic center of Zanzibar, Arab, Persian, Indian, European influences, UNESCO.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Lake Manyara", "description": "Alkaline lake, tree-climbing lions, flamingos, elephants, diverse ecosystems.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Tarangire National Park", "description": "Elephant herds, baobab trees, dry season wildlife concentration, birding.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Mafia Island", "description": "Diving paradise, whale sharks, pristine reefs, laid-back, off-beaten path.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Olduvai Gorge", "description": "Cradle of Mankind, early human fossils, archaeological site, paleoanthropology.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Pemba Island", "description": "Clove island, unspoiled beaches, diving, spice plantations, quiet escape.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AFRICA - MAURITIUS
+    "mauritius": [
+        {"name": "Le Morne Brabant", "description": "UNESCO mountain, hiking, symbol of resistance, stunning lagoon views, iconic peak.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Chamarel Seven Colored Earths", "description": "Sand dunes in seven colors, geological phenomenon, Chamarel Waterfall nearby.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Black River Gorges", "description": "National park, endemic species, waterfalls, hiking trails, lush rainforest.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Grand Baie Beach", "description": "Popular resort area, water sports, shopping, nightlife, turquoise lagoon.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ile aux Cerfs", "description": "Private island, pristine beaches, water activities, golf, day trip paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Port Louis Market", "description": "Central market, spices, textiles, street food, local culture, vibrant atmosphere.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Underwater Waterfall", "description": "Optical illusion of underwater waterfall, aerial views, unique natural phenomenon.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Pamplemousses Garden", "description": "Botanical garden, giant water lilies, exotic plants, colonial history, peaceful oasis.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Blue Bay Marine Park", "description": "Snorkeling paradise, glass-bottom boats, coral gardens, protected marine area.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Rodrigues Island", "description": "Remote volcanic island, pristine nature, Creole culture, caves, lagoon.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AFRICA - SEYCHELLES
+    "seychelles": [
+        {"name": "Anse Source d'Argent", "description": "World's most photographed beach, granite boulders, turquoise water, paradise.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Vallée de Mai", "description": "UNESCO primeval forest, coco de mer palms, endemic species, Garden of Eden.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Aldabra Atoll", "description": "UNESCO atoll, giant tortoises, pristine ecosystem, remote coral islands.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Beau Vallon Beach", "description": "Main beach, sunset views, water sports, restaurants, lively atmosphere.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Morne Seychellois", "description": "Highest peak, hiking trails, cloud forests, endemic flora, panoramic views.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Cousin Island", "description": "Nature reserve, seabirds, giant tortoises, conservation success story.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Anse Lazio", "description": "Pristine beach, granite rocks, clear water, snorkeling, consistently top-rated.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Curieuse Island", "description": "Giant tortoise breeding, mangrove forests, BBQ beaches, day excursions.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Victoria Clock Tower", "description": "Mini Big Ben, capital city landmark, colorful market, Creole culture.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Sainte Anne Marine Park", "description": "First marine park, snorkeling, glass-bottom boats, protected reefs, sea turtles.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # AFRICA - BOTSWANA
+    "botswana": [
+        {"name": "Okavango Delta", "description": "UNESCO inland delta, mokoro canoes, wildlife, water oasis in Kalahari Desert.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Chobe National Park", "description": "Massive elephant herds, river safaris, Big Five, bird paradise, pristine wilderness.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Makgadikgadi Salt Pans", "description": "Vast white salt flats, meerkats, flamingos, stargazing, surreal landscapes.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Moremi Game Reserve", "description": "Prime wildlife viewing, leopards, wild dogs, diverse ecosystems, luxury lodges.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Kalahari Desert", "description": "Red dunes, San Bushmen culture, wildlife adaptations, remote wilderness.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Tsodilo Hills", "description": "UNESCO rock art site, 4500 paintings, sacred to San people, spiritual place.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Savuti Marsh", "description": "Predator capital, lion prides, dry season action, dramatic wildlife encounters.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Linyanti Wildlife Reserve", "description": "Remote wetlands, wild dogs, elephants, exclusive safari experience.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Nxai Pan National Park", "description": "Ancient baobabs, springbok migration, dramatic landscapes, seasonal floods.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Kubu Island", "description": "Rocky outcrop in salt pan, ancient baobabs, camping, remote adventure.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
+    ],
+    
+    # AFRICA - NAMIBIA
+    "namibia": [
+        {"name": "Sossusvlei Dunes", "description": "World's highest red sand dunes, Dead Vlei, surreal desert landscapes, photography.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Etosha National Park", "description": "Salt pan, waterholes, lions, elephants, rhinos, excellent game viewing.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Fish River Canyon", "description": "Second largest canyon in world, hiking trail, dramatic ravine, geological wonder.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Skeleton Coast", "description": "Shipwrecks, seals, desert meets ocean, fog, desolate beauty, remote coast.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Spitzkoppe", "description": "Granite peaks, rock formations, ancient rock art, boulders, dramatic landscapes.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Swakopmund", "description": "German colonial town, adventure capital, sandboarding, quad biking, Atlantic coast.", "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Deadvlei", "description": "Ancient camel thorn trees, white clay pan, red dunes, photographer's dream.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Damaraland", "description": "Desert elephants, rock engravings, petrified forest, rugged wilderness.", "image_url": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Kolmanskop Ghost Town", "description": "Abandoned diamond mining town, sand-filled houses, photographer paradise.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Waterberg Plateau", "description": "Sandstone cliffs, rare species sanctuary, hiking, prehistoric rock art.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+    ],
+    
+    # AFRICA - TUNISIA
+    "tunisia": [
+        {"name": "Carthage Ruins", "description": "Ancient Phoenician city, Roman amphitheater, UNESCO site, Mediterranean history.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Sidi Bou Said", "description": "Blue and white village, clifftop Mediterranean views, artists, cafes, charm.", "image_url": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Sahara Star Wars Sets", "description": "Film locations in desert, Matmata troglodyte homes, Mos Espa, Tatooine experience.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Easy"},
+        {"name": "El Djem Amphitheater", "description": "Best-preserved Roman colosseum outside Italy, UNESCO, gladiator history.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Tunis Medina", "description": "UNESCO old town, souks, mosques, palaces, traditional crafts, labyrinth.", "image_url": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Chott el Djerid", "description": "Vast salt lake, mirages, Sahara gateway, surreal landscapes, desert tours.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Dougga Roman City", "description": "Best-preserved Roman town in North Africa, UNESCO, capitol, theater, temples.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Hammamet Beach", "description": "Popular resort, white sand, turquoise water, medina, golf, family destination.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Bardo National Museum", "description": "World's finest Roman mosaic collection, Carthaginian artifacts, Tunis palace.", "image_url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Tozeur Oasis", "description": "Desert oasis, palm groves, Berber architecture, Sahara gateway, date capital.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80", "difficulty": "Easy"},
+    ],
 }
