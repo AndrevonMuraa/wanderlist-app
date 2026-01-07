@@ -156,6 +156,63 @@ export default function ProfileScreen() {
           </View>
         </Surface>
 
+        {/* Progress Dashboard */}
+        {progressStats && (
+          <Surface style={styles.progressCard}>
+            <Text style={styles.sectionTitle}>Your Journey</Text>
+            
+            {/* Overall Progress Circle */}
+            <View style={styles.overallProgressContainer}>
+              <CircularProgress
+                percentage={progressStats.overall.percentage}
+                size={140}
+                strokeWidth={12}
+                label="Complete"
+                sublabel={`${progressStats.overall.visited}/${progressStats.overall.total} landmarks`}
+              />
+              <Text style={styles.progressDescription}>
+                You've explored {progressStats.overall.percentage.toFixed(1)}% of the world's wonders!
+              </Text>
+            </View>
+
+            {/* Continental Progress */}
+            <View style={styles.continentalSection}>
+              <Text style={styles.subsectionTitle}>Continental Progress</Text>
+              {Object.entries(progressStats.continents)
+                .sort((a, b) => b[1].percentage - a[1].percentage)
+                .map(([continent, data]) => (
+                  <View key={continent} style={styles.continentItem}>
+                    <View style={styles.continentHeader}>
+                      <View style={styles.continentNameRow}>
+                        <Ionicons
+                          name={
+                            continent === 'Europe' ? 'business-outline' :
+                            continent === 'Asia' ? 'earth-outline' :
+                            continent === 'Africa' ? 'sunny-outline' :
+                            continent === 'Americas' ? 'leaf-outline' :
+                            'water-outline'
+                          }
+                          size={20}
+                          color={theme.colors.primary}
+                        />
+                        <Text style={styles.continentName}>{continent}</Text>
+                      </View>
+                      <Text style={styles.continentCount}>
+                        {data.visited}/{data.total} countries
+                      </Text>
+                    </View>
+                    <ProgressBar
+                      percentage={data.percentage}
+                      height={6}
+                      showPercentage={false}
+                      style={styles.continentProgressBar}
+                    />
+                  </View>
+                ))}
+            </View>
+          </Surface>
+        )}
+
         {/* Friend Limit Card for Free Users */}
         {user?.subscription_tier === 'free' && stats && (
           <Surface style={styles.limitsCard}>
