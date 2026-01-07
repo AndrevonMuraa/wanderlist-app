@@ -136,7 +136,7 @@ backend:
   - task: "Database seeding with countries and landmarks"
     implemented: true
     working: true
-    file: "backend/seed_data.py"
+    file: "backend/seed_data_expansion.py"
     stuck_count: 0
     priority: "high"
     needs_retesting: false
@@ -147,6 +147,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ Database seeded successfully. Verified 10 countries and 100 landmarks including 'The Old Town of Fredrikstad' in Norway. All data properly structured with correct IDs and categories."
+      - working: true
+        agent: "testing"
+        comment: "🎉 GLOBAL EXPANSION COMPLETE! Successfully tested massive database expansion: 48 countries across 5 continents (Europe: 10, Asia: 10, Africa: 10, Americas: 10, Oceania: 8) with 480 landmarks total (336 free + 144 premium). All endpoints working perfectly with 100% test success rate. Data integrity verified across all continents."
   
   - task: "Authentication - JWT email/password"
     implemented: true
