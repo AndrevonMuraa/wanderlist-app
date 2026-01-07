@@ -492,6 +492,10 @@ const styles = StyleSheet.create({
     ...theme.typography.caption,
     color: theme.colors.textSecondary,
   },
+  rowContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: theme.spacing.md,
+  },
   cardContainer: {
     width: '50%',
     paddingBottom: theme.spacing.md,
