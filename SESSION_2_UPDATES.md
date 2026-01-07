@@ -55,7 +55,56 @@
 
 ---
 
-### 3. **UI Polish & Improvements** ✅ COMPLETE
+### 3. **Premium Landmarks Redesign** ✅ COMPLETE (NEW!)
+**Status:** Elegant frosted glass aesthetic
+
+**Design Changes:**
+- ❌ Removed all yellow/gold elements
+- ❌ Removed bright gradients and glow effects
+- ✅ Added frosted glass overlay (iced window effect)
+- ✅ Subtle white/transparent lock icon (40px)
+- ✅ Image blur effect (blurRadius: 3, opacity: 0.7)
+- ✅ Minimal white "PREMIUM" badge with diamond outline
+- ✅ Clean, sophisticated design
+
+**Visual Details:**
+- Frosted overlay: `rgba(255,255,255,0.15)` with blur
+- Lock icon: `rgba(255,255,255,0.85)` - white/transparent
+- Badge: Frosted glass with white text
+- No animations, glows, or pulse effects
+- Professional, high-end aesthetic
+
+**File Modified:**
+- `/app/frontend/app/landmarks/[country_id].tsx`
+
+---
+
+### 4. **Image Quality Improvements** ✅ COMPLETE (NEW!)
+**Status:** High-quality images for Norway landmarks
+
+**Images Updated:**
+- **Norway Country Card**: Stunning fjord landscape
+  - URL: `photo-1601439678777-b2b3c56fa627`
+- **Northern Lights**: Crystal-clear aurora borealis
+  - URL: `photo-1579033461380-adb47c3eb938?q=80`
+  - Quality parameter added for maximum clarity
+- **Lofoten Islands**: Mountain peaks landscape
+  - URL: `photo-1504893524553-b855bce32c67?q=80`
+  - Fixed broken image, proper loading
+
+**Quality Standards:**
+- All images: 800px width
+- Quality parameter: q=80
+- Professional Unsplash photography
+- Visual variety between landmarks
+
+**Files Modified:**
+- `/app/frontend/app/(tabs)/explore.tsx` (Norway card)
+- `/app/backend/seed_data.py` (Northern Lights, Lofoten)
+
+---
+
+### 5. **UI Polish & Improvements** ✅ COMPLETE
 
 **Changes Made:**
 - ✅ Unified logout dialog (no more platform-specific alerts)
