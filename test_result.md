@@ -2,21 +2,29 @@
 # ⚠️ CRITICAL: READ BEFORE STARTING ANY SESSION (INCLUDING FORKS)
 #====================================================================================================
 #
-# MANDATORY FIRST STEP: Read /app/CRITICAL_FIXES_AND_PATTERNS.md
+# MANDATORY FIRST STEPS (IN ORDER):
+#
+# 1. Read /app/WANDERLIST_BASELINE_MODEL.md (NEW - Complete app state)
+# 2. Read /app/CRITICAL_FIXES_AND_PATTERNS.md (Development patterns)
+# 3. Read this file (test_result.md) for testing protocols
 # 
-# This file contains:
-# - Known issues and their fixes (DO NOT reintroduce)
-# - Required patterns (BACKEND_URL, imports, etc.)
-# - Cross-platform compatibility requirements
-# - Session start checklist
+# These 3 documents form the complete context you need to start work.
 #
-# Failure to follow patterns in that document will result in:
-# - Mobile API connectivity failures
-# - Premium content not displaying
-# - Login issues on remote URLs
-# - Duplicate code and maintenance nightmares
+# The Baseline Model contains:
+# - Complete feature list (what's implemented vs planned)
+# - All bug fixes and their prevention strategies
+# - Architecture and data models
+# - Testing protocols and checklists
+# - Session start procedures for forks
+# - Quality gates that must pass
 #
-# READ IT FIRST. EVERY TIME. NO EXCEPTIONS.
+# Failure to read the baseline will result in:
+# - Reimplementing existing features
+# - Reintroducing fixed bugs
+# - Breaking stable functionality
+# - Lost context between sessions
+#
+# READ THE BASELINE FIRST. EVERY TIME. NO EXCEPTIONS.
 #
 #====================================================================================================
 # START - Testing Protocol - DO NOT EDIT OR REMOVE THIS SECTION
