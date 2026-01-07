@@ -317,33 +317,20 @@ export default function LandmarkDetailScreen() {
           </View>
         )}
 
-        {/* Historical & Cultural Facts */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Discover More</Text>
+        {/* Historical & Cultural Facts - Frosted Glass Cards */}
+        <View style={styles.contentCard}>
+          <Text style={styles.cardTitle}>Discover More</Text>
           {facts.map((fact, index) => (
             <View key={index} style={styles.factCard}>
               <View style={styles.factHeader}>
-                <View style={[styles.factIcon, { backgroundColor: theme.colors.primary + '20' }]}>
-                  <Ionicons name={fact.icon as any} size={24} color={theme.colors.primary} />
+                <View style={styles.factIcon}>
+                  <Ionicons name={fact.icon as any} size={24} color="#fff" />
                 </View>
-                <Text style={styles.factTitle}>{fact.title}</Text>
+                {fact.title && <Text style={styles.factTitle}>{fact.title}</Text>}
               </View>
               <Text style={styles.factText}>{fact.text}</Text>
             </View>
           ))}
-        </View>
-
-        {/* Tips for Visitors */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Visitor Tips</Text>
-          <View style={styles.tipCard}>
-            <Ionicons name="camera-outline" size={20} color={theme.colors.accent} />
-            <Text style={styles.tipText}>Best photo spots at sunrise and sunset</Text>
-          </View>
-          <View style={styles.tipCard}>
-            <Ionicons name="wallet-outline" size={20} color={theme.colors.accent} />
-            <Text style={styles.tipText}>Check for local tour guides for deeper insights</Text>
-          </View>
         </View>
 
         {/* Action Button */}
