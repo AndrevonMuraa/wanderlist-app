@@ -852,6 +852,72 @@ async def get_pending_requests(current_user: User = Depends(get_current_user)):
     
     return requests
 
+# ============= MESSAGING ENDPOINTS (Basic+ Only) =============
+
+@api_router.post("/messages", response_model=Message)
+async def send_message(data: MessageCreate, current_user: User = Depends(get_current_user)):
+    """Send a message to a friend - Basic and Premium only"""
+    # Check if user has messaging access
+    if current_user.subscription_tier == "free":
+        raise HTTPException(
+            status_code=403,
+            detail="Messaging is a premium feature. Upgrade to Basic or Premium to chat with friends!"
+        )
+    
+    # Verify users are friends
+    friendship = await db.friends.find_one({
+        "$or": [
+            {"user_id": current_user.user_id, "friend_id": data.receiver_id, "status": "accepted"},
+            {"user_id": data.receiver_id, "friend_id": current_user.user_id, "status": "accepted"}
+        ]
+    })
+    
+    if not friendship:
+        raise HTTPException(status_code=403, detail="You can only message friends")
+    
+    message_id = f"msg_{uuid.uuid4().hex[:12]}"
+    message = {
+        "message_id": message_id,
+        "sender_id": current_user.user_id,
+        "receiver_id": data.receiver_id,
+        "content": data.content,
+        "created_at": datetime.now(timezone.utc),
+        "read": False
+    }
+    
+    await db.messages.insert_one(message)
+    return Message(**message)
+
+@api_router.get("/messages/{friend_id}")
+async def get_messages(friend_id: str, current_user: User = Depends(get_current_user)):
+    """Get message history with a friend - Basic and Premium only"""
+    if current_user.subscription_tier == "free":
+        raise HTTPException(
+            status_code=403,
+            detail="Messaging is a premium feature. Upgrade to Basic or Premium to chat with friends!"
+        )
+    
+    # Verify friendship
+    friendship = await db.friends.find_one({
+        "$or": [
+            {"user_id": current_user.user_id, "friend_id": friend_id, "status": "accepted"},
+            {"user_id": friend_id, "friend_id": current_user.user_id, "status": "accepted"}
+        ]
+    })
+    
+    if not friendship:
+        raise HTTPException(status_code=403, detail="You can only view messages with friends")
+    
+    # Get messages between the two users
+    messages = await db.messages.find({
+        "$or": [
+            {"sender_id": current_user.user_id, "receiver_id": friend_id},
+            {"sender_id": friend_id, "receiver_id": current_user.user_id}
+        ]
+    }, {"_id": 0}).sort("created_at", 1).to_list(1000)
+    
+    return [Message(**m) for m in messages]
+
 # ============= STATS ENDPOINT =============
 
 @api_router.get("/stats")
