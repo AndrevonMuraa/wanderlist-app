@@ -216,4 +216,144 @@ LANDMARKS_DATA = {
         {"name": "Óbidos Medieval Town", "description": "Walled village with whitewashed houses, castle, cherry liqueur tradition.", "image_url": "https://images.unsplash.com/photo-1588453251771-cd19dc5aa89b?w=800&q=80", "difficulty": "Easy"},
         {"name": "Azores Islands", "description": "Volcanic archipelago, crater lakes, hot springs, whales, lush green landscapes.", "image_url": "https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=800&q=80", "difficulty": "Moderate"},
     ],
+    
+    # ASIA - JAPAN
+    "japan": [
+        {"name": "Mount Fuji", "description": "Iconic snow-capped volcano, Japan's highest peak, sacred pilgrimage site.", "image_url": "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Tokyo Shibuya Crossing", "description": "World's busiest intersection, neon lights, urban energy, modern Japan.", "image_url": "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Kyoto Golden Pavilion", "description": "Zen Buddhist temple covered in gold leaf, reflecting in pond, pure serenity.", "image_url": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Fushimi Inari Shrine", "description": "Thousands of vermillion torii gates winding up mountain, spiritual journey.", "image_url": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Hiroshima Peace Memorial", "description": "A-Bomb Dome, poignant reminder of nuclear devastation, message of peace.", "image_url": "https://images.unsplash.com/photo-1553604431-e1e7a7e79138?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Nara Deer Park", "description": "Sacred deer roaming freely, ancient temples, peaceful nature encounters.", "image_url": "https://images.unsplash.com/photo-1578664182687-576c49284f2e?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Tokyo Skytree", "description": "World's tallest tower, panoramic city views, modern architectural marvel.", "image_url": "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Osaka Castle", "description": "Historic castle with massive stone walls, cherry blossoms, samurai history.", "image_url": "https://images.unsplash.com/photo-1590559900499-d2d0e7e8f725?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Hakone Hot Springs", "description": "Natural onsen baths with Mount Fuji views, traditional ryokan experience.", "image_url": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Miyajima Island", "description": "Floating torii gate at high tide, sacred island, wild deer, spiritual beauty.", "image_url": "https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # ASIA - CHINA
+    "china": [
+        {"name": "Great Wall", "description": "Ancient defensive wall stretching 13,000 miles, engineering wonder of world.", "image_url": "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Forbidden City", "description": "Imperial palace complex, 980 buildings, Ming and Qing dynasty seat of power.", "image_url": "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Terracotta Army", "description": "8,000 life-size warrior statues guarding Emperor Qin's tomb, archaeological marvel.", "image_url": "https://images.unsplash.com/photo-1529487653865-c45e2bddbdc1?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Li River Karst Mountains", "description": "Dramatic limestone peaks, emerald waters, misty landscapes on 20-yuan note.", "image_url": "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Zhangjiajie Pillars", "description": "Towering sandstone pillars inspired Avatar's Pandora, glass walkways, nature wonder.", "image_url": "https://images.unsplash.com/photo-1534323755658-2396a0ea71d3?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "The Bund Shanghai", "description": "Waterfront promenade, colonial architecture facing futuristic Pudong skyline.", "image_url": "https://images.unsplash.com/photo-1521133573892-e44906baee46?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Temple of Heaven", "description": "Imperial complex where emperors prayed for harvests, stunning circular architecture.", "image_url": "https://images.unsplash.com/photo-1525193612537-2c576d3f24fc?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Yangshuo Countryside", "description": "Idyllic rural landscape, bamboo rafting, rice paddies, traditional village life.", "image_url": "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Summer Palace Beijing", "description": "Imperial garden, Kunming Lake, ornate pavilions, masterpiece of Chinese design.", "image_url": "https://images.unsplash.com/photo-1537185334-eba0d45c0a92?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Jiuzhaigou Valley", "description": "UNESCO nature reserve, colorful lakes, waterfalls, pristine forests, Tibetan culture.", "image_url": "https://images.unsplash.com/photo-1537185334-eba0d45c0a92?w=800&q=80", "difficulty": "Moderate"},
+    ],
+    
+    # ASIA - THAILAND
+    "thailand": [
+        {"name": "Grand Palace Bangkok", "description": "Dazzling complex of temples, golden spires, Emerald Buddha, Thai royalty.", "image_url": "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Phi Phi Islands", "description": "Limestone cliffs, turquoise lagoons, pristine beaches, snorkeling paradise.", "image_url": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Wat Arun", "description": "Temple of Dawn, ornate spires, riverside location, stunning at sunset.", "image_url": "https://images.unsplash.com/photo-1506665531195-3566af2b4dfa?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Chiang Mai Old City", "description": "Moated ancient city, 300+ Buddhist temples, night markets, Lanna culture.", "image_url": "https://images.unsplash.com/photo-1544026084-e76d1e7d1f64?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Railay Beach", "description": "Rock climbing mecca, accessible only by boat, limestone karsts, paradise beaches.", "image_url": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Ayutthaya Ruins", "description": "Ancient Siamese capital, Buddha statues, temple ruins, UNESCO heritage site.", "image_url": "https://images.unsplash.com/photo-1563492065213-f4b8c3a1b916?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Floating Markets", "description": "Traditional water markets, boats selling fruits, food, authentic Thai experience.", "image_url": "https://images.unsplash.com/photo-1542640244-7e672d6cef4e?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Erawan Waterfalls", "description": "Seven-tiered emerald waterfall, natural pools, jungle setting, swimming paradise.", "image_url": "https://images.unsplash.com/photo-1542640244-7e672d6cef4e?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "White Temple Chiang Rai", "description": "Dazzling white temple covered in mirrors, contemporary Buddhist art, unique vision.", "image_url": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Sukhothai Historical Park", "description": "First capital of Siam, Buddha images, lotus ponds, dawn of Thai civilization.", "image_url": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # ASIA - INDIA
+    "india": [
+        {"name": "Taj Mahal", "description": "White marble mausoleum, eternal love monument, UNESCO wonder, architectural perfection.", "image_url": "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Varanasi Ghats", "description": "Sacred riverfront steps on Ganges, spiritual ceremonies, ancient pilgrimage city.", "image_url": "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Jaipur City Palace", "description": "Pink City's royal residence, courtyards, museums, Rajasthani architecture.", "image_url": "https://images.unsplash.com/photo-1549611016-3a70d82b5040?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Kerala Backwaters", "description": "Network of lagoons, lakes, houseboats, palm-lined shores, serene water life.", "image_url": "https://images.unsplash.com/photo-1588523736859-2f14e2c5a3cb?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Golden Temple Amritsar", "description": "Sikh holy shrine, gold-covered marble, reflecting pool, spiritual magnificence.", "image_url": "https://images.unsplash.com/photo-1588523736859-2f14e2c5a3cb?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Amer Fort", "description": "Hilltop fort with mirror palaces, marble, red sandstone, Rajput military architecture.", "image_url": "https://images.unsplash.com/photo-1523469432922-3eaf1b00f6f2?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Mumbai Gateway of India", "description": "Iconic arch monument, harbor views, colonial architecture, city's landmark.", "image_url": "https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Khajuraho Temples", "description": "Medieval Hindu and Jain temples with intricate erotic sculptures, UNESCO site.", "image_url": "https://images.unsplash.com/photo-1588523736859-2f14e2c5a3cb?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Agra Fort", "description": "Massive red sandstone fortress, Mughal emperors' seat, near Taj Mahal.", "image_url": "https://images.unsplash.com/photo-1523469432922-3eaf1b00f6f2?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Goa Beaches", "description": "Tropical paradise, Portuguese heritage, beach shacks, hippie culture, sunset parties.", "image_url": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # ASIA - UAE
+    "uae": [
+        {"name": "Burj Khalifa", "description": "World's tallest building at 828m, observation decks, architectural marvel.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Sheikh Zayed Mosque", "description": "Stunning white marble mosque, 82 domes, world's largest hand-knotted carpet.", "image_url": "https://images.unsplash.com/photo-1588523736859-2f14e2c5a3cb?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Dubai Mall", "description": "World's largest mall, aquarium, ice rink, 1200 shops, ultimate shopping.", "image_url": "https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Palm Jumeirah", "description": "Man-made island shaped like palm tree, luxury resorts, engineering wonder.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Desert Safari", "description": "Dune bashing, camel rides, Bedouin camps, sunset over golden sands.", "image_url": "https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Dubai Frame", "description": "150m gold frame structure, views of old and new Dubai, museum inside.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Louvre Abu Dhabi", "description": "Art museum with iconic dome roof, universal museum, East meets West.", "image_url": "https://images.unsplash.com/photo-1588523736859-2f14e2c5a3cb?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Burj Al Arab", "description": "Iconic sail-shaped luxury hotel, man-made island, Dubai's symbol.", "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Dubai Fountain", "description": "World's largest choreographed fountain, water ballet with music and lights.", "image_url": "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Al Fahidi Historical District", "description": "Old Dubai quarter with wind towers, museums, souks, traditional architecture.", "image_url": "https://images.unsplash.com/photo-1549180030-48bf079fb38a?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # ASIA - SINGAPORE
+    "singapore": [
+        {"name": "Marina Bay Sands", "description": "Iconic hotel with rooftop infinity pool, skyline views, modern landmark.", "image_url": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Gardens by the Bay", "description": "Futuristic park, Supertree Grove, Cloud Forest, flower domes, nature meets tech.", "image_url": "https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Sentosa Island", "description": "Resort island, Universal Studios, beaches, attractions, family paradise.", "image_url": "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Merlion Park", "description": "Mythical creature statue, half-lion half-fish, Singapore's national symbol.", "image_url": "https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Orchard Road", "description": "Shopping paradise, luxury malls, dining, entertainment, urban energy.", "image_url": "https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Chinatown Singapore", "description": "Historic district, temples, shophouses, hawker food, cultural heritage.", "image_url": "https://images.unsplash.com/photo-1562416231-1d0e1dba9064?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Singapore Zoo", "description": "Open-concept zoo, rainforest setting, night safari, wildlife immersion.", "image_url": "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Clarke Quay", "description": "Riverside dining and nightlife, colorful colonial buildings, vibrant atmosphere.", "image_url": "https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Jewel Changi", "description": "Airport complex with indoor waterfall, forest valley, shopping, architectural wonder.", "image_url": "https://images.unsplash.com/photo-1543731068-5b6b1b9ab0b4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Little India", "description": "Colorful neighborhood, temples, spice shops, Indian culture and cuisine.", "image_url": "https://images.unsplash.com/photo-1562416231-1d0e1dba9064?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # ASIA - INDONESIA
+    "indonesia": [
+        {"name": "Borobudur Temple", "description": "World's largest Buddhist temple, 9th century, volcanic stone, spiritual journey.", "image_url": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Bali Rice Terraces", "description": "Emerald-green stepped rice paddies, UNESCO landscape, traditional irrigation.", "image_url": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Komodo National Park", "description": "Home to Komodo dragons, pink beaches, pristine diving, prehistoric reptiles.", "image_url": "https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Mount Bromo", "description": "Active volcano, sunrise views, sea of sand, otherworldly lunar landscape.", "image_url": "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Tanah Lot Temple", "description": "Iconic temple on rock formation in sea, sunset views, Balinese spirituality.", "image_url": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Raja Ampat Islands", "description": "World's richest marine biodiversity, pristine coral reefs, diving paradise.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Prambanan Temple", "description": "Hindu temple complex, towering spires, Ramayana reliefs, Java's gem.", "image_url": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Gili Islands", "description": "Three tiny islands, no cars, turtles, coral gardens, laid-back paradise.", "image_url": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Ubud Monkey Forest", "description": "Sacred sanctuary with 700 long-tailed macaques, temple complex, nature walk.", "image_url": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Lake Toba", "description": "Volcanic lake, largest in Southeast Asia, Samosir Island, Batak culture.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # ASIA - SOUTH KOREA
+    "south_korea": [
+        {"name": "Gyeongbokgung Palace", "description": "Main royal palace of Joseon Dynasty, changing of guard, traditional architecture.", "image_url": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Jeju Island", "description": "Volcanic island, lava tubes, waterfalls, beaches, Korea's honeymoon destination.", "image_url": "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80", "difficulty": "Easy"},
+        {"name": "N Seoul Tower", "description": "Iconic observation tower on Namsan Mountain, panoramic city views, love locks.", "image_url": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Bukchon Hanok Village", "description": "Traditional Korean houses, winding alleys, cultural heritage, Seoul views.", "image_url": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&q=80", "difficulty": "Easy"},
+        {"name": "DMZ Zone", "description": "Demilitarized zone between North and South Korea, tense border, historic tours.", "image_url": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Busan Haeundae Beach", "description": "Popular beach, high-rises, seafood, ocean views, summer festival.", "image_url": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Seoraksan National Park", "description": "Mountain park, hiking trails, autumn foliage, temples, natural beauty.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Boseong Tea Fields", "description": "Rolling green tea plantations, walking paths, serene rural landscape.", "image_url": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Changdeokgung Palace", "description": "UNESCO palace with secret garden, traditional architecture, royal history.", "image_url": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Gamcheon Culture Village", "description": "Colorful hillside village, street art, maze of stairs, Busan's Santorini.", "image_url": "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=800&q=80", "difficulty": "Easy"},
+    ],
+    
+    # ASIA - VIETNAM
+    "vietnam": [
+        {"name": "Ha Long Bay", "description": "UNESCO bay with 1600 limestone islands, emerald waters, kayaking, caves.", "image_url": "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Hoi An Ancient Town", "description": "Preserved trading port, lantern-lit streets, tailor shops, UNESCO heritage.", "image_url": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Cu Chi Tunnels", "description": "Underground network from Vietnam War, history, guerrilla warfare tactics.", "image_url": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Sapa Rice Terraces", "description": "Cascading rice paddies, hill tribe villages, trekking, misty mountains.", "image_url": "https://images.unsplash.com/photo-1551634979-1c3f28532194?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Phong Nha Caves", "description": "Massive cave systems, Son Doong world's largest cave, underground rivers.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Mekong Delta", "description": "River delta, floating markets, rice paddies, canal networks, local life.", "image_url": "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Imperial City Hue", "description": "Former capital, citadel, palaces, tombs, Vietnamese royal history.", "image_url": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Phu Quoc Island", "description": "Tropical beaches, diving, fish sauce, pearl farms, island paradise.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Hanoi Old Quarter", "description": "36 ancient streets, motorbike chaos, street food, colonial architecture.", "image_url": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Bai Tu Long Bay", "description": "Less crowded than Ha Long, pristine islands, kayaking, authentic experience.", "image_url": "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80", "difficulty": "Moderate"},
+    ],
+    
+    # ASIA - MALAYSIA
+    "malaysia": [
+        {"name": "Petronas Twin Towers", "description": "Iconic twin skyscrapers, skybridge, symbol of modern Malaysia, KL views.", "image_url": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Batu Caves", "description": "Hindu shrine in limestone cave, giant golden statue, 272 colorful steps.", "image_url": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Langkawi Island", "description": "Tropical paradise, beaches, cable car, duty-free shopping, mangrove tours.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "George Town Penang", "description": "UNESCO colonial city, street art, hawker food, multicultural heritage.", "image_url": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Cameron Highlands", "description": "Hill station, tea plantations, cooler climate, strawberry farms, British colonial.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Kinabalu Park", "description": "UNESCO park, Mount Kinabalu, world's richest botanical site, cloud forests.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
+        {"name": "Perhentian Islands", "description": "Crystal waters, coral reefs, turtles, jungle, backpacker paradise.", "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Malacca Historic City", "description": "Portuguese and Dutch colonial heritage, Jonker Street, UNESCO site.", "image_url": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&q=80", "difficulty": "Easy"},
+        {"name": "Taman Negara", "description": "Ancient rainforest, 130 million years old, canopy walk, wildlife spotting.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
+        {"name": "Kuala Lumpur Tower", "description": "Communications tower, observation deck, revolving restaurant, city panoramas.", "image_url": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=800&q=80", "difficulty": "Easy"},
+    ],
 }
