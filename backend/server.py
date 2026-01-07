@@ -651,7 +651,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         "visit_location": data.visit_location,
         "diary_notes": data.diary_notes,
         "status": "accepted",
-        "visited_at": datetime.now(timezone.utc),
+        "visited_at": data.visited_at if data.visited_at else datetime.now(timezone.utc),
         "created_at": datetime.now(timezone.utc)
     }
     
