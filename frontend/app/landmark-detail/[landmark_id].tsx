@@ -120,40 +120,7 @@ export default function LandmarkDetailScreen() {
   };
 
   const handleMarkAsVisited = () => {
-    setShowVisitTypeModal(true);
-  };
-
-  const handleVisitingNow = () => {
-    setShowVisitTypeModal(false);
     router.push(`/add-visit/${landmark_id}`);
-  };
-
-  const handleAlreadyVisited = () => {
-    setShowVisitTypeModal(false);
-    setShowDatePicker(true);
-  };
-
-  const handleDateChange = (event: any, date?: Date) => {
-    if (Platform.OS === 'android') {
-      setShowDatePicker(false);
-    }
-    
-    if (date) {
-      setSelectedDate(date);
-      if (Platform.OS === 'ios') {
-        // iOS has a confirm button
-        return;
-      }
-      // For Android, navigate immediately after date selection
-      router.push(`/add-visit/${landmark_id}?visitDate=${date.toISOString()}`);
-    } else {
-      setShowDatePicker(false);
-    }
-  };
-
-  const confirmIOSDate = () => {
-    setShowDatePicker(false);
-    router.push(`/add-visit/${landmark_id}?visitDate=${selectedDate.toISOString()}`);
   };
 
   if (loading) {
