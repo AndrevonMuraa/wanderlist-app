@@ -834,10 +834,10 @@ async def seed_database():
             # Get country info for required fields
             country_info = next(c for c in COUNTRIES_DATA if c["country_id"] == country_id)
             
-            # First 7 landmarks are official (free), last 3 are premium
+            # First 10 landmarks are official (free), last 5 are premium
             for idx, landmark in enumerate(landmarks):
                 landmark_doc = {
-                    "landmark_id": f"{country_id}_{landmark['name'].lower().replace(' ', '_')}",
+                    "landmark_id": f"{country_id}_{landmark['name'].lower().replace(' ', '_').replace('&', 'and')}",
                     "country_id": country_id,
                     "country_name": country_info["name"],
                     "continent": country_info["continent"],
@@ -846,8 +846,8 @@ async def seed_database():
                     "image_url": landmark["image_url"],
                     "images": [landmark["image_url"]],
                     "difficulty": landmark["difficulty"],
-                    "category": "premium" if idx >= 7 else "official",
-                    "points": 25 if idx >= 7 else 10,  # Premium landmarks worth more points
+                    "category": "premium" if idx >= 10 else "official",
+                    "points": 25 if idx >= 10 else 10,  # Premium landmarks worth more points
                     "upvotes": 0,
                     "created_by": None,
                     "created_at": datetime.now(timezone.utc),
@@ -859,7 +859,7 @@ async def seed_database():
                 }
                 await db.landmarks.insert_one(landmark_doc)
                 total_landmarks += 1
-                if idx >= 7:
+                if idx >= 10:
                     premium_count += 1
                 else:
                     official_count += 1
