@@ -160,10 +160,17 @@ export default function ExploreScreen() {
 
   const renderCountryCard = ({ item, index, section }: { item: Country; index: number; section: ContinentSection }) => {
     const accentColor = (theme.colors.countryAccents as any)[item.name.toLowerCase().replace(' ', '_')] || theme.colors.primary;
-    const isLeftColumn = index % 2 === 0;
+    const columnIndex = index % COLUMNS;
+    const isFirstColumn = columnIndex === 0;
+    const isLastColumn = columnIndex === COLUMNS - 1;
     
     return (
-      <View style={[styles.cardContainer, isLeftColumn ? styles.leftCard : styles.rightCard]}>
+      <View style={[
+        styles.cardContainer,
+        { width: CARD_WIDTH },
+        isFirstColumn && styles.firstColumnCard,
+        isLastColumn && styles.lastColumnCard
+      ]}>
         <TouchableOpacity
           onPress={() => router.push(`/landmarks/${item.country_id}?name=${encodeURIComponent(item.name)}`)}
           activeOpacity={0.9}
