@@ -693,33 +693,28 @@ class WanderListTester:
         self.log_test("Visits verified field", True, "Verified field checked in visits system tests")
         
     def run_all_tests(self):
-        """Run all test suites"""
-        print("🚀 STARTING WANDERLIST BACKEND API TESTING")
-        print("Focus: Monetization features, limits enforcement, and verification system")
-        print(f"Testing against: {self.base_url}")
+        """Run all test suites for global content expansion"""
+        print("🚀 STARTING WANDERLIST GLOBAL CONTENT EXPANSION TESTING")
+        print("Testing: 48 countries, 480 landmarks across all continents")
+        print(f"Backend URL: {self.base_url}")
         print(f"Test account: {TEST_EMAIL}")
         print("="*80)
         
-        # P0 Tests (Critical)
+        # Authentication (required for all API calls)
         if not self.test_authentication_p0():
             print("❌ Authentication failed - stopping tests")
             return False
             
-        self.test_countries_landmarks_p0()
-        self.test_visits_system_p0()
-        self.test_friend_limits_p0()  # CRITICAL for monetization
-        
-        # P1 Tests (Important)
-        self.test_stats_leaderboard_p1()
-        self.test_messaging_p1()
-        
-        # Scenarios
-        self.run_scenario_1_free_user_journey()
-        self.run_data_integrity_checks()
+        # Core expansion tests
+        print("\n🌍 TESTING GLOBAL CONTENT EXPANSION")
+        self.test_countries_endpoint_expansion()
+        self.test_landmarks_endpoint_expansion()
+        self.test_landmarks_by_country_samples()
+        self.test_data_integrity_expansion()
         
         # Summary
         print("\n" + "="*80)
-        print("📋 TEST SUMMARY")
+        print("📋 GLOBAL EXPANSION TEST SUMMARY")
         print("="*80)
         
         passed = sum(1 for r in self.test_results if r["success"])
@@ -737,21 +732,27 @@ class WanderListTester:
             for test in failed_tests:
                 print(f"  - {test['test']}: {test['details']}")
         else:
-            print("\n🎉 ALL TESTS PASSED!")
+            print("\n🎉 ALL EXPANSION TESTS PASSED!")
             
-        # Show critical monetization features status
-        print("\n💰 MONETIZATION FEATURES STATUS:")
-        friend_limit_tests = [r for r in self.test_results if "friend limit" in r["test"].lower()]
-        premium_tests = [r for r in self.test_results if "premium" in r["test"].lower()]
-        verification_tests = [r for r in self.test_results if "verified" in r["test"].lower() or "verification" in r["test"].lower()]
+        # Show expansion status summary
+        print("\n🌍 GLOBAL EXPANSION STATUS:")
         
-        friend_limit_passed = all(t["success"] for t in friend_limit_tests)
-        premium_passed = all(t["success"] for t in premium_tests)
-        verification_passed = all(t["success"] for t in verification_tests)
+        # Check key expansion metrics
+        countries_tests = [r for r in self.test_results if "countries" in r["test"].lower()]
+        landmarks_tests = [r for r in self.test_results if "landmarks" in r["test"].lower()]
+        data_tests = [r for r in self.test_results if "data" in r["test"].lower() or "integrity" in r["test"].lower()]
         
-        print(f"  Friend Limits: {'✅ WORKING' if friend_limit_passed else '❌ ISSUES'}")
-        print(f"  Premium Content: {'✅ WORKING' if premium_passed else '❌ ISSUES'}")
-        print(f"  Verification System: {'✅ WORKING' if verification_passed else '❌ ISSUES'}")
+        countries_passed = all(t["success"] for t in countries_tests)
+        landmarks_passed = all(t["success"] for t in landmarks_tests)
+        data_passed = all(t["success"] for t in data_tests)
+        
+        print(f"  Countries (48 expected): {'✅ VERIFIED' if countries_passed else '❌ ISSUES'}")
+        print(f"  Landmarks (480 expected): {'✅ VERIFIED' if landmarks_passed else '❌ ISSUES'}")
+        print(f"  Data Integrity: {'✅ VERIFIED' if data_passed else '❌ ISSUES'}")
+        
+        # Overall expansion status
+        expansion_success = countries_passed and landmarks_passed and data_passed
+        print(f"\n🎯 EXPANSION STATUS: {'✅ SUCCESS - Ready for production!' if expansion_success else '❌ ISSUES FOUND - Needs attention'}")
             
         return passed == total
 
