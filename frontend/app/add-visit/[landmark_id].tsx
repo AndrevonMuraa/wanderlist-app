@@ -238,7 +238,7 @@ export default function AddVisitScreen() {
               >
                 <Ionicons name="camera" size={48} color="#6200ee" />
                 <Text style={styles.addPhotoText}>Add Photo Proof</Text>
-                <Text style={styles.addPhotoSubtext}>Required</Text>
+                <Text style={styles.addPhotoSubtext}>For verified visit</Text>
               </TouchableOpacity>
             )}
           </Surface>
