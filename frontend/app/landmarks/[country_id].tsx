@@ -235,6 +235,35 @@ export default function LandmarksScreen() {
             tintColor={theme.colors.primary}
           />
         }
+        ListHeaderComponent={
+          countryProgress ? (
+            <Surface style={styles.progressHeader}>
+              <View style={styles.progressHeaderContent}>
+                <View style={styles.progressHeaderTextRow}>
+                  <Text style={styles.progressHeaderTitle}>Your Progress</Text>
+                  <View style={styles.progressStatsRow}>
+                    <Text style={styles.progressStatsText}>
+                      {countryProgress.visited}/{countryProgress.total} landmarks
+                    </Text>
+                    {countryProgress.percentage === 100 && (
+                      <Ionicons name="checkmark-circle" size={20} color="#4CAF50" style={{ marginLeft: 6 }} />
+                    )}
+                  </View>
+                </View>
+                <ProgressBar
+                  percentage={countryProgress.percentage}
+                  height={8}
+                  showPercentage={false}
+                  color={countryProgress.percentage === 100 ? '#4CAF50' : theme.colors.primary}
+                  style={{ marginTop: theme.spacing.sm }}
+                />
+                {countryProgress.percentage === 100 && (
+                  <Text style={styles.congratsText}>🎉 All landmarks visited!</Text>
+                )}
+              </View>
+            </Surface>
+          ) : null
+        }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="location-outline" size={64} color={theme.colors.border} />
