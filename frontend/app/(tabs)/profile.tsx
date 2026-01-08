@@ -188,6 +188,21 @@ export default function ProfileScreen() {
               </>
             )}
           </View>
+          
+          {/* User Rank */}
+          <View style={styles.rankContainer}>
+            <RankBadge 
+              rank={getUserRank(progressStats?.totalPoints || 0)} 
+              size="large"
+              showName={true}
+            />
+          </View>
+        </Surface>
+
+        {/* Rank Progress */}
+        <Surface style={styles.rankProgressCard}>
+          <Text style={styles.sectionTitle}>Rank Progress</Text>
+          <RankProgress points={progressStats?.totalPoints || 0} />
         </Surface>
 
         {/* Badges & Achievements */}
