@@ -191,6 +191,11 @@ class Activity(BaseModel):
     country_name: Optional[str] = None
     points_earned: Optional[int] = None
     milestone_count: Optional[int] = None  # For milestone activities
+    visit_id: Optional[str] = None  # Link to full visit details with rich content
+    has_diary: Optional[bool] = False  # Whether visit has diary notes
+    has_tips: Optional[bool] = False  # Whether visit has travel tips
+    has_photos: Optional[bool] = False  # Whether visit has photos
+    photo_count: Optional[int] = 0  # Number of photos in visit
     created_at: datetime
     likes_count: int = 0
     comments_count: int = 0
