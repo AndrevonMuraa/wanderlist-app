@@ -211,26 +211,6 @@ BADGE_DEFINITIONS = {
 
 ---
 
-### 7. **User-Suggested Landmarks** ✅ COMPLETE
-**Status:** Fully implemented
-
-**Backend:**
-- `POST /api/landmarks` - Create user-suggested landmark (line 624)
-- `POST /api/landmarks/{landmark_id}/upvote` - Upvote landmark (line 653)
-
-**Frontend:**
-- `/app/frontend/app/suggest-landmark.tsx` - Suggestion form
-
-**Features:**
-- Users can suggest new landmarks
-- Community upvoting system
-- Category marked as "user_suggested"
-
-**What Baseline Says:**
-- Not mentioned in baseline model
-
-**Impact:** Community-driven content feature not documented
-
 ---
 
 ### 8. **User Personal Landmarks Page** ✅ EXISTS
