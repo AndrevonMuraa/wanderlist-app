@@ -1072,11 +1072,11 @@ git commit -m "Session X: [Brief summary of changes]"
 - ✅ **Badges system corrected** - Was marked "not implemented", actually fully working
 - ✅ **Advanced Search documented** - Was implemented but not in baseline
 - ✅ **Loading skeletons documented** - New UX enhancement
-- ✅ **User-suggested landmarks documented**
 - ✅ **Friend search by username documented**
 - ✅ **Corrected landmark count** - 100 premium (not 144)
-- ✅ **Added complete API reference** - All 32 endpoints documented
+- ✅ **Added complete API reference** - 30 endpoints documented
 - ✅ **Added Session End Protocol** - Ensures baseline stays updated
+- ❌ **Removed User-Suggested Landmarks** - Feature removed from baseline
 - 📄 **File structure updated** with all new pages
 - 🔄 **Social hub fully documented** with all 4 sub-features
 
