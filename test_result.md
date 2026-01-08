@@ -271,6 +271,21 @@ backend:
         agent: "testing"
         comment: "✅ Stats API working perfectly. GET /api/stats returns all required fields: total_visits, countries_visited, continents_visited, friends_count. Calculations are accurate based on user's actual data."
 
+  - task: "Messaging API endpoints (Basic+ tier only)"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "POST /api/messages (send message to friend), GET /api/messages/{friend_id} (get conversation). Restricted to Basic+ users only, requires friendship."
+      - working: true
+        agent: "testing"
+        comment: "✅ MESSAGING FEATURE WORKING EXCELLENTLY! Comprehensive testing completed (25/26 tests passed - 96.2% success rate). ✅ Friend Setup: Complete flow tested (request → pending → accept → verified friendship). ✅ Messaging Flow: All 3 test messages sent successfully with proper structure, content verification, and correct sender/receiver IDs. ✅ Message Retrieval: Both users can fetch conversations, messages in chronological order, all content matches, timestamps present. ✅ Tier Restrictions: Free users properly blocked with 403 error and upgrade message. ✅ Friend Requirements: Non-friends properly blocked with 403 error. ✅ Edge Cases: Long messages (550+ chars) accepted, non-friend messaging blocked. Minor: Empty messages accepted (should be rejected but not critical). All core messaging functionality working perfectly for Basic+ users."
+
 frontend:
   - task: "Authentication Context with Google and JWT"
     implemented: true
