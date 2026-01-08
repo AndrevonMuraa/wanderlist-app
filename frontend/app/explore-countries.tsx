@@ -211,6 +211,7 @@ export default function ExploreCountriesScreen() {
           const accentColor = (theme.colors.countryAccents as any)[country.name.toLowerCase().replace(' ', '_')] || theme.colors.primary;
           const isComplete = country.percentage === 100;
           const hasProgress = (country.visited || 0) > 0;
+          const flagUrl = getFlagUrl(country.name);
           
           return (
             <View key={country.country_id} style={styles.cardContainer}>
@@ -219,15 +220,22 @@ export default function ExploreCountriesScreen() {
                 activeOpacity={0.9}
               >
                 <View style={styles.countryCard}>
-                  <Image
-                    source={{ uri: COUNTRY_IMAGES[country.name] || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600' }}
-                    style={styles.countryImage}
-                    resizeMode="cover"
-                  />
-                  <LinearGradient
-                    colors={['transparent', 'rgba(0,0,0,0.7)']}
-                    style={styles.countryOverlay}
-                  >
+                  {/* Flag Container - Main Visual */}
+                  <View style={styles.flagContainer}>
+                    <Image
+                      source={{ uri: flagUrl }}
+                      style={styles.flagImage}
+                      resizeMode="cover"
+                    />
+                    {/* Subtle Gradient Overlay for Text Readability */}
+                    <LinearGradient
+                      colors={['rgba(255,255,255,0.05)', 'rgba(0,0,0,0.35)']}
+                      style={styles.flagOverlay}
+                    />
+                  </View>
+                  
+                  {/* Content Overlay */}
+                  <View style={styles.countryOverlay}>
                     <Text style={styles.countryFlag}>{COUNTRY_FLAGS[country.name] || '🌍'}</Text>
                     <Text style={styles.countryName}>{country.name}</Text>
                     <Text style={styles.countryInfo}>{country.landmark_count} landmarks</Text>
