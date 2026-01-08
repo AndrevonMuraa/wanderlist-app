@@ -520,20 +520,75 @@ async def get_countries(current_user: User = Depends(get_current_user)):
 @api_router.get("/landmarks", response_model=List[Landmark])
 async def get_landmarks(
     country_id: Optional[str] = None,
+    continent: Optional[str] = None,
     category: Optional[str] = None,
+    search: Optional[str] = None,
+    visited: Optional[str] = None,  # "true", "false", or None (all)
+    sort_by: Optional[str] = "upvotes_desc",  # upvotes_desc, points_desc, points_asc, name_asc, name_desc
+    min_points: Optional[int] = None,
+    max_points: Optional[int] = None,
+    limit: int = 1000,
     current_user: User = Depends(get_current_user)
 ):
+    """
+    Get landmarks with advanced filtering and search
+    
+    Parameters:
+    - country_id: Filter by country
+    - continent: Filter by continent
+    - category: Filter by category (free/premium)
+    - search: Text search in name, description, country_name
+    - visited: Filter by visit status ("true"/"false"/None)
+    - sort_by: Sort order (upvotes_desc, points_desc, points_asc, name_asc, name_desc)
+    - min_points, max_points: Filter by points range
+    - limit: Maximum results
+    """
+    
+    # Build query
     query = {}
+    
     if country_id:
         query["country_id"] = country_id
     
-    # Filter by category if specified
+    if continent:
+        query["continent"] = continent
+    
     if category:
         query["category"] = category
-    # Otherwise, show all landmarks (official + premium)
-    # We'll mark premium ones as locked for free users below
     
-    landmarks = await db.landmarks.find(query, {"_id": 0}).sort("upvotes", -1).to_list(1000)
+    # Text search
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"description": {"$regex": search, "$options": "i"}},
+            {"country_name": {"$regex": search, "$options": "i"}}
+        ]
+    
+    # Points range filter
+    if min_points is not None or max_points is not None:
+        query["points"] = {}
+        if min_points is not None:
+            query["points"]["$gte"] = min_points
+        if max_points is not None:
+            query["points"]["$lte"] = max_points
+    
+    # Fetch landmarks
+    landmarks = await db.landmarks.find(query, {"_id": 0}).to_list(limit)
+    
+    # If filtering by visited status, get user's visits
+    if visited is not None:
+        user_visits = await db.visits.find(
+            {"user_id": current_user.user_id},
+            {"landmark_id": 1, "_id": 0}
+        ).to_list(10000)
+        visited_landmark_ids = {v["landmark_id"] for v in user_visits}
+        
+        if visited == "true":
+            # Only visited landmarks
+            landmarks = [l for l in landmarks if l["landmark_id"] in visited_landmark_ids]
+        elif visited == "false":
+            # Only unvisited landmarks
+            landmarks = [l for l in landmarks if l["landmark_id"] not in visited_landmark_ids]
     
     # Add locked status for premium landmarks if user is free tier
     results = []
@@ -543,9 +598,21 @@ async def get_landmarks(
             landmark_dict["is_locked"] = True
         else:
             landmark_dict["is_locked"] = False
-        results.append(Landmark(**landmark_dict))
+        results.append(landmark_dict)
     
-    return results
+    # Sort results
+    if sort_by == "upvotes_desc":
+        results.sort(key=lambda x: x.get("upvotes", 0), reverse=True)
+    elif sort_by == "points_desc":
+        results.sort(key=lambda x: x.get("points", 0), reverse=True)
+    elif sort_by == "points_asc":
+        results.sort(key=lambda x: x.get("points", 0))
+    elif sort_by == "name_asc":
+        results.sort(key=lambda x: x.get("name", ""))
+    elif sort_by == "name_desc":
+        results.sort(key=lambda x: x.get("name", ""), reverse=True)
+    
+    return [Landmark(**r) for r in results]
 
 @api_router.get("/landmarks/{landmark_id}", response_model=Landmark)
 async def get_landmark(landmark_id: str, current_user: User = Depends(get_current_user)):
