@@ -33,6 +33,7 @@ const getToken = async (): Promise<string | null> => {
 
 interface Activity {
   activity_id: string;
+  user_id: string;
   user_name: string;
   user_picture?: string;
   activity_type: 'visit' | 'milestone' | 'country_complete' | 'continent_complete';
@@ -47,6 +48,7 @@ interface Activity {
   created_at: string;
   likes_count: number;
   is_liked: boolean;
+  comments_count: number;
   visit_id?: string;
   has_diary?: boolean;
   has_tips?: boolean;
