@@ -1078,7 +1078,20 @@ git commit -m "Session X: [Brief summary of changes]"
 
 ## 📝 CHANGELOG (Baseline Evolution)
 
-### v4.0.0 (Current - January 8, 2026) - **MAJOR UPDATE**
+### v4.1.0 (Current - January 8, 2026) - **UI Enhancement**
+- ✨ **Flag-based country card design** - Authentic national flags for all 48 countries
+  - Replaced random Unsplash images with high-quality flags from flagcdn.com
+  - Full-card flag display with subtle gradient overlays for text readability
+  - ISO 3166-1 alpha-2 country code mapping for all countries
+  - Maintains progress bars, completion indicators, and turquoise accent bars
+  - Benefits: Instant recognition, cultural authenticity, better performance
+- 📄 **File updated:** `/app/frontend/app/explore-countries.tsx`
+  - Added `COUNTRY_FLAG_CODES` dictionary (48 countries)
+  - Added `getFlagUrl()` helper function
+  - Updated card rendering with flag-based visuals
+  - Added new styles: `flagContainer`, `flagImage`, `flagOverlay`
+
+### v4.0.0 (January 8, 2026) - **MAJOR UPDATE**
 - ✅ **Consolidated navigation** - 4-tab structure (My Journey, Explore, Social, Profile)
 - ✅ **Activity Feed documented** - Was implemented but not in baseline
 - ✅ **Badges system corrected** - Was marked "not implemented", actually fully working
