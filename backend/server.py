@@ -923,6 +923,10 @@ async def accept_friend_request(friendship_id: str, current_user: User = Depends
         {"$set": {"status": "accepted"}}
     )
     
+    # Check for social badges for both users
+    await check_and_award_badges(current_user.user_id)
+    await check_and_award_badges(friendship["user_id"])
+    
     return {"message": "Friend request accepted"}
 
 @api_router.get("/friends/pending")
