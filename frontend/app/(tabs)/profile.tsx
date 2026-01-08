@@ -12,6 +12,9 @@ import theme from '../../styles/theme';
 import UpgradeModal from '../../components/UpgradeModal';
 import { CircularProgress } from '../../components/CircularProgress';
 import { ProgressBar } from '../../components/ProgressBar';
+import RankBadge from '../../components/RankBadge';
+import RankProgress from '../../components/RankProgress';
+import { getUserRank } from '../../utils/rankSystem';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
