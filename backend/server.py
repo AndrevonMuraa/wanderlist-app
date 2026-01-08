@@ -130,11 +130,13 @@ class Visit(BaseModel):
     visit_id: str
     user_id: str
     landmark_id: str
-    photo_base64: Optional[str] = None  # Photo is now optional
+    photo_base64: Optional[str] = None  # Main photo (for backward compatibility)
+    photos: Optional[List[str]] = []  # Photo collage - up to 10 photos (base64)
     points_earned: int = 10  # Points earned for this visit
     comments: Optional[str] = None
     visit_location: Optional[dict] = None  # For Northern Lights: {"latitude": float, "longitude": float, "region": str}
-    diary_notes: Optional[str] = None
+    diary_notes: Optional[str] = None  # Travel diary entry
+    travel_tips: Optional[List[str]] = []  # Array of travel tips
     status: str = "accepted"
     verified: bool = True  # True if has photo, False if no photo (friends-only)
     visited_at: datetime
@@ -142,10 +144,12 @@ class Visit(BaseModel):
 
 class VisitCreate(BaseModel):
     landmark_id: str
-    photo_base64: Optional[str] = None  # Photo is now optional
+    photo_base64: Optional[str] = None  # Main photo (for backward compatibility)
+    photos: Optional[List[str]] = []  # Photo collage - up to 10 photos
     comments: Optional[str] = None
     visit_location: Optional[dict] = None  # For Northern Lights: {"latitude": float, "longitude": float, "region": str}
-    diary_notes: Optional[str] = None
+    diary_notes: Optional[str] = None  # Travel diary entry
+    travel_tips: Optional[List[str]] = []  # Array of travel tips (max 5)
     visited_at: Optional[datetime] = None  # Allow custom date for past visits
 
 class Friend(BaseModel):
