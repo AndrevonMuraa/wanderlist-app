@@ -44,37 +44,69 @@ interface ContinentSection {
   data: Country[][];
 }
 
-// Country flag emojis
-const COUNTRY_FLAGS: Record<string, string> = {
-  'Norway': '🇳🇴', 'France': '🇫🇷', 'Italy': '🇮🇹', 'Japan': '🇯🇵',
-  'Egypt': '🇪🇬', 'Peru': '🇵🇪', 'Australia': '🇦🇺', 'USA': '🇺🇸',
-  'UK': '🇬🇧', 'China': '🇨🇳', 'Spain': '🇪🇸', 'Greece': '🇬🇷',
-  'Thailand': '🇹🇭', 'India': '🇮🇳', 'Brazil': '🇧🇷', 'Mexico': '🇲🇽',
-  'UAE': '🇦🇪', 'Germany': '🇩🇪', 'Canada': '🇨🇦', 'South Africa': '🇿🇦',
+// ISO 3166-1 alpha-2 country codes for flag CDN
+const COUNTRY_FLAG_CODES: Record<string, string> = {
+  // Europe
+  'France': 'fr',
+  'Italy': 'it',
+  'Spain': 'es',
+  'United Kingdom': 'gb',
+  'Germany': 'de',
+  'Greece': 'gr',
+  'Norway': 'no',
+  'Switzerland': 'ch',
+  'Netherlands': 'nl',
+  'Portugal': 'pt',
+  // Asia
+  'Japan': 'jp',
+  'China': 'cn',
+  'Thailand': 'th',
+  'India': 'in',
+  'United Arab Emirates': 'ae',
+  'Singapore': 'sg',
+  'Indonesia': 'id',
+  'South Korea': 'kr',
+  'Vietnam': 'vn',
+  'Malaysia': 'my',
+  // Africa
+  'Egypt': 'eg',
+  'Morocco': 'ma',
+  'South Africa': 'za',
+  'Kenya': 'ke',
+  'Tanzania': 'tz',
+  'Mauritius': 'mu',
+  'Seychelles': 'sc',
+  'Botswana': 'bw',
+  'Namibia': 'na',
+  'Tunisia': 'tn',
+  // Americas
+  'United States': 'us',
+  'Canada': 'ca',
+  'Mexico': 'mx',
+  'Brazil': 'br',
+  'Peru': 'pe',
+  'Argentina': 'ar',
+  'Chile': 'cl',
+  'Colombia': 'co',
+  'Ecuador': 'ec',
+  'Costa Rica': 'cr',
+  // Oceania
+  'Australia': 'au',
+  'New Zealand': 'nz',
+  'Fiji': 'fj',
+  'French Polynesia': 'pf',
+  'Cook Islands': 'ck',
+  'Samoa': 'ws',
+  'Vanuatu': 'vu',
+  'Tonga': 'to',
 };
 
-// Country images
-const COUNTRY_IMAGES: Record<string, string> = {
-  'Norway': 'https://images.unsplash.com/photo-1601439678777-b2b3c56fa627?w=600',
-  'France': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600',
-  'Italy': 'https://images.unsplash.com/photo-1520175480921-4edfa2983e0f?w=600',
-  'Japan': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600',
-  'Egypt': 'https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=600',
-  'Peru': 'https://images.unsplash.com/photo-1526392060635-9d6019884377?w=600',
-  'Australia': 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=600',
-  'USA': 'https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=600',
-  'UK': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600',
-  'China': 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=600',
-  'Spain': 'https://images.unsplash.com/photo-1558642084-fd07fae5282e?w=600',
-  'Greece': 'https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=600',
-  'Thailand': 'https://images.unsplash.com/photo-1528181304800-259b08848526?w=600',
-  'India': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600',
-  'Brazil': 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=600',
-  'Mexico': 'https://images.unsplash.com/photo-1518638150340-f706e86654de?w=600',
-  'UAE': 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600',
-  'Germany': 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600',
-  'Canada': 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=600',
-  'South Africa': 'https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=600',
+// Helper function to get flag URL
+const getFlagUrl = (countryName: string): string => {
+  const code = COUNTRY_FLAG_CODES[countryName];
+  if (!code) return '';
+  // Using flagcdn.com for high-quality flag images
+  return `https://flagcdn.com/w320/${code}.png`;
 };
 
 // Continent icons
