@@ -73,6 +73,8 @@ export default function SocialHubScreen() {
   const [pendingCount, setPendingCount] = useState(0);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [expandedVisits, setExpandedVisits] = useState<Set<string>>(new Set());
+  const [visitDetails, setVisitDetails] = useState<{[key: string]: any}>({});
 
   useEffect(() => {
     loadAllData();
