@@ -1725,6 +1725,323 @@ async def unlike_comment(comment_id: str, current_user: User = Depends(get_curre
 
 # ============= END COMMENTS ENDPOINTS =============
 
+# ============= BUCKET LIST ENDPOINTS =============
+
+@api_router.get("/bucket-list")
+async def get_bucket_list(current_user: User = Depends(get_current_user)):
+    """Get user's bucket list with full landmark details"""
+    bucket_items = await db.bucket_list.find(
+        {"user_id": current_user.user_id}
+    ).sort("added_at", -1).to_list(1000)
+    
+    # Get full landmark details
+    landmark_ids = [item["landmark_id"] for item in bucket_items]
+    landmarks = await db.landmarks.find(
+        {"landmark_id": {"$in": landmark_ids}}
+    ).to_list(1000)
+    
+    # Create lookup dictionary
+    landmarks_dict = {lm["landmark_id"]: lm for lm in landmarks}
+    
+    # Combine bucket list items with landmark details
+    result = []
+    for item in bucket_items:
+        landmark = landmarks_dict.get(item["landmark_id"])
+        if landmark:
+            result.append({
+                "bucket_list_id": item["bucket_list_id"],
+                "added_at": item["added_at"],
+                "notes": item.get("notes"),
+                "landmark": landmark
+            })
+    
+    return result
+
+@api_router.post("/bucket-list")
+async def add_to_bucket_list(data: BucketListCreate, current_user: User = Depends(get_current_user)):
+    """Add a landmark to bucket list"""
+    # Check if already in bucket list
+    existing = await db.bucket_list.find_one({
+        "user_id": current_user.user_id,
+        "landmark_id": data.landmark_id
+    })
+    
+    if existing:
+        raise HTTPException(status_code=400, detail="Landmark already in bucket list")
+    
+    # Verify landmark exists
+    landmark = await db.landmarks.find_one({"landmark_id": data.landmark_id})
+    if not landmark:
+        raise HTTPException(status_code=404, detail="Landmark not found")
+    
+    # Create bucket list item
+    bucket_list_id = f"bucket_{uuid.uuid4().hex[:12]}"
+    bucket_item = {
+        "bucket_list_id": bucket_list_id,
+        "user_id": current_user.user_id,
+        "landmark_id": data.landmark_id,
+        "added_at": datetime.now(timezone.utc),
+        "notes": data.notes
+    }
+    
+    await db.bucket_list.insert_one(bucket_item)
+    
+    return {"message": "Added to bucket list", "bucket_list_id": bucket_list_id}
+
+@api_router.delete("/bucket-list/{bucket_list_id}")
+async def remove_from_bucket_list(bucket_list_id: str, current_user: User = Depends(get_current_user)):
+    """Remove a landmark from bucket list"""
+    result = await db.bucket_list.delete_one({
+        "bucket_list_id": bucket_list_id,
+        "user_id": current_user.user_id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Bucket list item not found")
+    
+    return {"message": "Removed from bucket list"}
+
+@api_router.get("/bucket-list/check/{landmark_id}")
+async def check_in_bucket_list(landmark_id: str, current_user: User = Depends(get_current_user)):
+    """Check if a landmark is in user's bucket list"""
+    item = await db.bucket_list.find_one({
+        "user_id": current_user.user_id,
+        "landmark_id": landmark_id
+    })
+    
+    return {"in_bucket_list": item is not None, "bucket_list_id": item.get("bucket_list_id") if item else None}
+
+# ============= END BUCKET LIST ENDPOINTS =============
+
+# ============= TRIP PLANNING ENDPOINTS =============
+
+@api_router.get("/trips")
+async def get_user_trips(status: Optional[str] = None, current_user: User = Depends(get_current_user)):
+    """Get user's trips, optionally filtered by status"""
+    query = {"user_id": current_user.user_id}
+    if status:
+        query["status"] = status
+    
+    trips = await db.trips.find(query).sort("created_at", -1).to_list(1000)
+    
+    # Get landmark counts for each trip
+    result = []
+    for trip in trips:
+        landmark_count = await db.trip_landmarks.count_documents({"trip_id": trip["trip_id"]})
+        visited_count = await db.trip_landmarks.count_documents({"trip_id": trip["trip_id"], "visited": True})
+        
+        trip["landmark_count"] = landmark_count
+        trip["visited_count"] = visited_count
+        result.append(Trip(**trip))
+    
+    return result
+
+@api_router.post("/trips")
+async def create_trip(data: TripCreate, current_user: User = Depends(get_current_user)):
+    """Create a new trip"""
+    trip_id = f"trip_{uuid.uuid4().hex[:12]}"
+    
+    now = datetime.now(timezone.utc)
+    trip = {
+        "trip_id": trip_id,
+        "user_id": current_user.user_id,
+        "name": data.name,
+        "destination": data.destination,
+        "start_date": datetime.fromisoformat(data.start_date.replace('Z', '+00:00')) if data.start_date else None,
+        "end_date": datetime.fromisoformat(data.end_date.replace('Z', '+00:00')) if data.end_date else None,
+        "budget": data.budget,
+        "notes": data.notes,
+        "status": "planned",
+        "created_at": now,
+        "updated_at": now
+    }
+    
+    await db.trips.insert_one(trip)
+    
+    return {"message": "Trip created", "trip_id": trip_id}
+
+@api_router.get("/trips/{trip_id}")
+async def get_trip_details(trip_id: str, current_user: User = Depends(get_current_user)):
+    """Get trip details with landmarks"""
+    trip = await db.trips.find_one({
+        "trip_id": trip_id,
+        "user_id": current_user.user_id
+    })
+    
+    if not trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    
+    # Get trip landmarks with full details
+    trip_landmarks = await db.trip_landmarks.find(
+        {"trip_id": trip_id}
+    ).sort("day_number", 1).to_list(1000)
+    
+    # Get full landmark details
+    landmark_ids = [tl["landmark_id"] for tl in trip_landmarks]
+    landmarks = await db.landmarks.find(
+        {"landmark_id": {"$in": landmark_ids}}
+    ).to_list(1000)
+    
+    landmarks_dict = {lm["landmark_id"]: lm for lm in landmarks}
+    
+    # Combine trip landmarks with landmark details
+    enriched_landmarks = []
+    for tl in trip_landmarks:
+        landmark = landmarks_dict.get(tl["landmark_id"])
+        if landmark:
+            enriched_landmarks.append({
+                "trip_landmark_id": tl["trip_landmark_id"],
+                "day_number": tl.get("day_number"),
+                "notes": tl.get("notes"),
+                "visited": tl["visited"],
+                "landmark": landmark
+            })
+    
+    trip["landmarks"] = enriched_landmarks
+    trip["landmark_count"] = len(enriched_landmarks)
+    trip["visited_count"] = sum(1 for tl in trip_landmarks if tl["visited"])
+    
+    return trip
+
+@api_router.put("/trips/{trip_id}")
+async def update_trip(trip_id: str, data: TripUpdate, current_user: User = Depends(get_current_user)):
+    """Update trip details"""
+    trip = await db.trips.find_one({
+        "trip_id": trip_id,
+        "user_id": current_user.user_id
+    })
+    
+    if not trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    
+    # Build update dict
+    update_data = {"updated_at": datetime.now(timezone.utc)}
+    if data.name is not None:
+        update_data["name"] = data.name
+    if data.destination is not None:
+        update_data["destination"] = data.destination
+    if data.start_date is not None:
+        update_data["start_date"] = datetime.fromisoformat(data.start_date.replace('Z', '+00:00'))
+    if data.end_date is not None:
+        update_data["end_date"] = datetime.fromisoformat(data.end_date.replace('Z', '+00:00'))
+    if data.budget is not None:
+        update_data["budget"] = data.budget
+    if data.notes is not None:
+        update_data["notes"] = data.notes
+    if data.status is not None:
+        update_data["status"] = data.status
+    
+    await db.trips.update_one(
+        {"trip_id": trip_id},
+        {"$set": update_data}
+    )
+    
+    return {"message": "Trip updated"}
+
+@api_router.delete("/trips/{trip_id}")
+async def delete_trip(trip_id: str, current_user: User = Depends(get_current_user)):
+    """Delete a trip and all its landmarks"""
+    result = await db.trips.delete_one({
+        "trip_id": trip_id,
+        "user_id": current_user.user_id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    
+    # Delete all trip landmarks
+    await db.trip_landmarks.delete_many({"trip_id": trip_id})
+    
+    return {"message": "Trip deleted"}
+
+@api_router.post("/trips/{trip_id}/landmarks")
+async def add_landmark_to_trip(trip_id: str, data: TripLandmarkCreate, current_user: User = Depends(get_current_user)):
+    """Add a landmark to a trip"""
+    # Verify trip belongs to user
+    trip = await db.trips.find_one({
+        "trip_id": trip_id,
+        "user_id": current_user.user_id
+    })
+    
+    if not trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    
+    # Check if landmark already in trip
+    existing = await db.trip_landmarks.find_one({
+        "trip_id": trip_id,
+        "landmark_id": data.landmark_id
+    })
+    
+    if existing:
+        raise HTTPException(status_code=400, detail="Landmark already in trip")
+    
+    # Verify landmark exists
+    landmark = await db.landmarks.find_one({"landmark_id": data.landmark_id})
+    if not landmark:
+        raise HTTPException(status_code=404, detail="Landmark not found")
+    
+    # Create trip landmark
+    trip_landmark_id = f"trip_lm_{uuid.uuid4().hex[:12]}"
+    trip_landmark = {
+        "trip_landmark_id": trip_landmark_id,
+        "trip_id": trip_id,
+        "landmark_id": data.landmark_id,
+        "day_number": data.day_number,
+        "notes": data.notes,
+        "visited": False,
+        "added_at": datetime.now(timezone.utc)
+    }
+    
+    await db.trip_landmarks.insert_one(trip_landmark)
+    
+    return {"message": "Landmark added to trip", "trip_landmark_id": trip_landmark_id}
+
+@api_router.delete("/trips/{trip_id}/landmarks/{trip_landmark_id}")
+async def remove_landmark_from_trip(trip_id: str, trip_landmark_id: str, current_user: User = Depends(get_current_user)):
+    """Remove a landmark from a trip"""
+    # Verify trip belongs to user
+    trip = await db.trips.find_one({
+        "trip_id": trip_id,
+        "user_id": current_user.user_id
+    })
+    
+    if not trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    
+    result = await db.trip_landmarks.delete_one({
+        "trip_landmark_id": trip_landmark_id,
+        "trip_id": trip_id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Trip landmark not found")
+    
+    return {"message": "Landmark removed from trip"}
+
+@api_router.put("/trips/{trip_id}/landmarks/{trip_landmark_id}/visited")
+async def mark_trip_landmark_visited(trip_id: str, trip_landmark_id: str, visited: bool, current_user: User = Depends(get_current_user)):
+    """Mark a trip landmark as visited/unvisited"""
+    # Verify trip belongs to user
+    trip = await db.trips.find_one({
+        "trip_id": trip_id,
+        "user_id": current_user.user_id
+    })
+    
+    if not trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    
+    result = await db.trip_landmarks.update_one(
+        {"trip_landmark_id": trip_landmark_id, "trip_id": trip_id},
+        {"$set": {"visited": visited}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Trip landmark not found")
+    
+    return {"message": f"Landmark marked as {'visited' if visited else 'unvisited'}"}
+
+# ============= END TRIP PLANNING ENDPOINTS =============
+
 # ============= END ACTIVITY FEED ENDPOINTS =============
 
 # ============= ACHIEVEMENTS ENDPOINTS =============
