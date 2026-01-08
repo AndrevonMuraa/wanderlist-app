@@ -446,6 +446,22 @@ export default function SocialHubScreen() {
             <Text style={styles.actionText}>{activity.likes_count}</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Comments Section */}
+        <CommentsSection
+          activityId={activity.activity_id}
+          commentsCount={activity.comments_count}
+          currentUserId={user?.user_id || ''}
+          onCommentsChange={(newCount) => {
+            setActivities(prev =>
+              prev.map(a =>
+                a.activity_id === activity.activity_id
+                  ? { ...a, comments_count: newCount }
+                  : a
+              )
+            );
+          }}
+        />
       </TouchableOpacity>
     );
   };
