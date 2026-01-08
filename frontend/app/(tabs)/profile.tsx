@@ -35,6 +35,7 @@ interface ProgressStats {
     total: number;
     percentage: number;
   };
+  totalPoints?: number;
   continents: Record<string, {
     visited: number;
     total: number;
@@ -49,10 +50,21 @@ interface ProgressStats {
   }>;
 }
 
+interface Badge {
+  achievement_id: string;
+  badge_type: string;
+  badge_name: string;
+  badge_description: string;
+  badge_icon: string;
+  earned_at: string;
+  is_featured: boolean;
+}
+
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
   const [stats, setStats] = useState<UserStats | null>(null);
   const [progressStats, setProgressStats] = useState<ProgressStats | null>(null);
+  const [badges, setBadges] = useState<Badge[]>([]);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const router = useRouter();
@@ -60,6 +72,7 @@ export default function ProfileScreen() {
   useEffect(() => {
     fetchStats();
     fetchProgressStats();
+    fetchBadges();
   }, []);
 
   const fetchStats = async () => {
