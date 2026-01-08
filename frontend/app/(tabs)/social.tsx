@@ -224,59 +224,176 @@ export default function SocialHubScreen() {
     return `${Math.floor(seconds / 86400)}d ago`;
   };
 
-  const renderActivityItem = (activity: Activity) => (
-    <TouchableOpacity 
-      key={activity.activity_id}
-      style={styles.activityItem}
-      activeOpacity={0.7}
-    >
-      <View style={styles.activityHeader}>
-        <Avatar.Image 
-          size={40} 
-          source={{ uri: activity.user_picture || 'https://via.placeholder.com/100' }} 
-        />
-        <View style={styles.activityInfo}>
-          <Text style={styles.activityUser}>{activity.user_name}</Text>
-          <Text style={styles.activityTime}>{formatTimeAgo(activity.created_at)}</Text>
-        </View>
-      </View>
+  const renderActivityItem = (activity: Activity) => {
+    const isExpanded = activity.visit_id && expandedVisits.has(activity.visit_id);
+    const visit = activity.visit_id ? visitDetails[activity.visit_id] : null;
+    const hasRichContent = activity.has_photos || activity.has_diary || activity.has_tips;
 
-      {activity.activity_type === 'visit' && (
-        <View style={styles.activityContent}>
-          <Text style={styles.activityText}>
-            Visited <Text style={styles.activityHighlight}>{activity.landmark_name}</Text>
-            {activity.country_name && ` in ${activity.country_name}`}
-          </Text>
-          <View style={styles.activityPoints}>
-            <Ionicons name="star" size={14} color="#FFD700" />
-            <Text style={styles.pointsText}>+{activity.points_earned} pts</Text>
+    return (
+      <TouchableOpacity 
+        key={activity.activity_id}
+        style={styles.activityItem}
+        activeOpacity={0.7}
+        onPress={() => activity.visit_id && hasRichContent && toggleVisitExpansion(activity.visit_id)}
+      >
+        <View style={styles.activityHeader}>
+          <Avatar.Image 
+            size={40} 
+            source={{ uri: activity.user_picture || 'https://via.placeholder.com/100' }} 
+          />
+          <View style={styles.activityInfo}>
+            <Text style={styles.activityUser}>{activity.user_name}</Text>
+            <Text style={styles.activityTime}>{formatTimeAgo(activity.created_at)}</Text>
           </View>
         </View>
-      )}
 
-      {activity.activity_type === 'milestone' && (
-        <View style={styles.activityContent}>
-          <Text style={styles.activityText}>
-            🎉 Reached <Text style={styles.activityHighlight}>{activity.milestone_count} visits</Text> milestone!
-          </Text>
+        {activity.activity_type === 'visit' && (
+          <View style={styles.activityContent}>
+            <Text style={styles.activityText}>
+              Visited <Text style={styles.activityHighlight}>{activity.landmark_name}</Text>
+              {activity.country_name && ` in ${activity.country_name}`}
+            </Text>
+            <View style={styles.activityPoints}>
+              <Ionicons name="star" size={14} color="#FFD700" />
+              <Text style={styles.pointsText}>+{activity.points_earned} pts</Text>
+            </View>
+
+            {/* Rich Content Indicators */}
+            {hasRichContent && (
+              <View style={styles.richContentBadges}>
+                {activity.has_photos && activity.photo_count && activity.photo_count > 0 && (
+                  <View style={styles.richBadge}>
+                    <Ionicons name="images" size={12} color={theme.colors.primary} />
+                    <Text style={styles.richBadgeText}>{activity.photo_count} {activity.photo_count === 1 ? 'photo' : 'photos'}</Text>
+                  </View>
+                )}
+                {activity.has_diary && (
+                  <View style={styles.richBadge}>
+                    <Ionicons name="journal" size={12} color={theme.colors.primary} />
+                    <Text style={styles.richBadgeText}>Diary</Text>
+                  </View>
+                )}
+                {activity.has_tips && (
+                  <View style={styles.richBadge}>
+                    <Ionicons name="bulb" size={12} color={theme.colors.primary} />
+                    <Text style={styles.richBadgeText}>Tips</Text>
+                  </View>
+                )}
+              </View>
+            )}
+
+            {/* Expanded Rich Content */}
+            {isExpanded && visit && (
+              <View style={styles.richContentExpanded}>
+                {/* Photos */}
+                {visit.photos && visit.photos.length > 0 && (
+                  <View style={styles.richSection}>
+                    <View style={styles.photoPreviewGrid}>
+                      {visit.photos.slice(0, 3).map((photo: string, index: number) => (
+                        <Image 
+                          key={index}
+                          source={{ uri: photo }} 
+                          style={styles.photoPreview} 
+                        />
+                      ))}
+                    </View>
+                    {visit.photos.length > 3 && (
+                      <Text style={styles.morePhotosText}>+{visit.photos.length - 3} more photos</Text>
+                    )}
+                  </View>
+                )}
+
+                {/* Diary */}
+                {visit.diary_notes && (
+                  <View style={styles.richSection}>
+                    <View style={styles.richSectionHeader}>
+                      <Ionicons name="journal" size={16} color={theme.colors.primary} />
+                      <Text style={styles.richSectionTitle}>Travel Diary</Text>
+                    </View>
+                    <Text style={styles.diaryText}>
+                      {visit.diary_notes.length > 150 
+                        ? visit.diary_notes.substring(0, 150) + '...' 
+                        : visit.diary_notes}
+                    </Text>
+                  </View>
+                )}
+
+                {/* Travel Tips */}
+                {visit.travel_tips && visit.travel_tips.length > 0 && (
+                  <View style={styles.richSection}>
+                    <View style={styles.richSectionHeader}>
+                      <Ionicons name="bulb" size={16} color={theme.colors.primary} />
+                      <Text style={styles.richSectionTitle}>Travel Tips</Text>
+                    </View>
+                    {visit.travel_tips.slice(0, 2).map((tip: string, index: number) => (
+                      <View key={index} style={styles.tipItem}>
+                        <Ionicons name="checkmark-circle" size={14} color={theme.colors.primary} />
+                        <Text style={styles.tipText}>{tip}</Text>
+                      </View>
+                    ))}
+                    {visit.travel_tips.length > 2 && (
+                      <Text style={styles.moreTipsText}>+{visit.travel_tips.length - 2} more tips</Text>
+                    )}
+                  </View>
+                )}
+              </View>
+            )}
+
+            {/* View Full Visit Button */}
+            {hasRichContent && !isExpanded && (
+              <TouchableOpacity 
+                style={styles.viewFullButton}
+                onPress={() => activity.visit_id && toggleVisitExpansion(activity.visit_id)}
+              >
+                <LinearGradient
+                  colors={[theme.colors.primary, theme.colors.secondary]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.viewFullGradient}
+                >
+                  <Text style={styles.viewFullText}>View Full Visit</Text>
+                  <Ionicons name="arrow-forward" size={14} color="#fff" />
+                </LinearGradient>
+              </TouchableOpacity>
+            )}
+
+            {/* Collapse Button */}
+            {isExpanded && (
+              <TouchableOpacity 
+                style={styles.collapseButton}
+                onPress={() => activity.visit_id && toggleVisitExpansion(activity.visit_id)}
+              >
+                <Text style={styles.collapseText}>Show Less</Text>
+                <Ionicons name="chevron-up" size={14} color={theme.colors.primary} />
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+
+        {activity.activity_type === 'milestone' && (
+          <View style={styles.activityContent}>
+            <Text style={styles.activityText}>
+              🎉 Reached <Text style={styles.activityHighlight}>{activity.milestone_count} visits</Text> milestone!
+            </Text>
+          </View>
+        )}
+
+        <View style={styles.activityActions}>
+          <TouchableOpacity 
+            style={styles.actionButton}
+            onPress={() => handleLike(activity.activity_id)}
+          >
+            <Ionicons 
+              name={activity.is_liked ? "heart" : "heart-outline"} 
+              size={20} 
+              color={activity.is_liked ? "#FF6B6B" : theme.colors.textLight} 
+            />
+            <Text style={styles.actionText}>{activity.likes_count}</Text>
+          </TouchableOpacity>
         </View>
-      )}
-
-      <View style={styles.activityActions}>
-        <TouchableOpacity 
-          style={styles.actionButton}
-          onPress={() => handleLike(activity.activity_id)}
-        >
-          <Ionicons 
-            name={activity.is_liked ? "heart" : "heart-outline"} 
-            size={20} 
-            color={activity.is_liked ? "#FF6B6B" : theme.colors.textLight} 
-          />
-          <Text style={styles.actionText}>{activity.likes_count}</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   const renderFriendItem = (friend: Friend, index: number) => (
     <TouchableOpacity 
