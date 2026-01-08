@@ -5,7 +5,8 @@ import {
   ScrollView, 
   TouchableOpacity, 
   Platform,
-  Dimensions 
+  Dimensions,
+  Alert 
 } from 'react-native';
 import { Text, ActivityIndicator, Surface } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -87,6 +88,15 @@ export default function LandmarkDetailScreen() {
     router.push(`/add-visit/${landmark_id}?name=${encodeURIComponent(landmark?.name || '')}`);
   };
 
+  const handleGoBack = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      // Fallback to explore page if no history
+      router.replace('/continents');
+    }
+  };
+
   const getDifficultyColor = (difficulty?: string) => {
     if (!difficulty) return theme.colors.textLight;
     switch (difficulty.toLowerCase()) {
@@ -129,14 +139,41 @@ export default function LandmarkDetailScreen() {
   if (!landmark) {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
-        <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle" size={48} color={theme.colors.accent} />
-          <Text style={styles.errorText}>Landmark not found</Text>
+        {/* Turquoise Header */}
+        <LinearGradient
+          colors={[theme.colors.primary, theme.colors.secondary]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.headerGradient}
+        >
           <TouchableOpacity 
+            onPress={handleGoBack}
             style={styles.backButton}
-            onPress={() => router.back()}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Text style={styles.backButtonText}>Go Back</Text>
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitleWhite}>Landmark Not Found</Text>
+          <View style={styles.headerRight} />
+        </LinearGradient>
+
+        <View style={styles.errorContainer}>
+          <Ionicons name="alert-circle" size={64} color={theme.colors.accent} />
+          <Text style={styles.errorText}>Landmark not found</Text>
+          <Text style={styles.errorSubtext}>This landmark may have been removed</Text>
+          <TouchableOpacity 
+            style={styles.backButtonCard}
+            onPress={handleGoBack}
+          >
+            <LinearGradient
+              colors={[theme.colors.primary, theme.colors.secondary]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.backButtonGradient}
+            >
+              <Ionicons name="arrow-back-circle" size={20} color="#fff" />
+              <Text style={styles.backButtonText}>Go Back</Text>
+            </LinearGradient>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -147,171 +184,196 @@ export default function LandmarkDetailScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
+      {/* Turquoise Gradient Header */}
+      <LinearGradient
+        colors={[theme.colors.primary, theme.colors.secondary]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.headerGradient}
+      >
         <TouchableOpacity 
-          onPress={() => router.back()} 
-          style={styles.headerButton}
+          onPress={handleGoBack}
+          style={styles.backButton}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
+          <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
-        <View style={styles.headerTitleContainer}>
-          <Text style={styles.headerTitle} numberOfLines={1}>
-            {landmark.name}
-          </Text>
-        </View>
-        <View style={styles.headerButton} />
-      </View>
+        <Text style={styles.headerTitleWhite} numberOfLines={1}>
+          {landmark.name}
+        </Text>
+        <View style={styles.headerRight} />
+      </LinearGradient>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Hero Section - Icon Based */}
-        <View style={styles.heroSection}>
-          <View style={[
-            styles.landmarkIconLarge,
-            isPremium ? styles.landmarkIconPremium : styles.landmarkIconOfficial
-          ]}>
-            <Ionicons 
-              name={isPremium ? "diamond" : "location"} 
-              size={64} 
-              color={isPremium ? "#FFD700" : theme.colors.primary} 
-            />
-          </View>
-          
-          <Text style={styles.landmarkName}>{landmark.name}</Text>
-          
-          <View style={styles.locationRow}>
-            <Ionicons name="location-outline" size={16} color={theme.colors.textSecondary} />
-            <Text style={styles.locationText}>
-              {landmark.country_name} • {landmark.continent}
-            </Text>
-          </View>
+        <Surface style={styles.heroCard}>
+          <View style={styles.heroContent}>
+            <View style={[
+              styles.landmarkIconLarge,
+              isPremium ? styles.landmarkIconPremium : styles.landmarkIconOfficial
+            ]}>
+              <Ionicons 
+                name={isPremium ? "diamond" : "location"} 
+                size={56} 
+                color={isPremium ? "#FFD700" : theme.colors.primary} 
+              />
+            </View>
+            
+            <Text style={styles.landmarkName}>{landmark.name}</Text>
+            
+            <View style={styles.locationRow}>
+              <Ionicons name="location" size={16} color={theme.colors.primary} />
+              <Text style={styles.locationText}>
+                {landmark.country_name} • {landmark.continent}
+              </Text>
+            </View>
 
-          <View style={styles.badgesRow}>
-            {isPremium && (
-              <View style={styles.premiumBadge}>
-                <Ionicons name="diamond" size={12} color="#B8860B" />
-                <Text style={styles.premiumBadgeText}>PREMIUM</Text>
+            <View style={styles.badgesRow}>
+              {isPremium && (
+                <View style={styles.premiumBadge}>
+                  <Ionicons name="diamond" size={12} color="#B8860B" />
+                  <Text style={styles.premiumBadgeText}>PREMIUM</Text>
+                </View>
+              )}
+              <View style={styles.pointsBadge}>
+                <Ionicons name="star" size={12} color="#FFD700" />
+                <Text style={styles.pointsBadgeText}>{landmark.points} points</Text>
               </View>
-            )}
-            <View style={styles.pointsBadge}>
-              <Ionicons name="star" size={12} color="#FFD700" />
-              <Text style={styles.pointsBadgeText}>{landmark.points} points</Text>
             </View>
           </View>
-        </View>
-
-        {/* Description Card */}
-        <Surface style={styles.card}>
-          <View style={styles.cardHeader}>
-            <Ionicons name="information-circle" size={24} color={theme.colors.primary} />
-            <Text style={styles.cardTitle}>About</Text>
-          </View>
-          <Text style={styles.description}>{landmark.description}</Text>
         </Surface>
 
-        {/* Quick Info Grid */}
-        <View style={styles.quickInfoGrid}>
-          {landmark.best_time_to_visit && (
-            <Surface style={styles.quickInfoCard}>
-              <Ionicons name="calendar" size={28} color={theme.colors.primary} />
-              <Text style={styles.quickInfoLabel}>Best Time</Text>
-              <Text style={styles.quickInfoValue}>{landmark.best_time_to_visit}</Text>
-            </Surface>
-          )}
-
-          {landmark.duration && (
-            <Surface style={styles.quickInfoCard}>
-              <Ionicons name="time" size={28} color={theme.colors.primary} />
-              <Text style={styles.quickInfoLabel}>Duration</Text>
-              <Text style={styles.quickInfoValue}>{landmark.duration}</Text>
-            </Surface>
-          )}
-
-          {landmark.difficulty && (
-            <Surface style={styles.quickInfoCard}>
-              <Ionicons 
-                name={getDifficultyIcon(landmark.difficulty)} 
-                size={28} 
-                color={getDifficultyColor(landmark.difficulty)} 
-              />
-              <Text style={styles.quickInfoLabel}>Difficulty</Text>
-              <Text style={[
-                styles.quickInfoValue,
-                { color: getDifficultyColor(landmark.difficulty) }
-              ]}>
-                {landmark.difficulty}
-              </Text>
-            </Surface>
-          )}
+        {/* About Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="information-circle" size={24} color={theme.colors.primary} />
+            <Text style={styles.sectionTitle}>About This Landmark</Text>
+          </View>
+          <Surface style={styles.card}>
+            <Text style={styles.description}>{landmark.description}</Text>
+          </Surface>
         </View>
 
-        {/* Coordinates Card */}
-        {landmark.latitude && landmark.longitude && (
-          <Surface style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Ionicons name="compass" size={24} color={theme.colors.primary} />
-              <Text style={styles.cardTitle}>Coordinates</Text>
+        {/* Quick Info Section */}
+        {(landmark.best_time_to_visit || landmark.duration || landmark.difficulty) && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Ionicons name="flash" size={24} color={theme.colors.primary} />
+              <Text style={styles.sectionTitle}>Quick Info</Text>
             </View>
-            <View style={styles.coordinatesRow}>
-              <View style={styles.coordinate}>
-                <Text style={styles.coordinateLabel}>Latitude</Text>
-                <Text style={styles.coordinateValue}>
-                  {landmark.latitude.toFixed(6)}°
-                </Text>
-              </View>
-              <View style={styles.coordinateDivider} />
-              <View style={styles.coordinate}>
-                <Text style={styles.coordinateLabel}>Longitude</Text>
-                <Text style={styles.coordinateValue}>
-                  {landmark.longitude.toFixed(6)}°
-                </Text>
-              </View>
-            </View>
-          </Surface>
-        )}
+            <View style={styles.quickInfoGrid}>
+              {landmark.best_time_to_visit && (
+                <Surface style={styles.quickInfoCard}>
+                  <Ionicons name="calendar" size={28} color={theme.colors.primary} />
+                  <Text style={styles.quickInfoLabel}>Best Time</Text>
+                  <Text style={styles.quickInfoValue}>{landmark.best_time_to_visit}</Text>
+                </Surface>
+              )}
 
-        {/* Facts Card */}
-        {landmark.facts && landmark.facts.length > 0 && (
-          <Surface style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Ionicons name="bulb" size={24} color={theme.colors.primary} />
-              <Text style={styles.cardTitle}>Did You Know?</Text>
-            </View>
-            {landmark.facts.map((fact, index) => (
-              <View key={index} style={styles.factItem}>
-                <View style={styles.factIconContainer}>
+              {landmark.duration && (
+                <Surface style={styles.quickInfoCard}>
+                  <Ionicons name="time" size={28} color={theme.colors.primary} />
+                  <Text style={styles.quickInfoLabel}>Duration</Text>
+                  <Text style={styles.quickInfoValue}>{landmark.duration}</Text>
+                </Surface>
+              )}
+
+              {landmark.difficulty && (
+                <Surface style={styles.quickInfoCard}>
                   <Ionicons 
-                    name={fact.icon as any} 
-                    size={20} 
-                    color={theme.colors.primary} 
+                    name={getDifficultyIcon(landmark.difficulty)} 
+                    size={28} 
+                    color={getDifficultyColor(landmark.difficulty)} 
                   />
+                  <Text style={styles.quickInfoLabel}>Difficulty</Text>
+                  <Text style={[
+                    styles.quickInfoValue,
+                    { color: getDifficultyColor(landmark.difficulty) }
+                  ]}>
+                    {landmark.difficulty}
+                  </Text>
+                </Surface>
+              )}
+            </View>
+          </View>
+        )}
+
+        {/* Coordinates Section */}
+        {landmark.latitude && landmark.longitude && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Ionicons name="compass" size={24} color={theme.colors.primary} />
+              <Text style={styles.sectionTitle}>Coordinates</Text>
+            </View>
+            <Surface style={styles.card}>
+              <View style={styles.coordinatesRow}>
+                <View style={styles.coordinate}>
+                  <Text style={styles.coordinateLabel}>Latitude</Text>
+                  <Text style={styles.coordinateValue}>
+                    {landmark.latitude.toFixed(6)}°
+                  </Text>
                 </View>
-                <View style={styles.factContent}>
-                  <Text style={styles.factTitle}>{fact.title}</Text>
-                  <Text style={styles.factText}>{fact.text}</Text>
+                <View style={styles.coordinateDivider} />
+                <View style={styles.coordinate}>
+                  <Text style={styles.coordinateLabel}>Longitude</Text>
+                  <Text style={styles.coordinateValue}>
+                    {landmark.longitude.toFixed(6)}°
+                  </Text>
                 </View>
               </View>
-            ))}
-          </Surface>
+            </Surface>
+          </View>
         )}
 
-        {/* Upvotes Card */}
+        {/* Facts Section */}
+        {landmark.facts && landmark.facts.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Ionicons name="bulb" size={24} color={theme.colors.primary} />
+              <Text style={styles.sectionTitle}>Did You Know?</Text>
+            </View>
+            <Surface style={styles.card}>
+              {landmark.facts.map((fact, index) => (
+                <View key={index} style={[
+                  styles.factItem,
+                  index < landmark.facts!.length - 1 && styles.factItemBorder
+                ]}>
+                  <View style={styles.factIconContainer}>
+                    <Ionicons 
+                      name={fact.icon as any} 
+                      size={20} 
+                      color={theme.colors.primary} 
+                    />
+                  </View>
+                  <View style={styles.factContent}>
+                    <Text style={styles.factTitle}>{fact.title}</Text>
+                    <Text style={styles.factText}>{fact.text}</Text>
+                  </View>
+                </View>
+              ))}
+            </Surface>
+          </View>
+        )}
+
+        {/* Community Section */}
         {landmark.category === 'user_suggested' && (
-          <Surface style={styles.card}>
-            <View style={styles.cardHeader}>
-              <Ionicons name="heart" size={24} color={theme.colors.accent} />
-              <Text style={styles.cardTitle}>Community</Text>
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Ionicons name="people" size={24} color={theme.colors.primary} />
+              <Text style={styles.sectionTitle}>Community</Text>
             </View>
-            <View style={styles.upvotesRow}>
-              <Ionicons name="arrow-up-circle" size={20} color={theme.colors.primary} />
-              <Text style={styles.upvotesText}>
-                {landmark.upvotes} {landmark.upvotes === 1 ? 'upvote' : 'upvotes'}
-              </Text>
-            </View>
-          </Surface>
+            <Surface style={styles.card}>
+              <View style={styles.upvotesRow}>
+                <Ionicons name="arrow-up-circle" size={24} color={theme.colors.primary} />
+                <Text style={styles.upvotesText}>
+                  {landmark.upvotes} {landmark.upvotes === 1 ? 'upvote' : 'upvotes'}
+                </Text>
+              </View>
+            </Surface>
+          </View>
         )}
 
-        <View style={{ height: 100 }} />
+        <View style={{ height: 120 }} />
       </ScrollView>
 
       {/* Floating Action Button */}
@@ -340,13 +402,13 @@ export default function LandmarkDetailScreen() {
         <View style={styles.fabContainer}>
           <TouchableOpacity 
             style={styles.fab}
-            onPress={() => {/* Show upgrade modal */}}
+            onPress={() => Alert.alert('Premium Required', 'Upgrade to Premium to visit this landmark')}
             activeOpacity={0.8}
           >
-            <View style={styles.fabLocked}>
+            <Surface style={styles.fabLocked}>
               <Ionicons name="lock-closed" size={24} color={theme.colors.accent} />
               <Text style={styles.fabTextLocked}>Upgrade to Visit</Text>
-            </View>
+            </Surface>
           </TouchableOpacity>
         </View>
       )}
@@ -376,58 +438,76 @@ const styles = StyleSheet.create({
     padding: theme.spacing.xl,
   },
   errorText: {
-    ...theme.typography.h3,
+    ...theme.typography.h2,
     color: theme.colors.text,
-    marginTop: theme.spacing.md,
-  },
-  backButton: {
     marginTop: theme.spacing.lg,
+    marginBottom: theme.spacing.xs,
+  },
+  errorSubtext: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.xl,
+  },
+  backButtonCard: {
+    borderRadius: theme.borderRadius.lg,
+    overflow: 'hidden',
+    ...theme.shadows.md,
+  },
+  backButtonGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
     paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.sm,
-    backgroundColor: theme.colors.primary,
-    borderRadius: theme.borderRadius.md,
+    paddingVertical: theme.spacing.md,
   },
   backButtonText: {
     ...theme.typography.body,
     color: '#fff',
     fontWeight: '700',
   },
-  header: {
+  // Turquoise Gradient Header
+  headerGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-    backgroundColor: theme.colors.surface,
+    paddingVertical: theme.spacing.md,
+    ...theme.shadows.sm,
   },
-  headerButton: {
+  backButton: {
     padding: theme.spacing.xs,
     width: 40,
   },
-  headerTitleContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  headerTitle: {
+  headerTitleWhite: {
     ...theme.typography.h3,
-    color: theme.colors.text,
+    color: '#fff',
     fontWeight: '700',
+    flex: 1,
+    textAlign: 'center',
+  },
+  headerRight: {
+    width: 40,
   },
   scrollView: {
     flex: 1,
   },
-  // Hero Section
-  heroSection: {
+  // Hero Card
+  heroCard: {
+    margin: theme.spacing.lg,
+    marginBottom: 0,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.md,
+  },
+  heroContent: {
     alignItems: 'center',
     paddingVertical: theme.spacing.xl,
     paddingHorizontal: theme.spacing.lg,
   },
   landmarkIconLarge: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: theme.spacing.lg,
@@ -457,7 +537,8 @@ const styles = StyleSheet.create({
   },
   locationText: {
     ...theme.typography.body,
-    color: theme.colors.textSecondary,
+    color: theme.colors.text,
+    fontWeight: '500',
   },
   badgesRow: {
     flexDirection: 'row',
@@ -484,7 +565,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.background,
     paddingHorizontal: theme.spacing.sm,
     paddingVertical: theme.spacing.xs / 2,
     borderRadius: theme.borderRadius.sm,
@@ -497,25 +578,27 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 11,
   },
-  // Cards
-  card: {
-    marginHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.md,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.lg,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
+  // Sections
+  section: {
+    paddingHorizontal: theme.spacing.lg,
+    marginTop: theme.spacing.lg,
   },
-  cardHeader: {
+  sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.sm,
     marginBottom: theme.spacing.md,
   },
-  cardTitle: {
+  sectionTitle: {
     ...theme.typography.h3,
     color: theme.colors.text,
     fontWeight: '700',
+  },
+  card: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    ...theme.shadows.sm,
   },
   description: {
     ...theme.typography.body,
@@ -526,14 +609,12 @@ const styles = StyleSheet.create({
   quickInfoGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: theme.spacing.lg,
     gap: theme.spacing.sm,
-    marginBottom: theme.spacing.md,
   },
   quickInfoCard: {
     flex: 1,
     minWidth: (width - theme.spacing.lg * 2 - theme.spacing.sm) / 2,
-    padding: theme.spacing.md,
+    padding: theme.spacing.lg,
     borderRadius: theme.borderRadius.lg,
     alignItems: 'center',
     backgroundColor: theme.colors.surface,
@@ -542,13 +623,13 @@ const styles = StyleSheet.create({
   quickInfoLabel: {
     ...theme.typography.caption,
     color: theme.colors.textSecondary,
-    marginTop: theme.spacing.xs,
+    marginTop: theme.spacing.sm,
   },
   quickInfoValue: {
     ...theme.typography.body,
     color: theme.colors.text,
     fontWeight: '700',
-    marginTop: 2,
+    marginTop: theme.spacing.xs / 2,
     textAlign: 'center',
   },
   // Coordinates
@@ -580,7 +661,11 @@ const styles = StyleSheet.create({
   // Facts
   factItem: {
     flexDirection: 'row',
-    marginBottom: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
+  },
+  factItemBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
   },
   factIconContainer: {
     width: 36,
@@ -609,7 +694,7 @@ const styles = StyleSheet.create({
   upvotesRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.xs,
+    gap: theme.spacing.sm,
   },
   upvotesText: {
     ...theme.typography.body,
@@ -632,7 +717,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: theme.spacing.md,
+    paddingVertical: theme.spacing.md + 2,
     gap: theme.spacing.sm,
   },
   fabText: {
@@ -644,7 +729,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: theme.spacing.md,
+    paddingVertical: theme.spacing.md + 2,
     gap: theme.spacing.sm,
     backgroundColor: theme.colors.surface,
     borderWidth: 2,
