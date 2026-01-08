@@ -343,6 +343,16 @@ export default function ProfileScreen() {
 
         <Surface style={styles.menuCard}>
           <List.Item
+            title="Rank System"
+            description="View all ranks and progression"
+            left={props => <List.Icon {...props} icon="trophy-outline" color={theme.colors.primary} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
+            onPress={() => router.push('/ranks')}
+            titleStyle={styles.listItemTitle}
+            descriptionStyle={styles.listItemDescription}
+          />
+          <Divider style={styles.divider} />
+          <List.Item
             title="About the App"
             description="Learn how to use WanderList"
             left={props => <List.Icon {...props} icon="information-outline" color={theme.colors.primary} />}
