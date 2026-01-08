@@ -75,9 +75,10 @@ export default function ChatScreen() {
       if (response.ok) {
         const data = await response.json();
         
-        // Mark messages as mine or theirs
+        // Mark messages as mine or theirs and map created_at to timestamp
         const processedMessages = data.map((msg: any) => ({
           ...msg,
+          timestamp: msg.created_at,  // Map backend's created_at to frontend's timestamp
           is_mine: msg.sender_id === user?.user_id
         }));
         
