@@ -309,7 +309,6 @@ These features are FULLY FUNCTIONAL and ready for users:
 ✅ **Friend Search by Username**
 ✅ **Messaging System (dual implementation)**
 ✅ **Loading Skeletons (UX enhancement)**
-✅ **User-Suggested Landmarks with Upvoting**
 
 ---
 
