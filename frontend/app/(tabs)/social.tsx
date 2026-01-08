@@ -907,6 +907,48 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     marginTop: theme.spacing.xs,
   },
+  // Completion Banner Styles
+  completionBanner: {
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.md,
+    marginTop: theme.spacing.sm,
+    borderWidth: 2,
+    borderColor: 'rgba(76, 175, 80, 0.3)',
+  },
+  completionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
+  },
+  completionTitle: {
+    ...theme.typography.h3,
+    color: '#4CAF50',
+    fontWeight: '700',
+  },
+  completionText: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    lineHeight: 22,
+    marginBottom: theme.spacing.sm,
+  },
+  completionHighlight: {
+    fontWeight: '700',
+    color: '#4CAF50',
+  },
+  completionPoints: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+    paddingTop: theme.spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(76, 175, 80, 0.2)',
+  },
+  completionPointsText: {
+    ...theme.typography.body,
+    color: '#4CAF50',
+    fontWeight: '700',
+  },
   // Friends Styles
   friendsStats: {
     flexDirection: 'row',
