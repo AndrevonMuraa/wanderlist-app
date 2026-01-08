@@ -69,17 +69,6 @@ class UserBadge(BaseModel):
     earned_at: datetime
     progress: str  # e.g., "5/10"
 
-class Challenge(BaseModel):
-    challenge_id: str
-    name: str
-    description: str
-    start_date: datetime
-    end_date: datetime
-    tier_required: str  # "basic" or "premium"
-    reward_badge_id: Optional[str] = None
-    target_landmarks: List[str]
-    target_count: int
-
 class RegisterRequest(BaseModel):
     email: str
     username: str
