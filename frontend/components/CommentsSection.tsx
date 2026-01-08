@@ -47,6 +47,7 @@ export default function CommentsSection({
   activityId,
   commentsCount,
   currentUserId,
+  onCommentsChange,
 }: CommentsSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(false);
