@@ -115,10 +115,10 @@ export default function SearchScreen() {
       <Surface style={styles.landmarkCard}>
         <View style={styles.landmarkImage}>
           {item.image_url ? (
-            <img
-              src={item.image_url}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 12 }}
-              alt={item.name}
+            <Image
+              source={{ uri: item.image_url }}
+              style={{ width: '100%', height: '100%', borderRadius: 12 }}
+              resizeMode="cover"
             />
           ) : (
             <View style={styles.placeholderImage}>
