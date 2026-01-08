@@ -819,6 +819,95 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     
     await db.activities.insert_one(activity)
     
+    # Check for country completion bonus
+    country_id = landmark.get("country_id")
+    if country_id:
+        # Get total landmarks in this country
+        total_landmarks_in_country = await db.landmarks.count_documents({"country_id": country_id})
+        # Get user's visits in this country
+        user_visits_in_country = await db.visits.count_documents({
+            "user_id": current_user.user_id,
+            "landmark_id": {"$in": [
+                lm["landmark_id"] for lm in await db.landmarks.find({"country_id": country_id}).to_list(1000)
+            ]}
+        })
+        
+        # If user just completed the country
+        if user_visits_in_country == total_landmarks_in_country:
+            country_completion_bonus = 50  # Bonus points for completing a country
+            
+            # Award bonus points to user
+            await db.users.update_one(
+                {"user_id": current_user.user_id},
+                {"$inc": {"points": country_completion_bonus}}
+            )
+            
+            # Create country completion activity
+            country_completion_activity_id = f"activity_{uuid.uuid4().hex[:12]}"
+            country_completion_activity = {
+                "activity_id": country_completion_activity_id,
+                "user_id": current_user.user_id,
+                "user_name": current_user.name,
+                "user_picture": current_user.picture,
+                "activity_type": "country_complete",
+                "country_id": country_id,
+                "country_name": landmark.get("country_name"),
+                "continent": landmark.get("continent"),
+                "points_earned": country_completion_bonus,
+                "landmarks_count": total_landmarks_in_country,
+                "created_at": datetime.now(timezone.utc),
+                "likes_count": 0,
+                "comments_count": 0
+            }
+            await db.activities.insert_one(country_completion_activity)
+            
+            # Check for continent completion bonus
+            continent = landmark.get("continent")
+            if continent:
+                # Get all countries in this continent
+                countries_in_continent = await db.countries.find({"continent": continent}).to_list(1000)
+                country_ids_in_continent = [c["country_id"] for c in countries_in_continent]
+                
+                # Check if user completed all countries in this continent
+                completed_countries = 0
+                for cid in country_ids_in_continent:
+                    total_landmarks = await db.landmarks.count_documents({"country_id": cid})
+                    user_visits = await db.visits.count_documents({
+                        "user_id": current_user.user_id,
+                        "landmark_id": {"$in": [
+                            lm["landmark_id"] for lm in await db.landmarks.find({"country_id": cid}).to_list(1000)
+                        ]}
+                    })
+                    if user_visits == total_landmarks:
+                        completed_countries += 1
+                
+                # If user just completed the continent
+                if completed_countries == len(country_ids_in_continent):
+                    continent_completion_bonus = 200  # Bonus points for completing a continent
+                    
+                    # Award bonus points to user
+                    await db.users.update_one(
+                        {"user_id": current_user.user_id},
+                        {"$inc": {"points": continent_completion_bonus}}
+                    )
+                    
+                    # Create continent completion activity
+                    continent_completion_activity_id = f"activity_{uuid.uuid4().hex[:12]}"
+                    continent_completion_activity = {
+                        "activity_id": continent_completion_activity_id,
+                        "user_id": current_user.user_id,
+                        "user_name": current_user.name,
+                        "user_picture": current_user.picture,
+                        "activity_type": "continent_complete",
+                        "continent": continent,
+                        "points_earned": continent_completion_bonus,
+                        "countries_count": len(country_ids_in_continent),
+                        "created_at": datetime.now(timezone.utc),
+                        "likes_count": 0,
+                        "comments_count": 0
+                    }
+                    await db.activities.insert_one(continent_completion_activity)
+    
     # Check for milestones and create activity if reached
     visit_count = await db.visits.count_documents({"user_id": current_user.user_id})
     if visit_count in [10, 25, 50, 100, 250, 500]:
