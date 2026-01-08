@@ -1566,11 +1566,105 @@ async def add_comment(activity_id: str, data: CommentCreate, current_user: User 
 async def get_activity_comments(activity_id: str, current_user: User = Depends(get_current_user)):
     """Get comments for an activity"""
     
-    comments = await db.comments.find(
-        {"activity_id": activity_id}
-    ).sort("created_at", 1).to_list(1000)
+    comments = await db.comments.find({"activity_id": activity_id}).sort("created_at", 1).to_list(1000)
     
-    return [Comment(**comment) for comment in comments]
+    # Check which comments current user has liked
+    comment_ids = [c["comment_id"] for c in comments]
+    user_comment_likes = await db.comment_likes.find({
+        "comment_id": {"$in": comment_ids},
+        "user_id": current_user.user_id
+    }).to_list(1000)
+    
+    liked_comment_ids = {like["comment_id"] for like in user_comment_likes}
+    
+    # Add is_liked flag
+    result_comments = []
+    for comment in comments:
+        comment["is_liked"] = comment["comment_id"] in liked_comment_ids
+        result_comments.append(Comment(**comment))
+    
+    return result_comments
+
+@api_router.delete("/comments/{comment_id}")
+async def delete_comment(comment_id: str, current_user: User = Depends(get_current_user)):
+    """Delete a comment (only own comments)"""
+    
+    comment = await db.comments.find_one({"comment_id": comment_id})
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+    
+    # Check if user owns the comment
+    if comment["user_id"] != current_user.user_id:
+        raise HTTPException(status_code=403, detail="Can only delete your own comments")
+    
+    # Delete the comment
+    await db.comments.delete_one({"comment_id": comment_id})
+    
+    # Update activity comments_count
+    await db.activities.update_one(
+        {"activity_id": comment["activity_id"]},
+        {"$inc": {"comments_count": -1}}
+    )
+    
+    return {"message": "Comment deleted"}
+
+@api_router.post("/comments/{comment_id}/like")
+async def like_comment(comment_id: str, current_user: User = Depends(get_current_user)):
+    """Like a comment"""
+    
+    comment = await db.comments.find_one({"comment_id": comment_id})
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+    
+    # Check if already liked
+    existing_like = await db.comment_likes.find_one({
+        "comment_id": comment_id,
+        "user_id": current_user.user_id
+    })
+    
+    if existing_like:
+        raise HTTPException(status_code=400, detail="Already liked")
+    
+    # Create like
+    like_id = f"comment_like_{uuid.uuid4().hex[:12]}"
+    like = {
+        "like_id": like_id,
+        "user_id": current_user.user_id,
+        "comment_id": comment_id,
+        "created_at": datetime.now(timezone.utc)
+    }
+    
+    await db.comment_likes.insert_one(like)
+    
+    # Update comment likes_count
+    await db.comments.update_one(
+        {"comment_id": comment_id},
+        {"$inc": {"likes_count": 1}}
+    )
+    
+    return {"message": "Comment liked"}
+
+@api_router.delete("/comments/{comment_id}/like")
+async def unlike_comment(comment_id: str, current_user: User = Depends(get_current_user)):
+    """Unlike a comment"""
+    
+    result = await db.comment_likes.delete_one({
+        "comment_id": comment_id,
+        "user_id": current_user.user_id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Like not found")
+    
+    # Update comment likes_count
+    await db.comments.update_one(
+        {"comment_id": comment_id},
+        {"$inc": {"likes_count": -1}}
+    )
+    
+    return {"message": "Comment unliked"}
+
+# ============= END COMMENTS ENDPOINTS =============
 
 # ============= END ACTIVITY FEED ENDPOINTS =============
 
