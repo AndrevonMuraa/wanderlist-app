@@ -34,24 +34,6 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="journey"
-        options={{
-          title: 'My Journey',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="map-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="feed"
-        options={{
-          title: 'Feed',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="newspaper-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="social"
         options={{
           title: 'Social',
@@ -67,6 +49,25 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),
+        }}
+      />
+      {/* Hidden tabs - functionality integrated into Social */}
+      <Tabs.Screen
+        name="journey"
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
+      <Tabs.Screen
+        name="feed"
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
+      <Tabs.Screen
+        name="leaderboard"
+        options={{
+          href: null, // Hide from tab bar
         }}
       />
     </Tabs>
