@@ -1,70 +1,128 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Image, RefreshControl, TouchableOpacity, Platform } from 'react-native';
-import { Text, ActivityIndicator, Surface, ProgressBar } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Platform, RefreshControl } from 'react-native';
+import { Text, Surface } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
+import { useAuth } from '../../contexts/AuthContext';
+import CircularProgress from '../../components/CircularProgress';
+import ProgressBar from '../../components/ProgressBar';
 
-// For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
-// For mobile, use the external URL
-const BACKEND_URL = Platform.OS === 'web' 
-  ? '' 
-  : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
+const BACKEND_URL = Platform.OS === 'web' ? '' : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
 
-interface Visit {
-  visit_id: string;
-  landmark_id: string;
-  photo_base64: string;
-  comments?: string;
-  diary_notes?: string;
-  visited_at: string;
-}
+const getToken = async (): Promise<string | null> => {
+  if (Platform.OS === 'web') {
+    return localStorage.getItem('auth_token');
+  } else {
+    return await SecureStore.getItemAsync('auth_token');
+  }
+};
 
 interface Stats {
   total_visits: number;
   countries_visited: number;
   continents_visited: number;
-  friends_count: number;
+  total_points: number;
+  rank: number;
+  current_streak: number;
+}
+
+interface ProgressStats {
+  overall: {
+    visited: number;
+    total: number;
+    percentage: number;
+  };
+  totalPoints?: number;
+  continents: Record<string, {
+    visited: number;
+    total: number;
+    percentage: number;
+  }>;
+  countries: Record<string, {
+    country_name: string;
+    continent: string;
+    visited: number;
+    total: number;
+    percentage: number;
+  }>;
+}
+
+interface Badge {
+  achievement_id: string;
+  badge_type: string;
+  badge_name: string;
+  badge_description: string;
+  badge_icon: string;
+  earned_at: string;
+}
+
+interface Visit {
+  visit_id: string;
+  landmark_id: string;
+  landmark_name?: string;
+  country_name?: string;
+  visited_at: string;
+  points_earned: number;
 }
 
 export default function JourneyScreen() {
-  const [visits, setVisits] = useState<Visit[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [progressStats, setProgressStats] = useState<ProgressStats | null>(null);
+  const [badges, setBadges] = useState<Badge[]>([]);
+  const [recentVisits, setRecentVisits] = useState<Visit[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { user } = useAuth();
 
   useEffect(() => {
-    fetchData();
+    fetchAllData();
   }, []);
 
-  const fetchData = async () => {
+  const fetchAllData = async () => {
     try {
-      const token = await SecureStore.getItemAsync('auth_token');
+      const token = await getToken();
       
-      const [visitsRes, statsRes] = await Promise.all([
-        fetch(`${BACKEND_URL}/api/visits`, {
+      const [statsRes, progressRes, badgesRes, visitsRes] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/stats`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${BACKEND_URL}/api/stats`, {
+        fetch(`${BACKEND_URL}/api/progress`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${BACKEND_URL}/api/achievements`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${BACKEND_URL}/api/visits`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
 
-      if (visitsRes.ok) {
-        const visitsData = await visitsRes.json();
-        setVisits(visitsData);
+      if (statsRes.ok) {
+        const data = await statsRes.json();
+        setStats(data);
       }
 
-      if (statsRes.ok) {
-        const statsData = await statsRes.json();
-        setStats(statsData);
+      if (progressRes.ok) {
+        const data = await progressRes.json();
+        setProgressStats(data);
+      }
+
+      if (badgesRes.ok) {
+        const data = await badgesRes.json();
+        setBadges(data);
+      }
+
+      if (visitsRes.ok) {
+        const data = await visitsRes.json();
+        setRecentVisits(data.slice(0, 5)); // Show 5 most recent
       }
     } catch (error) {
-      console.error('Error fetching journey:', error);
+      console.error('Error fetching journey data:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -73,229 +131,353 @@ export default function JourneyScreen() {
 
   const onRefresh = () => {
     setRefreshing(true);
-    fetchData();
+    fetchAllData();
   };
 
-  const renderVisit = ({ item }: { item: Visit }) => (
-    <TouchableOpacity
-      onPress={() => router.push(`/visit-details/${item.visit_id}`)}
-      activeOpacity={0.7}
-    >
-      <Surface style={styles.visitCard}>
-        <Image
-          source={{ uri: `data:image/jpeg;base64,${item.photo_base64}` }}
-          style={styles.visitImage}
-        />
-        <View style={styles.visitContent}>
-          {item.comments && (
-            <Text style={styles.visitComment} numberOfLines={2}>
-              {item.comments}
-            </Text>
-          )}
-          <Text style={styles.visitDate}>
-            {new Date(item.visited_at).toLocaleDateString()}
-          </Text>
-        </View>
-      </Surface>
-    </TouchableOpacity>
-  );
+  const getNextMilestone = () => {
+    const visited = progressStats?.overall.visited || 0;
+    const milestones = [10, 25, 50, 100, 250, 500];
+    const next = milestones.find(m => m > visited);
+    if (next) {
+      return {
+        target: next,
+        remaining: next - visited,
+        name: next === 10 ? 'Explorer' : next === 25 ? 'Adventurer' : next === 50 ? 'Globetrotter' : next === 100 ? 'World Traveler' : next === 250 ? 'Legend' : 'Ultimate Explorer'
+      };
+    }
+    return null;
+  };
+
+  const getTopContinent = () => {
+    if (!progressStats) return null;
+    const sorted = Object.entries(progressStats.continents)
+      .sort((a, b) => b[1].visited - a[1].visited);
+    if (sorted.length > 0 && sorted[0][1].visited > 0) {
+      return {
+        name: sorted[0][0],
+        visited: sorted[0][1].visited,
+        total: sorted[0][1].total
+      };
+    }
+    return null;
+  };
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  };
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-      </View>
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <View style={styles.loadingContainer}>
+          <Text>Loading your journey...</Text>
+        </View>
+      </SafeAreaView>
     );
   }
 
+  const nextMilestone = getNextMilestone();
+  const topContinent = getTopContinent();
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <LinearGradient
-        colors={[theme.colors.primary, theme.colors.primaryDark]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.header}
-      >
-        <Text style={styles.headerTitle}>My Journey</Text>
-        <Text style={styles.headerSubtitle}>Your travel memories</Text>
-      </LinearGradient>
-
-      {stats && (
-        <Surface style={styles.statsCard}>
-          <Text style={styles.statsCardTitle}>Your Progress</Text>
-          <View style={styles.statsRow}>
-            <View style={styles.statItem}>
-              <View style={[styles.iconCircle, { backgroundColor: theme.colors.primary + '20' }]}>
-                <Ionicons name="flag-outline" size={24} color={theme.colors.primary} />
-              </View>
-              <Text style={styles.statNumber}>{stats.total_visits}</Text>
-              <Text style={styles.statLabel}>Visits</Text>
-            </View>
-            <View style={styles.statItem}>
-              <View style={[styles.iconCircle, { backgroundColor: theme.colors.accent + '20' }]}>
-                <Ionicons name="map-outline" size={24} color={theme.colors.accent} />
-              </View>
-              <Text style={styles.statNumber}>{stats.countries_visited}</Text>
-              <Text style={styles.statLabel}>Countries</Text>
-            </View>
-            <View style={styles.statItem}>
-              <View style={[styles.iconCircle, { backgroundColor: theme.colors.accentBronze + '20' }]}>
-                <Ionicons name="earth-outline" size={24} color={theme.colors.accentBronze} />
-              </View>
-              <Text style={styles.statNumber}>{stats.continents_visited}</Text>
-              <Text style={styles.statLabel}>Continents</Text>
-            </View>
-          </View>
-          <ProgressBar
-            progress={stats.total_visits / 200}
-            color={theme.colors.primary}
-            style={styles.progressBar}
-          />
-          <Text style={styles.progressText}>
-            {stats.total_visits} of 200 landmarks visited
-          </Text>
-        </Surface>
-      )}
-
-      <FlatList
-        data={visits}
-        renderItem={renderVisit}
-        keyExtractor={(item) => item.visit_id}
-        contentContainerStyle={styles.listContainer}
+      <ScrollView
+        style={styles.scrollView}
         refreshControl={
-          <RefreshControl 
-            refreshing={refreshing} 
-            onRefresh={onRefresh}
-            tintColor={theme.colors.primary}
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        ListEmptyComponent={
-          <View style={styles.emptyStateContainer}>
-            {/* Hero Section */}
-            <LinearGradient
-              colors={['rgba(32, 178, 170, 0.1)', 'rgba(32, 178, 170, 0.05)']}
-              style={styles.emptyHero}
-            >
-              <Ionicons name="earth" size={80} color={theme.colors.primary} />
-              <Text style={styles.emptyHeroTitle}>Your Journey Awaits</Text>
-              <Text style={styles.emptyHeroSubtitle}>
-                Every great journey begins with a single step
-              </Text>
-            </LinearGradient>
+      >
+        {/* Header with Greeting */}
+        <LinearGradient
+          colors={[theme.colors.primary, theme.colors.primaryDark]}
+          style={styles.header}
+        >
+          <View style={styles.greetingContainer}>
+            <Text style={styles.greeting}>{getGreeting()}, {user?.name?.split(' ')[0]}! 👋</Text>
+            <Text style={styles.subGreeting}>Here's your travel journey</Text>
+          </View>
+        </LinearGradient>
 
-            {/* Inspiring Quote */}
-            <View style={styles.quoteCard}>
-              <Ionicons name="chatbox-ellipses" size={32} color={theme.colors.accent} style={styles.quoteIcon} />
-              <Text style={styles.quoteText}>
-                "The world is a book, and those who do not travel read only one page."
-              </Text>
-              <Text style={styles.quoteAuthor}>— Saint Augustine</Text>
+        {/* Travel Statistics Dashboard */}
+        {stats && progressStats && (
+          <Surface style={styles.statsCard}>
+            <View style={styles.statsHeader}>
+              <Text style={styles.sectionTitle}>Your Stats</Text>
+              <TouchableOpacity>
+                <Ionicons name="share-social-outline" size={22} color={theme.colors.primary} />
+              </TouchableOpacity>
             </View>
 
-            {/* Quick Stats / Motivation */}
-            <View style={styles.motivationSection}>
-              <Text style={styles.sectionTitle}>Why Travel?</Text>
-              <View style={styles.benefitsList}>
-                <View style={styles.benefitItem}>
-                  <Ionicons name="sparkles" size={24} color="#FFD700" />
-                  <Text style={styles.benefitText}>Create lasting memories</Text>
+            <View style={styles.statsGrid}>
+              <View style={styles.statBox}>
+                <View style={styles.statIconContainer}>
+                  <Ionicons name="flag" size={24} color={theme.colors.primary} />
                 </View>
-                <View style={styles.benefitItem}>
-                  <Ionicons name="people" size={24} color={theme.colors.accent} />
-                  <Text style={styles.benefitText}>Meet new cultures</Text>
+                <Text style={styles.statValue}>
+                  {Object.keys(progressStats.countries).filter(
+                    countryId => progressStats.countries[countryId].visited > 0
+                  ).length}
+                </Text>
+                <Text style={styles.statLabel}>Countries</Text>
+                <Text style={styles.statSubtext}>visited</Text>
+              </View>
+
+              <View style={styles.statBox}>
+                <View style={styles.statIconContainer}>
+                  <Ionicons name="location" size={24} color={theme.colors.accent} />
                 </View>
-                <View style={styles.benefitItem}>
+                <Text style={styles.statValue}>{progressStats.overall.visited}</Text>
+                <Text style={styles.statLabel}>Landmarks</Text>
+                <Text style={styles.statSubtext}>explored</Text>
+              </View>
+
+              <View style={styles.statBox}>
+                <View style={styles.statIconContainer}>
+                  <Ionicons name="star" size={24} color={theme.colors.accentYellow} />
+                </View>
+                <Text style={styles.statValue}>{progressStats.totalPoints || 0}</Text>
+                <Text style={styles.statLabel}>Points</Text>
+                <Text style={styles.statSubtext}>earned</Text>
+              </View>
+
+              <View style={styles.statBox}>
+                <View style={styles.statIconContainer}>
+                  <Ionicons name="flame" size={24} color={theme.colors.error} />
+                </View>
+                <Text style={styles.statValue}>{stats.current_streak || 0}</Text>
+                <Text style={styles.statLabel}>Day Streak</Text>
+                <Text style={styles.statSubtext}>current</Text>
+              </View>
+
+              <View style={styles.statBox}>
+                <View style={styles.statIconContainer}>
                   <Ionicons name="trophy" size={24} color={theme.colors.accentBronze} />
-                  <Text style={styles.benefitText}>Challenge yourself</Text>
                 </View>
-                <View style={styles.benefitItem}>
-                  <Ionicons name="camera" size={24} color={theme.colors.primary} />
-                  <Text style={styles.benefitText}>Capture amazing moments</Text>
+                <Text style={styles.statValue}>#{stats.rank || '-'}</Text>
+                <Text style={styles.statLabel}>Rank</Text>
+                <Text style={styles.statSubtext}>global</Text>
+              </View>
+
+              <View style={styles.statBox}>
+                <View style={styles.statIconContainer}>
+                  <Ionicons name="ribbon" size={24} color={theme.colors.primary} />
                 </View>
+                <Text style={styles.statValue}>{badges.length}</Text>
+                <Text style={styles.statLabel}>Badges</Text>
+                <Text style={styles.statSubtext}>earned</Text>
               </View>
             </View>
+          </Surface>
+        )}
 
-            {/* Featured Destinations */}
-            <View style={styles.featuredSection}>
-              <Text style={styles.sectionTitle}>Popular First Destinations</Text>
-              <Text style={styles.sectionSubtitle}>Start your journey with these favorites</Text>
-              
-              <TouchableOpacity
-                style={styles.featuredCard}
-                onPress={() => router.push('/landmarks/norway?name=Norway')}
-                activeOpacity={0.8}
-              >
-                <Image
-                  source={{ uri: 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=600' }}
-                  style={styles.featuredImage}
-                />
-                <LinearGradient
-                  colors={['transparent', 'rgba(0,0,0,0.8)']}
-                  style={styles.featuredOverlay}
-                >
-                  <Text style={styles.featuredFlag}>🇳🇴</Text>
-                  <Text style={styles.featuredName}>Norway</Text>
-                  <Text style={styles.featuredInfo}>15 landmarks • Northern Lights</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.featuredCard}
-                onPress={() => router.push('/landmarks/japan?name=Japan')}
-                activeOpacity={0.8}
-              >
-                <Image
-                  source={{ uri: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600' }}
-                  style={styles.featuredImage}
-                />
-                <LinearGradient
-                  colors={['transparent', 'rgba(0,0,0,0.8)']}
-                  style={styles.featuredOverlay}
-                >
-                  <Text style={styles.featuredFlag}>🇯🇵</Text>
-                  <Text style={styles.featuredName}>Japan</Text>
-                  <Text style={styles.featuredInfo}>15 landmarks • Ancient temples</Text>
-                </LinearGradient>
-              </TouchableOpacity>
+        {/* Overall Progress */}
+        {progressStats && (
+          <Surface style={styles.progressCard}>
+            <Text style={styles.sectionTitle}>Overall Progress</Text>
+            <View style={styles.progressContainer}>
+              <CircularProgress
+                percentage={progressStats.overall.percentage}
+                size={140}
+                strokeWidth={12}
+                label="Complete"
+                sublabel={`${progressStats.overall.visited}/${progressStats.overall.total}`}
+              />
+              <Text style={styles.progressDescription}>
+                {progressStats.overall.percentage < 10
+                  ? "Just getting started! Keep exploring! 🌟"
+                  : progressStats.overall.percentage < 30
+                  ? "Great progress! The world awaits! 🗺️"
+                  : progressStats.overall.percentage < 60
+                  ? "Amazing journey! Halfway there! 🎉"
+                  : progressStats.overall.percentage < 90
+                  ? "Incredible! You're a true explorer! 🏆"
+                  : "Almost there! World master status! 👑"}
+              </Text>
             </View>
+          </Surface>
+        )}
 
-            {/* CTA Button */}
-            <TouchableOpacity
-              style={styles.ctaButton}
-              onPress={() => router.push('/(tabs)/explore')}
-              activeOpacity={0.9}
+        {/* Next Milestone */}
+        {nextMilestone && (
+          <Surface style={styles.milestoneCard}>
+            <View style={styles.milestoneHeader}>
+              <Ionicons name="flag-outline" size={24} color={theme.colors.primary} />
+              <Text style={styles.milestoneTitle}>Next Milestone</Text>
+            </View>
+            <Text style={styles.milestoneName}>{nextMilestone.name}</Text>
+            <Text style={styles.milestoneProgress}>
+              {nextMilestone.remaining} more visit{nextMilestone.remaining !== 1 ? 's' : ''} to unlock!
+            </Text>
+            <ProgressBar 
+              percentage={((nextMilestone.target - nextMilestone.remaining) / nextMilestone.target) * 100}
+              style={styles.milestoneProgressBar}
+            />
+          </Surface>
+        )}
+
+        {/* Top Continent */}
+        {topContinent && (
+          <Surface style={styles.topContinentCard}>
+            <View style={styles.topContinentHeader}>
+              <Ionicons name="earth" size={24} color={theme.colors.accent} />
+              <Text style={styles.topContinentTitle}>Your Top Continent</Text>
+            </View>
+            <Text style={styles.topContinentName}>{topContinent.name}</Text>
+            <Text style={styles.topContinentStats}>
+              {topContinent.visited} of {topContinent.total} countries explored
+            </Text>
+          </Surface>
+        )}
+
+        {/* Continental Progress */}
+        {progressStats && (
+          <Surface style={styles.continentalCard}>
+            <Text style={styles.sectionTitle}>Continental Progress</Text>
+            {Object.entries(progressStats.continents)
+              .sort((a, b) => b[1].percentage - a[1].percentage)
+              .map(([continent, data]) => (
+                <View key={continent} style={styles.continentItem}>
+                  <View style={styles.continentHeader}>
+                    <View style={styles.continentNameRow}>
+                      <Ionicons
+                        name={
+                          continent === 'Europe' ? 'business-outline' :
+                          continent === 'Asia' ? 'earth-outline' :
+                          continent === 'Africa' ? 'sunny-outline' :
+                          continent === 'Americas' ? 'leaf-outline' :
+                          'water-outline'
+                        }
+                        size={20}
+                        color={theme.colors.primary}
+                      />
+                      <Text style={styles.continentName}>{continent}</Text>
+                    </View>
+                    <Text style={styles.continentCount}>
+                      {data.visited}/{data.total}
+                    </Text>
+                  </View>
+                  <ProgressBar
+                    percentage={data.percentage}
+                    style={styles.continentProgressBar}
+                  />
+                </View>
+              ))}
+          </Surface>
+        )}
+
+        {/* Recent Milestones */}
+        {badges.length > 0 && (
+          <Surface style={styles.recentBadgesCard}>
+            <Text style={styles.sectionTitle}>Recent Achievements</Text>
+            <View style={styles.timelineContainer}>
+              {badges
+                .sort((a, b) => new Date(b.earned_at).getTime() - new Date(a.earned_at).getTime())
+                .slice(0, 3)
+                .map((badge) => (
+                  <View key={badge.achievement_id} style={styles.timelineItem}>
+                    <View style={styles.timelineDot}>
+                      <Text style={styles.timelineEmoji}>{badge.badge_icon}</Text>
+                    </View>
+                    <View style={styles.timelineContent}>
+                      <Text style={styles.badgeName}>{badge.badge_name}</Text>
+                      <Text style={styles.badgeDate}>
+                        {new Date(badge.earned_at).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric'
+                        })}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+            </View>
+            <TouchableOpacity 
+              style={styles.viewAllButton}
+              onPress={() => router.push('/profile')}
+            >
+              <Text style={styles.viewAllText}>View All Badges</Text>
+              <Ionicons name="chevron-forward" size={16} color={theme.colors.primary} />
+            </TouchableOpacity>
+          </Surface>
+        )}
+
+        {/* Recent Visits */}
+        {recentVisits.length > 0 && (
+          <Surface style={styles.recentVisitsCard}>
+            <Text style={styles.sectionTitle}>Recent Visits</Text>
+            {recentVisits.map((visit) => (
+              <View key={visit.visit_id} style={styles.visitItem}>
+                <View style={styles.visitIcon}>
+                  <Ionicons name="location" size={20} color={theme.colors.primary} />
+                </View>
+                <View style={styles.visitInfo}>
+                  <Text style={styles.visitName}>{visit.landmark_name || 'Landmark'}</Text>
+                  <Text style={styles.visitDate}>
+                    {new Date(visit.visited_at).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric'
+                    })}
+                  </Text>
+                </View>
+                <View style={styles.visitPoints}>
+                  <Ionicons name="star" size={14} color={theme.colors.accentYellow} />
+                  <Text style={styles.visitPointsText}>{visit.points_earned}</Text>
+                </View>
+              </View>
+            ))}
+          </Surface>
+        )}
+
+        {/* Quick Actions */}
+        <Surface style={styles.quickActionsCard}>
+          <Text style={styles.sectionTitle}>Quick Actions</Text>
+          <View style={styles.actionsGrid}>
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => router.push('/explore')}
             >
               <LinearGradient
                 colors={[theme.colors.primary, theme.colors.primaryDark]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.ctaGradient}
+                style={styles.actionGradient}
               >
-                <Ionicons name="compass" size={24} color="#fff" />
-                <Text style={styles.ctaText}>Start Exploring</Text>
-                <Ionicons name="arrow-forward" size={20} color="#fff" />
+                <Ionicons name="compass" size={28} color="#fff" />
+                <Text style={styles.actionText}>Explore</Text>
               </LinearGradient>
             </TouchableOpacity>
 
-            {/* Travel Tips */}
-            <View style={styles.tipsSection}>
-              <Text style={styles.sectionTitle}>Travel Tips</Text>
-              <View style={styles.tipCard}>
-                <Ionicons name="bulb" size={20} color={theme.colors.accent} />
-                <Text style={styles.tipText}>
-                  You can mark visits with or without photos. Photos count for official leaderboards!
-                </Text>
-              </View>
-              <View style={styles.tipCard}>
-                <Ionicons name="star" size={20} color="#FFD700" />
-                <Text style={styles.tipText}>
-                  Earn points by visiting landmarks. Premium locations award 25 points each!
-                </Text>
-              </View>
-            </View>
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => router.push('/search')}
+            >
+              <LinearGradient
+                colors={[theme.colors.accent, theme.colors.accentDark]}
+                style={styles.actionGradient}
+              >
+                <Ionicons name="search" size={28} color="#fff" />
+                <Text style={styles.actionText}>Search</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => router.push('/feed')}
+            >
+              <LinearGradient
+                colors={[theme.colors.accentYellow, '#F39C12']}
+                style={styles.actionGradient}
+              >
+                <Ionicons name="newspaper" size={28} color="#fff" />
+                <Text style={styles.actionText}>Feed</Text>
+              </LinearGradient>
+            </TouchableOpacity>
           </View>
-        }
-      />
+        </Surface>
+
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -305,25 +487,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  centerContainer: {
+  loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.background,
+  },
+  scrollView: {
+    flex: 1,
   },
   header: {
-    padding: theme.spacing.lg,
-    paddingTop: theme.spacing.xl,
-    paddingBottom: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.xl,
   },
-  headerTitle: {
-    ...theme.typography.h1,
+  greetingContainer: {
+    marginTop: theme.spacing.sm,
+  },
+  greeting: {
+    fontSize: 28,
+    fontWeight: '800',
     color: '#fff',
-    marginBottom: theme.spacing.xs,
+    marginBottom: 4,
   },
-  headerSubtitle: {
-    ...theme.typography.bodySmall,
-    color: 'rgba(255,255,255,0.9)',
+  subGreeting: {
+    fontSize: 15,
+    color: 'rgba(255, 255, 255, 0.9)',
   },
   statsCard: {
     margin: theme.spacing.md,
@@ -332,235 +519,300 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
-  statsCardTitle: {
-    ...theme.typography.h3,
-    color: theme.colors.text,
-    marginBottom: theme.spacing.md,
-  },
-  statsRow: {
+  statsHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: theme.spacing.lg,
-  },
-  statItem: {
+    justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  iconCircle: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-  },
-  statNumber: {
-    ...theme.typography.h2,
-    color: theme.colors.text,
-    marginTop: theme.spacing.xs,
-  },
-  statLabel: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    marginTop: theme.spacing.xs,
-  },
-  progressBar: {
-    height: 8,
-    borderRadius: theme.borderRadius.sm,
-    marginBottom: theme.spacing.sm,
-    backgroundColor: theme.colors.surfaceTinted,
-  },
-  progressText: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    textAlign: 'center',
-  },
-  listContainer: {
-    padding: theme.spacing.md,
-  },
-  visitCard: {
-    marginBottom: theme.spacing.md,
-    borderRadius: theme.borderRadius.xl,
-    overflow: 'hidden',
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
-  visitImage: {
-    width: '100%',
-    height: 220,
-  },
-  visitContent: {
-    padding: theme.spacing.md,
-  },
-  visitComment: {
-    ...theme.typography.body,
-    color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
-  },
-  visitDate: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-  },
-  // Enhanced Empty State Styles
-  emptyStateContainer: {
-    padding: theme.spacing.lg,
-    paddingBottom: theme.spacing.xxl,
-  },
-  emptyHero: {
-    alignItems: 'center',
-    padding: theme.spacing.xl,
-    borderRadius: theme.borderRadius.xl,
-    marginBottom: theme.spacing.lg,
-  },
-  emptyHeroTitle: {
-    ...theme.typography.h1,
-    color: theme.colors.text,
-    marginTop: theme.spacing.md,
-    marginBottom: theme.spacing.xs,
-  },
-  emptyHeroSubtitle: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
-    textAlign: 'center',
-  },
-  quoteCard: {
-    backgroundColor: theme.colors.surface,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.lg,
-    marginBottom: theme.spacing.lg,
-    borderLeftWidth: 4,
-    borderLeftColor: theme.colors.accent,
-    ...theme.shadows.sm,
-  },
-  quoteIcon: {
-    marginBottom: theme.spacing.sm,
-    opacity: 0.7,
-  },
-  quoteText: {
-    ...theme.typography.body,
-    fontStyle: 'italic',
-    color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
-    lineHeight: 24,
-  },
-  quoteAuthor: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    textAlign: 'right',
-  },
-  motivationSection: {
     marginBottom: theme.spacing.lg,
   },
   sectionTitle: {
-    ...theme.typography.h3,
+    fontSize: 18,
+    fontWeight: '700',
     color: theme.colors.text,
-    marginBottom: theme.spacing.md,
   },
-  sectionSubtitle: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.md,
-  },
-  benefitsList: {
+  statsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: theme.spacing.sm,
+    justifyContent: 'space-between',
   },
-  benefitItem: {
-    flexDirection: 'row',
+  statBox: {
+    width: '31%',
     alignItems: 'center',
     padding: theme.spacing.md,
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: theme.borderRadius.lg,
+  },
+  statIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.md,
-    ...theme.shadows.sm,
-  },
-  benefitText: {
-    ...theme.typography.body,
-    color: theme.colors.text,
-    marginLeft: theme.spacing.md,
-  },
-  featuredSection: {
-    marginBottom: theme.spacing.lg,
-  },
-  featuredCard: {
-    height: 160,
-    borderRadius: theme.borderRadius.lg,
-    overflow: 'hidden',
-    marginBottom: theme.spacing.md,
-    ...theme.shadows.md,
-  },
-  featuredImage: {
-    width: '100%',
-    height: '100%',
-  },
-  featuredOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: theme.spacing.md,
-  },
-  featuredFlag: {
-    fontSize: 32,
-    marginBottom: theme.spacing.xs,
-  },
-  featuredName: {
-    ...theme.typography.h3,
-    color: '#fff',
-    marginBottom: 2,
-  },
-  featuredInfo: {
-    ...theme.typography.caption,
-    color: 'rgba(255,255,255,0.9)',
-  },
-  ctaButton: {
-    borderRadius: theme.borderRadius.lg,
-    overflow: 'hidden',
-    marginBottom: theme.spacing.lg,
-    ...theme.shadows.lg,
-  },
-  ctaGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
-    padding: theme.spacing.md,
-    gap: theme.spacing.sm,
-  },
-  ctaText: {
-    ...theme.typography.h4,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  tipsSection: {
-    marginBottom: theme.spacing.lg,
-  },
-  tipCard: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    padding: theme.spacing.md,
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.md,
+    alignItems: 'center',
     marginBottom: theme.spacing.sm,
     ...theme.shadows.sm,
   },
-  tipText: {
-    ...theme.typography.body,
+  statValue: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: theme.colors.text,
+    marginBottom: 2,
+  },
+  statLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.text,
+    marginBottom: 2,
+  },
+  statSubtext: {
+    fontSize: 10,
     color: theme.colors.textSecondary,
-    marginLeft: theme.spacing.md,
-    flex: 1,
-    lineHeight: 20,
   },
-  emptyContainer: {
+  progressCard: {
+    margin: theme.spacing.md,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
+  progressContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: theme.spacing.xxl,
+    marginTop: theme.spacing.lg,
   },
-  emptyText: {
-    ...theme.typography.h3,
-    color: theme.colors.textLight,
+  progressDescription: {
+    fontSize: 14,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+    marginTop: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
+  },
+  milestoneCard: {
+    margin: theme.spacing.md,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
+  milestoneHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing.sm,
+    gap: theme.spacing.sm,
+  },
+  milestoneTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  milestoneName: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: theme.colors.primary,
+    marginBottom: 4,
+  },
+  milestoneProgress: {
+    fontSize: 14,
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.md,
+  },
+  milestoneProgressBar: {
+    marginTop: theme.spacing.xs,
+  },
+  topContinentCard: {
+    margin: theme.spacing.md,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
+  topContinentHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing.sm,
+    gap: theme.spacing.sm,
+  },
+  topContinentTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  topContinentName: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: theme.colors.accent,
+    marginBottom: 4,
+  },
+  topContinentStats: {
+    fontSize: 14,
+    color: theme.colors.textSecondary,
+  },
+  continentalCard: {
+    margin: theme.spacing.md,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
+  continentItem: {
     marginTop: theme.spacing.md,
   },
-  emptySubtext: {
-    ...theme.typography.bodySmall,
-    color: theme.colors.textLight,
+  continentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xs,
+  },
+  continentNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+  },
+  continentName: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+  continentCount: {
+    fontSize: 13,
+    color: theme.colors.textSecondary,
+    fontWeight: '600',
+  },
+  continentProgressBar: {
+    marginTop: theme.spacing.xs / 2,
+  },
+  recentBadgesCard: {
+    margin: theme.spacing.md,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
+  timelineContainer: {
+    marginTop: theme.spacing.md,
+  },
+  timelineItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing.md,
+    gap: theme.spacing.md,
+  },
+  timelineDot: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: theme.colors.backgroundSecondary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...theme.shadows.sm,
+  },
+  timelineEmoji: {
+    fontSize: 24,
+  },
+  timelineContent: {
+    flex: 1,
+  },
+  badgeName: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: 2,
+  },
+  badgeDate: {
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+  },
+  viewAllButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: theme.spacing.sm,
-    textAlign: 'center',
+    paddingVertical: theme.spacing.sm,
+    gap: 4,
+  },
+  viewAllText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: theme.colors.primary,
+  },
+  recentVisitsCard: {
+    margin: theme.spacing.md,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
+  visitItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: theme.spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+  },
+  visitIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: theme.colors.primaryLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: theme.spacing.md,
+  },
+  visitInfo: {
+    flex: 1,
+  },
+  visitName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: theme.colors.text,
+    marginBottom: 2,
+  },
+  visitDate: {
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+  },
+  visitPoints: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: theme.colors.backgroundSecondary,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 4,
+    borderRadius: theme.borderRadius.sm,
+  },
+  visitPointsText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+  quickActionsCard: {
+    margin: theme.spacing.md,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
+  actionsGrid: {
+    flexDirection: 'row',
+    gap: theme.spacing.md,
+    marginTop: theme.spacing.md,
+  },
+  actionButton: {
+    flex: 1,
+  },
+  actionGradient: {
+    paddingVertical: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+  },
+  actionText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  bottomSpacer: {
+    height: theme.spacing.xl,
   },
 });
