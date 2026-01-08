@@ -1068,6 +1068,16 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     flex: 1,
   },
+  leaderboardNameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+    flex: 1,
+  },
+  userRankBadgeSmall: {
+    transform: [{ scale: 0.6 }],
+    marginLeft: -8,
+  },
   leaderboardRight: {
     flexDirection: 'row',
     alignItems: 'center',
