@@ -182,6 +182,37 @@ export default function SocialHubScreen() {
     }
   };
 
+  const loadVisitDetails = async (visitId: string) => {
+    if (visitDetails[visitId]) return; // Already loaded
+    
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/visits/${visitId}`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setVisitDetails(prev => ({ ...prev, [visitId]: data }));
+      }
+    } catch (error) {
+      console.error('Error loading visit details:', error);
+    }
+  };
+
+  const toggleVisitExpansion = async (visitId: string) => {
+    if (expandedVisits.has(visitId)) {
+      setExpandedVisits(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(visitId);
+        return newSet;
+      });
+    } else {
+      await loadVisitDetails(visitId);
+      setExpandedVisits(prev => new Set(prev).add(visitId));
+    }
+  };
+
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
