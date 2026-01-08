@@ -1304,7 +1304,75 @@ git commit -m "Session X: [Brief summary of changes]"
 
 ## 📝 CHANGELOG (Baseline Evolution)
 
-### v4.4.0 (Current - January 9, 2026) - **Back Button Fixes & Rich Social Feed**
+### v4.5.0 (Current - January 9, 2026) - **Country/Continent Bonuses + About Page + Enhanced Stats**
+- 🎊 **Country Completion Bonus System** - Automatic +50 bonus points for completing countries
+  - When user visits all landmarks in a country, system automatically detects completion
+  - Awards instant +50 bonus points (separate from landmark points)
+  - Creates celebratory "country_complete" activity in social feed
+  - Green gradient banner with flag icon showing: "Country Completed! 🎊"
+  - Displays landmarks count + country name + bonus points
+  - Backend logic in POST /api/visits endpoint checks completion after each visit
+  - Files: `/app/backend/server.py` (completion detection logic)
+- 🌍 **Continent Completion Bonus System** - Automatic +200 bonus points for completing continents
+  - When country completion triggers, checks if all countries in continent are now complete
+  - Awards instant +200 bonus points for continent mastery
+  - Creates celebratory "continent_complete" activity in social feed
+  - Purple gradient banner with earth icon showing: "Continent Mastered! 🌍"
+  - Displays countries count + continent name + bonus points
+  - Cascading bonus: Complete country → Check continent → Award if complete
+  - Motivation for users to complete entire regions, not just cherry-pick
+- 📖 **About the App - Interactive Guide** - Comprehensive 800+ line educational page
+  - Created `/app/frontend/app/about.tsx` from scratch
+  - Hero section: Earth icon, compelling tagline, value proposition
+  - Stats section: "480 Total Landmarks" with "380 Official • 100 Premium" breakdown
+  - "How It Works": 4-step guide with numbered gradient badges
+  - 6 interactive feature cards: Navigate to Explore, Journey, Social, Profile, Search, Premium
+  - Expandable mechanics: Points System (with completion bonuses), Badges, Social, Progress
+  - Points milestones: 4 visual progress bars (100/500/1000/5000 pts) with trophy icons
+  - Subscription tiers: Visual comparison of Free, Basic (most popular), Premium
+  - "Why Use WanderList": 4 benefits with checkmarks
+  - "Start Exploring Now" CTA button with gradient
+  - Accessible from: Profile → About the App (first menu item)
+  - Files: `/app/frontend/app/about.tsx` (new), `/app/frontend/app/(tabs)/profile.tsx` (menu link added)
+- 📊 **Enhanced Stats Display** - Premium/Official landmark breakdown across app
+  - About page stats: Shows "480 Total Landmarks" with breakdown "380 Official • 100 Premium"
+  - Explore page stats: Middle stat enhanced with icon-based breakdown
+  - Visual indicators: 📍 turquoise icon for official, 💎 gold diamond for premium
+  - Color coding: Official (turquoise text), Premium (gold text #FFD700)
+  - Compact design: Breakdown text 10-11px, doesn't clutter main numbers
+  - Files: `/app/frontend/app/about.tsx`, `/app/frontend/app/explore-countries.tsx`
+- 📈 **Points Progress Visualization** - Visual milestones in About page
+  - 4 progress bars showing point milestones: 100/500/1000/5000 pts
+  - Each bar has: Trophy icon (Bronze/Silver/Gold/Turquoise), points value, progress fill, badge name
+  - Color-coded fills: Bronze (#CD7F32), Silver (#C0C0C0), Gold (#FFD700), Turquoise (primary)
+  - Progress percentages: 20%, 40%, 60%, 100% (visual motivation)
+  - Educational tooltip: "💡 Earn badges automatically when you reach these milestones!"
+  - Expandable within "Points System" section of About page
+- 🎨 **Completion Celebration Banners** - Visual celebrations in social feed
+  - Country completion: Green gradient (#4CAF50) banner with flag icon
+  - Continent completion: Purple gradient (#9C27B0) banner with earth icon
+  - Both banners include: Header with icon + title, achievement description, bonus points display
+  - Styled with: Gradient backgrounds, borders, proper spacing, icon integration
+  - Likeable: Users can like country/continent completions
+  - Stand out in feed: Visual distinction from regular visit activities
+  - Files: `/app/frontend/app/(tabs)/social.tsx` (banner rendering + styles)
+- 🔧 **Backend Enhancements**
+  - Updated Activity model: Added country_id, continent, countries_count, landmarks_count fields
+  - Activity types: "visit", "country_complete", "continent_complete", "milestone"
+  - Completion detection: Checks landmark counts vs user visits after each POST /api/visits
+  - Points awarding: $inc MongoDB operation to add bonus points instantly
+  - Activity creation: Automatic activities for both country and continent completions
+- 💰 **Updated Points Economy**
+  - Landmark visits: 10 pts (official), 25 pts (premium)
+  - Country completion: +50 bonus pts
+  - Continent completion: +200 bonus pts
+  - 3-tier progression: Landmarks → Countries → Continents
+- ✅ **Comprehensive Testing** - 100% pass rate on all features
+  - Backend: Country/continent bonuses, activity creation, points calculation (275 pts verified)
+  - Frontend: About page, stats display, social feed banners, navigation (iPhone 14: 390x844)
+  - All features production-ready and verified on mobile
+
+### v4.4.0 (January 9, 2026) - **Back Button Fixes & Rich Social Feed**
 - ✅ **Back Button Navigation Fixed** - Consistent navigation across all pages
   - Fixed broken back button on landmark detail page with proper `router.back()` implementation
   - Added turquoise gradient header with back button on all detail pages
