@@ -1278,6 +1278,227 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# ============= BADGE DEFINITIONS =============
+
+BADGE_DEFINITIONS = {
+    "first_visit": {
+        "name": "First Steps",
+        "description": "Visited your first landmark",
+        "icon": "🎯"
+    },
+    "milestone_10": {
+        "name": "Explorer",
+        "description": "Visited 10 landmarks",
+        "icon": "🗺️"
+    },
+    "milestone_25": {
+        "name": "Adventurer",
+        "description": "Visited 25 landmarks",
+        "icon": "🧗"
+    },
+    "milestone_50": {
+        "name": "Globetrotter",
+        "description": "Visited 50 landmarks",
+        "icon": "🌍"
+    },
+    "milestone_100": {
+        "name": "World Traveler",
+        "description": "Visited 100 landmarks",
+        "icon": "✈️"
+    },
+    "milestone_250": {
+        "name": "Legend",
+        "description": "Visited 250 landmarks",
+        "icon": "🏆"
+    },
+    "milestone_500": {
+        "name": "Ultimate Explorer",
+        "description": "Visited 500 landmarks",
+        "icon": "👑"
+    },
+    "country_complete": {
+        "name": "Country Master",
+        "description": "Completed all landmarks in a country",
+        "icon": "🏁"
+    },
+    "points_100": {
+        "name": "Point Starter",
+        "description": "Earned 100 points",
+        "icon": "⭐"
+    },
+    "points_500": {
+        "name": "Point Collector",
+        "description": "Earned 500 points",
+        "icon": "🌟"
+    },
+    "points_1000": {
+        "name": "Point Master",
+        "description": "Earned 1,000 points",
+        "icon": "💫"
+    },
+    "points_5000": {
+        "name": "Point Legend",
+        "description": "Earned 5,000 points",
+        "icon": "✨"
+    },
+    "social_5": {
+        "name": "Friendly",
+        "description": "Made 5 friends",
+        "icon": "👋"
+    },
+    "social_10": {
+        "name": "Popular",
+        "description": "Made 10 friends",
+        "icon": "🤝"
+    },
+    "social_25": {
+        "name": "Social Butterfly",
+        "description": "Made 25 friends",
+        "icon": "🦋"
+    },
+    "streak_3": {
+        "name": "Getting Started",
+        "description": "3-day visit streak",
+        "icon": "🔥"
+    },
+    "streak_7": {
+        "name": "Week Warrior",
+        "description": "7-day visit streak",
+        "icon": "🔥"
+    },
+    "streak_30": {
+        "name": "Monthly Master",
+        "description": "30-day visit streak",
+        "icon": "🔥"
+    },
+}
+
+async def check_and_award_badges(user_id: str):
+    """Check for new badges and award them"""
+    newly_awarded = []
+    
+    # Get user's existing badges
+    existing_badges = await db.achievements.find({"user_id": user_id}).to_list(1000)
+    existing_badge_types = {badge["badge_type"] for badge in existing_badges}
+    
+    # Get user's visits
+    visits = await db.visits.find({"user_id": user_id}).to_list(10000)
+    visit_count = len(visits)
+    
+    # Calculate total points
+    total_points = sum(v.get("points_earned", 10) for v in visits)
+    
+    # Get friend count
+    friend_count = await db.friends.count_documents({
+        "$or": [
+            {"user_id": user_id, "status": "accepted"},
+            {"friend_id": user_id, "status": "accepted"}
+        ]
+    })
+    
+    # Check milestone badges
+    milestones = [1, 10, 25, 50, 100, 250, 500]
+    for milestone in milestones:
+        badge_type = f"milestone_{milestone}" if milestone > 1 else "first_visit"
+        if visit_count >= milestone and badge_type not in existing_badge_types:
+            badge_def = BADGE_DEFINITIONS.get(badge_type if milestone > 1 else "first_visit")
+            if badge_def:
+                achievement_id = f"achievement_{uuid.uuid4().hex[:12]}"
+                achievement = {
+                    "achievement_id": achievement_id,
+                    "user_id": user_id,
+                    "badge_type": badge_type,
+                    "badge_name": badge_def["name"],
+                    "badge_description": badge_def["description"],
+                    "badge_icon": badge_def["icon"],
+                    "earned_at": datetime.now(timezone.utc),
+                    "is_featured": milestone >= 100
+                }
+                await db.achievements.insert_one(achievement)
+                newly_awarded.append(badge_type)
+    
+    # Check points badges
+    point_milestones = [(100, "points_100"), (500, "points_500"), (1000, "points_1000"), (5000, "points_5000")]
+    for points, badge_type in point_milestones:
+        if total_points >= points and badge_type not in existing_badge_types:
+            badge_def = BADGE_DEFINITIONS.get(badge_type)
+            if badge_def:
+                achievement_id = f"achievement_{uuid.uuid4().hex[:12]}"
+                achievement = {
+                    "achievement_id": achievement_id,
+                    "user_id": user_id,
+                    "badge_type": badge_type,
+                    "badge_name": badge_def["name"],
+                    "badge_description": badge_def["description"],
+                    "badge_icon": badge_def["icon"],
+                    "earned_at": datetime.now(timezone.utc),
+                    "is_featured": points >= 1000
+                }
+                await db.achievements.insert_one(achievement)
+                newly_awarded.append(badge_type)
+    
+    # Check social badges
+    social_milestones = [(5, "social_5"), (10, "social_10"), (25, "social_25")]
+    for count, badge_type in social_milestones:
+        if friend_count >= count and badge_type not in existing_badge_types:
+            badge_def = BADGE_DEFINITIONS.get(badge_type)
+            if badge_def:
+                achievement_id = f"achievement_{uuid.uuid4().hex[:12]}"
+                achievement = {
+                    "achievement_id": achievement_id,
+                    "user_id": user_id,
+                    "badge_type": badge_type,
+                    "badge_name": badge_def["name"],
+                    "badge_description": badge_def["description"],
+                    "badge_icon": badge_def["icon"],
+                    "earned_at": datetime.now(timezone.utc),
+                    "is_featured": count >= 25
+                }
+                await db.achievements.insert_one(achievement)
+                newly_awarded.append(badge_type)
+    
+    # Check country complete badges
+    if visits:
+        # Group visits by country
+        visited_by_country = {}
+        for visit in visits:
+            landmark = await db.landmarks.find_one({"landmark_id": visit["landmark_id"]})
+            if landmark:
+                country_id = landmark.get("country_id")
+                if country_id:
+                    if country_id not in visited_by_country:
+                        visited_by_country[country_id] = set()
+                    visited_by_country[country_id].add(visit["landmark_id"])
+        
+        # Check if any country is complete
+        for country_id, visited_landmarks in visited_by_country.items():
+            all_country_landmarks = await db.landmarks.find({"country_id": country_id}).to_list(1000)
+            total_in_country = len(all_country_landmarks)
+            
+            if len(visited_landmarks) >= total_in_country and total_in_country > 0:
+                badge_type = f"country_complete_{country_id}"
+                if badge_type not in existing_badge_types:
+                    country = await db.countries.find_one({"country_id": country_id})
+                    country_name = country.get("name", "Unknown") if country else "Unknown"
+                    
+                    achievement_id = f"achievement_{uuid.uuid4().hex[:12]}"
+                    achievement = {
+                        "achievement_id": achievement_id,
+                        "user_id": user_id,
+                        "badge_type": badge_type,
+                        "badge_name": f"{country_name} Master",
+                        "badge_description": f"Completed all landmarks in {country_name}",
+                        "badge_icon": "🏁",
+                        "earned_at": datetime.now(timezone.utc),
+                        "is_featured": True
+                    }
+                    await db.achievements.insert_one(achievement)
+                    newly_awarded.append(badge_type)
+    
+    return newly_awarded
+
+# ============= END BADGE SYSTEM =============
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
