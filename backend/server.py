@@ -1011,6 +1011,7 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
             "total": total_landmarks,
             "percentage": overall_percentage
         },
+        "totalPoints": total_points,
         "continents": continental_progress,
         "countries": country_progress
     }
