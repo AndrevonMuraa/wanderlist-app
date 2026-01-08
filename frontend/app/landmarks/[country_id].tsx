@@ -122,81 +122,83 @@ export default function LandmarksScreen() {
     console.log('User wants to upgrade to:', tier);
   };
 
-  const renderLandmark = ({ item }: { item: Landmark }) => (
-    <TouchableOpacity
-      onPress={() => handleLandmarkPress(item)}
-      activeOpacity={0.7}
-    >
-      <Surface style={styles.landmarkCard}>
-        {/* Image with blur for locked content */}
-        <Image
-          source={{ uri: item.image_url }}
-          style={[
-            styles.landmarkImage,
-            item.is_locked && styles.blurredImage
-          ]}
-          blurRadius={item.is_locked ? 8 : 0}
-        />
-        
-        {/* Subtle Premium Badge - Top Right */}
-        {item.category === 'premium' && (
-          <View style={styles.premiumBadgeSubtle}>
-            <View style={styles.premiumBadgeBlur}>
-              <Ionicons name="diamond-outline" size={14} color="rgba(255,255,255,0.9)" />
-              <Text style={styles.premiumTextSubtle}>PREMIUM</Text>
-            </View>
-          </View>
-        )}
-        
-        {/* Frosted Glass Overlay for Locked Landmarks */}
-        {item.is_locked && (
-          <View style={styles.frostedOverlay}>
-            {/* Subtle Lock Icon - White/Transparent */}
-            <View style={styles.lockIconSubtle}>
-              <Ionicons name="lock-closed" size={40} color="rgba(255,255,255,0.85)" />
+  const renderLandmark = ({ item }: { item: Landmark }) => {
+    const isVisited = visitedLandmarkIds.has(item.landmark_id);
+    const isPremium = item.category === 'premium';
+    
+    return (
+      <TouchableOpacity
+        onPress={() => handleLandmarkPress(item)}
+        activeOpacity={0.7}
+        style={styles.landmarkItemContainer}
+      >
+        <Surface style={[
+          styles.landmarkListCard,
+          item.is_locked && styles.landmarkListCardLocked
+        ]}>
+          <View style={styles.landmarkContent}>
+            {/* Left: Icon */}
+            <View style={[
+              styles.landmarkIconContainer,
+              isPremium ? styles.landmarkIconPremium : styles.landmarkIconOfficial
+            ]}>
+              <Ionicons 
+                name={isPremium ? "diamond" : "location"} 
+                size={20} 
+                color={isPremium ? "#FFD700" : theme.colors.primary} 
+              />
             </View>
             
-            {/* Minimal Upgrade Text */}
-            <View style={styles.upgradeTextSubtle}>
-              <Text style={styles.upgradeTitleSubtle}>Premium Content</Text>
-              <Text style={styles.upgradeSubtitleSubtle}>Tap to unlock</Text>
+            {/* Middle: Content */}
+            <View style={styles.landmarkTextContainer}>
+              <Text style={[
+                styles.landmarkListName,
+                item.is_locked && styles.landmarkListNameLocked
+              ]} numberOfLines={1}>
+                {item.name}
+              </Text>
+              
+              {/* Points and Category */}
+              <View style={styles.landmarkMetaRow}>
+                <View style={styles.pointsContainer}>
+                  <Ionicons 
+                    name="star" 
+                    size={12} 
+                    color={isPremium ? "#FFD700" : "#FFA726"} 
+                  />
+                  <Text style={styles.pointsTextList}>
+                    {item.points || 10} pts
+                  </Text>
+                </View>
+                
+                {isPremium && (
+                  <View style={styles.premiumBadgeList}>
+                    <Text style={styles.premiumBadgeText}>PREMIUM</Text>
+                  </View>
+                )}
+                
+                {isVisited && (
+                  <View style={styles.visitedBadge}>
+                    <Ionicons name="checkmark-circle" size={14} color="#4CAF50" />
+                    <Text style={styles.visitedText}>Visited</Text>
+                  </View>
+                )}
+              </View>
+            </View>
+            
+            {/* Right: Lock icon or chevron */}
+            <View style={styles.landmarkActionIcon}>
+              {item.is_locked ? (
+                <Ionicons name="lock-closed" size={20} color="rgba(0,0,0,0.3)" />
+              ) : (
+                <Ionicons name="chevron-forward" size={20} color="rgba(0,0,0,0.3)" />
+              )}
             </View>
           </View>
-        )}
-        
-        {/* Bottom gradient with info */}
-        <LinearGradient
-          colors={['transparent', item.is_locked ? 'rgba(0,0,0,0.85)' : 'rgba(0,0,0,0.6)']}
-          style={styles.imageOverlay}
-        >
-          <Text style={[styles.landmarkName, item.is_locked && styles.landmarkNameLocked]}>
-            {item.name}
-          </Text>
-          
-          {/* Points Display - Enhanced for premium */}
-          <View style={[
-            styles.pointsBadge,
-            item.category === 'premium' && styles.pointsBadgePremium
-          ]}>
-            <Ionicons 
-              name={item.category === 'premium' ? "star" : "star-outline"} 
-              size={16} 
-              color={item.category === 'premium' ? "#FFD700" : "#FFD700"} 
-            />
-            <Text style={[
-              styles.pointsText,
-              item.category === 'premium' && styles.pointsTextPremium
-            ]}>
-              {item.points || 10} pts
-            </Text>
-            {item.category === 'premium' && (
-              <Ionicons name="diamond" size={12} color="#FFD700" style={{ marginLeft: 4 }} />
-            )}
-          </View>
-        </LinearGradient>
-      </Surface>
-    </TouchableOpacity>
-  );
+        </Surface>
+      </TouchableOpacity>
+    );
+  };
 
   if (loading) {
     return (
