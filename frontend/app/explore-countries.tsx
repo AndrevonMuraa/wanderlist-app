@@ -621,6 +621,21 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     fontSize: 12,
   },
+  landmarkBreakdown: {
+    flexDirection: 'column',
+    gap: 2,
+    marginTop: 4,
+  },
+  landmarkBreakdownItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  landmarkBreakdownText: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    fontSize: 10,
+  },
   statDivider: {
     width: 1,
     height: 40,
