@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import theme from '../../styles/theme';
 import ContinentsScreen from '../continents';
 import BucketListScreen from '../bucket-list';
@@ -11,6 +12,7 @@ import TripsScreen from '../trips';
 type TabType = 'explore' | 'bucket' | 'trips';
 
 export default function ExploreTab() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('explore');
 
   const renderTabButton = (tab: TabType, icon: string, label: string) => {
