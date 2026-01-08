@@ -1,470 +1,635 @@
 #!/usr/bin/env python3
 """
-WanderList Backend API Testing Suite
-Focus: Global Content Expansion - 48 countries, 480 landmarks
-Testing the massive database expansion across all continents
+Backend Testing for WanderList Country & Continent Completion Bonus System
+Testing the enhanced POST /api/visits endpoint and activity feed features
 """
 
 import requests
 import json
-import base64
-from datetime import datetime
 import sys
-import uuid
+from datetime import datetime
+import os
 
-# Get backend URL from frontend .env
-BACKEND_URL = "https://wandersync.preview.emergentagent.com/api"
+# Get backend URL from environment
+BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://wandersync.preview.emergentagent.com')
+API_BASE = f"{BACKEND_URL}/api"
 
-# Test account credentials from review request
+# Test credentials
 TEST_EMAIL = "mobile@test.com"
 TEST_PASSWORD = "test123"
 
 class WanderListTester:
     def __init__(self):
-        self.base_url = BACKEND_URL
         self.session = requests.Session()
         self.auth_token = None
-        self.user_data = None
+        self.user_id = None
         self.test_results = []
         
     def log_test(self, test_name, success, details=""):
         """Log test results"""
         status = "✅ PASS" if success else "❌ FAIL"
-        print(f"{status}: {test_name}")
-        if details:
-            print(f"   Details: {details}")
         self.test_results.append({
             "test": test_name,
             "success": success,
             "details": details
         })
+        print(f"{status}: {test_name}")
+        if details:
+            print(f"   Details: {details}")
+        print()
+    
+    def login(self):
+        """Login and get auth token"""
+        print("🔐 AUTHENTICATION TEST")
+        print("=" * 50)
         
-    def make_request(self, method, endpoint, data=None, headers=None, expect_status=200):
-        """Make HTTP request with proper headers"""
-        url = f"{self.base_url}{endpoint}"
-        req_headers = {"Content-Type": "application/json"}
-        
-        if self.auth_token:
-            req_headers["Authorization"] = f"Bearer {self.auth_token}"
-            
-        if headers:
-            req_headers.update(headers)
-            
         try:
-            if method.upper() == "GET":
-                response = self.session.get(url, headers=req_headers, timeout=30)
-            elif method.upper() == "POST":
-                response = self.session.post(url, json=data, headers=req_headers, timeout=30)
-            elif method.upper() == "PUT":
-                response = self.session.put(url, json=data, headers=req_headers, timeout=30)
+            response = self.session.post(f"{API_BASE}/auth/login", json={
+                "email": TEST_EMAIL,
+                "password": TEST_PASSWORD
+            })
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.auth_token = data["access_token"]
+                self.user_id = data["user"]["user_id"]
+                self.session.headers.update({"Authorization": f"Bearer {self.auth_token}"})
+                self.log_test("User Authentication", True, f"Logged in as {TEST_EMAIL}")
+                return True
             else:
-                raise ValueError(f"Unsupported method: {method}")
+                self.log_test("User Authentication", False, f"Status: {response.status_code}, Response: {response.text}")
+                return False
                 
-            return response
-        except requests.exceptions.Timeout:
-            print(f"Request timeout for {method} {url}")
-            return None
-        except requests.exceptions.ConnectionError as e:
-            print(f"Connection error for {method} {url}: {e}")
-            return None
         except Exception as e:
-            print(f"Request failed for {method} {url}: {e}")
+            self.log_test("User Authentication", False, f"Exception: {str(e)}")
+            return False
+    
+    def get_user_stats(self):
+        """Get current user stats for baseline"""
+        try:
+            response = self.session.get(f"{API_BASE}/stats")
+            if response.status_code == 200:
+                return response.json()
             return None
+        except:
+            return None
+    
+    def get_user_points(self):
+        """Get user's current points from visits"""
+        try:
+            visits_response = self.session.get(f"{API_BASE}/visits")
+            if visits_response.status_code == 200:
+                visits = visits_response.json()
+                total_points = sum(visit.get("points_earned", 10) for visit in visits)
+                return total_points, len(visits)
+            return 0, 0
+        except:
+            return 0, 0
+    
+    def find_country_with_few_landmarks(self):
+        """Find a country with manageable number of landmarks for testing"""
+        try:
+            response = self.session.get(f"{API_BASE}/countries")
+            if response.status_code == 200:
+                countries = response.json()
+                # Look for countries with 10 or fewer landmarks
+                for country in countries:
+                    if country.get("landmark_count", 0) <= 10:
+                        return country
+                # If no small country found, return first one
+                return countries[0] if countries else None
+            return None
+        except:
+            return None
+    
+    def get_landmarks_for_country(self, country_id):
+        """Get all landmarks for a specific country"""
+        try:
+            response = self.session.get(f"{API_BASE}/landmarks?country_id={country_id}")
+            if response.status_code == 200:
+                return response.json()
+            return []
+        except:
+            return []
+    
+    def get_user_visits_for_country(self, country_id):
+        """Get user's visits for landmarks in a specific country"""
+        try:
+            # Get all user visits
+            visits_response = self.session.get(f"{API_BASE}/visits")
+            if visits_response.status_code != 200:
+                return []
             
-    def test_authentication_p0(self):
-        """P0: Test authentication endpoints"""
-        print("\n🔐 TESTING AUTHENTICATION")
-        
-        # Login with test account
-        login_data = {
-            "email": TEST_EMAIL,
-            "password": TEST_PASSWORD
+            visits = visits_response.json()
+            
+            # Get landmarks for this country
+            landmarks = self.get_landmarks_for_country(country_id)
+            country_landmark_ids = {lm["landmark_id"] for lm in landmarks}
+            
+            # Filter visits for this country
+            country_visits = [v for v in visits if v["landmark_id"] in country_landmark_ids]
+            return country_visits
+            
+        except:
+            return []
+    
+    def create_visit(self, landmark_id, with_rich_content=False):
+        """Create a visit with optional rich content"""
+        visit_data = {
+            "landmark_id": landmark_id
         }
         
-        response = self.make_request("POST", "/auth/login", login_data)
-        if response and response.status_code == 200:
-            data = response.json()
-            self.auth_token = data.get("access_token")
-            self.user_data = data.get("user")
-            tier = self.user_data.get('subscription_tier', 'unknown')
-            self.log_test("POST /api/auth/login", True, f"Token received, user tier: {tier}")
-        else:
-            self.log_test("POST /api/auth/login", False, f"Status: {response.status_code if response else 'No response'}")
-            return False
+        if with_rich_content:
+            visit_data.update({
+                "photos": [
+                    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/wA==",
+                    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/wA==",
+                    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/wA=="
+                ],
+                "diary_notes": "This is a test diary entry with travel notes about this amazing landmark. The experience was incredible and I learned so much about the local culture and history.",
+                "travel_tips": [
+                    "Visit early in the morning to avoid crowds",
+                    "Bring comfortable walking shoes",
+                    "Don't forget your camera for amazing photos"
+                ]
+            })
+        
+        try:
+            response = self.session.post(f"{API_BASE}/visits", json=visit_data)
+            return response
+        except Exception as e:
+            print(f"Error creating visit: {e}")
+            return None
+    
+    def test_regular_landmark_visit(self):
+        """Test Case 1: Regular Landmark Visit"""
+        print("🎯 TEST CASE 1: REGULAR LANDMARK VISIT")
+        print("=" * 50)
+        
+        try:
+            # Get initial stats
+            initial_points, initial_visits = self.get_user_points()
             
-        # Verify token with /auth/me
-        response = self.make_request("GET", "/auth/me")
-        if response and response.status_code == 200:
-            user_data = response.json()
-            self.log_test("GET /api/auth/me", True, f"User: {user_data.get('name')}, Tier: {user_data.get('subscription_tier')}")
-        else:
-            self.log_test("GET /api/auth/me", False, f"Status: {response.status_code if response else 'No response'}")
+            # Find a landmark to visit
+            countries_response = self.session.get(f"{API_BASE}/countries")
+            if countries_response.status_code != 200:
+                self.log_test("Get Countries for Regular Visit", False, "Could not fetch countries")
+                return
             
-        return True
-        
-    def test_countries_endpoint_expansion(self):
-        """Test GET /api/countries - should return 48 countries with proper distribution"""
-        print("\n🌍 TESTING COUNTRIES ENDPOINT - GLOBAL EXPANSION")
-        
-        response = self.make_request("GET", "/countries")
-        if not response or response.status_code != 200:
-            self.log_test("GET /api/countries", False, f"Status: {response.status_code if response else 'No response'}")
-            return False
+            countries = countries_response.json()
+            if not countries:
+                self.log_test("Get Countries for Regular Visit", False, "No countries found")
+                return
             
-        countries = response.json()
-        total_countries = len(countries)
-        
-        # Test 1: Total count should be 48
-        if total_countries == 48:
-            self.log_test("Countries Total Count", True, f"Found {total_countries} countries as expected")
-        else:
-            self.log_test("Countries Total Count", False, f"Expected 48 countries, got {total_countries}")
+            # Get landmarks from first country
+            landmarks = self.get_landmarks_for_country(countries[0]["country_id"])
+            if not landmarks:
+                self.log_test("Get Landmarks for Regular Visit", False, "No landmarks found")
+                return
             
-        # Test 2: Continent distribution
-        continent_counts = {}
-        countries_with_images = 0
-        
-        for country in countries:
-            continent = country.get("continent", "Unknown")
-            continent_counts[continent] = continent_counts.get(continent, 0) + 1
+            # Find an unvisited landmark
+            visits_response = self.session.get(f"{API_BASE}/visits")
+            visited_landmark_ids = set()
+            if visits_response.status_code == 200:
+                visits = visits_response.json()
+                visited_landmark_ids = {v["landmark_id"] for v in visits}
             
-            # Check for image_url field
-            if country.get("image_url"):
-                countries_with_images += 1
-                
-            # Verify required fields
-            required_fields = ["country_id", "name", "continent", "landmark_count"]
-            for field in required_fields:
-                if field not in country:
-                    self.log_test("Countries Data Integrity", False, f"Missing field '{field}' in country {country.get('name', 'Unknown')}")
-                    return False
-        
-        print(f"\n📊 Continent Distribution:")
-        for continent, count in continent_counts.items():
-            print(f"   {continent}: {count} countries")
-        
-        # Test 3: Expected continent distribution
-        expected_distribution = {
-            "Europe": 10,
-            "Asia": 10, 
-            "Africa": 10,
-            "Americas": 10,  # Could be split into North/South America
-            "Oceania": 8
-        }
-        
-        # Check if distribution matches (allowing for continent name variations)
-        distribution_correct = True
-        if "Americas" in continent_counts:
-            americas_count = continent_counts["Americas"]
-        else:
-            americas_count = continent_counts.get("North America", 0) + continent_counts.get("South America", 0)
-        
-        expected_checks = [
-            ("Europe", continent_counts.get("Europe", 0), 10),
-            ("Asia", continent_counts.get("Asia", 0), 10),
-            ("Africa", continent_counts.get("Africa", 0), 10),
-            ("Americas", americas_count, 10),
-            ("Oceania", continent_counts.get("Oceania", 0), 8)
-        ]
-        
-        for continent, actual, expected in expected_checks:
-            if actual == expected:
-                self.log_test(f"{continent} Count", True, f"{actual} countries")
-            else:
-                self.log_test(f"{continent} Count", False, f"Expected {expected}, got {actual}")
-                distribution_correct = False
-        
-        # Test 4: Image URLs present
-        image_coverage = (countries_with_images / total_countries) * 100
-        if image_coverage >= 90:  # At least 90% should have images
-            self.log_test("Countries Image Coverage", True, f"{countries_with_images}/{total_countries} countries have images ({image_coverage:.1f}%)")
-        else:
-            self.log_test("Countries Image Coverage", False, f"Only {image_coverage:.1f}% coverage")
-            
-        return distribution_correct
-        
-    def test_landmarks_endpoint_expansion(self):
-        """Test GET /api/landmarks - should return 480 landmarks total"""
-        print("\n🏛️ TESTING LANDMARKS ENDPOINT - GLOBAL EXPANSION")
-        
-        response = self.make_request("GET", "/landmarks")
-        if not response or response.status_code != 200:
-            self.log_test("GET /api/landmarks", False, f"Status: {response.status_code if response else 'No response'}")
-            return False
-            
-        landmarks = response.json()
-        total_landmarks = len(landmarks)
-        
-        # Test 1: Total count should be 480
-        if total_landmarks == 480:
-            self.log_test("Landmarks Total Count", True, f"Found {total_landmarks} landmarks as expected")
-        else:
-            self.log_test("Landmarks Total Count", False, f"Expected 480 landmarks, got {total_landmarks}")
-            
-        # Test 2: Category distribution analysis
-        category_counts = {"official": 0, "premium": 0, "user_suggested": 0}
-        countries_landmark_count = {}
-        continents_represented = set()
-        
-        for landmark in landmarks:
-            category = landmark.get("category", "unknown")
-            if category in category_counts:
-                category_counts[category] += 1
-            
-            country_id = landmark.get("country_id", "unknown")
-            countries_landmark_count[country_id] = countries_landmark_count.get(country_id, 0) + 1
-            
-            continent = landmark.get("continent")
-            if continent:
-                continents_represented.add(continent)
-                
-            # Verify required fields for data integrity
-            required_fields = ["name", "description", "images", "difficulty", "category"]
-            for field in required_fields:
-                if field not in landmark:
-                    self.log_test("Landmarks Data Integrity", False, f"Missing field '{field}' in landmark {landmark.get('name', 'Unknown')}")
-                    return False
-        
-        print(f"\n📊 Landmark Categories:")
-        for category, count in category_counts.items():
-            print(f"   {category}: {count} landmarks")
-        
-        # Test 3: Premium vs Free distribution (336 free + 144 premium = 480 total)
-        expected_free = 336  # 7 per country × 48 countries
-        expected_premium = 144  # 3 per country × 48 countries
-        
-        actual_free = category_counts["official"]
-        actual_premium = category_counts["premium"]
-        
-        if actual_free == expected_free:
-            self.log_test("Free Landmarks Count", True, f"Found {actual_free} free landmarks (7 per country)")
-        else:
-            self.log_test("Free Landmarks Count", False, f"Expected {expected_free}, got {actual_free}")
-        
-        if actual_premium == expected_premium:
-            self.log_test("Premium Landmarks Count", True, f"Found {actual_premium} premium landmarks (3 per country)")
-        else:
-            self.log_test("Premium Landmarks Count", False, f"Expected {expected_premium}, got {actual_premium}")
-            
-        # Test 4: Total should equal free + premium
-        expected_total = expected_free + expected_premium
-        if total_landmarks == expected_total:
-            self.log_test("Total Landmarks Math", True, f"{actual_free} + {actual_premium} = {total_landmarks}")
-        else:
-            self.log_test("Total Landmarks Math", False, f"Math doesn't add up: {actual_free} + {actual_premium} ≠ {total_landmarks}")
-        
-        # Test 5: Each country should have exactly 10 landmarks
-        print(f"\n📊 Landmarks per Country Distribution:")
-        countries_with_10_landmarks = 0
-        sample_countries = list(countries_landmark_count.keys())[:10]  # Show first 10
-        
-        for country_id in sample_countries:
-            count = countries_landmark_count[country_id]
-            print(f"   {country_id}: {count} landmarks")
-            
-        for country_id, count in countries_landmark_count.items():
-            if count == 10:
-                countries_with_10_landmarks += 1
-                
-        total_countries_with_landmarks = len(countries_landmark_count)
-        if countries_with_10_landmarks == total_countries_with_landmarks:
-            self.log_test("Landmarks per Country", True, f"All {total_countries_with_landmarks} countries have exactly 10 landmarks")
-        else:
-            self.log_test("Landmarks per Country", False, f"Only {countries_with_10_landmarks}/{total_countries_with_landmarks} countries have 10 landmarks")
-        
-        # Test 6: Continental representation
-        print(f"\n📊 Continents Represented: {len(continents_represented)}")
-        for continent in sorted(continents_represented):
-            print(f"   {continent}")
-            
-        if len(continents_represented) >= 5:  # Should have all major continents
-            self.log_test("Continental Coverage", True, f"{len(continents_represented)} continents represented")
-        else:
-            self.log_test("Continental Coverage", False, f"Only {len(continents_represented)} continents found")
-            
-        return True
-        
-    def test_landmarks_by_country_samples(self):
-        """Test GET /api/landmarks?country_id={country_id} for sample countries"""
-        print("\n🔍 TESTING LANDMARKS BY COUNTRY - SAMPLE VERIFICATION")
-        
-        # Test specific countries mentioned in review request
-        test_countries = ["france", "japan", "brazil", "australia", "kenya"]
-        
-        for country_id in test_countries:
-            response = self.make_request("GET", f"/landmarks?country_id={country_id}")
-            
-            if not response or response.status_code != 200:
-                self.log_test(f"Landmarks for {country_id}", False, f"Status: {response.status_code if response else 'No response'}")
-                continue
-                
-            landmarks = response.json()
-            landmark_count = len(landmarks)
-            
-            # Test 1: Should have exactly 10 landmarks
-            if landmark_count == 10:
-                self.log_test(f"Landmarks for {country_id}", True, f"Found {landmark_count} landmarks")
-            else:
-                self.log_test(f"Landmarks for {country_id}", False, f"Expected 10, got {landmark_count}")
-                continue
-            
-            # Test 2: Category distribution (7 official + 3 premium)
-            official_count = sum(1 for l in landmarks if l.get("category") == "official")
-            premium_count = sum(1 for l in landmarks if l.get("category") == "premium")
-            
-            if official_count == 7 and premium_count == 3:
-                self.log_test(f"{country_id} Category Distribution", True, f"7 official + 3 premium")
-            else:
-                self.log_test(f"{country_id} Category Distribution", False, f"Got {official_count} official + {premium_count} premium")
-            
-            # Test 3: Verify landmark quality for this country
-            quality_issues = 0
+            unvisited_landmark = None
             for landmark in landmarks:
-                if not landmark.get("name") or not landmark.get("description"):
-                    quality_issues += 1
-                    
-            if quality_issues == 0:
-                self.log_test(f"{country_id} Data Quality", True, "All landmarks have name and description")
-            else:
-                self.log_test(f"{country_id} Data Quality", False, f"{quality_issues} landmarks missing data")
-                
-        return True
-        
-    def test_data_integrity_expansion(self):
-        """Test data integrity across the expanded dataset"""
-        print("\n🔧 TESTING DATA INTEGRITY - EXPANSION VERIFICATION")
-        
-        # Test 1: Get sample landmarks from different continents
-        response = self.make_request("GET", "/landmarks")
-        if not response or response.status_code != 200:
-            self.log_test("Data Integrity Setup", False, "Could not retrieve landmarks")
-            return False
-            
-        landmarks = response.json()
-        
-        # Sample landmarks from different continents for quality check
-        continents_sampled = {}
-        for landmark in landmarks:
-            continent = landmark.get("continent")
-            if continent and continent not in continents_sampled:
-                continents_sampled[continent] = landmark
-                if len(continents_sampled) >= 5:  # Sample from 5 continents
+                if landmark["landmark_id"] not in visited_landmark_ids:
+                    unvisited_landmark = landmark
                     break
-        
-        print(f"\n📊 Data Quality Sample ({len(continents_sampled)} continents):")
-        
-        # Test 2: Verify required fields across continents
-        quality_passed = True
-        for continent, landmark in continents_sampled.items():
-            issues = []
             
-            # Check all required fields
-            required_fields = {
-                "name": landmark.get("name"),
-                "description": landmark.get("description"),
-                "images": landmark.get("images"),
-                "difficulty": landmark.get("difficulty"),
-                "category": landmark.get("category")
-            }
+            if not unvisited_landmark:
+                self.log_test("Find Unvisited Landmark", False, "All landmarks already visited")
+                return
             
-            for field, value in required_fields.items():
-                if not value:
-                    issues.append(f"missing {field}")
-                elif field == "images" and not isinstance(value, list):
-                    issues.append(f"invalid {field} format")
-                elif field == "category" and value not in ["official", "premium", "user_suggested"]:
-                    issues.append(f"invalid {field} value")
+            # Create visit
+            visit_response = self.create_visit(unvisited_landmark["landmark_id"])
             
-            if issues:
-                quality_passed = False
-                print(f"   ❌ {continent} ({landmark.get('name', 'Unknown')}): {', '.join(issues)}")
+            if visit_response and visit_response.status_code == 200:
+                visit_data = visit_response.json()
+                
+                # Verify points increased
+                new_points, new_visits = self.get_user_points()
+                expected_points = unvisited_landmark.get("points", 10)
+                
+                if new_points > initial_points:
+                    points_gained = new_points - initial_points
+                    self.log_test("Regular Visit Points Award", True, 
+                                f"Points increased by {points_gained} (expected {expected_points})")
+                else:
+                    self.log_test("Regular Visit Points Award", False, 
+                                f"Points did not increase. Before: {initial_points}, After: {new_points}")
+                
+                # Verify activity created
+                feed_response = self.session.get(f"{API_BASE}/feed")
+                if feed_response.status_code == 200:
+                    activities = feed_response.json()
+                    visit_activity = None
+                    for activity in activities:
+                        if (activity.get("activity_type") == "visit" and 
+                            activity.get("landmark_id") == unvisited_landmark["landmark_id"]):
+                            visit_activity = activity
+                            break
+                    
+                    if visit_activity:
+                        # Check activity fields
+                        required_fields = ["visit_id", "has_diary", "has_tips", "has_photos"]
+                        missing_fields = [field for field in required_fields if field not in visit_activity]
+                        
+                        if not missing_fields:
+                            self.log_test("Visit Activity Creation", True, 
+                                        f"Activity created with all required fields: {required_fields}")
+                        else:
+                            self.log_test("Visit Activity Creation", False, 
+                                        f"Activity missing fields: {missing_fields}")
+                    else:
+                        self.log_test("Visit Activity Creation", False, "No visit activity found in feed")
+                else:
+                    self.log_test("Visit Activity Creation", False, f"Could not fetch feed: {feed_response.status_code}")
+                
             else:
-                print(f"   ✅ {continent} ({landmark.get('name', 'Unknown')}): All fields valid")
+                error_msg = visit_response.text if visit_response else "No response"
+                self.log_test("Regular Visit Creation", False, f"Visit creation failed: {error_msg}")
+                
+        except Exception as e:
+            self.log_test("Regular Landmark Visit Test", False, f"Exception: {str(e)}")
+    
+    def test_country_completion_bonus(self):
+        """Test Case 2: Country Completion Bonus"""
+        print("🏁 TEST CASE 2: COUNTRY COMPLETION BONUS")
+        print("=" * 50)
         
-        self.log_test("Cross-Continental Data Quality", quality_passed, "Sample landmarks from different continents")
+        try:
+            # Find a country with manageable landmarks
+            target_country = self.find_country_with_few_landmarks()
+            if not target_country:
+                self.log_test("Find Target Country", False, "No suitable country found")
+                return
+            
+            country_id = target_country["country_id"]
+            country_name = target_country["name"]
+            
+            self.log_test("Target Country Selected", True, 
+                        f"Testing with {country_name} ({target_country.get('landmark_count', 'unknown')} landmarks)")
+            
+            # Get all landmarks in this country
+            landmarks = self.get_landmarks_for_country(country_id)
+            if not landmarks:
+                self.log_test("Get Country Landmarks", False, f"No landmarks found for {country_name}")
+                return
+            
+            total_landmarks = len(landmarks)
+            self.log_test("Country Landmarks Retrieved", True, f"Found {total_landmarks} landmarks in {country_name}")
+            
+            # Get current visits for this country
+            current_visits = self.get_user_visits_for_country(country_id)
+            visited_landmark_ids = {v["landmark_id"] for v in current_visits}
+            
+            # Find unvisited landmarks
+            unvisited_landmarks = [lm for lm in landmarks if lm["landmark_id"] not in visited_landmark_ids]
+            
+            if len(current_visits) >= total_landmarks:
+                self.log_test("Country Already Complete", True, 
+                            f"{country_name} already completed ({len(current_visits)}/{total_landmarks})")
+                return
+            
+            if not unvisited_landmarks:
+                self.log_test("Find Unvisited Landmarks", False, "No unvisited landmarks found")
+                return
+            
+            # Visit remaining landmarks one by one
+            for i, landmark in enumerate(unvisited_landmarks):
+                is_last_landmark = (i == len(unvisited_landmarks) - 1)
+                
+                # Get points before visit
+                points_before, _ = self.get_user_points()
+                
+                # Create visit
+                visit_response = self.create_visit(landmark["landmark_id"])
+                
+                if visit_response and visit_response.status_code == 200:
+                    # Get points after visit
+                    points_after, _ = self.get_user_points()
+                    points_gained = points_after - points_before
+                    
+                    landmark_points = landmark.get("points", 10)
+                    
+                    if is_last_landmark:
+                        # This should trigger country completion bonus
+                        expected_total_points = landmark_points + 50  # 50 bonus for country completion
+                        
+                        if points_gained >= expected_total_points:
+                            self.log_test("Country Completion Bonus", True, 
+                                        f"Last landmark visit awarded {points_gained} points (landmark: {landmark_points} + bonus: 50)")
+                            
+                            # Check for country completion activity
+                            feed_response = self.session.get(f"{API_BASE}/feed")
+                            if feed_response.status_code == 200:
+                                activities = feed_response.json()
+                                country_activity = None
+                                for activity in activities:
+                                    if (activity.get("activity_type") == "country_complete" and 
+                                        activity.get("country_name") == country_name):
+                                        country_activity = activity
+                                        break
+                                
+                                if country_activity:
+                                    required_fields = ["country_name", "landmarks_count", "points_earned", "continent"]
+                                    missing_fields = [field for field in required_fields if field not in country_activity]
+                                    
+                                    if not missing_fields:
+                                        self.log_test("Country Completion Activity", True, 
+                                                    f"Country completion activity created with: {country_activity}")
+                                    else:
+                                        self.log_test("Country Completion Activity", False, 
+                                                    f"Activity missing fields: {missing_fields}")
+                                else:
+                                    self.log_test("Country Completion Activity", False, 
+                                                "No country completion activity found")
+                            else:
+                                self.log_test("Country Completion Activity Check", False, 
+                                            f"Could not fetch feed: {feed_response.status_code}")
+                        else:
+                            self.log_test("Country Completion Bonus", False, 
+                                        f"Expected {expected_total_points} points, got {points_gained}")
+                    else:
+                        # Regular landmark visit
+                        if points_gained >= landmark_points:
+                            self.log_test(f"Landmark Visit {i+1}/{len(unvisited_landmarks)}", True, 
+                                        f"Awarded {points_gained} points for {landmark['name']}")
+                        else:
+                            self.log_test(f"Landmark Visit {i+1}/{len(unvisited_landmarks)}", False, 
+                                        f"Expected {landmark_points} points, got {points_gained}")
+                else:
+                    error_msg = visit_response.text if visit_response else "No response"
+                    self.log_test(f"Landmark Visit {i+1}", False, f"Visit failed: {error_msg}")
+                    break
+                    
+        except Exception as e:
+            self.log_test("Country Completion Test", False, f"Exception: {str(e)}")
+    
+    def test_activity_feed_display(self):
+        """Test Case 4: Activity Feed Display"""
+        print("📱 TEST CASE 4: ACTIVITY FEED DISPLAY")
+        print("=" * 50)
         
-        # Test 3: Verify countries have proper data
-        response = self.make_request("GET", "/countries")
-        if response and response.status_code == 200:
-            countries = response.json()
-            countries_with_issues = 0
+        try:
+            response = self.session.get(f"{API_BASE}/feed")
             
-            for country in countries:
-                if not all([country.get("country_id"), country.get("name"), country.get("continent")]):
-                    countries_with_issues += 1
-            
-            if countries_with_issues == 0:
-                self.log_test("Countries Data Integrity", True, f"All {len(countries)} countries have required fields")
+            if response.status_code == 200:
+                activities = response.json()
+                
+                if activities:
+                    self.log_test("Activity Feed Retrieval", True, f"Retrieved {len(activities)} activities")
+                    
+                    # Check for different activity types
+                    activity_types = set(activity.get("activity_type") for activity in activities)
+                    expected_types = ["visit", "country_complete", "continent_complete"]
+                    
+                    found_types = [t for t in expected_types if t in activity_types]
+                    self.log_test("Activity Types Present", True, f"Found activity types: {found_types}")
+                    
+                    # Check visit activities for rich content fields
+                    visit_activities = [a for a in activities if a.get("activity_type") == "visit"]
+                    if visit_activities:
+                        sample_visit = visit_activities[0]
+                        rich_content_fields = ["has_diary", "has_tips", "has_photos", "photo_count"]
+                        present_fields = [field for field in rich_content_fields if field in sample_visit]
+                        
+                        if len(present_fields) == len(rich_content_fields):
+                            self.log_test("Visit Activity Rich Content Fields", True, 
+                                        f"All rich content fields present: {present_fields}")
+                        else:
+                            missing_fields = [field for field in rich_content_fields if field not in sample_visit]
+                            self.log_test("Visit Activity Rich Content Fields", False, 
+                                        f"Missing fields: {missing_fields}")
+                    else:
+                        self.log_test("Visit Activities Check", False, "No visit activities found")
+                    
+                    # Check country completion activities
+                    country_activities = [a for a in activities if a.get("activity_type") == "country_complete"]
+                    if country_activities:
+                        sample_country = country_activities[0]
+                        country_fields = ["country_name", "landmarks_count", "points_earned"]
+                        present_fields = [field for field in country_fields if field in sample_country]
+                        
+                        if len(present_fields) == len(country_fields):
+                            self.log_test("Country Completion Activity Fields", True, 
+                                        f"All required fields present: {present_fields}")
+                        else:
+                            missing_fields = [field for field in country_fields if field not in sample_country]
+                            self.log_test("Country Completion Activity Fields", False, 
+                                        f"Missing fields: {missing_fields}")
+                    
+                else:
+                    self.log_test("Activity Feed Content", False, "No activities found in feed")
             else:
-                self.log_test("Countries Data Integrity", False, f"{countries_with_issues} countries missing required fields")
-        else:
-            self.log_test("Countries Data Integrity", False, "Could not verify countries data")
+                self.log_test("Activity Feed Retrieval", False, f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Activity Feed Test", False, f"Exception: {str(e)}")
+    
+    def test_visit_details_with_rich_content(self):
+        """Test Case 5: Visit Details with Rich Content"""
+        print("📝 TEST CASE 5: VISIT DETAILS WITH RICH CONTENT")
+        print("=" * 50)
+        
+        try:
+            # Find a landmark to create a rich visit
+            countries_response = self.session.get(f"{API_BASE}/countries")
+            if countries_response.status_code != 200:
+                self.log_test("Get Countries for Rich Visit", False, "Could not fetch countries")
+                return
             
-        return quality_passed
-
+            countries = countries_response.json()
+            if not countries:
+                self.log_test("Get Countries for Rich Visit", False, "No countries found")
+                return
+            
+            landmarks = self.get_landmarks_for_country(countries[0]["country_id"])
+            if not landmarks:
+                self.log_test("Get Landmarks for Rich Visit", False, "No landmarks found")
+                return
+            
+            # Find an unvisited landmark
+            visits_response = self.session.get(f"{API_BASE}/visits")
+            visited_landmark_ids = set()
+            if visits_response.status_code == 200:
+                visits = visits_response.json()
+                visited_landmark_ids = {v["landmark_id"] for v in visits}
+            
+            unvisited_landmark = None
+            for landmark in landmarks:
+                if landmark["landmark_id"] not in visited_landmark_ids:
+                    unvisited_landmark = landmark
+                    break
+            
+            if not unvisited_landmark:
+                # Use first landmark anyway for testing
+                unvisited_landmark = landmarks[0]
+            
+            # Create visit with rich content
+            visit_response = self.create_visit(unvisited_landmark["landmark_id"], with_rich_content=True)
+            
+            if visit_response and visit_response.status_code == 200:
+                visit_data = visit_response.json()
+                visit_id = visit_data.get("visit_id")
+                
+                self.log_test("Rich Content Visit Creation", True, f"Created visit with ID: {visit_id}")
+                
+                # Get visit details
+                details_response = self.session.get(f"{API_BASE}/visits/{visit_id}")
+                
+                if details_response.status_code == 200:
+                    details = details_response.json()
+                    
+                    # Check for rich content fields
+                    rich_fields = ["photos", "diary_notes", "travel_tips"]
+                    present_fields = []
+                    
+                    for field in rich_fields:
+                        if field in details and details[field]:
+                            present_fields.append(field)
+                    
+                    if len(present_fields) == len(rich_fields):
+                        self.log_test("Rich Content Fields Verification", True, 
+                                    f"All rich content fields present: {present_fields}")
+                        
+                        # Verify content
+                        photos_count = len(details.get("photos", []))
+                        tips_count = len(details.get("travel_tips", []))
+                        has_diary = bool(details.get("diary_notes"))
+                        
+                        self.log_test("Rich Content Details", True, 
+                                    f"Photos: {photos_count}, Tips: {tips_count}, Diary: {has_diary}")
+                    else:
+                        missing_fields = [field for field in rich_fields if field not in present_fields]
+                        self.log_test("Rich Content Fields Verification", False, 
+                                    f"Missing fields: {missing_fields}")
+                else:
+                    self.log_test("Visit Details Retrieval", False, 
+                                f"Status: {details_response.status_code}")
+            else:
+                error_msg = visit_response.text if visit_response else "No response"
+                self.log_test("Rich Content Visit Creation", False, f"Visit creation failed: {error_msg}")
+                
+        except Exception as e:
+            self.log_test("Rich Content Visit Test", False, f"Exception: {str(e)}")
+    
+    def test_points_system_verification(self):
+        """Test Case 6: Points System Verification"""
+        print("💰 TEST CASE 6: POINTS SYSTEM VERIFICATION")
+        print("=" * 50)
+        
+        try:
+            # Get current points
+            current_points, current_visits = self.get_user_points()
+            
+            # Get all visits to verify points calculation
+            visits_response = self.session.get(f"{API_BASE}/visits")
+            if visits_response.status_code == 200:
+                visits = visits_response.json()
+                
+                # Calculate expected points
+                calculated_points = 0
+                official_visits = 0
+                premium_visits = 0
+                
+                for visit in visits:
+                    points = visit.get("points_earned", 10)
+                    calculated_points += points
+                    
+                    # Try to determine if it's premium or official
+                    if points == 25:
+                        premium_visits += 1
+                    elif points == 10:
+                        official_visits += 1
+                
+                self.log_test("Points Calculation Verification", True, 
+                            f"Total points: {calculated_points}, Official visits: {official_visits}, Premium visits: {premium_visits}")
+                
+                # Verify points match
+                if current_points == calculated_points:
+                    self.log_test("Points System Accuracy", True, 
+                                f"Points match: {current_points} = {calculated_points}")
+                else:
+                    self.log_test("Points System Accuracy", False, 
+                                f"Points mismatch: Current {current_points} vs Calculated {calculated_points}")
+                
+                # Check for bonus activities in feed
+                feed_response = self.session.get(f"{API_BASE}/feed")
+                if feed_response.status_code == 200:
+                    activities = feed_response.json()
+                    
+                    country_bonuses = [a for a in activities if a.get("activity_type") == "country_complete"]
+                    continent_bonuses = [a for a in activities if a.get("activity_type") == "continent_complete"]
+                    
+                    total_country_bonus = sum(a.get("points_earned", 0) for a in country_bonuses)
+                    total_continent_bonus = sum(a.get("points_earned", 0) for a in continent_bonuses)
+                    
+                    self.log_test("Bonus Points Summary", True, 
+                                f"Country bonuses: {len(country_bonuses)} ({total_country_bonus} pts), "
+                                f"Continent bonuses: {len(continent_bonuses)} ({total_continent_bonus} pts)")
+                else:
+                    self.log_test("Bonus Points Check", False, "Could not fetch activity feed")
+            else:
+                self.log_test("Points System Verification", False, f"Could not fetch visits: {visits_response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Points System Test", False, f"Exception: {str(e)}")
+    
     def run_all_tests(self):
-        """Run all test suites for global content expansion"""
-        print("🚀 STARTING WANDERLIST GLOBAL CONTENT EXPANSION TESTING")
-        print("Testing: 48 countries, 480 landmarks across all continents")
-        print(f"Backend URL: {self.base_url}")
-        print(f"Test account: {TEST_EMAIL}")
-        print("="*80)
+        """Run all test cases"""
+        print("🚀 WANDERLIST COUNTRY & CONTINENT COMPLETION BONUS TESTING")
+        print("=" * 70)
+        print(f"Backend URL: {API_BASE}")
+        print(f"Test User: {TEST_EMAIL}")
+        print("=" * 70)
+        print()
         
-        # Authentication (required for all API calls)
-        if not self.test_authentication_p0():
-            print("❌ Authentication failed - stopping tests")
-            return False
-            
-        # Core expansion tests
-        print("\n🌍 TESTING GLOBAL CONTENT EXPANSION")
-        self.test_countries_endpoint_expansion()
-        self.test_landmarks_endpoint_expansion()
-        self.test_landmarks_by_country_samples()
-        self.test_data_integrity_expansion()
+        # Login first
+        if not self.login():
+            print("❌ Authentication failed. Cannot proceed with tests.")
+            return
         
-        # Summary
-        print("\n" + "="*80)
-        print("📋 GLOBAL EXPANSION TEST SUMMARY")
-        print("="*80)
+        # Get initial stats
+        initial_stats = self.get_user_stats()
+        if initial_stats:
+            print(f"📊 Initial Stats: {initial_stats}")
+            print()
         
-        passed = sum(1 for r in self.test_results if r["success"])
-        total = len(self.test_results)
+        # Run test cases
+        self.test_regular_landmark_visit()
+        self.test_country_completion_bonus()
+        self.test_activity_feed_display()
+        self.test_visit_details_with_rich_content()
+        self.test_points_system_verification()
         
-        print(f"Total Tests: {total}")
-        print(f"Passed: {passed}")
-        print(f"Failed: {total - passed}")
-        print(f"Success Rate: {(passed/total)*100:.1f}%")
+        # Print summary
+        print("📋 TEST SUMMARY")
+        print("=" * 50)
+        
+        passed_tests = sum(1 for result in self.test_results if result["success"])
+        total_tests = len(self.test_results)
+        
+        print(f"Total Tests: {total_tests}")
+        print(f"Passed: {passed_tests}")
+        print(f"Failed: {total_tests - passed_tests}")
+        print(f"Success Rate: {(passed_tests/total_tests*100):.1f}%")
+        print()
         
         # Show failed tests
-        failed_tests = [r for r in self.test_results if not r["success"]]
+        failed_tests = [result for result in self.test_results if not result["success"]]
         if failed_tests:
-            print("\n❌ FAILED TESTS:")
+            print("❌ FAILED TESTS:")
             for test in failed_tests:
                 print(f"  - {test['test']}: {test['details']}")
         else:
-            print("\n🎉 ALL EXPANSION TESTS PASSED!")
-            
-        # Show expansion status summary
-        print("\n🌍 GLOBAL EXPANSION STATUS:")
+            print("🎉 ALL TESTS PASSED!")
         
-        # Check key expansion metrics
-        countries_tests = [r for r in self.test_results if "countries" in r["test"].lower()]
-        landmarks_tests = [r for r in self.test_results if "landmarks" in r["test"].lower()]
-        data_tests = [r for r in self.test_results if "data" in r["test"].lower() or "integrity" in r["test"].lower()]
-        
-        countries_passed = all(t["success"] for t in countries_tests)
-        landmarks_passed = all(t["success"] for t in landmarks_tests)
-        data_passed = all(t["success"] for t in data_tests)
-        
-        print(f"  Countries (48 expected): {'✅ VERIFIED' if countries_passed else '❌ ISSUES'}")
-        print(f"  Landmarks (480 expected): {'✅ VERIFIED' if landmarks_passed else '❌ ISSUES'}")
-        print(f"  Data Integrity: {'✅ VERIFIED' if data_passed else '❌ ISSUES'}")
-        
-        # Overall expansion status
-        expansion_success = countries_passed and landmarks_passed and data_passed
-        print(f"\n🎯 EXPANSION STATUS: {'✅ SUCCESS - Ready for production!' if expansion_success else '❌ ISSUES FOUND - Needs attention'}")
-            
-        return passed == total
+        return passed_tests == total_tests
 
 if __name__ == "__main__":
     tester = WanderListTester()
