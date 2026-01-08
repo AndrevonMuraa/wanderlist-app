@@ -320,164 +320,105 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: theme.spacing.md,
   },
-  landmarkCard: {
-    marginBottom: theme.spacing.md,
+  // New List-Based Landmark Cards
+  landmarkItemContainer: {
+    marginBottom: theme.spacing.sm,
+  },
+  landmarkListCard: {
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
-    height: 200,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.sm,
   },
-  landmarkImage: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
+  landmarkListCardLocked: {
+    opacity: 0.75,
   },
-  blurredImage: {
-    opacity: 0.7,
-  },
-  imageOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+  landmarkContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: theme.spacing.md,
-    justifyContent: 'flex-end',
+    minHeight: 72,
   },
-  landmarkName: {
-    ...theme.typography.h3,
-    color: '#fff',
-  },
-  landmarkNameLocked: {
-    opacity: 0.9,
-  },
-  // Enhanced Premium Badge
-  // Subtle Premium Badge
-  premiumBadgeSubtle: {
-    position: 'absolute',
-    top: theme.spacing.sm,
-    right: theme.spacing.sm,
+  // Landmark Icon (Left Side)
+  landmarkIconContainer: {
+    width: 44,
+    height: 44,
     borderRadius: theme.borderRadius.md,
-    overflow: 'hidden',
-  },
-  premiumBadgeBlur: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacing.sm,
-    paddingVertical: theme.spacing.xs / 2,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    backdropFilter: 'blur(10px)',
-  },
-  premiumTextSubtle: {
-    ...theme.typography.caption,
-    color: 'rgba(255,255,255,0.9)',
-    fontWeight: '600',
-    marginLeft: 4,
-    fontSize: 10,
-    letterSpacing: 0.8,
-  },
-  // Frosted Glass Overlay
-  frostedOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    backdropFilter: 'blur(8px)',
-  },
-  lockIconSubtle: {
-    marginBottom: theme.spacing.md,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderRadius: 40,
-    padding: theme.spacing.md,
-    backdropFilter: 'blur(10px)',
-  },
-  upgradeTextSubtle: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.sm,
-    borderRadius: theme.borderRadius.lg,
-    backdropFilter: 'blur(10px)',
-  },
-  upgradeTitleSubtle: {
-    ...theme.typography.body,
-    color: 'rgba(255,255,255,0.95)',
-    fontWeight: '600',
-    marginBottom: theme.spacing.xs / 2,
-  },
-  upgradeSubtitleSubtle: {
-    ...theme.typography.caption,
-    color: 'rgba(255,255,255,0.75)',
-    fontSize: 12,
-  },
-  // Premium Banner
-  premiumBanner: {
-    marginHorizontal: theme.spacing.md,
-    marginTop: theme.spacing.sm,
-    marginBottom: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
-    overflow: 'hidden',
-    ...theme.shadows.md,
-  },
-  premiumBannerGradient: {
-    padding: theme.spacing.md,
-  },
-  premiumBannerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  premiumBannerIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255,255,255,0.3)',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: theme.spacing.md,
   },
-  premiumBannerTextContainer: {
+  landmarkIconOfficial: {
+    backgroundColor: 'rgba(32, 178, 170, 0.1)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(32, 178, 170, 0.3)',
+  },
+  landmarkIconPremium: {
+    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 215, 0, 0.4)',
+  },
+  // Text Container (Middle)
+  landmarkTextContainer: {
     flex: 1,
+    marginRight: theme.spacing.sm,
   },
-  premiumBannerTitle: {
+  landmarkListName: {
     ...theme.typography.body,
-    color: '#fff',
-    fontWeight: 'bold',
-    marginBottom: 2,
+    color: theme.colors.text,
+    fontWeight: '600',
+    marginBottom: theme.spacing.xs / 2,
   },
-  premiumBannerSubtitle: {
-    ...theme.typography.caption,
-    color: 'rgba(255,255,255,0.95)',
-    fontSize: 12,
+  landmarkListNameLocked: {
+    color: theme.colors.textSecondary,
   },
-  // Enhanced Points Badge
-  pointsBadge: {
+  landmarkMetaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: theme.spacing.xs,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    paddingHorizontal: theme.spacing.sm,
-    paddingVertical: 4,
-    borderRadius: theme.borderRadius.sm,
-    alignSelf: 'flex-start',
+    gap: theme.spacing.sm,
   },
-  pointsBadgePremium: {
-    backgroundColor: 'rgba(255,215,0,0.3)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,215,0,0.5)',
+  pointsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
-  pointsText: {
+  pointsTextList: {
     ...theme.typography.caption,
-    color: '#FFD700',
-    fontWeight: 'bold',
-    marginLeft: 4,
+    color: theme.colors.textSecondary,
+    fontWeight: '500',
+    fontSize: 12,
   },
-  pointsTextPremium: {
-    fontSize: 13,
-    fontWeight: '800',
+  premiumBadgeList: {
+    backgroundColor: 'rgba(255, 215, 0, 0.15)',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: theme.borderRadius.sm,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 215, 0, 0.3)',
+  },
+  premiumBadgeText: {
+    ...theme.typography.caption,
+    color: '#B8860B',
+    fontWeight: '700',
+    fontSize: 9,
+    letterSpacing: 0.5,
+  },
+  visitedBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+  },
+  visitedText: {
+    ...theme.typography.caption,
+    color: '#4CAF50',
+    fontWeight: '600',
+    fontSize: 11,
+  },
+  // Action Icon (Right Side)
+  landmarkActionIcon: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 24,
   },
   emptyContainer: {
     alignItems: 'center',
