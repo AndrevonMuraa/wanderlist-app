@@ -11,9 +11,9 @@ export default function TabsLayout() {
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.textLight,
         tabBarStyle: {
-          height: Platform.OS === 'ios' ? 88 : 75,
-          paddingBottom: Platform.OS === 'ios' ? 28 : 12,
-          paddingTop: 10,
+          height: Platform.OS === 'ios' ? 90 : 78,
+          paddingBottom: Platform.OS === 'ios' ? 30 : 16,
+          paddingTop: 8,
           backgroundColor: theme.colors.surface,
           borderTopColor: theme.colors.border,
           borderTopWidth: 1,
@@ -22,10 +22,12 @@ export default function TabsLayout() {
         tabBarLabelStyle: {
           fontSize: 10,
           fontWeight: '600',
-          marginBottom: 2,
+          marginBottom: 4,
+          paddingBottom: 2,
         },
         tabBarIconStyle: {
-          marginTop: 2,
+          marginTop: 0,
+          marginBottom: 0,
         },
       }}
     >
