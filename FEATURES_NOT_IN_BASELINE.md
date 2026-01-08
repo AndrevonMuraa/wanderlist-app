@@ -211,8 +211,6 @@ BADGE_DEFINITIONS = {
 
 ---
 
----
-
 ### 7. **User Personal Landmarks Page** ✅ EXISTS
 **Status:** File exists but unclear if fully integrated
 
