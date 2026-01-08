@@ -483,6 +483,16 @@ This baseline model ensures:
 - Platform-aware styling
 - Material Design (react-native-paper)
 
+**Country Cards - Flag-Based Design (v4.1):** ✨
+- **Authentic national flags** for all 48 countries
+- High-quality flag images from flagcdn.com (320px)
+- Full-card flag display with subtle gradient overlays
+- Maintains text readability with gradient: `rgba(255,255,255,0.05)` to `rgba(0,0,0,0.35)`
+- Preserves progress bars, completion indicators, and turquoise accent bars
+- Consistent, recognizable visual identity
+- ISO 3166-1 alpha-2 country codes for reliable flag mapping
+- Benefits: Instant recognition, cultural authenticity, better performance
+
 **Key Components:**
 - UpgradeModal (subscription upsell)
 - MapComponents (platform-specific)
@@ -495,6 +505,7 @@ This baseline model ensures:
 **Files:**
 - `/app/frontend/app/(tabs)/_layout.tsx` - Main tab configuration (4 tabs)
 - `/app/frontend/app/(tabs)/social.tsx` - Social hub (1111 lines)
+- `/app/frontend/app/explore-countries.tsx` - Country exploration with flag-based cards
 
 ---
 
