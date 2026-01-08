@@ -688,10 +688,21 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
-  countryImage: {
+  flagContainer: {
     width: '100%',
     height: '100%',
     position: 'absolute',
+  },
+  flagImage: {
+    width: '100%',
+    height: '100%',
+  },
+  flagOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   countryOverlay: {
     flex: 1,
