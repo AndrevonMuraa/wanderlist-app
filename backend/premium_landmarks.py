@@ -5,7 +5,7 @@ PREMIUM_LANDMARKS = {
     "norway": [
         {"name": "Røros Mining Town", "description": "UNESCO World Heritage Site - a charming mining town with colorful wooden houses and rich copper mining history dating back to 1644.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=600", "points": 25},
         {"name": "Borgund Stave Church", "description": "Norway's best-preserved stave church from the 12th century, featuring intricate Viking-era dragon carvings and medieval architecture.", "image_url": "https://images.unsplash.com/photo-1555400435-6f6bb1bfd3e8?w=600", "points": 25},
-        {"name": "The Old Town of Fredrikstad", "description": "Best-preserved fortified town in Scandinavia, with cobblestone streets, historic ramparts, drawbridge, and charming wooden houses from the 1600s.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=600", "points": 25},
+        {"name": "Atlantic Ocean Road", "description": "Scenic road connecting islands with eight bridges, considered one of the world's most beautiful drives.", "image_url": "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=600", "points": 25},
         {"name": "Sognefjord", "description": "Norway's longest and deepest fjord, stretching 205 km inland with spectacular scenery.", "image_url": "https://images.unsplash.com/photo-1448375240586-882707db888b?w=600", "points": 25},
         {"name": "Tromsø Arctic Cathedral", "description": "Striking modern church with distinctive triangular shape, known as the Arctic Cathedral.", "image_url": "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=600", "points": 25},
     ],
