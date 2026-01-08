@@ -262,18 +262,17 @@ export default function SocialScreen() {
         {showAddFriend && (
           <Surface style={styles.addFriendSection}>
             <Text style={styles.addFriendTitle}>Add a Friend</Text>
-            <Text style={styles.addFriendSubtitle}>Enter their email address</Text>
+            <Text style={styles.addFriendSubtitle}>Enter their email or username</Text>
             <View style={styles.addFriendInput}>
               <TextInput
                 value={friendEmail}
                 onChangeText={setFriendEmail}
-                placeholder="friend@example.com"
+                placeholder="email@example.com or username"
                 mode="outlined"
                 style={styles.input}
                 outlineColor={theme.colors.primary}
                 activeOutlineColor={theme.colors.primary}
                 autoCapitalize="none"
-                keyboardType="email-address"
               />
               <TouchableOpacity 
                 style={styles.sendRequestButton}
