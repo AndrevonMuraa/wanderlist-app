@@ -493,6 +493,15 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
+  streakCard: {
+    margin: theme.spacing.md,
+    marginTop: 0,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
   statsCard: {
     margin: theme.spacing.md,
     marginTop: 0,
