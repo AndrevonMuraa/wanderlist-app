@@ -873,6 +873,7 @@ async def send_message(data: MessageCreate, current_user: User = Depends(get_cur
         "sender_id": current_user.user_id,
         "receiver_id": data.receiver_id,
         "content": data.content,
+        "image_base64": data.image_base64,  # Store image if provided
         "created_at": datetime.now(timezone.utc),
         "read": False
     }
