@@ -1299,7 +1299,29 @@ git commit -m "Session X: [Brief summary of changes]"
 
 ## 📝 CHANGELOG (Baseline Evolution)
 
-### v4.3.0 (Current - January 8, 2026) - **Hub-Style Social + Image-Free Design**
+### v4.4.0 (Current - January 9, 2026) - **Back Button Fixes & Rich Social Feed**
+- ✅ **Back Button Navigation Fixed** - Consistent navigation across all pages
+  - Fixed broken back button on landmark detail page with proper `router.back()` implementation
+  - Added turquoise gradient header with back button on all detail pages
+  - Fallback navigation to explore page when no history exists
+  - Improved header consistency across landmark list, detail, and suggestion pages
+  - Files: `/app/frontend/app/landmark-detail/[landmark_id].tsx`, `/app/frontend/app/landmarks/[country_id].tsx`
+- 📱 **Rich Social Feed Display Implemented** - Activity feed now shows full rich content
+  - Photo collage preview: Grid display of up to 3 photos in feed with "View All" indicator
+  - Diary preview: First 150 characters with "Read more..." expansion
+  - Travel tips preview: First 2 tips shown with bullet points and icon indicators
+  - Rich content badges: Photo count, diary indicator, tips count with icons
+  - "View Full Visit" button with turquoise gradient styling
+  - Expandable content sections with smooth animations
+  - Optimized for performance with lazy loading
+  - File: `/app/frontend/app/(tabs)/social.tsx` (enhanced)
+- 📖 **Baseline Model Updated** - v4.4 documentation reflects all recent changes
+  - Updated version number and changelog
+  - Documented back button fixes across navigation
+  - Added rich social feed implementation details
+  - Ensured feature parity between documentation and implementation
+
+### v4.3.0 (January 8, 2026) - **Hub-Style Social + Image-Free Design**
 - 🎯 **Social Hub Redesigned** - Dashboard-style single-page layout
   - Replaced tab-based navigation with hub/dashboard approach
   - Single scrollable page with all features visible at once
