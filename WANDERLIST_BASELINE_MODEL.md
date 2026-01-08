@@ -27,10 +27,14 @@ This baseline model ensures:
 **Total Countries:** 48 (Europe: 10, Asia: 10, Africa: 10, Americas: 10, Oceania: 8)
 **Total Landmarks:** 480 total (Distribution: ~380 official + ~100 premium across 20 countries)
 **Major Updates:** 
-- **Streak Tracking System** - Daily consecutive visit tracking with flame icon + milestones (NEW in v4.7)
-- **Streak Display Component** - Visual flame that "heats up" with longer streaks (NEW in v4.7)
-- **Streak Celebrations** - Orange confetti for 7/30/100 day milestones (NEW in v4.7)
-- **Profile Streak Card** - Dedicated streak display showing current + longest streak (NEW in v4.7)
+- **Comments System** - Full-featured commenting on activities with likes, replies, and deletion (NEW in v4.8)
+- **Threaded Comment Replies** - Support for nested comment threads with visual indentation (NEW in v4.8)
+- **Comment Interactions** - Like/unlike comments, expandable comment sections (NEW in v4.8)
+- **Real-time Comment Updates** - Comment counts update automatically on post/delete (NEW in v4.8)
+- **Streak Tracking System** - Daily consecutive visit tracking with flame icon + milestones (v4.7)
+- **Streak Display Component** - Visual flame that "heats up" with longer streaks (v4.7)
+- **Streak Celebrations** - Orange confetti for 7/30/100 day milestones (v4.7)
+- **Profile Streak Card** - Dedicated streak display showing current + longest streak (v4.7)
 - **Level-Up Celebrations** - Gold confetti + alerts when users advance in rank (v4.6)
 - **Leaderboard Rank Badges** - Visual rank indicators next to usernames in leaderboard (v4.6)
 - **User Ranks System** - 5-tier progression (Explorer→Adventurer→Voyager→Globetrotter→Legend) (v4.6)
@@ -39,8 +43,8 @@ This baseline model ensures:
 - **Continent Completion Bonus System** - Auto +200 pts when completing all countries in a continent (v4.5)
 - Redesigned landmark cards - Icon-based list design
 - Modernized Add Visit page - Turquoise theme, 3-tab modal interface
-- **Redesigned landmark cards** - Icon-based list design (NEW in v4.2)
-- **Modernized Add Visit page** - Turquoise theme, 3-tab modal interface (NEW in v4.2)
+- **Redesigned landmark cards** - Icon-based list design (v4.2)
+- **Modernized Add Visit page** - Turquoise theme, 3-tab modal interface (v4.2)
 - Consolidated navigation (4 tabs: My Journey, Explore, Social, Profile)
 - Flag-based country cards - Authentic national flags for all 48 countries
 - Activity Feed with likes & comments
