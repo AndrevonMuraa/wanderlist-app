@@ -1074,8 +1074,8 @@ async def seed_database():
             # Get country info for required fields
             country_info = next(c for c in COUNTRIES_DATA if c["country_id"] == country_id)
             
-            # First 10 landmarks are official (free), last 5 are premium
-            for idx, landmark in enumerate(landmarks):
+            # Only use first 10 landmarks as official (free)
+            for idx, landmark in enumerate(landmarks[:10]):  # Changed to only use first 10
                 landmark_doc = {
                     "landmark_id": f"{country_id}_{landmark['name'].lower().replace(' ', '_').replace('&', 'and')}",
                     "country_id": country_id,
@@ -1086,8 +1086,8 @@ async def seed_database():
                     "image_url": landmark["image_url"],
                     "images": [landmark["image_url"]],
                     "difficulty": landmark["difficulty"],
-                    "category": "premium" if idx >= 10 else "official",
-                    "points": 25 if idx >= 10 else 10,  # Premium landmarks worth more points
+                    "category": "official",
+                    "points": 10,
                     "upvotes": 0,
                     "created_by": None,
                     "created_at": datetime.now(timezone.utc),
@@ -1099,12 +1099,45 @@ async def seed_database():
                 }
                 await db.landmarks.insert_one(landmark_doc)
                 total_landmarks += 1
-                if idx >= 10:
-                    premium_count += 1
-                else:
-                    official_count += 1
+                official_count += 1
             
-            print(f"  ✓ {country_id}: {len(landmarks)} landmarks")
+            print(f"  ✓ {country_id}: {len(landmarks[:10])} free landmarks")
+        
+        # Now add premium landmarks from PREMIUM_LANDMARKS dictionary
+        print("\n💎 Inserting premium landmarks...")
+        for country_id, premium_landmarks in PREMIUM_LANDMARKS.items():
+            country_info = next((c for c in COUNTRIES_DATA if c["country_id"] == country_id), None)
+            if not country_info:
+                print(f"  ⚠️  Skipping {country_id} - country not found")
+                continue
+            
+            for landmark in premium_landmarks:
+                landmark_doc = {
+                    "landmark_id": f"{country_id}_{landmark['name'].lower().replace(' ', '_').replace('&', 'and').replace('(', '').replace(')', '')}",
+                    "country_id": country_id,
+                    "country_name": country_info["name"],
+                    "continent": country_info["continent"],
+                    "name": landmark["name"],
+                    "description": landmark["description"],
+                    "image_url": landmark["image_url"],
+                    "images": [landmark["image_url"]],
+                    "difficulty": "Easy",  # Default difficulty for premium landmarks
+                    "category": "premium",
+                    "points": landmark.get("points", 25),
+                    "upvotes": 0,
+                    "created_by": None,
+                    "created_at": datetime.now(timezone.utc),
+                    "facts": [],
+                    "best_time_to_visit": "Year-round",
+                    "duration": "2-3 hours",
+                    "latitude": None,
+                    "longitude": None
+                }
+                await db.landmarks.insert_one(landmark_doc)
+                total_landmarks += 1
+                premium_count += 1
+            
+            print(f"  ✓ {country_id}: {len(premium_landmarks)} premium landmarks")
         
         print(f"\n🎉 SUCCESS! Database seeded with:")
         print(f"   • {len(COUNTRIES_DATA)} countries")
