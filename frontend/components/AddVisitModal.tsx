@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import theme from '../styles/theme';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Surface } from 'react-native-paper';
 
 const { width } = Dimensions.get('window');
 
@@ -32,8 +33,6 @@ interface AddVisitModalProps {
   isPremium: boolean;
 }
 
-type TabType = 'photos' | 'diary' | 'tips';
-
 export default function AddVisitModal({
   visible,
   onClose,
@@ -41,7 +40,6 @@ export default function AddVisitModal({
   onSubmit,
   isPremium,
 }: AddVisitModalProps) {
-  const [activeTab, setActiveTab] = useState<TabType>('photos');
   const [photos, setPhotos] = useState<string[]>([]);
   const [diaryText, setDiaryText] = useState('');
   const [tipsText, setTipsText] = useState('');
@@ -82,11 +80,10 @@ export default function AddVisitModal({
       .split('\n')
       .map((tip) => tip.trim().replace(/^[•\-\*]\s*/, ''))
       .filter((tip) => tip.length > 0)
-      .slice(0, 5); // Max 5 tips
+      .slice(0, 5);
   };
 
   const handleSubmit = async () => {
-    // Validation
     if (photos.length === 0 && !diaryText && !tipsText) {
       Alert.alert('Add Content', 'Please add at least one photo, diary entry, or travel tip');
       return;
@@ -110,11 +107,9 @@ export default function AddVisitModal({
         diary_notes: diaryText,
         travel_tips: tips,
       });
-      // Reset state
       setPhotos([]);
       setDiaryText('');
       setTipsText('');
-      setActiveTab('photos');
     } catch (error) {
       console.error('Error submitting visit:', error);
       Alert.alert('Error', 'Failed to save your visit');
@@ -122,183 +117,6 @@ export default function AddVisitModal({
       setIsSubmitting(false);
     }
   };
-
-  const renderTabBar = () => (
-    <View style={styles.tabBar}>
-      <TouchableOpacity
-        style={[styles.tab, activeTab === 'photos' && styles.tabActive]}
-        onPress={() => setActiveTab('photos')}
-      >
-        <Ionicons
-          name="images"
-          size={20}
-          color={activeTab === 'photos' ? theme.colors.primary : theme.colors.textLight}
-        />
-        <Text style={[styles.tabText, activeTab === 'photos' && styles.tabTextActive]}>
-          Photos {photos.length > 0 && `(${photos.length})`}
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.tab, activeTab === 'diary' && styles.tabActive]}
-        onPress={() => setActiveTab('diary')}
-      >
-        <Ionicons
-          name="journal"
-          size={20}
-          color={activeTab === 'diary' ? theme.colors.primary : theme.colors.textLight}
-        />
-        <Text style={[styles.tabText, activeTab === 'diary' && styles.tabTextActive]}>
-          Diary
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.tab, activeTab === 'tips' && styles.tabActive]}
-        onPress={() => setActiveTab('tips')}
-        disabled={!isPremium}
-      >
-        <Ionicons
-          name="bulb"
-          size={20}
-          color={
-            !isPremium
-              ? theme.colors.textLight
-              : activeTab === 'tips'
-              ? theme.colors.primary
-              : theme.colors.textLight
-          }
-        />
-        <Text style={[styles.tabText, activeTab === 'tips' && styles.tabTextActive]}>
-          Tips {!isPremium && '🔒'}
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-  const renderPhotosTab = () => (
-    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
-      <Text style={styles.sectionTitle}>Photo Collage (Up to 10)</Text>
-      <Text style={styles.sectionSubtitle}>
-        Capture your adventure with multiple photos
-      </Text>
-
-      <TouchableOpacity style={styles.addPhotoButton} onPress={pickImages}>
-        <LinearGradient
-          colors={[theme.colors.primary, theme.colors.secondary]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.addPhotoGradient}
-        >
-          <Ionicons name="camera" size={24} color="#fff" />
-          <Text style={styles.addPhotoText}>
-            {photos.length === 0 ? 'Add Photos' : 'Add More Photos'}
-          </Text>
-        </LinearGradient>
-      </TouchableOpacity>
-
-      {photos.length > 0 && (
-        <View style={styles.photoGrid}>
-          {photos.map((photo, index) => (
-            <View key={index} style={styles.photoItem}>
-              <Image source={{ uri: photo }} style={styles.photoImage} />
-              <TouchableOpacity
-                style={styles.removePhotoButton}
-                onPress={() => removePhoto(index)}
-              >
-                <Ionicons name="close-circle" size={24} color="#fff" />
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
-      )}
-
-      {photos.length === 0 && (
-        <View style={styles.emptyState}>
-          <Ionicons name="images-outline" size={48} color={theme.colors.textLight} />
-          <Text style={styles.emptyStateText}>No photos yet</Text>
-          <Text style={styles.emptyStateSubtext}>
-            Add up to 10 photos to create your collage
-          </Text>
-        </View>
-      )}
-    </ScrollView>
-  );
-
-  const renderDiaryTab = () => (
-    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
-      <Text style={styles.sectionTitle}>Travel Diary</Text>
-      <Text style={styles.sectionSubtitle}>
-        Share your experience and memories ({diaryText.length}/2000)
-      </Text>
-
-      <TextInput
-        style={styles.diaryInput}
-        placeholder="Write about your experience at this landmark...&#10;&#10;What did you see? How did it make you feel? Any interesting stories?"
-        placeholderTextColor={theme.colors.textLight}
-        multiline
-        numberOfLines={12}
-        value={diaryText}
-        onChangeText={setDiaryText}
-        maxLength={2000}
-        textAlignVertical="top"
-      />
-
-      {diaryText.length > 1800 && (
-        <Text style={styles.characterWarning}>
-          {2000 - diaryText.length} characters remaining
-        </Text>
-      )}
-    </ScrollView>
-  );
-
-  const renderTipsTab = () => (
-    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
-      {!isPremium ? (
-        <View style={styles.premiumRequired}>
-          <Ionicons name="diamond" size={48} color={theme.colors.accent} />
-          <Text style={styles.premiumTitle}>Premium Feature</Text>
-          <Text style={styles.premiumSubtitle}>
-            Upgrade to Premium to share travel tips with the community
-          </Text>
-        </View>
-      ) : (
-        <>
-          <Text style={styles.sectionTitle}>Travel Tips (Up to 5)</Text>
-          <Text style={styles.sectionSubtitle}>
-            Share helpful tips for future travelers • One tip per line
-          </Text>
-
-          <TextInput
-            style={styles.tipsInput}
-            placeholder="• Best time to visit is early morning&#10;• Bring water and sunscreen&#10;• Book tickets online to skip the line&#10;• Local guide highly recommended&#10;• Great for photography at sunset"
-            placeholderTextColor={theme.colors.textLight}
-            multiline
-            numberOfLines={8}
-            value={tipsText}
-            onChangeText={setTipsText}
-            textAlignVertical="top"
-          />
-
-          <Text style={styles.tipsHint}>
-            💡 Tip: Start each line with • or - for bullet points
-          </Text>
-
-          {parseTips().length > 0 && (
-            <View style={styles.tipsPreview}>
-              <Text style={styles.tipsPreviewTitle}>Preview ({parseTips().length}/5)</Text>
-              {parseTips().map((tip, index) => (
-                <View key={index} style={styles.tipItem}>
-                  <Ionicons name="checkmark-circle" size={16} color={theme.colors.primary} />
-                  <Text style={styles.tipText}>{tip}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-        </>
-      )}
-    </ScrollView>
-  );
 
   return (
     <Modal
@@ -328,13 +146,198 @@ export default function AddVisitModal({
           </TouchableOpacity>
         </View>
 
-        {/* Tab Bar */}
-        {renderTabBar()}
+        {/* Hub-Style Scrollable Content */}
+        <ScrollView 
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {/* Photos Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View style={styles.sectionTitleRow}>
+                <Ionicons name="images" size={24} color={theme.colors.primary} />
+                <Text style={styles.sectionTitle}>Photo Collage</Text>
+                {photos.length > 0 && (
+                  <View style={styles.countBadge}>
+                    <Text style={styles.countBadgeText}>{photos.length}/10</Text>
+                  </View>
+                )}
+              </View>
+            </View>
 
-        {/* Tab Content */}
-        {activeTab === 'photos' && renderPhotosTab()}
-        {activeTab === 'diary' && renderDiaryTab()}
-        {activeTab === 'tips' && renderTipsTab()}
+            <Surface style={styles.card}>
+              <Text style={styles.sectionDescription}>
+                Capture your adventure with up to 10 photos
+              </Text>
+
+              <TouchableOpacity style={styles.addPhotoButton} onPress={pickImages}>
+                <LinearGradient
+                  colors={[theme.colors.primary, theme.colors.secondary]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.addPhotoGradient}
+                >
+                  <Ionicons name="camera" size={24} color="#fff" />
+                  <Text style={styles.addPhotoText}>
+                    {photos.length === 0 ? 'Add Photos' : 'Add More Photos'}
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+
+              {photos.length > 0 ? (
+                <View style={styles.photoGrid}>
+                  {photos.map((photo, index) => (
+                    <View key={index} style={styles.photoItem}>
+                      <Image source={{ uri: photo }} style={styles.photoImage} />
+                      <TouchableOpacity
+                        style={styles.removePhotoButton}
+                        onPress={() => removePhoto(index)}
+                      >
+                        <Ionicons name="close-circle" size={24} color="#fff" />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <View style={styles.emptyState}>
+                  <Ionicons name="images-outline" size={48} color={theme.colors.textLight} />
+                  <Text style={styles.emptyText}>No photos yet</Text>
+                  <Text style={styles.emptySubtext}>
+                    Add photos to create your collage
+                  </Text>
+                </View>
+              )}
+            </Surface>
+          </View>
+
+          {/* Diary Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View style={styles.sectionTitleRow}>
+                <Ionicons name="journal" size={24} color={theme.colors.primary} />
+                <Text style={styles.sectionTitle}>Travel Diary</Text>
+                {diaryText.length > 0 && (
+                  <View style={styles.countBadge}>
+                    <Text style={styles.countBadgeText}>{diaryText.length}/2000</Text>
+                  </View>
+                )}
+              </View>
+            </View>
+
+            <Surface style={styles.card}>
+              <Text style={styles.sectionDescription}>
+                Share your experience and memories
+              </Text>
+
+              <TextInput
+                style={styles.diaryInput}
+                placeholder="Write about your experience at this landmark...&#10;&#10;What did you see? How did it make you feel? Any interesting stories?"
+                placeholderTextColor={theme.colors.textLight}
+                multiline
+                numberOfLines={8}
+                value={diaryText}
+                onChangeText={setDiaryText}
+                maxLength={2000}
+                textAlignVertical="top"
+              />
+
+              {diaryText.length > 1800 && (
+                <Text style={styles.characterWarning}>
+                  {2000 - diaryText.length} characters remaining
+                </Text>
+              )}
+
+              {diaryText.length === 0 && (
+                <View style={styles.emptyState}>
+                  <Ionicons name="journal-outline" size={48} color={theme.colors.textLight} />
+                  <Text style={styles.emptyText}>No diary entry yet</Text>
+                  <Text style={styles.emptySubtext}>
+                    Share your thoughts and experiences
+                  </Text>
+                </View>
+              )}
+            </Surface>
+          </View>
+
+          {/* Travel Tips Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View style={styles.sectionTitleRow}>
+                <Ionicons name="bulb" size={24} color={theme.colors.primary} />
+                <Text style={styles.sectionTitle}>Travel Tips</Text>
+                {!isPremium && (
+                  <View style={styles.premiumBadge}>
+                    <Ionicons name="diamond" size={12} color="#B8860B" />
+                    <Text style={styles.premiumBadgeText}>PREMIUM</Text>
+                  </View>
+                )}
+                {isPremium && parseTips().length > 0 && (
+                  <View style={styles.countBadge}>
+                    <Text style={styles.countBadgeText}>{parseTips().length}/5</Text>
+                  </View>
+                )}
+              </View>
+            </View>
+
+            <Surface style={styles.card}>
+              {!isPremium ? (
+                <View style={styles.premiumRequired}>
+                  <Ionicons name="diamond" size={48} color={theme.colors.accent} />
+                  <Text style={styles.premiumTitle}>Premium Feature</Text>
+                  <Text style={styles.premiumSubtitle}>
+                    Upgrade to Premium to share travel tips with the community
+                  </Text>
+                </View>
+              ) : (
+                <>
+                  <Text style={styles.sectionDescription}>
+                    Share helpful tips for future travelers (up to 5 tips)
+                  </Text>
+
+                  <TextInput
+                    style={styles.tipsInput}
+                    placeholder="• Best time to visit is early morning&#10;• Bring water and sunscreen&#10;• Book tickets online to skip the line&#10;• Local guide highly recommended&#10;• Great for photography at sunset"
+                    placeholderTextColor={theme.colors.textLight}
+                    multiline
+                    numberOfLines={6}
+                    value={tipsText}
+                    onChangeText={setTipsText}
+                    textAlignVertical="top"
+                  />
+
+                  <Text style={styles.tipsHint}>
+                    💡 Start each line with • or - for bullet points
+                  </Text>
+
+                  {parseTips().length > 0 && (
+                    <View style={styles.tipsPreview}>
+                      <Text style={styles.tipsPreviewTitle}>Preview ({parseTips().length}/5)</Text>
+                      {parseTips().map((tip, index) => (
+                        <View key={index} style={styles.tipItem}>
+                          <Ionicons name="checkmark-circle" size={16} color={theme.colors.primary} />
+                          <Text style={styles.tipText}>{tip}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+
+                  {parseTips().length === 0 && tipsText.length === 0 && (
+                    <View style={styles.emptyState}>
+                      <Ionicons name="bulb-outline" size={48} color={theme.colors.textLight} />
+                      <Text style={styles.emptyText}>No tips yet</Text>
+                      <Text style={styles.emptySubtext}>
+                        Help future travelers with your insights
+                      </Text>
+                    </View>
+                  )}
+                </>
+              )}
+            </Surface>
+          </View>
+
+          <View style={{ height: theme.spacing.xxl }} />
+        </ScrollView>
       </View>
     </Modal>
   );
@@ -381,53 +384,75 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontWeight: '700',
   },
-  tabBar: {
-    flexDirection: 'row',
-    backgroundColor: theme.colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-  },
-  tab: {
+  scrollView: {
     flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: theme.spacing.xl,
+  },
+  section: {
+    paddingHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
+    marginTop: theme.spacing.md,
+  },
+  sectionHeader: {
+    marginBottom: theme.spacing.md,
+  },
+  sectionTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: theme.spacing.md,
-    gap: theme.spacing.xs,
-  },
-  tabActive: {
-    borderBottomWidth: 2,
-    borderBottomColor: theme.colors.primary,
-  },
-  tabText: {
-    ...theme.typography.body,
-    color: theme.colors.textLight,
-    fontWeight: '500',
-  },
-  tabTextActive: {
-    color: theme.colors.primary,
-    fontWeight: '700',
-  },
-  tabContent: {
-    flex: 1,
-    padding: theme.spacing.lg,
+    gap: theme.spacing.sm,
   },
   sectionTitle: {
     ...theme.typography.h3,
     color: theme.colors.text,
     fontWeight: '700',
-    marginBottom: theme.spacing.xs,
   },
-  sectionSubtitle: {
+  countBadge: {
+    backgroundColor: theme.colors.primary,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 2,
+    borderRadius: theme.borderRadius.sm,
+  },
+  countBadgeText: {
+    ...theme.typography.caption,
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 10,
+  },
+  premiumBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(255, 215, 0, 0.15)',
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 2,
+    borderRadius: theme.borderRadius.sm,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 215, 0, 0.3)',
+  },
+  premiumBadgeText: {
+    ...theme.typography.caption,
+    color: '#B8860B',
+    fontWeight: '700',
+    fontSize: 9,
+  },
+  card: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    ...theme.shadows.sm,
+  },
+  sectionDescription: {
     ...theme.typography.body,
     color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
   },
-  // Photos Tab
+  // Photos
   addPhotoButton: {
-    marginBottom: theme.spacing.lg,
-    borderRadius: theme.borderRadius.lg,
+    borderRadius: theme.borderRadius.md,
     overflow: 'hidden',
+    marginBottom: theme.spacing.md,
   },
   addPhotoGradient: {
     flexDirection: 'row',
@@ -447,7 +472,7 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
   },
   photoItem: {
-    width: (width - theme.spacing.lg * 2 - theme.spacing.sm * 2) / 3,
+    width: (width - theme.spacing.lg * 2 - theme.spacing.lg * 2 - theme.spacing.sm * 2) / 3,
     aspectRatio: 1,
     borderRadius: theme.borderRadius.md,
     overflow: 'hidden',
@@ -464,29 +489,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.6)',
     borderRadius: 12,
   },
-  emptyState: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: theme.spacing.xxl * 2,
-  },
-  emptyStateText: {
-    ...theme.typography.h3,
-    color: theme.colors.textSecondary,
-    marginTop: theme.spacing.md,
-  },
-  emptyStateSubtext: {
-    ...theme.typography.body,
-    color: theme.colors.textLight,
-    marginTop: theme.spacing.xs,
-  },
-  // Diary Tab
+  // Diary
   diaryInput: {
     ...theme.typography.body,
     color: theme.colors.text,
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.background,
+    borderRadius: theme.borderRadius.md,
     padding: theme.spacing.md,
-    minHeight: 300,
+    minHeight: 200,
     borderWidth: 1,
     borderColor: theme.colors.border,
   },
@@ -496,14 +506,14 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
     textAlign: 'right',
   },
-  // Tips Tab
+  // Tips
   tipsInput: {
     ...theme.typography.body,
     color: theme.colors.text,
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.background,
+    borderRadius: theme.borderRadius.md,
     padding: theme.spacing.md,
-    minHeight: 200,
+    minHeight: 150,
     borderWidth: 1,
     borderColor: theme.colors.border,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
@@ -515,10 +525,10 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   tipsPreview: {
-    marginTop: theme.spacing.lg,
+    marginTop: theme.spacing.md,
     padding: theme.spacing.md,
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.background,
+    borderRadius: theme.borderRadius.md,
     borderWidth: 1,
     borderColor: theme.colors.border,
   },
@@ -543,10 +553,10 @@ const styles = StyleSheet.create({
   premiumRequired: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: theme.spacing.xxl * 2,
+    paddingVertical: theme.spacing.xl,
   },
   premiumTitle: {
-    ...theme.typography.h2,
+    ...theme.typography.h3,
     color: theme.colors.text,
     fontWeight: '700',
     marginTop: theme.spacing.md,
@@ -556,6 +566,23 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     textAlign: 'center',
     marginTop: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.lg,
+  },
+  // Empty States
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.xl,
+  },
+  emptyText: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    marginTop: theme.spacing.sm,
+  },
+  emptySubtext: {
+    ...theme.typography.caption,
+    color: theme.colors.textLight,
+    marginTop: theme.spacing.xs / 2,
+    textAlign: 'center',
   },
 });
