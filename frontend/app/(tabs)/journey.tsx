@@ -8,8 +8,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
 import { useAuth } from '../../contexts/AuthContext';
-import CircularProgress from '../../components/CircularProgress';
-import ProgressBar from '../../components/ProgressBar';
+import { CircularProgress } from '../../components/CircularProgress';
+import { ProgressBar } from '../../components/ProgressBar';
 
 const BACKEND_URL = Platform.OS === 'web' ? '' : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
 
