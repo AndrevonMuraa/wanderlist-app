@@ -264,7 +264,18 @@ export default function LandmarkDetailScreen() {
         <Text style={styles.headerTitleWhite} numberOfLines={1}>
           {landmark.name}
         </Text>
-        <View style={styles.headerRight} />
+        <TouchableOpacity
+          onPress={handleToggleBucketList}
+          style={styles.headerRight}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          disabled={bucketListLoading}
+        >
+          <Ionicons
+            name={inBucketList ? "heart" : "heart-outline"}
+            size={24}
+            color={inBucketList ? "#FF6B6B" : "#fff"}
+          />
+        </TouchableOpacity>
       </LinearGradient>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
