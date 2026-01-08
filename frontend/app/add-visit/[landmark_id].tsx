@@ -161,7 +161,7 @@ export default function AddVisitScreen() {
       let shouldCelebrate = false;
       let celebType: 'landmark' | 'country' | 'continent' | 'milestone' = 'landmark';
 
-      // Priority: Continent > Country > Rank Up
+      // Priority: Continent > Country > Rank Up > Streak Milestone
       if (result.continent_completed) {
         celebrationMessage = `🌍 CONTINENT MASTERED!\n\nYou've completed all countries in ${result.completed_continent}!\n\n+${result.points_earned} points + 200 BONUS points!`;
         shouldCelebrate = true;
@@ -174,6 +174,15 @@ export default function AddVisitScreen() {
         celebrationMessage = `⭐ RANK UP!\n\nYou've advanced to ${newRank.name}!\n\n${newRank.description}\n\n+${result.points_earned} points earned!`;
         shouldCelebrate = true;
         celebType = 'milestone';
+      } else if (result.streak_milestone_reached) {
+        celebrationMessage = `🔥 ${result.new_milestone}-DAY STREAK!\n\nAmazing dedication! You've visited landmarks ${result.new_milestone} days in a row!\n\nKeep the fire burning! 🔥`;
+        shouldCelebrate = true;
+        celebType = 'milestone';
+      }
+
+      // Add current streak info if it's significant
+      if (result.current_streak >= 3 && !result.streak_milestone_reached) {
+        celebrationMessage += `\n\n🔥 ${result.current_streak}-day streak going!`;
       }
 
       // Add badge info if available
@@ -184,6 +193,11 @@ export default function AddVisitScreen() {
       // Add rank up mention even if there's a country/continent completion
       if (rankedUp && newRank && (result.country_completed || result.continent_completed)) {
         celebrationMessage += `\n\n⭐ BONUS: You also ranked up to ${newRank.name}!`;
+      }
+      
+      // Add streak milestone mention even if there's a higher priority achievement
+      if (result.streak_milestone_reached && (result.country_completed || result.continent_completed || rankedUp)) {
+        celebrationMessage += `\n\n🔥 BONUS: ${result.new_milestone}-day streak reached!`;
       }
 
       // Trigger celebration animation
