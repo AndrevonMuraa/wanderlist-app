@@ -214,6 +214,13 @@ export default function AddVisitScreen() {
           isPremium={userTier === 'premium'}
         />
       )}
+
+      {/* Celebration Effect */}
+      <CelebrationEffect
+        show={showCelebration}
+        type={celebrationType}
+        onComplete={() => setShowCelebration(false)}
+      />
     </SafeAreaView>
   );
 }
