@@ -284,8 +284,12 @@ export default function AboutScreen() {
               {expandedSection === 'points' && (
                 <View style={styles.expandableContent}>
                   <Text style={styles.expandableText}>
-                    • <Text style={styles.bold}>Official Landmarks:</Text> 10 points per visit{'\n'}
-                    • <Text style={styles.bold}>Premium Landmarks:</Text> 25 points per visit{'\n'}
+                    <Text style={styles.bold}>Landmark Visits:</Text>{'\n'}
+                    • Official Landmarks: 10 points per visit{'\n'}
+                    • Premium Landmarks: 25 points per visit{'\n\n'}
+                    <Text style={styles.bold}>Completion Bonuses:</Text>{'\n'}
+                    • Country Completion: 50 bonus points{'\n'}
+                    • Continent Completion: 200 bonus points{'\n\n'}
                     • <Text style={styles.bold}>Leaderboard:</Text> Compete globally or with friends{'\n'}
                     • <Text style={styles.bold}>Rankings:</Text> Climb the ranks to become a legend
                   </Text>
