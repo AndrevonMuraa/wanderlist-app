@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, Platform } from 'react-native';
-import { Text, ActivityIndicator, Chip } from 'react-native-paper';
+import { 
+  View, 
+  StyleSheet, 
+  ScrollView, 
+  TouchableOpacity, 
+  Platform,
+  Dimensions 
+} from 'react-native';
+import { Text, ActivityIndicator, Surface } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
-import LandmarkMap from '../../components/LandmarkMap';
-import { MapView, Marker } from '../../components/MapComponents';
 
-// For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
-// For mobile, use the external URL
 const BACKEND_URL = Platform.OS === 'web' 
   ? '' 
   : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
+
 const { width } = Dimensions.get('window');
 
-// Helper to get token
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
     return localStorage.getItem('auth_token');
@@ -38,8 +41,6 @@ interface Landmark {
   country_name: string;
   continent: string;
   description: string;
-  image_url: string;
-  images?: string[];
   facts?: LandmarkFact[];
   best_time_to_visit?: string;
   duration?: string;
@@ -47,16 +48,15 @@ interface Landmark {
   latitude?: number | null;
   longitude?: number | null;
   category: string;
+  points: number;
   upvotes: number;
+  is_locked?: boolean;
 }
-
 
 export default function LandmarkDetailScreen() {
   const { landmark_id } = useLocalSearchParams();
   const [landmark, setLandmark] = useState<Landmark | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [northernLightsVisits, setNorthernLightsVisits] = useState<any[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -66,27 +66,15 @@ export default function LandmarkDetailScreen() {
   const fetchLandmark = async () => {
     try {
       const token = await getToken();
-      console.log('Fetching landmark:', landmark_id);
-      
       const response = await fetch(`${BACKEND_URL}/api/landmarks/${landmark_id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
 
-      console.log('Landmark API response:', response.status);
-
       if (response.ok) {
         const data = await response.json();
-        console.log('Landmark loaded:', data.name);
         setLandmark(data);
-        
-        // If Northern Lights, fetch user's visits
-        if (data.name === 'Northern Lights') {
-          fetchNorthernLightsVisits(token);
-        }
-      } else {
-        console.error('Failed to fetch landmark:', response.status);
       }
     } catch (error) {
       console.error('Error fetching landmark:', error);
@@ -95,807 +83,576 @@ export default function LandmarkDetailScreen() {
     }
   };
 
-  const fetchNorthernLightsVisits = async (token: string | null) => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/visits`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+  const handleMarkAsVisited = () => {
+    router.push(`/add-visit/${landmark_id}?name=${encodeURIComponent(landmark?.name || '')}`);
+  };
 
-      if (response.ok) {
-        const visits = await response.json();
-        // Filter visits for Northern Lights that have location data
-        const nlVisits = visits.filter((visit: any) => 
-          visit.landmark_id === landmark_id && 
-          visit.visit_location && 
-          visit.visit_location.latitude && 
-          visit.visit_location.longitude
-        );
-        setNorthernLightsVisits(nlVisits);
-      }
-    } catch (error) {
-      console.error('Error fetching visits:', error);
+  const getDifficultyColor = (difficulty?: string) => {
+    if (!difficulty) return theme.colors.textLight;
+    switch (difficulty.toLowerCase()) {
+      case 'easy':
+        return '#4CAF50';
+      case 'moderate':
+        return '#FFA726';
+      case 'challenging':
+        return '#FF6B6B';
+      default:
+        return theme.colors.textLight;
     }
   };
 
-  const handleMarkAsVisited = () => {
-    router.push(`/add-visit/${landmark_id}`);
+  const getDifficultyIcon = (difficulty?: string) => {
+    if (!difficulty) return 'help-circle';
+    switch (difficulty.toLowerCase()) {
+      case 'easy':
+        return 'walk';
+      case 'moderate':
+        return 'trail-sign';
+      case 'challenging':
+        return 'fitness';
+      default:
+        return 'help-circle';
+    }
   };
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-      </View>
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <Text style={styles.loadingText}>Loading landmark...</Text>
+        </View>
+      </SafeAreaView>
     );
   }
 
   if (!landmark) {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
-        <View style={styles.centerContainer}>
-          <Ionicons name="location-outline" size={64} color={theme.colors.border} />
-          <Text style={styles.notFoundText}>Landmark not found</Text>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backToExploreButton}>
-            <Text style={styles.backToExploreText}>Back to Explore</Text>
+        <View style={styles.errorContainer}>
+          <Ionicons name="alert-circle" size={48} color={theme.colors.accent} />
+          <Text style={styles.errorText}>Landmark not found</Text>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Text style={styles.backButtonText}>Go Back</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
   }
 
-  // Get data from API or use defaults
-  const images = landmark.images && landmark.images.length > 0 ? landmark.images : [landmark.image_url];
-  const facts = landmark.facts && landmark.facts.length > 0 ? landmark.facts : [
-    {
-      title: 'Historic Significance',
-      text: landmark.description || 'A remarkable landmark with rich cultural heritage and historical importance.',
-      icon: 'book-outline'
-    },
-    {
-      title: 'Architectural Marvel',
-      text: 'Known for its distinctive architecture and design that reflects the cultural identity of the region.',
-      icon: 'business-outline'
-    },
-    {
-      title: 'Cultural Heritage',
-      text: 'A testament to human creativity and ingenuity, attracting visitors from around the world.',
-      icon: 'star-outline'
-    }
-  ];
-  const bestTimeToVisit = landmark.best_time_to_visit || 'Year-round';
-  const duration = landmark.duration || '2-3 hours';
-  const difficulty = landmark.difficulty || 'Easy';
-
-  const currentImage = images[selectedImageIndex] || landmark.image_url;
+  const isPremium = landmark.category === 'premium';
 
   return (
-    <View style={styles.container}>
-      {/* Background Image - Fixed */}
-      <Image
-        source={{ uri: currentImage }}
-        style={styles.backgroundImage}
-        blurRadius={0}
-      />
-      
-      {/* Dark overlay for readability */}
-      <LinearGradient
-        colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0.9)']}
-        style={styles.backgroundOverlay}
-      />
-
-      <SafeAreaView style={styles.safeArea} edges={['top']}>
-        {/* Back Button - Floating */}
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <View style={styles.backButtonCircle}>
-            <Ionicons name="arrow-back" size={24} color="#fff" />
-          </View>
-        </TouchableOpacity>
-
-        <ScrollView 
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
+    <SafeAreaView style={styles.container} edges={['top']}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity 
+          onPress={() => router.back()} 
+          style={styles.headerButton}
         >
-          {/* Hero Section with Title */}
-          <View style={styles.heroSection}>
-            <Text style={styles.landmarkName}>{landmark.name}</Text>
-            <View style={styles.locationRow}>
-              <Ionicons name="location" size={18} color="rgba(255,255,255,0.9)" />
-              <Text style={styles.locationText}>{landmark.country_name}</Text>
-            </View>
-          </View>
-
-        {/* Quick Info Cards - Frosted Glass */}
-        <View style={styles.quickInfoContainer}>
-          <View style={styles.quickInfoCard}>
-            <Ionicons name="time-outline" size={24} color="#fff" />
-            <Text style={styles.quickInfoLabel}>Duration</Text>
-            <Text style={styles.quickInfoValue}>{duration}</Text>
-          </View>
-          <View style={styles.quickInfoCard}>
-            <Ionicons name="calendar-outline" size={24} color="#fff" />
-            <Text style={styles.quickInfoLabel}>Best Time</Text>
-            <Text style={styles.quickInfoValue}>{bestTimeToVisit}</Text>
-          </View>
-          <View style={styles.quickInfoCard}>
-            <Ionicons name="speedometer-outline" size={24} color="#fff" />
-            <Text style={styles.quickInfoLabel}>Difficulty</Text>
-            <Text style={styles.quickInfoValue}>{difficulty}</Text>
-          </View>
+          <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
+        </TouchableOpacity>
+        <View style={styles.headerTitleContainer}>
+          <Text style={styles.headerTitle} numberOfLines={1}>
+            {landmark.name}
+          </Text>
         </View>
+        <View style={styles.headerButton} />
+      </View>
 
-        {/* Description - Frosted Glass Card */}
-        <View style={styles.contentCard}>
-          <Text style={styles.cardTitle}>About</Text>
-          <Text style={styles.cardText}>{landmark.description}</Text>
-        </View>
-
-        {/* Location Map - Special handling for Northern Lights */}
-        {landmark.name === 'Northern Lights' ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>🌌 Your Observation Locations</Text>
-            <Text style={styles.northernLightsInfo}>
-              The Northern Lights can be observed from various Arctic locations. 
-              {northernLightsVisits.length > 0 
-                ? ` You've logged ${northernLightsVisits.length} observation${northernLightsVisits.length > 1 ? 's' : ''}!`
-                : ' Mark your first visit to pin your observation point!'}
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        {/* Hero Section - Icon Based */}
+        <View style={styles.heroSection}>
+          <View style={[
+            styles.landmarkIconLarge,
+            isPremium ? styles.landmarkIconPremium : styles.landmarkIconOfficial
+          ]}>
+            <Ionicons 
+              name={isPremium ? "diamond" : "location"} 
+              size={64} 
+              color={isPremium ? "#FFD700" : theme.colors.primary} 
+            />
+          </View>
+          
+          <Text style={styles.landmarkName}>{landmark.name}</Text>
+          
+          <View style={styles.locationRow}>
+            <Ionicons name="location-outline" size={16} color={theme.colors.textSecondary} />
+            <Text style={styles.locationText}>
+              {landmark.country_name} • {landmark.continent}
             </Text>
-            
-            {/* Native Map View */}
-            {Platform.OS !== 'web' && MapView && (
-              <View style={styles.observationMapContainer}>
-                <MapView
-                  style={styles.observationMap}
-                  initialRegion={{
-                    latitude: landmark.latitude || 69.6492,
-                    longitude: landmark.longitude || 18.9553,
-                    latitudeDelta: 30,
-                    longitudeDelta: 30,
-                  }}
-                >
-                  {northernLightsVisits.map((visit, index) => (
-                    <Marker
-                      key={visit.visit_id}
-                      coordinate={{
-                        latitude: visit.visit_location.latitude,
-                        longitude: visit.visit_location.longitude,
-                      }}
-                      title={`Observation ${index + 1}`}
-                      description={visit.comments || 'Northern Lights sighting'}
-                      pinColor="#00ff00"
-                    />
-                  ))}
-                </MapView>
-              </View>
-            )}
-            
-            {/* Web Fallback */}
-            {Platform.OS === 'web' && (
-              <View style={styles.webMapPlaceholder}>
-                <Ionicons name="map" size={48} color={theme.colors.primary} />
-                <Text style={styles.webMapText}>
-                  Interactive map available on mobile devices
-                </Text>
-              </View>
-            )}
-            
-            {/* Observation Stats */}
-            <View style={styles.observationStats}>
-              <View style={styles.statCard}>
-                <Ionicons name="location" size={24} color={theme.colors.primary} />
-                <Text style={styles.statNumber}>{northernLightsVisits.length}</Text>
-                <Text style={styles.statLabel}>Observations</Text>
-              </View>
-              <View style={styles.statCard}>
-                <Ionicons name="pin" size={24} color={theme.colors.accent} />
-                <Text style={styles.statNumber}>
-                  {northernLightsVisits.length > 0 ? 'Active' : 'Pending'}
-                </Text>
-                <Text style={styles.statLabel}>Map Status</Text>
-              </View>
-            </View>
-            
-            {northernLightsVisits.length === 0 && (
-              <View style={styles.northernLightsCard}>
-                <Ionicons name="add-circle" size={24} color={theme.colors.primary} />
-                <Text style={styles.northernLightsCardText}>
-                  Click "Mark as Visited" below to add your first observation point!
-                </Text>
-              </View>
-            )}
           </View>
-        ) : (
-          <View style={styles.coordinatesCard}>
-            <View style={styles.coordinateRow}>
-              <View style={styles.coordinateItem}>
-                <Ionicons name="navigate" size={16} color="rgba(255,255,255,0.7)" />
+
+          <View style={styles.badgesRow}>
+            {isPremium && (
+              <View style={styles.premiumBadge}>
+                <Ionicons name="diamond" size={12} color="#B8860B" />
+                <Text style={styles.premiumBadgeText}>PREMIUM</Text>
+              </View>
+            )}
+            <View style={styles.pointsBadge}>
+              <Ionicons name="star" size={12} color="#FFD700" />
+              <Text style={styles.pointsBadgeText}>{landmark.points} points</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Description Card */}
+        <Surface style={styles.card}>
+          <View style={styles.cardHeader}>
+            <Ionicons name="information-circle" size={24} color={theme.colors.primary} />
+            <Text style={styles.cardTitle}>About</Text>
+          </View>
+          <Text style={styles.description}>{landmark.description}</Text>
+        </Surface>
+
+        {/* Quick Info Grid */}
+        <View style={styles.quickInfoGrid}>
+          {landmark.best_time_to_visit && (
+            <Surface style={styles.quickInfoCard}>
+              <Ionicons name="calendar" size={28} color={theme.colors.primary} />
+              <Text style={styles.quickInfoLabel}>Best Time</Text>
+              <Text style={styles.quickInfoValue}>{landmark.best_time_to_visit}</Text>
+            </Surface>
+          )}
+
+          {landmark.duration && (
+            <Surface style={styles.quickInfoCard}>
+              <Ionicons name="time" size={28} color={theme.colors.primary} />
+              <Text style={styles.quickInfoLabel}>Duration</Text>
+              <Text style={styles.quickInfoValue}>{landmark.duration}</Text>
+            </Surface>
+          )}
+
+          {landmark.difficulty && (
+            <Surface style={styles.quickInfoCard}>
+              <Ionicons 
+                name={getDifficultyIcon(landmark.difficulty)} 
+                size={28} 
+                color={getDifficultyColor(landmark.difficulty)} 
+              />
+              <Text style={styles.quickInfoLabel}>Difficulty</Text>
+              <Text style={[
+                styles.quickInfoValue,
+                { color: getDifficultyColor(landmark.difficulty) }
+              ]}>
+                {landmark.difficulty}
+              </Text>
+            </Surface>
+          )}
+        </View>
+
+        {/* Coordinates Card */}
+        {landmark.latitude && landmark.longitude && (
+          <Surface style={styles.card}>
+            <View style={styles.cardHeader}>
+              <Ionicons name="compass" size={24} color={theme.colors.primary} />
+              <Text style={styles.cardTitle}>Coordinates</Text>
+            </View>
+            <View style={styles.coordinatesRow}>
+              <View style={styles.coordinate}>
                 <Text style={styles.coordinateLabel}>Latitude</Text>
                 <Text style={styles.coordinateValue}>
-                  {landmark.latitude !== null && landmark.latitude !== undefined 
-                    ? `${landmark.latitude.toFixed(6)}°` 
-                    : 'N/A'}
+                  {landmark.latitude.toFixed(6)}°
                 </Text>
               </View>
               <View style={styles.coordinateDivider} />
-              <View style={styles.coordinateItem}>
-                <Ionicons name="compass" size={16} color="rgba(255,255,255,0.7)" />
+              <View style={styles.coordinate}>
                 <Text style={styles.coordinateLabel}>Longitude</Text>
                 <Text style={styles.coordinateValue}>
-                  {landmark.longitude !== null && landmark.longitude !== undefined 
-                    ? `${landmark.longitude.toFixed(6)}°` 
-                    : 'N/A'}
+                  {landmark.longitude.toFixed(6)}°
                 </Text>
               </View>
             </View>
-          </View>
+          </Surface>
         )}
 
-        {/* Historical & Cultural Facts - Frosted Glass Cards */}
-        <View style={styles.contentCard}>
-          <Text style={styles.cardTitle}>Discover More</Text>
-          {facts.map((fact, index) => (
-            <View key={index} style={styles.factCard}>
-              <View style={styles.factHeader}>
-                <View style={styles.factIcon}>
-                  <Ionicons name={fact.icon as any} size={24} color="#fff" />
-                </View>
-                {fact.title && <Text style={styles.factTitle}>{fact.title}</Text>}
-              </View>
-              <Text style={styles.factText}>{fact.text}</Text>
+        {/* Facts Card */}
+        {landmark.facts && landmark.facts.length > 0 && (
+          <Surface style={styles.card}>
+            <View style={styles.cardHeader}>
+              <Ionicons name="bulb" size={24} color={theme.colors.primary} />
+              <Text style={styles.cardTitle}>Did You Know?</Text>
             </View>
-          ))}
-        </View>
+            {landmark.facts.map((fact, index) => (
+              <View key={index} style={styles.factItem}>
+                <View style={styles.factIconContainer}>
+                  <Ionicons 
+                    name={fact.icon as any} 
+                    size={20} 
+                    color={theme.colors.primary} 
+                  />
+                </View>
+                <View style={styles.factContent}>
+                  <Text style={styles.factTitle}>{fact.title}</Text>
+                  <Text style={styles.factText}>{fact.text}</Text>
+                </View>
+              </View>
+            ))}
+          </Surface>
+        )}
 
+        {/* Upvotes Card */}
+        {landmark.category === 'user_suggested' && (
+          <Surface style={styles.card}>
+            <View style={styles.cardHeader}>
+              <Ionicons name="heart" size={24} color={theme.colors.accent} />
+              <Text style={styles.cardTitle}>Community</Text>
+            </View>
+            <View style={styles.upvotesRow}>
+              <Ionicons name="arrow-up-circle" size={20} color={theme.colors.primary} />
+              <Text style={styles.upvotesText}>
+                {landmark.upvotes} {landmark.upvotes === 1 ? 'upvote' : 'upvotes'}
+              </Text>
+            </View>
+          </Surface>
+        )}
+
+        <View style={{ height: 100 }} />
       </ScrollView>
 
-      {/* Floating Action Button - Mark as Visited */}
-      <View style={styles.floatingButtonContainer}>
-        <TouchableOpacity
-          onPress={handleMarkAsVisited}
-          style={styles.floatingButton}
-          activeOpacity={0.9}
-        >
-          <LinearGradient
-            colors={[theme.colors.primary, theme.colors.primaryDark]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.floatingButtonGradient}
+      {/* Floating Action Button */}
+      {!landmark.is_locked && (
+        <View style={styles.fabContainer}>
+          <TouchableOpacity 
+            style={styles.fab}
+            onPress={handleMarkAsVisited}
+            activeOpacity={0.8}
           >
-            <Ionicons name="checkmark-circle" size={28} color="#fff" />
-            <Text style={styles.floatingButtonText}>Mark as Visited</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View>
+            <LinearGradient
+              colors={[theme.colors.primary, theme.colors.secondary]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.fabGradient}
+            >
+              <Ionicons name="checkmark-circle" size={24} color="#fff" />
+              <Text style={styles.fabText}>Mark as Visited</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+      )}
 
+      {/* Locked Overlay */}
+      {landmark.is_locked && (
+        <View style={styles.fabContainer}>
+          <TouchableOpacity 
+            style={styles.fab}
+            onPress={() => {/* Show upgrade modal */}}
+            activeOpacity={0.8}
+          >
+            <View style={styles.fabLocked}>
+              <Ionicons name="lock-closed" size={24} color={theme.colors.accent} />
+              <Text style={styles.fabTextLocked}>Upgrade to Visit</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
-  </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: theme.colors.background,
   },
-  backgroundImage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    width: '100%',
-    height: '100%',
-  },
-  backgroundOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  safeArea: {
+  loadingContainer: {
     flex: 1,
-  },
-  scrollContent: {
-    paddingTop: 60, // Space for back button
-    paddingBottom: theme.spacing.xxl,
-  },
-  heroSection: {
-    paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.xl,
-    paddingBottom: theme.spacing.lg,
-    marginBottom: theme.spacing.md,
-  },
-  backButton: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 60 : 20,
-    left: theme.spacing.md,
-    zIndex: 10,
-  },
-  backButtonCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    backdropFilter: 'blur(10px)',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
-  landmarkName: {
-    ...theme.typography.h1,
-    color: '#fff',
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: theme.spacing.sm,
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
-  },
-  locationRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  locationText: {
+  loadingText: {
     ...theme.typography.body,
-    color: 'rgba(255,255,255,0.9)',
-    marginLeft: theme.spacing.xs,
-    fontSize: 16,
+    color: theme.colors.textSecondary,
+    marginTop: theme.spacing.md,
   },
-  centerContainer: {
+  errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: theme.spacing.xl,
   },
-  notFoundText: {
+  errorText: {
     ...theme.typography.h3,
-    color: theme.colors.textLight,
+    color: theme.colors.text,
     marginTop: theme.spacing.md,
-    marginBottom: theme.spacing.lg,
   },
-  backToExploreButton: {
+  backButton: {
+    marginTop: theme.spacing.lg,
     paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
     backgroundColor: theme.colors.primary,
     borderRadius: theme.borderRadius.md,
   },
-  backToExploreText: {
+  backButtonText: {
     ...theme.typography.body,
     color: '#fff',
-    fontWeight: '600',
+    fontWeight: '700',
   },
-  heroContainer: {
-    height: 400,
-    position: 'relative',
-  },
-  heroImage: {
-    width: '100%',
-    height: '100%',
-  },
-  heroOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    padding: theme.spacing.md,
-  },
-  backButton: {
-    alignSelf: 'flex-start',
-  },
-  backButtonCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
     backgroundColor: theme.colors.surface,
+  },
+  headerButton: {
+    padding: theme.spacing.xs,
+    width: 40,
+  },
+  headerTitleContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  headerTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '700',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  // Hero Section
+  heroSection: {
+    alignItems: 'center',
+    paddingVertical: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.lg,
+  },
+  landmarkIconLarge: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    ...theme.shadows.sm,
+    marginBottom: theme.spacing.lg,
   },
-  heroContent: {
-    marginBottom: theme.spacing.md,
+  landmarkIconOfficial: {
+    backgroundColor: 'rgba(32, 178, 170, 0.1)',
+    borderWidth: 3,
+    borderColor: 'rgba(32, 178, 170, 0.3)',
+  },
+  landmarkIconPremium: {
+    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+    borderWidth: 3,
+    borderColor: 'rgba(255, 215, 0, 0.4)',
   },
   landmarkName: {
-    ...theme.typography.display,
-    color: '#fff',
+    ...theme.typography.h1,
+    color: theme.colors.text,
+    fontWeight: '700',
+    textAlign: 'center',
     marginBottom: theme.spacing.sm,
   },
   locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 4,
+    marginBottom: theme.spacing.md,
   },
   locationText: {
     ...theme.typography.body,
-    color: 'rgba(255,255,255,0.9)',
-    marginLeft: theme.spacing.xs,
+    color: theme.colors.textSecondary,
   },
-  thumbnailContainer: {
-    marginTop: theme.spacing.md,
-    marginBottom: theme.spacing.md,
-  },
-  thumbnailContent: {
-    paddingHorizontal: theme.spacing.md,
+  badgesRow: {
+    flexDirection: 'row',
     gap: theme.spacing.sm,
   },
-  thumbnail: {
-    width: 80,
-    height: 80,
-    borderRadius: theme.borderRadius.md,
-    marginRight: theme.spacing.sm,
-    opacity: 0.6,
-  },
-  thumbnailSelected: {
-    opacity: 1,
-    borderWidth: 3,
-    borderColor: theme.colors.primary,
-  },
-  quickInfoContainer: {
+  premiumBadge: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: theme.spacing.md,
-    marginBottom: theme.spacing.lg,
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(255, 215, 0, 0.15)',
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs / 2,
+    borderRadius: theme.borderRadius.sm,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 215, 0, 0.3)',
+  },
+  premiumBadgeText: {
+    ...theme.typography.caption,
+    color: '#B8860B',
+    fontWeight: '700',
+    fontSize: 10,
+  },
+  pointsBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: theme.colors.surface,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs / 2,
+    borderRadius: theme.borderRadius.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  pointsBadgeText: {
+    ...theme.typography.caption,
+    color: theme.colors.text,
+    fontWeight: '600',
+    fontSize: 11,
+  },
+  // Cards
+  card: {
+    marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.sm,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
+  },
+  cardTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '700',
+  },
+  description: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    lineHeight: 24,
+  },
+  // Quick Info Grid
+  quickInfoGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: theme.spacing.lg,
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
   },
   quickInfoCard: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    backdropFilter: 'blur(10px)',
+    flex: 1,
+    minWidth: (width - theme.spacing.lg * 2 - theme.spacing.sm) / 2,
     padding: theme.spacing.md,
     borderRadius: theme.borderRadius.lg,
-    flex: 1,
-    marginHorizontal: theme.spacing.xs,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    alignItems: 'center',
+    backgroundColor: theme.colors.surface,
     ...theme.shadows.sm,
   },
   quickInfoLabel: {
     ...theme.typography.caption,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: theme.colors.textSecondary,
     marginTop: theme.spacing.xs,
   },
   quickInfoValue: {
-    ...theme.typography.labelSmall,
-    color: '#fff',
-    fontWeight: '600',
-    marginTop: theme.spacing.xs / 2,
+    ...theme.typography.body,
+    color: theme.colors.text,
+    fontWeight: '700',
+    marginTop: 2,
     textAlign: 'center',
   },
-  section: {
-    paddingHorizontal: theme.spacing.md,
-    marginBottom: theme.spacing.xl,
-  },
-  sectionTitle: {
-    ...theme.typography.h2,
-    color: theme.colors.text,
-    marginBottom: theme.spacing.md,
-  },
-  // Coordinates Card Styles - Compact Version
-  coordinatesCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.12)',
-    backdropFilter: 'blur(10px)',
-    borderRadius: theme.borderRadius.md,
-    marginHorizontal: theme.spacing.md,
-    marginBottom: theme.spacing.md,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.25)',
-    overflow: 'hidden',
-  },
-  coordinateRow: {
+  // Coordinates
+  coordinatesRow: {
     flexDirection: 'row',
-    paddingVertical: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.md,
+    alignItems: 'center',
   },
-  coordinateItem: {
+  coordinate: {
     flex: 1,
     alignItems: 'center',
   },
   coordinateDivider: {
     width: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    marginHorizontal: theme.spacing.xs,
+    height: 40,
+    backgroundColor: theme.colors.border,
+    marginHorizontal: theme.spacing.md,
   },
   coordinateLabel: {
     ...theme.typography.caption,
-    color: 'rgba(255, 255, 255, 0.6)',
-    marginTop: 2,
-    fontSize: 9,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.xs / 2,
   },
   coordinateValue: {
     ...theme.typography.body,
-    color: '#fff',
-    fontWeight: '600',
-    marginTop: 2,
-    fontSize: 13,
+    color: theme.colors.text,
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
   },
-  descriptionText: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
-    lineHeight: 24,
-  },
-  factCard: {
-    marginBottom: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
-    paddingBottom: theme.spacing.md,
-  },
-  factHeader: {
+  // Facts
+  factItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
   },
-  factIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  factIconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(32, 178, 170, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: theme.spacing.md,
+    marginRight: theme.spacing.sm,
+  },
+  factContent: {
+    flex: 1,
   },
   factTitle: {
-    ...theme.typography.h4,
-    color: '#fff',
-    flex: 1,
-    fontWeight: '600',
+    ...theme.typography.body,
+    color: theme.colors.text,
+    fontWeight: '700',
+    marginBottom: theme.spacing.xs / 2,
   },
   factText: {
     ...theme.typography.body,
-    color: 'rgba(255, 255, 255, 0.85)',
-    lineHeight: 22,
-    paddingLeft: 48 + theme.spacing.md, // Align with title
+    color: theme.colors.textSecondary,
+    lineHeight: 20,
   },
-  tipCard: {
+  // Upvotes
+  upvotesRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.surfaceTinted,
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.md,
-    marginBottom: theme.spacing.sm,
+    gap: theme.spacing.xs,
   },
-  tipText: {
-    ...theme.typography.bodySmall,
+  upvotesText: {
+    ...theme.typography.body,
     color: theme.colors.text,
-    marginLeft: theme.spacing.md,
-    flex: 1,
+    fontWeight: '600',
   },
-  // Floating Action Button Styles
-  floatingButtonContainer: {
+  // Floating Action Button
+  fabContainer: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    paddingHorizontal: theme.spacing.md,
-    paddingBottom: Platform.OS === 'ios' ? theme.spacing.lg : theme.spacing.md,
-    paddingTop: theme.spacing.md,
-    backgroundColor: 'transparent',
+    bottom: theme.spacing.lg,
+    left: theme.spacing.lg,
+    right: theme.spacing.lg,
   },
-  floatingButton: {
+  fab: {
     borderRadius: theme.borderRadius.xl,
     overflow: 'hidden',
-    ...theme.shadows.lg,
+    ...theme.shadows.card,
   },
-  floatingButtonGradient: {
+  fabGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: theme.spacing.md + 4,
-    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+    gap: theme.spacing.sm,
   },
-  floatingButtonText: {
-    ...theme.typography.h4,
-    color: '#fff',
-    marginLeft: theme.spacing.sm,
-    fontWeight: '700',
-    fontSize: 18,
-  },
-  northernLightsInfo: {
-    ...theme.typography.body,
-    color: theme.colors.textLight,
-    lineHeight: 22,
-    marginBottom: theme.spacing.md,
-  },
-  northernLightsCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: theme.colors.primary + '15',
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.md,
-    borderLeftWidth: 4,
-    borderLeftColor: theme.colors.primary,
-  },
-  northernLightsCardText: {
-    ...theme.typography.body,
-    color: theme.colors.text,
-    marginLeft: theme.spacing.md,
-    flex: 1,
-    fontWeight: '500',
-  },
-  observationMapContainer: {
-    borderRadius: theme.borderRadius.md,
-    overflow: 'hidden',
-    marginBottom: theme.spacing.md,
-  },
-  observationMap: {
-    width: '100%',
-    height: 300,
-  },
-  webMapPlaceholder: {
-    height: 300,
-    backgroundColor: theme.colors.primary + '10',
-    borderRadius: theme.borderRadius.md,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: theme.spacing.md,
-  },
-  webMapText: {
-    ...theme.typography.body,
-    color: theme.colors.textLight,
-    marginTop: theme.spacing.sm,
-  },
-  observationStats: {
-    flexDirection: 'row',
-    gap: theme.spacing.md,
-    marginBottom: theme.spacing.md,
-  },
-  statCard: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.md,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: theme.colors.primary + '20',
-  },
-  statNumber: {
+  fabText: {
     ...theme.typography.h3,
-    color: theme.colors.text,
-    marginTop: theme.spacing.xs,
+    color: '#fff',
     fontWeight: '700',
   },
-  statLabel: {
-    ...theme.typography.caption,
-    color: theme.colors.textLight,
-    marginTop: 4,
-  },
-  // Frosted Glass Styles
-  contentCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    backdropFilter: 'blur(10px)',
-    borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.lg,
-    marginHorizontal: theme.spacing.md,
-    marginBottom: theme.spacing.lg,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-    ...theme.shadows.md,
-  },
-  cardTitle: {
-    ...theme.typography.h2,
-    color: '#fff',
-    marginBottom: theme.spacing.md,
-    fontWeight: '600',
-  },
-  cardText: {
-    ...theme.typography.body,
-    color: 'rgba(255, 255, 255, 0.9)',
-    lineHeight: 24,
-  },
-  // Modal Styles
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.xl,
-    padding: theme.spacing.xl,
-    width: width * 0.9,
-    maxWidth: 400,
-    ...theme.shadows.lg,
-  },
-  modalTitle: {
-    ...theme.typography.h2,
-    color: theme.colors.text,
-    marginBottom: theme.spacing.xs,
-    textAlign: 'center',
-  },
-  modalSubtitle: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.lg,
-    textAlign: 'center',
-  },
-  modalOption: {
+  fabLocked: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: theme.spacing.md,
-    backgroundColor: theme.colors.background,
-    borderRadius: theme.borderRadius.md,
-    marginBottom: theme.spacing.md,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-  },
-  modalOptionIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: theme.colors.background,
     justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: theme.spacing.md,
-  },
-  modalOptionText: {
-    flex: 1,
-  },
-  modalOptionTitle: {
-    ...theme.typography.h4,
-    color: theme.colors.text,
-    marginBottom: 2,
-  },
-  modalOptionDesc: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-  },
-  modalCancelButton: {
-    padding: theme.spacing.md,
-    alignItems: 'center',
-    marginTop: theme.spacing.sm,
-  },
-  modalCancelText: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
-    fontWeight: '600',
-  },
-  // Date Picker Styles
-  datePickerContainer: {
+    paddingVertical: theme.spacing.md,
+    gap: theme.spacing.sm,
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.xl,
-    padding: theme.spacing.xl,
-    width: width * 0.9,
-    maxWidth: 400,
-    ...theme.shadows.lg,
+    borderWidth: 2,
+    borderColor: theme.colors.accent,
   },
-  datePicker: {
-    width: '100%',
-    marginVertical: theme.spacing.md,
-  },
-  datePickerButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: theme.spacing.md,
-  },
-  datePickerCancel: {
-    flex: 1,
-    padding: theme.spacing.md,
-    marginRight: theme.spacing.sm,
-    borderRadius: theme.borderRadius.md,
-    backgroundColor: theme.colors.background,
-    alignItems: 'center',
-  },
-  datePickerCancelText: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
-    fontWeight: '600',
-  },
-  datePickerConfirm: {
-    flex: 1,
-    padding: theme.spacing.md,
-    marginLeft: theme.spacing.sm,
-    borderRadius: theme.borderRadius.md,
-    backgroundColor: theme.colors.primary,
-    alignItems: 'center',
-  },
-  datePickerConfirmText: {
-    ...theme.typography.body,
-    color: '#fff',
-    fontWeight: '600',
+  fabTextLocked: {
+    ...theme.typography.h3,
+    color: theme.colors.accent,
+    fontWeight: '700',
   },
 });
-
