@@ -382,6 +382,52 @@ export default function SocialHubScreen() {
           </View>
         )}
 
+        {activity.activity_type === 'country_complete' && (
+          <View style={styles.activityContent}>
+            <LinearGradient
+              colors={['rgba(76, 175, 80, 0.1)', 'rgba(76, 175, 80, 0.05)']}
+              style={styles.completionBanner}
+            >
+              <View style={styles.completionHeader}>
+                <Ionicons name="flag" size={24} color="#4CAF50" />
+                <Text style={styles.completionTitle}>Country Completed! 🎊</Text>
+              </View>
+              <Text style={styles.completionText}>
+                Conquered all <Text style={styles.completionHighlight}>{activity.landmarks_count} landmarks</Text> in{' '}
+                <Text style={styles.completionHighlight}>{activity.country_name}</Text>!
+              </Text>
+              <View style={styles.completionPoints}>
+                <Ionicons name="star" size={16} color="#FFD700" />
+                <Text style={styles.completionPointsText}>+{activity.points_earned} bonus points</Text>
+              </View>
+            </LinearGradient>
+          </View>
+        )}
+
+        {activity.activity_type === 'continent_complete' && (
+          <View style={styles.activityContent}>
+            <LinearGradient
+              colors={['rgba(156, 39, 176, 0.15)', 'rgba(156, 39, 176, 0.05)']}
+              style={styles.completionBanner}
+            >
+              <View style={styles.completionHeader}>
+                <Ionicons name="earth" size={28} color="#9C27B0" />
+                <Text style={[styles.completionTitle, { color: '#9C27B0' }]}>Continent Mastered! 🌍</Text>
+              </View>
+              <Text style={styles.completionText}>
+                Amazing! Completed all <Text style={styles.completionHighlight}>{activity.countries_count} countries</Text> in{' '}
+                <Text style={[styles.completionHighlight, { color: '#9C27B0' }]}>
+                  {activity.continent?.charAt(0).toUpperCase() + activity.continent?.slice(1)}
+                </Text>!
+              </Text>
+              <View style={styles.completionPoints}>
+                <Ionicons name="trophy" size={16} color="#9C27B0" />
+                <Text style={[styles.completionPointsText, { color: '#9C27B0' }]}>+{activity.points_earned} bonus points</Text>
+              </View>
+            </LinearGradient>
+          </View>
+        )}
+
         <View style={styles.activityActions}>
           <TouchableOpacity 
             style={styles.actionButton}
