@@ -184,11 +184,15 @@ class Activity(BaseModel):
     user_id: str
     user_name: str
     user_picture: Optional[str] = None
-    activity_type: str  # "visit", "country_complete", "milestone"
+    activity_type: str  # "visit", "country_complete", "continent_complete", "milestone"
     landmark_id: Optional[str] = None
     landmark_name: Optional[str] = None
     landmark_image: Optional[str] = None
+    country_id: Optional[str] = None
     country_name: Optional[str] = None
+    continent: Optional[str] = None
+    countries_count: Optional[int] = None  # For continent completion
+    landmarks_count: Optional[int] = None  # For country completion
     points_earned: Optional[int] = None
     milestone_count: Optional[int] = None  # For milestone activities
     visit_id: Optional[str] = None  # Link to full visit details with rich content
