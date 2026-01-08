@@ -110,6 +110,12 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: theme.colors.primary,
   },
+  searchButton: {
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   content: {
     flex: 1,
   },
