@@ -823,6 +823,12 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     
     await db.activities.insert_one(activity)
     
+    # Track completion bonuses
+    country_completed = False
+    continent_completed = False
+    completed_country_name = None
+    completed_continent = None
+    
     # Check for country completion bonus
     country_id = landmark.get("country_id")
     if country_id:
@@ -839,6 +845,8 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         # If user just completed the country
         if user_visits_in_country == total_landmarks_in_country:
             country_completion_bonus = 50  # Bonus points for completing a country
+            country_completed = True
+            completed_country_name = landmark.get("country_name")
             
             # Award bonus points to user
             await db.users.update_one(
@@ -888,6 +896,8 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
                 # If user just completed the continent
                 if completed_countries == len(country_ids_in_continent):
                     continent_completion_bonus = 200  # Bonus points for completing a continent
+                    continent_completed = True
+                    completed_continent = continent
                     
                     # Award bonus points to user
                     await db.users.update_one(
@@ -936,12 +946,12 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     visit_response = Visit(**visit)
     visit_dict = visit_response.dict()
     visit_dict["newly_awarded_badges"] = newly_awarded_badges
-    visit_dict["country_completed"] = country_completion_bonus > 0 if 'country_completion_bonus' in locals() else False
-    visit_dict["continent_completed"] = continent_completion_bonus > 0 if 'continent_completion_bonus' in locals() else False
-    if visit_dict["country_completed"]:
-        visit_dict["completed_country_name"] = landmark.get("country_name")
-    if visit_dict["continent_completed"]:
-        visit_dict["completed_continent"] = landmark.get("continent")
+    visit_dict["country_completed"] = country_completed
+    visit_dict["continent_completed"] = continent_completed
+    if country_completed:
+        visit_dict["completed_country_name"] = completed_country_name
+    if continent_completed:
+        visit_dict["completed_continent"] = completed_continent
     
     return visit_dict
 
