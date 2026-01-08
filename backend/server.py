@@ -1822,7 +1822,7 @@ async def get_user_trips(status: Optional[str] = None, current_user: User = Depe
     if status:
         query["status"] = status
     
-    trips = await db.trips.find(query).sort("created_at", -1).to_list(1000)
+    trips = await db.trips.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
     
     # Get landmark counts for each trip
     result = []
