@@ -236,7 +236,6 @@ export default function ExploreCountriesScreen() {
                   
                   {/* Content Overlay */}
                   <View style={styles.countryOverlay}>
-                    <Text style={styles.countryFlag}>{COUNTRY_FLAGS[country.name] || '🌍'}</Text>
                     <Text style={styles.countryName}>{country.name}</Text>
                     <Text style={styles.countryInfo}>{country.landmark_count} landmarks</Text>
                     
@@ -262,7 +261,7 @@ export default function ExploreCountriesScreen() {
                         />
                       </View>
                     </View>
-                  </LinearGradient>
+                  </View>
                   <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
                 </View>
               </TouchableOpacity>
