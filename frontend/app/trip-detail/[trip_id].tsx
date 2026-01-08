@@ -14,8 +14,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
-import theme from '../styles/theme';
-import { BACKEND_URL } from '../utils/config';
+import theme from '../../styles/theme';
+import { BACKEND_URL } from '../../utils/config';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
