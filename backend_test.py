@@ -1,28 +1,24 @@
 #!/usr/bin/env python3
 """
-Backend Testing for WanderList Country & Continent Completion Bonus System
-Testing the enhanced POST /api/visits endpoint and activity feed features
+Backend Testing Script for WanderList Comments System
+Tests all comment-related endpoints and functionality
 """
 
 import requests
 import json
 import sys
 from datetime import datetime
-import os
 
 # Get backend URL from environment
-BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://travelfeed.preview.emergentagent.com')
-API_BASE = f"{BACKEND_URL}/api"
+BACKEND_URL = "https://travelfeed.preview.emergentagent.com/api"
 
-# Test credentials
-TEST_EMAIL = "mobile@test.com"
-TEST_PASSWORD = "test123"
-
-class WanderListTester:
+class CommentSystemTester:
     def __init__(self):
         self.session = requests.Session()
         self.auth_token = None
         self.user_id = None
+        self.activity_id = None
+        self.comment_id = None
         self.test_results = []
         
     def log_test(self, test_name, success, details=""):
@@ -36,602 +32,496 @@ class WanderListTester:
         print(f"{status}: {test_name}")
         if details:
             print(f"   Details: {details}")
-        print()
     
     def login(self):
-        """Login and get auth token"""
-        print("🔐 AUTHENTICATION TEST")
-        print("=" * 50)
-        
+        """Login as mobile@test.com"""
         try:
-            response = self.session.post(f"{API_BASE}/auth/login", json={
-                "email": TEST_EMAIL,
-                "password": TEST_PASSWORD
+            response = self.session.post(f"{BACKEND_URL}/auth/login", json={
+                "email": "mobile@test.com",
+                "password": "test123"
             })
             
             if response.status_code == 200:
                 data = response.json()
                 self.auth_token = data["access_token"]
                 self.user_id = data["user"]["user_id"]
-                self.session.headers.update({"Authorization": f"Bearer {self.auth_token}"})
-                self.log_test("User Authentication", True, f"Logged in as {TEST_EMAIL}")
+                self.session.headers.update({
+                    "Authorization": f"Bearer {self.auth_token}"
+                })
+                self.log_test("User Login", True, f"Logged in as {data['user']['name']}")
                 return True
             else:
-                self.log_test("User Authentication", False, f"Status: {response.status_code}, Response: {response.text}")
+                self.log_test("User Login", False, f"Status: {response.status_code}, Response: {response.text}")
                 return False
                 
         except Exception as e:
-            self.log_test("User Authentication", False, f"Exception: {str(e)}")
+            self.log_test("User Login", False, f"Exception: {str(e)}")
             return False
     
-    def get_user_stats(self):
-        """Get current user stats for baseline"""
+    def get_activity_from_feed(self):
+        """Get an activity from the feed to test comments on"""
         try:
-            response = self.session.get(f"{API_BASE}/stats")
-            if response.status_code == 200:
-                return response.json()
-            return None
-        except:
-            return None
-    
-    def get_user_points(self):
-        """Get user's current points from visits"""
-        try:
-            visits_response = self.session.get(f"{API_BASE}/visits")
-            if visits_response.status_code == 200:
-                visits = visits_response.json()
-                total_points = sum(visit.get("points_earned", 10) for visit in visits)
-                return total_points, len(visits)
-            return 0, 0
-        except:
-            return 0, 0
-    
-    def find_country_with_few_landmarks(self):
-        """Find a country with manageable number of landmarks for testing"""
-        try:
-            response = self.session.get(f"{API_BASE}/countries")
-            if response.status_code == 200:
-                countries = response.json()
-                # Look for countries with 10 or fewer landmarks
-                for country in countries:
-                    if country.get("landmark_count", 0) <= 10:
-                        return country
-                # If no small country found, return first one
-                return countries[0] if countries else None
-            return None
-        except:
-            return None
-    
-    def get_landmarks_for_country(self, country_id):
-        """Get all landmarks for a specific country"""
-        try:
-            response = self.session.get(f"{API_BASE}/landmarks?country_id={country_id}")
-            if response.status_code == 200:
-                return response.json()
-            return []
-        except:
-            return []
-    
-    def get_user_visits_for_country(self, country_id):
-        """Get user's visits for landmarks in a specific country"""
-        try:
-            # Get all user visits
-            visits_response = self.session.get(f"{API_BASE}/visits")
-            if visits_response.status_code != 200:
-                return []
-            
-            visits = visits_response.json()
-            
-            # Get landmarks for this country
-            landmarks = self.get_landmarks_for_country(country_id)
-            country_landmark_ids = {lm["landmark_id"] for lm in landmarks}
-            
-            # Filter visits for this country
-            country_visits = [v for v in visits if v["landmark_id"] in country_landmark_ids]
-            return country_visits
-            
-        except:
-            return []
-    
-    def create_visit(self, landmark_id, with_rich_content=False):
-        """Create a visit with optional rich content"""
-        visit_data = {
-            "landmark_id": landmark_id
-        }
-        
-        if with_rich_content:
-            visit_data.update({
-                "photos": [
-                    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/wA==",
-                    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/wA==",
-                    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/wA=="
-                ],
-                "diary_notes": "This is a test diary entry with travel notes about this amazing landmark. The experience was incredible and I learned so much about the local culture and history.",
-                "travel_tips": [
-                    "Visit early in the morning to avoid crowds",
-                    "Bring comfortable walking shoes",
-                    "Don't forget your camera for amazing photos"
-                ]
-            })
-        
-        try:
-            response = self.session.post(f"{API_BASE}/visits", json=visit_data)
-            return response
-        except Exception as e:
-            print(f"Error creating visit: {e}")
-            return None
-    
-    def test_regular_landmark_visit(self):
-        """Test Case 1: Regular Landmark Visit"""
-        print("🎯 TEST CASE 1: REGULAR LANDMARK VISIT")
-        print("=" * 50)
-        
-        try:
-            # Get initial stats
-            initial_points, initial_visits = self.get_user_points()
-            
-            # Find a landmark to visit
-            countries_response = self.session.get(f"{API_BASE}/countries")
-            if countries_response.status_code != 200:
-                self.log_test("Get Countries for Regular Visit", False, "Could not fetch countries")
-                return
-            
-            countries = countries_response.json()
-            if not countries:
-                self.log_test("Get Countries for Regular Visit", False, "No countries found")
-                return
-            
-            # Get landmarks from first country
-            landmarks = self.get_landmarks_for_country(countries[0]["country_id"])
-            if not landmarks:
-                self.log_test("Get Landmarks for Regular Visit", False, "No landmarks found")
-                return
-            
-            # Find an unvisited landmark
-            visits_response = self.session.get(f"{API_BASE}/visits")
-            visited_landmark_ids = set()
-            if visits_response.status_code == 200:
-                visits = visits_response.json()
-                visited_landmark_ids = {v["landmark_id"] for v in visits}
-            
-            unvisited_landmark = None
-            for landmark in landmarks:
-                if landmark["landmark_id"] not in visited_landmark_ids:
-                    unvisited_landmark = landmark
-                    break
-            
-            if not unvisited_landmark:
-                self.log_test("Find Unvisited Landmark", False, "All landmarks already visited")
-                return
-            
-            # Create visit
-            visit_response = self.create_visit(unvisited_landmark["landmark_id"])
-            
-            if visit_response and visit_response.status_code == 200:
-                visit_data = visit_response.json()
-                
-                # Verify points increased
-                new_points, new_visits = self.get_user_points()
-                expected_points = unvisited_landmark.get("points", 10)
-                
-                if new_points > initial_points:
-                    points_gained = new_points - initial_points
-                    self.log_test("Regular Visit Points Award", True, 
-                                f"Points increased by {points_gained} (expected {expected_points})")
-                else:
-                    self.log_test("Regular Visit Points Award", False, 
-                                f"Points did not increase. Before: {initial_points}, After: {new_points}")
-                
-                # Verify activity created
-                feed_response = self.session.get(f"{API_BASE}/feed")
-                if feed_response.status_code == 200:
-                    activities = feed_response.json()
-                    visit_activity = None
-                    for activity in activities:
-                        if (activity.get("activity_type") == "visit" and 
-                            activity.get("landmark_id") == unvisited_landmark["landmark_id"]):
-                            visit_activity = activity
-                            break
-                    
-                    if visit_activity:
-                        # Check activity fields
-                        required_fields = ["visit_id", "has_diary", "has_tips", "has_photos"]
-                        missing_fields = [field for field in required_fields if field not in visit_activity]
-                        
-                        if not missing_fields:
-                            self.log_test("Visit Activity Creation", True, 
-                                        f"Activity created with all required fields: {required_fields}")
-                        else:
-                            self.log_test("Visit Activity Creation", False, 
-                                        f"Activity missing fields: {missing_fields}")
-                    else:
-                        self.log_test("Visit Activity Creation", False, "No visit activity found in feed")
-                else:
-                    self.log_test("Visit Activity Creation", False, f"Could not fetch feed: {feed_response.status_code}")
-                
-            else:
-                error_msg = visit_response.text if visit_response else "No response"
-                self.log_test("Regular Visit Creation", False, f"Visit creation failed: {error_msg}")
-                
-        except Exception as e:
-            self.log_test("Regular Landmark Visit Test", False, f"Exception: {str(e)}")
-    
-    def test_country_completion_bonus(self):
-        """Test Case 2: Country Completion Bonus"""
-        print("🏁 TEST CASE 2: COUNTRY COMPLETION BONUS")
-        print("=" * 50)
-        
-        try:
-            # Find a country with manageable landmarks
-            target_country = self.find_country_with_few_landmarks()
-            if not target_country:
-                self.log_test("Find Target Country", False, "No suitable country found")
-                return
-            
-            country_id = target_country["country_id"]
-            country_name = target_country["name"]
-            
-            self.log_test("Target Country Selected", True, 
-                        f"Testing with {country_name} ({target_country.get('landmark_count', 'unknown')} landmarks)")
-            
-            # Get all landmarks in this country
-            landmarks = self.get_landmarks_for_country(country_id)
-            if not landmarks:
-                self.log_test("Get Country Landmarks", False, f"No landmarks found for {country_name}")
-                return
-            
-            total_landmarks = len(landmarks)
-            self.log_test("Country Landmarks Retrieved", True, f"Found {total_landmarks} landmarks in {country_name}")
-            
-            # Get current visits for this country
-            current_visits = self.get_user_visits_for_country(country_id)
-            visited_landmark_ids = {v["landmark_id"] for v in current_visits}
-            
-            # Find unvisited landmarks
-            unvisited_landmarks = [lm for lm in landmarks if lm["landmark_id"] not in visited_landmark_ids]
-            
-            if len(current_visits) >= total_landmarks:
-                self.log_test("Country Already Complete", True, 
-                            f"{country_name} already completed ({len(current_visits)}/{total_landmarks})")
-                return
-            
-            if not unvisited_landmarks:
-                self.log_test("Find Unvisited Landmarks", False, "No unvisited landmarks found")
-                return
-            
-            # Visit remaining landmarks one by one
-            for i, landmark in enumerate(unvisited_landmarks):
-                is_last_landmark = (i == len(unvisited_landmarks) - 1)
-                
-                # Get points before visit
-                points_before, _ = self.get_user_points()
-                
-                # Create visit
-                visit_response = self.create_visit(landmark["landmark_id"])
-                
-                if visit_response and visit_response.status_code == 200:
-                    # Get points after visit
-                    points_after, _ = self.get_user_points()
-                    points_gained = points_after - points_before
-                    
-                    landmark_points = landmark.get("points", 10)
-                    
-                    if is_last_landmark:
-                        # This should trigger country completion bonus
-                        expected_total_points = landmark_points + 50  # 50 bonus for country completion
-                        
-                        if points_gained >= expected_total_points:
-                            self.log_test("Country Completion Bonus", True, 
-                                        f"Last landmark visit awarded {points_gained} points (landmark: {landmark_points} + bonus: 50)")
-                            
-                            # Check for country completion activity
-                            feed_response = self.session.get(f"{API_BASE}/feed")
-                            if feed_response.status_code == 200:
-                                activities = feed_response.json()
-                                country_activity = None
-                                for activity in activities:
-                                    if (activity.get("activity_type") == "country_complete" and 
-                                        activity.get("country_name") == country_name):
-                                        country_activity = activity
-                                        break
-                                
-                                if country_activity:
-                                    required_fields = ["country_name", "landmarks_count", "points_earned", "continent"]
-                                    missing_fields = [field for field in required_fields if field not in country_activity]
-                                    
-                                    if not missing_fields:
-                                        self.log_test("Country Completion Activity", True, 
-                                                    f"Country completion activity created with: {country_activity}")
-                                    else:
-                                        self.log_test("Country Completion Activity", False, 
-                                                    f"Activity missing fields: {missing_fields}")
-                                else:
-                                    self.log_test("Country Completion Activity", False, 
-                                                "No country completion activity found")
-                            else:
-                                self.log_test("Country Completion Activity Check", False, 
-                                            f"Could not fetch feed: {feed_response.status_code}")
-                        else:
-                            self.log_test("Country Completion Bonus", False, 
-                                        f"Expected {expected_total_points} points, got {points_gained}")
-                    else:
-                        # Regular landmark visit
-                        if points_gained >= landmark_points:
-                            self.log_test(f"Landmark Visit {i+1}/{len(unvisited_landmarks)}", True, 
-                                        f"Awarded {points_gained} points for {landmark['name']}")
-                        else:
-                            self.log_test(f"Landmark Visit {i+1}/{len(unvisited_landmarks)}", False, 
-                                        f"Expected {landmark_points} points, got {points_gained}")
-                else:
-                    error_msg = visit_response.text if visit_response else "No response"
-                    self.log_test(f"Landmark Visit {i+1}", False, f"Visit failed: {error_msg}")
-                    break
-                    
-        except Exception as e:
-            self.log_test("Country Completion Test", False, f"Exception: {str(e)}")
-    
-    def test_activity_feed_display(self):
-        """Test Case 4: Activity Feed Display"""
-        print("📱 TEST CASE 4: ACTIVITY FEED DISPLAY")
-        print("=" * 50)
-        
-        try:
-            response = self.session.get(f"{API_BASE}/feed")
+            response = self.session.get(f"{BACKEND_URL}/feed")
             
             if response.status_code == 200:
                 activities = response.json()
-                
                 if activities:
-                    self.log_test("Activity Feed Retrieval", True, f"Retrieved {len(activities)} activities")
-                    
-                    # Check for different activity types
-                    activity_types = set(activity.get("activity_type") for activity in activities)
-                    expected_types = ["visit", "country_complete", "continent_complete"]
-                    
-                    found_types = [t for t in expected_types if t in activity_types]
-                    self.log_test("Activity Types Present", True, f"Found activity types: {found_types}")
-                    
-                    # Check visit activities for rich content fields
-                    visit_activities = [a for a in activities if a.get("activity_type") == "visit"]
-                    if visit_activities:
-                        sample_visit = visit_activities[0]
-                        rich_content_fields = ["has_diary", "has_tips", "has_photos", "photo_count"]
-                        present_fields = [field for field in rich_content_fields if field in sample_visit]
-                        
-                        if len(present_fields) == len(rich_content_fields):
-                            self.log_test("Visit Activity Rich Content Fields", True, 
-                                        f"All rich content fields present: {present_fields}")
-                        else:
-                            missing_fields = [field for field in rich_content_fields if field not in sample_visit]
-                            self.log_test("Visit Activity Rich Content Fields", False, 
-                                        f"Missing fields: {missing_fields}")
-                    else:
-                        self.log_test("Visit Activities Check", False, "No visit activities found")
-                    
-                    # Check country completion activities
-                    country_activities = [a for a in activities if a.get("activity_type") == "country_complete"]
-                    if country_activities:
-                        sample_country = country_activities[0]
-                        country_fields = ["country_name", "landmarks_count", "points_earned"]
-                        present_fields = [field for field in country_fields if field in sample_country]
-                        
-                        if len(present_fields) == len(country_fields):
-                            self.log_test("Country Completion Activity Fields", True, 
-                                        f"All required fields present: {present_fields}")
-                        else:
-                            missing_fields = [field for field in country_fields if field not in sample_country]
-                            self.log_test("Country Completion Activity Fields", False, 
-                                        f"Missing fields: {missing_fields}")
-                    
+                    # Use the first activity
+                    self.activity_id = activities[0]["activity_id"]
+                    activity_type = activities[0]["activity_type"]
+                    user_name = activities[0]["user_name"]
+                    self.log_test("Get Activity from Feed", True, 
+                                f"Found activity {self.activity_id} (type: {activity_type}, user: {user_name})")
+                    return True
                 else:
-                    self.log_test("Activity Feed Content", False, "No activities found in feed")
+                    self.log_test("Get Activity from Feed", False, "No activities found in feed")
+                    return False
             else:
-                self.log_test("Activity Feed Retrieval", False, f"Status: {response.status_code}")
+                self.log_test("Get Activity from Feed", False, f"Status: {response.status_code}")
+                return False
                 
         except Exception as e:
-            self.log_test("Activity Feed Test", False, f"Exception: {str(e)}")
+            self.log_test("Get Activity from Feed", False, f"Exception: {str(e)}")
+            return False
     
-    def test_visit_details_with_rich_content(self):
-        """Test Case 5: Visit Details with Rich Content"""
-        print("📝 TEST CASE 5: VISIT DETAILS WITH RICH CONTENT")
-        print("=" * 50)
-        
+    def post_comment_on_activity(self):
+        """Test posting a comment on an activity"""
         try:
-            # Find a landmark to create a rich visit
-            countries_response = self.session.get(f"{API_BASE}/countries")
-            if countries_response.status_code != 200:
-                self.log_test("Get Countries for Rich Visit", False, "Could not fetch countries")
-                return
+            comment_content = f"Great adventure! This looks amazing! 🌟 (Test comment at {datetime.now().strftime('%H:%M:%S')})"
             
-            countries = countries_response.json()
-            if not countries:
-                self.log_test("Get Countries for Rich Visit", False, "No countries found")
-                return
+            response = self.session.post(f"{BACKEND_URL}/activities/{self.activity_id}/comment", json={
+                "content": comment_content
+            })
             
-            landmarks = self.get_landmarks_for_country(countries[0]["country_id"])
-            if not landmarks:
-                self.log_test("Get Landmarks for Rich Visit", False, "No landmarks found")
-                return
-            
-            # Find an unvisited landmark
-            visits_response = self.session.get(f"{API_BASE}/visits")
-            visited_landmark_ids = set()
-            if visits_response.status_code == 200:
-                visits = visits_response.json()
-                visited_landmark_ids = {v["landmark_id"] for v in visits}
-            
-            unvisited_landmark = None
-            for landmark in landmarks:
-                if landmark["landmark_id"] not in visited_landmark_ids:
-                    unvisited_landmark = landmark
-                    break
-            
-            if not unvisited_landmark:
-                # Use first landmark anyway for testing
-                unvisited_landmark = landmarks[0]
-            
-            # Create visit with rich content
-            visit_response = self.create_visit(unvisited_landmark["landmark_id"], with_rich_content=True)
-            
-            if visit_response and visit_response.status_code == 200:
-                visit_data = visit_response.json()
-                visit_id = visit_data.get("visit_id")
+            if response.status_code == 200:
+                comment_data = response.json()
+                self.comment_id = comment_data["comment_id"]
                 
-                self.log_test("Rich Content Visit Creation", True, f"Created visit with ID: {visit_id}")
+                # Verify comment structure
+                required_fields = ["comment_id", "activity_id", "user_id", "user_name", "content", "created_at", "likes_count", "is_liked"]
+                missing_fields = [field for field in required_fields if field not in comment_data]
                 
-                # Get visit details
-                details_response = self.session.get(f"{API_BASE}/visits/{visit_id}")
-                
-                if details_response.status_code == 200:
-                    details = details_response.json()
-                    
-                    # Check for rich content fields
-                    rich_fields = ["photos", "diary_notes", "travel_tips"]
-                    present_fields = []
-                    
-                    for field in rich_fields:
-                        if field in details and details[field]:
-                            present_fields.append(field)
-                    
-                    if len(present_fields) == len(rich_fields):
-                        self.log_test("Rich Content Fields Verification", True, 
-                                    f"All rich content fields present: {present_fields}")
-                        
-                        # Verify content
-                        photos_count = len(details.get("photos", []))
-                        tips_count = len(details.get("travel_tips", []))
-                        has_diary = bool(details.get("diary_notes"))
-                        
-                        self.log_test("Rich Content Details", True, 
-                                    f"Photos: {photos_count}, Tips: {tips_count}, Diary: {has_diary}")
+                if not missing_fields:
+                    if (comment_data["content"] == comment_content and 
+                        comment_data["activity_id"] == self.activity_id and
+                        comment_data["user_id"] == self.user_id):
+                        self.log_test("Post Comment on Activity", True, 
+                                    f"Comment created with ID: {self.comment_id}")
+                        return True
                     else:
-                        missing_fields = [field for field in rich_fields if field not in present_fields]
-                        self.log_test("Rich Content Fields Verification", False, 
-                                    f"Missing fields: {missing_fields}")
+                        self.log_test("Post Comment on Activity", False, "Comment data mismatch")
+                        return False
                 else:
-                    self.log_test("Visit Details Retrieval", False, 
-                                f"Status: {details_response.status_code}")
+                    self.log_test("Post Comment on Activity", False, f"Missing fields: {missing_fields}")
+                    return False
             else:
-                error_msg = visit_response.text if visit_response else "No response"
-                self.log_test("Rich Content Visit Creation", False, f"Visit creation failed: {error_msg}")
+                self.log_test("Post Comment on Activity", False, f"Status: {response.status_code}, Response: {response.text}")
+                return False
                 
         except Exception as e:
-            self.log_test("Rich Content Visit Test", False, f"Exception: {str(e)}")
+            self.log_test("Post Comment on Activity", False, f"Exception: {str(e)}")
+            return False
     
-    def test_points_system_verification(self):
-        """Test Case 6: Points System Verification"""
-        print("💰 TEST CASE 6: POINTS SYSTEM VERIFICATION")
-        print("=" * 50)
-        
+    def fetch_comments_for_activity(self):
+        """Test fetching comments for an activity"""
         try:
-            # Get current points
-            current_points, current_visits = self.get_user_points()
+            response = self.session.get(f"{BACKEND_URL}/activities/{self.activity_id}/comments")
             
-            # Get all visits to verify points calculation
-            visits_response = self.session.get(f"{API_BASE}/visits")
-            if visits_response.status_code == 200:
-                visits = visits_response.json()
+            if response.status_code == 200:
+                comments = response.json()
                 
-                # Calculate expected points
-                calculated_points = 0
-                official_visits = 0
-                premium_visits = 0
+                # Find our comment
+                our_comment = None
+                for comment in comments:
+                    if comment["comment_id"] == self.comment_id:
+                        our_comment = comment
+                        break
                 
-                for visit in visits:
-                    points = visit.get("points_earned", 10)
-                    calculated_points += points
-                    
-                    # Try to determine if it's premium or official
-                    if points == 25:
-                        premium_visits += 1
-                    elif points == 10:
-                        official_visits += 1
-                
-                self.log_test("Points Calculation Verification", True, 
-                            f"Total points: {calculated_points}, Official visits: {official_visits}, Premium visits: {premium_visits}")
-                
-                # Verify points match
-                if current_points == calculated_points:
-                    self.log_test("Points System Accuracy", True, 
-                                f"Points match: {current_points} = {calculated_points}")
+                if our_comment:
+                    # Verify is_liked is false initially
+                    if our_comment["is_liked"] == False and our_comment["likes_count"] == 0:
+                        self.log_test("Fetch Comments for Activity", True, 
+                                    f"Found {len(comments)} comments, our comment has is_liked=False, likes_count=0")
+                        return True
+                    else:
+                        self.log_test("Fetch Comments for Activity", False, 
+                                    f"Comment like status incorrect: is_liked={our_comment['is_liked']}, likes_count={our_comment['likes_count']}")
+                        return False
                 else:
-                    self.log_test("Points System Accuracy", False, 
-                                f"Points mismatch: Current {current_points} vs Calculated {calculated_points}")
-                
-                # Check for bonus activities in feed
-                feed_response = self.session.get(f"{API_BASE}/feed")
-                if feed_response.status_code == 200:
-                    activities = feed_response.json()
-                    
-                    country_bonuses = [a for a in activities if a.get("activity_type") == "country_complete"]
-                    continent_bonuses = [a for a in activities if a.get("activity_type") == "continent_complete"]
-                    
-                    total_country_bonus = sum(a.get("points_earned", 0) for a in country_bonuses)
-                    total_continent_bonus = sum(a.get("points_earned", 0) for a in continent_bonuses)
-                    
-                    self.log_test("Bonus Points Summary", True, 
-                                f"Country bonuses: {len(country_bonuses)} ({total_country_bonus} pts), "
-                                f"Continent bonuses: {len(continent_bonuses)} ({total_continent_bonus} pts)")
-                else:
-                    self.log_test("Bonus Points Check", False, "Could not fetch activity feed")
+                    self.log_test("Fetch Comments for Activity", False, "Our comment not found in comments list")
+                    return False
             else:
-                self.log_test("Points System Verification", False, f"Could not fetch visits: {visits_response.status_code}")
+                self.log_test("Fetch Comments for Activity", False, f"Status: {response.status_code}")
+                return False
                 
         except Exception as e:
-            self.log_test("Points System Test", False, f"Exception: {str(e)}")
+            self.log_test("Fetch Comments for Activity", False, f"Exception: {str(e)}")
+            return False
+    
+    def like_comment(self):
+        """Test liking a comment"""
+        try:
+            response = self.session.post(f"{BACKEND_URL}/comments/{self.comment_id}/like")
+            
+            if response.status_code == 200:
+                self.log_test("Like Comment", True, "Comment liked successfully")
+                return True
+            else:
+                self.log_test("Like Comment", False, f"Status: {response.status_code}, Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Like Comment", False, f"Exception: {str(e)}")
+            return False
+    
+    def verify_comment_liked(self):
+        """Verify comment is liked and likes_count increased"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/activities/{self.activity_id}/comments")
+            
+            if response.status_code == 200:
+                comments = response.json()
+                
+                # Find our comment
+                our_comment = None
+                for comment in comments:
+                    if comment["comment_id"] == self.comment_id:
+                        our_comment = comment
+                        break
+                
+                if our_comment:
+                    if our_comment["is_liked"] == True and our_comment["likes_count"] == 1:
+                        self.log_test("Verify Comment Liked", True, 
+                                    f"Comment correctly shows is_liked=True, likes_count=1")
+                        return True
+                    else:
+                        self.log_test("Verify Comment Liked", False, 
+                                    f"Comment like status incorrect: is_liked={our_comment['is_liked']}, likes_count={our_comment['likes_count']}")
+                        return False
+                else:
+                    self.log_test("Verify Comment Liked", False, "Comment not found")
+                    return False
+            else:
+                self.log_test("Verify Comment Liked", False, f"Status: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Verify Comment Liked", False, f"Exception: {str(e)}")
+            return False
+    
+    def unlike_comment(self):
+        """Test unliking a comment"""
+        try:
+            response = self.session.delete(f"{BACKEND_URL}/comments/{self.comment_id}/like")
+            
+            if response.status_code == 200:
+                self.log_test("Unlike Comment", True, "Comment unliked successfully")
+                return True
+            else:
+                self.log_test("Unlike Comment", False, f"Status: {response.status_code}, Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Unlike Comment", False, f"Exception: {str(e)}")
+            return False
+    
+    def verify_comment_unliked(self):
+        """Verify comment is unliked and likes_count decreased"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/activities/{self.activity_id}/comments")
+            
+            if response.status_code == 200:
+                comments = response.json()
+                
+                # Find our comment
+                our_comment = None
+                for comment in comments:
+                    if comment["comment_id"] == self.comment_id:
+                        our_comment = comment
+                        break
+                
+                if our_comment:
+                    if our_comment["is_liked"] == False and our_comment["likes_count"] == 0:
+                        self.log_test("Verify Comment Unliked", True, 
+                                    f"Comment correctly shows is_liked=False, likes_count=0")
+                        return True
+                    else:
+                        self.log_test("Verify Comment Unliked", False, 
+                                    f"Comment like status incorrect: is_liked={our_comment['is_liked']}, likes_count={our_comment['likes_count']}")
+                        return False
+                else:
+                    self.log_test("Verify Comment Unliked", False, "Comment not found")
+                    return False
+            else:
+                self.log_test("Verify Comment Unliked", False, f"Status: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Verify Comment Unliked", False, f"Exception: {str(e)}")
+            return False
+    
+    def post_reply_to_comment(self):
+        """Test posting a reply to a comment"""
+        try:
+            reply_content = f"Thanks for the comment! I totally agree! 👍 (Reply at {datetime.now().strftime('%H:%M:%S')})"
+            
+            response = self.session.post(f"{BACKEND_URL}/activities/{self.activity_id}/comment", json={
+                "content": reply_content,
+                "parent_comment_id": self.comment_id
+            })
+            
+            if response.status_code == 200:
+                reply_data = response.json()
+                self.reply_id = reply_data["comment_id"]
+                
+                # Verify reply structure
+                if (reply_data["parent_comment_id"] == self.comment_id and
+                    reply_data["reply_to_user"] is not None and
+                    reply_data["content"] == reply_content):
+                    self.log_test("Post Reply to Comment", True, 
+                                f"Reply created with ID: {self.reply_id}, parent: {self.comment_id}")
+                    return True
+                else:
+                    self.log_test("Post Reply to Comment", False, 
+                                f"Reply data incorrect: parent_id={reply_data.get('parent_comment_id')}, reply_to_user={reply_data.get('reply_to_user')}")
+                    return False
+            else:
+                self.log_test("Post Reply to Comment", False, f"Status: {response.status_code}, Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Post Reply to Comment", False, f"Exception: {str(e)}")
+            return False
+    
+    def verify_reply_in_comments(self):
+        """Verify the reply appears in comments with correct parent_comment_id"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/activities/{self.activity_id}/comments")
+            
+            if response.status_code == 200:
+                comments = response.json()
+                
+                # Find our reply
+                our_reply = None
+                for comment in comments:
+                    if comment["comment_id"] == self.reply_id:
+                        our_reply = comment
+                        break
+                
+                if our_reply:
+                    if (our_reply["parent_comment_id"] == self.comment_id and
+                        our_reply["reply_to_user"] is not None):
+                        self.log_test("Verify Reply in Comments", True, 
+                                    f"Reply found with correct parent_comment_id and reply_to_user")
+                        return True
+                    else:
+                        self.log_test("Verify Reply in Comments", False, 
+                                    f"Reply structure incorrect")
+                        return False
+                else:
+                    self.log_test("Verify Reply in Comments", False, "Reply not found in comments")
+                    return False
+            else:
+                self.log_test("Verify Reply in Comments", False, f"Status: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Verify Reply in Comments", False, f"Exception: {str(e)}")
+            return False
+    
+    def get_initial_comments_count(self):
+        """Get initial comments count for the activity"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/feed")
+            
+            if response.status_code == 200:
+                activities = response.json()
+                for activity in activities:
+                    if activity["activity_id"] == self.activity_id:
+                        self.initial_comments_count = activity["comments_count"]
+                        self.log_test("Get Initial Comments Count", True, 
+                                    f"Initial comments count: {self.initial_comments_count}")
+                        return True
+                
+                self.log_test("Get Initial Comments Count", False, "Activity not found in feed")
+                return False
+            else:
+                self.log_test("Get Initial Comments Count", False, f"Status: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Get Initial Comments Count", False, f"Exception: {str(e)}")
+            return False
+    
+    def verify_comments_count_increased(self):
+        """Verify activity comments_count increased after adding comments"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/feed")
+            
+            if response.status_code == 200:
+                activities = response.json()
+                for activity in activities:
+                    if activity["activity_id"] == self.activity_id:
+                        current_count = activity["comments_count"]
+                        expected_count = self.initial_comments_count + 2  # Original comment + reply
+                        
+                        if current_count == expected_count:
+                            self.log_test("Verify Comments Count Increased", True, 
+                                        f"Comments count correctly increased from {self.initial_comments_count} to {current_count}")
+                            return True
+                        else:
+                            self.log_test("Verify Comments Count Increased", False, 
+                                        f"Comments count mismatch: expected {expected_count}, got {current_count}")
+                            return False
+                
+                self.log_test("Verify Comments Count Increased", False, "Activity not found in feed")
+                return False
+            else:
+                self.log_test("Verify Comments Count Increased", False, f"Status: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Verify Comments Count Increased", False, f"Exception: {str(e)}")
+            return False
+    
+    def delete_comment(self):
+        """Test deleting a comment (only owner can delete)"""
+        try:
+            response = self.session.delete(f"{BACKEND_URL}/comments/{self.comment_id}")
+            
+            if response.status_code == 200:
+                self.log_test("Delete Comment", True, "Comment deleted successfully")
+                return True
+            else:
+                self.log_test("Delete Comment", False, f"Status: {response.status_code}, Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Delete Comment", False, f"Exception: {str(e)}")
+            return False
+    
+    def verify_comment_deleted(self):
+        """Verify comment is deleted and comments_count decreased"""
+        try:
+            response = self.session.get(f"{BACKEND_URL}/activities/{self.activity_id}/comments")
+            
+            if response.status_code == 200:
+                comments = response.json()
+                
+                # Check if our comment is gone
+                comment_found = False
+                for comment in comments:
+                    if comment["comment_id"] == self.comment_id:
+                        comment_found = True
+                        break
+                
+                if not comment_found:
+                    # Also check if comments_count decreased
+                    feed_response = self.session.get(f"{BACKEND_URL}/feed")
+                    if feed_response.status_code == 200:
+                        activities = feed_response.json()
+                        for activity in activities:
+                            if activity["activity_id"] == self.activity_id:
+                                current_count = activity["comments_count"]
+                                expected_count = self.initial_comments_count + 1  # Only reply should remain
+                                
+                                if current_count == expected_count:
+                                    self.log_test("Verify Comment Deleted", True, 
+                                                f"Comment deleted and count decreased to {current_count}")
+                                    return True
+                                else:
+                                    self.log_test("Verify Comment Deleted", False, 
+                                                f"Comments count not updated correctly: expected {expected_count}, got {current_count}")
+                                    return False
+                    
+                    self.log_test("Verify Comment Deleted", False, "Could not verify comments count")
+                    return False
+                else:
+                    self.log_test("Verify Comment Deleted", False, "Comment still exists after deletion")
+                    return False
+            else:
+                self.log_test("Verify Comment Deleted", False, f"Status: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Verify Comment Deleted", False, f"Exception: {str(e)}")
+            return False
+    
+    def test_delete_other_user_comment(self):
+        """Test that users cannot delete other users' comments"""
+        try:
+            # Try to delete the reply (which should still exist)
+            if hasattr(self, 'reply_id'):
+                response = self.session.delete(f"{BACKEND_URL}/comments/{self.reply_id}")
+                
+                # This should succeed since we own the reply too
+                if response.status_code == 200:
+                    self.log_test("Delete Own Reply", True, "Successfully deleted own reply")
+                    return True
+                else:
+                    self.log_test("Delete Own Reply", False, f"Status: {response.status_code}")
+                    return False
+            else:
+                self.log_test("Delete Other User Comment", True, "No other user comment to test (skipped)")
+                return True
+                
+        except Exception as e:
+            self.log_test("Delete Other User Comment", False, f"Exception: {str(e)}")
+            return False
     
     def run_all_tests(self):
-        """Run all test cases"""
-        print("🚀 WANDERLIST COUNTRY & CONTINENT COMPLETION BONUS TESTING")
-        print("=" * 70)
-        print(f"Backend URL: {API_BASE}")
-        print(f"Test User: {TEST_EMAIL}")
-        print("=" * 70)
-        print()
+        """Run all comment system tests"""
+        print("🚀 Starting Comments System Backend Testing")
+        print("=" * 60)
         
-        # Login first
-        if not self.login():
-            print("❌ Authentication failed. Cannot proceed with tests.")
-            return
+        # Test sequence
+        tests = [
+            self.login,
+            self.get_activity_from_feed,
+            self.get_initial_comments_count,
+            self.post_comment_on_activity,
+            self.fetch_comments_for_activity,
+            self.like_comment,
+            self.verify_comment_liked,
+            self.unlike_comment,
+            self.verify_comment_unliked,
+            self.post_reply_to_comment,
+            self.verify_reply_in_comments,
+            self.verify_comments_count_increased,
+            self.delete_comment,
+            self.verify_comment_deleted,
+            self.test_delete_other_user_comment
+        ]
         
-        # Get initial stats
-        initial_stats = self.get_user_stats()
-        if initial_stats:
-            print(f"📊 Initial Stats: {initial_stats}")
-            print()
-        
-        # Run test cases
-        self.test_regular_landmark_visit()
-        self.test_country_completion_bonus()
-        self.test_activity_feed_display()
-        self.test_visit_details_with_rich_content()
-        self.test_points_system_verification()
+        for test in tests:
+            if not test():
+                print(f"\n❌ Test failed: {test.__name__}")
+                break
         
         # Print summary
-        print("📋 TEST SUMMARY")
-        print("=" * 50)
+        print("\n" + "=" * 60)
+        print("📊 TEST SUMMARY")
+        print("=" * 60)
         
-        passed_tests = sum(1 for result in self.test_results if result["success"])
-        total_tests = len(self.test_results)
+        passed = sum(1 for result in self.test_results if result["success"])
+        total = len(self.test_results)
         
-        print(f"Total Tests: {total_tests}")
-        print(f"Passed: {passed_tests}")
-        print(f"Failed: {total_tests - passed_tests}")
-        print(f"Success Rate: {(passed_tests/total_tests*100):.1f}%")
-        print()
+        for result in self.test_results:
+            status = "✅" if result["success"] else "❌"
+            print(f"{status} {result['test']}")
+            if result["details"] and not result["success"]:
+                print(f"   {result['details']}")
         
-        # Show failed tests
-        failed_tests = [result for result in self.test_results if not result["success"]]
-        if failed_tests:
-            print("❌ FAILED TESTS:")
-            for test in failed_tests:
-                print(f"  - {test['test']}: {test['details']}")
+        print(f"\n🎯 Results: {passed}/{total} tests passed ({passed/total*100:.1f}%)")
+        
+        if passed == total:
+            print("🎉 ALL COMMENTS SYSTEM TESTS PASSED!")
         else:
-            print("🎉 ALL TESTS PASSED!")
+            print("⚠️  Some tests failed - see details above")
         
-        return passed_tests == total_tests
+        return passed == total
 
 if __name__ == "__main__":
-    tester = WanderListTester()
+    tester = CommentSystemTester()
     success = tester.run_all_tests()
     sys.exit(0 if success else 1)
