@@ -13,7 +13,7 @@ import sys
 import uuid
 
 # Get backend URL from frontend .env
-BACKEND_URL = "https://landmark-tracker-2.preview.emergentagent.com/api"
+BACKEND_URL = "https://wandrlust-social.preview.emergentagent.com/api"
 
 # Test account credentials from review request
 TEST_EMAIL = "mobile@test.com"

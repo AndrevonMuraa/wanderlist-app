@@ -650,7 +650,7 @@ index fbad0b3..e69de29 100644
 ------+from datetime import datetime
 ------+
 ------+# Get backend URL from environment
-------+BACKEND_URL = "https://landmark-tracker-2.preview.emergentagent.com/api"
+------+BACKEND_URL = "https://wandrlust-social.preview.emergentagent.com/api"
 ------+
 ------+class Colors:
 ------+    GREEN = '\033[92m'
@@ -1249,7 +1249,7 @@ index fbad0b3..e69de29 100644
 ----------+
 ----------+**Version:** 2.0.0 (Session 2 Complete)
 ----------+**Status:** Production Ready with Full Feature Set
-----------+**Preview URL:** https://landmark-tracker-2.preview.emergentagent.com
+----------+**Preview URL:** https://wandrlust-social.preview.emergentagent.com
 ----------+**Test Credentials:** mobile@test.com / test123 (Free tier)
 ----------+
 ----------+### ✅ NEW IN SESSION 2:
