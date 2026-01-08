@@ -221,10 +221,15 @@ class Comment(BaseModel):
     user_name: str
     user_picture: Optional[str] = None
     content: str
+    parent_comment_id: Optional[str] = None  # For threaded replies
+    reply_to_user: Optional[str] = None  # Name of user being replied to
     created_at: datetime
+    likes_count: int = 0
+    is_liked: bool = False  # Whether current user liked this comment
 
 class CommentCreate(BaseModel):
     content: str
+    parent_comment_id: Optional[str] = None  # For replies
 
 # ============= END ACTIVITY FEED MODELS =============
 
