@@ -333,7 +333,6 @@ The baseline model (v3.0) is **significantly outdated** despite being updated ju
 - Full badges/achievements implementation
 - Advanced search feature
 - Loading skeletons
-- User-suggested landmarks
 
 **Incorrect in Baseline:**
 - Badge system marked as "not implemented" (it IS implemented)
