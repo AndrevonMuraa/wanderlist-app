@@ -686,6 +686,44 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     }
     
     await db.visits.insert_one(visit)
+    
+    # Create activity for social feed
+    activity_id = f"activity_{uuid.uuid4().hex[:12]}"
+    activity = {
+        "activity_id": activity_id,
+        "user_id": current_user.user_id,
+        "user_name": current_user.name,
+        "user_picture": current_user.picture,
+        "activity_type": "visit",
+        "landmark_id": data.landmark_id,
+        "landmark_name": landmark.get("name"),
+        "landmark_image": landmark.get("image_url"),
+        "country_name": landmark.get("country_name"),
+        "points_earned": landmark.get("points", 10),
+        "created_at": datetime.now(timezone.utc),
+        "likes_count": 0,
+        "comments_count": 0
+    }
+    
+    await db.activities.insert_one(activity)
+    
+    # Check for milestones and create activity if reached
+    visit_count = await db.visits.count_documents({"user_id": current_user.user_id})
+    if visit_count in [10, 25, 50, 100, 250, 500]:
+        milestone_activity_id = f"activity_{uuid.uuid4().hex[:12]}"
+        milestone_activity = {
+            "activity_id": milestone_activity_id,
+            "user_id": current_user.user_id,
+            "user_name": current_user.name,
+            "user_picture": current_user.picture,
+            "activity_type": "milestone",
+            "milestone_count": visit_count,
+            "created_at": datetime.now(timezone.utc),
+            "likes_count": 0,
+            "comments_count": 0
+        }
+        await db.activities.insert_one(milestone_activity)
+    
     return Visit(**visit)
 
 # ============= ADMIN ENDPOINTS =============
