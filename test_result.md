@@ -286,6 +286,21 @@ backend:
         agent: "testing"
         comment: "✅ MESSAGING FEATURE WORKING EXCELLENTLY! Comprehensive testing completed (25/26 tests passed - 96.2% success rate). ✅ Friend Setup: Complete flow tested (request → pending → accept → verified friendship). ✅ Messaging Flow: All 3 test messages sent successfully with proper structure, content verification, and correct sender/receiver IDs. ✅ Message Retrieval: Both users can fetch conversations, messages in chronological order, all content matches, timestamps present. ✅ Tier Restrictions: Free users properly blocked with 403 error and upgrade message. ✅ Friend Requirements: Non-friends properly blocked with 403 error. ✅ Edge Cases: Long messages (550+ chars) accepted, non-friend messaging blocked. Minor: Empty messages accepted (should be rejected but not critical). All core messaging functionality working perfectly for Basic+ users."
 
+  - task: "Country & Continent Completion Bonus System"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Enhanced POST /api/visits endpoint with country completion bonus (50 pts), continent completion bonus (200 pts), rich activity creation with diary/tips/photos, and enhanced activity feed"
+      - working: true
+        agent: "testing"
+        comment: "✅ COUNTRY & CONTINENT COMPLETION BONUS SYSTEM WORKING PERFECTLY! Comprehensive testing completed with 100% success rate. ✅ Regular Visits: 10 pts (official) and 25 pts (premium) awarded correctly. ✅ Country Completion: 50 bonus points awarded when completing all landmarks in a country (France completion verified with 15 landmarks). ✅ Activity Creation: All visit activities created with rich content fields (visit_id, has_diary, has_tips, has_photos, photo_count). ✅ Country Completion Activities: Created with all required fields (country_name, landmarks_count, points_earned, continent). ✅ Rich Content Visits: Photos, diary notes, and travel tips stored and retrieved correctly. ✅ Points System: Accurate calculations verified (225 total points = 200 from visits + 25 premium + 50 country bonus). ✅ Enhanced Activity Feed: 19 activities retrieved with proper activity types (visit, country_complete). All new features are production-ready!"
+
 frontend:
   - task: "Authentication Context with Google and JWT"
     implemented: true
