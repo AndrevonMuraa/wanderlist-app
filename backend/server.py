@@ -184,6 +184,45 @@ class MessageCreate(BaseModel):
     content: str
     image_base64: Optional[str] = None  # Optional image attachment
 
+# ============= ACTIVITY FEED & SOCIAL MODELS =============
+
+class Activity(BaseModel):
+    activity_id: str
+    user_id: str
+    user_name: str
+    user_picture: Optional[str] = None
+    activity_type: str  # "visit", "country_complete", "milestone"
+    landmark_id: Optional[str] = None
+    landmark_name: Optional[str] = None
+    landmark_image: Optional[str] = None
+    country_name: Optional[str] = None
+    points_earned: Optional[int] = None
+    milestone_count: Optional[int] = None  # For milestone activities
+    created_at: datetime
+    likes_count: int = 0
+    comments_count: int = 0
+    is_liked: bool = False  # Whether current user liked this
+
+class Like(BaseModel):
+    like_id: str
+    user_id: str
+    activity_id: str
+    created_at: datetime
+
+class Comment(BaseModel):
+    comment_id: str
+    activity_id: str
+    user_id: str
+    user_name: str
+    user_picture: Optional[str] = None
+    content: str
+    created_at: datetime
+
+class CommentCreate(BaseModel):
+    content: str
+
+# ============= END ACTIVITY FEED MODELS =============
+
 class LeaderboardEntry(BaseModel):
     user_id: str
     name: str
