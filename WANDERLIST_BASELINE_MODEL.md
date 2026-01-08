@@ -199,6 +199,24 @@ This baseline model ensures:
 - Categories: "official", "premium", or "user_suggested"
 - Points system: Official (10pts), Premium (25pts)
 
+**Landmark List Display - Icon-Based Design** ✅ **[NEW in v4.2]**
+- **Clean list format** replacing image-heavy cards
+- **Two landmark icon types:**
+  - Official: Location pin icon, turquoise background/border
+  - Premium: Diamond icon, gold background/border
+- **Icon specs:** 44x44px container, 20px icon, left-aligned
+- **Compact cards:** 72px height (vs 200px image cards)
+- **Metadata row:** Points, premium badge, visited status
+- **Benefits:** Better information density, faster loading, easier maintenance
+
+**Card Structure:**
+```
+┌──────────────────────────────────────┐
+│ [ICON]  Landmark Name         [>]   │
+│         ⭐ 10 pts | ✓ Visited        │
+└──────────────────────────────────────┘
+```
+
 **Features:**
 - Immersive detail page with full-screen background image
 - Frosted glass content cards
