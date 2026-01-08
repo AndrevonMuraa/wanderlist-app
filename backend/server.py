@@ -167,7 +167,8 @@ class Friend(BaseModel):
     created_at: datetime
 
 class FriendRequest(BaseModel):
-    friend_email: str
+    friend_email: Optional[str] = None  # Made optional
+    friend_username: Optional[str] = None  # Added username option
 
 class Message(BaseModel):
     message_id: str
