@@ -17,6 +17,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
 import { useAuth } from '../../contexts/AuthContext';
+import RankBadge from '../../components/RankBadge';
+import { getUserRank } from '../../utils/rankSystem';
 
 const BACKEND_URL = Platform.OS === 'web' ? '' : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
 
