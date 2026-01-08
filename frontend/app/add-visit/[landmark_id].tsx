@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { BACKEND_URL } from '../../utils/config';
 import theme from '../../styles/theme';
 import AddVisitModal from '../../components/AddVisitModal';
+import CelebrationEffect from '../../components/CelebrationEffect';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
@@ -31,6 +32,8 @@ export default function AddVisitScreen() {
   const [loading, setLoading] = useState(true);
   const [userTier, setUserTier] = useState('free');
   const [modalVisible, setModalVisible] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationType, setCelebrationType] = useState<'landmark' | 'country' | 'continent' | 'milestone'>('landmark');
   const router = useRouter();
 
   useEffect(() => {
