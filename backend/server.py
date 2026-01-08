@@ -780,10 +780,23 @@ async def send_friend_request(data: FriendRequest, current_user: User = Depends(
             detail=f"Friend limit reached ({int(max_friends)} max). Upgrade to {tier_name} for more friends!"
         )
     
-    # Find friend by email
-    friend = await db.users.find_one({"email": data.friend_email}, {"_id": 0})
+    # Find friend by email or username
+    if not data.friend_email and not data.friend_username:
+        raise HTTPException(status_code=400, detail="Please provide either email or username")
+    
+    # Build search query for email or username
+    search_query = []
+    if data.friend_email:
+        search_query.append({"email": data.friend_email})
+    if data.friend_username:
+        # Case-insensitive username search
+        search_query.append({"username": {"$regex": f"^{data.friend_username}$", "$options": "i"}})
+    
+    friend = await db.users.find_one({"$or": search_query}, {"_id": 0})
+    
     if not friend:
-        raise HTTPException(status_code=404, detail="User not found")
+        search_method = "email or username" if data.friend_email and data.friend_username else ("email" if data.friend_email else "username")
+        raise HTTPException(status_code=404, detail=f"User not found with that {search_method}")
     
     if friend["user_id"] == current_user.user_id:
         raise HTTPException(status_code=400, detail="Cannot add yourself as friend")
