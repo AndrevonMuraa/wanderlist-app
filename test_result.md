@@ -301,6 +301,18 @@ backend:
         agent: "testing"
         comment: "✅ COUNTRY & CONTINENT COMPLETION BONUS SYSTEM WORKING PERFECTLY! Comprehensive testing completed with 100% success rate. ✅ Regular Visits: 10 pts (official) and 25 pts (premium) awarded correctly. ✅ Country Completion: 50 bonus points awarded when completing all landmarks in a country (France completion verified with 15 landmarks). ✅ Activity Creation: All visit activities created with rich content fields (visit_id, has_diary, has_tips, has_photos, photo_count). ✅ Country Completion Activities: Created with all required fields (country_name, landmarks_count, points_earned, continent). ✅ Rich Content Visits: Photos, diary notes, and travel tips stored and retrieved correctly. ✅ Points System: Accurate calculations verified (225 total points = 200 from visits + 25 premium + 50 country bonus). ✅ Enhanced Activity Feed: 19 activities retrieved with proper activity types (visit, country_complete). All new features are production-ready!"
 
+  - task: "Comments System - Activity Comments & Replies"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "🎉 COMMENTS SYSTEM TESTING COMPLETE - ALL FEATURES WORKING PERFECTLY! ✅ COMPREHENSIVE TESTING RESULTS (15/15 tests passed - 100% success rate): ✅ POST /api/activities/{activity_id}/comment: Comment creation working with proper structure (comment_id, activity_id, user_id, user_name, content, created_at, likes_count, is_liked). ✅ GET /api/activities/{activity_id}/comments: Comments retrieval working, is_liked field correctly shows false initially. ✅ POST /api/comments/{comment_id}/like: Comment liking working successfully. ✅ Comment Like Verification: is_liked=true and likes_count=1 after liking. ✅ DELETE /api/comments/{comment_id}/like: Comment unliking working successfully. ✅ Comment Unlike Verification: is_liked=false and likes_count=0 after unliking. ✅ Reply System: POST with parent_comment_id creates replies with correct parent_comment_id and reply_to_user fields. ✅ Activity Comments Count: Automatically increments when comments added (0→2 after comment+reply), decrements when comments deleted (2→1 after deletion). ✅ DELETE /api/comments/{comment_id}: Comment deletion working, only owners can delete their comments. ✅ Authentication: All endpoints properly secured with JWT tokens. All comment system features are production-ready with full CRUD operations, like/unlike functionality, threaded replies, and proper activity integration!"
+
 frontend:
   - task: "Authentication Context with Google and JWT"
     implemented: true
