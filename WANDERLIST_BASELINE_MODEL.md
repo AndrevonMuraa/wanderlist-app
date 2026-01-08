@@ -667,7 +667,7 @@ Animated loading state components that improve perceived performance by 30-40%.
 
 ---
 
-## 📡 COMPLETE API REFERENCE (32 Endpoints)
+## 📡 COMPLETE API REFERENCE (30 Endpoints)
 
 ### Authentication (5 endpoints)
 - `POST /api/auth/register` - Create new account
