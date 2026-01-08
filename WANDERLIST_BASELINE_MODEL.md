@@ -830,9 +830,10 @@ Animated loading state components that improve perceived performance by 30-40%.
 - `GET /api/landmarks` - Get all landmarks (supports filters: search, visited, category, continent, sort_by)
 - `GET /api/landmarks/{landmark_id}` - Get single landmark details
 
-### Visits & Progress (4 endpoints)
+### Visits & Progress (5 endpoints)
 - `GET /api/visits` - Get user's visits
-- `POST /api/visits` - Create new visit (with optional photo)
+- `POST /api/visits` - Create new visit (with photos, diary, tips) **[Enhanced in v4.2]**
+- `GET /api/visits/{visit_id}` - Get full visit details with rich content **[NEW in v4.2]**
 - `GET /api/visits/stats` - Get visit statistics
 - `GET /api/progress` - Get progress tracking data
 
