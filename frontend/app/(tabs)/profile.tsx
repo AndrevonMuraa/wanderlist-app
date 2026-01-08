@@ -154,6 +154,12 @@ export default function ProfileScreen() {
           style={styles.header}
         >
           <Text style={styles.headerTitle}>Profile</Text>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => router.push('/edit-profile')}
+          >
+            <Ionicons name="create-outline" size={24} color="#fff" />
+          </TouchableOpacity>
         </LinearGradient>
 
         <Surface style={styles.profileCard}>
@@ -165,6 +171,15 @@ export default function ProfileScreen() {
             </View>
           )}
           <Text style={styles.userName}>{user?.name}</Text>
+          {user?.bio && (
+            <Text style={styles.userBio}>{user.bio}</Text>
+          )}
+          {user?.location && (
+            <View style={styles.locationRow}>
+              <Ionicons name="location" size={14} color={theme.colors.textSecondary} />
+              <Text style={styles.userLocation}>{user.location}</Text>
+            </View>
+          )}
           <Text style={styles.userEmail}>{user?.email}</Text>
 
           <View style={[styles.premiumBadge, {
