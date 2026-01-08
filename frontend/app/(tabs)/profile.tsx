@@ -364,6 +364,37 @@ export default function ProfileScreen() {
           </Surface>
         )}
 
+        {/* Milestones Timeline */}
+        {badges.length > 0 && (
+          <Surface style={styles.milestonesCard}>
+            <Text style={styles.sectionTitle}>Recent Milestones</Text>
+            <View style={styles.timelineContainer}>
+              {badges
+                .sort((a, b) => new Date(b.earned_at).getTime() - new Date(a.earned_at).getTime())
+                .slice(0, 5)
+                .map((badge, index) => (
+                  <View key={badge.achievement_id} style={styles.timelineItem}>
+                    <View style={styles.timelineDot}>
+                      <Text style={styles.timelineEmoji}>{badge.badge_icon}</Text>
+                    </View>
+                    <View style={styles.timelineLine} />
+                    <View style={styles.timelineContent}>
+                      <Text style={styles.milestoneName}>{badge.badge_name}</Text>
+                      <Text style={styles.milestoneDescription}>{badge.badge_description}</Text>
+                      <Text style={styles.milestoneDate}>
+                        {new Date(badge.earned_at).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+            </View>
+          </Surface>
+        )}
+
         {/* Friend Limit Card for Free Users */}
         {user?.subscription_tier === 'free' && stats && (
           <Surface style={styles.limitsCard}>
