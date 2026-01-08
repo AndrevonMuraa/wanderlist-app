@@ -58,10 +58,14 @@ export default function LandmarkDetailScreen() {
   const { landmark_id } = useLocalSearchParams();
   const [landmark, setLandmark] = useState<Landmark | null>(null);
   const [loading, setLoading] = useState(true);
+  const [inBucketList, setInBucketList] = useState(false);
+  const [bucketListId, setBucketListId] = useState<string | null>(null);
+  const [bucketListLoading, setBucketListLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     fetchLandmark();
+    checkBucketListStatus();
   }, []);
 
   const fetchLandmark = async () => {
@@ -81,6 +85,65 @@ export default function LandmarkDetailScreen() {
       console.error('Error fetching landmark:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkBucketListStatus = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/bucket-list/check/${landmark_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setInBucketList(data.in_bucket_list);
+        setBucketListId(data.bucket_list_id);
+      }
+    } catch (error) {
+      console.error('Error checking bucket list:', error);
+    }
+  };
+
+  const handleToggleBucketList = async () => {
+    if (bucketListLoading) return;
+
+    setBucketListLoading(true);
+    try {
+      const token = await getToken();
+
+      if (inBucketList && bucketListId) {
+        // Remove from bucket list
+        const response = await fetch(`${BACKEND_URL}/api/bucket-list/${bucketListId}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.ok) {
+          setInBucketList(false);
+          setBucketListId(null);
+        }
+      } else {
+        // Add to bucket list
+        const response = await fetch(`${BACKEND_URL}/api/bucket-list`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ landmark_id }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          setInBucketList(true);
+          setBucketListId(result.bucket_list_id);
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling bucket list:', error);
+    } finally {
+      setBucketListLoading(false);
     }
   };
 
