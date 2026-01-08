@@ -447,6 +447,9 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: theme.spacing.lg,
     paddingTop: theme.spacing.xl,
     paddingBottom: theme.spacing.xl,
@@ -454,6 +457,10 @@ const styles = StyleSheet.create({
   headerTitle: {
     ...theme.typography.h1,
     color: '#fff',
+    flex: 1,
+  },
+  editButton: {
+    padding: theme.spacing.xs,
   },
   profileCard: {
     margin: theme.spacing.md,
@@ -478,6 +485,24 @@ const styles = StyleSheet.create({
     ...theme.typography.h2,
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+  },
+  userBio: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    lineHeight: 20,
+  },
+  locationRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginBottom: theme.spacing.sm,
+  },
+  userLocation: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
   },
   userEmail: {
     ...theme.typography.bodySmall,
