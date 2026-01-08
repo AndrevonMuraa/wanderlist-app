@@ -60,19 +60,6 @@ export default function TabsLayout() {
           ),
         }}
       />
-      {/* Hidden tabs - functionality integrated into Social */}
-      <Tabs.Screen
-        name="feed"
-        options={{
-          href: null, // Hide from tab bar
-        }}
-      />
-      <Tabs.Screen
-        name="leaderboard"
-        options={{
-          href: null, // Hide from tab bar
-        }}
-      />
     </Tabs>
   );
 }
