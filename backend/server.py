@@ -1866,20 +1866,20 @@ async def get_trip_details(trip_id: str, current_user: User = Depends(get_curren
     trip = await db.trips.find_one({
         "trip_id": trip_id,
         "user_id": current_user.user_id
-    })
+    }, {"_id": 0})
     
     if not trip:
         raise HTTPException(status_code=404, detail="Trip not found")
     
     # Get trip landmarks with full details
     trip_landmarks = await db.trip_landmarks.find(
-        {"trip_id": trip_id}
+        {"trip_id": trip_id}, {"_id": 0}
     ).sort("day_number", 1).to_list(1000)
     
     # Get full landmark details
     landmark_ids = [tl["landmark_id"] for tl in trip_landmarks]
     landmarks = await db.landmarks.find(
-        {"landmark_id": {"$in": landmark_ids}}
+        {"landmark_id": {"$in": landmark_ids}}, {"_id": 0}
     ).to_list(1000)
     
     landmarks_dict = {lm["landmark_id"]: lm for lm in landmarks}
