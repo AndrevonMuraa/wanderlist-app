@@ -676,12 +676,10 @@ Animated loading state components that improve perceived performance by 30-40%.
 - `GET /api/auth/me` - Get current user info
 - `POST /api/auth/logout` - Logout user
 
-### Countries & Landmarks (5 endpoints)
+### Countries & Landmarks (3 endpoints)
 - `GET /api/countries` - Get all countries (48 total)
 - `GET /api/landmarks` - Get all landmarks (supports filters: search, visited, category, continent, sort_by)
 - `GET /api/landmarks/{landmark_id}` - Get single landmark details
-- `POST /api/landmarks` - Create user-suggested landmark
-- `POST /api/landmarks/{landmark_id}/upvote` - Toggle upvote on landmark
 
 ### Visits & Progress (4 endpoints)
 - `GET /api/visits` - Get user's visits
