@@ -932,10 +932,16 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     # Check and award badges
     newly_awarded_badges = await check_and_award_badges(current_user.user_id)
     
-    # Create visit response with badge info
+    # Create visit response with badge info and completion flags
     visit_response = Visit(**visit)
     visit_dict = visit_response.dict()
     visit_dict["newly_awarded_badges"] = newly_awarded_badges
+    visit_dict["country_completed"] = country_completion_bonus > 0 if 'country_completion_bonus' in locals() else False
+    visit_dict["continent_completed"] = continent_completion_bonus > 0 if 'continent_completion_bonus' in locals() else False
+    if visit_dict["country_completed"]:
+        visit_dict["completed_country_name"] = landmark.get("country_name")
+    if visit_dict["continent_completed"]:
+        visit_dict["completed_continent"] = landmark.get("continent")
     
     return visit_dict
 
