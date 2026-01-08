@@ -162,6 +162,11 @@ export default function CommentsSection({
 
       if (response.ok) {
         setComments(comments.filter(c => c.comment_id !== commentId));
+        
+        // Update parent component
+        if (onCommentsChange) {
+          onCommentsChange(comments.length - 1);
+        }
       }
     } catch (error) {
       console.error('Error deleting comment:', error);
