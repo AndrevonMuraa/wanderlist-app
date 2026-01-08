@@ -106,13 +106,16 @@ export default function ChatScreen() {
 
     try {
       const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/messages/${friend_id}`, {
+      const response = await fetch(`${BACKEND_URL}/api/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ content: messageContent })
+        body: JSON.stringify({ 
+          receiver_id: friend_id,
+          content: messageContent 
+        })
       });
 
       const canProceed = await checkResponse(response);
@@ -144,12 +147,20 @@ export default function ChatScreen() {
         }, 100);
       } else {
         const error = await response.json();
-        Alert.alert('Error', error.detail || 'Failed to send message');
+        if (Platform.OS === 'web') {
+          alert(error.detail || 'Failed to send message');
+        } else {
+          Alert.alert('Error', error.detail || 'Failed to send message');
+        }
         setNewMessage(messageContent); // Restore message
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      Alert.alert('Error', 'Failed to send message');
+      if (Platform.OS === 'web') {
+        alert('Failed to send message');
+      } else {
+        Alert.alert('Error', 'Failed to send message');
+      }
       setNewMessage(messageContent); // Restore message
     } finally {
       setSending(false);
