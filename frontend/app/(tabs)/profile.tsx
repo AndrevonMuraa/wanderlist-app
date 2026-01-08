@@ -206,6 +206,16 @@ export default function ProfileScreen() {
           <RankProgress points={progressStats?.totalPoints || 0} />
         </Surface>
 
+        {/* Streak */}
+        <Surface style={styles.streakCard}>
+          <Text style={styles.sectionTitle}>Daily Streak</Text>
+          <StreakDisplay 
+            currentStreak={user?.current_streak || 0}
+            longestStreak={user?.longest_streak || 0}
+            size="large"
+          />
+        </Surface>
+
         {/* Badges & Achievements */}
         {badges.length > 0 && (
           <Surface style={styles.badgesCard}>
