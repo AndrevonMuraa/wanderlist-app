@@ -687,6 +687,27 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: theme.colors.border,
   },
+  statBreakdown: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: theme.spacing.xs / 2,
+    gap: 4,
+  },
+  statBreakdownText: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    fontSize: 11,
+  },
+  statBreakdownDot: {
+    width: 3,
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: theme.colors.textLight,
+  },
+  premiumText: {
+    color: '#FFD700',
+    fontWeight: '600',
+  },
   // How It Works Steps
   stepContainer: {
     flexDirection: 'row',
@@ -790,6 +811,61 @@ const styles = StyleSheet.create({
     ...theme.typography.body,
     color: theme.colors.text,
     lineHeight: 24,
+  },
+  // Points Milestones Styles
+  pointsMilestonesSection: {
+    marginTop: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+  },
+  pointsMilestonesTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '700',
+    marginBottom: theme.spacing.md,
+  },
+  milestoneRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing.md,
+    gap: theme.spacing.sm,
+  },
+  milestoneInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    width: 80,
+  },
+  milestoneText: {
+    ...theme.typography.caption,
+    color: theme.colors.text,
+    fontWeight: '600',
+    fontSize: 12,
+  },
+  milestoneProgressBar: {
+    flex: 1,
+    height: 8,
+    backgroundColor: theme.colors.border,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  milestoneProgressFill: {
+    height: '100%',
+    borderRadius: 4,
+  },
+  milestoneLabel: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    width: 100,
+    fontSize: 11,
+  },
+  pointsExplanation: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    fontStyle: 'italic',
+    marginTop: theme.spacing.sm,
+    textAlign: 'center',
   },
   // Tier Cards
   tierCard: {
