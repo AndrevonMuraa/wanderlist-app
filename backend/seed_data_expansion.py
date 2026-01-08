@@ -204,10 +204,6 @@ LANDMARKS_DATA = {
         {"name": "Nidaros Cathedral", "description": "Norway's national sanctuary, Gothic masterpiece in Trondheim, pilgrimage site.", "image_url": "https://images.unsplash.com/photo-1578895101408-1a36b834405b?w=800&q=80", "difficulty": "Easy"},
         {"name": "Svalbard Arctic", "description": "Remote archipelago, polar bears, glaciers, northernmost settlement on Earth.", "image_url": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&q=80", "difficulty": "Hard"},
     ],
-        {"name": "VIP Norway Heritage Pass", "description": "Skip-the-line access to Norway's top heritage sites, private guides, and exclusive experiences.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Easy"},
-        {"name": "Ultimate Norway Adventure", "description": "Multi-day premium adventure package including unique Norway activities and hidden natural wonders.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Moderate"},
-        {"name": "Secret Norway Sanctuary", "description": "Off-the-beaten-path exclusive location, pristine natural beauty, accessible only through premium access.", "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", "difficulty": "Hard"},
-],
     
     # EUROPE - SWITZERLAND
     "switzerland": [
