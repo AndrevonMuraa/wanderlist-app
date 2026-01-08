@@ -106,6 +106,11 @@ export default function CommentsSection({
         setComments([...comments, newComment]);
         setCommentText('');
         setReplyingTo(null);
+        
+        // Update parent component
+        if (onCommentsChange) {
+          onCommentsChange(comments.length + 1);
+        }
       }
     } catch (error) {
       console.error('Error submitting comment:', error);
