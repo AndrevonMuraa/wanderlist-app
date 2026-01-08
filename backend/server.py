@@ -726,8 +726,18 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     if landmark.get("category") == "premium" and current_user.subscription_tier == "free":
         raise HTTPException(status_code=403, detail="Premium subscription required to visit this landmark")
     
+    # Validate photo collage limit (max 10 photos)
+    photos = data.photos or []
+    if len(photos) > 10:
+        raise HTTPException(status_code=400, detail="Maximum 10 photos allowed per visit")
+    
+    # Validate travel tips limit (max 5 tips)
+    travel_tips = data.travel_tips or []
+    if len(travel_tips) > 5:
+        raise HTTPException(status_code=400, detail="Maximum 5 travel tips allowed per visit")
+    
     # Determine if visit is verified (has photo proof)
-    is_verified = bool(data.photo_base64)
+    is_verified = bool(data.photo_base64 or len(photos) > 0)
     
     visit_id = f"visit_{uuid.uuid4().hex[:12]}"
     visit = {
@@ -735,10 +745,12 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         "user_id": current_user.user_id,
         "landmark_id": data.landmark_id,
         "photo_base64": data.photo_base64,
+        "photos": photos,  # Photo collage
         "points_earned": landmark.get("points", 10),  # Use landmark's point value
         "comments": data.comments,
         "visit_location": data.visit_location,
-        "diary_notes": data.diary_notes,
+        "diary_notes": data.diary_notes,  # Travel diary
+        "travel_tips": travel_tips,  # Travel tips array
         "status": "accepted",
         "verified": is_verified,  # True if has photo, False if not
         "visited_at": data.visited_at if data.visited_at else datetime.now(timezone.utc),
@@ -747,7 +759,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     
     await db.visits.insert_one(visit)
     
-    # Create activity for social feed
+    # Create rich activity for social feed (includes diary, tips, photos)
     activity_id = f"activity_{uuid.uuid4().hex[:12]}"
     activity = {
         "activity_id": activity_id,
@@ -760,6 +772,11 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         "landmark_image": landmark.get("image_url"),
         "country_name": landmark.get("country_name"),
         "points_earned": landmark.get("points", 10),
+        "visit_id": visit_id,  # Link to full visit details
+        "has_diary": bool(data.diary_notes),
+        "has_tips": len(travel_tips) > 0,
+        "has_photos": len(photos) > 0,
+        "photo_count": len(photos),
         "created_at": datetime.now(timezone.utc),
         "likes_count": 0,
         "comments_count": 0
