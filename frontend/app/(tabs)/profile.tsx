@@ -14,6 +14,7 @@ import { CircularProgress } from '../../components/CircularProgress';
 import { ProgressBar } from '../../components/ProgressBar';
 import RankBadge from '../../components/RankBadge';
 import RankProgress from '../../components/RankProgress';
+import StreakDisplay from '../../components/StreakDisplay';
 import { getUserRank } from '../../utils/rankSystem';
 
 // Helper to get token (works on both web and native)
