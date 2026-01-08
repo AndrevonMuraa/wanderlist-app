@@ -41,6 +41,8 @@ class User(BaseModel):
     username: Optional[str] = None  # Made optional for backwards compatibility
     name: str
     picture: Optional[str] = None
+    bio: Optional[str] = None  # User bio (max 200 chars)
+    location: Optional[str] = None  # User location/home country
     is_premium: bool = False  # Deprecated, kept for backward compatibility
     subscription_tier: str = "free"  # "free", "basic", "premium"
     password_hash: Optional[str] = None
@@ -54,6 +56,8 @@ class UserPublic(BaseModel):
     username: Optional[str] = None  # Made optional for backwards compatibility
     name: str
     picture: Optional[str] = None
+    bio: Optional[str] = None
+    location: Optional[str] = None
     is_premium: bool = False  # Deprecated
     subscription_tier: str = "free"
 
