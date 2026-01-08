@@ -130,17 +130,39 @@ export default function AddVisitScreen() {
 
       const result = await response.json();
 
+      // Check for country or continent completion
+      let celebrationMessage = `You earned ${result.points_earned} points`;
+      let shouldCelebrate = false;
+      let celebType: 'landmark' | 'country' | 'continent' | 'milestone' = 'landmark';
+
+      if (result.continent_completed) {
+        celebrationMessage = `🌍 CONTINENT MASTERED!\n\nYou've completed all countries in ${result.completed_continent}!\n\n+${result.points_earned} points + 200 BONUS points!`;
+        shouldCelebrate = true;
+        celebType = 'continent';
+      } else if (result.country_completed) {
+        celebrationMessage = `🎊 COUNTRY COMPLETED!\n\nYou've visited all landmarks in ${result.completed_country_name}!\n\n+${result.points_earned} points + 50 BONUS points!`;
+        shouldCelebrate = true;
+        celebType = 'country';
+      }
+
+      // Add badge info if available
+      if (result.newly_awarded_badges && result.newly_awarded_badges.length > 0) {
+        celebrationMessage += `\n\n✨ New badge unlocked: ${result.newly_awarded_badges[0].name}!`;
+      }
+
+      // Trigger celebration animation if country or continent completed
+      if (shouldCelebrate) {
+        setCelebrationType(celebType);
+        setShowCelebration(true);
+      }
+
       // Show success message
       Alert.alert(
-        '🎉 Visit Recorded!',
-        `You earned ${result.points_earned} points${
-          result.newly_awarded_badges && result.newly_awarded_badges.length > 0
-            ? `\n\n✨ New badge unlocked: ${result.newly_awarded_badges[0].name}!`
-            : ''
-        }`,
+        shouldCelebrate ? '🎉 AMAZING ACHIEVEMENT!' : '🎉 Visit Recorded!',
+        celebrationMessage,
         [
           {
-            text: 'Great!',
+            text: 'Awesome!',
             onPress: () => {
               setModalVisible(false);
               router.back();
