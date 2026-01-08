@@ -645,7 +645,7 @@ Animated loading state components that improve perceived performance by 30-40%.
 
 ---
 
-### 14. **Data Models (Complete List)** ✅
+### 13. **Data Models (Complete List)** ✅
 
 **Backend Models:**
 - `User` - user_id, email, username, subscription_tier, points, current_streak, longest_streak
