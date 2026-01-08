@@ -1268,6 +1268,34 @@ async def get_activity_comments(activity_id: str, current_user: User = Depends(g
 
 # ============= END ACTIVITY FEED ENDPOINTS =============
 
+# ============= ACHIEVEMENTS ENDPOINTS =============
+
+@api_router.get("/achievements", response_model=List[Achievement])
+async def get_user_achievements(current_user: User = Depends(get_current_user)):
+    """Get all achievements/badges for the current user"""
+    achievements = await db.achievements.find(
+        {"user_id": current_user.user_id}
+    ).sort("earned_at", -1).to_list(1000)
+    
+    return [Achievement(**achievement) for achievement in achievements]
+
+@api_router.get("/achievements/featured", response_model=List[Achievement])
+async def get_featured_achievements(current_user: User = Depends(get_current_user)):
+    """Get featured achievements for the current user"""
+    achievements = await db.achievements.find(
+        {"user_id": current_user.user_id, "is_featured": True}
+    ).sort("earned_at", -1).to_list(100)
+    
+    return [Achievement(**achievement) for achievement in achievements]
+
+@api_router.post("/achievements/check")
+async def manually_check_achievements(current_user: User = Depends(get_current_user)):
+    """Manually trigger achievement checking (for testing/admin purposes)"""
+    newly_awarded = await check_and_award_badges(current_user.user_id)
+    return {"newly_awarded_badges": newly_awarded}
+
+# ============= END ACHIEVEMENTS ENDPOINTS =============
+
 # Include the router in the main app
 app.include_router(api_router)
 
