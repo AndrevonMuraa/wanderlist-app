@@ -174,12 +174,14 @@ class Message(BaseModel):
     sender_id: str
     receiver_id: str
     content: str
+    image_base64: Optional[str] = None  # Optional image attachment
     created_at: datetime
     read: bool = False
 
 class MessageCreate(BaseModel):
     receiver_id: str
     content: str
+    image_base64: Optional[str] = None  # Optional image attachment
 
 class LeaderboardEntry(BaseModel):
     user_id: str
