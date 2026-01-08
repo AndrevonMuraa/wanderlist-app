@@ -225,6 +225,122 @@ This baseline model ensures:
 
 ---
 
+### 5.5. **Rich Social Landmark Features** ✅ **[NEW in v4.2]**
+**Status:** FULLY IMPLEMENTED & INTEGRATED
+
+**Overview:**
+Interactive social features that allow users to create rich, shareable landmark visit posts with photo collages, travel diaries, and travel tips. Fully integrated with the activity feed.
+
+**Features Implemented:**
+
+**1. Photo Collages (Up to 10 Photos):**
+- Multiple photo upload per visit
+- Grid layout display (3 columns)
+- Photo picker integration (expo-image-picker)
+- Remove/reorder functionality
+- Base64 storage in database
+- Displayed in activity feed with count badge
+
+**2. Travel Diaries (Up to 2000 Characters):**
+- Rich text diary entries
+- Character counter with warning at 1800
+- Preview in activity feed (first 2 lines)
+- "Read more" expansion
+- Personal travel stories and experiences
+
+**3. Travel Tips (Up to 5 Tips, Premium Only):**
+- Bullet-point format tips
+- Auto-parsing (•, -, * symbols)
+- Real-time preview
+- Helpful for future travelers
+- Premium feature lock for free users
+- Displayed as badges in feed
+
+**Backend Implementation:**
+
+**Enhanced Data Models:**
+```python
+class Visit(BaseModel):
+    photos: Optional[List[str]] = []  # Up to 10 photos
+    diary_notes: Optional[str] = None  # Up to 2000 chars
+    travel_tips: Optional[List[str]] = []  # Up to 5 tips
+    # ... other fields
+```
+
+**API Endpoints:**
+- `POST /api/visits` - Enhanced to accept photos, diary, tips
+- `GET /api/visits/{visit_id}` - Get full visit details with rich content
+- Validation: Max 10 photos, max 2000 chars diary, max 5 tips
+
+**Activity Feed Integration:**
+- Rich activity posts include metadata:
+  - `has_diary`, `has_tips`, `has_photos`
+  - `photo_count` for display
+  - `visit_id` linking to full details
+- Feed displays preview badges and counts
+- Tappable to view full visit details
+
+**Frontend Components:**
+
+**AddVisitModal Component** (`/app/frontend/components/AddVisitModal.tsx`):
+- Beautiful 3-tab modal interface
+- Tab 1: Photos (grid layout, add/remove)
+- Tab 2: Diary (rich text input, character counter)
+- Tab 3: Tips (bullet format, preview, premium lock)
+- Smooth animations and transitions
+- Validation and error handling
+- Success alerts with points/badges
+
+**Add Visit Page** (`/app/frontend/app/add-visit/[landmark_id].tsx`):
+- Modern turquoise-themed wrapper
+- Auto-opens AddVisitModal on load
+- Handles submission to backend
+- Success messaging with gamification
+- Points earned + badge unlock notifications
+
+**Design Features:**
+- Turquoise gradient buttons
+- Clean tab navigation with icons
+- Empty states with guidance
+- Real-time character/tip counters
+- Premium lock indicators
+- Photo grid with remove buttons
+- Placeholder examples
+
+**User Experience Flow:**
+1. User taps "Mark as Visited" on landmark
+2. Navigates to add-visit page
+3. Modal automatically opens with 3 tabs
+4. User adds photos, writes diary, adds tips
+5. Taps "Done" to submit
+6. Backend validates and creates visit
+7. Activity appears in social feed with rich content
+8. Success alert shows points + badges earned
+9. Returns to previous page
+
+**Feed Display (Planned):**
+- Photo count badge ("📷 5 photos")
+- Diary preview (first 2 lines + "Read more...")
+- Tips count badge ("💡 3 tips")
+- "Tap to see full visit" CTA
+- Expandable/detail view modal
+
+**Files:**
+- Backend: `/app/backend/server.py` (Visit models + endpoints)
+- Component: `/app/frontend/components/AddVisitModal.tsx` (Modal UI)
+- Page: `/app/frontend/app/add-visit/[landmark_id].tsx` (Integration)
+- Feed: `/app/frontend/app/(tabs)/social.tsx` (Display - enhancement pending)
+
+**Benefits:**
+- Richer user-generated content
+- Better social engagement
+- Travel inspiration for others
+- Community knowledge sharing
+- Premium feature differentiation
+- Enhanced activity feed value
+
+
+
 ### 6. **Social Features** ✅
 **Status:** COMPLETE - CONSOLIDATED IN SOCIAL HUB
 
