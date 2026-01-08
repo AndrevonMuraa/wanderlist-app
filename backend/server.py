@@ -701,6 +701,22 @@ async def get_landmark(landmark_id: str, current_user: User = Depends(get_curren
         raise HTTPException(status_code=404, detail="Landmark not found")
     return Landmark(**landmark)
 
+@api_router.get("/landmarks/search/query")
+async def search_landmarks(q: str, limit: int = 50, current_user: User = Depends(get_current_user)):
+    """Search landmarks by name across all countries"""
+    if not q or len(q.strip()) < 2:
+        return []
+    
+    # Search by name (case-insensitive, partial match)
+    landmarks = await db.landmarks.find(
+        {
+            "name": {"$regex": q, "$options": "i"}
+        },
+        {"_id": 0}
+    ).limit(limit).to_list(limit)
+    
+    return landmarks
+
 @api_router.post("/landmarks", response_model=Landmark)
 async def create_landmark(data: LandmarkCreate, current_user: User = Depends(get_current_user)):
     # Check if user is premium
