@@ -193,6 +193,7 @@ LANDMARKS_DATA = {
     
     # EUROPE - NORWAY
     "norway": [
+        {"name": "The Old Town of Fredrikstad", "description": "Best-preserved fortified town in Scandinavia, with cobblestone streets, historic ramparts, drawbridge, and charming wooden houses from the 1600s.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=600", "difficulty": "Easy"},
         {"name": "Geirangerfjord", "description": "Deep blue fjord surrounded by majestic mountains, waterfalls, and lush vegetation.", "image_url": "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Northern Lights", "description": "Aurora borealis dancing across Arctic sky, magical natural phenomenon.", "image_url": "https://images.unsplash.com/photo-1579033461380-adb47c3eb938?w=800&q=80", "difficulty": "Moderate"},
         {"name": "Lofoten Islands", "description": "Arctic archipelago with dramatic peaks, fishing villages, and midnight sun.", "image_url": "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800&q=80", "difficulty": "Moderate"},
@@ -200,7 +201,6 @@ LANDMARKS_DATA = {
         {"name": "Bergen Bryggen", "description": "Colorful Hanseatic wharf, UNESCO site, wooden trading houses from 1700s.", "image_url": "https://images.unsplash.com/photo-1601439678777-b2d6b2e8f6b0?w=800&q=80", "difficulty": "Easy"},
         {"name": "Trolltunga", "description": "Troll's Tongue, dramatic rock formation jutting out 700m above lake.", "image_url": "https://images.unsplash.com/photo-1558981852-426c6c22a060?w=800&q=80", "difficulty": "Hard"},
         {"name": "Vigeland Park Oslo", "description": "World's largest sculpture park by single artist, 200+ Gustav Vigeland works.", "image_url": "https://images.unsplash.com/photo-1564623645177-cc6ef73d3c8d?w=800&q=80", "difficulty": "Easy"},
-        {"name": "The Old Town of Fredrikstad", "description": "Best-preserved fortified town in Scandinavia, with cobblestone streets, historic ramparts, drawbridge, and charming wooden houses from the 1600s.", "image_url": "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=600", "difficulty": "Easy"},
         {"name": "Nidaros Cathedral", "description": "Norway's national sanctuary, Gothic masterpiece in Trondheim, pilgrimage site.", "image_url": "https://images.unsplash.com/photo-1578895101408-1a36b834405b?w=800&q=80", "difficulty": "Easy"},
         {"name": "Svalbard Arctic", "description": "Remote archipelago, polar bears, glaciers, northernmost settlement on Earth.", "image_url": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&q=80", "difficulty": "Hard"},
     ],
