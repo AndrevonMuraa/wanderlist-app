@@ -40,6 +40,11 @@ interface Activity {
   created_at: string;
   likes_count: number;
   is_liked: boolean;
+  visit_id?: string;
+  has_diary?: boolean;
+  has_tips?: boolean;
+  has_photos?: boolean;
+  photo_count?: number;
 }
 
 interface Friend {
