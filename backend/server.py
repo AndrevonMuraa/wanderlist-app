@@ -947,6 +947,9 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
     visits = await db.visits.find({"user_id": current_user.user_id}, {"_id": 0}).to_list(10000)
     visited_landmark_ids = {v["landmark_id"] for v in visits}
     
+    # Calculate total points earned
+    total_points = sum(v.get("points_earned", 10) for v in visits)
+    
     # Get all landmarks and countries
     all_landmarks = await db.landmarks.find({}, {"_id": 0}).to_list(10000)
     all_countries = await db.countries.find({}, {"_id": 0}).to_list(100)
