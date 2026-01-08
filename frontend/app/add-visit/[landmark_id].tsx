@@ -82,6 +82,7 @@ export default function AddVisitScreen() {
       if (response.ok) {
         const data = await response.json();
         setUserTier(data.subscription_tier || 'free');
+        setUserPoints(data.points || 0); // Track user points for level-up detection
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
