@@ -1531,6 +1531,13 @@ async def add_comment(activity_id: str, data: CommentCreate, current_user: User 
     if not activity:
         raise HTTPException(status_code=404, detail="Activity not found")
     
+    # If this is a reply, get parent comment details
+    reply_to_user = None
+    if data.parent_comment_id:
+        parent_comment = await db.comments.find_one({"comment_id": data.parent_comment_id})
+        if parent_comment:
+            reply_to_user = parent_comment.get("user_name")
+    
     comment_id = f"comment_{uuid.uuid4().hex[:12]}"
     comment = {
         "comment_id": comment_id,
@@ -1539,11 +1546,21 @@ async def add_comment(activity_id: str, data: CommentCreate, current_user: User 
         "user_name": current_user.name,
         "user_picture": current_user.picture,
         "content": data.content,
-        "created_at": datetime.now(timezone.utc)
+        "parent_comment_id": data.parent_comment_id,
+        "reply_to_user": reply_to_user,
+        "created_at": datetime.now(timezone.utc),
+        "likes_count": 0
     }
     
     await db.comments.insert_one(comment)
-    return Comment(**comment)
+    
+    # Update activity comments_count
+    await db.activities.update_one(
+        {"activity_id": activity_id},
+        {"$inc": {"comments_count": 1}}
+    )
+    
+    return Comment(**comment, is_liked=False)
 
 @api_router.get("/activities/{activity_id}/comments", response_model=List[Comment])
 async def get_activity_comments(activity_id: str, current_user: User = Depends(get_current_user)):
