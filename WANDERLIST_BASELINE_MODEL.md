@@ -584,8 +584,8 @@ class Visit(BaseModel):
 
 ---
 
-### 9. **Navigation & UI** ✅ **[UPDATED - NEW 4-TAB STRUCTURE]**
-**Status:** COMPLETE - CONSOLIDATED NAVIGATION
+### 9. **Navigation & UI** ✅ **[UPDATED - v4.3]**
+**Status:** COMPLETE - CONSOLIDATED NAVIGATION + HUB-STYLE SOCIAL
 
 **Tab Navigation (4 Tabs):**
 1. **My Journey** (`journey.tsx`) - Stats & progress dashboard
@@ -600,16 +600,54 @@ class Visit(BaseModel):
    - Country browsing
    - Search integration
    
-3. **Social** (`social.tsx`) - Consolidated social hub
+3. **Social** (`social.tsx`) - **Hub-style dashboard** ✨ **[NEW in v4.3]**
    - Icon: people-outline 👥
-   - 4 sub-tabs: Feed, Friends, Messages, Leaderboard
-   - All social features in one place
+   - **Single scrollable page** with all features visible
+   - **5 sections:** Activity Feed, Friends, Messages, Leaderboard, Stats
+   - **Dashboard layout** - See everything at once
+   - **Quick actions** - "See All", "Manage", "View Full"
+   - **Pull-to-refresh** - Updates all sections
+   - **Reduced code:** 1111 lines → ~700 lines (36% reduction)
+   - **Hub categorization:** Card-based sections with icons
    
 4. **Profile** (`profile.tsx`) - Account & settings
    - Icon: person-outline 👤
    - User info
    - Earned badges
    - Settings
+
+**Social Hub Layout (v4.3):**
+- **Header:** "Social Hub" + subtitle
+- **Activity Feed Section:**
+  - Icon: Newspaper
+  - Top 3 recent activities
+  - Like buttons with counts
+  - "See All →" and "View All Activity"
+  - Empty state with encouragement
+- **Friends Section:**
+  - Icon: People
+  - Stats: Friend count + Pending badge
+  - Horizontal scrollable avatars (top 8)
+  - Tap to message
+  - "Manage →" and "View All Friends"
+- **Messages Section:**
+  - Icon: Chatbubbles
+  - Gradient "Open Messages" button
+  - Unread badge indicator
+  - Premium lock hint for free users
+- **Leaderboard Section:**
+  - Icon: Trophy
+  - Top 5 users with colored rank badges
+  - Gold/Silver/Bronze for top 3
+  - Points with star icons
+  - "Full List →" and "View Full Leaderboard"
+
+**Benefits:**
+- See all social activity at once
+- Less tapping required
+- Clearer information hierarchy
+- Better engagement
+- Dashboard overview experience
 
 **Previous Structure (Removed):**
 - ❌ Standalone "Feed" tab - Now in Social
