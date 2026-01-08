@@ -716,6 +716,36 @@ async def get_visit_stats(current_user: User = Depends(get_current_user)):
         "tier": current_user.subscription_tier
     }
 
+
+@api_router.get("/visits/{visit_id}")
+async def get_visit_details(visit_id: str, current_user: User = Depends(get_current_user)):
+    """Get full visit details including photos, diary, and tips"""
+    visit = await db.visits.find_one({"visit_id": visit_id}, {"_id": 0})
+    if not visit:
+        raise HTTPException(status_code=404, detail="Visit not found")
+    
+    # Get landmark details
+    landmark = await db.landmarks.find_one(
+        {"landmark_id": visit["landmark_id"]}, 
+        {"_id": 0, "name": 1, "country_name": 1, "image_url": 1}
+    )
+    
+    # Get user details
+    user = await db.users.find_one(
+        {"user_id": visit["user_id"]},
+        {"_id": 0, "name": 1, "picture": 1, "username": 1}
+    )
+    
+    return {
+        **visit,
+        "landmark_name": landmark.get("name") if landmark else None,
+        "country_name": landmark.get("country_name") if landmark else None,
+        "landmark_image": landmark.get("image_url") if landmark else None,
+        "user_name": user.get("name") if user else None,
+        "user_picture": user.get("picture") if user else None,
+        "username": user.get("username") if user else None
+    }
+
 @api_router.post("/visits", response_model=Visit)
 async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_user)):
     landmark = await db.landmarks.find_one({"landmark_id": data.landmark_id}, {"_id": 0})
