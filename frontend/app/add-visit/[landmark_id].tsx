@@ -133,11 +133,35 @@ export default function AddVisitScreen() {
 
       const result = await response.json();
 
+      // Fetch updated user data to get new points and check for level-up
+      const userToken = await getToken();
+      const userResponse = await fetch(`${BACKEND_URL}/api/auth/me`, {
+        headers: {
+          'Authorization': `Bearer ${userToken}`,
+        },
+      });
+      
+      let newUserPoints = userPoints;
+      let rankedUp = false;
+      let newRank = null;
+      
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+        newUserPoints = userData.points || 0;
+        
+        // Check for level-up
+        newRank = checkLevelUp(userPoints, newUserPoints);
+        if (newRank) {
+          rankedUp = true;
+        }
+      }
+
       // Check for country or continent completion
       let celebrationMessage = `You earned ${result.points_earned} points`;
       let shouldCelebrate = false;
       let celebType: 'landmark' | 'country' | 'continent' | 'milestone' = 'landmark';
 
+      // Priority: Continent > Country > Rank Up
       if (result.continent_completed) {
         celebrationMessage = `🌍 CONTINENT MASTERED!\n\nYou've completed all countries in ${result.completed_continent}!\n\n+${result.points_earned} points + 200 BONUS points!`;
         shouldCelebrate = true;
@@ -146,14 +170,23 @@ export default function AddVisitScreen() {
         celebrationMessage = `🎊 COUNTRY COMPLETED!\n\nYou've visited all landmarks in ${result.completed_country_name}!\n\n+${result.points_earned} points + 50 BONUS points!`;
         shouldCelebrate = true;
         celebType = 'country';
+      } else if (rankedUp && newRank) {
+        celebrationMessage = `⭐ RANK UP!\n\nYou've advanced to ${newRank.name}!\n\n${newRank.description}\n\n+${result.points_earned} points earned!`;
+        shouldCelebrate = true;
+        celebType = 'milestone';
       }
 
       // Add badge info if available
       if (result.newly_awarded_badges && result.newly_awarded_badges.length > 0) {
         celebrationMessage += `\n\n✨ New badge unlocked: ${result.newly_awarded_badges[0].name}!`;
       }
+      
+      // Add rank up mention even if there's a country/continent completion
+      if (rankedUp && newRank && (result.country_completed || result.continent_completed)) {
+        celebrationMessage += `\n\n⭐ BONUS: You also ranked up to ${newRank.name}!`;
+      }
 
-      // Trigger celebration animation if country or continent completed
+      // Trigger celebration animation
       if (shouldCelebrate) {
         setCelebrationType(celebType);
         setShowCelebration(true);
