@@ -1004,6 +1004,9 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     visit_dict["newly_awarded_badges"] = newly_awarded_badges
     visit_dict["country_completed"] = country_completed
     visit_dict["continent_completed"] = continent_completed
+    visit_dict["current_streak"] = current_streak
+    visit_dict["streak_milestone_reached"] = streak_milestone_reached
+    visit_dict["new_milestone"] = new_milestone if streak_milestone_reached else 0
     if country_completed:
         visit_dict["completed_country_name"] = completed_country_name
     if continent_completed:
