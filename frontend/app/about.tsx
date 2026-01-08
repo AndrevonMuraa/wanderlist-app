@@ -156,17 +156,20 @@ export default function AboutScreen() {
             <View style={styles.statsRow}>
               <View style={styles.statBox}>
                 <Text style={styles.statNumber}>480</Text>
-                <Text style={styles.statLabel}>Landmarks</Text>
+                <Text style={styles.statLabel}>Total Landmarks</Text>
+                <View style={styles.statBreakdown}>
+                  <Text style={styles.statBreakdownText}>380 Official</Text>
+                  <View style={styles.statBreakdownDot} />
+                  <Text style={[styles.statBreakdownText, styles.premiumText]}>100 Premium</Text>
+                </View>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statBox}>
                 <Text style={styles.statNumber}>48</Text>
                 <Text style={styles.statLabel}>Countries</Text>
-              </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statBox}>
-                <Text style={styles.statNumber}>5</Text>
-                <Text style={styles.statLabel}>Continents</Text>
+                <View style={styles.statBreakdown}>
+                  <Text style={styles.statBreakdownText}>Across 5 continents</Text>
+                </View>
               </View>
             </View>
           </Surface>
@@ -286,6 +289,59 @@ export default function AboutScreen() {
                     • <Text style={styles.bold}>Leaderboard:</Text> Compete globally or with friends{'\n'}
                     • <Text style={styles.bold}>Rankings:</Text> Climb the ranks to become a legend
                   </Text>
+
+                  {/* Points Milestones Progress */}
+                  <View style={styles.pointsMilestonesSection}>
+                    <Text style={styles.pointsMilestonesTitle}>Points Milestones</Text>
+                    
+                    <View style={styles.milestoneRow}>
+                      <View style={styles.milestoneInfo}>
+                        <Ionicons name="trophy" size={16} color="#CD7F32" />
+                        <Text style={styles.milestoneText}>100 pts</Text>
+                      </View>
+                      <View style={styles.milestoneProgressBar}>
+                        <View style={[styles.milestoneProgressFill, { width: '20%', backgroundColor: '#CD7F32' }]} />
+                      </View>
+                      <Text style={styles.milestoneLabel}>Point Starter</Text>
+                    </View>
+
+                    <View style={styles.milestoneRow}>
+                      <View style={styles.milestoneInfo}>
+                        <Ionicons name="trophy" size={16} color="#C0C0C0" />
+                        <Text style={styles.milestoneText}>500 pts</Text>
+                      </View>
+                      <View style={styles.milestoneProgressBar}>
+                        <View style={[styles.milestoneProgressFill, { width: '40%', backgroundColor: '#C0C0C0' }]} />
+                      </View>
+                      <Text style={styles.milestoneLabel}>Point Collector</Text>
+                    </View>
+
+                    <View style={styles.milestoneRow}>
+                      <View style={styles.milestoneInfo}>
+                        <Ionicons name="trophy" size={16} color="#FFD700" />
+                        <Text style={styles.milestoneText}>1,000 pts</Text>
+                      </View>
+                      <View style={styles.milestoneProgressBar}>
+                        <View style={[styles.milestoneProgressFill, { width: '60%', backgroundColor: '#FFD700' }]} />
+                      </View>
+                      <Text style={styles.milestoneLabel}>Point Master</Text>
+                    </View>
+
+                    <View style={styles.milestoneRow}>
+                      <View style={styles.milestoneInfo}>
+                        <Ionicons name="trophy" size={16} color={theme.colors.primary} />
+                        <Text style={styles.milestoneText}>5,000 pts</Text>
+                      </View>
+                      <View style={styles.milestoneProgressBar}>
+                        <View style={[styles.milestoneProgressFill, { width: '100%', backgroundColor: theme.colors.primary }]} />
+                      </View>
+                      <Text style={styles.milestoneLabel}>Point Legend</Text>
+                    </View>
+
+                    <Text style={styles.pointsExplanation}>
+                      💡 Earn badges automatically when you reach these milestones!
+                    </Text>
+                  </View>
                 </View>
               )}
             </Surface>
