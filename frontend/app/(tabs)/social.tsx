@@ -463,29 +463,38 @@ export default function SocialHubScreen() {
     </TouchableOpacity>
   );
 
-  const renderLeaderboardItem = (entry: LeaderboardEntry, index: number) => (
-    <View key={index} style={styles.leaderboardItem}>
-      <View style={styles.leaderboardLeft}>
-        <View style={[
-          styles.rankBadge,
-          index === 0 && styles.rankBadgeGold,
-          index === 1 && styles.rankBadgeSilver,
-          index === 2 && styles.rankBadgeBronze,
-        ]}>
-          <Text style={styles.rankText}>{entry.rank}</Text>
+  const renderLeaderboardItem = (entry: LeaderboardEntry, index: number) => {
+    const userRank = getUserRank(entry.total_points);
+    
+    return (
+      <View key={index} style={styles.leaderboardItem}>
+        <View style={styles.leaderboardLeft}>
+          <View style={[
+            styles.rankBadge,
+            index === 0 && styles.rankBadgeGold,
+            index === 1 && styles.rankBadgeSilver,
+            index === 2 && styles.rankBadgeBronze,
+          ]}>
+            <Text style={styles.rankText}>{entry.rank}</Text>
+          </View>
+          <Avatar.Image 
+            size={32} 
+            source={{ uri: entry.picture || 'https://via.placeholder.com/100' }} 
+          />
+          <View style={styles.leaderboardNameContainer}>
+            <Text style={styles.leaderboardName} numberOfLines={1}>{entry.name}</Text>
+            <View style={styles.userRankBadgeSmall}>
+              <RankBadge rank={userRank} size="small" showName={false} />
+            </View>
+          </View>
         </View>
-        <Avatar.Image 
-          size={32} 
-          source={{ uri: entry.picture || 'https://via.placeholder.com/100' }} 
-        />
-        <Text style={styles.leaderboardName} numberOfLines={1}>{entry.name}</Text>
+        <View style={styles.leaderboardRight}>
+          <Ionicons name="star" size={14} color="#FFD700" />
+          <Text style={styles.leaderboardPoints}>{entry.total_points}</Text>
+        </View>
       </View>
-      <View style={styles.leaderboardRight}>
-        <Ionicons name="star" size={14} color="#FFD700" />
-        <Text style={styles.leaderboardPoints}>{entry.total_points}</Text>
-      </View>
-    </View>
-  );
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
