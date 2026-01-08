@@ -27,6 +27,7 @@ interface Message {
   sender_id: string;
   receiver_id: string;
   content: string;
+  image_base64?: string;  // Optional image attachment
   timestamp: string;
   is_mine: boolean;
 }
@@ -35,6 +36,9 @@ export default function ChatScreen() {
   const { friend_id, name } = useLocalSearchParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imageModalVisible, setImageModalVisible] = useState(false);
+  const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const flatListRef = useRef<FlatList>(null);
