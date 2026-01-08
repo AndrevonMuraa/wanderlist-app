@@ -187,6 +187,90 @@ export default function ProfileScreen() {
           </View>
         </Surface>
 
+        {/* Travel Statistics Dashboard */}
+        {stats && progressStats && (
+          <Surface style={styles.statsCard}>
+            <View style={styles.statsHeader}>
+              <Text style={styles.sectionTitle}>Travel Statistics</Text>
+              <TouchableOpacity>
+                <Ionicons name="share-social-outline" size={22} color={theme.colors.primary} />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.statsGrid}>
+              {/* Countries Visited */}
+              <View style={styles.statBox}>
+                <View style={styles.statIconContainer}>
+                  <Ionicons name="flag" size={24} color={theme.colors.primary} />
+                </View>
+                <Text style={styles.statValue}>
+                  {Object.keys(progressStats.countries).filter(
+                    countryId => progressStats.countries[countryId].visited > 0
+                  ).length}
+                </Text>
+                <Text style={styles.statLabel}>Countries</Text>
+                <Text style={styles.statSubtext}>of 48 total</Text>
+              </View>
+
+              {/* Continents Explored */}
+              <View style={styles.statBox}>
+                <View style={styles.statIconContainer}>
+                  <Ionicons name="earth" size={24} color={theme.colors.accent} />
+                </View>
+                <Text style={styles.statValue}>
+                  {Object.keys(progressStats.continents).filter(
+                    continent => progressStats.continents[continent].visited > 0
+                  ).length}
+                </Text>
+                <Text style={styles.statLabel}>Continents</Text>
+                <Text style={styles.statSubtext}>explored</Text>
+              </View>
+
+              {/* Total Landmarks */}
+              <View style={styles.statBox}>
+                <View style={styles.statIconContainer}>
+                  <Ionicons name="location" size={24} color={theme.colors.accentYellow} />
+                </View>
+                <Text style={styles.statValue}>{progressStats.overall.visited}</Text>
+                <Text style={styles.statLabel}>Landmarks</Text>
+                <Text style={styles.statSubtext}>visited</Text>
+              </View>
+
+              {/* Total Points */}
+              <View style={styles.statBox}>
+                <View style={styles.statIconContainer}>
+                  <Ionicons name="star" size={24} color={theme.colors.accentBronze} />
+                </View>
+                <Text style={styles.statValue}>{progressStats.totalPoints || 0}</Text>
+                <Text style={styles.statLabel}>Points</Text>
+                <Text style={styles.statSubtext}>earned</Text>
+              </View>
+
+              {/* Global Rank */}
+              <View style={styles.statBox}>
+                <View style={styles.statIconContainer}>
+                  <Ionicons name="trophy" size={24} color={theme.colors.accentYellow} />
+                </View>
+                <Text style={styles.statValue}>#{stats.rank || '-'}</Text>
+                <Text style={styles.statLabel}>Global Rank</Text>
+                <Text style={styles.statSubtext}>leaderboard</Text>
+              </View>
+
+              {/* Completion Rate */}
+              <View style={styles.statBox}>
+                <View style={styles.statIconContainer}>
+                  <Ionicons name="pie-chart" size={24} color={theme.colors.primary} />
+                </View>
+                <Text style={styles.statValue}>
+                  {Math.round(progressStats.overall.percentage)}%
+                </Text>
+                <Text style={styles.statLabel}>Complete</Text>
+                <Text style={styles.statSubtext}>overall</Text>
+              </View>
+            </View>
+          </Surface>
+        )}
+
         {/* Progress Dashboard */}
         {progressStats && (
           <Surface style={styles.progressCard}>
