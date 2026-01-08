@@ -227,7 +227,7 @@ class APITester:
             if response.status_code == 200:
                 trip_details = response.json()
                 landmarks = trip_details.get("landmarks", [])
-                has_added_landmark = any(lm["landmark_id"] == landmark_id for lm in landmarks)
+                has_added_landmark = any(lm["landmark"]["landmark_id"] == landmark_id for lm in landmarks)
                 self.log_test("Get Trip with Landmarks", has_added_landmark, f"Trip has {len(landmarks)} landmarks, added landmark present: {has_added_landmark}")
             else:
                 self.log_test("Get Trip with Landmarks", False, f"Status: {response.status_code}")
