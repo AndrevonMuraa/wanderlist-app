@@ -147,13 +147,20 @@ export default function SocialScreen() {
 
     try {
       const token = await getToken();
+      
+      // Determine if input is email or username
+      const isEmail = friendEmail.includes('@');
+      const requestBody = isEmail 
+        ? { friend_email: friendEmail.trim() }
+        : { friend_username: friendEmail.trim() };
+      
       const response = await fetch(`${BACKEND_URL}/api/friends/request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ friend_email: friendEmail })
+        body: JSON.stringify(requestBody)
       });
 
       if (response.ok) {
