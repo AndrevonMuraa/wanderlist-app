@@ -132,8 +132,18 @@ export default function ContinentsScreen() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Explore Continents</Text>
-        <Text style={styles.headerSubtitle}>Choose your next adventure</Text>
+        <View style={styles.headerContent}>
+          <View>
+            <Text style={styles.headerTitle}>Explore Continents</Text>
+            <Text style={styles.headerSubtitle}>Choose your next adventure</Text>
+          </View>
+          <TouchableOpacity 
+            style={styles.searchButton}
+            onPress={() => router.push('/search')}
+          >
+            <Ionicons name="search" size={24} color={theme.colors.primary} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Continent Cards */}
