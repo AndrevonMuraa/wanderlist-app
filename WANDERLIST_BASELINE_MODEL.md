@@ -1216,7 +1216,38 @@ git commit -m "Session X: [Brief summary of changes]"
 
 ## 📝 CHANGELOG (Baseline Evolution)
 
-### v4.1.0 (Current - January 8, 2026) - **UI Enhancement**
+### v4.2.0 (Current - January 8, 2026) - **Rich Social Features**
+- 🎉 **Rich Social Landmark Features** - Photo collages, travel diaries, travel tips
+  - Photo collages: Up to 10 photos per visit with grid layout
+  - Travel diaries: Up to 2000 character rich text entries
+  - Travel tips: Up to 5 bullet-point tips (Premium only)
+  - Backend validation and storage
+  - Activity feed integration with metadata
+- 📸 **AddVisitModal Component** - Beautiful 3-tab modal interface
+  - Created `/app/frontend/components/AddVisitModal.tsx`
+  - Tab 1: Photos (grid, add/remove, empty states)
+  - Tab 2: Diary (character counter, validation)
+  - Tab 3: Tips (premium lock, bullet parsing, preview)
+  - Turquoise theme, gradient buttons, smooth animations
+- 🎨 **Redesigned Add Visit Page** - Modern turquoise theme
+  - Replaced old purple design in `/app/frontend/app/add-visit/[landmark_id].tsx`
+  - Auto-opens AddVisitModal on load
+  - Success alerts with points + badge notifications
+  - Clean header with back button
+- 📋 **Landmark Cards Redesign** - Icon-based list design
+  - Removed image-based cards (200px → 72px height)
+  - Two icon types: Official (location pin, turquoise) & Premium (diamond, gold)
+  - 44x44px icon containers, left-aligned
+  - Metadata row with points, badges, visited status
+  - Better information density, faster loading
+- 🔧 **Backend Enhancements**
+  - Enhanced Visit models with photos, diary_notes, travel_tips arrays
+  - Added `GET /api/visits/{visit_id}` endpoint for full visit details
+  - Enhanced `POST /api/visits` with rich content validation
+  - Activity feed posts include has_diary, has_tips, has_photos flags
+- 📊 **Updated API reference** - 31 endpoints total (was 30)
+
+### v4.1.0 (January 8, 2026) - **UI Enhancement**
 - ✨ **Flag-based country card design** - Authentic national flags for all 48 countries
   - Replaced random Unsplash images with high-quality flags from flagcdn.com
   - Full-card flag display with subtle gradient overlays for text readability
