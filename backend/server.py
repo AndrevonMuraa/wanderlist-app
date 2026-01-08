@@ -1110,6 +1110,156 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
         "countries": country_progress
     }
 
+# ============= ACTIVITY FEED & SOCIAL ENDPOINTS =============
+
+@api_router.get("/feed", response_model=List[Activity])
+async def get_activity_feed(current_user: User = Depends(get_current_user), limit: int = 50):
+    """Get activity feed from friends"""
+    
+    # Get all accepted friends
+    friendships = await db.friends.find({
+        "$or": [
+            {"user_id": current_user.user_id, "status": "accepted"},
+            {"friend_id": current_user.user_id, "status": "accepted"}
+        ]
+    }).to_list(1000)
+    
+    # Extract friend IDs
+    friend_ids = []
+    for friendship in friendships:
+        if friendship["user_id"] == current_user.user_id:
+            friend_ids.append(friendship["friend_id"])
+        else:
+            friend_ids.append(friendship["user_id"])
+    
+    # Add current user to see own activities
+    friend_ids.append(current_user.user_id)
+    
+    # Get activities from friends, sorted by recent
+    activities = await db.activities.find(
+        {"user_id": {"$in": friend_ids}}
+    ).sort("created_at", -1).limit(limit).to_list(limit)
+    
+    # Enrich activities with like and comment counts, and check if current user liked
+    enriched_activities = []
+    for activity in activities:
+        # Get likes count
+        likes_count = await db.likes.count_documents({"activity_id": activity["activity_id"]})
+        
+        # Check if current user liked this
+        user_like = await db.likes.find_one({
+            "activity_id": activity["activity_id"],
+            "user_id": current_user.user_id
+        })
+        
+        # Get comments count
+        comments_count = await db.comments.count_documents({"activity_id": activity["activity_id"]})
+        
+        activity["likes_count"] = likes_count
+        activity["comments_count"] = comments_count
+        activity["is_liked"] = bool(user_like)
+        
+        enriched_activities.append(Activity(**activity))
+    
+    return enriched_activities
+
+@api_router.post("/activities/{activity_id}/like")
+async def like_activity(activity_id: str, current_user: User = Depends(get_current_user)):
+    """Like an activity"""
+    
+    # Check if activity exists
+    activity = await db.activities.find_one({"activity_id": activity_id})
+    if not activity:
+        raise HTTPException(status_code=404, detail="Activity not found")
+    
+    # Check if already liked
+    existing_like = await db.likes.find_one({
+        "activity_id": activity_id,
+        "user_id": current_user.user_id
+    })
+    
+    if existing_like:
+        raise HTTPException(status_code=400, detail="Already liked")
+    
+    # Create like
+    like_id = f"like_{uuid.uuid4().hex[:12]}"
+    like = {
+        "like_id": like_id,
+        "user_id": current_user.user_id,
+        "activity_id": activity_id,
+        "created_at": datetime.now(timezone.utc)
+    }
+    
+    await db.likes.insert_one(like)
+    return {"message": "Liked"}
+
+@api_router.delete("/activities/{activity_id}/like")
+async def unlike_activity(activity_id: str, current_user: User = Depends(get_current_user)):
+    """Unlike an activity"""
+    
+    result = await db.likes.delete_one({
+        "activity_id": activity_id,
+        "user_id": current_user.user_id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Like not found")
+    
+    return {"message": "Unliked"}
+
+@api_router.get("/activities/{activity_id}/likes")
+async def get_activity_likes(activity_id: str, current_user: User = Depends(get_current_user)):
+    """Get list of users who liked an activity"""
+    
+    likes = await db.likes.find({"activity_id": activity_id}).to_list(1000)
+    
+    # Get user details for each like
+    user_ids = [like["user_id"] for like in likes]
+    users = await db.users.find(
+        {"user_id": {"$in": user_ids}},
+        {"_id": 0, "user_id": 1, "name": 1, "picture": 1}
+    ).to_list(1000)
+    
+    return {
+        "count": len(likes),
+        "users": users
+    }
+
+@api_router.post("/activities/{activity_id}/comment", response_model=Comment)
+async def add_comment(activity_id: str, data: CommentCreate, current_user: User = Depends(get_current_user)):
+    """Add a comment to an activity"""
+    
+    # Check if activity exists
+    activity = await db.activities.find_one({"activity_id": activity_id})
+    if not activity:
+        raise HTTPException(status_code=404, detail="Activity not found")
+    
+    comment_id = f"comment_{uuid.uuid4().hex[:12]}"
+    comment = {
+        "comment_id": comment_id,
+        "activity_id": activity_id,
+        "user_id": current_user.user_id,
+        "user_name": current_user.name,
+        "user_picture": current_user.picture,
+        "content": data.content,
+        "created_at": datetime.now(timezone.utc)
+    }
+    
+    await db.comments.insert_one(comment)
+    return Comment(**comment)
+
+@api_router.get("/activities/{activity_id}/comments", response_model=List[Comment])
+async def get_activity_comments(activity_id: str, current_user: User = Depends(get_current_user)):
+    """Get comments for an activity"""
+    
+    comments = await db.comments.find(
+        {"activity_id": activity_id}
+    ).sort("created_at", 1).to_list(1000)
+    
+    return [Comment(**comment) for comment in comments]
+
+# ============= END ACTIVITY FEED ENDPOINTS =============
+
 # Include the router in the main app
 app.include_router(api_router)
 
