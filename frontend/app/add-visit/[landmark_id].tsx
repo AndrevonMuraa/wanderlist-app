@@ -15,6 +15,7 @@ import { BACKEND_URL } from '../../utils/config';
 import theme from '../../styles/theme';
 import AddVisitModal from '../../components/AddVisitModal';
 import CelebrationEffect from '../../components/CelebrationEffect';
+import { checkLevelUp } from '../../utils/rankSystem';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
