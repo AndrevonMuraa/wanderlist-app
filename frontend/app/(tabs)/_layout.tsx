@@ -52,11 +52,11 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="messages"
+        name="social"
         options={{
-          title: 'Messages',
+          title: 'Social',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbubbles-outline" size={size} color={color} />
+            <Ionicons name="people-outline" size={size} color={color} />
           ),
         }}
       />
