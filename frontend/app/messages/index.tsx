@@ -60,15 +60,37 @@ export default function MessagesScreen() {
       if (friendsRes.ok) {
         const friends = await friendsRes.json();
         
-        // For now, create conversation entries for all friends
-        // In a real app, you'd fetch last messages from backend
-        const convos: Conversation[] = friends.map((friend: Friend) => ({
-          friend,
-          lastMessage: undefined,
-          lastMessageTime: undefined,
-          unreadCount: 0
-        }));
+        // Fetch last message for each friend
+        const convosPromises = friends.map(async (friend: Friend) => {
+          try {
+            const messagesRes = await fetch(`${BACKEND_URL}/api/messages/${friend.user_id}`, {
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
+            
+            if (messagesRes.ok) {
+              const messages = await messagesRes.json();
+              const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+              
+              return {
+                friend,
+                lastMessage: lastMessage ? lastMessage.content : undefined,
+                lastMessageTime: lastMessage ? formatTimestamp(lastMessage.created_at) : undefined,
+                unreadCount: 0  // TODO: Implement read status tracking
+              };
+            }
+          } catch (error) {
+            console.error(`Error fetching messages for ${friend.name}:`, error);
+          }
+          
+          return {
+            friend,
+            lastMessage: undefined,
+            lastMessageTime: undefined,
+            unreadCount: 0
+          };
+        });
         
+        const convos = await Promise.all(convosPromises);
         setConversations(convos);
       }
     } catch (error) {
@@ -77,6 +99,22 @@ export default function MessagesScreen() {
       setLoading(false);
       setRefreshing(false);
     }
+  };
+
+  const formatTimestamp = (timestamp: string) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m`;
+    if (diffHours < 24) return `${diffHours}h`;
+    if (diffDays < 7) return `${diffDays}d`;
+    
+    return date.toLocaleDateString();
   };
 
   const onRefresh = () => {
