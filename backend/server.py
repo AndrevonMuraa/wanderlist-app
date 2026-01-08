@@ -586,6 +586,34 @@ async def google_callback(session_id: str, response: Response):
 async def get_me(current_user: User = Depends(get_current_user)):
     return UserPublic(**current_user.dict())
 
+@api_router.put("/auth/profile")
+async def update_profile(profile_data: ProfileUpdate, current_user: User = Depends(get_current_user)):
+    """Update user profile information"""
+    update_fields = {}
+    
+    if profile_data.name is not None:
+        update_fields["name"] = profile_data.name
+    
+    if profile_data.picture is not None:
+        update_fields["picture"] = profile_data.picture
+    
+    if profile_data.bio is not None:
+        # Limit bio to 200 characters
+        update_fields["bio"] = profile_data.bio[:200] if profile_data.bio else None
+    
+    if profile_data.location is not None:
+        update_fields["location"] = profile_data.location
+    
+    if update_fields:
+        await db.users.update_one(
+            {"user_id": current_user.user_id},
+            {"$set": update_fields}
+        )
+    
+    # Get updated user
+    updated_user = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
+    return UserPublic(**updated_user)
+
 @api_router.post("/auth/logout")
 async def logout(response: Response, session_token: Optional[str] = Cookie(None)):
     if session_token:
