@@ -32,9 +32,13 @@ interface Activity {
   activity_id: string;
   user_name: string;
   user_picture?: string;
-  activity_type: 'visit' | 'milestone';
+  activity_type: 'visit' | 'milestone' | 'country_complete' | 'continent_complete';
   landmark_name?: string;
   country_name?: string;
+  country_id?: string;
+  continent?: string;
+  countries_count?: number;
+  landmarks_count?: number;
   points_earned?: number;
   milestone_count?: number;
   created_at: string;
