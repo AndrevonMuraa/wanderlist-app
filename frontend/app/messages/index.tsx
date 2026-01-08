@@ -189,11 +189,7 @@ export default function MessagesScreen() {
         colors={[theme.colors.primary, theme.colors.primaryDark]}
         style={styles.header}
       >
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>Messages</Text>
-        <View style={styles.headerSpacer} />
       </LinearGradient>
 
       {user?.subscription_tier === 'free' ? (
