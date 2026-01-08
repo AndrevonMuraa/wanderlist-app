@@ -61,6 +61,12 @@ class UserPublic(BaseModel):
     is_premium: bool = False  # Deprecated
     subscription_tier: str = "free"
 
+class ProfileUpdate(BaseModel):
+    name: Optional[str] = None
+    picture: Optional[str] = None  # Base64 image or URL
+    bio: Optional[str] = None
+    location: Optional[str] = None
+
 class Badge(BaseModel):
     badge_id: str
     name: str
