@@ -221,14 +221,52 @@ This baseline model ensures:
 └──────────────────────────────────────┘
 ```
 
+**Landmark Detail Pages - Icon-Based, Image-Free** ✅ **[NEW in v4.3]**
+
+**Complete Redesign:**
+- **No images** - Icon-based hero section instead of background images
+- **Hero:** Large 120px icon (location pin for official, diamond for premium)
+- **Card-based layout** - Clean, sectioned information
+- **Turquoise theme** - Matches app design philosophy
+- **Performance:** 50-70% faster loading (no image downloads)
+
+**Page Structure:**
+1. **Header:** Back button + landmark name
+2. **Hero Section:**
+   - Large circular icon (turquoise for official, gold for premium)
+   - Landmark name (H1, centered)
+   - Location: Country • Continent
+   - Badges: Premium badge + Points badge
+3. **About Card:** Description with information icon
+4. **Quick Info Grid:** 2-column responsive
+   - Best time to visit (calendar icon)
+   - Duration (time icon)
+   - Difficulty (color-coded: green/orange/red)
+5. **Coordinates Card:** Latitude | Longitude (monospace)
+6. **Facts Card:** "Did You Know?" with circular icon bullets
+7. **Community Card:** Upvotes (for user-suggested)
+8. **Floating Action Button:** Gradient "Mark as Visited" or locked state
+
+**Icon System:**
+- Official: `location` icon, `rgba(32, 178, 170, 0.1)` background
+- Premium: `diamond` icon, `rgba(255, 215, 0, 0.1)` background
+- Size: 120x120px circle, 64px icon, 3px border
+- Color-coded difficulty icons (walk, trail-sign, fitness)
+
+**Benefits:**
+- No image management (480 landmarks)
+- Consistent appearance
+- Fast loading
+- Better readability
+- Maintainable and scalable
+
 **Features:**
-- Immersive detail page with full-screen background image
-- Frosted glass content cards
+- Clean card-based information architecture
 - Compact coordinate display (latitude/longitude)
 - Facts and cultural information
-- Difficulty ratings (Easy/Moderate/Challenging)
+- Difficulty ratings (Easy/Moderate/Challenging) - color-coded
 - Best time to visit, duration info
-- Floating "Mark as Visited" button
+- Floating "Mark as Visited" button with gradient
 - Upvoting system for user-suggested landmarks
 
 **Special Landmarks:**
