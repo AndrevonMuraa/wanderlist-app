@@ -111,6 +111,24 @@ export default function ProfileScreen() {
     }
   };
 
+  const fetchBadges = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/achievements`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBadges(data);
+      }
+    } catch (error) {
+      console.error('Error fetching badges:', error);
+    }
+  };
+
   const handleLogout = async () => {
     // Use custom dialog for mobile
     setShowLogoutDialog(true);
