@@ -138,7 +138,7 @@ index 1f0d405..e69de29 100644
 --+import os
 --+
 --+# Get backend URL from environment
---+BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://wandersync.preview.emergentagent.com')
+--+BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://travelfeed.preview.emergentagent.com')
 --+API_BASE = f"{BACKEND_URL}/api"
 --+
 --+# Test credentials
@@ -290,7 +290,7 @@ index 1f0d405..e69de29 100644
 --+import os
 --+
 --+# Get backend URL from environment
---+BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://wandersync.preview.emergentagent.com')
+--+BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://travelfeed.preview.emergentagent.com')
 --+API_BASE = f"{BACKEND_URL}/api"
 --+
 --+# Test credentials
@@ -1257,7 +1257,7 @@ index 1f0d405..e69de29 100644
 -----------+from datetime import datetime
 -----------+
 -----------+# Get backend URL from environment
------------+BACKEND_URL = "https://wandersync.preview.emergentagent.com/api"
+-----------+BACKEND_URL = "https://travelfeed.preview.emergentagent.com/api"
 -----------+
 -----------+class Colors:
 -----------+    GREEN = '\033[92m'
@@ -1856,7 +1856,7 @@ index 1f0d405..e69de29 100644
 ---------------+
 ---------------+**Version:** 2.0.0 (Session 2 Complete)
 ---------------+**Status:** Production Ready with Full Feature Set
----------------+**Preview URL:** https://wandersync.preview.emergentagent.com
+---------------+**Preview URL:** https://travelfeed.preview.emergentagent.com
 ---------------+**Test Credentials:** mobile@test.com / test123 (Free tier)
 ---------------+
 ---------------+### ✅ NEW IN SESSION 2:
