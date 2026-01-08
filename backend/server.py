@@ -1731,13 +1731,13 @@ async def unlike_comment(comment_id: str, current_user: User = Depends(get_curre
 async def get_bucket_list(current_user: User = Depends(get_current_user)):
     """Get user's bucket list with full landmark details"""
     bucket_items = await db.bucket_list.find(
-        {"user_id": current_user.user_id}
+        {"user_id": current_user.user_id}, {"_id": 0}
     ).sort("added_at", -1).to_list(1000)
     
     # Get full landmark details
     landmark_ids = [item["landmark_id"] for item in bucket_items]
     landmarks = await db.landmarks.find(
-        {"landmark_id": {"$in": landmark_ids}}
+        {"landmark_id": {"$in": landmark_ids}}, {"_id": 0}
     ).to_list(1000)
     
     # Create lookup dictionary
