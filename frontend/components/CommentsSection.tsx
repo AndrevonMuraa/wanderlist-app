@@ -32,6 +32,7 @@ interface CommentsSectionProps {
   activityId: string;
   commentsCount: number;
   currentUserId: string;
+  onCommentsChange?: (newCount: number) => void;
 }
 
 const getToken = async (): Promise<string | null> => {
