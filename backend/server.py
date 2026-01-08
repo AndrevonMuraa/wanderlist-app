@@ -801,6 +801,59 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     
     await db.visits.insert_one(visit)
     
+    # Update user streak
+    from datetime import date
+    today = date.today().isoformat()  # YYYY-MM-DD format
+    
+    user_doc = await db.users.find_one({"user_id": current_user.user_id})
+    last_visit_date = user_doc.get("last_visit_date")
+    current_streak = user_doc.get("current_streak", 0)
+    longest_streak = user_doc.get("longest_streak", 0)
+    
+    streak_continued = False
+    streak_milestone_reached = False
+    new_milestone = 0
+    
+    if last_visit_date:
+        from datetime import datetime as dt, timedelta
+        last_date_obj = dt.fromisoformat(last_visit_date).date()
+        today_obj = dt.fromisoformat(today).date()
+        days_diff = (today_obj - last_date_obj).days
+        
+        if days_diff == 0:
+            # Same day visit - don't change streak
+            pass
+        elif days_diff == 1:
+            # Consecutive day - increment streak
+            current_streak += 1
+            streak_continued = True
+        else:
+            # Streak broken - reset to 1
+            current_streak = 1
+    else:
+        # First ever visit
+        current_streak = 1
+    
+    # Update longest streak if current exceeds it
+    if current_streak > longest_streak:
+        longest_streak = current_streak
+    
+    # Check for streak milestones (7, 30, 100 days)
+    streak_milestones = [7, 30, 100]
+    if streak_continued and current_streak in streak_milestones:
+        streak_milestone_reached = True
+        new_milestone = current_streak
+    
+    # Update user document with new streak data
+    await db.users.update_one(
+        {"user_id": current_user.user_id},
+        {"$set": {
+            "current_streak": current_streak,
+            "longest_streak": longest_streak,
+            "last_visit_date": today
+        }}
+    )
+    
     # Create rich activity for social feed (includes diary, tips, photos)
     activity_id = f"activity_{uuid.uuid4().hex[:12]}"
     activity = {
