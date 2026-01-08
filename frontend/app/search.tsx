@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, Platform, Modal } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, Platform, Modal, Image } from 'react-native';
 import { Text, TextInput, Surface, Chip } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
