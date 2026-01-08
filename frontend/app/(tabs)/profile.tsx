@@ -466,6 +466,22 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: theme.colors.textSecondary,
   },
+  rankContainer: {
+    marginTop: theme.spacing.lg,
+    alignItems: 'center',
+    paddingVertical: theme.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+  },
+  rankProgressCard: {
+    margin: theme.spacing.md,
+    marginTop: 0,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
   statsCard: {
     margin: theme.spacing.md,
     marginTop: 0,
