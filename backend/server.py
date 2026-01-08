@@ -44,6 +44,9 @@ class User(BaseModel):
     is_premium: bool = False  # Deprecated, kept for backward compatibility
     subscription_tier: str = "free"  # "free", "basic", "premium"
     password_hash: Optional[str] = None
+    current_streak: int = 0  # Current consecutive days streak
+    longest_streak: int = 0  # Longest streak ever achieved
+    last_visit_date: Optional[str] = None  # Last date user made a visit (YYYY-MM-DD)
     created_at: datetime
 
 class UserPublic(BaseModel):
