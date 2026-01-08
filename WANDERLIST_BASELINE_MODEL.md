@@ -419,38 +419,64 @@ class Visit(BaseModel):
 **Navigation Structure:**
 - `/app/frontend/app/(tabs)/social.tsx` (1111 lines) - Main social hub with 4 sub-tabs
 
-**6.1 Activity Feed** ✅ **[NEWLY DOCUMENTED]**
+**6.1 Activity Feed** ✅ **[ENHANCED in v4.8]**
 **Status:** FULLY IMPLEMENTED & WORKING
 
 **Features:**
-- User activity stream (visit activities, milestones)
+- User activity stream (visit activities, milestones, country/continent completions)
 - Like/unlike functionality with heart icon ❤️
-- Comment system with threaded discussions 💬
+- **Comments System with threaded replies** 💬 **[NEW in v4.8]**
+- **Like/unlike individual comments** ❤️ **[NEW in v4.8]**
+- **Nested comment replies with visual indentation** **[NEW in v4.8]**
+- **Delete own comments** (with confirmation) **[NEW in v4.8]**
+- **Real-time comment count updates** **[NEW in v4.8]**
 - Expandable comment sections
 - Pull-to-refresh support
 - Real-time activity updates
-- Activity type indicators (visit, milestone)
+- Activity type indicators (visit, milestone, country_complete, continent_complete)
+
+**Comments System Details** **[NEW in v4.8]:**
+- Expandable/collapsible comment section per activity
+- Post top-level comments (max 500 characters)
+- Reply to comments with threading (parent_comment_id)
+- Like/unlike comments with visual feedback
+- Delete own comments (owner-only, with confirmation alert)
+- Comment input with "Replying to @username" banner
+- Visual indentation for replies with left border
+- Timestamps display (just now, 5m ago, 3h ago, etc.)
+- User avatars for each comment
+- Real-time updates to comments_count on activity
 
 **Backend API Endpoints:**
 - `GET /api/feed?limit=50` - Get user's activity feed
 - `POST /api/activities/{activity_id}/like` - Like an activity
 - `DELETE /api/activities/{activity_id}/like` - Unlike an activity
 - `GET /api/activities/{activity_id}/likes` - Get activity likes
-- `POST /api/activities/{activity_id}/comment` - Add comment to activity
-- `GET /api/activities/{activity_id}/comments` - Get activity comments
+- `POST /api/activities/{activity_id}/comment` - Add comment to activity **[ENHANCED in v4.8]**
+- `GET /api/activities/{activity_id}/comments` - Get activity comments **[ENHANCED in v4.8]**
+- `POST /api/comments/{comment_id}/like` - Like a comment **[NEW in v4.8]**
+- `DELETE /api/comments/{comment_id}/like` - Unlike a comment **[NEW in v4.8]**
+- `DELETE /api/comments/{comment_id}` - Delete a comment (owner-only) **[NEW in v4.8]**
 
 **Database Collections:**
-- `activities` - Stores user activities (visits, milestones)
+- `activities` - Stores user activities with comments_count field
 - `likes` - Stores activity likes (user_id, activity_id)
-- `comments` - Stores activity comments with content
+- `comments` - Stores activity comments with threading support (parent_comment_id, reply_to_user)
+- `comment_likes` - Stores comment likes **[NEW in v4.8]**
+
+**Frontend Components:**
+- `/app/frontend/app/(tabs)/social.tsx` - Main feed with integrated comments
+- `/app/frontend/components/CommentsSection.tsx` - Comments container component **[NEW in v4.8]**
+- `/app/frontend/components/CommentItem.tsx` - Individual comment renderer **[NEW in v4.8]**
 
 **Frontend Integration:**
 - Feed tab in Social screen
 - Optimistic UI updates (immediate feedback)
 - Collapsible comment sections
 - Like count display
-- Comment count display
+- Comment count display with real-time updates
 - User avatars and names
+- Keyboard-aware input handling
 
 **6.2 Friends System** ✅
 **Features:**
