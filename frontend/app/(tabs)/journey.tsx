@@ -408,7 +408,12 @@ export default function JourneyScreen() {
           <Surface style={styles.recentVisitsCard}>
             <Text style={styles.sectionTitle}>Recent Visits</Text>
             {recentVisits.map((visit) => (
-              <View key={visit.visit_id} style={styles.visitItem}>
+              <TouchableOpacity
+                key={visit.visit_id}
+                style={styles.visitItem}
+                onPress={() => router.push(`/visit-detail/${visit.visit_id}`)}
+                activeOpacity={0.7}
+              >
                 <View style={styles.visitIcon}>
                   <Ionicons name="location" size={20} color={theme.colors.primary} />
                 </View>
@@ -426,7 +431,8 @@ export default function JourneyScreen() {
                   <Ionicons name="star" size={14} color={theme.colors.accentYellow} />
                   <Text style={styles.visitPointsText}>{visit.points_earned}</Text>
                 </View>
-              </View>
+                <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+              </TouchableOpacity>
             ))}
           </Surface>
         )}
