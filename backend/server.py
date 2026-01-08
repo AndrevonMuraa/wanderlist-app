@@ -724,7 +724,15 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         }
         await db.activities.insert_one(milestone_activity)
     
-    return Visit(**visit)
+    # Check and award badges
+    newly_awarded_badges = await check_and_award_badges(current_user.user_id)
+    
+    # Create visit response with badge info
+    visit_response = Visit(**visit)
+    visit_dict = visit_response.dict()
+    visit_dict["newly_awarded_badges"] = newly_awarded_badges
+    
+    return visit_dict
 
 # ============= ADMIN ENDPOINTS =============
 
