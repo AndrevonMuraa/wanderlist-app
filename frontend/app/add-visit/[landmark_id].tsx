@@ -35,6 +35,7 @@ export default function AddVisitScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [celebrationType, setCelebrationType] = useState<'landmark' | 'country' | 'continent' | 'milestone'>('landmark');
+  const [userPoints, setUserPoints] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
