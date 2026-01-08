@@ -352,7 +352,7 @@ export default function SocialHubScreen() {
             {hasRichContent && !isExpanded && (
               <TouchableOpacity 
                 style={styles.viewFullButton}
-                onPress={() => activity.visit_id && toggleVisitExpansion(activity.visit_id)}
+                onPress={() => activity.visit_id && router.push(`/visit-detail/${activity.visit_id}`)}
               >
                 <LinearGradient
                   colors={[theme.colors.primary, theme.colors.secondary]}
@@ -360,7 +360,7 @@ export default function SocialHubScreen() {
                   end={{ x: 1, y: 0 }}
                   style={styles.viewFullGradient}
                 >
-                  <Text style={styles.viewFullText}>View Full Visit</Text>
+                  <Text style={styles.viewFullText}>View Full Details</Text>
                   <Ionicons name="arrow-forward" size={14} color="#fff" />
                 </LinearGradient>
               </TouchableOpacity>
