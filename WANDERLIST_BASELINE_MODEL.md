@@ -618,42 +618,7 @@ Animated loading state components that improve perceived performance by 30-40%.
 
 ---
 
-### 12. **User-Generated Content** ✅ **[NEWLY DOCUMENTED]**
-**Status:** FULLY IMPLEMENTED
-
-**Features:**
-- Users can suggest new landmarks
-- Community upvoting system
-- Admin can promote suggestions to official
-- Category marked as "user_suggested"
-
-**Backend API:**
-- `POST /api/landmarks` - Create user-suggested landmark
-- `POST /api/landmarks/{landmark_id}/upvote` - Upvote/downvote landmark
-- Upvotes stored per landmark
-- Sorting by upvotes available
-
-**Frontend:**
-- `/app/frontend/app/suggest-landmark.tsx` - Suggestion form
-- Form fields: name, country, description, coordinates
-- Image upload support (base64)
-- Difficulty rating selection
-- Best time to visit, duration fields
-
-**Workflow:**
-1. User suggests landmark via form
-2. Landmark created with `category: "user_suggested"`
-3. Community can upvote suggestions
-4. Popular suggestions can be promoted by admin
-
-**Moderation:**
-- User-suggested landmarks visible to all
-- Can be filtered out via search filters
-- Admin endpoint can change category to "official"
-
----
-
-### 13. **Statistics & Analytics** ✅
+### 12. **Statistics & Analytics** ✅
 **Status:** COMPLETE
 
 **Backend Endpoints:**
