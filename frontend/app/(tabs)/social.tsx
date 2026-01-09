@@ -922,6 +922,80 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '700',
   },
+  // Country Visit Styles
+  countryVisitContent: {
+    marginTop: theme.spacing.sm,
+  },
+  countryVisitHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+    marginBottom: theme.spacing.sm,
+  },
+  countryVisitText: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+  },
+  photoCollagePreview: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 2,
+    borderRadius: theme.borderRadius.md,
+    overflow: 'hidden',
+    marginBottom: theme.spacing.sm,
+  },
+  photoCollageItem: {
+    width: '49%',
+    height: 120,
+    backgroundColor: theme.colors.border,
+  },
+  photoCollageSingle: {
+    width: '100%',
+    height: 200,
+  },
+  photoCollageHalf: {
+    width: '49.5%',
+  },
+  photoCollageOverlay: {
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    width: '49%',
+    height: 120,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  photoCollageOverlayText: {
+    ...theme.typography.h3,
+    color: '#fff',
+    fontWeight: '700',
+  },
+  diaryPreview: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    lineHeight: 20,
+    marginBottom: theme.spacing.sm,
+  },
+  countryVisitFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  viewDetailsBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 4,
+    backgroundColor: `${theme.colors.primary}15`,
+    borderRadius: theme.borderRadius.sm,
+  },
+  viewDetailsText: {
+    ...theme.typography.caption,
+    color: theme.colors.primary,
+    fontWeight: '600',
+  },
   collapseButton: {
     flexDirection: 'row',
     alignItems: 'center',
