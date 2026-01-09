@@ -1711,6 +1711,33 @@ async def add_comment(activity_id: str, data: CommentCreate, current_user: User 
         {"$inc": {"comments_count": 1}}
     )
     
+    # Create notifications
+    if data.parent_comment_id:
+        # This is a reply - notify parent comment owner
+        parent_comment = await db.comments.find_one({"comment_id": data.parent_comment_id})
+        if parent_comment and parent_comment["user_id"] != current_user.user_id:
+            await create_notification(
+                user_id=parent_comment["user_id"],
+                notif_type="reply",
+                title="New Reply",
+                message=f"{current_user.name} replied to your comment",
+                related_id=activity_id,
+                related_user_id=current_user.user_id,
+                related_user_name=current_user.name
+            )
+    else:
+        # This is a comment - notify activity owner
+        if activity["user_id"] != current_user.user_id:
+            await create_notification(
+                user_id=activity["user_id"],
+                notif_type="comment",
+                title="New Comment",
+                message=f"{current_user.name} commented on your visit",
+                related_id=activity_id,
+                related_user_id=current_user.user_id,
+                related_user_name=current_user.name
+            )
+    
     return Comment(**comment, is_liked=False)
 
 @api_router.get("/activities/{activity_id}/comments", response_model=List[Comment])
