@@ -302,6 +302,31 @@ class TripLandmarkCreate(BaseModel):
 
 # ============= END TRIP PLANNING MODELS =============
 
+# ============= NOTIFICATION MODELS =============
+
+class Notification(BaseModel):
+    notification_id: str
+    user_id: str  # Who receives the notification
+    type: str  # "like", "comment", "reply", "friend_request", "achievement", "streak_milestone", "rank_up"
+    title: str
+    message: str
+    related_id: Optional[str] = None  # ID of related entity (visit_id, comment_id, etc.)
+    related_user_id: Optional[str] = None  # ID of user who triggered the notification
+    related_user_name: Optional[str] = None  # Name of user who triggered the notification
+    is_read: bool = False
+    created_at: datetime
+
+class NotificationCreate(BaseModel):
+    user_id: str
+    type: str
+    title: str
+    message: str
+    related_id: Optional[str] = None
+    related_user_id: Optional[str] = None
+    related_user_name: Optional[str] = None
+
+# ============= END NOTIFICATION MODELS =============
+
 class LeaderboardEntry(BaseModel):
     user_id: str
     name: str
