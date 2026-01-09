@@ -119,6 +119,28 @@ export default function LoginScreen() {
               Continue with Google
             </Button>
 
+            {/* Quick Test Login Button */}
+            <TouchableOpacity
+              onPress={async () => {
+                setEmail('mobile@test.com');
+                setPassword('test123');
+                setLoading(true);
+                try {
+                  await login('mobile@test.com', 'test123');
+                  router.replace('/(tabs)/explore');
+                } catch (err: any) {
+                  setError(err.message || 'Login failed');
+                } finally {
+                  setLoading(false);
+                }
+              }}
+              style={styles.quickLoginButton}
+              disabled={loading}
+            >
+              <Ionicons name="flash" size={20} color={theme.colors.accent} />
+              <Text style={styles.quickLoginText}>Quick Test Login</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity
               onPress={() => router.push('/(auth)/register')}
               style={styles.linkContainer}
