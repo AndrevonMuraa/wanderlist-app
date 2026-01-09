@@ -23,8 +23,8 @@ interface AnalyticsData {
   currentStreak: number;
   longestStreak: number;
   badgesEarned: number;
-  continentBreakdown: { [key: string]: { visited: number; total: number; percentage: number } };
-  countryBreakdown: { [key: string]: { visits: number; points: number } };
+  continentBreakdown: Record<string, { visited: number; total: number; percentage: number }>;
+  countryBreakdown: Record<string, { visits: number; points: number }>;
   topLandmarks: Array<{ name: string; visits: number; country: string }>;
   monthlyProgress: Array<{ month: string; visits: number }>;
 }
