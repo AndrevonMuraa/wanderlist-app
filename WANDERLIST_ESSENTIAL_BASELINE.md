@@ -155,6 +155,58 @@ curl http://localhost:8001/api/countries -H "Authorization: Bearer $TOKEN"
 
 ---
 
+## 🧪 **Automated Testing Pattern**
+
+### **Quick Screenshot Testing:**
+```bash
+# Use mcp_screenshot_tool to verify features
+# Template for testing new features:
+
+await page.set_viewport_size({"width": 390, "height": 844})
+await page.goto("URL")
+await page.click('text=Quick Test Login')  # Auto-login
+await asyncio.sleep(5)
+
+# Navigate and capture
+await page.click('text=Feature Name')
+await page.screenshot(path="/tmp/feature_test.png", quality=20)
+```
+
+### **Common Test Patterns:**
+
+**Login Flow:**
+```python
+await page.locator('text=Quick Test Login').click()
+await asyncio.sleep(5)  # Wait for redirect
+```
+
+**Navigation:**
+```python
+await page.click('text=Profile')
+await page.evaluate("window.scrollTo(0, 400)")  # Scroll
+await page.screenshot(path="/tmp/test.png", quality=20)
+```
+
+**Error Checking:**
+```python
+try:
+    await page.click('text=Feature')
+    print("✅ Feature accessible")
+except:
+    print("❌ Feature not found")
+```
+
+### **Testing Checklist for New Features:**
+- [ ] Quick login works
+- [ ] Feature accessible from menu
+- [ ] Premium badge shows (💎) if premium
+- [ ] Bottom tabs visible
+- [ ] Content loads properly
+- [ ] Back button works
+- [ ] No crashes/errors
+
+---
+
 ## 📝 **Content Updates (v4.19)**
 
 **Enhanced:**
