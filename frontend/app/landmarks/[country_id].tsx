@@ -244,51 +244,33 @@ export default function LandmarksScreen() {
           />
         }
         ListHeaderComponent={
-          <>
-            {countryProgress && (
-              <Surface style={styles.progressHeader}>
-                <View style={styles.progressHeaderContent}>
-                  <View style={styles.progressHeaderTextRow}>
-                    <Text style={styles.progressHeaderTitle}>Your Progress</Text>
-                    <View style={styles.progressStatsRow}>
-                      <Text style={styles.progressStatsText}>
-                        {countryProgress.visited}/{countryProgress.total} landmarks
-                      </Text>
-                      {countryProgress.percentage === 100 && (
-                        <Ionicons name="checkmark-circle" size={20} color="#4CAF50" style={{ marginLeft: 6 }} />
-                      )}
-                    </View>
+          countryProgress ? (
+            <Surface style={styles.progressHeader}>
+              <View style={styles.progressHeaderContent}>
+                <View style={styles.progressHeaderTextRow}>
+                  <Text style={styles.progressHeaderTitle}>Your Progress</Text>
+                  <View style={styles.progressStatsRow}>
+                    <Text style={styles.progressStatsText}>
+                      {countryProgress.visited}/{countryProgress.total} landmarks
+                    </Text>
+                    {countryProgress.percentage === 100 && (
+                      <Ionicons name="checkmark-circle" size={20} color="#4CAF50" style={{ marginLeft: 6 }} />
+                    )}
                   </View>
-                  <ProgressBar
-                    percentage={countryProgress.percentage}
-                    height={8}
-                    showPercentage={false}
-                    color={countryProgress.percentage === 100 ? '#4CAF50' : theme.colors.primary}
-                    style={{ marginTop: theme.spacing.sm }}
-                  />
-                  {countryProgress.percentage === 100 && (
-                    <Text style={styles.congratsText}>🎉 All landmarks visited!</Text>
-                  )}
                 </View>
-              </Surface>
-            )}
-            
-            {/* Country Fun Facts */}
-            {countryFacts.length > 0 && (
-              <Surface style={styles.funFactCard}>
-                <View style={styles.funFactHeader}>
-                  <Ionicons name="bulb" size={20} color={theme.colors.accentYellow} />
-                  <Text style={styles.funFactTitle}>Did You Know?</Text>
-                </View>
-                {countryFacts.map((fact, index) => (
-                  <View key={index} style={styles.funFactItem}>
-                    <Text style={styles.funFactBullet}>💡</Text>
-                    <Text style={styles.funFactText}>{fact}</Text>
-                  </View>
-                ))}
-              </Surface>
-            )}
-          </>
+                <ProgressBar
+                  percentage={countryProgress.percentage}
+                  height={8}
+                  showPercentage={false}
+                  color={countryProgress.percentage === 100 ? '#4CAF50' : theme.colors.primary}
+                  style={{ marginTop: theme.spacing.sm }}
+                />
+                {countryProgress.percentage === 100 && (
+                  <Text style={styles.congratsText}>🎉 All landmarks visited!</Text>
+                )}
+              </View>
+            </Surface>
+          ) : null
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
