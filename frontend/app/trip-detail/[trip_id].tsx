@@ -423,6 +423,25 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     textAlign: 'center',
   },
+  completeButton: {
+    marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
+    borderRadius: theme.borderRadius.md,
+    overflow: 'hidden',
+    ...theme.shadows.md,
+  },
+  completeButtonGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: theme.spacing.sm,
+    paddingVertical: theme.spacing.md,
+  },
+  completeButtonText: {
+    ...theme.typography.body,
+    color: '#fff',
+    fontWeight: '700',
+  },
   section: {
     paddingHorizontal: theme.spacing.lg,
     marginBottom: theme.spacing.lg,
