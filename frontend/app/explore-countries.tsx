@@ -482,7 +482,7 @@ export default function ExploreCountriesScreen() {
         renderItem={renderCountryCard}
         renderSectionHeader={renderSectionHeader}
         keyExtractor={(item, index) => `row-${index}-${item.map(c => c.country_id).join('-')}`}
-        contentContainerStyle={styles.listContainer}
+        contentContainerStyle={[styles.listContainer, { paddingBottom: Platform.OS === 'ios' ? 100 : 90 }]}
         ListHeaderComponent={renderListHeader}
         ListFooterComponent={renderListFooter}
         stickySectionHeadersEnabled={false}
