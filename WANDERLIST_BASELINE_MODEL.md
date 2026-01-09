@@ -532,23 +532,58 @@ class Visit(BaseModel):
 - Free: Lock screen with upgrade prompt
 - Basic/Premium: Full access to messaging
 
-**6.4 Leaderboard** ✅
+**6.4 Leaderboard** ✅ **[ENHANCED in v4.16]**
 **Features:**
-- Toggle between Friends and Global leaderboards
-- Friends leaderboard (all tiers) - shows ALL visits
-- Global leaderboard (Premium only) - shows verified visits only
-- Username display for privacy
-- User rankings with rank numbers
-- Points and visit count display
-- User's own position highlighted
+- **Enhanced Filtering System** 🆕 **[v4.16]**
+  - Time Period: All Time / Monthly (30 days) / Weekly (7 days)
+  - Category: Points / Visits / Countries / Streaks
+  - Scope: Global / Friends Only
+- **Dedicated Leaderboard Screen** 🆕 **[v4.16]**
+  - Full-page experience at `/leaderboard`
+  - SegmentedButtons for time period selection
+  - Category chips for metric selection
+  - Toggle switch for Friends/Global
+- **User Rank Display** 🆕 **[v4.16]**
+  - Gradient card showing user's current rank
+  - "Your Rank" with position (e.g., "#15 of 2,453")
+  - Trophy icon and visual emphasis
+- **Medal System** 🆕 **[v4.16]**
+  - 🥇 Gold medal for 1st place
+  - 🥈 Silver medal for 2nd place
+  - 🥉 Bronze medal for 3rd place
+  - Rank numbers (#4, #5, etc.) for others
+- **Rich Entry Display** 🆕 **[v4.16]**
+  - Avatar (image or text initials)
+  - User name and username
+  - Rank badge component
+  - Value with proper formatting (commas for large numbers)
+  - Category label (Points/Visits/Countries/Streak Days)
+  - Additional stats (current streak for Points/Streaks category)
+- **Empty State Handling** 🆕 **[v4.16]**
+  - Helpful messages for no rankings
+  - Different messages for Friends vs Global
+  - Trophy outline icon with encouraging text
+- **Pull-to-Refresh** 🆕 **[v4.16]**
+- **Legacy Features** (maintained):
+  - Toggle between Friends and Global leaderboards
+  - Friends leaderboard (all tiers) - shows ALL visits
+  - Global leaderboard (Premium only) - shows verified visits only
+  - Username display for privacy
+  - User's own position highlighted
 
 **Backend API Endpoint:**
-- `GET /api/leaderboard` - Get leaderboard data
+- `GET /api/leaderboard?time_period={all_time|monthly|weekly}&category={points|visits|countries|streaks}&friends_only={true|false}` **[ENHANCED in v4.16]**
+  - Returns: `{ leaderboard: [], user_rank: number|null, total_users: number }`
+  - Filters data by time period using `created_at` timestamps
+  - Aggregates different metrics based on category
+  - Scopes to friends when `friends_only=true`
+  - Includes additional user stats (current_streak, longest_streak) where relevant
 
 **Frontend:**
-- Leaderboard tab in Social screen
-- Toggle switch for friends/global
-- Rank badges and user cards
+- **New:** Dedicated leaderboard screen at `/app/leaderboard.tsx` **[v4.16]**
+- **Legacy:** Leaderboard preview in Social tab (links to full screen)
+- Material Design with SegmentedButtons, Chips, and custom toggle
+- Responsive mobile design (390x844 tested)
 
 ---
 
