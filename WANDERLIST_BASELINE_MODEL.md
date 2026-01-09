@@ -1,5 +1,9 @@
 # WanderList App - Baseline Model & State Preservation System
 
+> **NOTE FOR PRO SUBSCRIPTION USERS:** 
+> A streamlined version exists at `/app/WANDERLIST_ESSENTIAL_BASELINE.md` (recommended)
+> This full version is kept for reference but may be more than needed with Emergent's auto-summarization.
+
 > **CRITICAL**: This document MUST be read at the start of EVERY session and EVERY fork.
 > It defines the current stable state of the app and ensures continuity across sessions.
 > **MANDATORY**: Update this document at the END of every session with new features/changes.
