@@ -290,7 +290,7 @@ export default function ProfileScreen() {
               {badges.length > 6 && (
                 <TouchableOpacity 
                   style={styles.viewAllBadges}
-                  onPress={() => {/* Navigate to full badges page */}}
+                  onPress={() => router.push('/achievements')}
                 >
                   <Ionicons name="ellipsis-horizontal-circle" size={32} color={theme.colors.primary} />
                   <Text style={styles.viewAllText}>View All</Text>
