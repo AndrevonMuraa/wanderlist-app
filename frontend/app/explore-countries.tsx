@@ -134,7 +134,14 @@ export default function ExploreCountriesScreen() {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const token = await getToken();
+      
+      if (!token) {
+        console.error('No authentication token found');
+        setLoading(false);
+        return;
+      }
       
       // Fetch countries and progress data in parallel
       const [countriesResponse, progressResponse] = await Promise.all([
