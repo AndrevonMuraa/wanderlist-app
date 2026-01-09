@@ -1047,4 +1047,31 @@ agent_communication:
     - POST/DELETE /api/trips/{id}/landmarks ✅
     - PUT /api/trips/{id}/landmarks/{id}/visited ✅
     
-    Both Trip Planning and Bucket List features are production-ready with full CRUD operations, proper data validation, and seamless integration!"
+    Both Trip Planning and Bucket List features are production-ready with full CRUD operations, proper data validation, and seamless integration!"  - agent: "main"
+    message: "🔄 LEADERBOARD ENHANCEMENTS - v4.16 IN PROGRESS:
+    
+    📝 IMPLEMENTATION STARTED:
+    - Replaced basic leaderboard endpoint with enhanced filterable version
+    - New endpoint supports multiple dimensions:
+      * time_period: all_time, monthly (30 days), weekly (7 days)
+      * category: points, visits, countries, streaks
+      * friends_only: true/false for scoped rankings
+      * limit: configurable results limit
+    - Returns user's rank position in addition to leaderboard
+    - Includes additional user stats (current_streak, longest_streak) where relevant
+    
+    🎯 TESTING PLAN:
+    - Test all time_period combinations (all_time, monthly, weekly)
+    - Test all category combinations (points, visits, countries, streaks)
+    - Test friends_only filter with and without friendships
+    - Verify user_rank calculation is correct
+    - Verify leaderboard sorting is accurate for each category
+    - Test with empty results (new users, no visits in time period)
+    
+    🔧 BACKEND STATUS:
+    - Implementation: ✅ Complete in /app/backend/server.py
+    - timedelta import: ✅ Already present
+    - Backend service: ✅ Restarted successfully
+    - Needs: Comprehensive testing before frontend implementation
+    
+    NEXT STEPS: Backend testing with all filter combinations, then build frontend UI in Social tab."
