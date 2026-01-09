@@ -305,7 +305,11 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginRight: theme.spacing.md,
-    padding: theme.spacing.sm,
+    padding: theme.spacing.md,
+    minWidth: 44,
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerContent: {
     flex: 1,
