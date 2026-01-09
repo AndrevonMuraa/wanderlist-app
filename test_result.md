@@ -544,7 +544,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Achievement Showcase Screen - v4.17"
+    - "Streamlined Add Visit Modal - Quick/Detailed Mode"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
