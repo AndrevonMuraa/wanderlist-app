@@ -230,7 +230,7 @@ export default function LandmarksScreen() {
         data={landmarks}
         renderItem={renderLandmark}
         keyExtractor={(item) => item.landmark_id}
-        contentContainerStyle={styles.listContainer}
+        contentContainerStyle={[styles.listContainer, { paddingBottom: Platform.OS === 'ios' ? 100 : 90 }]}
         refreshControl={
           <RefreshControl 
             refreshing={refreshing} 
