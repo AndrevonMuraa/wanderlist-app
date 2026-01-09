@@ -372,6 +372,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ TRIP PLANNING FUNCTIONALITY WORKING PERFECTLY! Comprehensive testing completed (14/14 tests passed - 100% success rate): ✅ POST /api/trips: Creates trips with proper trip_id, name, destination, budget. ✅ GET /api/trips: Returns user trips with landmark_count and visited_count fields. ✅ GET /api/trips/{id}: Returns full trip details with landmarks array containing enriched landmark data. ✅ POST /api/trips/{id}/landmarks: Adds landmarks to trips with day_number and trip_landmark_id. ✅ PUT /api/trips/{id}/landmarks/{id}/visited: Marks landmarks as visited and updates visited_count. ✅ DELETE /api/trips/{id}/landmarks/{id}: Removes landmarks from trips. ✅ PUT /api/trips/{id}: Updates trip status, budget, and other fields. ✅ DELETE /api/trips/{id}: Deletes trips and all associated trip_landmarks. ✅ Bug Fixes Applied: Fixed MongoDB ObjectId serialization errors in get_trip_details and get_user_trips endpoints. All trip planning endpoints are production-ready!"
+      - working: true
+        agent: "testing"
+        comment: "✅ RETESTED - TRIP PLANNING WORKING PERFECTLY! Full CRUD flow tested successfully (6/6 tests passed - 100% success rate): ✅ POST /api/trips: Created trip 'European Adventure 2024' with destination, dates, budget, and notes. ✅ GET /api/trips: Retrieved user trips with landmark_count and visited_count fields. ✅ GET /api/trips/{id}: Retrieved full trip details with proper status and landmarks array. ✅ POST /api/trips/{id}/landmarks: Successfully added Eiffel Tower to trip with day_number and notes. ✅ PUT /api/trips/{id}/landmarks/{id}/visited?visited=true: Successfully marked landmark as visited in trip (fixed query parameter requirement). ✅ DELETE /api/trips/{id}: Successfully deleted trip and all associated data. All trip planning endpoints confirmed production-ready!"
 
 frontend:
   - task: "Authentication Context with Google and JWT"
