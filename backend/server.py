@@ -2981,7 +2981,8 @@ async def check_and_award_badges(user_id: str):
     longest_streak = user.get("longest_streak", 0)
     
     # Get user's visits for visit count
-    visit_count = await db.visits.count_documents({"user_id": user_id})
+    visits = await db.visits.find({"user_id": user_id}).to_list(1000)
+    visit_count = len(visits)
     
     # Get friend count
     friend_count = await db.friends.count_documents({
