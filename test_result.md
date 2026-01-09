@@ -1135,3 +1135,16 @@ agent_communication:
     ✅ user_rank is accurately calculated
     
     ALL ENHANCED LEADERBOARD FEATURES ARE PRODUCTION-READY!"
+
+frontend:
+  - task: "Leaderboard Screen with Advanced Filters"
+    implemented: true
+    working: "NA"
+    file: "frontend/app/leaderboard.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created dedicated leaderboard screen (/leaderboard) with comprehensive filtering: Time Period segmented buttons (All Time/Monthly/Weekly), Category chips (Points/Visits/Countries/Streaks), Friends/Global toggle switch. Displays top rankings with medals for top 3, rank badges, avatars, user stats. Shows current user's rank in gradient card. Includes pull-to-refresh, empty states, and proper loading states. Uses react-native-paper components for consistency with app design."
