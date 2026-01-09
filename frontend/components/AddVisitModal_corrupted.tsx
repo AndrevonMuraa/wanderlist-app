@@ -499,3 +499,441 @@ export default function AddVisitModal({
     </Modal>
   );
 } 
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {/* Photos Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View style={styles.sectionTitleRow}>
+                <Ionicons name="images" size={24} color={theme.colors.primary} />
+                <Text style={styles.sectionTitle}>Photo Collage</Text>
+                {photos.length > 0 && (
+                  <View style={styles.countBadge}>
+                    <Text style={styles.countBadgeText}>{photos.length}/10</Text>
+                  </View>
+                )}
+              </View>
+            </View>
+
+            <Surface style={styles.card}>
+              <Text style={styles.sectionDescription}>
+                Capture your adventure with up to 10 photos
+              </Text>
+
+              <TouchableOpacity style={styles.addPhotoButton} onPress={pickImages}>
+                <LinearGradient
+                  colors={[theme.colors.primary, theme.colors.secondary]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.addPhotoGradient}
+                >
+                  <Ionicons name="camera" size={24} color="#fff" />
+                  <Text style={styles.addPhotoText}>
+                    {photos.length === 0 ? 'Add Photos' : 'Add More Photos'}
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+
+              {photos.length > 0 ? (
+                <View style={styles.photoGrid}>
+                  {photos.map((photo, index) => (
+                    <View key={index} style={styles.photoItem}>
+                      <Image source={{ uri: photo }} style={styles.photoImage} />
+                      <TouchableOpacity
+                        style={styles.removePhotoButton}
+                        onPress={() => removePhoto(index)}
+                      >
+                        <Ionicons name="close-circle" size={24} color="#fff" />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <View style={styles.emptyState}>
+                  <Ionicons name="images-outline" size={48} color={theme.colors.textLight} />
+                  <Text style={styles.emptyText}>No photos yet</Text>
+                  <Text style={styles.emptySubtext}>
+                    Add photos to create your collage
+                  </Text>
+                </View>
+              )}
+            </Surface>
+          </View>
+
+          {/* Diary Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View style={styles.sectionTitleRow}>
+                <Ionicons name="journal" size={24} color={theme.colors.primary} />
+                <Text style={styles.sectionTitle}>Travel Diary</Text>
+                {diaryText.length > 0 && (
+                  <View style={styles.countBadge}>
+                    <Text style={styles.countBadgeText}>{diaryText.length}/2000</Text>
+                  </View>
+                )}
+              </View>
+            </View>
+
+            <Surface style={styles.card}>
+              <Text style={styles.sectionDescription}>
+                Share your experience and memories
+              </Text>
+
+              <TextInput
+                style={styles.diaryInput}
+                placeholder="Write about your experience at this landmark...&#10;&#10;What did you see? How did it make you feel? Any interesting stories?"
+                placeholderTextColor={theme.colors.textLight}
+                multiline
+                numberOfLines={8}
+                value={diaryText}
+                onChangeText={setDiaryText}
+                maxLength={2000}
+                textAlignVertical="top"
+              />
+
+              {diaryText.length > 1800 && (
+                <Text style={styles.characterWarning}>
+                  {2000 - diaryText.length} characters remaining
+                </Text>
+              )}
+
+              {diaryText.length === 0 && (
+                <View style={styles.emptyState}>
+                  <Ionicons name="journal-outline" size={48} color={theme.colors.textLight} />
+                  <Text style={styles.emptyText}>No diary entry yet</Text>
+                  <Text style={styles.emptySubtext}>
+                    Share your thoughts and experiences
+                  </Text>
+                </View>
+              )}
+            </Surface>
+          </View>
+
+          {/* Travel Tips Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <View style={styles.sectionTitleRow}>
+                <Ionicons name="bulb" size={24} color={theme.colors.primary} />
+                <Text style={styles.sectionTitle}>Travel Tips</Text>
+                {!isPremium && (
+                  <View style={styles.premiumBadge}>
+                    <Ionicons name="diamond" size={12} color="#B8860B" />
+                    <Text style={styles.premiumBadgeText}>PREMIUM</Text>
+                  </View>
+                )}
+                {isPremium && parseTips().length > 0 && (
+                  <View style={styles.countBadge}>
+                    <Text style={styles.countBadgeText}>{parseTips().length}/5</Text>
+                  </View>
+                )}
+              </View>
+            </View>
+
+            <Surface style={styles.card}>
+              {!isPremium ? (
+                <View style={styles.premiumRequired}>
+                  <Ionicons name="diamond" size={48} color={theme.colors.accent} />
+                  <Text style={styles.premiumTitle}>Premium Feature</Text>
+                  <Text style={styles.premiumSubtitle}>
+                    Upgrade to Premium to share travel tips with the community
+                  </Text>
+                </View>
+              ) : (
+                <>
+                  <Text style={styles.sectionDescription}>
+                    Share helpful tips for future travelers (up to 5 tips)
+                  </Text>
+
+                  <TextInput
+                    style={styles.tipsInput}
+                    placeholder="• Best time to visit is early morning&#10;• Bring water and sunscreen&#10;• Book tickets online to skip the line&#10;• Local guide highly recommended&#10;• Great for photography at sunset"
+                    placeholderTextColor={theme.colors.textLight}
+                    multiline
+                    numberOfLines={6}
+                    value={tipsText}
+                    onChangeText={setTipsText}
+                    textAlignVertical="top"
+                  />
+
+                  <Text style={styles.tipsHint}>
+                    💡 Start each line with • or - for bullet points
+                  </Text>
+
+                  {parseTips().length > 0 && (
+                    <View style={styles.tipsPreview}>
+                      <Text style={styles.tipsPreviewTitle}>Preview ({parseTips().length}/5)</Text>
+                      {parseTips().map((tip, index) => (
+                        <View key={index} style={styles.tipItem}>
+                          <Ionicons name="checkmark-circle" size={16} color={theme.colors.primary} />
+                          <Text style={styles.tipText}>{tip}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+
+                  {parseTips().length === 0 && tipsText.length === 0 && (
+                    <View style={styles.emptyState}>
+                      <Ionicons name="bulb-outline" size={48} color={theme.colors.textLight} />
+                      <Text style={styles.emptyText}>No tips yet</Text>
+                      <Text style={styles.emptySubtext}>
+                        Help future travelers with your insights
+                      </Text>
+                    </View>
+                  )}
+                </>
+              )}
+            </Surface>
+          </View>
+
+          <View style={{ height: theme.spacing.xxl }} />
+        </ScrollView>
+      </View>
+    </Modal>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: theme.spacing.md,
+    paddingTop: Platform.OS === 'ios' ? 50 : theme.spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+    backgroundColor: theme.colors.surface,
+  },
+  closeButton: {
+    padding: theme.spacing.xs,
+  },
+  headerContent: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  headerTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '700',
+  },
+  headerSubtitle: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    marginTop: 2,
+  },
+  submitButton: {
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.xs,
+  },
+  submitButtonText: {
+    ...theme.typography.body,
+    color: theme.colors.primary,
+    fontWeight: '700',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: theme.spacing.xl,
+  },
+  section: {
+    paddingHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
+    marginTop: theme.spacing.md,
+  },
+  sectionHeader: {
+    marginBottom: theme.spacing.md,
+  },
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+  },
+  sectionTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '700',
+  },
+  countBadge: {
+    backgroundColor: theme.colors.primary,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 2,
+    borderRadius: theme.borderRadius.sm,
+  },
+  countBadgeText: {
+    ...theme.typography.caption,
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 10,
+  },
+  premiumBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(255, 215, 0, 0.15)',
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 2,
+    borderRadius: theme.borderRadius.sm,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 215, 0, 0.3)',
+  },
+  premiumBadgeText: {
+    ...theme.typography.caption,
+    color: '#B8860B',
+    fontWeight: '700',
+    fontSize: 9,
+  },
+  card: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    ...theme.shadows.sm,
+  },
+  sectionDescription: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.md,
+  },
+  // Photos
+  addPhotoButton: {
+    borderRadius: theme.borderRadius.md,
+    overflow: 'hidden',
+    marginBottom: theme.spacing.md,
+  },
+  addPhotoGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: theme.spacing.md,
+    gap: theme.spacing.sm,
+  },
+  addPhotoText: {
+    ...theme.typography.body,
+    color: '#fff',
+    fontWeight: '700',
+  },
+  photoGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.spacing.sm,
+  },
+  photoItem: {
+    width: (width - theme.spacing.lg * 2 - theme.spacing.lg * 2 - theme.spacing.sm * 2) / 3,
+    aspectRatio: 1,
+    borderRadius: theme.borderRadius.md,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  photoImage: {
+    width: '100%',
+    height: '100%',
+  },
+  removePhotoButton: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderRadius: 12,
+  },
+  // Diary
+  diaryInput: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    backgroundColor: theme.colors.background,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.md,
+    minHeight: 200,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  characterWarning: {
+    ...theme.typography.caption,
+    color: theme.colors.accent,
+    marginTop: theme.spacing.sm,
+    textAlign: 'right',
+  },
+  // Tips
+  tipsInput: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    backgroundColor: theme.colors.background,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.md,
+    minHeight: 150,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+  },
+  tipsHint: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    marginTop: theme.spacing.sm,
+    fontStyle: 'italic',
+  },
+  tipsPreview: {
+    marginTop: theme.spacing.md,
+    padding: theme.spacing.md,
+    backgroundColor: theme.colors.background,
+    borderRadius: theme.borderRadius.md,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  tipsPreviewTitle: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    fontWeight: '700',
+    marginBottom: theme.spacing.sm,
+  },
+  tipItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: theme.spacing.sm,
+    gap: theme.spacing.xs,
+  },
+  tipText: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    flex: 1,
+  },
+  // Premium Required
+  premiumRequired: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.xl,
+  },
+  premiumTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '700',
+    marginTop: theme.spacing.md,
+  },
+  premiumSubtitle: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+    marginTop: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.lg,
+  },
+  // Empty States
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.xl,
+  },
+  emptyText: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    marginTop: theme.spacing.sm,
+  },
+  emptySubtext: {
+    ...theme.typography.caption,
+    color: theme.colors.textLight,
+    marginTop: theme.spacing.xs / 2,
+    textAlign: 'center',
+  },
+});
