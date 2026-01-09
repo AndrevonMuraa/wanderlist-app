@@ -2440,6 +2440,121 @@ async def delete_notification(notification_id: str, current_user: User = Depends
 
 # ============= END NOTIFICATION ENDPOINTS =============
 
+# ============= COUNTRY VISIT ENDPOINTS =============
+
+@api_router.post("/country-visits")
+async def create_country_visit(data: CountryVisitCreate, current_user: User = Depends(get_current_user)):
+    """Create a country visit with photo collage and diary"""
+    
+    # Validate photos (max 10)
+    if len(data.photos) > 10:
+        raise HTTPException(status_code=400, detail="Maximum 10 photos allowed")
+    
+    # Parse visit date
+    visited_at = datetime.now(timezone.utc)
+    if data.visited_at:
+        try:
+            visited_at = datetime.fromisoformat(data.visited_at.replace('Z', '+00:00'))
+        except:
+            pass
+    
+    # Create country visit
+    country_visit_id = f"cv_{uuid.uuid4().hex[:12]}"
+    country_visit = {
+        "country_visit_id": country_visit_id,
+        "user_id": current_user.user_id,
+        "user_name": current_user.name,
+        "user_picture": current_user.picture,
+        "country_name": data.country_name,
+        "continent": data.continent,
+        "photos": data.photos,
+        "diary": data.diary,
+        "visited_at": visited_at,
+        "points_earned": 15,
+        "created_at": datetime.now(timezone.utc)
+    }
+    
+    await db.country_visits.insert_one(country_visit)
+    
+    # Award points to user
+    await db.users.update_one(
+        {"user_id": current_user.user_id},
+        {"$inc": {"points": 15}}
+    )
+    
+    # Create activity for feed
+    activity_id = f"activity_{uuid.uuid4().hex[:12]}"
+    activity = {
+        "activity_id": activity_id,
+        "user_id": current_user.user_id,
+        "user_name": current_user.name,
+        "user_picture": current_user.picture,
+        "activity_type": "country_visit",
+        "country_visit_id": country_visit_id,
+        "country_name": data.country_name,
+        "continent": data.continent,
+        "photos": data.photos,
+        "diary": data.diary,
+        "points_earned": 15,
+        "created_at": datetime.now(timezone.utc),
+        "likes_count": 0,
+        "comments_count": 0
+    }
+    await db.activities.insert_one(activity)
+    
+    return {"message": "Country visit created", "country_visit_id": country_visit_id, "points_earned": 15}
+
+@api_router.get("/country-visits")
+async def get_country_visits(current_user: User = Depends(get_current_user)):
+    """Get user's country visits"""
+    country_visits = await db.country_visits.find(
+        {"user_id": current_user.user_id},
+        {"_id": 0}
+    ).sort("visited_at", -1).to_list(1000)
+    
+    return country_visits
+
+@api_router.get("/country-visits/{country_visit_id}")
+async def get_country_visit_details(country_visit_id: str, current_user: User = Depends(get_current_user)):
+    """Get country visit details"""
+    country_visit = await db.country_visits.find_one(
+        {"country_visit_id": country_visit_id},
+        {"_id": 0}
+    )
+    
+    if not country_visit:
+        raise HTTPException(status_code=404, detail="Country visit not found")
+    
+    return country_visit
+
+@api_router.delete("/country-visits/{country_visit_id}")
+async def delete_country_visit(country_visit_id: str, current_user: User = Depends(get_current_user)):
+    """Delete a country visit"""
+    # Verify ownership
+    country_visit = await db.country_visits.find_one({
+        "country_visit_id": country_visit_id,
+        "user_id": current_user.user_id
+    })
+    
+    if not country_visit:
+        raise HTTPException(status_code=404, detail="Country visit not found")
+    
+    # Delete country visit
+    await db.country_visits.delete_one({"country_visit_id": country_visit_id})
+    
+    # Delete associated activity
+    await db.activities.delete_many({"country_visit_id": country_visit_id})
+    
+    # Deduct points
+    await db.users.update_one(
+        {"user_id": current_user.user_id},
+        {"$inc": {"points": -15}}
+    )
+    
+    return {"message": "Country visit deleted"}
+
+# ============= END COUNTRY VISIT ENDPOINTS =============
+
 # ============= END ACTIVITY FEED ENDPOINTS =============
 
 # ============= ACHIEVEMENTS ENDPOINTS =============
