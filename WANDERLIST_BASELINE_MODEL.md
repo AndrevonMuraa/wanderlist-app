@@ -1171,6 +1171,31 @@ import { MapView, Marker } from '../../components/MapComponents';
 **Fix:** Removed all fake landmarks, re-seeded with 480 real curated landmarks
 **Prevention:** Only seed from verified, curated data sources
 
+### 9. **Landmark Count Excluding Premium** ✅ FIXED (Session 12 - v4.19)
+**Issue:** Countries API only counted official landmarks, showing 100 for Africa instead of 110
+**Fix:** Removed `category: "official"` filter from count query in `/api/countries` endpoint
+**Result:** All continents now show correct total (official + premium)
+**Prevention:** Always count ALL items unless specifically filtering for user view
+
+### 10. **Tunnel Deployment Failure** ✅ FIXED (Session 12 - v4.19)
+**Issue:** Expo stuck in STARTING state with ngrok ERR_NGROK_334 conflicts
+**Fix:** Changed supervisor config from `--tunnel` to `--web` mode
+**Result:** Stable web deployment on port 3000
+**Prevention:** Use --web for deployed environments, --tunnel only for mobile testing
+
+### 11. **Backend Visits Variable Undefined** ✅ FIXED (Session 12 - v4.19)
+**Issue:** NameError in check_and_award_badges() - visits variable not defined
+**Fix:** Added `visits = await db.visits.find({"user_id": user_id}).to_list(1000)`
+**Result:** Visit creation working, country completion bonuses triggering
+**Prevention:** Always define variables before use in badge checking logic
+
+### 12. **Inconsistent BACKEND_URL Usage** ✅ FIXED (Session 12 - v4.19)
+**Issue:** Multiple files defining local BACKEND_URL instead of using centralized config
+**Affected Files:** journey.tsx, social.tsx, continent/[continent].tsx
+**Fix:** Changed all to `import { BACKEND_URL } from '../../utils/config'`
+**Result:** Consistent API calls across all platforms (web, mobile, remote URLs)
+**Prevention:** NEVER define BACKEND_URL locally - ALWAYS import from utils/config.ts
+
 ---
 
 ## 🧪 TESTING CHECKLIST (Every Session Start)
