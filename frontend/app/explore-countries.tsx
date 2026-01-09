@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../styles/theme';
 import { CountryCardSkeleton } from '../components/Skeleton';
+import { PersistentTabBar } from '../components/PersistentTabBar';
 
 const { width } = Dimensions.get('window');
 // Responsive grid: mobile (2 cols), tablet (3 cols), desktop (4 cols)
