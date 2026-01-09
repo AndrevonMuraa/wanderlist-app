@@ -532,12 +532,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Comments System Frontend Integration"
-    - "Social Hub Navigation"
-    - "Comments UI/UX Testing"
-  stuck_tasks:
-    - "Comments System Frontend Integration"
+    - "Leaderboard Screen with Advanced Filters"
+  stuck_tasks: []
   test_all: false
+  test_priority: "high_first"
   test_priority: "high_first"
 
 agent_communication:
