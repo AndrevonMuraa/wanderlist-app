@@ -1626,6 +1626,19 @@ async def like_activity(activity_id: str, current_user: User = Depends(get_curre
     }
     
     await db.likes.insert_one(like)
+    
+    # Create notification for activity owner (if not liking own activity)
+    if activity["user_id"] != current_user.user_id:
+        await create_notification(
+            user_id=activity["user_id"],
+            notif_type="like",
+            title="New Like",
+            message=f"{current_user.name} liked your visit",
+            related_id=activity_id,
+            related_user_id=current_user.user_id,
+            related_user_name=current_user.name
+        )
+    
     return {"message": "Liked"}
 
 @api_router.delete("/activities/{activity_id}/like")
