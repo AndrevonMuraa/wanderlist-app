@@ -494,6 +494,7 @@ export default function ExploreCountriesScreen() {
           />
         }
       />
+      <PersistentTabBar />
     </SafeAreaView>
   );
 }
