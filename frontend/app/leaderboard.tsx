@@ -137,11 +137,19 @@ export default function LeaderboardScreen() {
           </View>
 
           {/* Avatar */}
-          <Avatar.Image
-            size={48}
-            source={entry.picture ? { uri: entry.picture } : require('../assets/default-avatar.png')}
-            style={styles.avatar}
-          />
+          {entry.picture ? (
+            <Avatar.Image
+              size={48}
+              source={{ uri: entry.picture }}
+              style={styles.avatar}
+            />
+          ) : (
+            <Avatar.Text
+              size={48}
+              label={entry.name.substring(0, 2).toUpperCase()}
+              style={styles.avatar}
+            />
+          )}
 
           {/* User Info */}
           <View style={styles.userInfo}>
