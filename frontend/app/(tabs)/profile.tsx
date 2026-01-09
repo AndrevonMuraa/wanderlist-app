@@ -492,6 +492,32 @@ const styles = StyleSheet.create({
     color: '#fff',
     flex: 1,
   },
+  headerButtons: {
+    flexDirection: 'row',
+    gap: theme.spacing.sm,
+  },
+  notificationButton: {
+    padding: theme.spacing.xs,
+    position: 'relative',
+  },
+  notificationBadge: {
+    position: 'absolute',
+    top: 2,
+    right: 2,
+    backgroundColor: '#FF6B6B',
+    borderRadius: theme.borderRadius.full,
+    minWidth: 18,
+    height: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+  },
+  notificationBadgeText: {
+    ...theme.typography.caption,
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 10,
+  },
   editButton: {
     padding: theme.spacing.xs,
   },
