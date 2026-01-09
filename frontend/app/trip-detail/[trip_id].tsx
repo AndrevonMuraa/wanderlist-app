@@ -216,6 +216,24 @@ export default function TripDetailScreen() {
           </View>
         </Surface>
 
+        {/* Complete Trip Button */}
+        {trip.status === 'planned' && trip.landmark_count > 0 && (
+          <TouchableOpacity
+            style={styles.completeButton}
+            onPress={() => router.push(`/trip-completion/${trip.trip_id}`)}
+          >
+            <LinearGradient
+              colors={[theme.colors.success, '#10B981']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.completeButtonGradient}
+            >
+              <Ionicons name="checkmark-circle" size={20} color="#fff" />
+              <Text style={styles.completeButtonText}>Complete Trip</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        )}
+
         {/* Landmarks List */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
