@@ -156,7 +156,7 @@ export default function ContinentScreen() {
         keyExtractor={(item) => item.country_id}
         numColumns={2}
         columnWrapperStyle={styles.row}
-        contentContainerStyle={styles.listContainer}
+        contentContainerStyle={[styles.listContainer, { paddingBottom: Platform.OS === 'ios' ? 100 : 90 }]}
         refreshControl={
           <RefreshControl 
             refreshing={refreshing} 
