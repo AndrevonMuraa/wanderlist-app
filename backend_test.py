@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend Testing for Achievement Showcase API - v4.17
-Tests the /api/achievements/showcase endpoint comprehensively
+Backend Testing for Achievement Showcase API - v4.17 (RETEST)
+Testing the /api/achievements/showcase endpoint after fixing badge awarding logic
 """
 
 import requests
