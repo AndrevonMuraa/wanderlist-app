@@ -397,6 +397,21 @@ export default function ProfileScreen() {
 
         <Surface style={styles.menuCard}>
           <List.Item
+            title="My Collections"
+            description="Premium: Custom landmark collections"
+            left={props => <List.Icon {...props} icon="albums" color={theme.colors.primary} />}
+            right={props => (
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                <Ionicons name="diamond" size={16} color={theme.colors.accent} />
+                <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />
+              </View>
+            )}
+            onPress={() => router.push('/collections')}
+            titleStyle={styles.listItemTitle}
+            descriptionStyle={styles.listItemDescription}
+          />
+          <Divider style={styles.divider} />
+          <List.Item
             title="Travel Analytics"
             description="Premium: View detailed insights & stats"
             left={props => <List.Icon {...props} icon="chart-line" color={theme.colors.accent} />}
