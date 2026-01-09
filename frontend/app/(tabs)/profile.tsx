@@ -399,7 +399,7 @@ export default function ProfileScreen() {
           <List.Item
             title="My Collections"
             description="Premium: Custom landmark collections"
-            left={props => <List.Icon {...props} icon="albums" color={theme.colors.primary} />}
+            left={props => <List.Icon {...props} icon="folder-multiple" color={theme.colors.primary} />}
             right={props => (
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                 <Ionicons name="diamond" size={16} color={theme.colors.accent} />
