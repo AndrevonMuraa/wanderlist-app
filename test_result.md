@@ -532,10 +532,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Leaderboard Screen with Advanced Filters"
+    - "Achievement Showcase Screen - v4.17"
   stuck_tasks: []
   test_all: false
-  test_priority: "high_first"
   test_priority: "high_first"
 
 agent_communication:
