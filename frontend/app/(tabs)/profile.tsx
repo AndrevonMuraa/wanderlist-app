@@ -547,6 +547,10 @@ const styles = StyleSheet.create({
   editButton: {
     padding: theme.spacing.xs,
   },
+  headerIconButton: {
+    padding: theme.spacing.xs,
+    marginRight: theme.spacing.sm,
+  },
   profileCard: {
     margin: theme.spacing.md,
     padding: theme.spacing.xl,
