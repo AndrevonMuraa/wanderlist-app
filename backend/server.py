@@ -1208,33 +1208,28 @@ async def update_user_tier(
 
 # ============= LEADERBOARD ENDPOINTS =============
 
-@api_router.get("/leaderboard", response_model=List[LeaderboardEntry])
-async def get_leaderboard(current_user: User = Depends(get_current_user)):
-    if current_user.is_premium:
-        # Global leaderboard for premium users - ONLY VERIFIED VISITS (with photos)
-        pipeline = [
-            {"$match": {"verified": True}},  # Only count visits with photo proof
-            {"$group": {"_id": "$user_id", "visit_count": {"$sum": 1}}},
-            {"$sort": {"visit_count": -1}},
-            {"$limit": 100}
-        ]
-        results = await db.visits.aggregate(pipeline).to_list(100)
-        
-        leaderboard = []
-        for idx, entry in enumerate(results):
-            user = await db.users.find_one({"user_id": entry["_id"]}, {"_id": 0})
-            if user:
-                leaderboard.append(LeaderboardEntry(
-                    user_id=user["user_id"],
-                    name=user["name"],
-                    picture=user.get("picture"),
-                    total_points=entry["visit_count"],
-                    rank=idx + 1
-                ))
-        return leaderboard
-    else:
-        # Friends leaderboard for freemium users - ALL VISITS (verified and unverified)
-        # Get friend IDs
+@api_router.get("/leaderboard")
+async def get_enhanced_leaderboard(
+    time_period: str = "all_time",  # "all_time", "monthly", "weekly"
+    category: str = "points",  # "points", "visits", "countries", "streaks"
+    friends_only: bool = False,
+    limit: int = 100,
+    current_user: User = Depends(get_current_user)
+):
+    """Enhanced leaderboard with time periods, categories, and filters"""
+    
+    # Calculate time filter if needed
+    time_filter = {}
+    if time_period == "weekly":
+        week_ago = datetime.now(timezone.utc) - timedelta(days=7)
+        time_filter = {"created_at": {"$gte": week_ago}}
+    elif time_period == "monthly":
+        month_ago = datetime.now(timezone.utc) - timedelta(days=30)
+        time_filter = {"created_at": {"$gte": month_ago}}
+    
+    # Get friend IDs if friends_only filter
+    user_filter = []
+    if friends_only:
         friendships = await db.friends.find({
             "$or": [
                 {"user_id": current_user.user_id, "status": "accepted"},
@@ -1242,33 +1237,143 @@ async def get_leaderboard(current_user: User = Depends(get_current_user)):
             ]
         }, {"_id": 0}).to_list(1000)
         
-        friend_ids = [current_user.user_id]  # Include self
+        user_filter = [current_user.user_id]
         for f in friendships:
             if f["user_id"] == current_user.user_id:
-                friend_ids.append(f["friend_id"])
+                user_filter.append(f["friend_id"])
             else:
-                friend_ids.append(f["user_id"])
+                user_filter.append(f["user_id"])
+    
+    leaderboard = []
+    user_rank = None
+    
+    if category == "points":
+        # Get users sorted by points
+        query = {}
+        if user_filter:
+            query["user_id"] = {"$in": user_filter}
         
-        # Get visit counts for friends
+        users = await db.users.find(query, {"_id": 0}).sort("points", -1).limit(limit).to_list(limit)
+        
+        for idx, user in enumerate(users):
+            leaderboard.append({
+                "user_id": user["user_id"],
+                "name": user["name"],
+                "picture": user.get("picture"),
+                "username": user.get("username"),
+                "value": user.get("points", 0),
+                "rank": idx + 1,
+                "current_streak": user.get("current_streak", 0),
+                "longest_streak": user.get("longest_streak", 0)
+            })
+            if user["user_id"] == current_user.user_id:
+                user_rank = idx + 1
+                
+    elif category == "visits":
+        # Get visit counts
         pipeline = [
-            {"$match": {"user_id": {"$in": friend_ids}}},
+            {"$match": {**time_filter, **({"user_id": {"$in": user_filter}} if user_filter else {})}},
             {"$group": {"_id": "$user_id", "visit_count": {"$sum": 1}}},
-            {"$sort": {"visit_count": -1}}
+            {"$sort": {"visit_count": -1}},
+            {"$limit": limit}
         ]
-        results = await db.visits.aggregate(pipeline).to_list(1000)
+        results = await db.visits.aggregate(pipeline).to_list(limit)
         
-        leaderboard = []
         for idx, entry in enumerate(results):
             user = await db.users.find_one({"user_id": entry["_id"]}, {"_id": 0})
             if user:
-                leaderboard.append(LeaderboardEntry(
-                    user_id=user["user_id"],
-                    name=user["name"],
-                    picture=user.get("picture"),
-                    total_points=entry["visit_count"],
-                    rank=idx + 1
-                ))
-        return leaderboard
+                leaderboard.append({
+                    "user_id": user["user_id"],
+                    "name": user["name"],
+                    "picture": user.get("picture"),
+                    "username": user.get("username"),
+                    "value": entry["visit_count"],
+                    "rank": idx + 1
+                })
+                if user["user_id"] == current_user.user_id:
+                    user_rank = idx + 1
+                    
+    elif category == "countries":
+        # Get unique countries visited count
+        pipeline = [
+            {"$match": {**time_filter, **({"user_id": {"$in": user_filter}} if user_filter else {})}},
+            {"$group": {"_id": {"user_id": "$user_id", "country": "$country_name"}}},
+            {"$group": {"_id": "$_id.user_id", "country_count": {"$sum": 1}}},
+            {"$sort": {"country_count": -1}},
+            {"$limit": limit}
+        ]
+        results = await db.visits.aggregate(pipeline).to_list(limit)
+        
+        for idx, entry in enumerate(results):
+            user = await db.users.find_one({"user_id": entry["_id"]}, {"_id": 0})
+            if user:
+                leaderboard.append({
+                    "user_id": user["user_id"],
+                    "name": user["name"],
+                    "picture": user.get("picture"),
+                    "username": user.get("username"),
+                    "value": entry["country_count"],
+                    "rank": idx + 1
+                })
+                if user["user_id"] == current_user.user_id:
+                    user_rank = idx + 1
+                    
+    elif category == "streaks":
+        # Get users by longest streak
+        query = {}
+        if user_filter:
+            query["user_id"] = {"$in": user_filter}
+        
+        users = await db.users.find(query, {"_id": 0}).sort("longest_streak", -1).limit(limit).to_list(limit)
+        
+        for idx, user in enumerate(users):
+            leaderboard.append({
+                "user_id": user["user_id"],
+                "name": user["name"],
+                "picture": user.get("picture"),
+                "username": user.get("username"),
+                "value": user.get("longest_streak", 0),
+                "rank": idx + 1,
+                "current_streak": user.get("current_streak", 0)
+            })
+            if user["user_id"] == current_user.user_id:
+                user_rank = idx + 1
+    
+    return {
+        "leaderboard": leaderboard,
+        "user_rank": user_rank,
+        "total_users": len(leaderboard)
+    }
+
+@api_router.get("/leaderboard/rising-stars")
+async def get_rising_stars(limit: int = 10, current_user: User = Depends(get_current_user)):
+    """Get users with biggest point gains this week"""
+    week_ago = datetime.now(timezone.utc) - timedelta(days=7)
+    
+    # Get points earned this week from activities
+    pipeline = [
+        {"$match": {"created_at": {"$gte": week_ago}}},
+        {"$group": {"_id": "$user_id", "points_this_week": {"$sum": "$points_earned"}}},
+        {"$sort": {"points_this_week": -1}},
+        {"$limit": limit}
+    ]
+    
+    results = await db.activities.aggregate(pipeline).to_list(limit)
+    
+    rising_stars = []
+    for idx, entry in enumerate(results):
+        user = await db.users.find_one({"user_id": entry["_id"]}, {"_id": 0})
+        if user:
+            rising_stars.append({
+                "user_id": user["user_id"],
+                "name": user["name"],
+                "picture": user.get("picture"),
+                "username": user.get("username"),
+                "points_this_week": entry["points_this_week"],
+                "rank": idx + 1
+            })
+    
+    return rising_stars
 
 # ============= FRIEND ENDPOINTS =============
 
