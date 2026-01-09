@@ -302,6 +302,30 @@ class TripLandmarkCreate(BaseModel):
 
 # ============= END TRIP PLANNING MODELS =============
 
+# ============= COUNTRY VISIT MODELS =============
+
+class CountryVisit(BaseModel):
+    country_visit_id: str
+    user_id: str
+    user_name: str
+    user_picture: Optional[str] = None
+    country_name: str
+    continent: str
+    photos: List[str] = []  # Base64 images, max 10
+    diary: Optional[str] = None
+    visited_at: datetime
+    points_earned: int = 15  # Points for country visit
+    created_at: datetime
+
+class CountryVisitCreate(BaseModel):
+    country_name: str
+    continent: str
+    photos: List[str] = []  # Base64 images
+    diary: Optional[str] = None
+    visited_at: Optional[str] = None  # ISO format date
+
+# ============= END COUNTRY VISIT MODELS =============
+
 # ============= NOTIFICATION MODELS =============
 
 class Notification(BaseModel):
