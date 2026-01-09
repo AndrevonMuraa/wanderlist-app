@@ -18,6 +18,11 @@ export default function RankBadge({
   showName = true,
   style 
 }: RankBadgeProps) {
+  // Add safety check for rank object
+  if (!rank || !rank.gradient || !rank.icon) {
+    return null; // Return null if rank is invalid
+  }
+
   const sizeConfig = {
     small: { badge: 40, icon: 20, fontSize: 10 },
     medium: { badge: 60, icon: 30, fontSize: 12 },
