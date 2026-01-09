@@ -81,14 +81,14 @@ export default function AnalyticsScreen() {
         }, {} as any);
 
         setAnalytics({
-          totalVisits: stats.total_visits,
-          countriesVisited: stats.countries_visited,
-          continentsVisited: stats.continents_visited,
+          totalVisits: stats.total_visits || 0,
+          countriesVisited: stats.countries_visited || 0,
+          continentsVisited: stats.continents_visited || 0,
           totalPoints: progress.totalPoints || 0,
-          currentStreak: stats.current_streak || 0,
-          longestStreak: stats.longest_streak || 0,
+          currentStreak: 0,  // Will be from user object when implemented
+          longestStreak: 0,  // Will be from user object when implemented
           badgesEarned: Array.isArray(achievements) ? achievements.length : 0,
-          continentBreakdown: progress.continents,
+          continentBreakdown: progress.continents || {},
           countryBreakdown,
           topLandmarks: [],
           monthlyProgress: [],
