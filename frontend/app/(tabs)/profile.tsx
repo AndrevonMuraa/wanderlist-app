@@ -187,6 +187,12 @@ export default function ProfileScreen() {
               )}
             </TouchableOpacity>
             <TouchableOpacity
+              style={styles.headerIconButton}
+              onPress={() => router.push('/about')}
+            >
+              <Ionicons name="information-circle-outline" size={28} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity
               style={styles.editButton}
               onPress={() => router.push('/edit-profile')}
             >
