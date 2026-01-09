@@ -477,6 +477,24 @@ export default function ProfileScreen() {
           />
           <Divider style={styles.divider} />
           <List.Item
+            title="Dark Mode"
+            description="Switch between light and dark theme"
+            left={props => <List.Icon {...props} icon="moon-outline" color={theme.colors.primary} />}
+            right={props => (
+              <Switch
+                value={false}
+                onValueChange={async () => {
+                  // Will implement with ThemeContext
+                  console.log('Toggle dark mode');
+                }}
+                color={theme.colors.primary}
+              />
+            )}
+            titleStyle={styles.listItemTitle}
+            descriptionStyle={styles.listItemDescription}
+          />
+          <Divider style={styles.divider} />
+          <List.Item
             title="Settings"
             description="App preferences"
             left={props => <List.Icon {...props} icon="cog-outline" color={theme.colors.primary} />}
