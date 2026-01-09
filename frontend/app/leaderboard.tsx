@@ -107,9 +107,9 @@ export default function LeaderboardScreen() {
   const getCategoryIcon = () => {
     switch (category) {
       case 'points': return 'star';
-      case 'visits': return 'location';
-      case 'countries': return 'earth';
-      case 'streaks': return 'flame';
+      case 'visits': return 'location-outline';
+      case 'countries': return 'earth-outline';
+      case 'streaks': return 'flame-outline';
     }
   };
 
