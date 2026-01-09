@@ -3,7 +3,6 @@ import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform, Alert 
 import { Text, Surface, Button, Divider, Switch, List, Dialog, Portal } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
