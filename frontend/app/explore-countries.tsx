@@ -422,7 +422,7 @@ export default function ExploreCountriesScreen() {
         'trophy',
         'Leaderboard',
         "See who's leading",
-        () => router.push('/(tabs)/leaderboard'),
+        () => router.push('/leaderboard'),
         theme.colors.accent
       )}
       
