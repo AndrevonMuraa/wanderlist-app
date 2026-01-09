@@ -245,7 +245,7 @@ def test_trip_planning(token):
     if created_trip_id and created_landmark_id:
         print_info("\nTest 5: Mark landmark as visited in trip")
         visit_response = requests.put(
-            f"{BACKEND_URL}/trips/{created_trip_id}/landmarks/{created_landmark_id}/visited",
+            f"{BACKEND_URL}/trips/{created_trip_id}/landmarks/{created_landmark_id}/visited?visited=true",
             headers=headers
         )
         
