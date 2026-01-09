@@ -484,11 +484,8 @@ export default function ProfileScreen() {
             left={props => <List.Icon {...props} icon="weather-night" color={theme.colors.primary} />}
             right={props => (
               <Switch
-                value={false}
-                onValueChange={async () => {
-                  // Will implement with ThemeContext
-                  console.log('Toggle dark mode');
-                }}
+                value={isDark}
+                onValueChange={toggleTheme}
                 color={theme.colors.primary}
               />
             )}
