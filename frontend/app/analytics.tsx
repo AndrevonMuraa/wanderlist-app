@@ -15,25 +15,7 @@ import { PersistentTabBar } from '../components/PersistentTabBar';
 
 const { width } = Dimensions.get('window');
 
-export default function AnalyticsScreen() {
-  const router = useRouter();
-  const { user } = useAuth();  // Use AuthContext for token
-  const [loading, setLoading] = useState(true);
-  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
-
-  useEffect(() => {
-    loadAnalytics();
-  }, []);
-
-  const getToken = async (): Promise<string | null> => {
-    if (Platform.OS === 'web') {
-      return localStorage.getItem('auth_token');
-    } else {
-      return await SecureStore.getItemAsync('auth_token');
-    }
-  };
-
-  const loadAnalytics = async () => {
+interface AnalyticsData {
   totalVisits: number;
   countriesVisited: number;
   continentsVisited: number;
@@ -49,12 +31,21 @@ export default function AnalyticsScreen() {
 
 export default function AnalyticsScreen() {
   const router = useRouter();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
 
   useEffect(() => {
     loadAnalytics();
   }, []);
+
+  const getToken = async (): Promise<string | null> => {
+    if (Platform.OS === 'web') {
+      return localStorage.getItem('auth_token');
+    } else {
+      return await SecureStore.getItemAsync('auth_token');
+    }
+  };
 
   const loadAnalytics = async () => {
     try {
