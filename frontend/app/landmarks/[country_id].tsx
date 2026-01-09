@@ -12,6 +12,7 @@ import UpgradeModal from '../../components/UpgradeModal';
 import { BACKEND_URL } from '../../utils/config';
 import { ProgressBar } from '../../components/ProgressBar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
+import { getAllCountryFacts } from '../../utils/countryFacts';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
