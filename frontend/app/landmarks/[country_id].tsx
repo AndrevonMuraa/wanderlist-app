@@ -11,6 +11,7 @@ import theme from '../../styles/theme';
 import UpgradeModal from '../../components/UpgradeModal';
 import { BACKEND_URL } from '../../utils/config';
 import { ProgressBar } from '../../components/ProgressBar';
+import { PersistentTabBar } from '../../components/PersistentTabBar';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
