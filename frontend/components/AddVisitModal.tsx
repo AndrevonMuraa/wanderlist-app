@@ -498,7 +498,7 @@ export default function AddVisitModal({
       </View>
     </Modal>
   );
-} 
+}
 
 const styles = StyleSheet.create({
   container: {
