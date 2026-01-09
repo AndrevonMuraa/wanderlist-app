@@ -20,8 +20,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import RankBadge from '../../components/RankBadge';
 import CommentsSection from '../../components/CommentsSection';
 import { getUserRank } from '../../utils/rankSystem';
-
-const BACKEND_URL = Platform.OS === 'web' ? '' : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
+import { BACKEND_URL } from '../../utils/config';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
