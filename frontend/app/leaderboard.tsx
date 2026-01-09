@@ -122,7 +122,7 @@ export default function LeaderboardScreen() {
 
   const renderLeaderboardEntry = (entry: LeaderboardEntry, index: number) => {
     const medal = getMedalEmoji(entry.rank);
-    const rankInfo = getUserRank(entry.value || 0);
+    const rankInfo = getUserRank(Math.max(entry.value || 0, 0));
 
     return (
       <Surface key={entry.user_id} style={styles.entryCard} elevation={1}>
