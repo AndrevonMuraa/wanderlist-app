@@ -2078,6 +2078,176 @@ async def check_in_bucket_list(landmark_id: str, current_user: User = Depends(ge
 
 # ============= END BUCKET LIST ENDPOINTS =============
 
+# ============= CUSTOM COLLECTIONS ENDPOINTS (PREMIUM FEATURE) =============
+
+class Collection(BaseModel):
+    collection_id: str
+    user_id: str
+    name: str
+    description: Optional[str] = None
+    icon: str = "star"  # Icon name for the collection
+    color: str = "#20B2AA"  # Collection color theme
+    landmark_count: int = 0
+    created_at: datetime
+    updated_at: datetime
+
+class CollectionCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    icon: Optional[str] = "star"
+    color: Optional[str] = "#20B2AA"
+
+@api_router.get("/collections")
+async def get_user_collections(current_user: User = Depends(get_current_user)):
+    """Get user's custom collections"""
+    collections = await db.collections.find(
+        {"user_id": current_user.user_id}, 
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(1000)
+    
+    # Get landmark count for each collection
+    result = []
+    for collection in collections:
+        count = await db.collection_items.count_documents({"collection_id": collection["collection_id"]})
+        collection["landmark_count"] = count
+        result.append(Collection(**collection))
+    
+    return result
+
+@api_router.post("/collections")
+async def create_collection(data: CollectionCreate, current_user: User = Depends(get_current_user)):
+    """Create a new custom collection"""
+    collection_id = f"collection_{uuid.uuid4().hex[:12]}"
+    
+    collection = {
+        "collection_id": collection_id,
+        "user_id": current_user.user_id,
+        "name": data.name,
+        "description": data.description,
+        "icon": data.icon or "star",
+        "color": data.color or "#20B2AA",
+        "created_at": datetime.now(timezone.utc),
+        "updated_at": datetime.now(timezone.utc)
+    }
+    
+    await db.collections.insert_one(collection)
+    collection["landmark_count"] = 0
+    
+    return Collection(**collection)
+
+@api_router.delete("/collections/{collection_id}")
+async def delete_collection(collection_id: str, current_user: User = Depends(get_current_user)):
+    """Delete a collection"""
+    # Verify ownership
+    collection = await db.collections.find_one({"collection_id": collection_id, "user_id": current_user.user_id})
+    if not collection:
+        raise HTTPException(status_code=404, detail="Collection not found")
+    
+    # Delete collection and all its items
+    await db.collections.delete_one({"collection_id": collection_id})
+    await db.collection_items.delete_many({"collection_id": collection_id})
+    
+    return {"message": "Collection deleted successfully"}
+
+@api_router.post("/collections/{collection_id}/landmarks")
+async def add_landmark_to_collection(
+    collection_id: str, 
+    landmark_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Add a landmark to a collection"""
+    # Verify collection ownership
+    collection = await db.collections.find_one({"collection_id": collection_id, "user_id": current_user.user_id})
+    if not collection:
+        raise HTTPException(status_code=404, detail="Collection not found")
+    
+    # Check if landmark exists
+    landmark = await db.landmarks.find_one({"landmark_id": landmark_id}, {"_id": 0})
+    if not landmark:
+        raise HTTPException(status_code=404, detail="Landmark not found")
+    
+    # Check if already in collection
+    exists = await db.collection_items.find_one({
+        "collection_id": collection_id,
+        "landmark_id": landmark_id
+    })
+    if exists:
+        raise HTTPException(status_code=400, detail="Landmark already in collection")
+    
+    # Add to collection
+    item_id = f"item_{uuid.uuid4().hex[:12]}"
+    item = {
+        "item_id": item_id,
+        "collection_id": collection_id,
+        "user_id": current_user.user_id,
+        "landmark_id": landmark_id,
+        "added_at": datetime.now(timezone.utc)
+    }
+    
+    await db.collection_items.insert_one(item)
+    
+    # Update collection updated_at
+    await db.collections.update_one(
+        {"collection_id": collection_id},
+        {"$set": {"updated_at": datetime.now(timezone.utc)}}
+    )
+    
+    return {"message": "Landmark added to collection", "item_id": item_id}
+
+@api_router.get("/collections/{collection_id}/landmarks")
+async def get_collection_landmarks(collection_id: str, current_user: User = Depends(get_current_user)):
+    """Get all landmarks in a collection"""
+    # Verify ownership
+    collection = await db.collections.find_one({"collection_id": collection_id, "user_id": current_user.user_id})
+    if not collection:
+        raise HTTPException(status_code=404, detail="Collection not found")
+    
+    # Get items
+    items = await db.collection_items.find({"collection_id": collection_id}, {"_id": 0}).to_list(1000)
+    
+    # Get full landmark details
+    landmark_ids = [item["landmark_id"] for item in items]
+    landmarks = await db.landmarks.find({"landmark_id": {"$in": landmark_ids}}, {"_id": 0}).to_list(1000)
+    
+    # Add is_locked flag based on user tier
+    results = []
+    for landmark in landmarks:
+        landmark_dict = dict(landmark)
+        if current_user.subscription_tier == "free" and landmark_dict.get("category") == "premium":
+            landmark_dict["is_locked"] = True
+        else:
+            landmark_dict["is_locked"] = False
+        results.append(Landmark(**landmark_dict))
+    
+    return results
+
+@api_router.delete("/collections/{collection_id}/landmarks/{landmark_id}")
+async def remove_landmark_from_collection(
+    collection_id: str,
+    landmark_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Remove a landmark from a collection"""
+    result = await db.collection_items.delete_one({
+        "collection_id": collection_id,
+        "landmark_id": landmark_id,
+        "user_id": current_user.user_id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Item not found in collection")
+    
+    # Update collection updated_at
+    await db.collections.update_one(
+        {"collection_id": collection_id},
+        {"$set": {"updated_at": datetime.now(timezone.utc)}}
+    )
+    
+    return {"message": "Landmark removed from collection"}
+
+# ============= END CUSTOM COLLECTIONS ENDPOINTS =============
+
+
 # ============= TRIP PLANNING ENDPOINTS =============
 
 @api_router.get("/trips")
