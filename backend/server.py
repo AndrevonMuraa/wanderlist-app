@@ -2971,12 +2971,17 @@ async def check_and_award_badges(user_id: str):
     existing_badges = await db.achievements.find({"user_id": user_id}).to_list(1000)
     existing_badge_types = {badge["badge_type"] for badge in existing_badges}
     
-    # Get user's visits
-    visits = await db.visits.find({"user_id": user_id}).to_list(10000)
-    visit_count = len(visits)
+    # Get user document for accurate stats
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    if not user:
+        return newly_awarded
     
-    # Calculate total points
-    total_points = sum(v.get("points_earned", 10) for v in visits)
+    # Get accurate stats from user document
+    total_points = user.get("points", 0)
+    longest_streak = user.get("longest_streak", 0)
+    
+    # Get user's visits for visit count
+    visit_count = await db.visits.count_documents({"user_id": user_id})
     
     # Get friend count
     friend_count = await db.friends.count_documents({
