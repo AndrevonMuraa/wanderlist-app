@@ -87,13 +87,19 @@ export default function AnalyticsScreen() {
           countriesVisited: stats.countries_visited || 0,
           continentsVisited: stats.continents_visited || 0,
           totalPoints: progress.totalPoints || 0,
-          currentStreak: 0,  // Will be from user object when implemented
-          longestStreak: 0,  // Will be from user object when implemented
+          currentStreak: 0,
+          longestStreak: 0,
           badgesEarned: Array.isArray(achievements) ? achievements.length : 0,
           continentBreakdown: progress.continents || {},
           countryBreakdown,
           topLandmarks: [],
           monthlyProgress: [],
+        });
+        
+        console.log('Analytics loaded:', {
+          visits: stats.total_visits,
+          countries: stats.countries_visited,
+          points: progress.totalPoints,
         });
       }
     } catch (error) {
