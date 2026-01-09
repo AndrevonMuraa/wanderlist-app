@@ -433,6 +433,63 @@ export default function SocialHubScreen() {
           </View>
         )}
 
+        {activity.activity_type === 'country_visit' && (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => activity.country_visit_id && router.push(`/country-visit-detail/${activity.country_visit_id}`)}
+          >
+            <View style={styles.countryVisitContent}>
+              <View style={styles.countryVisitHeader}>
+                <Ionicons name="earth" size={20} color={theme.colors.primary} />
+                <Text style={styles.countryVisitText}>
+                  Visited <Text style={styles.activityHighlight}>{activity.country_name}</Text>
+                </Text>
+              </View>
+              
+              {/* Photo Preview Grid */}
+              {activity.photos && activity.photos.length > 0 && (
+                <View style={styles.photoCollagePreview}>
+                  {activity.photos.slice(0, 4).map((photo, index) => (
+                    <Image
+                      key={index}
+                      source={{ uri: photo }}
+                      style={[
+                        styles.photoCollageItem,
+                        activity.photos.length === 1 && styles.photoCollageSingle,
+                        activity.photos.length === 2 && styles.photoCollageHalf,
+                      ]}
+                      resizeMode="cover"
+                    />
+                  ))}
+                  {activity.photos.length > 4 && (
+                    <View style={styles.photoCollageOverlay}>
+                      <Text style={styles.photoCollageOverlayText}>+{activity.photos.length - 4}</Text>
+                    </View>
+                  )}
+                </View>
+              )}
+
+              {/* Diary Preview */}
+              {activity.diary && (
+                <Text style={styles.diaryPreview} numberOfLines={3}>
+                  {activity.diary}
+                </Text>
+              )}
+
+              <View style={styles.countryVisitFooter}>
+                <View style={styles.activityPoints}>
+                  <Ionicons name="star" size={14} color="#FFD700" />
+                  <Text style={styles.pointsText}>+{activity.points_earned} pts</Text>
+                </View>
+                <View style={styles.viewDetailsBadge}>
+                  <Text style={styles.viewDetailsText}>View Details</Text>
+                  <Ionicons name="arrow-forward" size={12} color={theme.colors.primary} />
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
+
         <View style={styles.activityActions}>
           <TouchableOpacity 
             style={styles.actionButton}
