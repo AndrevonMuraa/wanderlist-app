@@ -430,7 +430,7 @@ export default function ExploreCountriesScreen() {
         'ribbon',
         'Achievements',
         'View your badges',
-        () => {},
+        () => router.push('/achievements'),
         theme.colors.accentBronze
       )}
     </View>
