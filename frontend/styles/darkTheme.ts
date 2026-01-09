@@ -1,82 +1,83 @@
-// Dark theme variant for WanderList
+// Dark theme variant for WanderList - Luxury Travel Magazine at Night
+// Maintains Maldivean ocean blues + warm gold accents
 
 export const darkColors = {
-  // Primary Colors - Maintain turquoise identity
-  primary: '#20B2AA',
-  primaryDark: '#1A8E87',
-  primaryLight: '#4DD4CB',
+  // Primary Colors - SAME Maldivean turquoise (brand consistency)
+  primary: '#4DB8D8',        // Maldivean turquoise - MATCHES light theme
+  primaryDark: '#2E9AB5',    // Deep ocean blue
+  primaryLight: '#7DCBE3',   // Light tropical water
   
-  // Secondary
-  secondary: '#2D3748',
-  secondaryLight: '#4A5568',
+  // Secondary - Warm dark tones
+  secondary: '#3D3530',      // Warm dark brown
+  secondaryLight: '#4A3F38',
   
-  // Accents
-  accent: '#F6AD55',
-  accentYellow: '#FFD93D',
-  accentBronze: '#D4A574',
-  accentCopper: '#E8956A',
-  accentDark: '#DD6B20',
+  // Luxury Accents - SAME rich gold (brand consistency)
+  accent: '#C9A961',         // Rich gold - MATCHES light theme
+  accentYellow: '#E8C77D',   // Soft gold
+  accentBronze: '#B8956A',   // Bronze
+  accentCopper: '#D4A574',   // Copper warmth
+  accentDark: '#A88850',     // Deeper gold
   
-  // Backgrounds - Dark
-  background: '#1A202C',        // Deep dark blue-gray
-  backgroundSecondary: '#2D3748', // Slightly lighter
-  surface: '#2D3748',           // Card background
-  surfaceElevated: '#374151',   // Elevated cards
-  surfaceTinted: '#252F3F',     // Tinted variant
+  // Backgrounds - Warm dark chocolate/brown (NOT cold blue-gray)
+  background: '#1F1E1C',        // Warm dark chocolate
+  backgroundSecondary: '#2A2725', // Slightly lighter warm
+  surface: '#2A2725',           // Warm dark brown cards
+  surfaceElevated: '#323030',   // Elevated cards
+  surfaceTinted: '#252320',     // Subtle warm tint
   
-  // Text - Light on dark
-  text: '#F7FAFC',              // Almost white
-  textSecondary: '#A0AEC0',     // Medium gray
-  textLight: '#718096',         // Light gray
-  textInverse: '#1A202C',       // Dark on light
+  // Text - Warm light tones (inverted from light theme)
+  text: '#F5F3F0',              // Warm cream - INVERTED from light bg
+  textSecondary: '#B8B3AD',     // Warm medium gray
+  textLight: '#8A8580',         // Warm light gray
+  textInverse: '#1F1E1C',       // Dark on light
   
-  // Status Colors - Adjusted for dark
-  success: '#48BB78',
-  warning: '#F6AD55',
-  error: '#FC8181',
-  info: '#4299E1',
+  // Status Colors - Warmer for dark
+  success: '#5DC99D',
+  warning: '#C9A961',        // Use accent gold
+  error: '#E8857E',
+  info: '#4DB8D8',           // Use primary
   
-  // Tier Colors
-  free: '#A0AEC0',
-  basic: '#4299E1',
-  premium: '#F6AD55',
+  // Tier Colors - Same as light for consistency
+  free: '#9B9B9B',
+  basic: '#4DB8D8',          // Ocean blue
+  premium: '#C9A961',        // Rich gold
   
-  // Overlays
-  overlay: 'rgba(0, 0, 0, 0.7)',
-  overlayLight: 'rgba(0, 0, 0, 0.4)',
-  overlayStrong: 'rgba(0, 0, 0, 0.85)',
+  // Overlays - Adjusted for dark
+  overlay: 'rgba(0, 0, 0, 0.6)',
+  overlayLight: 'rgba(0, 0, 0, 0.3)',
+  overlayStrong: 'rgba(0, 0, 0, 0.8)',
   
-  // Borders
-  border: '#4A5568',
-  borderLight: '#374151',
+  // Borders - Warm subtle
+  border: '#3D3530',
+  borderLight: '#323030',
   
-  // Country accents - Slightly muted for dark theme
+  // Country accents - Same as light theme for brand consistency
   countryAccents: {
-    norway: '#5AA4B4',
-    france: '#AB8ECE',
-    italy: '#D8A57A',
-    japan: '#F897AE',
-    egypt: '#E4B584',
-    peru: '#9B7F57',
-    australia: '#F8AB6C',
-    usa: '#6B9FB3',
-    uk: '#8A9E8E',
-    china: '#E4635D',
-    spain: '#F8B06C',
-    greece: '#5DC8D8',
-    thailand: '#9FCC9F',
-    india: '#E4A57A',
-    brazil: '#6FC86F',
-    mexico: '#F8B882',
-    uae: '#D9B971',
-    germany: '#7B9EA9',
-    canada: '#E47B7B',
-    south_africa: '#D8955D',
+    norway: '#4A90A4',
+    france: '#9B7EBE',
+    italy: '#C8956A',
+    japan: '#E8879E',
+    egypt: '#D4A574',
+    peru: '#8B6F47',
+    australia: '#E89B5C',
+    usa: '#5B8FA3',
+    uk: '#7A8E7E',
+    china: '#D4534D',
+    spain: '#E8A05C',
+    greece: '#4DB8D8',
+    thailand: '#8FBC8F',
+    india: '#D4956A',
+    brazil: '#5FB85F',
+    mexico: '#E8A872',
+    uae: '#C9A961',
+    germany: '#6B8E99',
+    canada: '#D46B6B',
+    south_africa: '#C8854D',
   },
 };
 
 // Export combined theme object
 export const darkTheme = {
   colors: darkColors,
-  // Spacing, typography, etc. remain the same
+  // Spacing, typography, etc. remain the same as light theme
 };
