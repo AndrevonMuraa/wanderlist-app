@@ -499,3 +499,302 @@ export default function AddVisitModal({
     </Modal>
   );
 } 
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: theme.spacing.md,
+    paddingTop: Platform.OS === 'ios' ? 50 : theme.spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+    backgroundColor: theme.colors.surface,
+  },
+  closeButton: {
+    padding: theme.spacing.xs,
+  },
+  headerContent: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  headerTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '700',
+  },
+  headerSubtitle: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    marginTop: 2,
+  },
+  submitButton: {
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.xs,
+  },
+  submitButtonText: {
+    ...theme.typography.body,
+    color: theme.colors.primary,
+    fontWeight: '700',
+  },
+  // Mode Toggle
+  modeToggle: {
+    flexDirection: 'row',
+    margin: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    padding: 4,
+  },
+  modeButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    borderRadius: theme.borderRadius.md,
+    gap: theme.spacing.xs,
+  },
+  modeButtonActive: {
+    backgroundColor: theme.colors.primary,
+  },
+  modeButtonText: {
+    ...theme.typography.body,
+    color: theme.colors.primary,
+    fontWeight: '600',
+  },
+  modeButtonTextActive: {
+    color: '#fff',
+  },
+  // Quick Mode
+  content: {
+    flex: 1,
+  },
+  quickPhotoSection: {
+    margin: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    backgroundColor: theme.colors.surface,
+  },
+  quickPhotoHeader: {
+    alignItems: 'center',
+    marginBottom: theme.spacing.lg,
+  },
+  quickPhotoTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '700',
+    marginBottom: theme.spacing.xs,
+  },
+  quickPhotoSubtitle: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+  },
+  quickPhotoActions: {
+    flexDirection: 'row',
+    gap: theme.spacing.md,
+    marginBottom: theme.spacing.lg,
+  },
+  quickPhotoButton: {
+    flex: 1,
+    borderRadius: theme.borderRadius.md,
+    overflow: 'hidden',
+  },
+  quickPhotoGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: theme.spacing.md,
+    gap: theme.spacing.sm,
+  },
+  quickPhotoText: {
+    ...theme.typography.body,
+    color: '#fff',
+    fontWeight: '600',
+  },
+  quickPhotoPreview: {
+    width: '100%',
+    height: 200,
+    borderRadius: theme.borderRadius.md,
+    marginBottom: theme.spacing.md,
+  },
+  quickNoteSection: {
+    marginTop: theme.spacing.md,
+  },
+  quickNoteTitle: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    fontWeight: '600',
+    marginBottom: theme.spacing.sm,
+  },
+  quickNoteInput: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    backgroundColor: theme.colors.background,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.md,
+    minHeight: 80,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    textAlignVertical: 'top',
+  },
+  quickNoteCounter: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    textAlign: 'right',
+    marginTop: theme.spacing.xs,
+  },
+  quickSubmitSection: {
+    padding: theme.spacing.md,
+  },
+  quickSubmitButton: {
+    borderRadius: theme.borderRadius.md,
+    overflow: 'hidden',
+  },
+  quickSubmitGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: theme.spacing.lg,
+    gap: theme.spacing.sm,
+  },
+  quickSubmitText: {
+    ...theme.typography.body,
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  // Detailed Mode
+  detailedContent: {
+    flex: 1,
+  },
+  section: {
+    marginBottom: theme.spacing.lg,
+  },
+  sectionHeader: {
+    paddingHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+  },
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+  },
+  sectionTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '700',
+    flex: 1,
+  },
+  sectionSubtitle: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    marginTop: theme.spacing.xs,
+  },
+  inputContainer: {
+    paddingHorizontal: theme.spacing.md,
+  },
+  inputGradient: {
+    borderRadius: theme.borderRadius.md,
+    padding: 2,
+  },
+  diaryInput: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.md,
+    minHeight: 150,
+    textAlignVertical: 'top',
+  },
+  tipsInput: {
+    ...theme.typography.body,
+    color: theme.colors.text,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.md,
+    minHeight: 120,
+    textAlignVertical: 'top',
+  },
+  tipsHint: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    marginTop: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+  },
+  countBadge: {
+    backgroundColor: theme.colors.primary,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 2,
+    borderRadius: theme.borderRadius.sm,
+  },
+  countBadgeText: {
+    ...theme.typography.caption,
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 10,
+  },
+  premiumBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(255, 215, 0, 0.15)',
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 2,
+    borderRadius: theme.borderRadius.sm,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 215, 0, 0.3)',
+  },
+  premiumBadgeText: {
+    ...theme.typography.caption,
+    color: '#B8860B',
+    fontWeight: '700',
+    fontSize: 9,
+  },
+  premiumRequired: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.md,
+  },
+  premiumIcon: {
+    marginBottom: theme.spacing.md,
+  },
+  premiumTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: theme.spacing.sm,
+  },
+  premiumSubtitle: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+  },
+  detailedSubmitSection: {
+    padding: theme.spacing.md,
+  },
+  detailedSubmitButton: {
+    borderRadius: theme.borderRadius.md,
+    overflow: 'hidden',
+  },
+  detailedSubmitGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: theme.spacing.lg,
+    gap: theme.spacing.sm,
+  },
+  detailedSubmitText: {
+    ...theme.typography.body,
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+});
