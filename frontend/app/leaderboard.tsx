@@ -164,7 +164,7 @@ export default function LeaderboardScreen() {
             {/* Show additional stats for certain categories */}
             {category === 'points' && entry.current_streak !== undefined && (
               <View style={styles.statsRow}>
-                <Ionicons name="flame" size={12} color="#FF6B35" />
+                <Ionicons name="flame-outline" size={12} color="#FF6B35" />
                 <Text style={styles.statText}>{entry.current_streak} day streak</Text>
               </View>
             )}
