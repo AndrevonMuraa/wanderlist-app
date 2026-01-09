@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
+import { PersistentTabBar } from '../../components/PersistentTabBar';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
