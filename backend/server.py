@@ -693,9 +693,9 @@ async def get_temp_token(email: str = "mobile@test.com"):
 async def get_countries(current_user: User = Depends(get_current_user)):
     countries = await db.countries.find({}, {"_id": 0}).to_list(1000)
     
-    # Count landmarks for each country
+    # Count ALL landmarks for each country (official + premium)
     for country in countries:
-        count = await db.landmarks.count_documents({"country_id": country["country_id"], "category": "official"})
+        count = await db.landmarks.count_documents({"country_id": country["country_id"]})
         country["landmark_count"] = count
     
     return [Country(**c) for c in countries]
