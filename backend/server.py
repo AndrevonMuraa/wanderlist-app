@@ -2159,6 +2159,179 @@ async def mark_trip_landmark_visited(trip_id: str, trip_landmark_id: str, visite
     
     return {"message": f"Landmark marked as {'visited' if visited else 'unvisited'}"}
 
+@api_router.post("/trips/{trip_id}/complete-review")
+async def get_trip_completion_review(trip_id: str, current_user: User = Depends(get_current_user)):
+    """Get trip details for completion review"""
+    trip = await db.trips.find_one({
+        "trip_id": trip_id,
+        "user_id": current_user.user_id
+    }, {"_id": 0})
+    
+    if not trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    
+    # Get trip landmarks
+    trip_landmarks = await db.trip_landmarks.find(
+        {"trip_id": trip_id}
+    ).to_list(1000)
+    
+    # Get landmark details
+    landmark_ids = [tl["landmark_id"] for tl in trip_landmarks]
+    landmarks = await db.landmarks.find(
+        {"landmark_id": {"$in": landmark_ids}},
+        {"_id": 0}
+    ).to_list(1000)
+    
+    landmarks_dict = {lm["landmark_id"]: lm for lm in landmarks}
+    
+    # Combine data
+    enriched_landmarks = []
+    for tl in trip_landmarks:
+        landmark = landmarks_dict.get(tl["landmark_id"])
+        if landmark:
+            enriched_landmarks.append({
+                "trip_landmark_id": tl["trip_landmark_id"],
+                "landmark": landmark,
+                "visited": tl.get("visited", False)
+            })
+    
+    return {
+        "trip": trip,
+        "landmarks": enriched_landmarks
+    }
+
+@api_router.post("/trips/{trip_id}/convert-to-visits")
+async def convert_trip_to_visits(
+    trip_id: str,
+    selected_landmarks: List[str],  # List of trip_landmark_ids
+    current_user: User = Depends(get_current_user)
+):
+    """Convert selected trip landmarks to actual visits and complete the trip"""
+    # Verify trip belongs to user
+    trip = await db.trips.find_one({
+        "trip_id": trip_id,
+        "user_id": current_user.user_id
+    })
+    
+    if not trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    
+    # Get selected trip landmarks
+    trip_landmarks = await db.trip_landmarks.find({
+        "trip_landmark_id": {"$in": selected_landmarks},
+        "trip_id": trip_id
+    }).to_list(1000)
+    
+    if not trip_landmarks:
+        raise HTTPException(status_code=400, detail="No landmarks selected")
+    
+    # Get landmark details
+    landmark_ids = [tl["landmark_id"] for tl in trip_landmarks]
+    landmarks = await db.landmarks.find(
+        {"landmark_id": {"$in": landmark_ids}},
+        {"_id": 0}
+    ).to_list(1000)
+    
+    landmarks_dict = {lm["landmark_id"]: lm for lm in landmarks}
+    
+    # Create visits for each selected landmark
+    visits_created = []
+    total_points = 0
+    countries_visited = set()
+    
+    for tl in trip_landmarks:
+        landmark = landmarks_dict.get(tl["landmark_id"])
+        if not landmark:
+            continue
+        
+        # Check if visit already exists
+        existing_visit = await db.visits.find_one({
+            "user_id": current_user.user_id,
+            "landmark_id": tl["landmark_id"]
+        })
+        
+        if existing_visit:
+            # Skip if already visited
+            continue
+        
+        # Create visit
+        visit_id = f"visit_{uuid.uuid4().hex[:12]}"
+        visit = {
+            "visit_id": visit_id,
+            "user_id": current_user.user_id,
+            "landmark_id": tl["landmark_id"],
+            "landmark_name": landmark["name"],
+            "country_name": landmark["country_name"],
+            "visited_at": datetime.now(timezone.utc),
+            "points_earned": landmark["points"],
+            "created_at": datetime.now(timezone.utc)
+        }
+        
+        await db.visits.insert_one(visit)
+        visits_created.append(visit_id)
+        total_points += landmark["points"]
+        countries_visited.add(landmark["country_name"])
+        
+        # Create activity for this visit
+        activity_id = f"activity_{uuid.uuid4().hex[:12]}"
+        activity = {
+            "activity_id": activity_id,
+            "user_id": current_user.user_id,
+            "user_name": current_user.name,
+            "user_picture": current_user.picture,
+            "activity_type": "visit",
+            "visit_id": visit_id,
+            "landmark_id": tl["landmark_id"],
+            "landmark_name": landmark["name"],
+            "country_name": landmark["country_name"],
+            "points_earned": landmark["points"],
+            "created_at": datetime.now(timezone.utc),
+            "likes_count": 0,
+            "comments_count": 0
+        }
+        await db.activities.insert_one(activity)
+    
+    # Update user stats (add points)
+    if total_points > 0:
+        await db.users.update_one(
+            {"user_id": current_user.user_id},
+            {"$inc": {"points": total_points}}
+        )
+    
+    # Mark trip as completed
+    await db.trips.update_one(
+        {"trip_id": trip_id},
+        {"$set": {"status": "completed", "updated_at": datetime.now(timezone.utc)}}
+    )
+    
+    # Create trip completion activity
+    activity_id = f"activity_{uuid.uuid4().hex[:12]}"
+    activity = {
+        "activity_id": activity_id,
+        "user_id": current_user.user_id,
+        "user_name": current_user.name,
+        "user_picture": current_user.picture,
+        "activity_type": "trip_completed",
+        "trip_id": trip_id,
+        "trip_name": trip["name"],
+        "landmarks_visited": len(visits_created),
+        "countries_visited": len(countries_visited),
+        "points_earned": total_points,
+        "created_at": datetime.now(timezone.utc),
+        "likes_count": 0,
+        "comments_count": 0
+    }
+    await db.activities.insert_one(activity)
+    
+    # Return completion summary
+    return {
+        "message": "Trip completed successfully",
+        "visits_created": len(visits_created),
+        "countries_visited": len(countries_visited),
+        "total_points": total_points,
+        "trip_name": trip["name"]
+    }
+
 # ============= END TRIP PLANNING ENDPOINTS =============
 
 # ============= NOTIFICATION HELPER FUNCTIONS =============
