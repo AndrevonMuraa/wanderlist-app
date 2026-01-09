@@ -2873,87 +2873,87 @@ logger = logging.getLogger(__name__)
 BADGE_DEFINITIONS = {
     "first_visit": {
         "name": "First Steps",
-        "description": "Visited your first landmark",
+        "description": "Your journey begins! You've taken the first step into a world of adventure 🎉",
         "icon": "🎯"
     },
     "milestone_10": {
         "name": "Explorer",
-        "description": "Visited 10 landmarks",
+        "description": "10 landmarks conquered! You're building momentum - the world is watching! 🌟",
         "icon": "🗺️"
     },
     "milestone_25": {
         "name": "Adventurer",
-        "description": "Visited 25 landmarks",
+        "description": "25 landmarks down! You're not just traveling - you're collecting memories 💪",
         "icon": "🧗"
     },
     "milestone_50": {
         "name": "Globetrotter",
-        "description": "Visited 50 landmarks",
+        "description": "50 landmarks explored! You've officially caught the travel bug - there's no cure! 🎊",
         "icon": "🌍"
     },
     "milestone_100": {
         "name": "World Traveler",
-        "description": "Visited 100 landmarks",
+        "description": "100 landmarks! Triple digits! You're unstoppable - the world is your playground! 🚀",
         "icon": "✈️"
     },
     "milestone_250": {
         "name": "Legend",
-        "description": "Visited 250 landmarks",
+        "description": "250 landmarks?! You're living proof that dreams become reality. LEGENDARY status! 👑",
         "icon": "🏆"
     },
     "milestone_500": {
         "name": "Ultimate Explorer",
-        "description": "Visited 500 landmarks",
+        "description": "500 landmarks conquered! You've seen what most only dream of. You ARE the legend! 🌟",
         "icon": "👑"
     },
     "country_complete": {
         "name": "Country Master",
-        "description": "Completed all landmarks in a country",
+        "description": "All landmarks in one country! You don't just visit - you CONQUER! 🏁",
         "icon": "🏁"
     },
     "points_100": {
         "name": "Point Starter",
-        "description": "Earned 100 points",
+        "description": "Your first 100 points! Every journey starts with a single step - you're on your way! ⭐",
         "icon": "⭐"
     },
     "points_500": {
         "name": "Point Collector",
-        "description": "Earned 500 points",
+        "description": "500 points earned! The points are adding up and so are your amazing memories! 🎯",
         "icon": "🌟"
     },
     "points_1000": {
         "name": "Point Master",
-        "description": "Earned 1,000 points",
+        "description": "1,000 points! Four digits! You're in the big leagues now - keep climbing! 💫",
         "icon": "💫"
     },
     "points_5000": {
         "name": "Point Legend",
-        "description": "Earned 5,000 points",
+        "description": "5,000 points?! You're rewriting the leaderboard. Absolute LEGEND status! ✨",
         "icon": "✨"
     },
     "social_5": {
         "name": "Friendly",
-        "description": "Made 5 friends",
+        "description": "5 travel buddies! Adventure is better with friends by your side! 👋",
         "icon": "👋"
     },
     "social_10": {
         "name": "Popular",
-        "description": "Made 10 friends",
+        "description": "10 friends in your crew! You're building a travel community - love it! 🤝",
         "icon": "🤝"
     },
     "social_25": {
         "name": "Social Butterfly",
-        "description": "Made 25 friends",
+        "description": "25 friends! You're not just exploring the world - you're bringing people together! 🦋",
         "icon": "🦋"
     },
     "streak_3": {
         "name": "Getting Started",
-        "description": "3-day visit streak",
+        "description": "3 days in a row! Consistency is key - keep that fire burning! 🔥",
         "icon": "🔥"
     },
     "streak_7": {
         "name": "Week Warrior",
-        "description": "7-day visit streak",
+        "description": "A full week streak! You're building a habit that will change your life! 🔥",
         "icon": "🔥"
     },
     "streak_30": {
