@@ -350,52 +350,64 @@ export default function ExploreCountriesScreen() {
     const totalPoints = progressData?.totalPoints || 0;
 
     return (
-      <View style={styles.welcomeSection}>
-        {continent && (
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
-            <Text style={styles.backButtonText}>Back to Continents</Text>
-          </TouchableOpacity>
-        )}
-        <View style={styles.welcomeTextContainer}>
-          <Text style={styles.welcomeText}>Discover the world and conquer landmarks</Text>
-          <Text style={styles.welcomeSubtext}>
-            {continent ? `Exploring ${(continent as string).charAt(0).toUpperCase() + (continent as string).slice(1)}` : 'Explore 720 landmarks across 48 countries'}
-          </Text>
-        </View>
+      <View>
+        {/* Turquoise Gradient Header */}
+        <LinearGradient
+          colors={[theme.colors.primary, theme.colors.primaryDark]}
+          style={styles.gradientHeader}
+        >
+          {continent && (
+            <TouchableOpacity 
+              style={styles.backButtonGradient}
+              onPress={() => router.back()}
+            >
+              <Ionicons name="arrow-back" size={24} color="#fff" />
+              <Text style={styles.backButtonTextWhite}>Back to Continents</Text>
+            </TouchableOpacity>
+          )}
+          <View style={styles.headerTextContainer}>
+            <Text style={styles.headerTitle}>
+              {continent ? `${(continent as string).charAt(0).toUpperCase() + (continent as string).slice(1)}` : 'Explore Countries'}
+            </Text>
+            <Text style={styles.headerSubtitle}>
+              {continent ? 'Discover amazing landmarks' : 'Choose your next destination'}
+            </Text>
+          </View>
+        </LinearGradient>
 
         {/* Visual Stats Section */}
-        <View style={styles.statsContainer}>
-          <View style={styles.statBox}>
-            <View style={styles.statIconContainer}>
-              <Ionicons name="flag" size={20} color={theme.colors.primary} />
+        <View style={styles.statsContainerNew}>
+          <Surface style={styles.statsCard}>
+            <View style={styles.statBoxRow}>
+              <View style={styles.statItem}>
+                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.primary + '20' }]}>
+                  <Ionicons name="flag" size={24} color={theme.colors.primary} />
+                </View>
+                <Text style={styles.statNumberLarge}>{totalCountries}</Text>
+                <Text style={styles.statLabelNew}>Countries</Text>
+              </View>
+              
+              <View style={styles.statDividerNew} />
+              
+              <View style={styles.statItem}>
+                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.accent + '20' }]}>
+                  <Ionicons name="location" size={24} color={theme.colors.accent} />
+                </View>
+                <Text style={styles.statNumberLarge}>{totalLandmarks}</Text>
+                <Text style={styles.statLabelNew}>Landmarks</Text>
+              </View>
+              
+              <View style={styles.statDividerNew} />
+              
+              <View style={styles.statItem}>
+                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.accentYellow + '20' }]}>
+                  <Ionicons name="star" size={24} color={theme.colors.accentYellow} />
+                </View>
+                <Text style={styles.statNumberLarge}>{totalPoints}</Text>
+                <Text style={styles.statLabelNew}>Points</Text>
+              </View>
             </View>
-            <Text style={styles.statNumber}>{totalCountries}</Text>
-            <Text style={styles.statLabel}>Countries</Text>
-          </View>
-          
-          <View style={styles.statDivider} />
-          
-          <View style={styles.statBox}>
-            <View style={styles.statIconContainer}>
-              <Ionicons name="location" size={20} color={theme.colors.accent} />
-            </View>
-            <Text style={styles.statNumber}>{totalLandmarks}</Text>
-            <Text style={styles.statLabel}>Total Landmarks</Text>
-          </View>
-          
-          <View style={styles.statDivider} />
-          
-          <View style={styles.statBox}>
-            <View style={styles.statIconContainer}>
-              <Ionicons name="trophy" size={20} color={theme.colors.accentBronze} />
-            </View>
-            <Text style={styles.statNumber}>{totalPoints}</Text>
-            <Text style={styles.statLabel}>Points</Text>
-          </View>
+          </Surface>
         </View>
       </View>
     );
