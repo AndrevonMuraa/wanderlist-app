@@ -671,6 +671,22 @@ async def logout(response: Response, session_token: Optional[str] = Cookie(None)
     response.delete_cookie("session_token", path="/")
     return {"message": "Logged out successfully"}
 
+@api_router.get("/auth/temp-token")
+async def get_temp_token(email: str = "mobile@test.com"):
+    """Generate a temporary auto-login token for testing purposes"""
+    user_doc = await db.users.find_one({"email": email}, {"_id": 0})
+    if not user_doc:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Create JWT token with 24 hour expiry for temp links
+    access_token, expires_at = create_access_token({"sub": user_doc["user_id"]})
+    
+    return {
+        "token": access_token,
+        "user": UserPublic(**user_doc),
+        "expires_at": expires_at.isoformat()
+    }
+
 # ============= COUNTRY & LANDMARK ENDPOINTS =============
 
 @api_router.get("/countries", response_model=List[Country])
