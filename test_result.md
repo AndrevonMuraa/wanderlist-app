@@ -1153,15 +1153,18 @@ frontend:
 backend:
   - task: "Achievement Showcase API Endpoint"
     implemented: true
-    working: "NA"
+    working: false
     file: "backend/server.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Created GET /api/achievements/showcase endpoint that returns earned and locked badges with progress tracking. Calculates progress for milestone, points, social, and streak badges based on user stats. Returns completion percentage and categorizes badges into earned (with dates) and locked (with progress bars). Aggregates data from visits, users, friends, and landmarks collections."
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL BUG FOUND: Achievement Showcase API has major logic error. The points_100 badge is marked as earned (is_earned=true) but user only has 50/100 points (progress=50%). This violates the core achievement system logic where earned badges must have 100% progress. Additional issues: 18 total badges instead of expected 16, points formatting lacks comma separators for large numbers (shows '50/1,000 points' instead of '50/1,000 points'). The endpoint structure is correct and performance is good (0.04s response time), but the achievement awarding logic is fundamentally broken. This would confuse users and break the gamification system."
 
 frontend:
   - task: "Achievement Showcase Screen"
