@@ -105,9 +105,15 @@ This baseline model ensures:
 │   │   ├── ProgressBar.tsx - Animated progress bars
 │   │   ├── Skeleton.tsx - Loading skeletons
 │   │   ├── UpgradeModal.tsx - Subscription prompts
+│   │   ├── OptimizedImage.tsx - Performance-optimized images (NEW v4.19)
+│   │   ├── LoadingSpinner.tsx - Reusable loading component (NEW v4.19)
 │   │   └── MapComponents.tsx - Platform-specific maps
 │   ├── contexts/ (AuthContext)
-│   ├── utils/ (config.ts - CRITICAL for API URLs)
+│   ├── utils/ 
+│   │   ├── config.ts - CRITICAL for API URLs
+│   │   ├── haptics.ts - Haptic feedback system (NEW v4.19)
+│   │   ├── toast.ts - Toast notifications (NEW v4.19)
+│   │   └── errorMessages.ts - User-friendly errors (NEW v4.19)
 │   └── styles/
 └── [documentation files]
 ```
