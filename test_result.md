@@ -363,6 +363,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ BUCKET LIST FUNCTIONALITY WORKING PERFECTLY! Comprehensive testing completed (6/6 tests passed - 100% success rate): ✅ POST /api/bucket-list: Successfully adds landmarks to bucket list with proper bucket_list_id generation. ✅ GET /api/bucket-list: Returns full landmark details with each bucket list item, proper structure with landmark nested object. ✅ GET /api/bucket-list/check/{landmark_id}: Correctly returns in_bucket_list status and bucket_list_id. ✅ DELETE /api/bucket-list/{bucket_list_id}: Successfully removes items from bucket list. ✅ Verification Tests: All CRUD operations verified with proper data persistence and removal. ✅ Bug Fix Applied: Fixed MongoDB ObjectId serialization error by adding {'_id': 0} to all queries. All bucket list endpoints are production-ready!"
+      - working: true
+        agent: "testing"
+        comment: "✅ RETESTED - BUCKET LIST WORKING PERFECTLY! Full CRUD flow tested successfully (4/4 tests passed - 100% success rate): ✅ POST /api/bucket-list: Successfully added Eiffel Tower to bucket list with notes. ✅ GET /api/bucket-list: Retrieved 1 item with full landmark details (name, image, etc.) properly nested. ✅ GET /api/bucket-list/check/{landmark_id}: Correctly returned in_bucket_list=true with bucket_list_id. ✅ DELETE /api/bucket-list/{bucket_list_id}: Successfully removed item from bucket list. All bucket list endpoints confirmed production-ready with proper data structure and CRUD operations!"
 
   - task: "Trip Planning API endpoints"
     implemented: true
