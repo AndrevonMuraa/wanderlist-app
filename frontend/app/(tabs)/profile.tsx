@@ -479,7 +479,7 @@ export default function ProfileScreen() {
           <List.Item
             title="Dark Mode"
             description="Switch between light and dark theme"
-            left={props => <List.Icon {...props} icon="moon-outline" color={theme.colors.primary} />}
+            left={props => <List.Icon {...props} icon="weather-night" color={theme.colors.primary} />}
             right={props => (
               <Switch
                 value={false}
