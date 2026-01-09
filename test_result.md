@@ -291,6 +291,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ MESSAGING FEATURE WORKING EXCELLENTLY! Comprehensive testing completed (25/26 tests passed - 96.2% success rate). ✅ Friend Setup: Complete flow tested (request → pending → accept → verified friendship). ✅ Messaging Flow: All 3 test messages sent successfully with proper structure, content verification, and correct sender/receiver IDs. ✅ Message Retrieval: Both users can fetch conversations, messages in chronological order, all content matches, timestamps present. ✅ Tier Restrictions: Free users properly blocked with 403 error and upgrade message. ✅ Friend Requirements: Non-friends properly blocked with 403 error. ✅ Edge Cases: Long messages (550+ chars) accepted, non-friend messaging blocked. Minor: Empty messages accepted (should be rejected but not critical). All core messaging functionality working perfectly for Basic+ users."
+      - working: true
+        agent: "testing"
+        comment: "✅ RETESTED - MESSAGING WORKING PERFECTLY! Test context: Premium user (mobile@test.com) with established friendship with Sarah (free tier). ✅ POST /api/messages: Successfully sent message to friend with all required fields (message_id, sender_id, receiver_id, content, created_at, read). ✅ GET /api/messages/{friend_id}: Retrieved conversation history (2 messages) in chronological order. ✅ Tier Verification: Premium user has full messaging access. ✅ Message Structure: All fields present and correctly populated. Messaging system confirmed working for Basic+ tier users with proper tier restrictions enforced."
 
   - task: "Country & Continent Completion Bonus System"
     implemented: true
