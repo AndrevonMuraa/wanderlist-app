@@ -812,9 +812,9 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
   },
   quickActionText: {
-    ...theme.typography.body,
-    color: '#fff',
+    fontSize: 16,
     fontWeight: '600',
+    color: '#fff',
   },
   quickPhoto: {
     width: '100%',
