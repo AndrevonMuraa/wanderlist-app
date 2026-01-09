@@ -280,6 +280,7 @@ export default function LandmarksScreen() {
         onClose={() => setShowUpgradeModal(false)}
         onUpgrade={handleUpgrade}
       />
+      <PersistentTabBar />
     </SafeAreaView>
   );
 }
