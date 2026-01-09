@@ -385,16 +385,6 @@ export default function ExploreCountriesScreen() {
             </View>
             <Text style={styles.statNumber}>{totalLandmarks}</Text>
             <Text style={styles.statLabel}>Total Landmarks</Text>
-            <View style={styles.landmarkBreakdown}>
-              <View style={styles.landmarkBreakdownItem}>
-                <Ionicons name="location" size={10} color={theme.colors.primary} />
-                <Text style={styles.landmarkBreakdownText}>380 Official</Text>
-              </View>
-              <View style={styles.landmarkBreakdownItem}>
-                <Ionicons name="diamond" size={10} color="#FFD700" />
-                <Text style={[styles.landmarkBreakdownText, { color: '#FFD700' }]}>100 Premium</Text>
-              </View>
-            </View>
           </View>
           
           <View style={styles.statDivider} />
