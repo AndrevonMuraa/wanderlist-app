@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useAuth } from '../contexts/AuthContext';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
@@ -14,15 +15,25 @@ import { PersistentTabBar } from '../components/PersistentTabBar';
 
 const { width } = Dimensions.get('window');
 
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
+export default function AnalyticsScreen() {
+  const router = useRouter();
+  const { user } = useAuth();  // Use AuthContext for token
+  const [loading, setLoading] = useState(true);
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
 
-interface AnalyticsData {
+  useEffect(() => {
+    loadAnalytics();
+  }, []);
+
+  const getToken = async (): Promise<string | null> => {
+    if (Platform.OS === 'web') {
+      return localStorage.getItem('auth_token');
+    } else {
+      return await SecureStore.getItemAsync('auth_token');
+    }
+  };
+
+  const loadAnalytics = async () => {
   totalVisits: number;
   countriesVisited: number;
   continentsVisited: number;
