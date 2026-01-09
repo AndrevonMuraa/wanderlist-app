@@ -228,11 +228,11 @@ backend:
 
   - task: "Leaderboard API endpoint"
     implemented: true
-    working: true
+    working: "NA"
     file: "backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -240,6 +240,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ Leaderboard API working correctly. GET /api/leaderboard returns proper rankings based on visit counts. Tested with freemium user (friends-only leaderboard). Premium/freemium logic implemented correctly."
+      - working: "NA"
+        agent: "main"
+        comment: "ENHANCED: Replaced basic leaderboard with advanced filterable endpoint. New features: time_period filter (all_time/monthly/weekly), category filter (points/visits/countries/streaks), friends_only filter, returns user_rank and includes additional user stats. Backend implementation complete, needs comprehensive testing with all filter combinations."
 
   - task: "Friends API endpoints"
     implemented: true
