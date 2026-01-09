@@ -45,6 +45,8 @@ export default function LandmarksScreen() {
   const [countryProgress, setCountryProgress] = useState<{visited: number; total: number; percentage: number} | null>(null);
   const [visitedLandmarkIds, setVisitedLandmarkIds] = useState<Set<string>>(new Set());
   const router = useRouter();
+  
+  const countryFacts = getAllCountryFacts(country_id as string);
 
   useEffect(() => {
     fetchData();
