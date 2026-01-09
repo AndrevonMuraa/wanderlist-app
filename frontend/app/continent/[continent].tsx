@@ -171,6 +171,7 @@ export default function ContinentScreen() {
           </View>
         }
       />
+      <PersistentTabBar />
     </SafeAreaView>
   );
 }
