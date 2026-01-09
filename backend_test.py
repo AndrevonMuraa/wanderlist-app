@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Enhanced Leaderboard API Testing - v4.16
-Comprehensive testing of the enhanced /api/leaderboard endpoint with all filter combinations
+Backend Testing for Achievement Showcase API - v4.17
+Tests the /api/achievements/showcase endpoint comprehensively
 """
 
 import requests
@@ -10,34 +10,34 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://leaderboard-dev.preview.emergentagent.com/api"
+BACKEND_URL = "https://leaderboard-dev.preview.emergentagent.com/api"
 TEST_EMAIL = "mobile@test.com"
 TEST_PASSWORD = "test123"
 
-class LeaderboardTester:
+class AchievementShowcaseAPITester:
     def __init__(self):
         self.token = None
         self.user_id = None
         self.test_results = []
         
-    def log_test(self, test_name, success, details=""):
+    def log_test(self, test_name, passed, details=""):
         """Log test result"""
-        status = "✅ PASS" if success else "❌ FAIL"
-        self.test_results.append({
-            "test": test_name,
-            "success": success,
-            "details": details
-        })
+        status = "✅ PASS" if passed else "❌ FAIL"
         print(f"{status}: {test_name}")
         if details:
             print(f"   Details: {details}")
+        self.test_results.append({
+            "test": test_name,
+            "passed": passed,
+            "details": details
+        })
     
     def authenticate(self):
         """Authenticate and get JWT token"""
-        print("🔐 Authenticating...")
+        print("\n🔐 AUTHENTICATION TEST")
         
         try:
-            response = requests.post(f"{BASE_URL}/auth/login", json={
+            response = requests.post(f"{BACKEND_URL}/auth/login", json={
                 "email": TEST_EMAIL,
                 "password": TEST_PASSWORD
             })
@@ -46,7 +46,7 @@ class LeaderboardTester:
                 data = response.json()
                 self.token = data["access_token"]
                 self.user_id = data["user"]["user_id"]
-                self.log_test("Authentication", True, f"User ID: {self.user_id}")
+                self.log_test("Authentication", True, f"Token obtained for user {self.user_id}")
                 return True
             else:
                 self.log_test("Authentication", False, f"Status: {response.status_code}, Response: {response.text}")
@@ -60,420 +60,391 @@ class LeaderboardTester:
         """Get authorization headers"""
         return {"Authorization": f"Bearer {self.token}"}
     
-    def test_time_period_filters(self):
-        """Test all time period filter combinations"""
-        print("\n🕒 Testing Time Period Filters...")
+    def test_endpoint_availability(self):
+        """Test 1: Endpoint Availability"""
+        print("\n🎯 TEST 1: ENDPOINT AVAILABILITY")
         
-        time_periods = ["all_time", "monthly", "weekly"]
-        
-        for period in time_periods:
-            try:
-                response = requests.get(
-                    f"{BASE_URL}/leaderboard",
-                    params={"time_period": period, "category": "points"},
-                    headers=self.get_headers()
-                )
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    
-                    # Validate response structure
-                    required_fields = ["leaderboard", "user_rank", "total_users"]
-                    if all(field in data for field in required_fields):
-                        self.log_test(f"Time Period Filter: {period}", True, 
-                                    f"Users: {data['total_users']}, User Rank: {data['user_rank']}")
-                    else:
-                        missing = [f for f in required_fields if f not in data]
-                        self.log_test(f"Time Period Filter: {period}", False, 
-                                    f"Missing fields: {missing}")
-                else:
-                    self.log_test(f"Time Period Filter: {period}", False, 
-                                f"Status: {response.status_code}")
-                    
-            except Exception as e:
-                self.log_test(f"Time Period Filter: {period}", False, f"Exception: {str(e)}")
-    
-    def test_category_filters(self):
-        """Test all category filter combinations"""
-        print("\n📊 Testing Category Filters...")
-        
-        categories = ["points", "visits", "countries", "streaks"]
-        
-        for category in categories:
-            try:
-                response = requests.get(
-                    f"{BASE_URL}/leaderboard",
-                    params={"category": category, "time_period": "all_time"},
-                    headers=self.get_headers()
-                )
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    
-                    # Validate response structure
-                    if "leaderboard" in data and len(data["leaderboard"]) > 0:
-                        entry = data["leaderboard"][0]
-                        
-                        # Check required fields for leaderboard entry
-                        required_entry_fields = ["user_id", "name", "value", "rank"]
-                        if all(field in entry for field in required_entry_fields):
-                            # Check category-specific fields
-                            if category in ["points", "streaks"]:
-                                if "current_streak" in entry and "longest_streak" in entry:
-                                    self.log_test(f"Category Filter: {category}", True, 
-                                                f"Top value: {entry['value']}, Extra fields present")
-                                else:
-                                    self.log_test(f"Category Filter: {category}", False, 
-                                                "Missing streak fields for points/streaks category")
-                            else:
-                                self.log_test(f"Category Filter: {category}", True, 
-                                            f"Top value: {entry['value']}")
-                        else:
-                            missing = [f for f in required_entry_fields if f not in entry]
-                            self.log_test(f"Category Filter: {category}", False, 
-                                        f"Missing entry fields: {missing}")
-                    else:
-                        self.log_test(f"Category Filter: {category}", True, 
-                                    "Empty leaderboard (no data)")
-                else:
-                    self.log_test(f"Category Filter: {category}", False, 
-                                f"Status: {response.status_code}")
-                    
-            except Exception as e:
-                self.log_test(f"Category Filter: {category}", False, f"Exception: {str(e)}")
-    
-    def test_friends_filter(self):
-        """Test friends_only filter"""
-        print("\n👥 Testing Friends Filter...")
-        
-        # Test global leaderboard (friends_only=false)
+        # Test with valid token
         try:
-            response = requests.get(
-                f"{BASE_URL}/leaderboard",
-                params={"friends_only": False},
-                headers=self.get_headers()
-            )
+            response = requests.get(f"{BACKEND_URL}/achievements/showcase", headers=self.get_headers())
             
             if response.status_code == 200:
-                global_data = response.json()
-                global_count = global_data["total_users"]
-                self.log_test("Friends Filter: Global (friends_only=false)", True, 
-                            f"Global users: {global_count}")
+                self.log_test("Endpoint returns 200 with valid token", True)
             else:
-                self.log_test("Friends Filter: Global (friends_only=false)", False, 
-                            f"Status: {response.status_code}")
-                global_count = 0
+                self.log_test("Endpoint returns 200 with valid token", False, f"Status: {response.status_code}")
                 
         except Exception as e:
-            self.log_test("Friends Filter: Global (friends_only=false)", False, f"Exception: {str(e)}")
-            global_count = 0
+            self.log_test("Endpoint returns 200 with valid token", False, f"Exception: {str(e)}")
         
-        # Test friends-only leaderboard (friends_only=true)
+        # Test without token (should return 401)
         try:
-            response = requests.get(
-                f"{BASE_URL}/leaderboard",
-                params={"friends_only": True},
-                headers=self.get_headers()
-            )
+            response = requests.get(f"{BACKEND_URL}/achievements/showcase")
             
-            if response.status_code == 200:
-                friends_data = response.json()
-                friends_count = friends_data["total_users"]
-                
-                # Friends-only should include current user + accepted friends
-                # So it should be <= global count
-                if friends_count <= global_count:
-                    self.log_test("Friends Filter: Friends-only (friends_only=true)", True, 
-                                f"Friends users: {friends_count} (≤ global: {global_count})")
-                else:
-                    self.log_test("Friends Filter: Friends-only (friends_only=true)", False, 
-                                f"Friends count ({friends_count}) > global count ({global_count})")
+            if response.status_code == 401:
+                self.log_test("Endpoint returns 401 without token", True)
             else:
-                self.log_test("Friends Filter: Friends-only (friends_only=true)", False, 
-                            f"Status: {response.status_code}")
+                self.log_test("Endpoint returns 401 without token", False, f"Status: {response.status_code}")
                 
         except Exception as e:
-            self.log_test("Friends Filter: Friends-only (friends_only=true)", False, f"Exception: {str(e)}")
-    
-    def test_combination_filters(self):
-        """Test combination of multiple filters"""
-        print("\n🔄 Testing Filter Combinations...")
-        
-        test_combinations = [
-            {"time_period": "weekly", "category": "countries", "friends_only": True},
-            {"time_period": "monthly", "category": "visits", "friends_only": False},
-            {"time_period": "all_time", "category": "streaks", "friends_only": True},
-        ]
-        
-        for i, params in enumerate(test_combinations, 1):
-            try:
-                response = requests.get(
-                    f"{BASE_URL}/leaderboard",
-                    params=params,
-                    headers=self.get_headers()
-                )
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    
-                    # Validate response structure
-                    if all(field in data for field in ["leaderboard", "user_rank", "total_users"]):
-                        self.log_test(f"Combination Test {i}", True, 
-                                    f"Params: {params}, Users: {data['total_users']}")
-                    else:
-                        self.log_test(f"Combination Test {i}", False, 
-                                    f"Invalid response structure")
-                else:
-                    self.log_test(f"Combination Test {i}", False, 
-                                f"Status: {response.status_code}")
-                    
-            except Exception as e:
-                self.log_test(f"Combination Test {i}", False, f"Exception: {str(e)}")
+            self.log_test("Endpoint returns 401 without token", False, f"Exception: {str(e)}")
     
     def test_response_structure(self):
-        """Test detailed response structure validation"""
-        print("\n🏗️ Testing Response Structure...")
+        """Test 2: Response Structure Validation"""
+        print("\n📋 TEST 2: RESPONSE STRUCTURE VALIDATION")
         
         try:
-            response = requests.get(
-                f"{BASE_URL}/leaderboard",
-                params={"category": "points", "limit": 5},
-                headers=self.get_headers()
-            )
+            response = requests.get(f"{BACKEND_URL}/achievements/showcase", headers=self.get_headers())
             
-            if response.status_code == 200:
-                data = response.json()
-                
-                # Test top-level structure
-                required_top_fields = ["leaderboard", "user_rank", "total_users"]
-                missing_top = [f for f in required_top_fields if f not in data]
-                
-                if not missing_top:
-                    self.log_test("Response Structure: Top Level", True, 
-                                "All required top-level fields present")
+            if response.status_code != 200:
+                self.log_test("Response Structure", False, f"Failed to get response: {response.status_code}")
+                return None
+            
+            data = response.json()
+            
+            # Check top-level structure
+            required_fields = ["earned_badges", "locked_badges", "stats"]
+            for field in required_fields:
+                if field in data:
+                    self.log_test(f"Response contains '{field}' field", True)
                 else:
-                    self.log_test("Response Structure: Top Level", False, 
-                                f"Missing fields: {missing_top}")
-                    return
-                
-                # Test leaderboard entry structure
-                if data["leaderboard"]:
-                    entry = data["leaderboard"][0]
-                    required_entry_fields = ["user_id", "name", "value", "rank"]
-                    optional_entry_fields = ["picture", "username", "current_streak", "longest_streak"]
-                    
-                    missing_entry = [f for f in required_entry_fields if f not in entry]
-                    
-                    if not missing_entry:
-                        present_optional = [f for f in optional_entry_fields if f in entry]
-                        self.log_test("Response Structure: Leaderboard Entry", True, 
-                                    f"Required fields present, Optional fields: {present_optional}")
+                    self.log_test(f"Response contains '{field}' field", False)
+            
+            # Check stats structure
+            if "stats" in data:
+                stats_fields = ["total_badges", "earned_count", "locked_count", "completion_percentage"]
+                for field in stats_fields:
+                    if field in data["stats"]:
+                        self.log_test(f"Stats contains '{field}' field", True)
                     else:
-                        self.log_test("Response Structure: Leaderboard Entry", False, 
-                                    f"Missing required fields: {missing_entry}")
-                else:
-                    self.log_test("Response Structure: Leaderboard Entry", True, 
-                                "Empty leaderboard (no entries to validate)")
-                
-                # Test data types
-                if isinstance(data["total_users"], int) and (data["user_rank"] is None or isinstance(data["user_rank"], int)):
-                    self.log_test("Response Structure: Data Types", True, 
-                                f"total_users: {type(data['total_users'])}, user_rank: {type(data['user_rank'])}")
-                else:
-                    self.log_test("Response Structure: Data Types", False, 
-                                f"Invalid data types")
-                    
-            else:
-                self.log_test("Response Structure", False, f"Status: {response.status_code}")
-                
+                        self.log_test(f"Stats contains '{field}' field", False)
+            
+            return data
+            
         except Exception as e:
             self.log_test("Response Structure", False, f"Exception: {str(e)}")
+            return None
     
-    def test_ranking_verification(self):
-        """Test ranking accuracy and sorting"""
-        print("\n🏆 Testing Ranking Verification...")
+    def test_badge_data_validation(self, data):
+        """Test 3: Badge Data Validation"""
+        print("\n🏆 TEST 3: BADGE DATA VALIDATION")
         
-        try:
-            response = requests.get(
-                f"{BASE_URL}/leaderboard",
-                params={"category": "points", "limit": 10},
-                headers=self.get_headers()
-            )
-            
-            if response.status_code == 200:
-                data = response.json()
-                leaderboard = data["leaderboard"]
-                
-                if len(leaderboard) > 1:
-                    # Test rank sequence (should be 1, 2, 3, ...)
-                    ranks_correct = all(
-                        entry["rank"] == idx + 1 
-                        for idx, entry in enumerate(leaderboard)
-                    )
-                    
-                    if ranks_correct:
-                        self.log_test("Ranking: Rank Sequence", True, 
-                                    f"Ranks 1-{len(leaderboard)} correctly assigned")
-                    else:
-                        self.log_test("Ranking: Rank Sequence", False, 
-                                    "Rank sequence is incorrect")
-                    
-                    # Test sorting (values should be in descending order)
-                    values_sorted = all(
-                        leaderboard[i]["value"] >= leaderboard[i+1]["value"]
-                        for i in range(len(leaderboard)-1)
-                    )
-                    
-                    if values_sorted:
-                        self.log_test("Ranking: Value Sorting", True, 
-                                    f"Values properly sorted (desc): {[e['value'] for e in leaderboard[:3]]}")
-                    else:
-                        self.log_test("Ranking: Value Sorting", False, 
-                                    "Values not properly sorted in descending order")
+        if not data:
+            self.log_test("Badge Data Validation", False, "No data to validate")
+            return
+        
+        # Required badge fields
+        required_badge_fields = [
+            "badge_type", "badge_name", "badge_description", "badge_icon",
+            "is_earned", "progress", "current_value", "target_value", 
+            "progress_text", "earned_at"
+        ]
+        
+        # Test earned badges
+        earned_badges = data.get("earned_badges", [])
+        for i, badge in enumerate(earned_badges[:3]):  # Test first 3 earned badges
+            for field in required_badge_fields:
+                if field in badge:
+                    self.log_test(f"Earned badge {i+1} has '{field}' field", True)
                 else:
-                    self.log_test("Ranking Verification", True, 
-                                f"Only {len(leaderboard)} entries - cannot verify sorting")
-                    
-            else:
-                self.log_test("Ranking Verification", False, f"Status: {response.status_code}")
-                
-        except Exception as e:
-            self.log_test("Ranking Verification", False, f"Exception: {str(e)}")
+                    self.log_test(f"Earned badge {i+1} has '{field}' field", False)
+        
+        # Test locked badges
+        locked_badges = data.get("locked_badges", [])
+        for i, badge in enumerate(locked_badges[:3]):  # Test first 3 locked badges
+            for field in required_badge_fields:
+                if field in badge:
+                    self.log_test(f"Locked badge {i+1} has '{field}' field", True)
+                else:
+                    self.log_test(f"Locked badge {i+1} has '{field}' field", False)
     
-    def test_edge_cases(self):
-        """Test edge cases and limits"""
-        print("\n🔍 Testing Edge Cases...")
+    def test_earned_badges_validation(self, data):
+        """Test 4: Earned Badges Validation"""
+        print("\n🎖️ TEST 4: EARNED BADGES VALIDATION")
         
-        # Test with limit parameter
-        try:
-            response = requests.get(
-                f"{BASE_URL}/leaderboard",
-                params={"limit": 5},
-                headers=self.get_headers()
-            )
-            
-            if response.status_code == 200:
-                data = response.json()
-                actual_count = len(data["leaderboard"])
-                
-                if actual_count <= 5:
-                    self.log_test("Edge Case: Limit Parameter", True, 
-                                f"Returned {actual_count} entries (≤ limit of 5)")
-                else:
-                    self.log_test("Edge Case: Limit Parameter", False, 
-                                f"Returned {actual_count} entries (> limit of 5)")
-            else:
-                self.log_test("Edge Case: Limit Parameter", False, f"Status: {response.status_code}")
-                
-        except Exception as e:
-            self.log_test("Edge Case: Limit Parameter", False, f"Exception: {str(e)}")
+        if not data:
+            return
         
-        # Test invalid parameters
-        try:
-            response = requests.get(
-                f"{BASE_URL}/leaderboard",
-                params={"category": "invalid_category"},
-                headers=self.get_headers()
-            )
-            
-            # Should either return 400 error or default to valid category
-            if response.status_code in [200, 400]:
-                self.log_test("Edge Case: Invalid Category", True, 
-                            f"Handled invalid category appropriately (status: {response.status_code})")
-            else:
-                self.log_test("Edge Case: Invalid Category", False, 
-                            f"Unexpected status: {response.status_code}")
-                
-        except Exception as e:
-            self.log_test("Edge Case: Invalid Category", False, f"Exception: {str(e)}")
+        earned_badges = data.get("earned_badges", [])
+        
+        # Test earned badges properties
+        all_earned_correct = True
+        for badge in earned_badges:
+            if not badge.get("is_earned"):
+                all_earned_correct = False
+                break
+            if badge.get("earned_at") is None:
+                all_earned_correct = False
+                break
+            if badge.get("progress") != 100:
+                all_earned_correct = False
+                break
+        
+        self.log_test("All earned badges have is_earned=true", all_earned_correct)
+        
+        # Test earned_at dates
+        valid_dates = True
+        for badge in earned_badges:
+            earned_at = badge.get("earned_at")
+            if earned_at:
+                try:
+                    datetime.fromisoformat(earned_at.replace('Z', '+00:00'))
+                except:
+                    valid_dates = False
+                    break
+        
+        self.log_test("All earned badges have valid ISO dates", valid_dates)
+        
+        # Test sorting (newest first)
+        if len(earned_badges) > 1:
+            sorted_correctly = True
+            for i in range(len(earned_badges) - 1):
+                current_date = earned_badges[i].get("earned_at", "")
+                next_date = earned_badges[i + 1].get("earned_at", "")
+                if current_date < next_date:  # Should be descending
+                    sorted_correctly = False
+                    break
+            self.log_test("Earned badges sorted by date (newest first)", sorted_correctly)
     
-    def test_user_rank_accuracy(self):
-        """Test user_rank calculation accuracy"""
-        print("\n🎯 Testing User Rank Accuracy...")
+    def test_locked_badges_validation(self, data):
+        """Test 5: Locked Badges Validation"""
+        print("\n🔒 TEST 5: LOCKED BADGES VALIDATION")
+        
+        if not data:
+            return
+        
+        locked_badges = data.get("locked_badges", [])
+        
+        # Test locked badges properties
+        all_locked_correct = True
+        for badge in locked_badges:
+            if badge.get("is_earned"):
+                all_locked_correct = False
+                break
+            if badge.get("earned_at") is not None:
+                all_locked_correct = False
+                break
+            if badge.get("progress") >= 100:
+                all_locked_correct = False
+                break
+        
+        self.log_test("All locked badges have is_earned=false", all_locked_correct)
+        self.log_test("All locked badges have earned_at=null", all_locked_correct)
+        
+        # Test sorting (by progress desc)
+        if len(locked_badges) > 1:
+            sorted_correctly = True
+            for i in range(len(locked_badges) - 1):
+                current_progress = locked_badges[i].get("progress", 0)
+                next_progress = locked_badges[i + 1].get("progress", 0)
+                if current_progress < next_progress:  # Should be descending
+                    sorted_correctly = False
+                    break
+            self.log_test("Locked badges sorted by progress (desc)", sorted_correctly)
+    
+    def test_progress_calculations(self, data):
+        """Test 6: Progress Calculation Test"""
+        print("\n📊 TEST 6: PROGRESS CALCULATION TEST")
+        
+        if not data:
+            return
+        
+        all_badges = data.get("earned_badges", []) + data.get("locked_badges", [])
+        
+        # Test milestone badges
+        milestone_badges = [b for b in all_badges if b.get("badge_type", "").startswith("milestone_") or b.get("badge_type") == "first_visit"]
+        for badge in milestone_badges[:3]:  # Test first 3
+            badge_type = badge.get("badge_type", "")
+            progress_text = badge.get("progress_text", "")
+            
+            if "visits" in progress_text:
+                self.log_test(f"Milestone badge {badge_type} has correct progress format", True, f"Progress: {progress_text}")
+            else:
+                self.log_test(f"Milestone badge {badge_type} has correct progress format", False, f"Progress: {progress_text}")
+        
+        # Test points badges
+        points_badges = [b for b in all_badges if b.get("badge_type", "").startswith("points_")]
+        for badge in points_badges[:2]:  # Test first 2
+            badge_type = badge.get("badge_type", "")
+            progress_text = badge.get("progress_text", "")
+            
+            if "points" in progress_text and "," in progress_text:  # Should have comma formatting
+                self.log_test(f"Points badge {badge_type} has correct progress format", True, f"Progress: {progress_text}")
+            else:
+                self.log_test(f"Points badge {badge_type} has correct progress format", False, f"Progress: {progress_text}")
+        
+        # Test social badges
+        social_badges = [b for b in all_badges if b.get("badge_type", "").startswith("social_")]
+        for badge in social_badges[:2]:  # Test first 2
+            badge_type = badge.get("badge_type", "")
+            progress_text = badge.get("progress_text", "")
+            
+            if "friends" in progress_text:
+                self.log_test(f"Social badge {badge_type} has correct progress format", True, f"Progress: {progress_text}")
+            else:
+                self.log_test(f"Social badge {badge_type} has correct progress format", False, f"Progress: {progress_text}")
+        
+        # Test streak badges
+        streak_badges = [b for b in all_badges if b.get("badge_type", "").startswith("streak_")]
+        for badge in streak_badges[:2]:  # Test first 2
+            badge_type = badge.get("badge_type", "")
+            progress_text = badge.get("progress_text", "")
+            
+            if "days" in progress_text:
+                self.log_test(f"Streak badge {badge_type} has correct progress format", True, f"Progress: {progress_text}")
+            else:
+                self.log_test(f"Streak badge {badge_type} has correct progress format", False, f"Progress: {progress_text}")
+        
+        # Test country complete badge
+        country_badges = [b for b in all_badges if b.get("badge_type") == "country_complete"]
+        for badge in country_badges:
+            progress_text = badge.get("progress_text", "")
+            
+            if "completed" in progress_text:
+                self.log_test("Country complete badge has correct progress format", True, f"Progress: {progress_text}")
+            else:
+                self.log_test("Country complete badge has correct progress format", False, f"Progress: {progress_text}")
+    
+    def test_stats_validation(self, data):
+        """Test 7: Stats Validation"""
+        print("\n📈 TEST 7: STATS VALIDATION")
+        
+        if not data:
+            return
+        
+        stats = data.get("stats", {})
+        earned_badges = data.get("earned_badges", [])
+        locked_badges = data.get("locked_badges", [])
+        
+        # Test total badges = 16
+        total_badges = stats.get("total_badges", 0)
+        if total_badges == 16:
+            self.log_test("Total badges equals 16", True)
+        else:
+            self.log_test("Total badges equals 16", False, f"Got {total_badges}")
+        
+        # Test earned + locked = total
+        earned_count = stats.get("earned_count", 0)
+        locked_count = stats.get("locked_count", 0)
+        
+        if earned_count + locked_count == total_badges:
+            self.log_test("Earned + locked count equals total", True)
+        else:
+            self.log_test("Earned + locked count equals total", False, f"Earned: {earned_count}, Locked: {locked_count}, Total: {total_badges}")
+        
+        # Test completion percentage calculation
+        expected_percentage = int((earned_count / total_badges) * 100) if total_badges > 0 else 0
+        actual_percentage = stats.get("completion_percentage", 0)
+        
+        if actual_percentage == expected_percentage:
+            self.log_test("Completion percentage calculated correctly", True, f"{actual_percentage}%")
+        else:
+            self.log_test("Completion percentage calculated correctly", False, f"Expected: {expected_percentage}%, Got: {actual_percentage}%")
+    
+    def test_edge_cases(self, data):
+        """Test 8: Edge Cases"""
+        print("\n🔍 TEST 8: EDGE CASES")
+        
+        if not data:
+            return
+        
+        all_badges = data.get("earned_badges", []) + data.get("locked_badges", [])
+        
+        # Test all 16 badge types are present
+        expected_badge_types = {
+            "first_visit", "milestone_10", "milestone_25", "milestone_50", "milestone_100", 
+            "milestone_250", "milestone_500", "country_complete", "points_100", "points_500", 
+            "points_1000", "points_5000", "social_5", "social_10", "social_25", 
+            "streak_3", "streak_7", "streak_30"
+        }
+        
+        actual_badge_types = {badge.get("badge_type") for badge in all_badges}
+        
+        if len(actual_badge_types) == 16:
+            self.log_test("All 16 badge types present", True)
+        else:
+            missing = expected_badge_types - actual_badge_types
+            self.log_test("All 16 badge types present", False, f"Missing: {missing}")
+        
+        # Test no duplicate badge types
+        badge_types_list = [badge.get("badge_type") for badge in all_badges]
+        if len(badge_types_list) == len(set(badge_types_list)):
+            self.log_test("No duplicate badge types", True)
+        else:
+            self.log_test("No duplicate badge types", False)
+    
+    def test_performance(self):
+        """Test 9: Performance Test"""
+        print("\n⚡ TEST 9: PERFORMANCE TEST")
+        
+        import time
         
         try:
-            response = requests.get(
-                f"{BASE_URL}/leaderboard",
-                params={"category": "points"},
-                headers=self.get_headers()
-            )
+            start_time = time.time()
+            response = requests.get(f"{BACKEND_URL}/achievements/showcase", headers=self.get_headers())
+            end_time = time.time()
             
-            if response.status_code == 200:
-                data = response.json()
-                user_rank = data["user_rank"]
-                leaderboard = data["leaderboard"]
-                
-                if user_rank is not None:
-                    # Find current user in leaderboard
-                    user_entry = None
-                    for entry in leaderboard:
-                        if entry["user_id"] == self.user_id:
-                            user_entry = entry
-                            break
-                    
-                    if user_entry:
-                        if user_entry["rank"] == user_rank:
-                            self.log_test("User Rank Accuracy", True, 
-                                        f"User rank {user_rank} matches leaderboard position")
-                        else:
-                            self.log_test("User Rank Accuracy", False, 
-                                        f"User rank {user_rank} != leaderboard rank {user_entry['rank']}")
-                    else:
-                        # User not in current page but has rank - this is valid
-                        self.log_test("User Rank Accuracy", True, 
-                                    f"User rank {user_rank} (not in current page)")
-                else:
-                    self.log_test("User Rank Accuracy", True, 
-                                "User rank is null (user not in leaderboard)")
-                    
+            response_time = end_time - start_time
+            
+            if response.status_code == 200 and response_time < 2.0:
+                self.log_test("Response time < 2 seconds", True, f"{response_time:.2f}s")
             else:
-                self.log_test("User Rank Accuracy", False, f"Status: {response.status_code}")
+                self.log_test("Response time < 2 seconds", False, f"{response_time:.2f}s")
                 
         except Exception as e:
-            self.log_test("User Rank Accuracy", False, f"Exception: {str(e)}")
+            self.log_test("Performance test", False, f"Exception: {str(e)}")
     
     def run_all_tests(self):
-        """Run all leaderboard tests"""
-        print("🎯 ENHANCED LEADERBOARD API TESTING - v4.16")
+        """Run all tests"""
+        print("🎯 BACKEND TESTING: Achievement Showcase API - v4.17")
         print("=" * 60)
         
+        # Authenticate first
         if not self.authenticate():
             print("❌ Authentication failed. Cannot proceed with tests.")
             return False
         
-        # Run all test suites
-        self.test_time_period_filters()
-        self.test_category_filters()
-        self.test_friends_filter()
-        self.test_combination_filters()
+        # Run all tests
+        self.test_endpoint_availability()
+        
+        # Get data for subsequent tests
+        response = requests.get(f"{BACKEND_URL}/achievements/showcase", headers=self.get_headers())
+        data = response.json() if response.status_code == 200 else None
+        
+        if data:
+            print(f"\n📊 SAMPLE DATA PREVIEW:")
+            print(f"   Earned badges: {len(data.get('earned_badges', []))}")
+            print(f"   Locked badges: {len(data.get('locked_badges', []))}")
+            print(f"   Total badges: {data.get('stats', {}).get('total_badges', 0)}")
+            print(f"   Completion: {data.get('stats', {}).get('completion_percentage', 0)}%")
+        
         self.test_response_structure()
-        self.test_ranking_verification()
-        self.test_edge_cases()
-        self.test_user_rank_accuracy()
+        self.test_badge_data_validation(data)
+        self.test_earned_badges_validation(data)
+        self.test_locked_badges_validation(data)
+        self.test_progress_calculations(data)
+        self.test_stats_validation(data)
+        self.test_edge_cases(data)
+        self.test_performance()
         
         # Summary
         print("\n" + "=" * 60)
-        print("📊 TEST SUMMARY")
+        print("📋 TEST SUMMARY")
         print("=" * 60)
         
+        passed_tests = sum(1 for result in self.test_results if result["passed"])
         total_tests = len(self.test_results)
-        passed_tests = sum(1 for result in self.test_results if result["success"])
-        failed_tests = total_tests - passed_tests
+        success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
         
-        print(f"Total Tests: {total_tests}")
-        print(f"✅ Passed: {passed_tests}")
-        print(f"❌ Failed: {failed_tests}")
-        print(f"Success Rate: {(passed_tests/total_tests*100):.1f}%")
+        print(f"✅ Passed: {passed_tests}/{total_tests} ({success_rate:.1f}%)")
         
-        if failed_tests > 0:
-            print("\n❌ FAILED TESTS:")
-            for result in self.test_results:
-                if not result["success"]:
-                    print(f"  - {result['test']}: {result['details']}")
-        
-        return failed_tests == 0
+        if passed_tests == total_tests:
+            print("🎉 ALL TESTS PASSED - ACHIEVEMENT SHOWCASE API IS WORKING PERFECTLY!")
+        else:
+            print("❌ Some tests failed. See details above.")
+            
+        return passed_tests == total_tests
 
 if __name__ == "__main__":
-    tester = LeaderboardTester()
+    tester = AchievementShowcaseAPITester()
     success = tester.run_all_tests()
     sys.exit(0 if success else 1)
