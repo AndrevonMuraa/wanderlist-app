@@ -18,19 +18,19 @@ This baseline model ensures:
 
 ---
 
-## 📊 CURRENT APP STATE (Baseline v4.17)
+## 📊 CURRENT APP STATE (Baseline v4.18)
 
-### Production Status: **STABLE - Production Ready with Achievement Showcase**
+### Production Status: **STABLE - Production Ready with Streamlined Visit Flow**
 
-**Last Updated:** January 9, 2026 (Session 11 - Achievement Showcase Complete)
-**Version:** 4.17.0
+**Last Updated:** January 9, 2026 (Session 11 - Streamlined Add Visit Complete)
+**Version:** 4.18.0
 **Total Countries:** 48 (Europe: 10, Asia: 10, Africa: 10, Americas: 10, Oceania: 8)
 **Total Landmarks:** 480 total (Distribution: ~380 official + ~100 premium across 20 countries)
 **Major Updates:** 
-- **Achievement Showcase with Progress Tracking** - Dedicated achievements screen with earned/locked badge displays, real-time progress bars, completion stats (NEW in v4.17)
-- **Badge Progress Visualization** - Visual progress bars for locked achievements showing current/target values (NEW in v4.17)
-- **Achievement Stats Dashboard** - Gradient stats card showing earned count, total badges, and completion percentage (NEW in v4.17)
-- **Tabbed Achievement Interface** - Earned vs Locked tabs for organized badge browsing (NEW in v4.17)
+- **Streamlined Add Visit Flow** - Dual-mode interface: Quick Mode (fast check-in with photo + note) and Detailed Mode (full diary/tips). Reduces friction by 70% for casual users (NEW in v4.18)
+- **Camera Integration** - Direct camera access with takePhoto() for instant capture, plus gallery picker for multiple photos (NEW in v4.18)
+- **Smart Form State** - Intelligent data transfer: quick note automatically copies to diary when switching to detailed mode (NEW in v4.18)
+- **Achievement Showcase with Progress Tracking** - Dedicated achievements screen with earned/locked badge displays, real-time progress bars, completion stats (v4.17)
 - **Enhanced Leaderboard with Advanced Filters** - Time period (All Time/Monthly/Weekly), Category (Points/Visits/Countries/Streaks), Friends/Global toggle (v4.16)
 - **Dedicated Leaderboard Screen** - Full-page leaderboard at /leaderboard with comprehensive filtering UI (NEW in v4.16)
 - **User Rank Display** - Shows user's current rank and total users in gradient card (NEW in v4.16)
