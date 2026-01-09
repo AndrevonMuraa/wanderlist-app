@@ -797,7 +797,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 16,
   },
-  // Missing Quick Mode styles
+  
+  // Quick Mode styles
   quickActionButton: {
     flex: 1,
     borderRadius: theme.borderRadius.md,
