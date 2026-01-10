@@ -214,15 +214,39 @@ export default function AboutScreen() {
           <FeatureCard
             icon="map"
             title="Discover Landmarks"
-            description="Explore 480 landmarks organized by continent and country"
+            description="Explore 528 landmarks across 48 countries and 5 continents"
             color={theme.colors.primary}
             onPress={() => router.push('/continents')}
           />
 
           <FeatureCard
             icon="analytics"
-            title="Track Your Progress"
-            description="Visual progress tracking with completion percentages and stats"
+            title="Travel Analytics (Premium)"
+            description="Detailed stats, continental coverage, and personalized travel insights"
+            color={theme.colors.accent}
+            onPress={() => router.push('/analytics')}
+          />
+          
+          <FeatureCard
+            icon="folder-multiple"
+            title="Custom Collections (Premium)"
+            description="Create custom lists to organize your dream destinations"
+            color="#C9A961"
+            onPress={() => router.push('/collections')}
+          />
+
+          <FeatureCard
+            icon="flag"
+            title="Country Visits"
+            description="Record entire country experiences with 10-photo collages and diaries"
+            color={theme.colors.primary}
+            onPress={() => router.push('/(tabs)/explore')}
+          />
+
+          <FeatureCard
+            icon="camera"
+            title="Photo Galleries"
+            description="Full-screen photo viewer with swipe navigation"
             color="#FFA726"
             onPress={() => router.push('/(tabs)/journey')}
           />
@@ -238,9 +262,9 @@ export default function AboutScreen() {
           <FeatureCard
             icon="trophy"
             title="Badges & Achievements"
-            description="Unlock 16 different badges by reaching milestones"
+            description="Unlock achievement badges by reaching travel milestones"
             color="#FF6B6B"
-            onPress={() => router.push('/(tabs)/profile')}
+            onPress={() => router.push('/achievements')}
           />
 
           <FeatureCard
