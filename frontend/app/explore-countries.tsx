@@ -228,53 +228,48 @@ export default function ExploreCountriesScreen() {
                 activeOpacity={0.9}
               >
                 <View style={styles.countryCard}>
+                  {/* Pure Flag Display - Top Section */}
                   <ImageBackground
                     source={{ uri: flagUrl }}
-                    style={styles.flagBackgroundImage}
+                    style={styles.flagSection}
                     resizeMode="cover"
-                    imageStyle={styles.flagBackgroundImageStyle}
                   >
-                    {/* Subtle Dark Overlay for Readability */}
-                    <LinearGradient
-                      colors={[
-                        'rgba(0,0,0,0.15)',
-                        'rgba(0,0,0,0.25)',
-                        'rgba(0,0,0,0.15)'
-                      ]}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      style={styles.luxuryOverlay}
-                    />
-                    
-                    {/* Content Container */}
-                    <View style={styles.cardContent}>
-                    {/* Country Name - Dark Bold Text */}
-                    <Text style={styles.countryNameLux} numberOfLines={1}>
+                    {/* Completion Badge Only */}
+                    {isComplete && (
+                      <View style={styles.completionBadge}>
+                        <Ionicons name="checkmark-circle" size={18} color="#4CAF50" />
+                      </View>
+                    )}
+                  </ImageBackground>
+                  
+                  {/* Info Section - Below Flag */}
+                  <View style={styles.infoSection}>
+                    {/* Country Name */}
+                    <Text style={styles.countryNameNew} numberOfLines={1}>
                       {country.name}
                     </Text>
                     
-                    {/* Info Row */}
-                    <View style={styles.infoRow}>
-                      <View style={styles.infoChip}>
-                        <Ionicons name="location" size={14} color="#2A2A2A" />
-                        <Text style={styles.infoChipText}>{country.landmark_count}</Text>
+                    {/* Stats Row */}
+                    <View style={styles.statsRowNew}>
+                      <View style={styles.statBubble}>
+                        <Ionicons name="location" size={12} color={theme.colors.primary} />
+                        <Text style={styles.statBubbleText}>{country.landmark_count}</Text>
                       </View>
-                      
-                      <View style={[styles.infoChip, styles.pointChip]}>
-                        <Ionicons name="star" size={14} color="#C9A961" />
-                        <Text style={[styles.infoChipText, { color: '#2A2A2A', fontWeight: '700' }]}>
+                      <View style={[styles.statBubble, { backgroundColor: theme.colors.accentYellow + '20' }]}>
+                        <Ionicons name="star" size={12} color={theme.colors.accentYellow} />
+                        <Text style={[styles.statBubbleText, { color: '#C9A961' }]}>
                           {pointReward}pts
                         </Text>
                       </View>
                     </View>
                     
-                    {/* Progress Section */}
-                    {hasProgress && (
-                      <View style={styles.luxProgress}>
-                        <View style={styles.progressTrack}>
+                    {/* Progress or Visit Button */}
+                    {hasProgress ? (
+                      <View style={styles.progressSection}>
+                        <View style={styles.progressBarNew}>
                           <View 
                             style={[
-                              styles.progressIndicator,
+                              styles.progressFillNew,
                               { 
                                 width: `${country.percentage || 0}%`,
                                 backgroundColor: isComplete ? '#4CAF50' : theme.colors.primary
@@ -282,20 +277,24 @@ export default function ExploreCountriesScreen() {
                             ]} 
                           />
                         </View>
-                        <Text style={styles.progressLabel}>
+                        <Text style={styles.progressTextNew}>
                           {country.visited}/{country.landmark_count}
                         </Text>
                       </View>
+                    ) : (
+                      <TouchableOpacity 
+                        style={styles.visitButton}
+                        onPress={async (e) => {
+                          e.stopPropagation();
+                          // Will implement country visit
+                          console.log('Mark country as visited');
+                        }}
+                      >
+                        <Ionicons name="add-circle" size={14} color={theme.colors.primary} />
+                        <Text style={styles.visitButtonText}>Mark as Visited</Text>
+                      </TouchableOpacity>
                     )}
                   </View>
-                  
-                  {/* Completion Glow */}
-                  {isComplete && (
-                    <View style={styles.completionGlow}>
-                      <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
-                    </View>
-                  )}
-                  </ImageBackground>
                 </View>
               </TouchableOpacity>
             </View>
