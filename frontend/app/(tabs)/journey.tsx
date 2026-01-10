@@ -170,11 +170,7 @@ export default function JourneyScreen() {
   };
 
   if (loading) {
-    return (
-      <SafeAreaView style={styles.container} edges={['top']}>
-        <LoadingSpinner message="Loading your journey..." />
-      </SafeAreaView>
-    );
+    return <LoadingSpinner message="Loading your journey..." />;
   }
 
   const nextMilestone = getNextMilestone();
