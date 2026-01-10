@@ -253,6 +253,13 @@ export default function VisitDetailScreen() {
 
         <View style={styles.bottomSpacer} />
       </ScrollView>
+      
+      <PhotoGalleryModal
+        visible={showGallery}
+        photos={photos}
+        initialIndex={selectedPhoto}
+        onClose={() => setShowGallery(false)}
+      />
     </SafeAreaView>
   );
 }
