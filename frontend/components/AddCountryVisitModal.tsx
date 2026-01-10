@@ -148,7 +148,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
             <Text style={styles.sectionTitle}>Travel Diary (Optional)</Text>
             <TextInput
               style={styles.diaryInput}
-              placeholder=\"Share your experience in ${countryName}...\"
+              placeholder={`Share your experience in ${countryName}...`}
               placeholderTextColor={theme.colors.textLight}
               value={diary}
               onChangeText={setDiary}
