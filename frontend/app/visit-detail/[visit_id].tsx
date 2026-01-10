@@ -123,16 +123,36 @@ export default function VisitDetailScreen() {
               <Text style={styles.headerSubtitle}>{visit.country_name}</Text>
             )}
           </View>
+          <TouchableOpacity 
+            style={styles.shareButton}
+            onPress={handleShare}
+          >
+            <Ionicons name="share-social" size={24} color="#fff" />
+          </TouchableOpacity>
         </LinearGradient>
 
         {/* Photo Gallery */}
         {photos.length > 0 && (
           <View style={styles.photoSection}>
-            <Image
-              source={{ uri: photos[selectedPhoto] }}
-              style={styles.mainPhoto}
-              resizeMode="cover"
-            />
+            <TouchableOpacity
+              onPress={async () => {
+                await lightHaptic();
+                setShowGallery(true);
+              }}
+              activeOpacity={0.9}
+            >
+              <Image
+                source={{ uri: photos[selectedPhoto] }}
+                style={styles.mainPhoto}
+                resizeMode="cover"
+              />
+              {photos.length > 1 && (
+                <View style={styles.photoCountBadge}>
+                  <Ionicons name="images" size={16} color="#fff" />
+                  <Text style={styles.photoCountText}>{photos.length}</Text>
+                </View>
+              )}
+            </TouchableOpacity>
             {photos.length > 1 && (
               <ScrollView
                 horizontal
