@@ -82,7 +82,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
           country_id: countryId,
           photos,
           diary_notes: diary || undefined,
-          visibility: 'public',
+          visibility: privacy,
         }),
       });
 
