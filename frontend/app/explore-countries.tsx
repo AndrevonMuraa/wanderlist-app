@@ -219,7 +219,7 @@ export default function ExploreCountriesScreen() {
           const isComplete = country.percentage === 100;
           const hasProgress = (country.visited || 0) > 0;
           const flagUrl = getFlagUrl(country.name);
-          const pointReward = country.landmark_count * 10; // Example: 10 points per landmark
+          const pointReward = country.landmark_count * 10;
           
           return (
             <View key={country.country_id} style={styles.cardContainer}>
@@ -228,40 +228,54 @@ export default function ExploreCountriesScreen() {
                 activeOpacity={0.9}
               >
                 <View style={styles.countryCard}>
-                  {/* Compact Flag Display - Full flag visible */}
-                  <View style={styles.flagSection}>
-                    <Image
-                      source={{ uri: flagUrl }}
-                      style={styles.flagImageCompact}
-                      resizeMode="contain"
-                    />
-                  </View>
+                  {/* Full Flag Background - Premium Feel */}
+                  <Image
+                    source={{ uri: flagUrl }}
+                    style={styles.flagBackground}
+                    resizeMode="cover"
+                  />
                   
-                  {/* Country Info Section */}
-                  <View style={styles.infoSection}>
-                    <Text style={styles.countryNameCompact} numberOfLines={1}>
+                  {/* Luxury Window Overlay - Subtle Dim */}
+                  <LinearGradient
+                    colors={[
+                      'rgba(255,255,255,0.85)',
+                      'rgba(255,255,255,0.75)',
+                      'rgba(255,255,255,0.85)'
+                    ]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.luxuryOverlay}
+                  />
+                  
+                  {/* Content Container */}
+                  <View style={styles.cardContent}>
+                    {/* Country Name */}
+                    <Text style={styles.countryNameLux} numberOfLines={1}>
                       {country.name}
                     </Text>
                     
-                    <View style={styles.statsRow}>
-                      <View style={styles.statItem}>
-                        <Ionicons name="location" size={12} color={theme.colors.textSecondary} />
-                        <Text style={styles.statText}>{country.landmark_count}</Text>
+                    {/* Info Row */}
+                    <View style={styles.infoRow}>
+                      <View style={styles.infoChip}>
+                        <Ionicons name="location\" size={14} color={theme.colors.primary} />
+                        <Text style={styles.infoChipText}>{country.landmark_count}</Text>
                       </View>
                       
-                      <View style={styles.statItem}>
-                        <Ionicons name="star" size={12} color={theme.colors.accentYellow} />
-                        <Text style={styles.statText}>{pointReward}pts</Text>
+                      <View style={[styles.infoChip, styles.pointChip]}>
+                        <Ionicons name="star\" size={14} color={theme.colors.accentYellow} />
+                        <Text style={[styles.infoChipText, { color: theme.colors.accentYellow }]}>
+                          {pointReward}
+                        </Text>
                       </View>
                     </View>
                     
-                    {/* Compact Progress */}
+                    {/* Progress Section */}
                     {hasProgress && (
-                      <View style={styles.compactProgress}>
-                        <View style={styles.progressBarMini}>
+                      <View style={styles.luxProgress}>
+                        <View style={styles.progressTrack}>
                           <View 
                             style={[
-                              styles.progressFillMini,
+                              styles.progressIndicator,
                               { 
                                 width: `${country.percentage || 0}%`,
                                 backgroundColor: isComplete ? '#4CAF50' : theme.colors.primary
@@ -269,17 +283,17 @@ export default function ExploreCountriesScreen() {
                             ]} 
                           />
                         </View>
-                        <Text style={styles.progressPercentText}>
-                          {Math.round(country.percentage || 0)}%
+                        <Text style={styles.progressLabel}>
+                          {country.visited}/{country.landmark_count}
                         </Text>
                       </View>
                     )}
                   </View>
                   
-                  {/* Completion Badge */}
+                  {/* Completion Glow */}
                   {isComplete && (
-                    <View style={styles.completeBadge}>
-                      <Ionicons name="checkmark-circle" size={16} color="#4CAF50" />
+                    <View style={styles.completionGlow}>
+                      <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
                     </View>
                   )}
                 </View>
