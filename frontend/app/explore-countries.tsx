@@ -805,6 +805,78 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.md,
+  flagBackground: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  luxuryOverlay: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  cardContent: {
+    flex: 1,
+    padding: theme.spacing.md,
+    justifyContent: 'space-between',
+  },
+  countryNameLux: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#2A2A2A',
+    marginBottom: theme.spacing.xs,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    gap: theme.spacing.sm,
+  },
+  infoChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 4,
+    borderRadius: theme.borderRadius.sm,
+  },
+  pointChip: {
+    backgroundColor: 'rgba(255,215,0,0.2)',
+  },
+  infoChipText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#2A2A2A',
+  },
+  luxProgress: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+    marginTop: theme.spacing.xs,
+  },
+  progressTrack: {
+    flex: 1,
+    height: 4,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  progressIndicator: {
+    height: '100%',
+  },
+  progressLabel: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#2A2A2A',
+  },
+  completionGlow: {
+    position: 'absolute',
+    top: theme.spacing.xs,
+    right: theme.spacing.xs,
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    borderRadius: 12,
+    padding: 2,
+  },
+
     gap: theme.spacing.sm,
   },
   cardContainer: {
