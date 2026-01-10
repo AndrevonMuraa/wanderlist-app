@@ -155,37 +155,37 @@ export default function AnalyticsScreen() {
 
         {/* Key Stats Grid */}
         <View style={styles.statsGrid}>
-          <Surface style={styles.statCard}>
+          <View style={[styles.statCard, { backgroundColor: theme.colors.surface }]}>
             <View style={[styles.statIcon, { backgroundColor: theme.colors.primary + '20' }]}>
               <Ionicons name="flag" size={28} color={theme.colors.primary} />
             </View>
-            <Text style={styles.statValue}>{analytics.totalVisits}</Text>
-            <Text style={styles.statLabel}>Total Visits</Text>
-          </Surface>
+            <Text style={[styles.statValue, { color: theme.colors.text }]}>{analytics.totalVisits}</Text>
+            <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>Total Visits</Text>
+          </View>
 
-          <Surface style={styles.statCard}>
+          <View style={[styles.statCard, { backgroundColor: theme.colors.surface }]}>
             <View style={[styles.statIcon, { backgroundColor: theme.colors.accent + '20' }]}>
               <Ionicons name="earth" size={28} color={theme.colors.accent} />
             </View>
-            <Text style={styles.statValue}>{analytics.countriesVisited}</Text>
-            <Text style={styles.statLabel}>Countries</Text>
-          </Surface>
+            <Text style={[styles.statValue, { color: theme.colors.text }]}>{analytics.countriesVisited}</Text>
+            <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>Countries</Text>
+          </View>
 
-          <Surface style={styles.statCard}>
+          <View style={[styles.statCard, { backgroundColor: theme.colors.surface }]}>
             <View style={[styles.statIcon, { backgroundColor: theme.colors.accentYellow + '20' }]}>
               <Ionicons name="star" size={28} color={theme.colors.accentYellow} />
             </View>
-            <Text style={styles.statValue}>{analytics.totalPoints.toLocaleString()}</Text>
-            <Text style={styles.statLabel}>Points</Text>
-          </Surface>
+            <Text style={[styles.statValue, { color: theme.colors.text }]}>{analytics.totalPoints.toLocaleString()}</Text>
+            <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>Points</Text>
+          </View>
 
-          <Surface style={styles.statCard}>
+          <View style={[styles.statCard, { backgroundColor: theme.colors.surface }]}>
             <View style={[styles.statIcon, { backgroundColor: '#FF6B6B20' }]}>
               <Ionicons name="flame" size={28} color="#FF6B6B" />
             </View>
-            <Text style={styles.statValue}>{analytics.longestStreak}</Text>
-            <Text style={styles.statLabel}>Best Streak</Text>
-          </Surface>
+            <Text style={[styles.statValue, { color: theme.colors.text }]}>{analytics.longestStreak}</Text>
+            <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>Best Streak</Text>
+          </View>
         </View>
 
         {/* Continental Distribution */}
