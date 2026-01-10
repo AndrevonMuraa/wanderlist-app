@@ -11,8 +11,8 @@ export const PersistentTabBar: React.FC = () => {
   const pathname = usePathname();
 
   const tabs = [
-    { name: 'My Journey', icon: 'map-outline', route: '/(tabs)/journey' },
     { name: 'Explore', icon: 'compass-outline', route: '/(tabs)/explore' },
+    { name: 'My Journey', icon: 'map-outline', route: '/(tabs)/journey' },
     { name: 'Social', icon: 'people-outline', route: '/(tabs)/social' },
     { name: 'Profile', icon: 'person-outline', route: '/(tabs)/profile' },
   ];
