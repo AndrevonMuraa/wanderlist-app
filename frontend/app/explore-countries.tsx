@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, SectionList, TouchableOpacity, RefreshControl, Image, Dimensions, Platform } from 'react-native';
+import { View, StyleSheet, SectionList, TouchableOpacity, RefreshControl, Image, ImageBackground, Dimensions, Platform } from 'react-native';
 import { Text, ActivityIndicator, Surface } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
