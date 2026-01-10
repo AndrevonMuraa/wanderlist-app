@@ -3,12 +3,17 @@
 > **Purpose:** Critical information that's hard to auto-summarize in forks
 > **Read this:** At session start if forked, or when encountering issues
 
-### 13. **Browser Cache on iPhone** ✅ PATTERN
-**Issue:** "Safari cannot open page - server not found" error on iPhone despite services running
-**Cause:** iPhone Safari caching old/broken version of the app
-**Fix:** Clear Safari cache (Settings → Safari → Clear History and Website Data) OR use Private/Incognito mode
-**Prevention:** During active development, use Private Browsing on iPhone for testing
-**Test:** curl http://localhost:3000 shows HTML = server is working, it's just cache
+### 13. **Browser Cache on iPhone** ✅ COMMON PATTERN
+**Issue:** "Safari cannot open page - server not found" or "Failed to load" despite services running
+**Cause:** iPhone Safari aggressively caches, shows old error pages
+**Fix:** 
+1. Close Safari tab completely
+2. Settings → Safari → Clear History and Website Data
+3. OR use Private/Incognito mode
+4. Reopen app URL
+**Prevention:** Use Private Browsing during active development
+**Verify:** `curl http://localhost:3000` shows HTML = server works, it's cache
+**Frequency:** Happens after major updates/restarts - now documented in baseline for quick reference
 
 ### 14. **Analytics Layout Fix** ✅ FIXED (Session 12 - v4.21)
 **Issue:** Travel Analytics stat cards rendered off-screen (numbers at x: 461-476px, outside 390px viewport)
