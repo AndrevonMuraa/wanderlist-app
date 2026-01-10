@@ -805,17 +805,18 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.md,
-  flagBackground: {
-    position: 'absolute',
+  flagBackgroundImage: {
     width: '100%',
     height: '100%',
-    zIndex: 0,  // Behind everything
+  },
+  flagBackgroundImageStyle: {
+    opacity: 1,
   },
   luxuryOverlay: {
     position: 'absolute',
     width: '100%',
     height: '100%',
-    zIndex: 1,  // Above flag, below content
+    zIndex: 1,
   },
   cardContent: {
     position: 'absolute',
@@ -825,7 +826,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     padding: theme.spacing.md,
     justifyContent: 'space-between',
-    zIndex: 2,  // Top layer
+    zIndex: 2,
   },
   countryNameLux: {
     fontSize: 16,
