@@ -205,6 +205,32 @@ await page.screenshot(path="/tmp/feature_test.png", quality=20)
 
 ### **Common Test Patterns:**
 
+**Screenshot-Based Error Detection (RECOMMENDED):**
+```python
+# Quick visual verification - catches UI bugs immediately
+await page.set_viewport_size({"width": 390, "height": 844})
+await page.goto("URL")
+await page.click('text=Quick Test Login')
+await asyncio.sleep(5)
+
+# Navigate to feature
+await page.click('text=Feature Name')
+await asyncio.sleep(3)
+
+# Capture screenshot
+await page.screenshot(path="/tmp/feature_test.png", quality=20)
+print("✅ Screenshot captured - review for visual issues")
+
+# Pattern: Take screenshots of critical pages
+# - Login page
+# - Main tabs (My Journey, Explore, Social, Profile)
+# - New features being developed
+# - After major UI changes
+# 
+# Benefits: Immediate visual feedback, catches rendering bugs,
+# documents UI state, helps debug styling issues
+```
+
 **Login Flow:**
 ```python
 await page.locator('text=Quick Test Login').click()
