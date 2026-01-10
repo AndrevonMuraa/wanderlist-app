@@ -903,7 +903,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
     backgroundColor: theme.colors.surface,
-    position: 'relative',  // Enable absolute positioning for flag background
+    flexDirection: 'row',  // Flag on left, info on right
     ...theme.shadows.card,
   },
   flagSection: {
