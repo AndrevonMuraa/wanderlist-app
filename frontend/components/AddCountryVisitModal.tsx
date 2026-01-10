@@ -8,6 +8,7 @@ import * as SecureStore from 'expo-secure-store';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { successHaptic, lightHaptic } from '../utils/haptics';
+import { PrivacySelector } from './PrivacySelector';
 
 interface AddCountryVisitModalProps {
   visible: boolean;
