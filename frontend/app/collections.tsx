@@ -175,6 +175,12 @@ export default function CollectionsScreen() {
           colors={[theme.colors.primary, theme.colors.primaryDark]}
           style={styles.header}
         >
+          <TouchableOpacity 
+            onPress={() => router.back()} 
+            style={styles.backButton}
+          >
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
           <View style={styles.headerContent}>
             <View>
               <Text style={styles.headerTitle}>My Collections</Text>
