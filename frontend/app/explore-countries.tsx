@@ -295,6 +295,7 @@ export default function ExploreCountriesScreen() {
                       <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
                     </View>
                   )}
+                  </ImageBackground>
                 </View>
               </TouchableOpacity>
             </View>
