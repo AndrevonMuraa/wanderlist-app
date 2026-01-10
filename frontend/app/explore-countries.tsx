@@ -238,9 +238,9 @@ export default function ExploreCountriesScreen() {
                   {/* Luxury Window Overlay - Subtle Dim */}
                   <LinearGradient
                     colors={[
-                      'rgba(255,255,255,0.85)',
-                      'rgba(255,255,255,0.75)',
-                      'rgba(255,255,255,0.85)'
+                      'rgba(255,255,255,0.40)',
+                      'rgba(255,255,255,0.30)',
+                      'rgba(255,255,255,0.40)'
                     ]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
@@ -257,13 +257,13 @@ export default function ExploreCountriesScreen() {
                     {/* Info Row */}
                     <View style={styles.infoRow}>
                       <View style={styles.infoChip}>
-                        <Ionicons name="location\" size={14} color={theme.colors.primary} />
+                        <Ionicons name="location" size={14} color={theme.colors.primary} />
                         <Text style={styles.infoChipText}>{country.landmark_count}</Text>
                       </View>
                       
                       <View style={[styles.infoChip, styles.pointChip]}>
-                        <Ionicons name="star\" size={14} color={theme.colors.accentYellow} />
-                        <Text style={[styles.infoChipText, { color: theme.colors.accentYellow }]}>
+                        <Ionicons name="star" size={14} color={theme.colors.accentYellow} />
+                        <Text style={[styles.infoChipText, { color: '#C9A961', fontWeight: '700' }]}>
                           {pointReward}
                         </Text>
                       </View>
