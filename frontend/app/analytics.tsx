@@ -382,13 +382,13 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 28,
     fontWeight: '800',
-    color: theme.colors.text,
+    color: '#2A2A2A',  // Hardcoded dark text
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: theme.colors.textSecondary,
+    color: '#6B6B6B',  // Hardcoded medium gray
   },
   section: {
     margin: theme.spacing.md,
