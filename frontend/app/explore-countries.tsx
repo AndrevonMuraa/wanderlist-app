@@ -128,6 +128,8 @@ export default function ExploreCountriesScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [progressData, setProgressData] = useState<any>(null);
+  const [showCountryVisitModal, setShowCountryVisitModal] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<{id: string; name: string} | null>(null);
   const router = useRouter();
 
   useEffect(() => {
