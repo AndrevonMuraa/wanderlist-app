@@ -10,6 +10,7 @@ import theme from '../../styles/theme';
 import { useAuth } from '../../contexts/AuthContext';
 import { CircularProgress } from '../../components/CircularProgress';
 import { ProgressBar } from '../../components/ProgressBar';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { BACKEND_URL } from '../../utils/config';
 
 const getToken = async (): Promise<string | null> => {
