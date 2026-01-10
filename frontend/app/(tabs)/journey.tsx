@@ -172,9 +172,7 @@ export default function JourneyScreen() {
   if (loading) {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
-        <View style={styles.loadingContainer}>
-          <Text>Loading your journey...</Text>
-        </View>
+        <LoadingSpinner message="Loading your journey..." />
       </SafeAreaView>
     );
   }
