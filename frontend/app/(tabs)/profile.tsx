@@ -314,42 +314,9 @@ export default function ProfileScreen() {
           </Surface>
         )}
 
-        {stats && (
-          <Surface style={styles.statsCard}>
-            <Text style={styles.sectionTitle}>Your Stats</Text>
-            <View style={styles.statsGrid}>
-              <View style={styles.statBox}>
-                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.primary + '20' }]}>
-                  <Ionicons name="flag-outline" size={28} color={theme.colors.primary} />
-                </View>
-                <Text style={styles.statNumber}>{stats.total_visits}</Text>
-                <Text style={styles.statLabel}>Total Visits</Text>
-              </View>
-              <View style={styles.statBox}>
-                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.accent + '20' }]}>
-                  <Ionicons name="map-outline" size={28} color={theme.colors.accent} />
-                </View>
-                <Text style={styles.statNumber}>{stats.countries_visited}</Text>
-                <Text style={styles.statLabel}>Countries</Text>
-              </View>
-              <View style={styles.statBox}>
-                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.accentBronze + '20' }]}>
-                  <Ionicons name="earth-outline" size={28} color={theme.colors.accentBronze} />
-                </View>
-                <Text style={styles.statNumber}>{stats.continents_visited}</Text>
-                <Text style={styles.statLabel}>Continents</Text>
-              </View>
-              <View style={styles.statBox}>
-                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.primaryLight + '20' }]}>
-                  <Ionicons name="people-outline" size={28} color={theme.colors.primaryLight} />
-                </View>
-                <Text style={styles.statNumber}>{stats.friends_count}</Text>
-                <Text style={styles.statLabel}>Friends</Text>
-              </View>
-            </View>
-          </Surface>
-        )}
+        {/* Stats - Removed, duplicates Journey/Explore */}
 
+        {/* Premium Features Menu */}
         <Surface style={styles.menuCard}>
           <List.Item
             title="My Collections"
