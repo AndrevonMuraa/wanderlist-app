@@ -183,6 +183,27 @@ class Message(BaseModel):
     message_id: str
     sender_id: str
     receiver_id: str
+
+# Country Visit Models
+class CountryVisit(BaseModel):
+    country_visit_id: str
+    user_id: str
+    country_id: str
+    country_name: str
+    photos: List[str] = []  # Up to 10 photos
+    diary_notes: Optional[str] = None
+    points_earned: int = 50
+    visibility: str = "public"
+    visited_at: datetime
+    created_at: datetime
+
+class CountryVisitCreate(BaseModel):
+    country_id: str
+    photos: List[str] = []
+    diary_notes: Optional[str] = None
+    visibility: Optional[str] = "public"
+    visited_at: Optional[datetime] = None
+
     content: str
     image_base64: Optional[str] = None  # Optional image attachment
     created_at: datetime
