@@ -349,16 +349,6 @@ export default function ProfileScreen() {
           />
           <Divider style={styles.divider} />
           <List.Item
-            title="Friends"
-            description="Manage your friend connections"
-            left={props => <List.Icon {...props} icon="account-group-outline" color={theme.colors.primary} />}
-            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
-            onPress={() => router.push('/friends')}
-            titleStyle={styles.listItemTitle}
-            descriptionStyle={styles.listItemDescription}
-          />
-          <Divider style={styles.divider} />
-          <List.Item
             title="Settings"
             description="App preferences"
             left={props => <List.Icon {...props} icon="cog-outline" color={theme.colors.primary} />}
