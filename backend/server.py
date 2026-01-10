@@ -2080,6 +2080,75 @@ async def add_to_bucket_list(data: BucketListCreate, current_user: User = Depend
     
     await db.bucket_list.insert_one(bucket_item)
     
+
+
+# ============= COUNTRY VISITS ENDPOINTS =============
+
+@api_router.post("/country-visits", response_model=CountryVisit)
+async def add_country_visit(data: CountryVisitCreate, current_user: User = Depends(get_current_user)):
+    """Create a country visit with photo collage and diary"""
+    country = await db.countries.find_one({"country_id": data.country_id}, {"_id": 0})
+    if not country:
+        raise HTTPException(status_code=404, detail="Country not found")
+    
+    # Validate photo limit (max 10)
+    if len(data.photos) > 10:
+        raise HTTPException(status_code=400, detail="Maximum 10 photos allowed")
+    
+    country_visit_id = f"country_visit_{uuid.uuid4().hex[:12]}"
+    visibility = data.visibility or current_user.default_privacy or "public"
+    
+    country_visit = {
+        "country_visit_id": country_visit_id,
+        "user_id": current_user.user_id,
+        "country_id": data.country_id,
+        "country_name": country["name"],
+        "photos": data.photos,
+        "diary_notes": data.diary_notes,
+        "points_earned": 50,  # Country visit bonus
+        "visibility": visibility,
+        "visited_at": data.visited_at if data.visited_at else datetime.now(timezone.utc),
+        "created_at": datetime.now(timezone.utc)
+    }
+    
+    await db.country_visits.insert_one(country_visit)
+    
+    # Create activity
+    activity_id = f"activity_{uuid.uuid4().hex[:12]}"
+    activity = {
+        "activity_id": activity_id,
+        "user_id": current_user.user_id,
+        "activity_type": "country_visit",
+        "country_id": data.country_id,
+        "country_name": country["name"],
+        "visibility": visibility,
+        "points_earned": 50,
+        "created_at": datetime.now(timezone.utc)
+    }
+    await db.activities.insert_one(activity)
+    
+    return CountryVisit(**country_visit)
+
+@api_router.get("/country-visits")
+async def get_country_visits(current_user: User = Depends(get_current_user)):
+    """Get user's country visits"""
+    visits = await db.country_visits.find(
+        {"user_id": current_user.user_id},
+        {"_id": 0}
+    ).sort("visited_at", -1).to_list(1000)
+    return [CountryVisit(**v) for v in visits]
+
+@api_router.delete("/country-visits/{country_visit_id}")
+async def delete_country_visit(country_visit_id: str, current_user: User = Depends(get_current_user)):
+    """Delete a country visit"""
+    result = await db.country_visits.delete_one({
+        "country_visit_id": country_visit_id,
+        "user_id": current_user.user_id
+    })
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Country visit not found")
+    return {"message": "Country visit deleted"}
+
     return {"message": "Added to bucket list", "bucket_list_id": bucket_list_id}
 
 @api_router.delete("/bucket-list/{bucket_list_id}")
