@@ -1091,6 +1091,49 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     
     await db.activities.insert_one(activity)
     
+
+    # AUTO-REWARD: Award country points on first landmark visit
+    country_id = landmark.get("country_id")
+    if country_id:
+        # Check if this is first visit to this country
+        country_visit_count = await db.visits.count_documents({
+            "user_id": current_user.user_id,
+            "landmark_id": {"$regex": f"^{country_id}_"}
+        })
+        
+        if country_visit_count == 1:  # First landmark in this country
+            # Award country exploration bonus
+            country_bonus_points = 20
+            await db.users.update_one(
+                {"user_id": current_user.user_id},
+                {"$inc": {"points": country_bonus_points}}
+            )
+            
+            # Check continent for auto-reward
+            country_doc = await db.countries.find_one({"country_id": country_id})
+            if country_doc:
+                continent = country_doc.get("continent")
+                # Check if this is first country in this continent
+                continent_country_count = await db.countries.count_documents({
+                    "continent": continent
+                })
+                user_continent_visits = 0
+                continent_countries = await db.countries.find({"continent": continent}).to_list(1000)
+                for cont_country in continent_countries:
+                    count = await db.visits.count_documents({
+                        "user_id": current_user.user_id,
+                        "landmark_id": {"$regex": f"^{cont_country['country_id']}_"}
+                    })
+                    if count > 0:
+                        user_continent_visits += 1
+                
+                if user_continent_visits == 1:  # First country in this continent
+                    continent_bonus_points = 50
+                    await db.users.update_one(
+                        {"user_id": current_user.user_id},
+                        {"$inc": {"points": continent_bonus_points}}
+                    )
+
     # Track completion bonuses
     country_completed = False
     continent_completed = False
