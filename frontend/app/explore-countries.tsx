@@ -806,11 +806,77 @@ const styles = StyleSheet.create({
     paddingLeft: theme.spacing.xs,
   },
   countryCard: {
-    height: 220,
-    borderRadius: theme.borderRadius.xxl,
+    height: 110,  // 50% of original 220
+    borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
     backgroundColor: theme.colors.surface,
+    flexDirection: 'row',
     ...theme.shadows.card,
+  },
+  flagSection: {
+    width: 80,
+    height: '100%',
+    backgroundColor: theme.colors.backgroundSecondary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing.xs,
+  },
+  flagImageCompact: {
+    width: '100%',
+    height: 50,
+  },
+  infoSection: {
+    flex: 1,
+    padding: theme.spacing.sm,
+    justifyContent: 'space-between',
+  },
+  countryNameCompact: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: theme.spacing.xs / 2,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    gap: theme.spacing.md,
+    marginBottom: theme.spacing.xs,
+  },
+  statItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  statText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  compactProgress: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+  },
+  progressBarMini: {
+    flex: 1,
+    height: 4,
+    backgroundColor: theme.colors.border,
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  progressFillMini: {
+    height: '100%',
+  },
+  progressPercentText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: theme.colors.primary,
+    minWidth: 32,
+    textAlign: 'right',
+  },
+  completeBadge: {
+    position: 'absolute',
+    top: theme.spacing.xs,
+    right: theme.spacing.xs,
   },
   flagContainer: {
     width: '100%',
