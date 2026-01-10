@@ -3,6 +3,30 @@
 > **Purpose:** Critical information that's hard to auto-summarize in forks
 > **Read this:** At session start if forked, or when encountering issues
 
+### 13. **Analytics Layout Fix** ✅ FIXED (Session 12 - v4.21)
+**Issue:** Travel Analytics stat cards rendered off-screen (numbers at x: 461-476px, outside 390px viewport)
+**Fix:** Changed from calculated width `(width - theme.spacing.md * 3) / 2` to fixed percentage `width: '48%'`
+**Result:** Stat cards now display within viewport, numbers visible
+**Prevention:** Use percentage widths for flex grid layouts on mobile, not pixel calculations
+
+---
+
+## 📝 **v4.21 Features Added (Session 12)**
+
+**Premium Features:**
+- Travel Analytics Dashboard (stats, charts, insights)
+- Custom Collections (organize landmarks with icons/colors)
+
+**User Experience:**
+- Photo Gallery Modal (full-screen viewer with swipe)
+- Share to Social (4 share types)
+- Quick Test Login (⚡ one-tap access)
+- Enhanced Loading States (LoadingSpinner)
+
+**Frameworks:**
+- Offline support utilities (caching, sync)
+- Community features (friend suggestions, trending)
+
 ---
 
 ## 📊 **Current State**
