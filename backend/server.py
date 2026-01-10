@@ -60,6 +60,7 @@ class UserPublic(BaseModel):
     location: Optional[str] = None
     is_premium: bool = False  # Deprecated
     subscription_tier: str = "free"
+    default_privacy: str = "public"  # "public", "friends", "private"
 
 class ProfileUpdate(BaseModel):
     name: Optional[str] = None
