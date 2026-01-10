@@ -429,20 +429,36 @@ export default function ExploreCountriesScreen() {
 
   const renderListFooter = () => (
     <View style={styles.featuresSection}>
-      <Text style={styles.featuresSectionTitle}>Features</Text>
+      <Text style={styles.featuresSectionTitle}>Premium Features</Text>
+      
+      {renderFeatureCard(
+        'analytics',
+        'Travel Analytics',
+        'Premium: View detailed stats & insights',
+        () => router.push('/analytics'),
+        theme.colors.primary
+      )}
+      
+      {renderFeatureCard(
+        'folder-multiple',
+        'My Collections',
+        'Premium: Organize your dream destinations',
+        () => router.push('/collections'),
+        theme.colors.accent
+      )}
       
       {renderFeatureCard(
         'trophy',
         'Leaderboard',
-        "See who's leading",
+        "Compete with travelers worldwide",
         () => router.push('/leaderboard'),
-        theme.colors.accent
+        theme.colors.accentYellow
       )}
       
       {renderFeatureCard(
         'ribbon',
         'Achievements',
-        'View your badges',
+        'Unlock badges and milestones',
         () => router.push('/achievements'),
         theme.colors.accentBronze
       )}
