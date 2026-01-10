@@ -228,27 +228,26 @@ export default function ExploreCountriesScreen() {
                 activeOpacity={0.9}
               >
                 <View style={styles.countryCard}>
-                  {/* Full Flag Background - Premium Feel */}
-                  <Image
+                  <ImageBackground
                     source={{ uri: flagUrl }}
-                    style={styles.flagBackground}
+                    style={styles.flagBackgroundImage}
                     resizeMode="cover"
-                  />
-                  
-                  {/* Subtle Dark Overlay for Readability */}
-                  <LinearGradient
-                    colors={[
-                      'rgba(0,0,0,0.15)',
-                      'rgba(0,0,0,0.25)',
-                      'rgba(0,0,0,0.15)'
-                    ]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={styles.luxuryOverlay}
-                  />
-                  
-                  {/* Content Container */}
-                  <View style={styles.cardContent}>
+                    imageStyle={styles.flagBackgroundImageStyle}
+                  >
+                    {/* Subtle Dark Overlay for Readability */}
+                    <LinearGradient
+                      colors={[
+                        'rgba(0,0,0,0.15)',
+                        'rgba(0,0,0,0.25)',
+                        'rgba(0,0,0,0.15)'
+                      ]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={styles.luxuryOverlay}
+                    />
+                    
+                    {/* Content Container */}
+                    <View style={styles.cardContent}>
                     {/* Country Name - Dark Bold Text */}
                     <Text style={styles.countryNameLux} numberOfLines={1}>
                       {country.name}
