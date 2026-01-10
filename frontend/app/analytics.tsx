@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   statCard: {
-    width: (width - theme.spacing.md * 2 - theme.spacing.sm) / 2,
+    width: '48%',  // Fixed percentage instead of calculated
     padding: theme.spacing.lg,
     borderRadius: theme.borderRadius.xl,
     alignItems: 'center',
