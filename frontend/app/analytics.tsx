@@ -362,13 +362,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     padding: theme.spacing.md,
-    gap: theme.spacing.sm,
+    justifyContent: 'space-between',
   },
   statCard: {
-    width: (width - theme.spacing.md * 3) / 2,
+    width: (width - theme.spacing.md * 2 - theme.spacing.sm) / 2,
     padding: theme.spacing.lg,
     borderRadius: theme.borderRadius.xl,
     alignItems: 'center',
+    marginBottom: theme.spacing.sm,
     ...theme.shadows.card,
   },
   statIcon: {
