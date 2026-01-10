@@ -258,42 +258,9 @@ export default function ProfileScreen() {
 
         {/* Streak - Removed, overlaps with Journey */}
 
-        {/* Badges & Achievements */}
-        {badges.length > 0 && (
-          <Surface style={styles.badgesCard}>
-            <View style={styles.badgesHeader}>
-              <Text style={styles.sectionTitle}>Badges & Achievements</Text>
-              <Text style={styles.badgeCount}>{badges.length} earned</Text>
-            </View>
-            
-            <View style={styles.badgesGrid}>
-              {badges.slice(0, 6).map((badge) => (
-                <View key={badge.achievement_id} style={styles.badgeItem}>
-                  <View style={styles.badgeIconContainer}>
-                    <Text style={styles.badgeEmoji}>{badge.badge_icon}</Text>
-                    {badge.is_featured && (
-                      <View style={styles.featuredBadge}>
-                        <Ionicons name="star" size={12} color={theme.colors.accentYellow} />
-                      </View>
-                    )}
-                  </View>
-                  <Text style={styles.badgeName} numberOfLines={2}>{badge.badge_name}</Text>
-                </View>
-              ))}
-              
-              {badges.length > 6 && (
-                <TouchableOpacity 
-                  style={styles.viewAllBadges}
-                  onPress={() => router.push('/achievements')}
-                >
-                  <Ionicons name="ellipsis-horizontal-circle" size={32} color={theme.colors.primary} />
-                  <Text style={styles.viewAllText}>View All</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </Surface>
-        )}
+        {/* Badges - Removed, duplicates Journey */}
 
+        {/* Menu - Simplified */}
         {/* Friend Limit Card for Free Users */}
         {user?.subscription_tier === 'free' && stats && (
           <Surface style={styles.limitsCard}>
