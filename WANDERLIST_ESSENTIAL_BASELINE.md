@@ -98,6 +98,54 @@ visits = await db.visits.find({"user_id": user_id}).to_list(1000)
 visit_count = len(visits)
 ```
 
+
+---
+
+## 🔄 **App Coherency System - CRITICAL**
+
+### **Problem:** 
+When updating features, related UI elements don't auto-update, causing outdated content.
+
+### **Solution: Update Checklist**
+
+**When Adding New Features:**
+1. ✅ Implement backend endpoint
+2. ✅ Build frontend UI
+3. ✅ **Update ALL related sections:**
+   - Profile menu (if applicable)
+   - Features section (explore-countries.tsx line 432)
+   - About page features list
+   - Welcome screen features
+   - Any hardcoded feature lists
+4. ✅ Update baseline documentation
+5. ✅ Test with screenshots
+
+**Interconnected Components Map:**
+
+**Features List Locations:**
+- `/app/frontend/app/explore-countries.tsx` (line 432) - "Features" section
+- `/app/frontend/app/about.tsx` - "Explore Features" section
+- `/app/frontend/app/welcome.tsx` - Feature highlights
+- `/app/frontend/app/(tabs)/profile.tsx` - Menu items
+
+**When You Add Premium Feature:**
+→ Update: Profile menu, Features section, About page
+
+**When You Add Tab/Navigation:**
+→ Update: TabsLayout + PersistentTabBar component
+
+**When You Clean Database:**
+→ Update: Continent counts in continents.tsx
+
+**Pattern:** Search for feature mentions across codebase before marking complete!
+
+```bash
+# Quick coherency check:
+grep -r "FEATURE_NAME" /app/frontend/app/*.tsx
+```
+
+
+
 ---
 
 ### **4. Deployment Mode (INFRASTRUCTURE)**
