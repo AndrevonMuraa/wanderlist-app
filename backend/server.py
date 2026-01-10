@@ -968,19 +968,24 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     is_verified = bool(data.photo_base64 or len(photos) > 0)
     
     visit_id = f"visit_{uuid.uuid4().hex[:12]}"
+    
+    # Determine privacy setting (use provided or user's default)
+    visibility = data.visibility or current_user.default_privacy or "public"
+    
     visit = {
         "visit_id": visit_id,
         "user_id": current_user.user_id,
         "landmark_id": data.landmark_id,
         "photo_base64": data.photo_base64,
-        "photos": photos,  # Photo collage
-        "points_earned": landmark.get("points", 10),  # Use landmark's point value
+        "photos": photos,
+        "points_earned": landmark.get("points", 10),
         "comments": data.comments,
         "visit_location": data.visit_location,
-        "diary_notes": data.diary_notes,  # Travel diary
-        "travel_tips": travel_tips,  # Travel tips array
+        "diary_notes": data.diary_notes,
+        "travel_tips": travel_tips,
         "status": "accepted",
-        "verified": is_verified,  # True if has photo, False if not
+        "verified": is_verified,
+        "visibility": visibility,  # Privacy setting
         "visited_at": data.visited_at if data.visited_at else datetime.now(timezone.utc),
         "created_at": datetime.now(timezone.utc)
     }
