@@ -34,6 +34,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
 }) => {
   const [photos, setPhotos] = useState<string[]>([]);
   const [diary, setDiary] = useState('');
+  const [privacy, setPrivacy] = useState<'public' | 'friends' | 'private'>('public');
   const [submitting, setSubmitting] = useState(false);
 
   const pickImages = async () => {
