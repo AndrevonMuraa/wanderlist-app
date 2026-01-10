@@ -33,56 +33,56 @@ const CONTINENTS: Continent[] = [
     id: 'europe',
     name: 'Europe',
     countries: 10,
-    landmarks: 150,
+    landmarks: 113,  // Updated after duplicate cleanup
     image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80',
     gradient: ['rgba(0, 0, 0, 0.3)', 'rgba(52, 152, 219, 0.75)'],
     icon: 'business-outline',
     description: 'Historic castles and cultural heritage',
-    totalPoints: 1875, // 10 free × 10 pts + 5 premium × 25 pts per country × 10 countries
+    totalPoints: 1130,  // Updated: 113 landmarks × 10 avg pts
   },
   {
     id: 'asia',
     name: 'Asia',
     countries: 10,
-    landmarks: 150,
+    landmarks: 116,  // Updated after duplicate cleanup
     image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80',
     gradient: ['rgba(0, 0, 0, 0.3)', 'rgba(231, 76, 60, 0.75)'],
     icon: 'earth-outline',
     description: 'Ancient temples and modern wonders',
-    totalPoints: 1875,
+    totalPoints: 1160,  // Updated: 116 landmarks × 10 avg pts
   },
   {
     id: 'africa',
     name: 'Africa',
     countries: 10,
-    landmarks: 150,
+    landmarks: 103,  // Updated after duplicate cleanup
     image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80',
     gradient: ['rgba(0, 0, 0, 0.3)', 'rgba(243, 156, 18, 0.75)'],
     icon: 'sunny-outline',
     description: 'Wild savannas and ancient civilizations',
-    totalPoints: 1875,
+    totalPoints: 1030,  // Updated: 103 landmarks × 10 avg pts
   },
   {
     id: 'americas',
     name: 'Americas',
     countries: 10,
-    landmarks: 150,
+    landmarks: 113,  // Updated after duplicate cleanup
     image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80',
     gradient: ['rgba(0, 0, 0, 0.3)', 'rgba(46, 204, 113, 0.75)'],
     icon: 'leaf-outline',
     description: 'Rainforests to mountain peaks',
-    totalPoints: 1875,
+    totalPoints: 1130,  // Updated: 113 landmarks × 10 avg pts
   },
   {
     id: 'oceania',
     name: 'Oceania',
     countries: 8,
-    landmarks: 120,
+    landmarks: 83,  // Updated after duplicate cleanup
     image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800&q=80',
     gradient: ['rgba(0, 0, 0, 0.3)', 'rgba(26, 188, 156, 0.75)'],
     icon: 'water-outline',
     description: 'Tropical islands and coastal beauty',
-    totalPoints: 1500, // 8 countries
+    totalPoints: 830,  // Updated: 83 landmarks × 10 avg pts
   },
 ];
 
