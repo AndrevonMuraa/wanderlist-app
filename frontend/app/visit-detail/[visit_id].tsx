@@ -9,6 +9,8 @@ import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import { lightHaptic } from '../../utils/haptics';
+import { PhotoGalleryModal } from '../../components/PhotoGalleryModal';
+import { shareVisit } from '../../utils/shareUtils';
 
 const { width } = Dimensions.get('window');
 
