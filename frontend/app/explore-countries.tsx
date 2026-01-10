@@ -280,7 +280,8 @@ export default function ExploreCountriesScreen() {
                         style={styles.shareButton}
                         onPress={(e) => {
                           e.stopPropagation();
-                          console.log('Share country visit');
+                          setSelectedCountry({ id: country.country_id, name: country.name });
+                          setShowCountryVisitModal(true);
                         }}
                       >
                         <Ionicons name="share-social" size={16} color={theme.colors.primary} />
