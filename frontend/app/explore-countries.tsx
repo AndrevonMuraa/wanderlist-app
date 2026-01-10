@@ -809,11 +809,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
+    zIndex: 0,  // Behind everything
   },
   luxuryOverlay: {
     position: 'absolute',
     width: '100%',
     height: '100%',
+    zIndex: 1,  // Above flag, below content
   },
   cardContent: {
     position: 'absolute',
@@ -823,6 +825,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     padding: theme.spacing.md,
     justifyContent: 'space-between',
+    zIndex: 2,  // Top layer
   },
   countryNameLux: {
     fontSize: 16,
