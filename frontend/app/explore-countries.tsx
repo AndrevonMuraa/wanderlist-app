@@ -892,11 +892,11 @@ const styles = StyleSheet.create({
     paddingLeft: theme.spacing.xs,
   },
   countryCard: {
-    height: 110,  // 50% of original 220
+    height: 110,
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
     backgroundColor: theme.colors.surface,
-    flexDirection: 'row',
+    position: 'relative',  // Enable absolute positioning for flag background
     ...theme.shadows.card,
   },
   flagSection: {
