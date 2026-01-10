@@ -228,48 +228,42 @@ export default function ExploreCountriesScreen() {
                 activeOpacity={0.9}
               >
                 <View style={styles.countryCard}>
-                  {/* Pure Flag Display - Top Section */}
+                  {/* Full Flag - Top 70% */}
                   <ImageBackground
                     source={{ uri: flagUrl }}
-                    style={styles.flagSection}
+                    style={styles.flagSectionFull}
                     resizeMode="cover"
                   >
-                    {/* Completion Badge Only */}
+                    {/* Country Name Overlay */}
+                    <LinearGradient
+                      colors={['transparent', 'rgba(0,0,0,0.6)']}
+                      style={styles.flagNameGradient}
+                    >
+                      <Text style={styles.countryNameOnFlag}>{country.name}</Text>
+                    </LinearGradient>
+                    
+                    {/* Completion Badge */}
                     {isComplete && (
-                      <View style={styles.completionBadge}>
-                        <Ionicons name="checkmark-circle" size={18} color="#4CAF50" />
+                      <View style={styles.completeBadgeTop}>
+                        <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
                       </View>
                     )}
                   </ImageBackground>
                   
-                  {/* Info Section - Below Flag */}
-                  <View style={styles.infoSection}>
-                    {/* Country Name */}
-                    <Text style={styles.countryNameNew} numberOfLines={1}>
-                      {country.name}
-                    </Text>
-                    
-                    {/* Stats Row */}
-                    <View style={styles.statsRowNew}>
-                      <View style={styles.statBubble}>
-                        <Ionicons name="location" size={12} color={theme.colors.primary} />
-                        <Text style={styles.statBubbleText}>{country.landmark_count}</Text>
-                      </View>
-                      <View style={[styles.statBubble, { backgroundColor: theme.colors.accentYellow + '20' }]}>
-                        <Ionicons name="star" size={12} color={theme.colors.accentYellow} />
-                        <Text style={[styles.statBubbleText, { color: '#C9A961' }]}>
-                          {pointReward}pts
-                        </Text>
-                      </View>
+                  {/* Info Bar - Bottom 30% */}
+                  <View style={styles.infoBar}>
+                    <View style={styles.pointsSection}>
+                      <Ionicons name="star" size={16} color={theme.colors.accentYellow} />
+                      <Text style={styles.pointsText}>{pointReward} points</Text>
                     </View>
                     
-                    {/* Progress or Visit Button */}
                     {hasProgress ? (
-                      <View style={styles.progressSection}>
-                        <View style={styles.progressBarNew}>
+                      <View style={styles.progressMini}>
+                        <Text style={styles.progressMiniText}>{country.visited}/{country.landmark_count}</Text>
+                        <View style={styles.progressBarTiny}>
                           <View 
                             style={[
-                              styles.progressFillNew,
+                              styles.progressFillTiny,
                               { 
                                 width: `${country.percentage || 0}%`,
                                 backgroundColor: isComplete ? '#4CAF50' : theme.colors.primary
@@ -277,21 +271,16 @@ export default function ExploreCountriesScreen() {
                             ]} 
                           />
                         </View>
-                        <Text style={styles.progressTextNew}>
-                          {country.visited}/{country.landmark_count}
-                        </Text>
                       </View>
                     ) : (
                       <TouchableOpacity 
-                        style={styles.visitButton}
-                        onPress={async (e) => {
+                        style={styles.shareButton}
+                        onPress={(e) => {
                           e.stopPropagation();
-                          // Will implement country visit
-                          console.log('Mark country as visited');
+                          console.log('Share country visit');
                         }}
                       >
-                        <Ionicons name="add-circle" size={14} color={theme.colors.primary} />
-                        <Text style={styles.visitButtonText}>Mark as Visited</Text>
+                        <Ionicons name="share-social" size={16} color={theme.colors.primary} />
                       </TouchableOpacity>
                     )}
                   </View>
