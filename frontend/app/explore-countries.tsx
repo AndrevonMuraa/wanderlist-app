@@ -907,12 +907,9 @@ const styles = StyleSheet.create({
     ...theme.shadows.card,
   },
   flagSection: {
-    width: 80,
+    width: '40%',
     height: '100%',
     backgroundColor: theme.colors.backgroundSecondary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: theme.spacing.xs,
   },
   flagImageCompact: {
     width: '100%',
