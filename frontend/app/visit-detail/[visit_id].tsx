@@ -42,6 +42,7 @@ export default function VisitDetailScreen() {
   const [visit, setVisit] = useState<VisitDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState(0);
+  const [showGallery, setShowGallery] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -63,6 +64,16 @@ export default function VisitDetailScreen() {
       console.error('Error fetching visit:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleShare = async () => {
+    if (visit) {
+      await shareVisit(
+        visit.landmark_name || 'Landmark',
+        visit.country_name || 'Country',
+        visit.points_earned
+      );
     }
   };
 
