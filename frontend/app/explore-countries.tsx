@@ -888,17 +888,82 @@ const styles = StyleSheet.create({
     paddingLeft: theme.spacing.xs,
   },
   countryCard: {
-    height: 110,
+    height: 140,  // Taller for vertical layout
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
     backgroundColor: theme.colors.surface,
-    flexDirection: 'row',  // Flag on left, info on right
     ...theme.shadows.card,
   },
-  flagSection: {
-    width: '40%',
+  flagSectionFull: {
+    width: '100%',
+    height: '70%',  // Flag takes 70% of card
+  },
+  flagNameGradient: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: theme.spacing.sm,
+  },
+  countryNameOnFlag: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+    textShadowColor: 'rgba(0,0,0,0.75)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
+  completeBadgeTop: {
+    position: 'absolute',
+    top: theme.spacing.xs,
+    right: theme.spacing.xs,
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderRadius: 12,
+    padding: 2,
+  },
+  infoBar: {
+    height: '30%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+  },
+  pointsSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+  },
+  pointsText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#C9A961',
+  },
+  progressMini: {
+    alignItems: 'flex-end',
+    gap: 4,
+  },
+  progressMiniText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  progressBarTiny: {
+    width: 60,
+    height: 3,
+    backgroundColor: theme.colors.border,
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  progressFillTiny: {
     height: '100%',
-    backgroundColor: theme.colors.backgroundSecondary,
+  },
+  shareButton: {
+    padding: theme.spacing.xs,
+    backgroundColor: theme.colors.primary + '15',
+    borderRadius: theme.borderRadius.sm,
   },
   flagImageCompact: {
     width: '100%',
