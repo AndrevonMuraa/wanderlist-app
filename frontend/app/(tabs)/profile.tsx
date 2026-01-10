@@ -244,7 +244,7 @@ export default function ProfileScreen() {
             )}
           </View>
           
-          {/* User Rank */}
+          {/* User Rank - Keep, it's unique to profile */}
           <View style={styles.rankContainer}>
             <RankBadge 
               rank={getUserRank(progressStats?.totalPoints || 0)} 
@@ -254,21 +254,9 @@ export default function ProfileScreen() {
           </View>
         </Surface>
 
-        {/* Rank Progress */}
-        <Surface style={styles.rankProgressCard}>
-          <Text style={styles.sectionTitle}>Rank Progress</Text>
-          <RankProgress points={progressStats?.totalPoints || 0} />
-        </Surface>
+        {/* Rank Progress - Removed, overlaps with Journey */}
 
-        {/* Streak */}
-        <Surface style={styles.streakCard}>
-          <Text style={styles.sectionTitle}>Daily Streak</Text>
-          <StreakDisplay 
-            currentStreak={user?.current_streak || 0}
-            longestStreak={user?.longest_streak || 0}
-            size="large"
-          />
-        </Surface>
+        {/* Streak - Removed, overlaps with Journey */}
 
         {/* Badges & Achievements */}
         {badges.length > 0 && (
