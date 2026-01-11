@@ -267,33 +267,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.lg,
     paddingBottom: theme.spacing.sm,
-  quickNav: {
+  },
+  tabContainer: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacing.md,
     gap: theme.spacing.sm,
     marginBottom: theme.spacing.md,
   },
-  quickNavButton: {
+  tabButton: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 6,
-    paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
     borderRadius: theme.borderRadius.md,
     backgroundColor: theme.colors.surface,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent',
   },
-  quickNavButtonActive: {
-    backgroundColor: theme.colors.primary + '10',
-    borderColor: theme.colors.primary,
+  tabButtonActive: {
+    borderBottomColor: theme.colors.primary,
   },
-  quickNavText: {
+  tabLabel: {
     fontSize: 13,
     fontWeight: '600',
     color: theme.colors.textSecondary,
   },
-
+  tabLabelActive: {
+    color: theme.colors.primary,
   },
   headerContent: {
     flexDirection: 'row',
