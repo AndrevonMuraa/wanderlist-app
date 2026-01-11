@@ -371,21 +371,6 @@ export default function ProfileScreen() {
           />
           <Divider style={styles.divider} />
           <List.Item
-            title="Travel Analytics"
-            description="Premium: View detailed insights & stats"
-            left={props => <List.Icon {...props} icon="chart-line" color={theme.colors.accent} />}
-            right={props => (
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <Ionicons name="diamond" size={16} color={theme.colors.accent} />
-                <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />
-              </View>
-            )}
-            onPress={() => router.push('/analytics')}
-            titleStyle={styles.listItemTitle}
-            descriptionStyle={styles.listItemDescription}
-          />
-          <Divider style={styles.divider} />
-          <List.Item
             title="About WanderList"
             description="Learn how to use the app"
             left={props => <List.Icon {...props} icon="information-outline" color={theme.colors.primary} />}
