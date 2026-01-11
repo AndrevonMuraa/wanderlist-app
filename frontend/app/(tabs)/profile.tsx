@@ -554,6 +554,41 @@ const styles = StyleSheet.create({
   rankContainer: {
     marginTop: theme.spacing.lg,
     alignItems: 'center',
+  compactStatsCard: {
+    margin: theme.spacing.md,
+    marginTop: theme.spacing.sm,
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.sm,
+  },
+  compactStatsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  compactStat: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  compactStatNumber: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: theme.colors.text,
+    marginBottom: 4,
+  },
+  compactStatLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+    textTransform: 'uppercase',
+  },
+  compactStatDivider: {
+    width: 1,
+    height: 30,
+    backgroundColor: theme.colors.border,
+  },
+
     paddingVertical: theme.spacing.md,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
