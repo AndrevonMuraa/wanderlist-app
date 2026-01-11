@@ -208,12 +208,6 @@ export default function ProfileScreen() {
             >
               <Ionicons name="information-circle-outline" size={28} color="#fff" />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={() => router.push('/edit-profile')}
-            >
-              <Ionicons name="create-outline" size={24} color="#fff" />
-            </TouchableOpacity>
           </View>
         </LinearGradient>
 
