@@ -256,7 +256,7 @@ export default function ProfileScreen() {
 
         {/* Compact Stats - Quick Overview */}
         {stats && (
-          <Surface style={styles.compactStatsCard}>
+          <View style={styles.compactStatsCard}>
             <View style={styles.compactStatsRow}>
               <View style={styles.compactStat}>
                 <Text style={styles.compactStatNumber}>{stats.total_visits || 0}</Text>
@@ -273,7 +273,7 @@ export default function ProfileScreen() {
                 <Text style={styles.compactStatLabel}>Points</Text>
               </View>
             </View>
-          </Surface>
+          </View>
         )}
 
 
