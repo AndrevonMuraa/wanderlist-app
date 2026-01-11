@@ -10,7 +10,7 @@ interface DefaultAvatarProps {
 }
 
 export const DefaultAvatar: React.FC<DefaultAvatarProps> = ({ name, size = 100 }) => {
-  const initials = name
+  const initials = (name || 'U')
     .split(' ')
     .map(n => n[0])
     .join('')
