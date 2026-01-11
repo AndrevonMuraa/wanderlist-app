@@ -261,11 +261,11 @@ export default function ProfileScreen() {
               </View>
             </View>
             
-            {/* Right: Rank - 35% */}
+            {/* Right: Rank - Smaller */}
             <View style={{ flex: 35, alignItems: 'flex-end', justifyContent: 'flex-start' }}>
               <RankBadge 
                 rank={getUserRank(progressStats?.totalPoints || 0)} 
-                size="large"
+                size="medium"
                 showName={true}
               />
             </View>
