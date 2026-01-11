@@ -217,105 +217,68 @@ export default function ProfileScreen() {
           </View>
         </LinearGradient>
 
-        <Surface style={styles.profileCard}>
-          {user?.picture ? (
-            <Image source={{ uri: user.picture }} style={styles.profileImage} />
-          ) : (
-            <View style={[styles.profileImage, styles.defaultProfileImage]}>
-              <Ionicons name="person-outline" size={56} color={theme.colors.textSecondary} />
-            </View>
-          )}
-          <Text style={styles.userName}>{user?.name}</Text>
-          {user?.bio && (
-            <Text style={styles.userBio}>{user.bio}</Text>
-          )}
-          {user?.location && (
-            <View style={styles.locationRow}>
-              <Ionicons name="location" size={14} color={theme.colors.textSecondary} />
-              <Text style={styles.userLocation}>{user.location}</Text>
-            </View>
-          )}
-          <Text style={styles.userEmail}>{user?.email}</Text>
-
-          <View style={[styles.premiumBadge, {
-            backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '20' : 
-                             user?.subscription_tier === 'basic' ? theme.colors.primary + '20' : 
-                             theme.colors.surfaceTinted
-          }]}>
-            {user?.subscription_tier === 'premium' ? (
-              <>
-                <Ionicons name="diamond" size={18} color={theme.colors.accent} />
-                <Text style={[styles.premiumText, { color: theme.colors.accent }]}>Premium Traveler</Text>
-              </>
-            ) : user?.subscription_tier === 'basic' ? (
-              <>
-                <Ionicons name="ribbon" size={18} color={theme.colors.primary} />
-                <Text style={[styles.premiumText, { color: theme.colors.primary }]}>Basic Traveler</Text>
-              </>
-            ) : (
-              <>
-                <Ionicons name="person-outline" size={18} color={theme.colors.textSecondary} />
-                <Text style={styles.freemiumText}>Free Traveler</Text>
-              </>
-            )}
-          </View>
-          
-          {/* User Rank - Keep, it's unique to profile */}
-          <View style={styles.rankContainer}>
-            <RankBadge 
-              rank={getUserRank(progressStats?.totalPoints || 0)} 
-              size="large"
-              showName={true}
-            />
-          </View>
-        </Surface>
-
-        {/* Compact Stats - Quick Overview */}
-        {stats && (
-          <Surface style={{
-            marginHorizontal: 16,
-            marginTop: 8,
-            marginBottom: 16,
-            paddingVertical: 20,
-            paddingHorizontal: 16,
-            borderRadius: 16,
-            backgroundColor: '#FFFFFF',
-            elevation: 3,
-          }}>
-            <View style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-around',
-            }}>
-              <View style={{ alignItems: 'center', flex: 1 }}>
-                <Text style={{ fontSize: 22, fontWeight: '800', color: '#2A2A2A', marginBottom: 4 }}>
-                  {stats.total_visits || 0}
-                </Text>
-                <Text style={{ fontSize: 11, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
-                  Visits
-                </Text>
+        {/* DESIGN 1: HORIZONTAL SPLIT - Compact One-Screen Layout */}
+        <View style={styles.compactContainer}>
+          {/* Top Row: User Info (Left) + Stats (Right) */}
+          <Surface style={styles.topRow}>
+            {/* Left: User Info */}
+            <View style={styles.userSection}>
+              {user?.picture ? (
+                <Image source={{ uri: user.picture }} style={styles.compactProfileImage} />
+              ) : (
+                <View style={[styles.compactProfileImage, styles.defaultProfileImage]}>
+                  <Ionicons name="person-outline" size={28} color={theme.colors.textSecondary} />
+                </View>
+              )}
+              <View style={styles.userInfo}>
+                <Text style={styles.compactUserName}>{user?.name}</Text>
+                <View style={[styles.compactBadge, {
+                  backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '20' : 
+                                   user?.subscription_tier === 'basic' ? theme.colors.primary + '20' : '#F0F0F0'
+                }]}>
+                  {user?.subscription_tier === 'premium' ? (
+                    <>
+                      <Ionicons name="diamond" size={12} color={theme.colors.accent} />
+                      <Text style={[styles.compactBadgeText, { color: theme.colors.accent }]}>Premium</Text>
+                    </>
+                  ) : user?.subscription_tier === 'basic' ? (
+                    <>
+                      <Ionicons name="ribbon" size={12} color={theme.colors.primary} />
+                      <Text style={[styles.compactBadgeText, { color: theme.colors.primary }]}>Basic</Text>
+                    </>
+                  ) : (
+                    <Text style={styles.compactBadgeText}>Free</Text>
+                  )}
+                </View>
               </View>
-              <View style={{ width: 1, height: 35, backgroundColor: '#E0E0E0' }} />
-              <View style={{ alignItems: 'center', flex: 1 }}>
-                <Text style={{ fontSize: 22, fontWeight: '800', color: '#2A2A2A', marginBottom: 4 }}>
-                  {stats.countries_visited || 0}
-                </Text>
-                <Text style={{ fontSize: 11, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
-                  Countries
-                </Text>
+            </View>
+            
+            {/* Right: Quick Stats */}
+            <View style={styles.quickStats}>
+              <View style={styles.quickStatItem}>
+                <Text style={styles.quickStatNumber}>{stats?.total_visits || 0}</Text>
+                <Text style={styles.quickStatLabel}>Visits</Text>
               </View>
-              <View style={{ width: 1, height: 35, backgroundColor: '#E0E0E0' }} />
-              <View style={{ alignItems: 'center', flex: 1 }}>
-                <Text style={{ fontSize: 22, fontWeight: '800', color: '#2A2A2A', marginBottom: 4 }}>
-                  {progressStats?.totalPoints || 0}
-                </Text>
-                <Text style={{ fontSize: 11, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
-                  Points
-                </Text>
+              <View style={styles.quickStatItem}>
+                <Text style={styles.quickStatNumber}>{stats?.countries_visited || 0}</Text>
+                <Text style={styles.quickStatLabel}>Countries</Text>
+              </View>
+              <View style={styles.quickStatItem}>
+                <Text style={styles.quickStatNumber}>{progressStats?.totalPoints || 0}</Text>
+                <Text style={styles.quickStatLabel}>Points</Text>
               </View>
             </View>
           </Surface>
-        )}
+          
+          {/* Rank Badge - Compact */}
+          <View style={styles.compactRankSection}>
+            <RankBadge 
+              rank={getUserRank(progressStats?.totalPoints || 0)} 
+              size="medium"
+              showName={true}
+            />
+          </View>
+        </View>
 
 
         {/* Rank Progress - Removed, overlaps with Journey */}
