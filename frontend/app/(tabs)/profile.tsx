@@ -507,7 +507,6 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
-    alignItems: 'center',
   },
   profileImage: {
     width: 80,  // Reduced from 100
