@@ -254,6 +254,29 @@ export default function ProfileScreen() {
           </View>
         </Surface>
 
+        {/* Compact Stats - Quick Overview */}
+        {progressStats && (
+          <Surface style={styles.compactStatsCard}>
+            <View style={styles.compactStatsRow}>
+              <View style={styles.compactStat}>
+                <Text style={styles.compactStatNumber}>{progressStats.totalVisits || 0}</Text>
+                <Text style={styles.compactStatLabel}>Visits</Text>
+              </View>
+              <View style={styles.compactStatDivider} />
+              <View style={styles.compactStat}>
+                <Text style={styles.compactStatNumber}>{progressStats.totalCountries || 0}</Text>
+                <Text style={styles.compactStatLabel}>Countries</Text>
+              </View>
+              <View style={styles.compactStatDivider} />
+              <View style={styles.compactStat}>
+                <Text style={styles.compactStatNumber}>{progressStats.totalPoints || 0}</Text>
+                <Text style={styles.compactStatLabel}>Points</Text>
+              </View>
+            </View>
+          </Surface>
+        )}
+
+
         {/* Rank Progress - Removed, overlaps with Journey */}
 
         {/* Streak - Removed, overlaps with Journey */}
