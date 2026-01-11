@@ -149,10 +149,7 @@ export default function ContinentsScreen() {
         </View>
       </LinearGradient>
 
-      {/* Spacing for smooth transition */}
-      <View style={{ height: 16 }} />
-
-      {/* Quick Navigation Tabs - Exactly like original */}
+      {/* Quick Navigation Tabs - Connected to Header */}
       <View style={styles.tabContainer}>
         <TouchableOpacity 
           style={[styles.tabButton, styles.tabButtonActive]}
