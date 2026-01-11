@@ -131,8 +131,11 @@ export default function ContinentsScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
+      {/* Turquoise Header */}
+      <LinearGradient
+        colors={[theme.colors.primary, theme.colors.primaryDark]}
+        style={styles.headerGradient}
+      >
         <View style={styles.headerContent}>
           <View>
             <Text style={styles.headerTitle}>Explore Continents</Text>
@@ -142,10 +145,10 @@ export default function ContinentsScreen() {
             style={styles.searchButton}
             onPress={() => router.push('/search')}
           >
-            <Ionicons name="search" size={24} color={theme.colors.primary} />
+            <Ionicons name="search" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
-      </View>
+      </LinearGradient>
 
       {/* Continent Cards */}
       <ScrollView 
