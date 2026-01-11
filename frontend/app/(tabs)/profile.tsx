@@ -235,12 +235,11 @@ export default function ProfileScreen() {
                   </TouchableOpacity>
                 </View>
                 <View style={[styles.tierBadgeLarge, {
-                  backgroundColor: user?.subscription_tier === 'premium' ? 'transparent' : 
-                                   user?.subscription_tier === 'basic' ? theme.colors.primary + '10' : '#F8F8F8'
+                  backgroundColor: 'transparent'
                 }]}>
                   {user?.subscription_tier === 'premium' ? (
                     <>
-                      <Ionicons name="diamond" size={12} color={theme.colors.accent} />
+                      <Iconicons name="diamond" size={12} color={theme.colors.accent} />
                       <Text style={[styles.tierTextLarge, { color: theme.colors.accent }]}>Premium</Text>
                     </>
                   ) : user?.subscription_tier === 'basic' ? (
@@ -249,7 +248,10 @@ export default function ProfileScreen() {
                       <Text style={[styles.tierTextLarge, { color: theme.colors.primary }]}>Basic</Text>
                     </>
                   ) : (
-                    <Text style={styles.tierTextLarge}>Free</Text>
+                    <>
+                      <Ionicons name="person-outline" size={12} color={theme.colors.textSecondary} />
+                      <Text style={[styles.tierTextLarge, { color: theme.colors.textSecondary }]}>Free</Text>
+                    </>
                   )}
                 </View>
               </View>
