@@ -705,6 +705,65 @@ const styles = StyleSheet.create({
     paddingTop: theme.spacing.md,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
+  gridHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+  },
+  gridProfileImage: {
+    width: 45,
+    height: 45,
+    borderRadius: 22,
+    marginRight: theme.spacing.sm,
+  },
+  gridUserInfo: {
+    flex: 1,
+  },
+  gridUserName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: 6,
+  },
+  gridStatsChips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  statsChip: {
+    backgroundColor: theme.colors.primary + '15',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+  },
+  chipText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+  featureGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.spacing.sm,
+  },
+  gridCard: {
+    width: '48%',
+    aspectRatio: 1.2,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  gridCardTitle: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+
   },
   statItemCompact: {
     alignItems: 'center',
