@@ -153,6 +153,46 @@ grep -r "FEATURE_NAME" /app/frontend/app/*.tsx
 **Fix:** `/etc/supervisor/conf.d/supervisord.conf`
 ```bash
 # ✅ CORRECT for web deployment
+
+
+---
+
+## 🔄 **Session Workflow - CRITICAL GUIDANCE**
+
+### **When to Say "Session Complete":**
+- ❌ **NEVER say "Session X Complete"** unless user explicitly asks to wrap up
+- ❌ **NEVER say "production ready" or "ready to ship"** unless user confirms it's ready
+- ✅ **Use "Progress Update"** for mid-work checkpoints
+- ✅ **Use "Checkpoint"** when pausing to ask questions
+- ✅ **Only use "Complete"** when user says "stop", "wrap up", or "end session"
+
+### **Development Focus:**
+- Primary: Build features, fix bugs, improve quality
+- Secondary: Document progress for continuity
+- ❌ Avoid: Premature shipping talk, false completion signals
+
+### **finish Tool Usage:**
+- For progress updates (not completion)
+- To share current state
+- To ask for next direction
+- **NOT** to declare session complete
+
+### **Communication Pattern:**
+```
+## 📊 Progress Update - [Feature Name]
+
+**What's Done:** [brief list]
+**What's Next:** [brief list]
+
+## 🎯 Recommended Next Steps:
+[Options for user to choose]
+
+Reply: Choose option
+```
+
+**Key Point:** Let USER decide when session is complete, don't assume!
+
+
 command=yarn expo start --web --port 3000
 # NOT: --tunnel (that's for mobile dev only)
 ```
