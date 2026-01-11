@@ -1,0 +1,241 @@
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, ScrollView, Switch, TouchableOpacity, Alert, Platform } from 'react-native';
+import { Text, Surface, List, Divider } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
+import theme from '../styles/theme';
+import { BACKEND_URL } from '../utils/config';
+import { PersistentTabBar } from '../components/PersistentTabBar';
+import { PrivacySelector } from '../components/PrivacySelector';
+
+const getToken = async (): Promise<string | null> => {
+  if (Platform.OS === 'web') {
+    return localStorage.getItem('auth_token');
+  }
+  return await SecureStore.getItemAsync('auth_token');
+};
+
+export default function SettingsScreen() {
+  const router = useRouter();
+  const [defaultPrivacy, setDefaultPrivacy] = useState<'public' | 'friends' | 'private'>('public');
+  const [pushNotifications, setPushNotifications] = useState(true);
+  const [emailNotifications, setEmailNotifications] = useState(true);
+  const [language, setLanguage] = useState('en');
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.ok) {
+        const user = await response.json();
+        setDefaultPrivacy(user.default_privacy || 'public');
+      }
+    } catch (error) {
+      console.error('Error loading settings:', error);
+    }
+  };
+
+  const updatePrivacy = async (value: 'public' | 'friends' | 'private') => {
+    setDefaultPrivacy(value);
+    // TODO: Save to backend
+    Alert.alert('Updated', `Default privacy set to ${value}`);
+  };
+
+  return (
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+        {/* Header */}
+        <LinearGradient
+          colors={[theme.colors.primary, theme.colors.primaryDark]}
+          style={styles.header}
+        >
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <View style={styles.headerContent}>
+            <Text style={styles.headerTitle}>Settings</Text>
+            <Text style={styles.headerSubtitle}>Manage your preferences</Text>
+          </View>
+        </LinearGradient>
+
+        {/* Privacy Settings */}
+        <Surface style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="lock-closed" size={24} color={theme.colors.primary} />
+            <Text style={styles.sectionTitle}>Privacy</Text>
+          </View>
+          <Text style={styles.sectionDescription}>
+            Choose who can see your visits and activity
+          </Text>
+          <View style={styles.privacyContainer}>
+            <PrivacySelector selected={defaultPrivacy} onChange={updatePrivacy} />
+          </View>
+        </Surface>
+
+        {/* Notification Settings */}
+        <Surface style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="notifications" size={24} color={theme.colors.accent} />
+            <Text style={styles.sectionTitle}>Notifications</Text>
+          </View>
+          
+          <List.Item
+            title="Push Notifications"
+            description="Get notified about friend activity and achievements"
+            left={props => <List.Icon {...props} icon="bell" />}
+            right={() => (
+              <Switch
+                value={pushNotifications}
+                onValueChange={setPushNotifications}
+                color={theme.colors.primary}
+              />
+            )}
+          />
+          <Divider />
+          <List.Item
+            title="Email Notifications"
+            description="Receive updates and tips via email"
+            left={props => <List.Icon {...props} icon="email" />}
+            right={() => (
+              <Switch
+                value={emailNotifications}
+                onValueChange={setEmailNotifications}
+                color={theme.colors.primary}
+              />
+            )}
+          />
+        </Surface>
+
+        {/* Language */}
+        <Surface style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="language" size={24} color={theme.colors.accentYellow} />
+            <Text style={styles.sectionTitle}>Language</Text>
+          </View>
+          <List.Item
+            title="English"
+            description="App language"
+            left={props => <List.Icon {...props} icon="earth" />}
+            right={() => <Ionicons name="checkmark" size={24} color={theme.colors.primary} />}
+          />
+        </Surface>
+
+        {/* Account */}
+        <Surface style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="person" size={24} color={theme.colors.primaryLight} />
+            <Text style={styles.sectionTitle}>Account</Text>
+          </View>
+          <List.Item
+            title="Change Email"
+            left={props => <List.Icon {...props} icon="at" />}
+            right={props => <List.Icon {...props} icon="chevron-right" />}
+            onPress={() => Alert.alert('Coming Soon', 'Email change feature coming soon')}
+          />
+          <Divider />
+          <List.Item
+            title="Change Password"
+            left={props => <List.Icon {...props} icon="key" />}
+            right={props => <List.Icon {...props} icon="chevron-right" />}
+            onPress={() => Alert.alert('Coming Soon', 'Password change feature coming soon')}
+          />
+          <Divider />
+          <List.Item
+            title="Delete Account"
+            titleStyle={{ color: theme.colors.error }}
+            left={props => <List.Icon {...props} icon="delete" color={theme.colors.error} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.error} />}
+            onPress={() => {
+              Alert.alert(
+                'Delete Account',
+                'This action cannot be undone. Are you sure?',
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  { text: 'Delete', style: 'destructive', onPress: () => {} },
+                ]
+              );
+            }}
+          />
+        </Surface>
+
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
+      <PersistentTabBar />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: Platform.OS === 'ios' ? 100 : 90,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
+  },
+  backButton: {
+    padding: theme.spacing.sm,
+    marginRight: theme.spacing.sm,
+  },
+  headerContent: {
+    flex: 1,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#fff',
+    marginBottom: 4,
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.9)',
+  },
+  section: {
+    margin: theme.spacing.md,
+    marginTop: 0,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    ...theme.shadows.card,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  sectionDescription: {
+    fontSize: 14,
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.md,
+    lineHeight: 20,
+  },
+  privacyContainer: {
+    marginTop: theme.spacing.sm,
+  },
+  bottomSpacer: {
+    height: theme.spacing.xl,
+  },
+});
