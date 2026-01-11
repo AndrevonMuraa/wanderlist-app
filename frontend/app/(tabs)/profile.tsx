@@ -217,60 +217,68 @@ export default function ProfileScreen() {
           </View>
         </LinearGradient>
 
-        {/* DESIGN 3: MODERN GRID - Icon-Based Actions */}
+        {/* DESIGN 1: HORIZONTAL SPLIT - Compact & Clean */}
         <Surface style={styles.profileCard}>
-          {/* Ultra Compact Header */}
-          <View style={styles.gridHeader}>
+          {/* Compact Header: Photo Left, Info Right */}
+          <View style={styles.profileRow}>
             {user?.picture ? (
-              <Image source={{ uri: user.picture }} style={styles.gridProfileImage} />
+              <Image source={{ uri: user.picture }} style={styles.profileImageCompact} />
             ) : (
-              <View style={[styles.gridProfileImage, styles.defaultProfileImage]}>
-                <Ionicons name="person-outline" size={20} color={theme.colors.textSecondary} />
+              <View style={[styles.profileImageCompact, styles.defaultProfileImage]}>
+                <Ionicons name="person-outline" size={28} color={theme.colors.textSecondary} />
               </View>
             )}
-            <View style={styles.gridUserInfo}>
-              <Text style={styles.gridUserName}>{user?.name}</Text>
-              <View style={styles.gridStatsChips}>
-                <View style={styles.statsChip}>
-                  <Text style={styles.chipText}>{stats?.total_visits || 0} visits</Text>
-                </View>
-                <View style={styles.statsChip}>
-                  <Text style={styles.chipText}>{stats?.countries_visited || 0} countries</Text>
-                </View>
-                <View style={[styles.statsChip, { backgroundColor: theme.colors.accentYellow + '20' }]}>
-                  <Text style={[styles.chipText, { color: '#C9A961' }]}>{progressStats?.totalPoints || 0}pts</Text>
-                </View>
+            <View style={styles.profileInfo}>
+              <Text style={styles.userNameCompact}>{user?.name}</Text>
+              <View style={[styles.tierBadgeCompact, {
+                backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '20' : 
+                                 user?.subscription_tier === 'basic' ? theme.colors.primary + '20' : '#F0F0F0'
+              }]}>
+                {user?.subscription_tier === 'premium' ? (
+                  <>
+                    <Ionicons name="diamond" size={10} color={theme.colors.accent} />
+                    <Text style={[styles.tierText, { color: theme.colors.accent }]}>Premium</Text>
+                  </>
+                ) : user?.subscription_tier === 'basic' ? (
+                  <>
+                    <Ionicons name="ribbon" size={10} color={theme.colors.primary} />
+                    <Text style={[styles.tierText, { color: theme.colors.primary }]}>Basic</Text>
+                  </>
+                ) : (
+                  <Text style={styles.tierText}>Free</Text>
+                )}
+              </View>
+              
+              {/* Rank Badge - Compact */}
+              <View style={styles.rankBadgeSmall}>
+                <RankBadge 
+                  rank={getUserRank(progressStats?.totalPoints || 0)} 
+                  size="small"
+                  showName={false}
+                />
               </View>
             </View>
           </View>
           
-          {/* Feature Grid - 3 Cards */}
-          <View style={styles.featureGrid}>
-            <TouchableOpacity 
-              style={[styles.gridCard, { backgroundColor: theme.colors.primary + '10' }]}
-              onPress={() => router.push('/collections')}
-            >
-              <Ionicons name="folder-multiple" size={32} color={theme.colors.primary} />
-              <Text style={styles.gridCardTitle}>Collections</Text>
-              <Ionicons name="diamond" size={14} color={theme.colors.accent} />
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={[styles.gridCard, { backgroundColor: '#4CAF5010' }]}
-              onPress={() => router.push('/about')}
-            >
-              <Ionicons name="information-circle" size={32} color="#4CAF50" />
-              <Text style={styles.gridCardTitle}>About</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={[styles.gridCard, { backgroundColor: '#FF6B6B10' }]}
-              onPress={() => router.push('/settings')}
-            >
-              <Ionicons name="cog" size={32} color="#FF6B6B" />
-              <Text style={styles.gridCardTitle}>Settings</Text>
-            </TouchableOpacity>
-          </View>
+          {/* Stats Row */}
+          {stats && (
+            <View style={styles.statsRowCompact}>
+              <View style={styles.statItemCompact}>
+                <Text style={styles.statNumCompact}>{stats.total_visits || 0}</Text>
+                <Text style={styles.statLabelCompact}>Visits</Text>
+              </View>
+              <View style={styles.statDivider} />
+              <View style={styles.statItemCompact}>
+                <Text style={styles.statNumCompact}>{stats.countries_visited || 0}</Text>
+                <Text style={styles.statLabelCompact}>Countries</Text>
+              </View>
+              <View style={styles.statDivider} />
+              <View style={styles.statItemCompact}>
+                <Text style={styles.statNumCompact}>{progressStats?.totalPoints || 0}</Text>
+                <Text style={styles.statLabelCompact}>Points</Text>
+              </View>
+            </View>
+          )}
         </Surface>
 
 
