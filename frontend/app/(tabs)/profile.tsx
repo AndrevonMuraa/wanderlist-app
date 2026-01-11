@@ -260,21 +260,30 @@ export default function ProfileScreen() {
             </View>
           </View>
           
-          {/* Stats Row */}
-          {stats && (
+          {/* Stats Row - Redesigned */}
+          {stats && progressStats && (
             <View style={styles.statsRowCompact}>
               <View style={styles.statItemCompact}>
-                <Text style={styles.statNumCompact}>{stats.total_visits || 0}</Text>
-                <Text style={styles.statLabelCompact}>Visits</Text>
+                <Ionicons name="location" size={18} color={theme.colors.primary} />
+                <Text style={styles.statNumCompact}>{progressStats.totalLandmarks || stats.total_visits || 0}</Text>
+                <Text style={styles.statLabelCompact}>Landmarks</Text>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItemCompact}>
+                <Ionicons name="flag" size={18} color={theme.colors.accent} />
                 <Text style={styles.statNumCompact}>{stats.countries_visited || 0}</Text>
                 <Text style={styles.statLabelCompact}>Countries</Text>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItemCompact}>
-                <Text style={styles.statNumCompact}>{progressStats?.totalPoints || 0}</Text>
+                <Ionicons name="earth" size={18} color={theme.colors.accentBronze} />
+                <Text style={styles.statNumCompact}>{stats.continents_visited || 0}</Text>
+                <Text style={styles.statLabelCompact}>Continents</Text>
+              </View>
+              <View style={styles.statDivider} />
+              <View style={styles.statItemCompact}>
+                <Ionicons name="star" size={18} color="#C9A961" />
+                <Text style={[styles.statNumCompact, { color: '#C9A961' }]}>{progressStats.totalPoints || 0}</Text>
                 <Text style={styles.statLabelCompact}>Points</Text>
               </View>
             </View>
