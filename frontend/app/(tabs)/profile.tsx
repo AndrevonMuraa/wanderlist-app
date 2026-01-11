@@ -217,47 +217,6 @@ export default function ProfileScreen() {
           </View>
         </LinearGradient>
 
-        {/* ENHANCED: User Hero Section - Compact */}
-        <Surface style={styles.profileCard}>
-          {/* User Identity - Centered & Prominent */}
-          <View style={styles.userHeroSection}>
-            {user?.picture ? (
-              <Image source={{ uri: user.picture }} style={styles.profileImageHero} />
-            ) : (
-              <View style={[styles.profileImageHero, styles.defaultProfileImage]}>
-                <Ionicons name="person-outline" size={32} color={theme.colors.textSecondary} />
-              </View>
-            )}
-            <Text style={styles.userNameHero}>{user?.name}</Text>
-            
-            {/* Tier & Rank - Inline */}
-            <View style={styles.tierRankRow}>
-              <View style={[styles.tierBadgeHero, {
-                backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '15' : 
-                                 user?.subscription_tier === 'basic' ? theme.colors.primary + '15' : '#F5F5F5'
-              }]}>
-                {user?.subscription_tier === 'premium' ? (
-                  <>
-                    <Ionicons name="diamond" size={11} color={theme.colors.accent} />
-                    <Text style={[styles.tierTextHero, { color: theme.colors.accent }]}>Premium</Text>
-                  </>
-                ) : user?.subscription_tier === 'basic' ? (
-                  <>
-                    <Ionicons name="ribbon" size={11} color={theme.colors.primary} />
-                    <Text style={[styles.tierTextHero, { color: theme.colors.primary }]}>Basic</Text>
-                  </>
-                ) : (
-                  <Text style={styles.tierTextHero}>Free</Text>
-                )}
-              </View>
-              <RankBadge 
-                rank={getUserRank(progressStats?.totalPoints || 0)} 
-                size="small"
-                showName={false}
-              />
-            </View>
-          </View>
-          
         {/* FINAL: User Left, Rank Right, Stats Row */}
         <Surface style={styles.profileCard}>
           {/* Top: User (Left) & Rank (Right) - Large & Prominent */}
