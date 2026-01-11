@@ -424,10 +424,10 @@ export default function ProfileScreen() {
           <Divider style={styles.divider} />
           <List.Item
             title="Settings"
-            description="App preferences"
+            description="App preferences and account"
             left={props => <List.Icon {...props} icon="cog-outline" color={theme.colors.primary} />}
             right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
-            onPress={() => {}}
+            onPress={() => router.push('/settings')}
             titleStyle={styles.listItemTitle}
             descriptionStyle={styles.listItemDescription}
           />
