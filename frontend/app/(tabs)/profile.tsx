@@ -482,7 +482,7 @@ const styles = StyleSheet.create({
   },
   profileCard: {
     margin: theme.spacing.md,
-    padding: theme.spacing.lg,  // Reduced from xl to lg
+    padding: theme.spacing.md,
     borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
