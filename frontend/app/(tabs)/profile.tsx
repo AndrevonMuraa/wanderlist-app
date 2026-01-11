@@ -712,6 +712,62 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: theme.spacing.md,
     paddingBottom: theme.spacing.md,
+  userHeroSection: {
+    alignItems: 'center',
+    marginBottom: theme.spacing.lg,
+  },
+  profileImageHero: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    marginBottom: theme.spacing.md,
+  },
+  userNameHero: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: theme.spacing.sm,
+  },
+  tierBadgeHero: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    marginBottom: theme.spacing.md,
+  },
+  tierTextHero: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  rankHeroSection: {
+    marginTop: theme.spacing.xs,
+  },
+  elegantStatsSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingTop: theme.spacing.md,
+    paddingHorizontal: theme.spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+  },
+  elegantStatItem: {
+    alignItems: 'center',
+    gap: 4,
+  },
+  elegantStatValue: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  elegantStatLabel: {
+    fontSize: 9,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+    textTransform: 'uppercase',
+  },
+
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border,
   },
