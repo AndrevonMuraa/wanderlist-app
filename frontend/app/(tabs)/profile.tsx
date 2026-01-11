@@ -16,6 +16,7 @@ import RankBadge from '../../components/RankBadge';
 import RankProgress from '../../components/RankProgress';
 import StreakDisplay from '../../components/StreakDisplay';
 import { getUserRank } from '../../utils/rankSystem';
+import { DefaultAvatar } from '../../components/DefaultAvatar';
 
 // Helper to get token (works on both web and native)
 import { shareProgress } from '../../utils/shareUtils';
