@@ -746,16 +746,16 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   profileImageLarge: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     marginRight: theme.spacing.md,
   },
   userInfoLeft: {
     flex: 1,
   },
   userNameLarge: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '700',
     color: theme.colors.text,
     marginBottom: 6,
