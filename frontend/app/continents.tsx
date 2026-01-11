@@ -35,7 +35,7 @@ const CONTINENTS: Continent[] = [
     countries: 10,
     landmarks: 113,  // Updated after duplicate cleanup
     image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80',
-    gradient: ['rgba(0, 0, 0, 0.3)', 'rgba(52, 152, 219, 0.75)'],
+    gradient: ['rgba(0, 0, 0, 0.2)', 'rgba(52, 152, 219, 0.5)'],
     icon: 'business-outline',
     description: 'Historic castles and cultural heritage',
     totalPoints: 1130,  // Updated: 113 landmarks × 10 avg pts
