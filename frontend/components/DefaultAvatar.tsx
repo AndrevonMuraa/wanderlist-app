@@ -10,12 +10,24 @@ interface DefaultAvatarProps {
 }
 
 export const DefaultAvatar: React.FC<DefaultAvatarProps> = ({ name, size = 100 }) => {
-  const initials = (name || 'U')
-    .split(' ')
-    .map(n => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
+  // Smart initials: handles full names, usernames, single names
+  let initials = 'U';
+  
+  if (name) {
+    const trimmed = name.trim();
+    if (trimmed.includes(' ')) {
+      // Full name with spaces: "Test User" → "TU"
+      const words = trimmed.split(' ').filter(w => w.length > 0);
+      initials = words
+        .slice(0, 2)
+        .map(w => w[0])
+        .join('')
+        .toUpperCase();
+    } else {
+      // Username or single word: "testuser" → "TE", "John" → "JO"
+      initials = trimmed.slice(0, 2).toUpperCase();
+    }
+  }
 
   const colors = [
     [theme.colors.primary, theme.colors.primaryDark],
