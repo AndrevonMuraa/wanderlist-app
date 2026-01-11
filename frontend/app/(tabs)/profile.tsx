@@ -258,55 +258,90 @@ export default function ProfileScreen() {
             </View>
           </View>
           
-          {/* Stats Grid - 2x2 Fixed */}
-          {stats && progressStats && (
-            <View style={{
-              paddingTop: 16,
-              borderTopWidth: 1,
-              borderTopColor: '#E0E0E0',
-              width: '100%',
-            }}>
-              {/* Row 1 - Horizontal */}
-              <View style={{ flexDirection: 'row', marginBottom: 12 }}>
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                  <Ionicons name="location" size={20} color="#4DB8D8" />
-                  <Text style={{ fontSize: 18, fontWeight: '800', color: '#2A2A2A', marginTop: 4, marginBottom: 2 }}>
-                    {progressStats.totalLandmarks || stats.total_visits || 0}
-                  </Text>
-                  <Text style={{ fontSize: 9, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
-                    Landmarks
-                  </Text>
+        {/* FINAL: User Left, Rank Right, Stats Row */}
+        <Surface style={styles.profileCard}>
+          {/* Top: User (Left) & Rank (Right) - Large & Prominent */}
+          <View style={styles.heroRow}>
+            {/* Left: User */}
+            <View style={styles.userLeft}>
+              {user?.picture ? (
+                <Image source={{ uri: user.picture }} style={styles.profileImageLarge} />
+              ) : (
+                <View style={[styles.profileImageLarge, styles.defaultProfileImage]}>
+                  <Ionicons name="person-outline" size={56} color={theme.colors.textSecondary} />
                 </View>
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                  <Ionicons name="flag" size={20} color="#FF6B6B" />
-                  <Text style={{ fontSize: 18, fontWeight: '800', color: '#2A2A2A', marginTop: 4, marginBottom: 2 }}>
-                    {stats.countries_visited || 0}
-                  </Text>
-                  <Text style={{ fontSize: 9, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
-                    Countries
-                  </Text>
+              )}
+              <View style={styles.userInfoLeft}>
+                <Text style={styles.userNameLarge}>{user?.name}</Text>
+                <View style={[styles.tierBadgeLarge, {
+                  backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '15' : 
+                                   user?.subscription_tier === 'basic' ? theme.colors.primary + '15' : '#F5F5F5'
+                }]}>
+                  {user?.subscription_tier === 'premium' ? (
+                    <>
+                      <Ionicons name="diamond" size={12} color={theme.colors.accent} />
+                      <Text style={[styles.tierTextLarge, { color: theme.colors.accent }]}>Premium</Text>
+                    </>
+                  ) : user?.subscription_tier === 'basic' ? (
+                    <>
+                      <Ionicons name="ribbon" size={12} color={theme.colors.primary} />
+                      <Text style={[styles.tierTextLarge, { color: theme.colors.primary }]}>Basic</Text>
+                    </>
+                  ) : (
+                    <Text style={styles.tierTextLarge}>Free</Text>
+                  )}
                 </View>
               </View>
-              {/* Row 2 - Horizontal */}
-              <View style={{ flexDirection: 'row' }}>
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                  <Ionicons name="earth" size={20} color="#66BB6A" />
-                  <Text style={{ fontSize: 18, fontWeight: '800', color: '#2A2A2A', marginTop: 4, marginBottom: 2 }}>
-                    {stats.continents_visited || 0}
-                  </Text>
-                  <Text style={{ fontSize: 9, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
-                    Continents
-                  </Text>
-                </View>
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                  <Ionicons name="star" size={20} color="#FFD700" />
-                  <Text style={{ fontSize: 18, fontWeight: '800', color: '#C9A961', marginTop: 4, marginBottom: 2 }}>
-                    {progressStats.totalPoints || 0}
-                  </Text>
-                  <Text style={{ fontSize: 9, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
-                    Points
-                  </Text>
-                </View>
+            </View>
+            
+            {/* Right: Rank - Large */}
+            <View style={styles.rankRight}>
+              <RankBadge 
+                rank={getUserRank(progressStats?.totalPoints || 0)} 
+                size="large"
+                showName={false}
+              />
+            </View>
+          </View>
+          
+          {/* Stats - One Horizontal Row */}
+          {stats && progressStats && (
+            <View style={{ flexDirection: 'row', paddingTop: 16, borderTopWidth: 1, borderTopColor: '#E0E0E0' }}>
+              <View style={{ flex: 1, alignItems: 'center' }}>
+                <Ionicons name="location" size={16} color="#4DB8D8" />
+                <Text style={{ fontSize: 16, fontWeight: '800', color: '#2A2A2A', marginTop: 2 }}>
+                  {progressStats.totalLandmarks || stats.total_visits || 0}
+                </Text>
+                <Text style={{ fontSize: 8, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
+                  Landmarks
+                </Text>
+              </View>
+              <View style={{ flex: 1, alignItems: 'center' }}>
+                <Iconicons name="flag" size={16} color="#FF6B6B" />
+                <Text style={{ fontSize: 16, fontWeight: '800', color: '#2A2A2A', marginTop: 2 }}>
+                  {stats.countries_visited || 0}
+                </Text>
+                <Text style={{ fontSize: 8, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
+                  Countries
+                </Text>
+              </View>
+              <View style={{ flex: 1, alignItems: 'center' }}>
+                <Ionicons name="earth" size={16} color="#66BB6A" />
+                <Text style={{ fontSize: 16, fontWeight: '800', color: '#2A2A2A', marginTop: 2 }}>
+                  {stats.continents_visited || 0}
+                </Text>
+                <Text style={{ fontSize: 8, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
+                  Continents
+                </Text>
+              </View>
+              <View style={{ flex: 1, alignItems: 'center' }}>
+                <Ionicons name="star" size={16} color="#FFD700" />
+                <Text style={{ fontSize: 16, fontWeight: '800', color: '#C9A961', marginTop: 2 }}>
+                  {progressStats.totalPoints || 0}
+                </Text>
+                <Text style={{ fontSize: 8, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
+                  Points
+                </Text>
               </View>
             </View>
           )}
