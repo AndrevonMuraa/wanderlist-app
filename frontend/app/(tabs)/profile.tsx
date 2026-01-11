@@ -733,14 +733,15 @@ const styles = StyleSheet.create({
   },
   heroRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     marginBottom: theme.spacing.md,
+    width: '100%',
   },
   userLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    flex: 2,
   },
   profileImageLarge: {
     width: 100,
