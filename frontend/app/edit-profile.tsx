@@ -121,7 +121,7 @@ export default function EditProfileScreen() {
 
       if (response.ok) {
         Alert.alert('Success', 'Profile updated successfully', [
-          { text: 'OK', onPress: () => router.back() },
+          { text: 'OK', onPress: () => router.push('/(tabs)/profile') },
         ]);
       } else {
         Alert.alert('Error', 'Failed to update profile');
