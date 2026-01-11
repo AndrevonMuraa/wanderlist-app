@@ -314,16 +314,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 16,
-    backdropFilter: 'blur(10px)',
   },
   pointsText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#fff',
+    color: '#C9A961',
   },
   cardContent: {
     flex: 1,
