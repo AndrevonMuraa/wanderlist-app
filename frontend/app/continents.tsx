@@ -334,9 +334,10 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.sm,
   },
   card: {
-    height: 115,
-    borderRadius: theme.borderRadius.xl,
+    height: 105,
+    borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
+    marginBottom: theme.spacing.sm,
     ...theme.shadows.card,
   },
   cardImage: {
