@@ -176,7 +176,7 @@ export default function CollectionsScreen() {
           style={styles.header}
         >
           <TouchableOpacity 
-            onPress={() => router.back()} 
+            onPress={() => router.push('/(tabs)/profile')} 
             style={styles.backButton}
           >
             <Ionicons name="arrow-back" size={24} color="#fff" />
