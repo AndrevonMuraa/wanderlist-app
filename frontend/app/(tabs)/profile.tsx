@@ -258,7 +258,7 @@ export default function ProfileScreen() {
               <RankBadge 
                 rank={getUserRank(progressStats?.totalPoints || 0)} 
                 size="large"
-                showName={false}
+                showName={true}
               />
             </View>
           </View>
