@@ -217,68 +217,57 @@ export default function ProfileScreen() {
           </View>
         </LinearGradient>
 
-        {/* DESIGN 1: HORIZONTAL SPLIT - Compact One-Screen Layout */}
-        <View style={styles.compactContainer}>
-          {/* Top Row: User Info (Left) + Stats (Right) */}
-          <Surface style={styles.topRow}>
-            {/* Left: User Info */}
-            <View style={styles.userSection}>
-              {user?.picture ? (
-                <Image source={{ uri: user.picture }} style={styles.compactProfileImage} />
-              ) : (
-                <View style={[styles.compactProfileImage, styles.defaultProfileImage]}>
-                  <Ionicons name="person-outline" size={28} color={theme.colors.textSecondary} />
-                </View>
-              )}
-              <View style={styles.userInfo}>
-                <Text style={styles.compactUserName}>{user?.name}</Text>
-                <View style={[styles.compactBadge, {
-                  backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '20' : 
-                                   user?.subscription_tier === 'basic' ? theme.colors.primary + '20' : '#F0F0F0'
-                }]}>
-                  {user?.subscription_tier === 'premium' ? (
-                    <>
-                      <Ionicons name="diamond" size={12} color={theme.colors.accent} />
-                      <Text style={[styles.compactBadgeText, { color: theme.colors.accent }]}>Premium</Text>
-                    </>
-                  ) : user?.subscription_tier === 'basic' ? (
-                    <>
-                      <Ionicons name="ribbon" size={12} color={theme.colors.primary} />
-                      <Text style={[styles.compactBadgeText, { color: theme.colors.primary }]}>Basic</Text>
-                    </>
-                  ) : (
-                    <Text style={styles.compactBadgeText}>Free</Text>
-                  )}
-                </View>
+        <Surface style={styles.profileCard}>
+          {/* Horizontal Layout: Photo + Info */}
+          <View style={styles.profileRow}>
+            {user?.picture ? (
+              <Image source={{ uri: user.picture }} style={styles.profileImageCompact} />
+            ) : (
+              <View style={[styles.profileImageCompact, styles.defaultProfileImage]}>
+                <Ionicons name="person-outline" size={24} color={theme.colors.textSecondary} />
+              </View>
+            )}
+            <View style={styles.profileInfo}>
+              <Text style={styles.userNameCompact}>{user?.name}</Text>
+              <View style={[styles.tierBadgeCompact, {
+                backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '20' : 
+                                 user?.subscription_tier === 'basic' ? theme.colors.primary + '20' : '#F0F0F0'
+              }]}>
+                {user?.subscription_tier === 'premium' ? (
+                  <>
+                    <Ionicons name="diamond" size={10} color={theme.colors.accent} />
+                    <Text style={[styles.tierText, { color: theme.colors.accent }]}>Premium</Text>
+                  </>
+                ) : user?.subscription_tier === 'basic' ? (
+                  <>
+                    <Ionicons name="ribbon" size={10} color={theme.colors.primary} />
+                    <Text style={[styles.tierText, { color: theme.colors.primary }]}>Basic</Text>
+                  </>
+                ) : (
+                  <Text style={styles.tierText}>Free</Text>
+                )}
               </View>
             </View>
-            
-            {/* Right: Quick Stats */}
-            <View style={styles.quickStats}>
-              <View style={styles.quickStatItem}>
-                <Text style={styles.quickStatNumber}>{stats?.total_visits || 0}</Text>
-                <Text style={styles.quickStatLabel}>Visits</Text>
-              </View>
-              <View style={styles.quickStatItem}>
-                <Text style={styles.quickStatNumber}>{stats?.countries_visited || 0}</Text>
-                <Text style={styles.quickStatLabel}>Countries</Text>
-              </View>
-              <View style={styles.quickStatItem}>
-                <Text style={styles.quickStatNumber}>{progressStats?.totalPoints || 0}</Text>
-                <Text style={styles.quickStatLabel}>Points</Text>
-              </View>
-            </View>
-          </Surface>
-          
-          {/* Rank Badge - Compact */}
-          <View style={styles.compactRankSection}>
-            <RankBadge 
-              rank={getUserRank(progressStats?.totalPoints || 0)} 
-              size="medium"
-              showName={true}
-            />
           </View>
-        </View>
+          
+          {/* Stats Row */}
+          {stats && (
+            <View style={styles.statsRowCompact}>
+              <View style={styles.statItemCompact}>
+                <Text style={styles.statNumCompact}>{stats.total_visits || 0}</Text>
+                <Text style={styles.statLabelCompact}>Visits</Text>
+              </View>
+              <View style={styles.statItemCompact}>
+                <Text style={styles.statNumCompact}>{stats.countries_visited || 0}</Text>
+                <Text style={styles.statLabelCompact}>Countries</Text>
+              </View>
+              <View style={styles.statItemCompact}>
+                <Text style={styles.statNumCompact}>{progressStats?.totalPoints || 0}</Text>
+                <Text style={styles.statLabelCompact}>Points</Text>
+              </View>
+            </View>
+          )}
+        </Surface>
 
 
         {/* Rank Progress - Removed, overlaps with Journey */}
