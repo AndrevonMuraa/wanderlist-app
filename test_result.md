@@ -643,11 +643,99 @@ metadata:
 
 test_plan:
   current_focus:
-    - "v4.24 Final Verification Complete"
+    - "Header Consistency Verification"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
 
+agent_communication:
+  - agent: "testing"
+    message: "⚠️ HEADER CONSISTENCY ISSUE FOUND - CRITICAL UI BUG
+    
+    URL: https://work-in-progress-12.preview.emergentagent.com
+    VIEWPORT: 390x844 (iPhone 12)
+    DATE: Header Consistency Verification
+    
+    ❌ CRITICAL ISSUE FOUND (5/6 pages have inconsistent headers):
+    
+    PROBLEM: Profile, My Journey, Social, and Explore pages have turquoise gradient headers BUT with DARK TEXT instead of white text. This makes the headers inconsistent with Collections page which correctly has white text.
+    
+    DETAILED FINDINGS:
+    
+    1. ❌ PROFILE PAGE - INCONSISTENT
+       - ✓ Turquoise gradient: YES (rgb(77, 184, 216) to rgb(46, 154, 181))
+       - ✓ Compact padding: YES (24px)
+       - ✗ Text color: DARK (rgb(42, 42, 42)) - SHOULD BE WHITE
+       - Issue: Header title 'Profile' is not visible or using dark text
+    
+    2. ❌ MY JOURNEY PAGE - INCONSISTENT
+       - ✓ Turquoise gradient: YES
+       - ✓ Compact padding: YES (24px)
+       - ✗ Text color: DARK (rgb(42, 42, 42)) - SHOULD BE WHITE
+       - Issue: Header greeting text is not white
+    
+    3. ❌ SOCIAL PAGE - INCONSISTENT
+       - ✓ Turquoise gradient: YES
+       - ✓ Compact padding: YES (24px)
+       - ✗ Text color: DARK (rgb(42, 42, 42)) - SHOULD BE WHITE
+       - Issue: 'Social Hub' title is not white
+    
+    4. ❌ EXPLORE PAGE - INCONSISTENT
+       - ✓ Turquoise gradient: YES
+       - ✓ Compact padding: YES (24px)
+       - ✗ Text color: DARK (rgb(42, 42, 42)) - SHOULD BE WHITE
+       - Issue: 'Explore Continents' title is not white
+    
+    5. ✓ COLLECTIONS PAGE - CONSISTENT (REFERENCE)
+       - ✓ Turquoise gradient: YES
+       - ✓ Compact padding: YES (24px)
+       - ✓ Title text: WHITE (rgb(255, 255, 255))
+       - ✓ Subtitle text: WHITE (rgba(255, 255, 255, 0.9))
+       - This is the CORRECT implementation
+    
+    6. ⚠️ SETTINGS PAGE - NOT TESTED
+       - Could not navigate to Settings page during test
+       - Needs manual verification
+    
+    ROOT CAUSE:
+    The issue is that Profile, My Journey, Social, and Explore pages are NOT using white text in their headers despite having the turquoise gradient. Looking at the code:
+    
+    - profile.tsx (line 467-471): Uses theme.typography.h1 with color '#fff' but the text is not rendering white
+    - journey.tsx (line 523-527): Uses white color for greeting text
+    - social.tsx (line 779-787): Uses theme.colors.text (which is dark) instead of white
+    - continents.tsx (line 264-271): Uses theme.colors.text (which is dark) instead of white
+    
+    REQUIRED FIXES:
+    
+    1. Profile page (profile.tsx):
+       - Line 467: headerTitle style already has color: '#fff' but may not be applied correctly
+       - Verify the Text component is using the style correctly
+    
+    2. My Journey page (journey.tsx):
+       - Line 523: greeting style has color: '#fff' - verify it's applied
+       - Line 530: subGreeting has rgba(255, 255, 255, 0.9) - verify it's applied
+    
+    3. Social page (social.tsx):
+       - Line 779-783: headerTitle uses theme.colors.text (DARK) - CHANGE TO '#fff'
+       - Line 785-787: headerSubtitle uses theme.colors.textSecondary (DARK) - CHANGE TO 'rgba(255,255,255,0.9)'
+    
+    4. Explore/Continents page (continents.tsx):
+       - Line 264-267: headerTitle uses theme.colors.text (DARK) - CHANGE TO '#fff'
+       - Line 269-271: headerSubtitle uses theme.colors.textSecondary (DARK) - CHANGE TO 'rgba(255,255,255,0.9)'
+    
+    5. Settings page:
+       - Needs verification after navigation issue is fixed
+    
+    SCREENSHOTS CAPTURED:
+    - profile_header.png: Shows dark text on turquoise gradient
+    - my_journey_header.png: Shows dark text on turquoise gradient
+    - social_header.png: Shows dark text on turquoise gradient
+    - explore_header.png: Shows dark text on turquoise gradient
+    - collections_header.png: Shows CORRECT white text on turquoise gradient
+    
+    SUCCESS RATE: 16.7% (1/6 pages consistent)
+    
+    PRIORITY: HIGH - This is a visual consistency issue that affects user experience across the entire app."
 agent_communication:
   - agent: "testing"
     message: "🎉 ✅ v4.24 FINAL COMPREHENSIVE TEST COMPLETE - 100% SUCCESS!
