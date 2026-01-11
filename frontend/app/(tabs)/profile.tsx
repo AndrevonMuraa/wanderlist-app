@@ -219,10 +219,10 @@ export default function ProfileScreen() {
 
         {/* FINAL: User Left, Rank Right, Stats Row */}
         <Surface style={styles.profileCard}>
-          {/* Top: User (Left) & Rank (Right) - Side by Side */}
-          <View style={{ flexDirection: 'row', marginBottom: 16, alignItems: 'flex-start' }}>
-            {/* Left: User - 60% */}
-            <View style={{ width: '60%', flexDirection: 'row', alignItems: 'center' }}>
+          {/* Top: User (Left) & Rank (Right) - Explicit Split */}
+          <View style={{ flexDirection: 'row', marginBottom: 16, width: '100%' }}>
+            {/* Left: User - 65% */}
+            <View style={{ flex: 65, flexDirection: 'row', alignItems: 'center', paddingRight: 8 }}>
               {user?.picture ? (
                 <Image source={{ uri: user.picture }} style={styles.profileImageLarge} />
               ) : (
@@ -253,8 +253,8 @@ export default function ProfileScreen() {
               </View>
             </View>
             
-            {/* Right: Rank - 40% */}
-            <View style={{ width: '40%', alignItems: 'center', justifyContent: 'center' }}>
+            {/* Right: Rank - 35% */}
+            <View style={{ flex: 35, alignItems: 'flex-end', justifyContent: 'flex-start' }}>
               <RankBadge 
                 rank={getUserRank(progressStats?.totalPoints || 0)} 
                 size="large"
