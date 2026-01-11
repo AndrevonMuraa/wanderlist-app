@@ -705,6 +705,15 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
   gridHeader: {
+  rankBadgeSmall: {
+    marginTop: 6,
+  },
+  statDivider: {
+    width: 1,
+    height: 30,
+    backgroundColor: theme.colors.border,
+  },
+
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: theme.spacing.md,
