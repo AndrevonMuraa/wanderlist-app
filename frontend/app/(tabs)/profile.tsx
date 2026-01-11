@@ -234,23 +234,21 @@ export default function ProfileScreen() {
                     <Ionicons name="create-outline" size={18} color={theme.colors.primary} />
                   </TouchableOpacity>
                 </View>
-                <View style={[styles.tierBadgeLarge, {
-                  backgroundColor: 'transparent'
-                }]}>
+                <View style={styles.tierBadgeLarge}>
                   {user?.subscription_tier === 'premium' ? (
                     <>
-                      <Iconicons name="diamond" size={12} color={theme.colors.accent} />
-                      <Text style={[styles.tierTextLarge, { color: theme.colors.accent }]}>Premium</Text>
+                      <Ionicons name="diamond" size={12} color={theme.colors.accent} />
+                      <Text style={[styles.tierTextLarge, { color: theme.colors.accent }]}>Premium user</Text>
                     </>
                   ) : user?.subscription_tier === 'basic' ? (
                     <>
                       <Ionicons name="ribbon" size={12} color={theme.colors.primary} />
-                      <Text style={[styles.tierTextLarge, { color: theme.colors.primary }]}>Basic</Text>
+                      <Text style={[styles.tierTextLarge, { color: theme.colors.primary }]}>Basic user</Text>
                     </>
                   ) : (
                     <>
                       <Ionicons name="person-outline" size={12} color={theme.colors.textSecondary} />
-                      <Text style={[styles.tierTextLarge, { color: theme.colors.textSecondary }]}>Free</Text>
+                      <Text style={[styles.tierTextLarge, { color: theme.colors.textSecondary }]}>Freemium user</Text>
                     </>
                   )}
                 </View>
