@@ -557,10 +557,11 @@ const styles = StyleSheet.create({
   compactStatsCard: {
     margin: theme.spacing.md,
     marginTop: theme.spacing.sm,
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
+    marginBottom: theme.spacing.sm,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: '#FFFFFF',  // Explicit white background
+    ...theme.shadows.card,
   },
   compactStatsRow: {
     flexDirection: 'row',
@@ -572,21 +573,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   compactStatNumber: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '800',
-    color: theme.colors.text,
+    color: '#2A2A2A',  // Explicit dark color
     marginBottom: 4,
   },
   compactStatLabel: {
     fontSize: 11,
     fontWeight: '600',
-    color: theme.colors.textSecondary,
+    color: '#6B6B6B',  // Explicit gray
     textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   compactStatDivider: {
     width: 1,
-    height: 30,
-    backgroundColor: theme.colors.border,
+    height: 35,
+    backgroundColor: '#E0E0E0',  // Explicit border color
   },
 
     paddingVertical: theme.spacing.md,
