@@ -213,10 +213,10 @@ export default function ProfileScreen() {
 
         {/* FINAL: User Left, Rank Right, Stats Row */}
         <Surface style={styles.profileCard}>
-          {/* Top: User (Left) & Rank (Right) - Optimized Spacing */}
-          <View style={{ flexDirection: 'row', marginTop: 8, marginBottom: 12, width: '100%', alignItems: 'center' }}>
-            {/* Left: User - 65% */}
-            <View style={{ flex: 65, flexDirection: 'row', alignItems: 'center', paddingRight: 8 }}>
+          {/* Top: User & Rank - Tight & Balanced */}
+          <View style={{ flexDirection: 'row', marginTop: 4, marginBottom: 8, width: '100%', alignItems: 'center' }}>
+            {/* Left: User */}
+            <View style={{ flex: 65, flexDirection: 'row', alignItems: 'center', paddingRight: 4 }}>
               {user?.picture ? (
                 <Image source={{ uri: user.picture }} style={styles.profileImageLarge} />
               ) : (
@@ -224,12 +224,12 @@ export default function ProfileScreen() {
                   <Ionicons name="person-outline" size={56} color={theme.colors.textSecondary} />
                 </View>
               )}
-              <View style={{ flex: 1, marginLeft: 12 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
+              <View style={{ flex: 1, marginLeft: 8 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
                   <Text style={styles.userNameLarge}>{user?.name}</Text>
                   <TouchableOpacity 
                     onPress={() => router.push('/edit-profile')}
-                    style={{ marginLeft: 8, padding: 4 }}
+                    style={{ marginLeft: 6, padding: 2 }}
                   >
                     <Ionicons name="create-outline" size={18} color={theme.colors.primary} />
                   </TouchableOpacity>
