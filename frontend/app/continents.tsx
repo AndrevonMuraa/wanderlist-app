@@ -152,6 +152,31 @@ export default function ContinentsScreen() {
       {/* Spacing for smooth transition */}
       <View style={{ height: 16 }} />
 
+      {/* Quick Navigation Tabs */}
+      <View style={styles.quickNav}>
+        <TouchableOpacity 
+          style={[styles.quickNavButton, styles.quickNavButtonActive]}
+          onPress={() => {}}
+        >
+          <Ionicons name="earth" size={18} color={theme.colors.primary} />
+          <Text style={[styles.quickNavText, { color: theme.colors.primary }]}>Explore</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.quickNavButton}
+          onPress={() => router.push('/bucket-list')}
+        >
+          <Ionicons name="bookmark" size={18} color={theme.colors.textSecondary} />
+          <Text style={styles.quickNavText}>Bucket List</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.quickNavButton}
+          onPress={() => router.push('/trips')}
+        >
+          <Ionicons name="map" size={18} color={theme.colors.textSecondary} />
+          <Text style={styles.quickNavText}>My Trips</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Continent Cards */}
       <ScrollView 
         style={styles.scrollView}
