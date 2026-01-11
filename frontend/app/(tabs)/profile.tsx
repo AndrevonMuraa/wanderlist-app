@@ -18,6 +18,8 @@ import StreakDisplay from '../../components/StreakDisplay';
 import { getUserRank } from '../../utils/rankSystem';
 
 // Helper to get token (works on both web and native)
+import { shareProgress } from '../../utils/shareUtils';
+
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
     return localStorage.getItem('auth_token');
