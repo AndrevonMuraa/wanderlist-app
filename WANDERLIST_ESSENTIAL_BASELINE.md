@@ -258,6 +258,27 @@ await page.screenshot(path="/tmp/feature_test.png", quality=20)
 
 ### **Common Test Patterns:**
 
+### **Screenshot-Based Debug Loop (RECOMMENDED):**
+```python
+# Visual bug fixing with automatic verification
+# 1. Take screenshot
+# 2. Analyze visually
+# 3. Fix issue
+# 4. Restart & screenshot again
+# 5. Repeat until correct
+
+# Example:
+await page.screenshot(path="/tmp/debug.png", quality=20)
+# Review screenshot, identify issue
+# Apply fix in code
+# sudo supervisorctl restart expo
+# Take new screenshot
+# Compare and verify
+
+# Benefits: See exact rendering, catch styling bugs,
+# verify fixes visually, faster than manual testing
+```
+
 **Screenshot-Based Error Detection (RECOMMENDED):**
 ```python
 # Quick visual verification - catches UI bugs immediately
