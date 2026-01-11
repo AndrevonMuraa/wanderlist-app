@@ -580,11 +580,14 @@ export default function SocialHubScreen() {
         }
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
-        <View style={styles.header}>
+        {/* Turquoise Gradient Header */}
+        <LinearGradient
+          colors={[theme.colors.primary, theme.colors.primaryDark]}
+          style={styles.headerGradient}
+        >
           <Text style={styles.headerTitle}>Social Hub</Text>
           <Text style={styles.headerSubtitle}>Stay connected with your travel community</Text>
-        </View>
+        </LinearGradient>
 
         {/* Activity Feed Section */}
         <View style={styles.section}>
