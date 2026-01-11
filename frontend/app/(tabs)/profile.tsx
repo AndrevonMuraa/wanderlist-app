@@ -317,7 +317,7 @@ export default function ProfileScreen() {
                 </Text>
               </View>
               <View style={{ flex: 1, alignItems: 'center' }}>
-                <Iconicons name="flag" size={16} color="#FF6B6B" />
+                <Ionicons name="flag" size={16} color="#FF6B6B" />
                 <Text style={{ fontSize: 16, fontWeight: '800', color: '#2A2A2A', marginTop: 2 }}>
                   {stats.countries_visited || 0}
                 </Text>
