@@ -221,9 +221,7 @@ export default function ProfileScreen() {
               {user?.picture ? (
                 <Image source={{ uri: user.picture }} style={styles.profileImageLarge} />
               ) : (
-                <View style={[styles.profileImageLarge, styles.defaultProfileImage]}>
-                  <Ionicons name="person-outline" size={56} color={theme.colors.textSecondary} />
-                </View>
+                <DefaultAvatar size={120} />
               )}
               <View style={{ flex: 1, marginLeft: 8 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
