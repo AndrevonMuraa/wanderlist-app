@@ -759,18 +759,20 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   statsGrid2x2: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.spacing.sm,
     paddingTop: theme.spacing.md,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
     width: '100%',
   },
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: theme.spacing.sm,
+  },
   statBox2x2: {
-    width: '48%',
     alignItems: 'center',
-    paddingVertical: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
+    flex: 1,
   },
   statNum2x2: {
     fontSize: 18,
