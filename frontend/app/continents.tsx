@@ -149,6 +149,9 @@ export default function ContinentsScreen() {
         </View>
       </LinearGradient>
 
+      {/* Spacing for smooth transition */}
+      <View style={{ height: 16 }} />
+
       {/* Continent Cards */}
       <ScrollView 
         style={styles.scrollView}
