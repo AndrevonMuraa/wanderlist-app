@@ -219,10 +219,10 @@ export default function ProfileScreen() {
 
         {/* FINAL: User Left, Rank Right, Stats Row */}
         <Surface style={styles.profileCard}>
-          {/* Top: User (Left) & Rank (Right) - Large & Prominent */}
-          <View style={styles.heroRow}>
-            {/* Left: User */}
-            <View style={styles.userLeft}>
+          {/* Top: User (Left) & Rank (Right) - Side by Side */}
+          <View style={{ flexDirection: 'row', marginBottom: 16, alignItems: 'flex-start' }}>
+            {/* Left: User - 60% */}
+            <View style={{ width: '60%', flexDirection: 'row', alignItems: 'center' }}>
               {user?.picture ? (
                 <Image source={{ uri: user.picture }} style={styles.profileImageLarge} />
               ) : (
@@ -230,7 +230,7 @@ export default function ProfileScreen() {
                   <Ionicons name="person-outline" size={56} color={theme.colors.textSecondary} />
                 </View>
               )}
-              <View style={styles.userInfoLeft}>
+              <View style={{ flex: 1, marginLeft: 12 }}>
                 <Text style={styles.userNameLarge}>{user?.name}</Text>
                 <View style={[styles.tierBadgeLarge, {
                   backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '15' : 
@@ -253,8 +253,8 @@ export default function ProfileScreen() {
               </View>
             </View>
             
-            {/* Right: Rank - Large */}
-            <View style={styles.rankRight}>
+            {/* Right: Rank - 40% */}
+            <View style={{ width: '40%', alignItems: 'center', justifyContent: 'center' }}>
               <RankBadge 
                 rank={getUserRank(progressStats?.totalPoints || 0)} 
                 size="large"
