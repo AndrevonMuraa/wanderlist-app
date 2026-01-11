@@ -217,74 +217,74 @@ export default function ProfileScreen() {
           </View>
         </LinearGradient>
 
-        {/* DESIGN 1: HORIZONTAL SPLIT - Compact & Clean */}
+        {/* ENHANCED: User Hero Section */}
         <Surface style={styles.profileCard}>
-          {/* Compact Header: Photo Left, Info Right */}
-          <View style={styles.profileRow}>
+          {/* User Identity - Large & Prominent */}
+          <View style={styles.userHeroSection}>
             {user?.picture ? (
-              <Image source={{ uri: user.picture }} style={styles.profileImageCompact} />
+              <Image source={{ uri: user.picture }} style={styles.profileImageHero} />
             ) : (
-              <View style={[styles.profileImageCompact, styles.defaultProfileImage]}>
-                <Ionicons name="person-outline" size={28} color={theme.colors.textSecondary} />
+              <View style={[styles.profileImageHero, styles.defaultProfileImage]}>
+                <Ionicons name="person-outline" size={40} color={theme.colors.textSecondary} />
               </View>
             )}
-            <View style={styles.profileInfo}>
-              <Text style={styles.userNameCompact}>{user?.name}</Text>
-              <View style={[styles.tierBadgeCompact, {
-                backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '20' : 
-                                 user?.subscription_tier === 'basic' ? theme.colors.primary + '20' : '#F0F0F0'
-              }]}>
-                {user?.subscription_tier === 'premium' ? (
-                  <>
-                    <Ionicons name="diamond" size={10} color={theme.colors.accent} />
-                    <Text style={[styles.tierText, { color: theme.colors.accent }]}>Premium</Text>
-                  </>
-                ) : user?.subscription_tier === 'basic' ? (
-                  <>
-                    <Ionicons name="ribbon" size={10} color={theme.colors.primary} />
-                    <Text style={[styles.tierText, { color: theme.colors.primary }]}>Basic</Text>
-                  </>
-                ) : (
-                  <Text style={styles.tierText}>Free</Text>
-                )}
-              </View>
-              
-              {/* Rank Badge - Compact */}
-              <View style={styles.rankBadgeSmall}>
-                <RankBadge 
-                  rank={getUserRank(progressStats?.totalPoints || 0)} 
-                  size="small"
-                  showName={false}
-                />
-              </View>
+            <Text style={styles.userNameHero}>{user?.name}</Text>
+            
+            {/* Tier Badge - Elegant */}
+            <View style={[styles.tierBadgeHero, {
+              backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '15' : 
+                               user?.subscription_tier === 'basic' ? theme.colors.primary + '15' : '#F5F5F5'
+            }]}>
+              {user?.subscription_tier === 'premium' ? (
+                <>
+                  <Ionicons name="diamond" size={14} color={theme.colors.accent} />
+                  <Text style={[styles.tierTextHero, { color: theme.colors.accent }]}>Premium Traveler</Text>
+                </>
+              ) : user?.subscription_tier === 'basic' ? (
+                <>
+                  <Ionicons name="ribbon" size={14} color={theme.colors.primary} />
+                  <Text style={[styles.tierTextHero, { color: theme.colors.primary }]}>Basic Traveler</Text>
+                </>
+              ) : (
+                <>
+                  <Ionicons name="person-outline" size={14} color={theme.colors.textSecondary} />
+                  <Text style={styles.tierTextHero}>Free Traveler</Text>
+                </>
+              )}
+            </View>
+            
+            {/* Rank - Prominent */}
+            <View style={styles.rankHeroSection}>
+              <RankBadge 
+                rank={getUserRank(progressStats?.totalPoints || 0)} 
+                size="medium"
+                showName={true}
+              />
             </View>
           </View>
           
-          {/* Stats Row - Redesigned */}
+          {/* Stats - Elegant Supporting Info */}
           {stats && progressStats && (
-            <View style={styles.statsRowCompact}>
-              <View style={styles.statItemCompact}>
-                <Ionicons name="location" size={18} color={theme.colors.primary} />
-                <Text style={styles.statNumCompact}>{progressStats.totalLandmarks || stats.total_visits || 0}</Text>
-                <Text style={styles.statLabelCompact}>Landmarks</Text>
+            <View style={styles.elegantStatsSection}>
+              <View style={styles.elegantStatItem}>
+                <Ionicons name="location" size={14} color={theme.colors.primary} />
+                <Text style={styles.elegantStatValue}>{progressStats.totalLandmarks || stats.total_visits || 0}</Text>
+                <Text style={styles.elegantStatLabel}>Landmarks</Text>
               </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statItemCompact}>
-                <Ionicons name="flag" size={18} color={theme.colors.accent} />
-                <Text style={styles.statNumCompact}>{stats.countries_visited || 0}</Text>
-                <Text style={styles.statLabelCompact}>Countries</Text>
+              <View style={styles.elegantStatItem}>
+                <Ionicons name="flag" size={14} color={theme.colors.accent} />
+                <Text style={styles.elegantStatValue}>{stats.countries_visited || 0}</Text>
+                <Text style={styles.elegantStatLabel}>Countries</Text>
               </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statItemCompact}>
-                <Ionicons name="earth" size={18} color={theme.colors.accentBronze} />
-                <Text style={styles.statNumCompact}>{stats.continents_visited || 0}</Text>
-                <Text style={styles.statLabelCompact}>Continents</Text>
+              <View style={styles.elegantStatItem}>
+                <Ionicons name="earth" size={14} color={theme.colors.accentBronze} />
+                <Text style={styles.elegantStatValue}>{stats.continents_visited || 0}</Text>
+                <Text style={styles.elegantStatLabel}>Continents</Text>
               </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statItemCompact}>
-                <Ionicons name="star" size={18} color="#C9A961" />
-                <Text style={[styles.statNumCompact, { color: '#C9A961' }]}>{progressStats.totalPoints || 0}</Text>
-                <Text style={styles.statLabelCompact}>Points</Text>
+              <View style={styles.elegantStatItem}>
+                <Ionicons name="star" size={14} color="#C9A961" />
+                <Text style={[styles.elegantStatValue, { color: '#C9A961' }]}>{progressStats.totalPoints || 0}</Text>
+                <Text style={styles.elegantStatLabel}>Points</Text>
               </View>
             </View>
           )}
