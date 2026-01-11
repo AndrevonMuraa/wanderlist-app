@@ -213,8 +213,8 @@ export default function ProfileScreen() {
 
         {/* FINAL: User Left, Rank Right, Stats Row */}
         <Surface style={styles.profileCard}>
-          {/* Top: User (Left) & Rank (Right) - Explicit Split */}
-          <View style={{ flexDirection: 'row', marginBottom: 16, width: '100%' }}>
+          {/* Top: User (Left) & Rank (Right) - Optimized Spacing */}
+          <View style={{ flexDirection: 'row', marginTop: 8, marginBottom: 12, width: '100%', alignItems: 'center' }}>
             {/* Left: User - 65% */}
             <View style={{ flex: 65, flexDirection: 'row', alignItems: 'center', paddingRight: 8 }}>
               {user?.picture ? (
@@ -255,8 +255,8 @@ export default function ProfileScreen() {
               </View>
             </View>
             
-            {/* Right: Rank - Smaller */}
-            <View style={{ flex: 35, alignItems: 'flex-end', justifyContent: 'flex-start' }}>
+            {/* Right: Rank - 35% - Vertically Centered */}
+            <View style={{ flex: 35, alignItems: 'flex-end', justifyContent: 'center' }}>
               <RankBadge 
                 rank={getUserRank(progressStats?.totalPoints || 0)} 
                 size="medium"
