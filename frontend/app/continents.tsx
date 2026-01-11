@@ -271,6 +271,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border,
     paddingHorizontal: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
   },
   tabButton: {
     flex: 1,
