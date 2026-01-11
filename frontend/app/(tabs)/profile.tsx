@@ -588,6 +588,73 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#2A2A2A',  // Explicit dark color
     marginBottom: 4,
+  compactContainer: {
+    margin: theme.spacing.md,
+  },
+  topRow: {
+    flexDirection: 'row',
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: '#FFFFFF',
+    ...theme.shadows.card,
+    marginBottom: theme.spacing.sm,
+  },
+  userSection: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+  },
+  compactProfileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: theme.spacing.sm,
+  },
+  userInfo: {
+    flex: 1,
+  },
+  compactUserName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: 4,
+  },
+  compactBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: theme.spacing.xs,
+    paddingVertical: 2,
+    borderRadius: theme.borderRadius.sm,
+    alignSelf: 'flex-start',
+  },
+  compactBadgeText: {
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  quickStats: {
+    flexDirection: 'row',
+    gap: theme.spacing.md,
+  },
+  quickStatItem: {
+    alignItems: 'center',
+  },
+  quickStatNumber: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: theme.colors.text,
+  },
+  quickStatLabel: {
+    fontSize: 9,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+    textTransform: 'uppercase',
+  },
+  compactRankSection: {
+    alignItems: 'center',
+    marginBottom: theme.spacing.sm,
+  },
+
   },
   compactStatLabel: {
     fontSize: 11,
