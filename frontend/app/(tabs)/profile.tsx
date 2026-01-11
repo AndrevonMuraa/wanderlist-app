@@ -217,74 +217,69 @@ export default function ProfileScreen() {
           </View>
         </LinearGradient>
 
-        {/* ENHANCED: User Hero Section */}
+        {/* ENHANCED: User Hero Section - Compact */}
         <Surface style={styles.profileCard}>
-          {/* User Identity - Large & Prominent */}
+          {/* User Identity - Centered & Prominent */}
           <View style={styles.userHeroSection}>
             {user?.picture ? (
               <Image source={{ uri: user.picture }} style={styles.profileImageHero} />
             ) : (
               <View style={[styles.profileImageHero, styles.defaultProfileImage]}>
-                <Ionicons name="person-outline" size={40} color={theme.colors.textSecondary} />
+                <Ionicons name="person-outline" size={32} color={theme.colors.textSecondary} />
               </View>
             )}
             <Text style={styles.userNameHero}>{user?.name}</Text>
             
-            {/* Tier Badge - Elegant */}
-            <View style={[styles.tierBadgeHero, {
-              backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '15' : 
-                               user?.subscription_tier === 'basic' ? theme.colors.primary + '15' : '#F5F5F5'
-            }]}>
-              {user?.subscription_tier === 'premium' ? (
-                <>
-                  <Ionicons name="diamond" size={14} color={theme.colors.accent} />
-                  <Text style={[styles.tierTextHero, { color: theme.colors.accent }]}>Premium Traveler</Text>
-                </>
-              ) : user?.subscription_tier === 'basic' ? (
-                <>
-                  <Ionicons name="ribbon" size={14} color={theme.colors.primary} />
-                  <Text style={[styles.tierTextHero, { color: theme.colors.primary }]}>Basic Traveler</Text>
-                </>
-              ) : (
-                <>
-                  <Ionicons name="person-outline" size={14} color={theme.colors.textSecondary} />
-                  <Text style={styles.tierTextHero}>Free Traveler</Text>
-                </>
-              )}
-            </View>
-            
-            {/* Rank - Prominent */}
-            <View style={styles.rankHeroSection}>
+            {/* Tier & Rank - Inline */}
+            <View style={styles.tierRankRow}>
+              <View style={[styles.tierBadgeHero, {
+                backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '15' : 
+                                 user?.subscription_tier === 'basic' ? theme.colors.primary + '15' : '#F5F5F5'
+              }]}>
+                {user?.subscription_tier === 'premium' ? (
+                  <>
+                    <Ionicons name="diamond" size={11} color={theme.colors.accent} />
+                    <Text style={[styles.tierTextHero, { color: theme.colors.accent }]}>Premium</Text>
+                  </>
+                ) : user?.subscription_tier === 'basic' ? (
+                  <>
+                    <Ionicons name="ribbon" size={11} color={theme.colors.primary} />
+                    <Text style={[styles.tierTextHero, { color: theme.colors.primary }]}>Basic</Text>
+                  </>
+                ) : (
+                  <Text style={styles.tierTextHero}>Free</Text>
+                )}
+              </View>
               <RankBadge 
                 rank={getUserRank(progressStats?.totalPoints || 0)} 
-                size="medium"
-                showName={true}
+                size="small"
+                showName={false}
               />
             </View>
           </View>
           
-          {/* Stats - Elegant Supporting Info */}
+          {/* Stats Grid - 2x2 Compact */}
           {stats && progressStats && (
-            <View style={styles.elegantStatsSection}>
-              <View style={styles.elegantStatItem}>
-                <Ionicons name="location" size={14} color={theme.colors.primary} />
-                <Text style={styles.elegantStatValue}>{progressStats.totalLandmarks || stats.total_visits || 0}</Text>
-                <Text style={styles.elegantStatLabel}>Landmarks</Text>
+            <View style={styles.statsGrid2x2}>
+              <View style={styles.statBox2x2}>
+                <Ionicons name="location" size={20} color="#4DB8D8" />
+                <Text style={styles.statNum2x2}>{progressStats.totalLandmarks || stats.total_visits || 0}</Text>
+                <Text style={styles.statLabel2x2}>Landmarks</Text>
               </View>
-              <View style={styles.elegantStatItem}>
-                <Ionicons name="flag" size={14} color={theme.colors.accent} />
-                <Text style={styles.elegantStatValue}>{stats.countries_visited || 0}</Text>
-                <Text style={styles.elegantStatLabel}>Countries</Text>
+              <View style={styles.statBox2x2}>
+                <Ionicons name="flag" size={20} color="#FF6B6B" />
+                <Text style={styles.statNum2x2}>{stats.countries_visited || 0}</Text>
+                <Text style={styles.statLabel2x2}>Countries</Text>
               </View>
-              <View style={styles.elegantStatItem}>
-                <Ionicons name="earth" size={14} color={theme.colors.accentBronze} />
-                <Text style={styles.elegantStatValue}>{stats.continents_visited || 0}</Text>
-                <Text style={styles.elegantStatLabel}>Continents</Text>
+              <View style={styles.statBox2x2}>
+                <Ionicons name="earth" size={20} color="#66BB6A" />
+                <Text style={styles.statNum2x2}>{stats.continents_visited || 0}</Text>
+                <Text style={styles.statLabel2x2}>Continents</Text>
               </View>
-              <View style={styles.elegantStatItem}>
-                <Ionicons name="star" size={14} color="#C9A961" />
-                <Text style={[styles.elegantStatValue, { color: '#C9A961' }]}>{progressStats.totalPoints || 0}</Text>
-                <Text style={styles.elegantStatLabel}>Points</Text>
+              <View style={styles.statBox2x2}>
+                <Ionicons name="star" size={20} color="#FFD700" />
+                <Text style={[styles.statNum2x2, { color: '#C9A961' }]}>{progressStats.totalPoints || 0}</Text>
+                <Text style={styles.statLabel2x2}>Points</Text>
               </View>
             </View>
           )}
