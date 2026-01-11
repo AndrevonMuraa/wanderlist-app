@@ -776,15 +776,20 @@ const styles = StyleSheet.create({
     padding: theme.spacing.lg,
     paddingBottom: theme.spacing.md,
   },
+  headerGradient: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.lg,
+    paddingBottom: theme.spacing.md,
+  },
   headerTitle: {
-    ...theme.typography.h1,
-    color: theme.colors.text,
-    fontWeight: '700',
-    marginBottom: theme.spacing.xs / 2,
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#fff',
+    marginBottom: 4,
   },
   headerSubtitle: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.9)',
   },
   section: {
     marginBottom: theme.spacing.lg,
