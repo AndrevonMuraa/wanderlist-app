@@ -349,6 +349,16 @@ export default function ProfileScreen() {
           />
           <Divider style={styles.divider} />
           <List.Item
+            title="About WanderList"
+            description="Learn how to use the app"
+            left={props => <List.Icon {...props} icon="information-outline" color={theme.colors.primary} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
+            onPress={() => router.push('/about')}
+            titleStyle={styles.listItemTitle}
+            descriptionStyle={styles.listItemDescription}
+          />
+          <Divider style={styles.divider} />
+          <List.Item
             title="Settings"
             description="App preferences"
             left={props => <List.Icon {...props} icon="cog-outline" color={theme.colors.primary} />}
