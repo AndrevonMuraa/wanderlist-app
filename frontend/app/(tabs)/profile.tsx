@@ -221,7 +221,7 @@ export default function ProfileScreen() {
               {user?.picture ? (
                 <Image source={{ uri: user.picture }} style={styles.profileImageLarge} />
               ) : (
-                <DefaultAvatar size={120} />
+                <DefaultAvatar name={user?.name || 'User'} size={120} />
               )}
               <View style={{ flex: 1, marginLeft: 8 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
