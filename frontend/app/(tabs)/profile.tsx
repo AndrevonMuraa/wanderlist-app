@@ -256,24 +256,49 @@ export default function ProfileScreen() {
 
         {/* Compact Stats - Quick Overview */}
         {stats && (
-          <View style={styles.compactStatsCard}>
-            <View style={styles.compactStatsRow}>
-              <View style={styles.compactStat}>
-                <Text style={styles.compactStatNumber}>{stats.total_visits || 0}</Text>
-                <Text style={styles.compactStatLabel}>Visits</Text>
+          <Surface style={{
+            marginHorizontal: 16,
+            marginTop: 8,
+            marginBottom: 16,
+            paddingVertical: 20,
+            paddingHorizontal: 16,
+            borderRadius: 16,
+            backgroundColor: '#FFFFFF',
+            elevation: 3,
+          }}>
+            <View style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+            }}>
+              <View style={{ alignItems: 'center', flex: 1 }}>
+                <Text style={{ fontSize: 22, fontWeight: '800', color: '#2A2A2A', marginBottom: 4 }}>
+                  {stats.total_visits || 0}
+                </Text>
+                <Text style={{ fontSize: 11, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
+                  Visits
+                </Text>
               </View>
-              <View style={styles.compactStatDivider} />
-              <View style={styles.compactStat}>
-                <Text style={styles.compactStatNumber}>{stats.countries_visited || 0}</Text>
-                <Text style={styles.compactStatLabel}>Countries</Text>
+              <View style={{ width: 1, height: 35, backgroundColor: '#E0E0E0' }} />
+              <View style={{ alignItems: 'center', flex: 1 }}>
+                <Text style={{ fontSize: 22, fontWeight: '800', color: '#2A2A2A', marginBottom: 4 }}>
+                  {stats.countries_visited || 0}
+                </Text>
+                <Text style={{ fontSize: 11, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
+                  Countries
+                </Text>
               </View>
-              <View style={styles.compactStatDivider} />
-              <View style={styles.compactStat}>
-                <Text style={styles.compactStatNumber}>{progressStats?.totalPoints || 0}</Text>
-                <Text style={styles.compactStatLabel}>Points</Text>
+              <View style={{ width: 1, height: 35, backgroundColor: '#E0E0E0' }} />
+              <View style={{ alignItems: 'center', flex: 1 }}>
+                <Text style={{ fontSize: 22, fontWeight: '800', color: '#2A2A2A', marginBottom: 4 }}>
+                  {progressStats?.totalPoints || 0}
+                </Text>
+                <Text style={{ fontSize: 11, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
+                  Points
+                </Text>
               </View>
             </View>
-          </View>
+          </Surface>
         )}
 
 
