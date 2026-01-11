@@ -258,28 +258,34 @@ export default function ProfileScreen() {
             </View>
           </View>
           
-          {/* Stats Grid - 2x2 Compact */}
+          {/* Stats Grid - 2x2 Explicit Rows */}
           {stats && progressStats && (
             <View style={styles.statsGrid2x2}>
-              <View style={styles.statBox2x2}>
-                <Ionicons name="location" size={20} color="#4DB8D8" />
-                <Text style={styles.statNum2x2}>{progressStats.totalLandmarks || stats.total_visits || 0}</Text>
-                <Text style={styles.statLabel2x2}>Landmarks</Text>
+              {/* Row 1 */}
+              <View style={styles.statsRow}>
+                <View style={styles.statBox2x2}>
+                  <Ionicons name="location" size={20} color="#4DB8D8" />
+                  <Text style={styles.statNum2x2}>{progressStats.totalLandmarks || stats.total_visits || 0}</Text>
+                  <Text style={styles.statLabel2x2}>Landmarks</Text>
+                </View>
+                <View style={styles.statBox2x2}>
+                  <Ionicons name="flag" size={20} color="#FF6B6B" />
+                  <Text style={styles.statNum2x2}>{stats.countries_visited || 0}</Text>
+                  <Text style={styles.statLabel2x2}>Countries</Text>
+                </View>
               </View>
-              <View style={styles.statBox2x2}>
-                <Ionicons name="flag" size={20} color="#FF6B6B" />
-                <Text style={styles.statNum2x2}>{stats.countries_visited || 0}</Text>
-                <Text style={styles.statLabel2x2}>Countries</Text>
-              </View>
-              <View style={styles.statBox2x2}>
-                <Ionicons name="earth" size={20} color="#66BB6A" />
-                <Text style={styles.statNum2x2}>{stats.continents_visited || 0}</Text>
-                <Text style={styles.statLabel2x2}>Continents</Text>
-              </View>
-              <View style={styles.statBox2x2}>
-                <Ionicons name="star" size={20} color="#FFD700" />
-                <Text style={[styles.statNum2x2, { color: '#C9A961' }]}>{progressStats.totalPoints || 0}</Text>
-                <Text style={styles.statLabel2x2}>Points</Text>
+              {/* Row 2 */}
+              <View style={styles.statsRow}>
+                <View style={styles.statBox2x2}>
+                  <Ionicons name="earth" size={20} color="#66BB6A" />
+                  <Text style={styles.statNum2x2}>{stats.continents_visited || 0}</Text>
+                  <Text style={styles.statLabel2x2}>Continents</Text>
+                </View>
+                <View style={styles.statBox2x2}>
+                  <Ionicons name="star" size={20} color="#FFD700" />
+                  <Text style={[styles.statNum2x2, { color: '#C9A961' }]}>{progressStats.totalPoints || 0}</Text>
+                  <Text style={styles.statLabel2x2}>Points</Text>
+                </View>
               </View>
             </View>
           )}
