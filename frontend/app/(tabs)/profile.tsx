@@ -231,7 +231,15 @@ export default function ProfileScreen() {
                 </View>
               )}
               <View style={{ flex: 1, marginLeft: 12 }}>
-                <Text style={styles.userNameLarge}>{user?.name}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
+                  <Text style={styles.userNameLarge}>{user?.name}</Text>
+                  <TouchableOpacity 
+                    onPress={() => router.push('/edit-profile')}
+                    style={{ marginLeft: 8, padding: 4 }}
+                  >
+                    <Ionicons name="create-outline" size={18} color={theme.colors.primary} />
+                  </TouchableOpacity>
+                </View>
                 <View style={[styles.tierBadgeLarge, {
                   backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '15' : 
                                    user?.subscription_tier === 'basic' ? theme.colors.primary + '15' : '#F5F5F5'
