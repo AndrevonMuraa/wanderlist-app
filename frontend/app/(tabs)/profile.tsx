@@ -465,17 +465,17 @@ const styles = StyleSheet.create({
   },
   profileCard: {
     margin: theme.spacing.md,
-    padding: theme.spacing.xl,
+    padding: theme.spacing.lg,  // Reduced from xl to lg
     borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
     alignItems: 'center',
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: theme.spacing.md,
+    width: 80,  // Reduced from 100
+    height: 80,
+    borderRadius: 40,
+    marginBottom: theme.spacing.sm,  // Reduced from md
   },
   defaultProfileImage: {
     backgroundColor: theme.colors.surfaceTinted,
