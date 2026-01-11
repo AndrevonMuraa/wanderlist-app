@@ -152,28 +152,27 @@ export default function ContinentsScreen() {
       {/* Spacing for smooth transition */}
       <View style={{ height: 16 }} />
 
-      {/* Quick Navigation Tabs */}
-      <View style={styles.quickNav}>
+      {/* Quick Navigation Tabs - Exactly like original */}
+      <View style={styles.tabContainer}>
         <TouchableOpacity 
-          style={[styles.quickNavButton, styles.quickNavButtonActive]}
-          onPress={() => {}}
+          style={[styles.tabButton, styles.tabButtonActive]}
         >
-          <Ionicons name="earth" size={18} color={theme.colors.primary} />
-          <Text style={[styles.quickNavText, { color: theme.colors.primary }]}>Explore</Text>
+          <Ionicons name="earth" size={20} color={theme.colors.primary} />
+          <Text style={[styles.tabLabel, styles.tabLabelActive]}>Explore</Text>
         </TouchableOpacity>
         <TouchableOpacity 
-          style={styles.quickNavButton}
+          style={styles.tabButton}
           onPress={() => router.push('/bucket-list')}
         >
-          <Ionicons name="bookmark" size={18} color={theme.colors.textSecondary} />
-          <Text style={styles.quickNavText}>Bucket List</Text>
+          <Ionicons name="bookmark" size={20} color={theme.colors.textSecondary} />
+          <Text style={styles.tabLabel}>Bucket List</Text>
         </TouchableOpacity>
         <TouchableOpacity 
-          style={styles.quickNavButton}
+          style={styles.tabButton}
           onPress={() => router.push('/trips')}
         >
-          <Ionicons name="map" size={18} color={theme.colors.textSecondary} />
-          <Text style={styles.quickNavText}>My Trips</Text>
+          <Ionicons name="map" size={20} color={theme.colors.textSecondary} />
+          <Text style={styles.tabLabel}>My Trips</Text>
         </TouchableOpacity>
       </View>
 
