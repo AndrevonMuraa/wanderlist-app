@@ -653,6 +653,62 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   compactStatDivider: {
+  profileRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing.md,
+  },
+  profileImageCompact: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: theme.spacing.md,
+  },
+  profileInfo: {
+    flex: 1,
+  },
+  userNameCompact: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: 6,
+  },
+  tierBadgeCompact: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    alignSelf: 'flex-start',
+  },
+  tierText: {
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  statsRowCompact: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingTop: theme.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+  },
+  statItemCompact: {
+    alignItems: 'center',
+  },
+  statNumCompact: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: theme.colors.text,
+    marginBottom: 4,
+  },
+  statLabelCompact: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+    textTransform: 'uppercase',
+  },
+
     width: 1,
     height: 35,
     backgroundColor: '#E0E0E0',  // Explicit border color
