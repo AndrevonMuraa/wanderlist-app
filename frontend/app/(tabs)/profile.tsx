@@ -745,9 +745,9 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   profileImageLarge: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 85,
+    height: 85,
+    borderRadius: 42.5,
     marginRight: theme.spacing.md,
   },
   userInfoLeft: {
