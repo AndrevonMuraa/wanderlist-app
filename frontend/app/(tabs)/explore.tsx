@@ -55,20 +55,7 @@ export default function ExploreTab() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Tab Navigation */}
-      <View style={styles.tabContainer}>
-        {renderTabButton('explore', 'earth', 'Explore')}
-        {renderTabButton('bucket', 'heart', 'Bucket List')}
-        {renderTabButton('trips', 'airplane', 'My Trips')}
-        <TouchableOpacity
-          style={styles.searchButton}
-          onPress={() => router.push('/landmark-search')}
-        >
-          <Ionicons name="search" size={20} color={theme.colors.primary} />
-        </TouchableOpacity>
-      </View>
-
-      {/* Content */}
+      {/* Content First */}
       <View style={styles.content}>
         {renderContent()}
       </View>
