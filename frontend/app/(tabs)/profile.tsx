@@ -718,6 +718,68 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
   },
   userNameHero: {
+  userHeroSection: {
+    alignItems: 'center',
+    marginBottom: theme.spacing.md,
+  },
+  profileImageHero: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    marginBottom: theme.spacing.sm,
+  },
+  userNameHero: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: theme.spacing.xs,
+  },
+  tierRankRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    marginTop: theme.spacing.xs,
+  },
+  tierBadgeHero: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  tierTextHero: {
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  statsGrid2x2: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.spacing.sm,
+    paddingTop: theme.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+    width: '100%',
+  },
+  statBox2x2: {
+    width: '48%',
+    alignItems: 'center',
+    paddingVertical: theme.spacing.sm,
+  },
+  statNum2x2: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: theme.colors.text,
+    marginTop: 4,
+    marginBottom: 2,
+  },
+  statLabel2x2: {
+    fontSize: 9,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+    textTransform: 'uppercase',
+  },
+
     fontSize: 22,
     fontWeight: '700',
     color: theme.colors.text,
