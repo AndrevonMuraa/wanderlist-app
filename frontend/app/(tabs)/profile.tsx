@@ -244,7 +244,7 @@ export default function ProfileScreen() {
             </View>
           </View>
           
-          {/* Feature Grid - 2x2 */}
+          {/* Feature Grid - 3 Cards */}
           <View style={styles.featureGrid}>
             <TouchableOpacity 
               style={[styles.gridCard, { backgroundColor: theme.colors.primary + '10' }]}
@@ -252,15 +252,6 @@ export default function ProfileScreen() {
             >
               <Ionicons name="folder-multiple" size={32} color={theme.colors.primary} />
               <Text style={styles.gridCardTitle}>Collections</Text>
-              <Ionicons name="diamond" size={14} color={theme.colors.accent} />
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={[styles.gridCard, { backgroundColor: theme.colors.accent + '10' }]}
-              onPress={() => router.push('/analytics')}
-            >
-              <Ionicons name="analytics" size={32} color={theme.colors.accent} />
-              <Text style={styles.gridCardTitle}>Analytics</Text>
               <Ionicons name="diamond" size={14} color={theme.colors.accent} />
             </TouchableOpacity>
             
