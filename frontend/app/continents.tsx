@@ -270,19 +270,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'rgba(255,255,255,0.9)',
   },
-
-  headerTitle: {
-    ...theme.typography.h1,
-    fontSize: 26,
-    fontWeight: '800',
-    color: theme.colors.text,
-    marginBottom: theme.spacing.xs / 2,
-  },
-  headerSubtitle: {
-    ...theme.typography.body,
-    fontSize: 14,
-    color: theme.colors.textSecondary,
-  },
   scrollView: {
     flex: 1,
   },
