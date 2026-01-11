@@ -773,6 +773,49 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: theme.spacing.lg,
   },
+  heroRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing.md,
+  },
+  userLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  profileImageLarge: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginRight: theme.spacing.md,
+  },
+  userInfoLeft: {
+    flex: 1,
+  },
+  userNameLarge: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: 6,
+  },
+  tierBadgeLarge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 14,
+    alignSelf: 'flex-start',
+  },
+  tierTextLarge: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  rankRight: {
+    marginLeft: theme.spacing.sm,
+  },
+
   profileImageHero: {
     width: 90,
     height: 90,
