@@ -235,8 +235,8 @@ export default function ProfileScreen() {
                   </TouchableOpacity>
                 </View>
                 <View style={[styles.tierBadgeLarge, {
-                  backgroundColor: user?.subscription_tier === 'premium' ? theme.colors.accent + '15' : 
-                                   user?.subscription_tier === 'basic' ? theme.colors.primary + '15' : '#F5F5F5'
+                  backgroundColor: user?.subscription_tier === 'premium' ? 'transparent' : 
+                                   user?.subscription_tier === 'basic' ? theme.colors.primary + '10' : '#F8F8F8'
                 }]}>
                   {user?.subscription_tier === 'premium' ? (
                     <>
