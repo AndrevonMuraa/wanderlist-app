@@ -190,6 +190,20 @@ export default function ProfileScreen() {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.headerIconButton}
+              onPress={async () => {
+                if (stats) {
+                  await shareProgress(
+                    stats.total_visits || 0,
+                    stats.countries_visited || 0,
+                    progressStats?.totalPoints || 0
+                  );
+                }
+              }}
+            >
+              <Ionicons name="share-social-outline" size={26} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.headerIconButton}
               onPress={() => router.push('/about')}
             >
               <Ionicons name="information-circle-outline" size={28} color="#fff" />
