@@ -455,8 +455,8 @@ const styles = StyleSheet.create({
   },
   cardArrow: {
     position: 'absolute',
-    right: theme.spacing.md,
-    bottom: theme.spacing.md,
+    right: 8,
+    bottom: 8,
     width: 40,
     height: 40,
     borderRadius: 20,
