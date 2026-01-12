@@ -387,13 +387,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   cardTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '700',
     color: '#fff',
     marginBottom: theme.spacing.xs / 2,
     textShadowColor: 'rgba(0, 0, 0, 0.5)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   cardDescription: {
     fontSize: 12,
