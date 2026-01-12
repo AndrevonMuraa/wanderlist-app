@@ -470,6 +470,8 @@ export default function TripsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: theme.colors.background,
+  },
   headerGradient: {
     padding: theme.spacing.md,
     paddingTop: theme.spacing.lg,
