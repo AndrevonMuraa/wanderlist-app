@@ -312,7 +312,7 @@ export default function TripsScreen() {
           style={styles.tabButton}
           onPress={() => router.push('/bucket-list')}
         >
-          <Iconicons name="bookmark" size={20} color={theme.colors.textSecondary} />
+          <Ionicons name="bookmark" size={20} color={theme.colors.textSecondary} />
           <Text style={styles.tabLabel}>Bucket List</Text>
         </TouchableOpacity>
         <TouchableOpacity 
