@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
   cardGradient: {
     ...StyleSheet.absoluteFillObject,
     padding: theme.spacing.md,
-    paddingTop: theme.spacing.lg,
+    paddingTop: theme.spacing.lg + 4,
     justifyContent: 'space-between',
   },
   cardTopRow: {
