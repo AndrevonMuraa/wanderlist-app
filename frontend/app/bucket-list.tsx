@@ -263,7 +263,8 @@ export default function BucketListScreen() {
 
         <View style={{ height: theme.spacing.xl }} />
       </ScrollView>
-    </View>
+      <PersistentTabBar />
+    </SafeAreaView>
   );
 }
 
