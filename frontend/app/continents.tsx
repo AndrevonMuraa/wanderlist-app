@@ -374,8 +374,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 16,
     position: 'absolute',
-    top: 8,
-    right: 8,
+    top: 4,
+    right: 4,
   },
   pointsText: {
     fontSize: 13,
