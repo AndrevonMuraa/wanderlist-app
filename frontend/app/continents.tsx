@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: theme.spacing.xs,
-    paddingVertical: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
     borderBottomWidth: 2,
     borderBottomColor: 'transparent',
   },
