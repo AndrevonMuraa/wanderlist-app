@@ -277,7 +277,52 @@ export default function TripsScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      {/* Turquoise Header - Gold Standard */}
+      <LinearGradient
+        colors={[theme.colors.primary, theme.colors.primaryDark]}
+        style={styles.headerGradient}
+      >
+        <View style={styles.headerContent}>
+          <View>
+            <Text style={styles.headerTitle}>My Trips</Text>
+            <Text style={styles.headerSubtitle}>
+              {trips.length === 0 ? 'Plan your adventures' : `${trips.length} trips`}
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={styles.createButton}
+            onPress={() => setCreateModalVisible(true)}
+          >
+            <Ionicons name="add" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+
+      {/* Navigation Tabs */}
+      <View style={styles.tabContainer}>
+        <TouchableOpacity 
+          style={styles.tabButton}
+          onPress={() => router.push('/continents')}
+        >
+          <Ionicons name="earth" size={20} color={theme.colors.textSecondary} />
+          <Text style={styles.tabLabel}>Explore</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.tabButton}
+          onPress={() => router.push('/bucket-list')}
+        >
+          <Iconicons name="bookmark" size={20} color={theme.colors.textSecondary} />
+          <Text style={styles.tabLabel}>Bucket List</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.tabButton, styles.tabButtonActive]}
+        >
+          <Ionicons name="map" size={20} color={theme.colors.primary} />
+          <Text style={[styles.tabLabel, styles.tabLabelActive]}>My Trips</Text>
+        </TouchableOpacity>
+      </View>
+
       <ScrollView
         style={styles.scrollView}
         refreshControl={
