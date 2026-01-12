@@ -241,9 +241,9 @@ export default function ContinentsScreen() {
                     </View>
                   )}
 
-                  {/* Arrow Icon */}
+                  {/* Arrow Icon - Transparent */}
                   <View style={styles.cardArrow}>
-                    <Ionicons name="arrow-forward" size={24} color="#fff" />
+                    <Ionicons name="arrow-forward" size={24} color="rgba(255,255,255,0.6)" />
                   </View>
                 </View>
               </LinearGradient>
