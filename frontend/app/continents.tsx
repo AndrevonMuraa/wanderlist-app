@@ -144,7 +144,7 @@ export default function ContinentsScreen() {
             style={styles.searchButton}
             onPress={() => router.push('/search')}
           >
-            <Ionicons name="search" size={24} color="#fff" />
+            <Ionicons name="search" size={22} color={theme.colors.primary} />
           </TouchableOpacity>
         </View>
       </LinearGradient>
