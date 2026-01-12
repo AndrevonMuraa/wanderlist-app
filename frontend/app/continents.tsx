@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     ...theme.shadows.sm,
   },
   headerGradient: {
-    paddingHorizontal: theme.spacing.lg,
+    padding: theme.spacing.md,
     paddingTop: theme.spacing.lg,
     paddingBottom: theme.spacing.md,
   },
