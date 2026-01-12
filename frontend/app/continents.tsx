@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.sm,
   },
   card: {
-    height: 105,
+    height: 115,
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
     marginBottom: theme.spacing.sm,
