@@ -480,7 +480,8 @@ export default function TripsScreen() {
           </View>
         </KeyboardAvoidingView>
       </Modal>
-    </View>
+      <PersistentTabBar />
+    </SafeAreaView>
   );
 }
 
