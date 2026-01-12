@@ -519,9 +519,6 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: theme.colors.primary,
   },
-
-    backgroundColor: theme.colors.background,
-  },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
