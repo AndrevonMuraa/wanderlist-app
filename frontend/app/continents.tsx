@@ -374,8 +374,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 16,
     position: 'absolute',
-    top: theme.spacing.md,
-    right: theme.spacing.md,
+    top: 8,
+    right: 8,
   },
   pointsText: {
     fontSize: 13,
