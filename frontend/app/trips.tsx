@@ -330,24 +330,6 @@ export default function TripsScreen() {
         }
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.title}>My Trips</Text>
-            <Text style={styles.subtitle}>
-              {trips.length === 0
-                ? 'No trips planned yet'
-                : `${trips.length} ${trips.length === 1 ? 'trip' : 'trips'}`}
-            </Text>
-          </View>
-          <TouchableOpacity
-            style={styles.createButton}
-            onPress={() => setCreateModalVisible(true)}
-          >
-            <Ionicons name="add" size={24} color="#fff" />
-          </TouchableOpacity>
-        </View>
-
         {/* Filters */}
         <View style={styles.filterContainer}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
