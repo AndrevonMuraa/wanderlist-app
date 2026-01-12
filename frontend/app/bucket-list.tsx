@@ -183,7 +183,46 @@ export default function BucketListScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      {/* Turquoise Header - Gold Standard */}
+      <LinearGradient
+        colors={[theme.colors.primary, theme.colors.primaryDark]}
+        style={styles.headerGradient}
+      >
+        <View style={styles.headerContent}>
+          <View>
+            <Text style={styles.headerTitle}>Bucket List</Text>
+            <Text style={styles.headerSubtitle}>
+              {bucketList.length === 0 ? 'Save landmarks to visit' : `${bucketList.length} saved`}
+            </Text>
+          </View>
+        </View>
+      </LinearGradient>
+
+      {/* Navigation Tabs */}
+      <View style={styles.tabContainer}>
+        <TouchableOpacity 
+          style={styles.tabButton}
+          onPress={() => router.push('/continents')}
+        >
+          <Ionicons name="earth" size={20} color={theme.colors.textSecondary} />
+          <Text style={styles.tabLabel}>Explore</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.tabButton, styles.tabButtonActive]}
+        >
+          <Ionicons name="bookmark" size={20} color={theme.colors.primary} />
+          <Text style={[styles.tabLabel, styles.tabLabelActive]}>Bucket List</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.tabButton}
+          onPress={() => router.push('/trips')}
+        >
+          <Ionicons name="map" size={20} color={theme.colors.textSecondary} />
+          <Text style={styles.tabLabel}>My Trips</Text>
+        </TouchableOpacity>
+      </View>
+
       <ScrollView
         style={styles.scrollView}
         refreshControl={
