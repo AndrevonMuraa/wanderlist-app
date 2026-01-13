@@ -215,17 +215,40 @@ export default function LandmarksScreen() {
         colors={['#3BB8C3', '#2AA8B3']}
         style={styles.header}
       >
-        <TouchableOpacity 
-          onPress={() => router.back()} 
-          style={styles.backButton}
-          activeOpacity={0.7}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>{name}</Text>
-          <Text style={styles.headerSubtitle}>{landmarks.length} Landmarks</Text>
+        {/* Branding Row */}
+        <View style={styles.brandingRow}>
+          <TouchableOpacity 
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="earth" size={18} color="#fff" />
+            <Text style={styles.brandingText}>WanderList</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={styles.profileButton}
+            onPress={() => router.push('/(tabs)/profile')}
+          >
+            <View style={styles.profileCircle}>
+              <Text style={styles.profileInitial}>U</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        
+        {/* Title Row with Back Button */}
+        <View style={styles.titleRow}>
+          <TouchableOpacity 
+            onPress={() => router.back()} 
+            style={styles.backButton}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="arrow-back" size={22} color="#fff" />
+          </TouchableOpacity>
+          <View style={styles.headerContent}>
+            <Text style={styles.headerTitle}>{name}</Text>
+            <Text style={styles.headerSubtitle}>{landmarks.length} Landmarks</Text>
+          </View>
         </View>
       </LinearGradient>
 
