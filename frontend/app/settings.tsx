@@ -46,8 +46,26 @@ export default function SettingsScreen() {
 
   const updatePrivacy = async (value: 'public' | 'friends' | 'private') => {
     setDefaultPrivacy(value);
-    // TODO: Save to backend
-    Alert.alert('Updated', `Default privacy set to ${value}`);
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/auth/privacy`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ privacy: value }),
+      });
+      
+      if (response.ok) {
+        Alert.alert('Updated', `Default privacy set to ${value}`);
+      } else {
+        Alert.alert('Error', 'Failed to update privacy setting');
+      }
+    } catch (error) {
+      console.error('Error updating privacy:', error);
+      Alert.alert('Error', 'Failed to update privacy setting');
+    }
   };
 
   return (
