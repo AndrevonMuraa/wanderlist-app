@@ -561,40 +561,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: theme.colors.background,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.md,
-    backgroundColor: theme.colors.background,
-  },
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  logo: {
-    ...theme.typography.h2,
-    color: theme.colors.text,
-    marginLeft: theme.spacing.sm,
-    fontWeight: '700',
-  },
-  profileButton: {
-    padding: theme.spacing.xs,
-  },
-  profileCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: theme.colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileInitial: {
-    ...theme.typography.body,
-    color: '#fff',
-    fontWeight: '700',
-  },
   searchContainer: {
     paddingHorizontal: theme.spacing.md,
     marginBottom: theme.spacing.md,
