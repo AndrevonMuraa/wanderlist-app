@@ -361,9 +361,11 @@ export default function ExploreCountriesScreen() {
 
     return (
       <View>
-        {/* Universal Turquoise Gradient Header */}
+        {/* Universal Gradient Header - Testing "Mark as Visited" colors */}
         <LinearGradient
-          colors={['#3BB8C3', '#2AA8B3']}
+          colors={['#4DB8D8', '#E8DCC8']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           style={styles.gradientHeader}
         >
           {/* Branding Row */}
