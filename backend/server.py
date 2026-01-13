@@ -2954,6 +2954,53 @@ async def delete_country_visit(country_visit_id: str, current_user: User = Depen
     
     return {"message": "Country visit deleted"}
 
+@api_router.put("/country-visits/{country_visit_id}")
+async def update_country_visit(country_visit_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update a country visit (diary entry)"""
+    # Verify ownership
+    country_visit = await db.country_visits.find_one({
+        "country_visit_id": country_visit_id,
+        "user_id": current_user.user_id
+    })
+    
+    if not country_visit:
+        raise HTTPException(status_code=404, detail="Country visit not found")
+    
+    # Build update fields
+    update_fields = {}
+    if "diary" in data:
+        update_fields["diary"] = data["diary"]
+    if "visibility" in data and data["visibility"] in ["public", "friends", "private"]:
+        update_fields["visibility"] = data["visibility"]
+    
+    if not update_fields:
+        raise HTTPException(status_code=400, detail="No valid fields to update")
+    
+    # Update country visit
+    await db.country_visits.update_one(
+        {"country_visit_id": country_visit_id},
+        {"$set": update_fields}
+    )
+    
+    # Also update the associated activity if diary changed
+    if "diary" in update_fields:
+        await db.activities.update_many(
+            {"country_visit_id": country_visit_id},
+            {"$set": {"diary": update_fields["diary"]}}
+        )
+    if "visibility" in update_fields:
+        await db.activities.update_many(
+            {"country_visit_id": country_visit_id},
+            {"$set": {"visibility": update_fields["visibility"]}}
+        )
+    
+    # Return updated visit
+    updated_visit = await db.country_visits.find_one(
+        {"country_visit_id": country_visit_id},
+        {"_id": 0}
+    )
+    return updated_visit
+
 # ============= END COUNTRY VISIT ENDPOINTS =============
 
 # ============= END ACTIVITY FEED ENDPOINTS =============
