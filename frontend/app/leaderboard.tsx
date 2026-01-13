@@ -223,16 +223,33 @@ export default function LeaderboardScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#1a1a1a" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Leaderboard</Text>
-        <View style={styles.headerRight}>
+      {/* Universal Header with Branding */}
+      <LinearGradient
+        colors={['#3BB8C3', '#2AA8B3']}
+        style={styles.headerGradient}
+      >
+        {/* Top Row: Branding + Back */}
+        <View style={styles.brandingRow}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={22} color="#fff" />
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="earth" size={18} color="#fff" />
+            <Text style={styles.brandingText}>WanderList</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Main Content */}
+        <View style={styles.headerMain}>
+          <Text style={styles.headerTitleNew}>Leaderboard</Text>
           <Ionicons name="trophy" size={24} color="#FFD700" />
         </View>
-      </View>
+        <Text style={styles.headerSubtitle}>Compete with travelers worldwide</Text>
+      </LinearGradient>
 
       <ScrollView
         style={styles.content}
