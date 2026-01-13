@@ -603,7 +603,9 @@ export default function SocialHubScreen() {
       >
         {/* Universal Header with Branding */}
         <LinearGradient
-          colors={['#3BB8C3', '#2AA8B3']}
+          colors={gradients.oceanToSand}
+          start={gradients.horizontal.start}
+          end={gradients.horizontal.end}
           style={styles.headerGradient}
         >
           {/* Top Row: Branding + Profile */}
@@ -631,7 +633,6 @@ export default function SocialHubScreen() {
 
           {/* Main Content */}
           <Text style={styles.headerTitle}>Social Hub</Text>
-          <Text style={styles.headerSubtitle}>Connect with your travel community</Text>
         </LinearGradient>
 
         {/* Activity Feed Section */}
