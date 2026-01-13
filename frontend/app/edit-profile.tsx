@@ -153,11 +153,9 @@ export default function EditProfileScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
       >
-        {/* Header */}
+        {/* Universal Header */}
         <LinearGradient
-          colors={[theme.colors.primary, theme.colors.secondary]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
+          colors={['#3BB8C3', '#2AA8B3']}
           style={styles.header}
         >
           <TouchableOpacity onPress={() => router.push('/(tabs)/profile')} style={styles.backButton}>
