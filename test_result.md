@@ -382,6 +382,30 @@ backend:
         agent: "testing"
         comment: "✅ RETESTED - TRIP PLANNING WORKING PERFECTLY! Full CRUD flow tested successfully (6/6 tests passed - 100% success rate): ✅ POST /api/trips: Created trip 'European Adventure 2024' with destination, dates, budget, and notes. ✅ GET /api/trips: Retrieved user trips with landmark_count and visited_count fields. ✅ GET /api/trips/{id}: Retrieved full trip details with proper status and landmarks array. ✅ POST /api/trips/{id}/landmarks: Successfully added Eiffel Tower to trip with day_number and notes. ✅ PUT /api/trips/{id}/landmarks/{id}/visited?visited=true: Successfully marked landmark as visited in trip (fixed query parameter requirement). ✅ DELETE /api/trips/{id}: Successfully deleted trip and all associated data. All trip planning endpoints confirmed production-ready!"
 
+  - task: "Country Visits API endpoints"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "🎉 COUNTRY VISITS API TESTING COMPLETE - ALL FEATURES WORKING PERFECTLY! ✅ COMPREHENSIVE TESTING RESULTS (8/8 tests passed - 100% success rate): ✅ POST /api/country-visits: Successfully creates country visit with country_id (france), photos (base64 array, max 10), diary_notes, visibility settings. Awards 50 points bonus as expected. Returns country_visit_id and points_earned correctly. ✅ GET /api/country-visits: Returns user's country visits list with all required fields (country_visit_id, country_name, continent, photos, points_earned). Retrieved 4 existing visits successfully. ✅ GET /api/country-visits/{country_visit_id}: Returns specific visit details including country name (France), continent (Europe), photos array, diary notes. All data properly structured. ✅ DELETE /api/country-visits/{country_visit_id}: Successfully deletes country visit and confirms deletion with 404 verification. Properly removes associated activities and deducts points. ✅ AUTHENTICATION: All endpoints properly require JWT authentication (401 for unauthenticated requests). ✅ COUNTRY LOOKUP: Backend correctly looks up country_name and continent from country_id. ✅ POINTS SYSTEM: 50 points awarded per country visit as specified. All country visits endpoints are production-ready with full CRUD operations!"
+
+  - task: "Profile Update API endpoint"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ PROFILE UPDATE API WORKING PERFECTLY! ✅ PUT /api/auth/profile: Successfully updates all profile fields including name (string), picture (base64 image string), bio (string, max 200 chars), and location (string). All fields updated correctly and returned in response. Profile picture upload supports base64 image format as required. Bio character limit properly enforced at 200 characters. Authentication required and working correctly. All profile update functionality is production-ready!"
+
 frontend:
   - task: "Authentication Context with Google and JWT"
     implemented: true
