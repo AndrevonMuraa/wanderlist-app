@@ -146,7 +146,7 @@ export default function ContinentsScreen() {
       <View style={[styles.contentContainer, { paddingTop: fixedBarHeight }]}>
         {/* Sub Header with title - Scrolls with content */}
         <LinearGradient
-          colors={['#35B0BB', '#2AA8B3']}
+          colors={['#3BB8C3', '#2AA8B3']}
           style={styles.subHeaderGradient}
         >
           <View style={styles.mainRow}>
