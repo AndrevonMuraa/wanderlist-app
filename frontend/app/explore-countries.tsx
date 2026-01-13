@@ -8,7 +8,7 @@ import { BACKEND_URL } from '../utils/config';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import theme from '../styles/theme';
+import theme, { gradients } from '../styles/theme';
 import { CountryCardSkeleton } from '../components/Skeleton';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 import { AddCountryVisitModal } from '../components/AddCountryVisitModal';
