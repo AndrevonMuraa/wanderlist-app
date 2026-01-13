@@ -408,6 +408,16 @@ const styles = StyleSheet.create({
     padding: theme.spacing.lg,
     justifyContent: 'space-between',
   },
+  // Card Top Section (Title + Points)
+  cardTopSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  cardTitleSection: {
+    flex: 1,
+    marginRight: theme.spacing.md,
+  },
   cardTopRow: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -426,6 +436,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
   },
+  // Card Bottom Section (Stats + Arrow)
+  cardBottomSection: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+  },
   cardContent: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -434,12 +450,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '800',
     color: '#fff',
-    marginBottom: theme.spacing.xs,
+    marginBottom: 4,
   },
   cardDescription: {
     fontSize: 14,
     color: 'rgba(255, 255, 255, 0.9)',
-    marginBottom: theme.spacing.sm,
   },
   progressSection: {
     marginTop: theme.spacing.xs,
