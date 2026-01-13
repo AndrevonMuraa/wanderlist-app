@@ -152,10 +152,10 @@ export const FixedTopBar: React.FC<{ onProfilePress?: () => void }> = ({ onProfi
 
   return (
     <LinearGradient
-      colors={['#3BB8C3', '#35B0BB']}
+      colors={['#3BB8C3', '#3BB8C3']}
       style={[
         styles.fixedBar,
-        { paddingTop: Platform.OS === 'ios' ? insets.top : StatusBar.currentHeight || 24 }
+        { paddingTop: Platform.OS === 'ios' ? insets.top : StatusBar.currentHeight || 20 }
       ]}
     >
       <TouchableOpacity 
