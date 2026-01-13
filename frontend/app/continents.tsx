@@ -11,13 +11,13 @@ import { useAuth } from '../contexts/AuthContext';
 
 const { width } = Dimensions.get('window');
 
-// Continent data
+// Continent data - matches backend continents
 const CONTINENTS = [
   {
     id: 'europe',
     name: 'Europe',
-    countries: 12,
-    landmarks: 48,
+    countries: 10,
+    landmarks: 113,
     image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800',
     gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
     totalPoints: 2400,
@@ -26,38 +26,28 @@ const CONTINENTS = [
   {
     id: 'asia',
     name: 'Asia',
-    countries: 15,
-    landmarks: 52,
+    countries: 10,
+    landmarks: 116,
     image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800',
     gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
     totalPoints: 3100,
     description: 'Ancient traditions & temples',
   },
   {
-    id: 'north-america',
-    name: 'North America',
-    countries: 8,
-    landmarks: 36,
+    id: 'americas',
+    name: 'Americas',
+    countries: 10,
+    landmarks: 113,
     image: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800',
     gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
-    totalPoints: 1800,
-    description: 'Natural wonders & cities',
-  },
-  {
-    id: 'south-america',
-    name: 'South America',
-    countries: 10,
-    landmarks: 28,
-    image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800',
-    gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
-    totalPoints: 1400,
-    description: 'Vibrant cultures & rainforests',
+    totalPoints: 3200,
+    description: 'From Canada to Patagonia',
   },
   {
     id: 'africa',
     name: 'Africa',
-    countries: 12,
-    landmarks: 32,
+    countries: 10,
+    landmarks: 103,
     image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800',
     gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
     totalPoints: 1600,
@@ -66,8 +56,8 @@ const CONTINENTS = [
   {
     id: 'oceania',
     name: 'Oceania',
-    countries: 5,
-    landmarks: 20,
+    countries: 8,
+    landmarks: 83,
     image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800',
     gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
     totalPoints: 1000,
