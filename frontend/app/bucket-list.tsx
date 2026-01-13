@@ -336,6 +336,34 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: theme.colors.primary,
   },
+  // Universal header branding styles
+  brandingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xs,
+  },
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  brandingText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  profileButton: {
+    padding: 2,
+  },
+  profileCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
   centerContainer: {
     flex: 1,
