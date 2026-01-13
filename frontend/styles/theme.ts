@@ -1,5 +1,14 @@
 // WanderList Design System - Luxury Travel Magazine Aesthetic
 // Inspired by editorial travel magazines with Maldivean ocean vibes
+//
+// CORE DESIGN PHILOSOPHY: "Ocean to Sand" Gradient
+// ================================================
+// Our signature gradient flows from vibrant Maldivean turquoise (#4DB8D8) 
+// to warm beach sand (#E8DCC8), evoking the feeling of standing at the 
+// water's edge where ocean meets shore. This gradient is used throughout
+// the app as our primary brand element - in headers, buttons, and accents.
+//
+// Usage: colors={['#4DB8D8', '#E8DCC8']} with horizontal direction (x: 0→1)
 
 export const colors = {
   // Primary Colors - Maldivean Ocean Blues
