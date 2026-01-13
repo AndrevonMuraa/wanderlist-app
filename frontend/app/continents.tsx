@@ -138,150 +138,132 @@ export default function ContinentsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Universal Header with Branding */}
-      <LinearGradient
-        colors={['#3BB8C3', '#2AA8B3']}
-        style={styles.headerGradient}
-      >
-        {/* Top Row: Branding + Profile */}
-        <View style={styles.brandingRow}>
-          <TouchableOpacity 
-            style={styles.brandingContainer}
-            onPress={() => router.push('/about')}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="earth" size={18} color="#fff" />
-            <Text style={styles.brandingText}>WanderList</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={styles.profileButton}
-            onPress={() => router.push('/(tabs)/profile')}
-          >
-            <View style={styles.profileCircle}>
-              <Text style={styles.profileInitial}>
-                {user?.name?.charAt(0).toUpperCase() || 'U'}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+    <View style={styles.container}>
+      {/* Fixed Top Bar - Stays in place when scrolling */}
+      <FixedTopBar />
 
-        {/* Main Content Row */}
-        <View style={styles.mainRow}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.headerTitle}>Explore Continents</Text>
-            <Text style={styles.headerSubtitle}>Choose your next adventure</Text>
+      {/* Content with proper padding for fixed bar */}
+      <View style={[styles.contentContainer, { paddingTop: fixedBarHeight }]}>
+        {/* Sub Header with title - Scrolls with content */}
+        <LinearGradient
+          colors={['#35B0BB', '#2AA8B3']}
+          style={styles.subHeaderGradient}
+        >
+          <View style={styles.mainRow}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.headerTitle}>Explore Continents</Text>
+              <Text style={styles.headerSubtitle}>Choose your next adventure</Text>
+            </View>
+
+            <TouchableOpacity 
+              style={styles.searchButton}
+              onPress={() => router.push('/search')}
+            >
+              <Ionicons name="search" size={20} color="#fff" />
+            </TouchableOpacity>
           </View>
+        </LinearGradient>
 
+        {/* Quick Navigation Tabs */}
+        <View style={styles.tabContainer}>
           <TouchableOpacity 
-            style={styles.searchButton}
-            onPress={() => router.push('/search')}
+            style={[styles.tabButton, styles.tabButtonActive]}
           >
-            <Ionicons name="search" size={20} color="#fff" />
+            <Ionicons name="earth" size={18} color={theme.colors.primary} />
+            <Text style={[styles.tabLabel, styles.tabLabelActive]}>Explore</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.tabButton}
+            onPress={() => router.push('/bucket-list')}
+          >
+            <Ionicons name="bookmark" size={18} color={theme.colors.textSecondary} />
+            <Text style={styles.tabLabel}>Bucket List</Text>
           </TouchableOpacity>
         </View>
-      </LinearGradient>
 
-      {/* Quick Navigation Tabs */}
-      <View style={styles.tabContainer}>
-        <TouchableOpacity 
-          style={[styles.tabButton, styles.tabButtonActive]}
+        {/* Continent Cards */}
+        <ScrollView 
+          style={styles.scrollView}
+          contentContainerStyle={styles.cardsContainer}
+          showsVerticalScrollIndicator={false}
         >
-          <Ionicons name="earth" size={18} color={theme.colors.primary} />
-          <Text style={[styles.tabLabel, styles.tabLabelActive]}>Explore</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.tabButton}
-          onPress={() => router.push('/bucket-list')}
-        >
-          <Ionicons name="bookmark" size={18} color={theme.colors.textSecondary} />
-          <Text style={styles.tabLabel}>Bucket List</Text>
-        </TouchableOpacity>
+          {continents.map((continent, index) => (
+            <TouchableOpacity
+              key={continent.id}
+              style={[
+                styles.cardWrapper,
+                index === continents.length - 1 && styles.lastCardWrapper
+              ]}
+              onPress={() => handleContinentPress(continent.id)}
+              activeOpacity={0.9}
+            >
+              <View style={styles.card}>
+                {/* Background Image */}
+                <Image 
+                  source={{ uri: continent.image }} 
+                  style={styles.cardImage}
+                  resizeMode="cover"
+                />
+                
+                {/* Gradient Overlay */}
+                <LinearGradient
+                  colors={continent.gradient}
+                  style={styles.cardGradient}
+                >
+                  {/* Top Row: Points Badge with Golden Star */}
+                  <View style={styles.cardTopRow}>
+                    <View style={styles.pointsBadge}>
+                      <Ionicons name="star" size={14} color="#FFD700" />
+                      <Text style={styles.pointsText}>{continent.totalPoints.toLocaleString()}</Text>
+                    </View>
+                  </View>
+
+                  {/* Content */}
+                  <View style={styles.cardContent}>
+                    <Text style={styles.cardTitle}>{continent.name}</Text>
+                    <Text style={styles.cardDescription}>{continent.description}</Text>
+                    
+                    {/* Progress Bar */}
+                    {continent.percentage !== undefined && continent.percentage > 0 ? (
+                      <View style={styles.progressSection}>
+                        <Text style={styles.progressLabel}>
+                          {continent.visited}/{continent.countries} countries visited
+                        </Text>
+                        <View style={styles.progressBarContainer}>
+                          <View 
+                            style={[
+                              styles.progressBarFill, 
+                              { width: `${continent.percentage}%` }
+                            ]} 
+                          />
+                        </View>
+                      </View>
+                    ) : (
+                      <View style={styles.cardStats}>
+                        <View style={styles.statItem}>
+                          <Text style={styles.statNumber}>{continent.countries}</Text>
+                          <Text style={styles.statLabel}>Countries</Text>
+                        </View>
+                        <View style={styles.statDivider} />
+                        <View style={styles.statItem}>
+                          <Text style={styles.statNumber}>{continent.landmarks}</Text>
+                          <Text style={styles.statLabel}>Landmarks</Text>
+                        </View>
+                      </View>
+                    )}
+
+                    {/* Arrow Icon - Transparent */}
+                    <View style={styles.cardArrow}>
+                      <Ionicons name="arrow-forward" size={24} color="rgba(255,255,255,0.6)" />
+                    </View>
+                  </View>
+                </LinearGradient>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </View>
-
-      {/* Continent Cards */}
-      <ScrollView 
-        style={styles.scrollView}
-        contentContainerStyle={styles.cardsContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        {continents.map((continent, index) => (
-          <TouchableOpacity
-            key={continent.id}
-            style={[
-              styles.cardWrapper,
-              index === continents.length - 1 && styles.lastCardWrapper
-            ]}
-            onPress={() => handleContinentPress(continent.id)}
-            activeOpacity={0.9}
-          >
-            <View style={styles.card}>
-              {/* Background Image */}
-              <Image 
-                source={{ uri: continent.image }} 
-                style={styles.cardImage}
-                resizeMode="cover"
-              />
-              
-              {/* Gradient Overlay */}
-              <LinearGradient
-                colors={continent.gradient}
-                style={styles.cardGradient}
-              >
-                {/* Top Row: Points Badge with Golden Star */}
-                <View style={styles.cardTopRow}>
-                  <View style={styles.pointsBadge}>
-                    <Ionicons name="star" size={14} color="#FFD700" />
-                    <Text style={styles.pointsText}>{continent.totalPoints.toLocaleString()}</Text>
-                  </View>
-                </View>
-
-                {/* Content */}
-                <View style={styles.cardContent}>
-                  <Text style={styles.cardTitle}>{continent.name}</Text>
-                  <Text style={styles.cardDescription}>{continent.description}</Text>
-                  
-                  {/* Progress Bar */}
-                  {continent.percentage !== undefined && continent.percentage > 0 ? (
-                    <View style={styles.progressSection}>
-                      <Text style={styles.progressLabel}>
-                        {continent.visited}/{continent.countries} countries visited
-                      </Text>
-                      <View style={styles.progressBarContainer}>
-                        <View 
-                          style={[
-                            styles.progressBarFill, 
-                            { width: `${continent.percentage}%` }
-                          ]} 
-                        />
-                      </View>
-                    </View>
-                  ) : (
-                    <View style={styles.cardStats}>
-                      <View style={styles.statItem}>
-                        <Text style={styles.statNumber}>{continent.countries}</Text>
-                        <Text style={styles.statLabel}>Countries</Text>
-                      </View>
-                      <View style={styles.statDivider} />
-                      <View style={styles.statItem}>
-                        <Text style={styles.statNumber}>{continent.landmarks}</Text>
-                        <Text style={styles.statLabel}>Landmarks</Text>
-                      </View>
-                    </View>
-                  )}
-
-                  {/* Arrow Icon - Transparent */}
-                  <View style={styles.cardArrow}>
-                    <Ionicons name="arrow-forward" size={24} color="rgba(255,255,255,0.6)" />
-                  </View>
-                </View>
-              </LinearGradient>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
