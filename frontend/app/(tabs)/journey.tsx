@@ -184,84 +184,90 @@ export default function JourneyScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {/* Header with Greeting */}
+        {/* Universal Header with Branding */}
         <LinearGradient
-          colors={[theme.colors.primary, theme.colors.primaryDark]}
+          colors={['#3BB8C3', '#2AA8B3']}
           style={styles.header}
         >
+          {/* Top Row: Branding + Profile */}
+          <View style={styles.brandingRow}>
+            <TouchableOpacity 
+              style={styles.brandingContainer}
+              onPress={() => router.push('/about')}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="earth" size={18} color="#fff" />
+              <Text style={styles.brandingText}>WanderList</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.profileButton}
+              onPress={() => router.push('/(tabs)/profile')}
+            >
+              <View style={styles.profileCircle}>
+                <Text style={styles.profileInitial}>
+                  {user?.name?.charAt(0).toUpperCase() || 'U'}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          {/* Main Content */}
           <View style={styles.greetingContainer}>
-            <Text style={styles.greeting}>{getGreeting()}, {user?.name?.split(' ')[0]}! 👋</Text>
-            <Text style={styles.subGreeting}>Here's your travel journey</Text>
+            <Text style={styles.greeting}>My Journey</Text>
+            <Text style={styles.subGreeting}>{getGreeting()}, {user?.name?.split(' ')[0]}!</Text>
           </View>
         </LinearGradient>
 
-        {/* Travel Statistics Dashboard */}
+        {/* Travel Statistics Dashboard - Compressed */}
         {stats && progressStats && (
           <Surface style={styles.statsCard}>
             <View style={styles.statsHeader}>
               <Text style={styles.sectionTitle}>Your Stats</Text>
               <TouchableOpacity>
-                <Ionicons name="share-social-outline" size={22} color={theme.colors.primary} />
+                <Ionicons name="share-social-outline" size={20} color={theme.colors.primary} />
               </TouchableOpacity>
             </View>
 
-            <View style={styles.statsGrid}>
-              <View style={styles.statBox}>
-                <View style={styles.statIconContainer}>
-                  <Ionicons name="flag" size={24} color={theme.colors.primary} />
-                </View>
-                <Text style={styles.statValue}>
+            <View style={styles.statsGridCompact}>
+              <View style={styles.statBoxCompact}>
+                <Ionicons name="flag" size={20} color={theme.colors.primary} />
+                <Text style={styles.statValueCompact}>
                   {Object.keys(progressStats.countries).filter(
                     countryId => progressStats.countries[countryId].visited > 0
                   ).length}
                 </Text>
-                <Text style={styles.statLabel}>Countries</Text>
-                <Text style={styles.statSubtext}>visited</Text>
+                <Text style={styles.statLabelCompact}>Countries</Text>
               </View>
 
-              <View style={styles.statBox}>
-                <View style={styles.statIconContainer}>
-                  <Ionicons name="location" size={24} color={theme.colors.accent} />
-                </View>
-                <Text style={styles.statValue}>{progressStats.overall.visited}</Text>
-                <Text style={styles.statLabel}>Landmarks</Text>
-                <Text style={styles.statSubtext}>explored</Text>
+              <View style={styles.statBoxCompact}>
+                <Ionicons name="location" size={20} color={theme.colors.accent} />
+                <Text style={styles.statValueCompact}>{progressStats.overall.visited}</Text>
+                <Text style={styles.statLabelCompact}>Landmarks</Text>
               </View>
 
-              <View style={styles.statBox}>
-                <View style={styles.statIconContainer}>
-                  <Ionicons name="star" size={24} color={theme.colors.accentYellow} />
-                </View>
-                <Text style={styles.statValue}>{progressStats.totalPoints || 0}</Text>
-                <Text style={styles.statLabel}>Points</Text>
-                <Text style={styles.statSubtext}>earned</Text>
+              <View style={styles.statBoxCompact}>
+                <Ionicons name="star" size={20} color={theme.colors.accentYellow} />
+                <Text style={styles.statValueCompact}>{progressStats.totalPoints || 0}</Text>
+                <Text style={styles.statLabelCompact}>Points</Text>
               </View>
 
-              <View style={styles.statBox}>
-                <View style={styles.statIconContainer}>
-                  <Ionicons name="flame" size={24} color={theme.colors.error} />
-                </View>
-                <Text style={styles.statValue}>{stats.current_streak || 0}</Text>
-                <Text style={styles.statLabel}>Day Streak</Text>
-                <Text style={styles.statSubtext}>current</Text>
+              <View style={styles.statBoxCompact}>
+                <Ionicons name="flame" size={20} color={theme.colors.error} />
+                <Text style={styles.statValueCompact}>{stats.current_streak || 0}</Text>
+                <Text style={styles.statLabelCompact}>Streak</Text>
               </View>
 
-              <View style={styles.statBox}>
-                <View style={styles.statIconContainer}>
-                  <Ionicons name="trophy" size={24} color={theme.colors.accentBronze} />
-                </View>
-                <Text style={styles.statValue}>#{stats.rank || '-'}</Text>
-                <Text style={styles.statLabel}>Rank</Text>
-                <Text style={styles.statSubtext}>global</Text>
+              <View style={styles.statBoxCompact}>
+                <Ionicons name="trophy" size={20} color={theme.colors.accentBronze} />
+                <Text style={styles.statValueCompact}>#{stats.rank || '-'}</Text>
+                <Text style={styles.statLabelCompact}>Rank</Text>
               </View>
 
-              <View style={styles.statBox}>
-                <View style={styles.statIconContainer}>
-                  <Ionicons name="ribbon" size={24} color={theme.colors.primary} />
-                </View>
-                <Text style={styles.statValue}>{badges.length}</Text>
-                <Text style={styles.statLabel}>Badges</Text>
-                <Text style={styles.statSubtext}>earned</Text>
+              <View style={styles.statBoxCompact}>
+                <Ionicons name="ribbon" size={20} color={theme.colors.primary} />
+                <Text style={styles.statValueCompact}>{badges.length}</Text>
+                <Text style={styles.statLabelCompact}>Badges</Text>
               </View>
             </View>
           </Surface>
