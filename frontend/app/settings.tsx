@@ -97,6 +97,20 @@ export default function SettingsScreen() {
           <View style={styles.privacyContainer}>
             <PrivacySelector selected={defaultPrivacy} onChange={updatePrivacy} />
           </View>
+          <View style={styles.privacyLegend}>
+            <View style={styles.legendItem}>
+              <Ionicons name="globe" size={14} color="#27ae60" />
+              <Text style={styles.legendText}>Public - Everyone can see</Text>
+            </View>
+            <View style={styles.legendItem}>
+              <Ionicons name="people" size={14} color="#3498db" />
+              <Text style={styles.legendText}>Friends - Only your friends</Text>
+            </View>
+            <View style={styles.legendItem}>
+              <Ionicons name="lock-closed" size={14} color="#e74c3c" />
+              <Text style={styles.legendText}>Private - Only you</Text>
+            </View>
+          </View>
         </Surface>
 
         {/* Notification Settings */}
