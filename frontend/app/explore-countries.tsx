@@ -256,7 +256,7 @@ export default function ExploreCountriesScreen() {
                   {/* Info Bar - Bottom 30% */}
                   <View style={styles.infoBar}>
                     <View style={styles.pointsSection}>
-                      <Ionicons name="star" size={16} color={theme.colors.accentYellow} />
+                      <Ionicons name="star" size={16} color="#FFD700" />
                       <Text style={styles.pointsText}>{pointReward} points</Text>
                     </View>
                     
