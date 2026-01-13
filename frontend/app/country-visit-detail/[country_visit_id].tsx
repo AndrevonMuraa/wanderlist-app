@@ -12,17 +12,21 @@ import {
   Share,
   FlatList,
   Animated,
+  Modal,
+  Alert,
+  TextInput,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Surface } from 'react-native-paper';
+import { Surface, Portal, Dialog, Button } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -86,7 +90,17 @@ export default function CountryVisitDetailScreen() {
   const [visit, setVisit] = useState<CountryVisit | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [showFullscreen, setShowFullscreen] = useState(false);
+  const [fullscreenIndex, setFullscreenIndex] = useState(0);
+  const [editDiary, setEditDiary] = useState('');
+  const [deleting, setDeleting] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [showOptionsMenu, setShowOptionsMenu] = useState(false);
+  
   const flatListRef = useRef<FlatList>(null);
+  const fullscreenListRef = useRef<FlatList>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -106,11 +120,87 @@ export default function CountryVisitDetailScreen() {
       if (response.ok) {
         const data = await response.json();
         setVisit(data);
+        setEditDiary(data.diary || '');
       }
     } catch (error) {
       console.error('Error fetching country visit:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      const token = await getToken();
+      const response = await fetch(
+        `${BACKEND_URL}/api/country-visits/${country_visit_id}`,
+        {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.ok) {
+        setShowDeleteDialog(false);
+        // Navigate back with success message
+        if (Platform.OS === 'web') {
+          alert('Visit deleted successfully');
+        } else {
+          Alert.alert('Success', 'Visit deleted successfully');
+        }
+        router.back();
+      } else {
+        throw new Error('Failed to delete');
+      }
+    } catch (error) {
+      console.error('Error deleting visit:', error);
+      if (Platform.OS === 'web') {
+        alert('Failed to delete visit');
+      } else {
+        Alert.alert('Error', 'Failed to delete visit');
+      }
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const handleSaveDiary = async () => {
+    setSaving(true);
+    try {
+      const token = await getToken();
+      const response = await fetch(
+        `${BACKEND_URL}/api/country-visits/${country_visit_id}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ diary: editDiary }),
+        }
+      );
+
+      if (response.ok) {
+        setVisit(prev => prev ? { ...prev, diary: editDiary } : null);
+        setShowEditDialog(false);
+        if (Platform.OS === 'web') {
+          alert('Diary updated!');
+        } else {
+          Alert.alert('Success', 'Diary updated!');
+        }
+      } else {
+        throw new Error('Failed to update');
+      }
+    } catch (error) {
+      console.error('Error updating diary:', error);
+      if (Platform.OS === 'web') {
+        alert('Failed to update diary');
+      } else {
+        Alert.alert('Error', 'Failed to update diary');
+      }
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -151,9 +241,20 @@ export default function CountryVisitDetailScreen() {
     }
   };
 
+  const openFullscreen = (index: number) => {
+    setFullscreenIndex(index);
+    setShowFullscreen(true);
+  };
+
   const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
     if (viewableItems.length > 0) {
       setSelectedPhotoIndex(viewableItems[0].index || 0);
+    }
+  }).current;
+
+  const onFullscreenViewableItemsChanged = useRef(({ viewableItems }: any) => {
+    if (viewableItems.length > 0) {
+      setFullscreenIndex(viewableItems[0].index || 0);
     }
   }).current;
 
@@ -175,6 +276,18 @@ export default function CountryVisitDetailScreen() {
   const goToNextPhoto = () => {
     if (visit && selectedPhotoIndex < visit.photos.length - 1) {
       scrollToIndex(selectedPhotoIndex + 1);
+    }
+  };
+
+  const goToPrevFullscreen = () => {
+    if (fullscreenIndex > 0) {
+      fullscreenListRef.current?.scrollToIndex({ index: fullscreenIndex - 1, animated: true });
+    }
+  };
+
+  const goToNextFullscreen = () => {
+    if (visit && fullscreenIndex < visit.photos.length - 1) {
+      fullscreenListRef.current?.scrollToIndex({ index: fullscreenIndex + 1, animated: true });
     }
   };
 
@@ -225,9 +338,14 @@ export default function CountryVisitDetailScreen() {
             {visit.continent || 'Country Visit'}
           </Text>
         </View>
-        <TouchableOpacity onPress={handleShare} style={styles.shareButton}>
-          <Ionicons name="share-social-outline" size={22} color="#fff" />
-        </TouchableOpacity>
+        <View style={styles.headerActions}>
+          <TouchableOpacity onPress={handleShare} style={styles.headerIconBtn}>
+            <Ionicons name="share-social-outline" size={22} color="#fff" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setShowOptionsMenu(true)} style={styles.headerIconBtn}>
+            <Ionicons name="ellipsis-vertical" size={22} color="#fff" />
+          </TouchableOpacity>
+        </View>
       </LinearGradient>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
@@ -235,7 +353,11 @@ export default function CountryVisitDetailScreen() {
         {visit.photos && visit.photos.length > 0 && (
           <View style={styles.gallerySection}>
             {/* Swipeable Photo Gallery */}
-            <View style={styles.mainPhotoContainer}>
+            <TouchableOpacity 
+              activeOpacity={0.9}
+              onPress={() => openFullscreen(selectedPhotoIndex)}
+              style={styles.mainPhotoContainer}
+            >
               <FlatList
                 ref={flatListRef}
                 data={visit.photos}
@@ -262,6 +384,12 @@ export default function CountryVisitDetailScreen() {
                   { useNativeDriver: false }
                 )}
               />
+
+              {/* Tap to zoom hint */}
+              <View style={styles.zoomHint}>
+                <Ionicons name="expand-outline" size={16} color="#fff" />
+                <Text style={styles.zoomHintText}>Tap to zoom</Text>
+              </View>
 
               {/* Navigation Arrows */}
               {visit.photos.length > 1 && (
@@ -293,7 +421,7 @@ export default function CountryVisitDetailScreen() {
                   </Text>
                 </View>
               )}
-            </View>
+            </TouchableOpacity>
 
             {/* Dot Indicators */}
             {visit.photos.length > 1 && (
@@ -363,39 +491,270 @@ export default function CountryVisitDetailScreen() {
         </Surface>
 
         {/* Diary Entry */}
-        {visit.diary && (
-          <Surface style={styles.diaryCard}>
-            <View style={styles.diaryHeader}>
+        <Surface style={styles.diaryCard}>
+          <View style={styles.diaryHeader}>
+            <View style={styles.diaryTitleRow}>
               <Ionicons name="book" size={22} color={theme.colors.primary} />
               <Text style={styles.diaryTitle}>Travel Diary</Text>
             </View>
+            <TouchableOpacity 
+              onPress={() => {
+                setEditDiary(visit.diary || '');
+                setShowEditDialog(true);
+              }}
+              style={styles.editDiaryBtn}
+            >
+              <Ionicons name="create-outline" size={20} color={theme.colors.primary} />
+            </TouchableOpacity>
+          </View>
+          {visit.diary ? (
             <Text style={styles.diaryText}>{visit.diary}</Text>
-          </Surface>
-        )}
-
-        {/* Empty Diary State */}
-        {!visit.diary && (
-          <Surface style={styles.diaryCard}>
+          ) : (
             <View style={styles.emptyDiary}>
               <Ionicons name="book-outline" size={32} color={theme.colors.textLight} />
-              <Text style={styles.emptyDiaryText}>No diary entry for this visit</Text>
+              <Text style={styles.emptyDiaryText}>No diary entry yet</Text>
+              <TouchableOpacity 
+                style={styles.addDiaryBtn}
+                onPress={() => {
+                  setEditDiary('');
+                  setShowEditDialog(true);
+                }}
+              >
+                <Text style={styles.addDiaryText}>+ Add Entry</Text>
+              </TouchableOpacity>
             </View>
-          </Surface>
-        )}
+          )}
+        </Surface>
 
-        {/* Share Button */}
-        <TouchableOpacity style={styles.shareCard} onPress={handleShare} activeOpacity={0.8}>
-          <LinearGradient
-            colors={[theme.colors.primary, '#2AA8B3']}
-            style={styles.shareGradient}
+        {/* Action Buttons */}
+        <View style={styles.actionButtons}>
+          <TouchableOpacity style={styles.shareCard} onPress={handleShare} activeOpacity={0.8}>
+            <LinearGradient
+              colors={[theme.colors.primary, '#2AA8B3']}
+              style={styles.shareGradient}
+            >
+              <Ionicons name="share-social" size={22} color="#fff" />
+              <Text style={styles.shareText}>Share This Memory</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.deleteButton} 
+            onPress={() => setShowDeleteDialog(true)}
+            activeOpacity={0.8}
           >
-            <Ionicons name="share-social" size={22} color="#fff" />
-            <Text style={styles.shareText}>Share This Memory</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+            <Ionicons name="trash-outline" size={20} color={theme.colors.error} />
+            <Text style={styles.deleteText}>Delete Visit</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.bottomSpacer} />
       </ScrollView>
+
+      {/* Options Menu Modal */}
+      <Modal
+        visible={showOptionsMenu}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowOptionsMenu(false)}
+      >
+        <TouchableOpacity 
+          style={styles.optionsOverlay}
+          activeOpacity={1}
+          onPress={() => setShowOptionsMenu(false)}
+        >
+          <View style={styles.optionsMenu}>
+            <TouchableOpacity 
+              style={styles.optionItem}
+              onPress={() => {
+                setShowOptionsMenu(false);
+                handleShare();
+              }}
+            >
+              <Ionicons name="share-social-outline" size={22} color={theme.colors.text} />
+              <Text style={styles.optionText}>Share</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.optionItem}
+              onPress={() => {
+                setShowOptionsMenu(false);
+                setEditDiary(visit.diary || '');
+                setShowEditDialog(true);
+              }}
+            >
+              <Ionicons name="create-outline" size={22} color={theme.colors.text} />
+              <Text style={styles.optionText}>Edit Diary</Text>
+            </TouchableOpacity>
+            
+            <View style={styles.optionDivider} />
+            
+            <TouchableOpacity 
+              style={styles.optionItem}
+              onPress={() => {
+                setShowOptionsMenu(false);
+                setShowDeleteDialog(true);
+              }}
+            >
+              <Ionicons name="trash-outline" size={22} color={theme.colors.error} />
+              <Text style={[styles.optionText, { color: theme.colors.error }]}>Delete Visit</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
+      {/* Fullscreen Photo Modal */}
+      <Modal
+        visible={showFullscreen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowFullscreen(false)}
+      >
+        <View style={styles.fullscreenContainer}>
+          {/* Close button */}
+          <TouchableOpacity 
+            style={styles.closeFullscreen}
+            onPress={() => setShowFullscreen(false)}
+          >
+            <Ionicons name="close" size={28} color="#fff" />
+          </TouchableOpacity>
+
+          {/* Photo counter */}
+          {visit.photos.length > 1 && (
+            <View style={styles.fullscreenCounter}>
+              <Text style={styles.fullscreenCounterText}>
+                {fullscreenIndex + 1} / {visit.photos.length}
+              </Text>
+            </View>
+          )}
+
+          {/* Fullscreen gallery */}
+          <FlatList
+            ref={fullscreenListRef}
+            data={visit.photos}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onViewableItemsChanged={onFullscreenViewableItemsChanged}
+            viewabilityConfig={viewabilityConfig}
+            initialScrollIndex={fullscreenIndex}
+            getItemLayout={(_, index) => ({
+              length: width,
+              offset: width * index,
+              index,
+            })}
+            keyExtractor={(_, index) => `fullscreen-${index}`}
+            renderItem={({ item }) => (
+              <View style={styles.fullscreenImageContainer}>
+                <Image
+                  source={{ uri: item }}
+                  style={styles.fullscreenImage}
+                  resizeMode="contain"
+                />
+              </View>
+            )}
+          />
+
+          {/* Navigation arrows */}
+          {visit.photos.length > 1 && (
+            <>
+              {fullscreenIndex > 0 && (
+                <TouchableOpacity
+                  style={[styles.fullscreenArrow, styles.fullscreenArrowLeft]}
+                  onPress={goToPrevFullscreen}
+                >
+                  <Ionicons name="chevron-back" size={36} color="#fff" />
+                </TouchableOpacity>
+              )}
+              {fullscreenIndex < visit.photos.length - 1 && (
+                <TouchableOpacity
+                  style={[styles.fullscreenArrow, styles.fullscreenArrowRight]}
+                  onPress={goToNextFullscreen}
+                >
+                  <Ionicons name="chevron-forward" size={36} color="#fff" />
+                </TouchableOpacity>
+              )}
+            </>
+          )}
+
+          {/* Thumbnail strip at bottom */}
+          {visit.photos.length > 1 && (
+            <View style={styles.fullscreenThumbnails}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.fullscreenThumbnailContent}
+              >
+                {visit.photos.map((photo, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      setFullscreenIndex(index);
+                      fullscreenListRef.current?.scrollToIndex({ index, animated: true });
+                    }}
+                    style={[
+                      styles.fullscreenThumb,
+                      fullscreenIndex === index && styles.fullscreenThumbActive,
+                    ]}
+                  >
+                    <Image source={{ uri: photo }} style={styles.fullscreenThumbImage} />
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
+        </View>
+      </Modal>
+
+      {/* Delete Confirmation Dialog */}
+      <Portal>
+        <Dialog visible={showDeleteDialog} onDismiss={() => setShowDeleteDialog(false)}>
+          <Dialog.Title>Delete Visit?</Dialog.Title>
+          <Dialog.Content>
+            <Text>Are you sure you want to delete this country visit? This action cannot be undone and you will lose {visit.points_earned} points.</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowDeleteDialog(false)} disabled={deleting}>Cancel</Button>
+            <Button 
+              onPress={handleDelete} 
+              textColor={theme.colors.error}
+              loading={deleting}
+              disabled={deleting}
+            >
+              Delete
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+
+      {/* Edit Diary Dialog */}
+      <Portal>
+        <Dialog visible={showEditDialog} onDismiss={() => setShowEditDialog(false)}>
+          <Dialog.Title>Edit Travel Diary</Dialog.Title>
+          <Dialog.Content>
+            <TextInput
+              style={styles.diaryInput}
+              value={editDiary}
+              onChangeText={setEditDiary}
+              placeholder="Write about your experience..."
+              placeholderTextColor={theme.colors.textLight}
+              multiline
+              numberOfLines={6}
+              textAlignVertical="top"
+            />
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowEditDialog(false)} disabled={saving}>Cancel</Button>
+            <Button 
+              onPress={handleSaveDiary}
+              loading={saving}
+              disabled={saving}
+            >
+              Save
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </SafeAreaView>
   );
 }
@@ -448,8 +807,13 @@ const styles = StyleSheet.create({
   headerSpacer: {
     width: 40,
   },
-  shareButton: {
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerIconBtn: {
     padding: theme.spacing.xs,
+    marginLeft: theme.spacing.xs,
   },
   errorContainer: {
     flex: 1,
@@ -478,6 +842,23 @@ const styles = StyleSheet.create({
   mainPhoto: {
     width: width,
     height: width * 0.75,
+  },
+  zoomHint: {
+    position: 'absolute',
+    bottom: theme.spacing.md,
+    left: theme.spacing.md,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  zoomHintText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '500',
   },
   navArrow: {
     position: 'absolute',
@@ -598,13 +979,21 @@ const styles = StyleSheet.create({
   diaryHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.sm,
+    justifyContent: 'space-between',
     marginBottom: theme.spacing.md,
+  },
+  diaryTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
   },
   diaryTitle: {
     fontSize: 18,
     fontWeight: '700',
     color: theme.colors.text,
+  },
+  editDiaryBtn: {
+    padding: theme.spacing.xs,
   },
   diaryText: {
     fontSize: 15,
@@ -613,16 +1002,40 @@ const styles = StyleSheet.create({
   },
   emptyDiary: {
     alignItems: 'center',
-    paddingVertical: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
   },
   emptyDiaryText: {
     marginTop: theme.spacing.sm,
     fontSize: 14,
     color: theme.colors.textLight,
   },
-  // Share Card
+  addDiaryBtn: {
+    marginTop: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    backgroundColor: theme.colors.surfaceTinted,
+    borderRadius: theme.borderRadius.md,
+  },
+  addDiaryText: {
+    color: theme.colors.primary,
+    fontWeight: '600',
+  },
+  diaryInput: {
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.md,
+    fontSize: 15,
+    color: theme.colors.text,
+    minHeight: 120,
+    backgroundColor: theme.colors.background,
+  },
+  // Action Buttons
+  actionButtons: {
+    paddingHorizontal: theme.spacing.md,
+    gap: theme.spacing.sm,
+  },
   shareCard: {
-    marginHorizontal: theme.spacing.md,
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
   },
@@ -638,7 +1051,143 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
   },
+  deleteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.md,
+    gap: theme.spacing.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.error,
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: 'transparent',
+  },
+  deleteText: {
+    color: theme.colors.error,
+    fontSize: 16,
+    fontWeight: '600',
+  },
   bottomSpacer: {
     height: theme.spacing.xl,
+  },
+  // Options Menu
+  optionsOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+    paddingTop: 60,
+    paddingRight: theme.spacing.md,
+  },
+  optionsMenu: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    paddingVertical: theme.spacing.sm,
+    minWidth: 180,
+    ...theme.shadows.md,
+  },
+  optionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.lg,
+    gap: theme.spacing.sm,
+  },
+  optionText: {
+    fontSize: 16,
+    color: theme.colors.text,
+  },
+  optionDivider: {
+    height: 1,
+    backgroundColor: theme.colors.border,
+    marginVertical: theme.spacing.xs,
+  },
+  // Fullscreen
+  fullscreenContainer: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+  closeFullscreen: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    zIndex: 10,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullscreenCounter: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 10,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  fullscreenCounterText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  fullscreenImageContainer: {
+    width: width,
+    height: height,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullscreenImage: {
+    width: width,
+    height: height * 0.7,
+  },
+  fullscreenArrow: {
+    position: 'absolute',
+    top: '50%',
+    marginTop: -30,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  fullscreenArrowLeft: {
+    left: 10,
+  },
+  fullscreenArrowRight: {
+    right: 10,
+  },
+  fullscreenThumbnails: {
+    position: 'absolute',
+    bottom: 40,
+    left: 0,
+    right: 0,
+  },
+  fullscreenThumbnailContent: {
+    paddingHorizontal: theme.spacing.md,
+    gap: theme.spacing.sm,
+    justifyContent: 'center',
+  },
+  fullscreenThumb: {
+    width: 50,
+    height: 50,
+    borderRadius: 8,
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: 'transparent',
+    opacity: 0.6,
+  },
+  fullscreenThumbActive: {
+    borderColor: '#fff',
+    opacity: 1,
+  },
+  fullscreenThumbImage: {
+    width: '100%',
+    height: '100%',
   },
 });
