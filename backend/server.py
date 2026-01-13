@@ -3032,10 +3032,11 @@ async def delete_country_visit(country_visit_id: str, current_user: User = Depen
     # Delete associated activity
     await db.activities.delete_many({"country_visit_id": country_visit_id})
     
-    # Deduct points
+    # Deduct points (50 points for country visits)
+    points_to_deduct = country_visit.get("points_earned", 50)
     await db.users.update_one(
         {"user_id": current_user.user_id},
-        {"$inc": {"points": -15}}
+        {"$inc": {"points": -points_to_deduct}}
     )
     
     return {"message": "Country visit deleted"}
