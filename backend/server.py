@@ -237,6 +237,7 @@ class Activity(BaseModel):
     has_tips: Optional[bool] = False  # Whether visit has travel tips
     has_photos: Optional[bool] = False  # Whether visit has photos
     photo_count: Optional[int] = 0  # Number of photos in visit
+    visibility: Optional[str] = "public"  # "public", "friends", "private"
     created_at: datetime
     likes_count: int = 0
     comments_count: int = 0
