@@ -233,10 +233,22 @@ export default function SocialHubScreen() {
     return `${Math.floor(seconds / 86400)}d ago`;
   };
 
+  const getPrivacyIcon = (visibility?: string) => {
+    switch (visibility) {
+      case 'friends':
+        return { icon: 'people', color: '#3498db' };
+      case 'private':
+        return { icon: 'lock-closed', color: '#e74c3c' };
+      default:
+        return { icon: 'globe', color: '#27ae60' };
+    }
+  };
+
   const renderActivityItem = (activity: Activity) => {
     const isExpanded = activity.visit_id && expandedVisits.has(activity.visit_id);
     const visit = activity.visit_id ? visitDetails[activity.visit_id] : null;
     const hasRichContent = activity.has_photos || activity.has_diary || activity.has_tips;
+    const privacyInfo = getPrivacyIcon(activity.visibility);
 
     return (
       <TouchableOpacity 
@@ -251,7 +263,15 @@ export default function SocialHubScreen() {
             source={{ uri: activity.user_picture || 'https://via.placeholder.com/100' }} 
           />
           <View style={styles.activityInfo}>
-            <Text style={styles.activityUser}>{activity.user_name}</Text>
+            <View style={styles.activityNameRow}>
+              <Text style={styles.activityUser}>{activity.user_name}</Text>
+              <Ionicons 
+                name={privacyInfo.icon as any} 
+                size={12} 
+                color={privacyInfo.color} 
+                style={styles.privacyIcon}
+              />
+            </View>
             <Text style={styles.activityTime}>{formatTimeAgo(activity.created_at)}</Text>
           </View>
         </View>
