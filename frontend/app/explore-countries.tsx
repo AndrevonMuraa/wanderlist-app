@@ -361,9 +361,9 @@ export default function ExploreCountriesScreen() {
 
     return (
       <View>
-        {/* Universal Blue Gradient Header */}
+        {/* Universal Turquoise Gradient Header */}
         <LinearGradient
-          colors={['#2196F3', '#1976D2']}
+          colors={['#3BB8C3', '#2AA8B3']}
           style={styles.gradientHeader}
         >
           {/* Branding Row */}

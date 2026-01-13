@@ -145,7 +145,7 @@ export default function ContinentsScreen() {
     <View style={styles.container}>
       {/* UNIFIED FIXED HEADER - Both branding and title */}
       <LinearGradient
-        colors={['#2196F3', '#1976D2']}
+        colors={['#3BB8C3', '#2AA8B3']}
         style={[styles.fixedHeader, { paddingTop: topPadding }]}
       >
         {/* Top Row: Branding + Profile */}

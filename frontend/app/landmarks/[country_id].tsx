@@ -212,7 +212,7 @@ export default function LandmarksScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <LinearGradient
-        colors={['#2196F3', '#1976D2']}
+        colors={['#3BB8C3', '#2AA8B3']}
         style={styles.header}
       >
         <TouchableOpacity 
