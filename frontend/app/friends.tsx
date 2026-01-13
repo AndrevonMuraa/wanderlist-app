@@ -255,15 +255,14 @@ export default function FriendsScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <LinearGradient
-        colors={[theme.colors.primary, theme.colors.primaryDark]}
+        colors={['#3BB8C3', '#2AA8B3']}
         style={styles.header}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
       >
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
+          <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Friends</Text>
+        <View style={styles.headerSpacer} />
       </LinearGradient>
 
       <Surface style={styles.searchCard}>
