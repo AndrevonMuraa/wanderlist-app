@@ -222,8 +222,9 @@ export default function ProfileScreen() {
                 style={styles.headerIconButton}
                 onPress={() => router.push('/about')}
               >
-              <Ionicons name="information-circle-outline" size={28} color="#fff" />
-            </TouchableOpacity>
+                <Ionicons name="information-circle-outline" size={22} color="#fff" />
+              </TouchableOpacity>
+            </View>
           </View>
         </LinearGradient>
 
