@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import theme from '../styles/theme';
-import { ProgressBar } from '../components/ProgressBar';
 import { BACKEND_URL } from '../utils/config';
 import * as SecureStore from 'expo-secure-store';
+import { useAuth } from '../contexts/AuthContext';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const getToken = async () => {
-  return await SecureStore.getItemAsync('token');
+  if (Platform.OS === 'web') {
+    return localStorage.getItem('auth_token');
+  }
+  return await SecureStore.getItemAsync('auth_token');
 };
 
 interface Continent {
@@ -35,7 +39,7 @@ const CONTINENTS: Continent[] = [
     countries: 10,
     landmarks: 113,
     image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80',
-    gradient: ['rgba(0, 0, 0, 0.05)', 'rgba(52, 152, 219, 0.35)'],  // Lighter for better image visibility
+    gradient: ['rgba(0, 0, 0, 0.05)', 'rgba(52, 152, 219, 0.35)'],
     icon: 'business-outline',
     description: 'Historic castles and cultural heritage',
     totalPoints: 1130,
@@ -88,6 +92,7 @@ const CONTINENTS: Continent[] = [
 
 export default function ContinentsScreen() {
   const router = useRouter();
+  const { user } = useAuth();
   const [continents, setContinents] = useState<Continent[]>(CONTINENTS);
   const [loading, setLoading] = useState(true);
 
@@ -105,7 +110,6 @@ export default function ContinentsScreen() {
       if (response.ok) {
         const progressData = await response.json();
         
-        // Merge progress data with continents
         const updatedContinents = CONTINENTS.map(continent => {
           const continentProgress = progressData.continents[continent.name];
           return {
@@ -129,39 +133,64 @@ export default function ContinentsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Turquoise Header */}
+    <SafeAreaView style={styles.container} edges={['top']}>
+      {/* Universal Header with Branding */}
       <LinearGradient
-        colors={[theme.colors.primary, theme.colors.primaryDark]}
+        colors={['#3BB8C3', '#2AA8B3']}
         style={styles.headerGradient}
       >
-        <View style={styles.headerContent}>
-          <View>
+        {/* Top Row: Branding + Profile */}
+        <View style={styles.brandingRow}>
+          <TouchableOpacity 
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="earth" size={18} color="#fff" />
+            <Text style={styles.brandingText}>WanderList</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={styles.profileButton}
+            onPress={() => router.push('/(tabs)/profile')}
+          >
+            <View style={styles.profileCircle}>
+              <Text style={styles.profileInitial}>
+                {user?.name?.charAt(0).toUpperCase() || 'U'}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* Main Content Row */}
+        <View style={styles.mainRow}>
+          <View style={styles.titleContainer}>
             <Text style={styles.headerTitle}>Explore Continents</Text>
             <Text style={styles.headerSubtitle}>Choose your next adventure</Text>
           </View>
+
           <TouchableOpacity 
             style={styles.searchButton}
             onPress={() => router.push('/search')}
           >
-            <Ionicons name="search" size={22} color={theme.colors.primary} />
+            <Ionicons name="search" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
       </LinearGradient>
 
-      {/* Quick Navigation Tabs - Connected to Header */}
+      {/* Quick Navigation Tabs */}
       <View style={styles.tabContainer}>
         <TouchableOpacity 
           style={[styles.tabButton, styles.tabButtonActive]}
         >
-          <Ionicons name="earth" size={20} color={theme.colors.primary} />
+          <Ionicons name="earth" size={18} color={theme.colors.primary} />
           <Text style={[styles.tabLabel, styles.tabLabelActive]}>Explore</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.tabButton}
           onPress={() => router.push('/bucket-list')}
         >
-          <Ionicons name="bookmark" size={20} color={theme.colors.textSecondary} />
+          <Ionicons name="bookmark" size={18} color={theme.colors.textSecondary} />
           <Text style={styles.tabLabel}>Bucket List</Text>
         </TouchableOpacity>
       </View>
@@ -175,7 +204,10 @@ export default function ContinentsScreen() {
         {continents.map((continent, index) => (
           <TouchableOpacity
             key={continent.id}
-            style={styles.cardWrapper}
+            style={[
+              styles.cardWrapper,
+              index === continents.length - 1 && styles.lastCardWrapper
+            ]}
             onPress={() => handleContinentPress(continent.id)}
             activeOpacity={0.9}
           >
@@ -192,7 +224,7 @@ export default function ContinentsScreen() {
                 colors={continent.gradient}
                 style={styles.cardGradient}
               >
-                {/* Top Row: Points Badge */}
+                {/* Top Row: Points Badge with Golden Star */}
                 <View style={styles.cardTopRow}>
                   <View style={styles.pointsBadge}>
                     <Ionicons name="star" size={14} color="#FFD700" />
@@ -244,7 +276,7 @@ export default function ContinentsScreen() {
           </TouchableOpacity>
         ))}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -253,18 +285,77 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  header: {
+  // Universal Header Styles
+  headerGradient: {
     paddingHorizontal: theme.spacing.md,
-    paddingTop: theme.spacing.lg,
-    paddingBottom: theme.spacing.sm,
+    paddingTop: theme.spacing.sm,
+    paddingBottom: theme.spacing.md,
   },
+  brandingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xs,
+  },
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  brandingText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  profileButton: {
+    padding: 2,
+  },
+  profileCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileInitial: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  mainRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  titleContainer: {
+    flex: 1,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#fff',
+  },
+  headerSubtitle: {
+    fontSize: 13,
+    color: 'rgba(255, 255, 255, 0.9)',
+    marginTop: 2,
+  },
+  searchButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: theme.spacing.sm,
+  },
+  // Tab Styles
   tabContainer: {
     flexDirection: 'row',
     backgroundColor: theme.colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border,
-    paddingHorizontal: theme.spacing.sm,
-    marginBottom: theme.spacing.md,
+    paddingHorizontal: theme.spacing.md,
   },
   tabButton: {
     flex: 1,
@@ -272,7 +363,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: theme.spacing.xs,
-    paddingVertical: theme.spacing.sm,
+    paddingVertical: 12,
     borderBottomWidth: 2,
     borderBottomColor: 'transparent',
   },
@@ -280,57 +371,32 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.primary,
   },
   tabLabel: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '600',
     color: theme.colors.textSecondary,
   },
   tabLabelActive: {
     color: theme.colors.primary,
   },
-  headerContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  searchButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: theme.colors.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...theme.shadows.sm,
-  },
-  headerGradient: {
-    padding: theme.spacing.md,
-    paddingTop: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#fff',
-    marginBottom: 4,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.9)',
-  },
+  // Scroll & Cards
   scrollView: {
     flex: 1,
   },
   cardsContainer: {
     paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
   },
   cardWrapper: {
+    marginBottom: theme.spacing.md,
+  },
+  lastCardWrapper: {
     marginBottom: theme.spacing.sm,
   },
   card: {
-    height: 115,
+    height: 120,
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
-    marginBottom: theme.spacing.sm,
     ...theme.shadows.card,
   },
   cardImage: {
@@ -341,22 +407,12 @@ const styles = StyleSheet.create({
   cardGradient: {
     ...StyleSheet.absoluteFillObject,
     padding: theme.spacing.md,
-    paddingTop: theme.spacing.lg + 4,
     justifyContent: 'space-between',
   },
   cardTopRow: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
-  },
-  cardIconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backdropFilter: 'blur(10px)',
   },
   pointsBadge: {
     flexDirection: 'row',
@@ -366,9 +422,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 16,
-    position: 'absolute',
-    top: 4,
-    right: 4,
   },
   pointsText: {
     fontSize: 13,
