@@ -249,7 +249,6 @@ export default function LandmarksScreen() {
           </TouchableOpacity>
           <View style={styles.headerContent}>
             <Text style={styles.headerTitle}>{name}</Text>
-            <Text style={styles.headerSubtitle}>{landmarks.length} Landmarks</Text>
           </View>
         </View>
       </LinearGradient>
