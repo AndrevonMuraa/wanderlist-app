@@ -361,11 +361,35 @@ export default function ExploreCountriesScreen() {
 
     return (
       <View>
-        {/* Turquoise Gradient Header */}
+        {/* Universal Blue Gradient Header */}
         <LinearGradient
-          colors={[theme.colors.primary, theme.colors.primaryDark]}
+          colors={['#2196F3', '#1976D2']}
           style={styles.gradientHeader}
         >
+          {/* Branding Row */}
+          <View style={styles.brandingRow}>
+            <TouchableOpacity 
+              style={styles.brandingContainer}
+              onPress={() => router.push('/about')}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="earth" size={18} color="#fff" />
+              <Text style={styles.brandingText}>WanderList</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.profileButton}
+              onPress={() => router.push('/(tabs)/profile')}
+            >
+              <View style={styles.profileCircle}>
+                <Text style={styles.profileInitial}>
+                  {user?.name?.charAt(0).toUpperCase() || 'U'}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          
+          {/* Back button + Title */}
           {continent && (
             <TouchableOpacity 
               style={styles.backButtonGradient}
