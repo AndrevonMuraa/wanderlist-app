@@ -120,19 +120,21 @@ export default function ContinentsScreen() {
       if (response.ok) {
         const data = await response.json();
         // Update continents with progress data
-        setContinents(prev => prev.map(continent => {
-          const progress = data.continents?.find((c: any) => 
-            c.name.toLowerCase() === continent.name.toLowerCase()
-          );
-          if (progress) {
-            return {
-              ...continent,
-              visited: progress.visited_countries || 0,
-              percentage: progress.percentage || 0
-            };
-          }
-          return continent;
-        }));
+        if (data.continents && Array.isArray(data.continents)) {
+          setContinents(prev => prev.map(continent => {
+            const progress = data.continents.find((c: any) => 
+              c.name?.toLowerCase() === continent.name.toLowerCase()
+            );
+            if (progress) {
+              return {
+                ...continent,
+                visited: progress.visited_countries || 0,
+                percentage: progress.percentage || 0
+              };
+            }
+            return continent;
+          }));
+        }
       }
     } catch (error) {
       console.error('Error fetching progress:', error);
