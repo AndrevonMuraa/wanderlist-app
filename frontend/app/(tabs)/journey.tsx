@@ -437,51 +437,6 @@ export default function JourneyScreen() {
           </Surface>
         )}
 
-        {/* Quick Actions */}
-        <Surface style={styles.quickActionsCard}>
-          <Text style={styles.sectionTitle}>Quick Actions</Text>
-          <View style={styles.actionsGrid}>
-            <TouchableOpacity 
-              style={styles.actionButton}
-              onPress={() => router.push('/explore')}
-            >
-              <LinearGradient
-                colors={[theme.colors.primary, theme.colors.primaryDark]}
-                style={styles.actionGradient}
-              >
-                <Ionicons name="compass" size={28} color="#fff" />
-                <Text style={styles.actionText}>Explore</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={styles.actionButton}
-              onPress={() => router.push('/search')}
-            >
-              <LinearGradient
-                colors={[theme.colors.accent, theme.colors.accentDark]}
-                style={styles.actionGradient}
-              >
-                <Ionicons name="search" size={28} color="#fff" />
-                <Text style={styles.actionText}>Search</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={styles.actionButton}
-              onPress={() => router.push('/feed')}
-            >
-              <LinearGradient
-                colors={[theme.colors.accentYellow, '#F39C12']}
-                style={styles.actionGradient}
-              >
-                <Ionicons name="newspaper" size={28} color="#fff" />
-                <Text style={styles.actionText}>Feed</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-          </View>
-        </Surface>
-
         <View style={styles.bottomSpacer} />
       </ScrollView>
 
