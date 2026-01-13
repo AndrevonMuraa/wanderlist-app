@@ -580,8 +580,8 @@ const styles = StyleSheet.create({
   },
   gradientHeader: {
     paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.md,
-    paddingBottom: theme.spacing.xl,
+    paddingTop: theme.spacing.sm,
+    paddingBottom: theme.spacing.md,
   },
   brandingRow: {
     flexDirection: 'row',
@@ -615,28 +615,25 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#fff',
   },
-  backButtonGradient: {
+  titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: theme.spacing.md,
-    gap: theme.spacing.xs,
   },
-  backButtonTextWhite: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
+  backButtonInline: {
+    padding: theme.spacing.xs,
+    marginRight: theme.spacing.sm,
   },
   headerTextContainer: {
-    marginTop: theme.spacing.sm,
+    flex: 1,
   },
   headerTitle: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: '800',
     color: '#fff',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   headerSubtitle: {
-    fontSize: 15,
+    fontSize: 13,
     color: 'rgba(255, 255, 255, 0.9)',
   },
   statsContainerNew: {
