@@ -920,10 +920,18 @@ const styles = StyleSheet.create({
     marginLeft: theme.spacing.sm,
     flex: 1,
   },
+  activityNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
   activityUser: {
     ...theme.typography.body,
     color: theme.colors.text,
     fontWeight: '600',
+  },
+  privacyIcon: {
+    marginLeft: 2,
   },
   activityTime: {
     ...theme.typography.caption,
