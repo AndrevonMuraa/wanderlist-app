@@ -231,18 +231,10 @@ export default function ContinentsScreen() {
                     </View>
                   </View>
                   
-                  {/* Bottom Section: Stats/Progress + Arrow */}
+                  {/* Bottom Section: Stats + Progress + Arrow */}
                   <View style={styles.cardBottomSection}>
-                    {continent.percentage !== undefined && continent.percentage > 0 ? (
-                      <View style={styles.progressSection}>
-                        <Text style={styles.progressLabel}>
-                          {continent.visited}/{continent.countries} countries visited
-                        </Text>
-                        <View style={styles.progressBarContainer}>
-                          <View style={[styles.progressBarFill, { width: `${continent.percentage}%` }]} />
-                        </View>
-                      </View>
-                    ) : (
+                    <View style={styles.statsAndProgress}>
+                      {/* Always show Countries & Landmarks count */}
                       <View style={styles.cardStats}>
                         <View style={styles.statItem}>
                           <Text style={styles.statNumber}>{continent.countries}</Text>
@@ -254,7 +246,19 @@ export default function ContinentsScreen() {
                           <Text style={styles.statLabel}>Landmarks</Text>
                         </View>
                       </View>
-                    )}
+                      
+                      {/* Show progress bar if user has visited */}
+                      {continent.percentage !== undefined && continent.percentage > 0 && (
+                        <View style={styles.progressSection}>
+                          <View style={styles.progressBarContainer}>
+                            <View style={[styles.progressBarFill, { width: `${continent.percentage}%` }]} />
+                          </View>
+                          <Text style={styles.progressLabel}>
+                            {continent.visited}/{continent.countries} visited
+                          </Text>
+                        </View>
+                      )}
+                    </View>
                     <View style={styles.cardArrow}>
                       <Ionicons name="arrow-forward" size={24} color="rgba(255,255,255,0.6)" />
                     </View>
