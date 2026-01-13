@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, Image, Dimensions, Platform } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, Image, Dimensions, Platform, StatusBar } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
+import { FixedTopBar, SubHeader } from '../../components/StickyHeader';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
@@ -69,6 +70,10 @@ export default function ContinentScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const router = useRouter();
+  const insets = useSafeAreaInsets();
+
+  // Calculate the height of the fixed top bar
+  const fixedBarHeight = (Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 24)) + 44;
 
   useEffect(() => {
     fetchCountries();
@@ -139,40 +144,45 @@ export default function ContinentScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.headerGradient}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <View style={styles.headerContent}>
-          <Text style={styles.headerTitleWhite}>{continentName}</Text>
-          <Text style={styles.headerSubtitleWhite}>{countries.length} countries to explore</Text>
-        </View>
-      </LinearGradient>
+    <View style={styles.container}>
+      {/* Fixed Top Bar - Stays in place when scrolling */}
+      <FixedTopBar />
 
-      <FlatList
-        data={countries}
-        renderItem={renderCountryCard}
-        keyExtractor={(item) => item.country_id}
-        numColumns={2}
-        columnWrapperStyle={styles.row}
-        contentContainerStyle={[styles.listContainer, { paddingBottom: Platform.OS === 'ios' ? 100 : 90 }]}
-        refreshControl={
-          <RefreshControl 
-            refreshing={refreshing} 
-            onRefresh={onRefresh}
-            tintColor={theme.colors.primary}
-          />
-        }
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Ionicons name="globe-outline" size={64} color={theme.colors.border} />
-            <Text style={styles.emptyText}>No countries found</Text>
-          </View>
-        }
-      />
+      {/* Content with proper padding for fixed bar */}
+      <View style={[styles.contentContainer, { paddingTop: fixedBarHeight }]}>
+        {/* Sub Header - Scrolls with content */}
+        <SubHeader
+          title={continentName}
+          subtitle={`${countries.length} countries to explore`}
+          showBack={true}
+          showSearch={false}
+        />
+
+        <FlatList
+          data={countries}
+          renderItem={renderCountryCard}
+          keyExtractor={(item) => item.country_id}
+          numColumns={2}
+          columnWrapperStyle={styles.row}
+          contentContainerStyle={[styles.listContainer, { paddingBottom: Platform.OS === 'ios' ? 100 : 90 }]}
+          refreshControl={
+            <RefreshControl 
+              refreshing={refreshing} 
+              onRefresh={onRefresh}
+              tintColor={theme.colors.primary}
+            />
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Ionicons name="globe-outline" size={64} color={theme.colors.border} />
+              <Text style={styles.emptyText}>No countries found</Text>
+            </View>
+          }
+        />
+      </View>
+      
       <PersistentTabBar />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -181,51 +191,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
+  contentContainer: {
+    flex: 1,
+  },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: theme.colors.background,
-  },
-  headerGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.md,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.md,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
-  },
-  backButton: {
-    padding: theme.spacing.sm,
-    marginRight: theme.spacing.sm,
-  },
-  headerContent: {
-    flex: 1,
-  },
-  headerTitle: {
-    ...theme.typography.h2,
-    color: theme.colors.text,
-    marginBottom: theme.spacing.xs / 2,
-  },
-  headerTitleWhite: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#fff',
-  },
-  headerSubtitle: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-  },
-  headerSubtitleWhite: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.9)',
-    marginTop: 2,
   },
   listContainer: {
     padding: theme.spacing.md,
