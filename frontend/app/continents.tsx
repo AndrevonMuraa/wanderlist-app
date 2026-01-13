@@ -466,9 +466,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   arrowCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -477,13 +477,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   cardTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '800',
     color: '#fff',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   cardDescription: {
-    fontSize: 14,
+    fontSize: 12,
     color: 'rgba(255, 255, 255, 0.9)',
   },
 });
