@@ -473,26 +473,58 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.md,
+    paddingTop: theme.spacing.sm,
     paddingBottom: theme.spacing.md,
   },
+  brandingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xs,
+  },
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  brandingText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  profileButton: {
+    padding: 2,
+  },
+  profileCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileInitial: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#fff',
+  },
   greetingContainer: {
-    marginTop: theme.spacing.sm,
+    marginTop: theme.spacing.xs,
   },
   greeting: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: '800',
     color: '#fff',
-    marginBottom: 4,
   },
   subGreeting: {
-    fontSize: 15,
+    fontSize: 13,
     color: 'rgba(255, 255, 255, 0.9)',
+    marginTop: 2,
   },
   statsCard: {
     margin: theme.spacing.md,
-    padding: theme.spacing.lg,
+    padding: theme.spacing.md,
     borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
@@ -501,13 +533,39 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: theme.colors.text,
   },
+  // Compact stats grid
+  statsGridCompact: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.spacing.xs,
+    justifyContent: 'space-between',
+  },
+  statBoxCompact: {
+    width: '31%',
+    alignItems: 'center',
+    padding: theme.spacing.sm,
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: theme.borderRadius.md,
+    gap: 4,
+  },
+  statValueCompact: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: theme.colors.text,
+  },
+  statLabelCompact: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  // Original stats (keeping for backward compatibility)
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -549,14 +607,14 @@ const styles = StyleSheet.create({
   },
   progressCard: {
     margin: theme.spacing.md,
-    padding: theme.spacing.lg,
+    padding: theme.spacing.md,
     borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
   progressContainer: {
     alignItems: 'center',
-    marginTop: theme.spacing.lg,
+    marginTop: theme.spacing.md,
   },
   progressDescription: {
     fontSize: 14,
