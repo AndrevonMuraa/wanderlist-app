@@ -20,10 +20,9 @@ export default function TabsLayout() {
           ...theme.shadows.md,
         },
         tabBarLabelStyle: {
-          fontSize: 10,
+          fontSize: 11,
           fontWeight: '600',
-          marginBottom: 4,
-          paddingBottom: 2,
+          marginTop: 2,
         },
         tabBarIconStyle: {
           marginTop: 0,
