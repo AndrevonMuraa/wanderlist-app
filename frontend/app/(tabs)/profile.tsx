@@ -170,9 +170,9 @@ export default function ProfileScreen() {
       <ScrollView>
         {/* Universal Header with Branding */}
         <LinearGradient
-          colors={['#3BB8C3', '#2AA8B3']}
+          colors={['#4DB8D8', '#E8DCC8']}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+          end={{ x: 1, y: 0 }}
           style={styles.header}
         >
           {/* Top Row: Branding */}
