@@ -168,36 +168,51 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView>
+        {/* Universal Header with Branding */}
         <LinearGradient
-          colors={[theme.colors.primary, theme.colors.primaryDark]}
+          colors={['#3BB8C3', '#2AA8B3']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.header}
         >
-          <Text style={styles.headerTitle}>Profile</Text>
-          <View style={styles.headerButtons}>
-            <TouchableOpacity
-              style={styles.notificationButton}
-              onPress={() => router.push('/notifications')}
+          {/* Top Row: Branding */}
+          <View style={styles.brandingRow}>
+            <TouchableOpacity 
+              style={styles.brandingContainer}
+              onPress={() => router.push('/about')}
+              activeOpacity={0.7}
             >
-              <Ionicons name="notifications-outline" size={24} color="#fff" />
-              {unreadCount > 0 && (
-                <View style={styles.notificationBadge}>
-                  <Text style={styles.notificationBadgeText}>
-                    {unreadCount > 9 ? '9+' : unreadCount}
-                  </Text>
-                </View>
-              )}
+              <Ionicons name="earth" size={18} color="#fff" />
+              <Text style={styles.brandingText}>WanderList</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.headerIconButton}
-              onPress={async () => {
-                if (stats) {
-                  await shareProgress(
-                    stats.total_visits || 0,
-                    stats.countries_visited || 0,
-                    progressStats?.totalPoints || 0
-                  );
+          </View>
+          
+          {/* Main Row: Title + Actions */}
+          <View style={styles.headerMainRow}>
+            <Text style={styles.headerTitle}>Profile</Text>
+            <View style={styles.headerButtons}>
+              <TouchableOpacity
+                style={styles.notificationButton}
+                onPress={() => router.push('/notifications')}
+              >
+                <Ionicons name="notifications-outline" size={22} color="#fff" />
+                {unreadCount > 0 && (
+                  <View style={styles.notificationBadge}>
+                    <Text style={styles.notificationBadgeText}>
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.headerIconButton}
+                onPress={async () => {
+                  if (stats) {
+                    await shareProgress(
+                      stats.total_visits || 0,
+                      stats.countries_visited || 0,
+                      progressStats?.totalPoints || 0
+                    );
                 }
               }}
             >
