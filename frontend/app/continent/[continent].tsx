@@ -140,15 +140,15 @@ export default function ContinentScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+      <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.headerGradient}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
+          <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
         <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>{continentName}</Text>
-          <Text style={styles.headerSubtitle}>{countries.length} countries to explore</Text>
+          <Text style={styles.headerTitleWhite}>{continentName}</Text>
+          <Text style={styles.headerSubtitleWhite}>{countries.length} countries to explore</Text>
         </View>
-      </View>
+      </LinearGradient>
 
       <FlatList
         data={countries}
