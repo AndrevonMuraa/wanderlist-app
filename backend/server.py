@@ -1783,7 +1783,7 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
 
 @api_router.get("/feed", response_model=List[Activity])
 async def get_activity_feed(current_user: User = Depends(get_current_user), limit: int = 50):
-    """Get activity feed from friends"""
+    """Get activity feed from friends with privacy filtering"""
     
     # Get all accepted friends
     friendships = await db.friends.find({
@@ -1801,13 +1801,28 @@ async def get_activity_feed(current_user: User = Depends(get_current_user), limi
         else:
             friend_ids.append(friendship["user_id"])
     
-    # Add current user to see own activities
-    friend_ids.append(current_user.user_id)
+    # Privacy filtering query:
+    # - Show all own activities (any visibility)
+    # - Show friends' activities that are "public" or "friends"
+    # - Never show "private" activities from others
+    privacy_filter = {
+        "$or": [
+            # Own activities - show all
+            {"user_id": current_user.user_id},
+            # Friends' public activities
+            {
+                "user_id": {"$in": friend_ids},
+                "$or": [
+                    {"visibility": "public"},
+                    {"visibility": "friends"},
+                    {"visibility": {"$exists": False}}  # Legacy activities without visibility
+                ]
+            }
+        ]
+    }
     
-    # Get activities from friends, sorted by recent
-    activities = await db.activities.find(
-        {"user_id": {"$in": friend_ids}}
-    ).sort("created_at", -1).limit(limit).to_list(limit)
+    # Get activities with privacy filter, sorted by recent
+    activities = await db.activities.find(privacy_filter).sort("created_at", -1).limit(limit).to_list(limit)
     
     # Enrich activities with like and comment counts, and check if current user liked
     enriched_activities = []
