@@ -7,7 +7,7 @@ Your friend can test the WanderList app instantly without creating an account!
 ### 🔗 Direct Link (Copy & Share)
 
 ```
-https://work-in-progress-12.preview.emergentagent.com/auto-login?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzk3MzU3ZDAyMzg4YyIsImV4cCI6MTc2ODU2NDYyM30.FnF2tJ5WAIPJEopdVoaRsBpSprBW2sRQW_-H1Eh3GmQ
+https://travelgram-7.preview.emergentagent.com/auto-login?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzk3MzU3ZDAyMzg4YyIsImV4cCI6MTc2ODU2NDYyM30.FnF2tJ5WAIPJEopdVoaRsBpSprBW2sRQW_-H1Eh3GmQ
 ```
 
 **Simply send this link to your friend** - they'll be automatically logged in and taken straight to the app!

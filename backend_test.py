@@ -9,7 +9,7 @@ import json
 from datetime import datetime
 
 # Backend URL from environment
-BACKEND_URL = "https://work-in-progress-12.preview.emergentagent.com/api"
+BACKEND_URL = "https://travelgram-7.preview.emergentagent.com/api"
 
 # Test user credentials
 TEST_USER = {
