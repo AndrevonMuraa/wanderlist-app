@@ -120,16 +120,16 @@ export default function ContinentsScreen() {
       if (response.ok) {
         const data = await response.json();
         // Update continents with progress data if available
+        // data.continents is an object like { "Europe": {...}, "Asia": {...} }
         const continentProgress = data?.continents;
-        if (continentProgress && Array.isArray(continentProgress)) {
+        if (continentProgress && typeof continentProgress === 'object') {
           setContinents(prev => prev.map(continent => {
-            const progress = continentProgress.find((c: any) => 
-              c?.name?.toLowerCase() === continent.name.toLowerCase()
-            );
+            // Match by continent name (key in the object)
+            const progress = continentProgress[continent.name];
             if (progress) {
               return {
                 ...continent,
-                visited: progress.visited_countries || 0,
+                visited: progress.visited || 0,
                 percentage: progress.percentage || 0
               };
             }
