@@ -213,15 +213,15 @@ export default function ProfileScreen() {
                       stats.countries_visited || 0,
                       progressStats?.totalPoints || 0
                     );
-                }
-              }}
-            >
-              <Ionicons name="share-social-outline" size={26} color="#fff" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.headerIconButton}
-              onPress={() => router.push('/about')}
-            >
+                  }
+                }}
+              >
+                <Ionicons name="share-social-outline" size={22} color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.headerIconButton}
+                onPress={() => router.push('/about')}
+              >
               <Ionicons name="information-circle-outline" size={28} color="#fff" />
             </TouchableOpacity>
           </View>
