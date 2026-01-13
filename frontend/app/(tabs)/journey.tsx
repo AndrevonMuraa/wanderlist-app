@@ -186,7 +186,9 @@ export default function JourneyScreen() {
       >
         {/* Universal Header with Branding */}
         <LinearGradient
-          colors={['#3BB8C3', '#2AA8B3']}
+          colors={gradients.oceanToSand}
+          start={gradients.horizontal.start}
+          end={gradients.horizontal.end}
           style={styles.header}
         >
           {/* Top Row: Branding + Profile */}
@@ -215,7 +217,6 @@ export default function JourneyScreen() {
           {/* Main Content */}
           <View style={styles.greetingContainer}>
             <Text style={styles.greeting}>My Journey</Text>
-            <Text style={styles.subGreeting}>{getGreeting()}, {user?.name?.split(' ')[0]}!</Text>
           </View>
         </LinearGradient>
 
