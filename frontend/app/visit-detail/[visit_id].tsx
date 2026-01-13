@@ -115,7 +115,7 @@ export default function VisitDetailScreen() {
               router.back();
             }}
           >
-            <Ionicons name="arrow-back" size={24} color="#fff" />
+            <Ionicons name="arrow-back" size={22} color="#fff" />
           </TouchableOpacity>
           <View style={styles.headerContent}>
             <Text style={styles.headerTitle}>{visit.landmark_name || 'Visit Details'}</Text>

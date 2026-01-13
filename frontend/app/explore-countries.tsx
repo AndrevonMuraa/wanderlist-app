@@ -371,7 +371,7 @@ export default function ExploreCountriesScreen() {
               style={styles.backButtonGradient}
               onPress={() => router.back()}
             >
-              <Ionicons name="arrow-back" size={24} color="#fff" />
+              <Ionicons name="arrow-back" size={22} color="#fff" />
               <Text style={styles.backButtonTextWhite}>Back to Continents</Text>
             </TouchableOpacity>
           )}
