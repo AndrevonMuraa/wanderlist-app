@@ -389,6 +389,16 @@ export default function ProfileScreen() {
         {/* Menu - Simplified */}
         <Surface style={styles.menuCard}>
           <List.Item
+            title="My Country Visits"
+            description="Photo collages and travel diaries"
+            left={props => <List.Icon {...props} icon="camera" color={theme.colors.primary} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
+            onPress={() => router.push('/my-country-visits')}
+            titleStyle={styles.listItemTitle}
+            descriptionStyle={styles.listItemDescription}
+          />
+          <Divider style={styles.divider} />
+          <List.Item
             title="About WanderList"
             description="Learn how to use the app"
             left={props => <List.Icon {...props} icon="information-outline" color={theme.colors.primary} />}
