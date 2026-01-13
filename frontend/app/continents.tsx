@@ -499,8 +499,6 @@ const styles = StyleSheet.create({
     marginHorizontal: theme.spacing.lg,
   },
   cardArrow: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
+    marginLeft: theme.spacing.md,
   },
 });
