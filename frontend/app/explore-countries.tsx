@@ -363,9 +363,9 @@ export default function ExploreCountriesScreen() {
       <View>
         {/* Universal Gradient Header - Testing "Mark as Visited" colors */}
         <LinearGradient
-          colors={['#4DB8D8', '#E8DCC8']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
+          colors={gradients.oceanToSand}
+          start={gradients.horizontal.start}
+          end={gradients.horizontal.end}
           style={styles.gradientHeader}
         >
           {/* Branding Row */}
@@ -404,9 +404,6 @@ export default function ExploreCountriesScreen() {
             <View style={styles.headerTextContainer}>
               <Text style={styles.headerTitle}>
                 {continent ? `${(continent as string).charAt(0).toUpperCase() + (continent as string).slice(1)}` : 'Explore Countries'}
-              </Text>
-              <Text style={styles.headerSubtitle}>
-                {continent ? 'Discover amazing landmarks' : 'Choose your next destination'}
               </Text>
             </View>
           </View>
