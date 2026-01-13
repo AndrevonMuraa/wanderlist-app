@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
   },
   cardGradient: {
     flex: 1,
-    padding: theme.spacing.lg,
+    padding: theme.spacing.md,
     justifyContent: 'space-between',
   },
   // Card Top Section (Title + Points)
