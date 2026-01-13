@@ -65,7 +65,7 @@ const COUNTRY_IMAGES: Record<string, string> = {
 
 export default function ContinentScreen() {
   const params = useLocalSearchParams();
-  const continentName = decodeURIComponent(params['[continent]'] as string);
+  const continentName = decodeURIComponent((params.continent || params['continent']) as string || 'Unknown');
   const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
