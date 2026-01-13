@@ -385,36 +385,59 @@ export default function LeaderboardScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: theme.colors.background,
   },
-  header: {
+  headerGradient: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 16,
+  },
+  brandingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    gap: 12,
+  },
+  backButton: {
+    padding: 4,
+  },
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  brandingText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  headerMain: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
   },
-  backButton: {
-    padding: 8,
-  },
-  headerTitle: {
-    fontSize: 24,
+  headerTitleNew: {
+    fontSize: 22,
     fontWeight: '800',
     color: '#fff',
-    marginBottom: 4,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#fff',
   },
   headerSubtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: 'rgba(255,255,255,0.9)',
+    marginTop: 2,
   },
   headerRight: {
     width: 40,
     alignItems: 'flex-end',
   },
   content: {
+    flex: 1,
+  },
     flex: 1,
   },
   filterSection: {
