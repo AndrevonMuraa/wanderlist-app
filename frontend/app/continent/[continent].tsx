@@ -187,6 +187,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: theme.colors.background,
   },
+  headerGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -207,9 +213,19 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginBottom: theme.spacing.xs / 2,
   },
+  headerTitleWhite: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#fff',
+  },
   headerSubtitle: {
     ...theme.typography.caption,
     color: theme.colors.textSecondary,
+  },
+  headerSubtitleWhite: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.9)',
+    marginTop: 2,
   },
   listContainer: {
     padding: theme.spacing.md,
