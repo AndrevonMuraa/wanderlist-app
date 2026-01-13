@@ -1,123 +1,75 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
+  Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
-  Platform,
   Image,
+  TouchableOpacity,
   Dimensions,
-  Modal,
-  Alert,
-  FlatList,
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
-import { Text, Surface } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Surface } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
-import CommentsSection from '../../components/CommentsSection';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
     return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
   }
+  return await SecureStore.getItemAsync('auth_token');
 };
 
-interface CountryVisitDetail {
+interface CountryVisit {
   country_visit_id: string;
   user_id: string;
-  user_name: string;
-  user_picture?: string;
+  country_id: string;
   country_name: string;
-  continent: string;
   photos: string[];
-  diary?: string;
-  visited_at: string;
+  diary: string;
+  visibility: string;
   points_earned: number;
+  created_at: string;
 }
 
 export default function CountryVisitDetailScreen() {
-  const { country_visit_id } = useLocalSearchParams();
   const router = useRouter();
-  const [countryVisit, setCountryVisit] = useState<CountryVisitDetail | null>(null);
+  const { country_visit_id } = useLocalSearchParams();
+  const [visit, setVisit] = useState<CountryVisit | null>(null);
   const [loading, setLoading] = useState(true);
-  const [currentUserId, setCurrentUserId] = useState<string>('');
-  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
-  const [commentsCount, setCommentsCount] = useState(0);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
 
   useEffect(() => {
-    loadCountryVisit();
-    loadCurrentUser();
-  }, []);
+    fetchVisitDetails();
+  }, [country_visit_id]);
 
-  const loadCurrentUser = async () => {
+  const fetchVisitDetails = async () => {
     try {
       const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setCurrentUserId(data.user_id);
-      }
-    } catch (error) {
-      console.error('Error loading user:', error);
-    }
-  };
-
-  const loadCountryVisit = async () => {
-    try {
-      const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/country-visits/${country_visit_id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        `${BACKEND_URL}/api/country-visits/${country_visit_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
-        setCountryVisit(data);
+        setVisit(data);
       }
     } catch (error) {
-      console.error('Error loading country visit:', error);
+      console.error('Error fetching country visit:', error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDelete = () => {
-    Alert.alert(
-      'Delete Country Visit',
-      'Are you sure you want to delete this country visit? This cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              const token = await getToken();
-              const response = await fetch(`${BACKEND_URL}/api/country-visits/${country_visit_id}`, {
-                method: 'DELETE',
-                headers: { Authorization: `Bearer ${token}` },
-              });
-
-              if (response.ok) {
-                router.back();
-              }
-            } catch (error) {
-              console.error('Error deleting country visit:', error);
-            }
-          },
-        },
-      ]
-    );
   };
 
   const formatDate = (dateString: string) => {
@@ -129,206 +81,149 @@ export default function CountryVisitDetailScreen() {
     });
   };
 
-  const renderPhotoGallery = () => {
-    if (!countryVisit?.photos || countryVisit.photos.length === 0) {
-      return null;
+  const getVisibilityIcon = (visibility: string) => {
+    switch (visibility) {
+      case 'public':
+        return 'globe-outline';
+      case 'friends':
+        return 'people-outline';
+      case 'private':
+        return 'lock-closed-outline';
+      default:
+        return 'globe-outline';
     }
-
-    return (
-      <View style={styles.photoGallery}>
-        <FlatList
-          data={countryVisit.photos}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item, index) => `photo-${index}`}
-          renderItem={({ item, index }) => (
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={() => setSelectedPhotoIndex(index)}
-            >
-              <Image
-                source={{ uri: item }}
-                style={styles.photo}
-                resizeMode="cover"
-              />
-            </TouchableOpacity>
-          )}
-        />
-        <View style={styles.photoCounter}>
-          <Ionicons name="images" size={16} color="#fff" />
-          <Text style={styles.photoCounterText}>
-            {countryVisit.photos.length} {countryVisit.photos.length === 1 ? 'photo' : 'photos'}
-          </Text>
-        </View>
-      </View>
-    );
-  };
-
-  const renderFullScreenPhoto = () => {
-    if (selectedPhotoIndex === null || !countryVisit?.photos) return null;
-
-    return (
-      <Modal
-        visible={true}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setSelectedPhotoIndex(null)}
-      >
-        <View style={styles.fullScreenModal}>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setSelectedPhotoIndex(null)}
-          >
-            <Ionicons name="close" size={32} color="#fff" />
-          </TouchableOpacity>
-
-          <FlatList
-            data={countryVisit.photos}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            initialScrollIndex={selectedPhotoIndex}
-            getItemLayout={(data, index) => ({
-              length: SCREEN_WIDTH,
-              offset: SCREEN_WIDTH * index,
-              index,
-            })}
-            keyExtractor={(item, index) => `fullscreen-photo-${index}`}
-            renderItem={({ item, index }) => (
-              <View style={styles.fullScreenPhotoContainer}>
-                <Image
-                  source={{ uri: item }}
-                  style={styles.fullScreenPhoto}
-                  resizeMode="contain"
-                />
-                <Text style={styles.fullScreenPhotoCounter}>
-                  {index + 1} / {countryVisit.photos!.length}
-                </Text>
-              </View>
-            )}
-          />
-        </View>
-      </Modal>
-    );
   };
 
   if (loading) {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
-        <View style={styles.centerContainer}>
-          <Text style={styles.loadingText}>Loading...</Text>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <Text style={styles.loadingText}>Loading visit...</Text>
         </View>
       </SafeAreaView>
     );
   }
 
-  if (!countryVisit) {
+  if (!visit) {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
-        <View style={styles.centerContainer}>
-          <Text style={styles.loadingText}>Country visit not found</Text>
+        <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={22} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Visit Not Found</Text>
+          <View style={styles.headerSpacer} />
+        </LinearGradient>
+        <View style={styles.errorContainer}>
+          <Ionicons name="alert-circle" size={64} color={theme.colors.textLight} />
+          <Text style={styles.errorText}>This visit could not be found</Text>
         </View>
       </SafeAreaView>
     );
   }
-
-  const isOwner = currentUserId === countryVisit.user_id;
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <LinearGradient
-        colors={[theme.colors.primary, theme.colors.secondary]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.header}
-      >
+      {/* Universal Turquoise Header */}
+      <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
+          <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle} numberOfLines={1}>
-          Country Visit
-        </Text>
-        {isOwner && (
-          <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
-            <Ionicons name="trash-outline" size={22} color="#fff" />
-          </TouchableOpacity>
-        )}
-        {!isOwner && <View style={styles.headerRight} />}
+        <View style={styles.headerContent}>
+          <Text style={styles.headerTitle}>{visit.country_name}</Text>
+          <Text style={styles.headerSubtitle}>Country Visit</Text>
+        </View>
+        <View style={styles.visibilityBadge}>
+          <Ionicons name={getVisibilityIcon(visit.visibility)} size={18} color="#fff" />
+        </View>
       </LinearGradient>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Photo Gallery */}
-        {renderPhotoGallery()}
+        {visit.photos && visit.photos.length > 0 && (
+          <View style={styles.gallerySection}>
+            {/* Main Photo */}
+            <View style={styles.mainPhotoContainer}>
+              <Image
+                source={{ uri: visit.photos[selectedPhotoIndex] }}
+                style={styles.mainPhoto}
+                resizeMode="cover"
+              />
+              {visit.photos.length > 1 && (
+                <View style={styles.photoCounter}>
+                  <Text style={styles.photoCounterText}>
+                    {selectedPhotoIndex + 1} / {visit.photos.length}
+                  </Text>
+                </View>
+              )}
+            </View>
 
-        {/* Country Info */}
-        <Surface style={styles.countryCard}>
-          <View style={styles.countryHeader}>
-            <View style={styles.countryInfo}>
-              <View style={styles.countryTitleRow}>
-                <Ionicons name="earth" size={24} color={theme.colors.primary} />
-                <Text style={styles.countryName}>{countryVisit.country_name}</Text>
-              </View>
-              <View style={styles.continentRow}>
-                <Ionicons name="location" size={14} color={theme.colors.textSecondary} />
-                <Text style={styles.continentText}>{countryVisit.continent}</Text>
-              </View>
-            </View>
-            <View style={styles.pointsBadge}>
-              <Ionicons name="star" size={16} color="#FFD700" />
-              <Text style={styles.pointsText}>+{countryVisit.points_earned}</Text>
-            </View>
+            {/* Thumbnail Strip */}
+            {visit.photos.length > 1 && (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={styles.thumbnailStrip}
+                contentContainerStyle={styles.thumbnailContent}
+              >
+                {visit.photos.map((photo, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => setSelectedPhotoIndex(index)}
+                    style={[
+                      styles.thumbnailContainer,
+                      selectedPhotoIndex === index && styles.thumbnailSelected,
+                    ]}
+                  >
+                    <Image source={{ uri: photo }} style={styles.thumbnail} />
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            )}
           </View>
+        )}
 
-          <View style={styles.dateRow}>
-            <Ionicons name="calendar" size={14} color={theme.colors.textSecondary} />
-            <Text style={styles.dateText}>Visited {formatDate(countryVisit.visited_at)}</Text>
+        {/* Visit Info Card */}
+        <Surface style={styles.infoCard}>
+          <View style={styles.infoRow}>
+            <View style={styles.infoItem}>
+              <Ionicons name="calendar" size={20} color={theme.colors.primary} />
+              <Text style={styles.infoLabel}>Visited</Text>
+              <Text style={styles.infoValue}>{formatDate(visit.created_at)}</Text>
+            </View>
+            <View style={styles.infoDivider} />
+            <View style={styles.infoItem}>
+              <Ionicons name="star" size={20} color="#FFD700" />
+              <Text style={styles.infoLabel}>Points Earned</Text>
+              <Text style={styles.infoValue}>{visit.points_earned}</Text>
+            </View>
           </View>
         </Surface>
 
-        {/* User Info */}
-        <Surface style={styles.userCard}>
-          <Image
-            source={{ uri: countryVisit.user_picture || 'https://via.placeholder.com/100' }}
-            style={styles.avatar}
-          />
-          <View style={styles.userInfo}>
-            <Text style={styles.userName}>{countryVisit.user_name}</Text>
-            <Text style={styles.userLabel}>Traveler</Text>
-          </View>
-        </Surface>
-
-        {/* Diary */}
-        {countryVisit.diary && (
-          <Surface style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Ionicons name="book" size={20} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Travel Diary</Text>
+        {/* Diary Entry */}
+        {visit.diary && (
+          <Surface style={styles.diaryCard}>
+            <View style={styles.diaryHeader}>
+              <Ionicons name="book" size={22} color={theme.colors.primary} />
+              <Text style={styles.diaryTitle}>Travel Diary</Text>
             </View>
-            <Text style={styles.diaryText}>{countryVisit.diary}</Text>
+            <Text style={styles.diaryText}>{visit.diary}</Text>
           </Surface>
         )}
 
-        {/* Comments Section */}
-        <Surface style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Ionicons name="chatbubbles" size={20} color={theme.colors.primary} />
-            <Text style={styles.sectionTitle}>Comments</Text>
-          </View>
-          <CommentsSection
-            activityId={countryVisit.country_visit_id}
-            commentsCount={commentsCount}
-            currentUserId={currentUserId}
-            onCommentsChange={setCommentsCount}
-          />
-        </Surface>
+        {/* Empty Diary State */}
+        {!visit.diary && (
+          <Surface style={styles.diaryCard}>
+            <View style={styles.emptyDiary}>
+              <Ionicons name="book-outline" size={32} color={theme.colors.textLight} />
+              <Text style={styles.emptyDiaryText}>No diary entry for this visit</Text>
+            </View>
+          </Surface>
+        )}
 
-        <View style={{ height: theme.spacing.xl }} />
+        <View style={styles.bottomSpacer} />
       </ScrollView>
-
-      {/* Full Screen Photo Modal */}
-      {renderFullScreenPhoto()}
     </SafeAreaView>
   );
 }
@@ -338,210 +233,176 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  centerContainer: {
+  loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  loadingText: {
+    marginTop: theme.spacing.md,
+    color: theme.colors.textSecondary,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
   },
   backButton: {
     padding: theme.spacing.xs,
+    marginRight: theme.spacing.sm,
+  },
+  headerContent: {
+    flex: 1,
   },
   headerTitle: {
-    ...theme.typography.h2,
-    color: '#fff',
+    fontSize: 20,
     fontWeight: '700',
-    flex: 1,
-    marginHorizontal: theme.spacing.md,
+    color: '#fff',
   },
-  deleteButton: {
+  headerSubtitle: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.8)',
+    marginTop: 2,
+  },
+  headerSpacer: {
+    width: 40,
+  },
+  visibilityBadge: {
     padding: theme.spacing.xs,
   },
-  headerRight: {
-    width: 40,
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing.xl,
+  },
+  errorText: {
+    marginTop: theme.spacing.md,
+    fontSize: 16,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
   },
   scrollView: {
     flex: 1,
   },
-  loadingText: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
+  // Gallery
+  gallerySection: {
+    marginBottom: theme.spacing.md,
   },
-  photoGallery: {
-    height: 300,
-    backgroundColor: theme.colors.surface,
+  mainPhotoContainer: {
+    width: width,
+    height: width * 0.75,
+    position: 'relative',
   },
-  photo: {
-    width: SCREEN_WIDTH,
-    height: 300,
+  mainPhoto: {
+    width: '100%',
+    height: '100%',
   },
   photoCounter: {
     position: 'absolute',
     bottom: theme.spacing.md,
     right: theme.spacing.md,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    borderRadius: theme.borderRadius.full,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
+    borderRadius: theme.borderRadius.md,
   },
   photoCounterText: {
-    ...theme.typography.caption,
     color: '#fff',
+    fontSize: 12,
     fontWeight: '600',
   },
-  countryCard: {
-    margin: theme.spacing.lg,
-    marginBottom: theme.spacing.md,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.lg,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
+  thumbnailStrip: {
+    marginTop: theme.spacing.sm,
   },
-  countryHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: theme.spacing.md,
-  },
-  countryInfo: {
-    flex: 1,
-    marginRight: theme.spacing.md,
-  },
-  countryTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.sm,
-    marginBottom: theme.spacing.xs,
-  },
-  countryName: {
-    ...theme.typography.h2,
-    color: theme.colors.text,
-    fontWeight: '700',
-  },
-  continentRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  continentText: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
-  },
-  pointsBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+  thumbnailContent: {
     paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    borderRadius: theme.borderRadius.full,
-  },
-  pointsText: {
-    ...theme.typography.body,
-    color: '#FFD700',
-    fontWeight: '700',
-  },
-  dateRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  dateText: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-  },
-  userCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.md,
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
-  },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    marginRight: theme.spacing.md,
-  },
-  userInfo: {
-    flex: 1,
-  },
-  userName: {
-    ...theme.typography.body,
-    color: theme.colors.text,
-    fontWeight: '700',
-    marginBottom: 2,
-  },
-  userLabel: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-  },
-  section: {
-    marginHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.md,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.lg,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
     gap: theme.spacing.sm,
-    marginBottom: theme.spacing.md,
   },
-  sectionTitle: {
-    ...theme.typography.h3,
-    color: theme.colors.text,
-    fontWeight: '700',
+  thumbnailContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: theme.borderRadius.md,
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
-  diaryText: {
-    ...theme.typography.body,
-    color: theme.colors.text,
-    lineHeight: 24,
+  thumbnailSelected: {
+    borderColor: theme.colors.primary,
   },
-  // Full Screen Photo Modal
-  fullScreenModal: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 50,
-    right: theme.spacing.lg,
-    zIndex: 10,
-    padding: theme.spacing.sm,
-  },
-  fullScreenPhotoContainer: {
-    width: SCREEN_WIDTH,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  fullScreenPhoto: {
-    width: SCREEN_WIDTH,
+  thumbnail: {
+    width: '100%',
     height: '100%',
   },
-  fullScreenPhotoCounter: {
-    position: 'absolute',
-    bottom: 40,
-    ...theme.typography.body,
-    color: '#fff',
-    fontWeight: '600',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.sm,
-    borderRadius: theme.borderRadius.full,
+  // Info Card
+  infoCard: {
+    marginHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.sm,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  infoItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  infoDivider: {
+    width: 1,
+    height: 40,
+    backgroundColor: theme.colors.border,
+  },
+  infoLabel: {
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+    marginTop: theme.spacing.xs,
+  },
+  infoValue: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginTop: 2,
+  },
+  // Diary
+  diaryCard: {
+    marginHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.sm,
+  },
+  diaryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
+  },
+  diaryTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  diaryText: {
+    fontSize: 15,
+    lineHeight: 24,
+    color: theme.colors.textSecondary,
+  },
+  emptyDiary: {
+    alignItems: 'center',
+    paddingVertical: theme.spacing.lg,
+  },
+  emptyDiaryText: {
+    marginTop: theme.spacing.sm,
+    fontSize: 14,
+    color: theme.colors.textLight,
+  },
+  bottomSpacer: {
+    height: theme.spacing.xl,
   },
 });
