@@ -99,7 +99,7 @@ export default function ContinentsScreen() {
   const insets = useSafeAreaInsets();
 
   // Calculate the height of the fixed top bar (compact)
-  const fixedBarHeight = (Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 16)) + 36;
+  const fixedBarHeight = (Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20)) + 40;
 
   useEffect(() => {
     fetchProgress();
