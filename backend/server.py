@@ -2916,6 +2916,17 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
     if len(data.photos) > 10:
         raise HTTPException(status_code=400, detail="Maximum 10 photos allowed")
     
+    if len(data.photos) == 0:
+        raise HTTPException(status_code=400, detail="At least one photo is required")
+    
+    # Look up country details from database
+    country = await db.countries.find_one({"country_id": data.country_id}, {"_id": 0})
+    if not country:
+        raise HTTPException(status_code=404, detail="Country not found")
+    
+    country_name = country.get("name", "Unknown")
+    continent = country.get("continent", "Unknown")
+    
     # Parse visit date
     visited_at = datetime.now(timezone.utc)
     if data.visited_at:
@@ -2924,6 +2935,12 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
         except:
             pass
     
+    # Determine visibility (use provided or user's default)
+    visibility = data.visibility or current_user.default_privacy or "public"
+    
+    # Award 50 points for country visit (as shown in modal)
+    points_earned = 50
+    
     # Create country visit
     country_visit_id = f"cv_{uuid.uuid4().hex[:12]}"
     country_visit = {
@@ -2931,12 +2948,14 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
         "user_id": current_user.user_id,
         "user_name": current_user.name,
         "user_picture": current_user.picture,
-        "country_name": data.country_name,
-        "continent": data.continent,
+        "country_id": data.country_id,
+        "country_name": country_name,
+        "continent": continent,
         "photos": data.photos,
-        "diary": data.diary,
+        "diary": data.diary_notes,
+        "visibility": visibility,
         "visited_at": visited_at,
-        "points_earned": 15,
+        "points_earned": points_earned,
         "created_at": datetime.now(timezone.utc)
     }
     
@@ -2945,7 +2964,7 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
     # Award points to user
     await db.users.update_one(
         {"user_id": current_user.user_id},
-        {"$inc": {"points": 15}}
+        {"$inc": {"points": points_earned}}
     )
     
     # Create activity for feed
@@ -2957,18 +2976,20 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
         "user_picture": current_user.picture,
         "activity_type": "country_visit",
         "country_visit_id": country_visit_id,
-        "country_name": data.country_name,
-        "continent": data.continent,
+        "country_id": data.country_id,
+        "country_name": country_name,
+        "continent": continent,
         "photos": data.photos,
-        "diary": data.diary,
-        "points_earned": 15,
+        "diary": data.diary_notes,
+        "visibility": visibility,
+        "points_earned": points_earned,
         "created_at": datetime.now(timezone.utc),
         "likes_count": 0,
         "comments_count": 0
     }
     await db.activities.insert_one(activity)
     
-    return {"message": "Country visit created", "country_visit_id": country_visit_id, "points_earned": 15}
+    return {"message": "Country visit created", "country_visit_id": country_visit_id, "points_earned": points_earned}
 
 @api_router.get("/country-visits")
 async def get_country_visits(current_user: User = Depends(get_current_user)):
