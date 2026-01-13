@@ -229,15 +229,20 @@ export default function ContinentsScreen() {
               <View style={styles.card}>
                 <Image source={{ uri: continent.image }} style={styles.cardImage} resizeMode="cover" />
                 <LinearGradient colors={continent.gradient} style={styles.cardGradient}>
-                  <View style={styles.cardTopRow}>
+                  {/* Top Section: Title (left) + Points (right) */}
+                  <View style={styles.cardTopSection}>
+                    <View style={styles.cardTitleSection}>
+                      <Text style={styles.cardTitle}>{continent.name}</Text>
+                      <Text style={styles.cardDescription}>{continent.description}</Text>
+                    </View>
                     <View style={styles.pointsBadge}>
                       <Ionicons name="star" size={14} color="#FFD700" />
                       <Text style={styles.pointsText}>{continent.totalPoints.toLocaleString()}</Text>
                     </View>
                   </View>
-                  <View style={styles.cardContent}>
-                    <Text style={styles.cardTitle}>{continent.name}</Text>
-                    <Text style={styles.cardDescription}>{continent.description}</Text>
+                  
+                  {/* Bottom Section: Stats/Progress + Arrow */}
+                  <View style={styles.cardBottomSection}>
                     {continent.percentage !== undefined && continent.percentage > 0 ? (
                       <View style={styles.progressSection}>
                         <Text style={styles.progressLabel}>
