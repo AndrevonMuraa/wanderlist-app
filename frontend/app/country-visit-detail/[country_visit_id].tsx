@@ -25,6 +25,7 @@ import { Surface, Portal, Dialog, Button } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
+import PhotoViewer from '../../components/PhotoViewer';
 
 const { width, height } = Dimensions.get('window');
 
