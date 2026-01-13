@@ -19,9 +19,10 @@ const CONTINENTS = [
     countries: 10,
     landmarks: 113,
     image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800',
-    gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
+    gradient: ['rgba(59,184,195,0.2)', 'rgba(59,184,195,0.7)'] as const,
     totalPoints: 2400,
-    description: 'Historic cities & culture',
+    description: 'Historic castles and cultural heritage',
+    accentColor: '#3BB8C3', // Turquoise/Cyan
   },
   {
     id: 'asia',
@@ -29,19 +30,10 @@ const CONTINENTS = [
     countries: 10,
     landmarks: 116,
     image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800',
-    gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
+    gradient: ['rgba(255,140,66,0.2)', 'rgba(255,140,66,0.7)'] as const,
     totalPoints: 3100,
-    description: 'Ancient traditions & temples',
-  },
-  {
-    id: 'americas',
-    name: 'Americas',
-    countries: 10,
-    landmarks: 113,
-    image: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800',
-    gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
-    totalPoints: 3200,
-    description: 'From Canada to Patagonia',
+    description: 'Ancient temples and modern wonders',
+    accentColor: '#FF8C42', // Orange
   },
   {
     id: 'africa',
@@ -49,9 +41,21 @@ const CONTINENTS = [
     countries: 10,
     landmarks: 103,
     image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800',
-    gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
+    gradient: ['rgba(218,165,32,0.2)', 'rgba(218,165,32,0.7)'] as const,
     totalPoints: 1600,
-    description: 'Wildlife & ancient history',
+    description: 'Wild savannas and ancient civilizations',
+    accentColor: '#DAA520', // Golden
+  },
+  {
+    id: 'americas',
+    name: 'Americas',
+    countries: 10,
+    landmarks: 113,
+    image: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800',
+    gradient: ['rgba(76,175,80,0.2)', 'rgba(76,175,80,0.7)'] as const,
+    totalPoints: 3200,
+    description: 'Rainforests to mountain peaks',
+    accentColor: '#4CAF50', // Green
   },
   {
     id: 'oceania',
@@ -59,9 +63,10 @@ const CONTINENTS = [
     countries: 8,
     landmarks: 83,
     image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800',
-    gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
+    gradient: ['rgba(33,150,243,0.2)', 'rgba(33,150,243,0.7)'] as const,
     totalPoints: 1000,
-    description: 'Island paradise & reefs',
+    description: 'Island paradise and coral reefs',
+    accentColor: '#2196F3', // Blue
   },
 ];
 
