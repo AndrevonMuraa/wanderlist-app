@@ -243,15 +243,15 @@ export default function AddVisitScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+      <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.headerGradient}>
         <TouchableOpacity onPress={handleClose} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
+          <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
         <View style={styles.headerContent}>
           <Text style={styles.headerTitle}>Add Visit</Text>
           <Text style={styles.headerSubtitle}>{landmark?.name || name}</Text>
         </View>
-      </View>
+      </LinearGradient>
 
       {/* Modern Modal Component */}
       {landmark && (
