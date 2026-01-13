@@ -170,16 +170,16 @@ export default function CollectionsScreen() {
         contentContainerStyle={styles.scrollContent}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        {/* Header */}
+        {/* Universal Turquoise Header */}
         <LinearGradient
-          colors={[theme.colors.primary, theme.colors.primaryDark]}
+          colors={['#3BB8C3', '#2AA8B3']}
           style={styles.header}
         >
           <TouchableOpacity 
             onPress={() => router.push('/(tabs)/profile')} 
             style={styles.backButton}
           >
-            <Ionicons name="arrow-back" size={24} color="#fff" />
+            <Ionicons name="arrow-back" size={22} color="#fff" />
           </TouchableOpacity>
           <View style={styles.headerContent}>
             <View>
