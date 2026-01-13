@@ -163,13 +163,13 @@ export default function AchievementsScreen() {
   if (loading) {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
-        <View style={styles.header}>
+        <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.headerGradient}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#1a1a1a" />
+            <Ionicons name="arrow-back" size={22} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Achievements</Text>
           <View style={styles.headerRight} />
-        </View>
+        </LinearGradient>
         <View style={styles.loadingContainer}>
           <Text>Loading achievements...</Text>
         </View>
@@ -180,13 +180,13 @@ export default function AchievementsScreen() {
   if (!data) {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
-        <View style={styles.header}>
+        <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.headerGradient}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#1a1a1a" />
+            <Ionicons name="arrow-back" size={22} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Achievements</Text>
           <View style={styles.headerRight} />
-        </View>
+        </LinearGradient>
         <View style={styles.errorContainer}>
           <Text>Failed to load achievements</Text>
         </View>
@@ -198,16 +198,16 @@ export default function AchievementsScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
+      {/* Universal Turquoise Header */}
+      <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.headerGradient}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#1a1a1a" />
+          <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Achievements</Text>
         <View style={styles.headerRight}>
-          <Ionicons name="trophy" size={24} color="#FFD700" />
+          <Ionicons name="trophy" size={22} color="#FFD700" />
         </View>
-      </View>
+      </LinearGradient>
 
       <ScrollView
         style={styles.content}
