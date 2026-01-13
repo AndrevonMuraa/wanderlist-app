@@ -389,23 +389,24 @@ export default function ExploreCountriesScreen() {
             </TouchableOpacity>
           </View>
           
-          {/* Back button + Title */}
-          {continent && (
-            <TouchableOpacity 
-              style={styles.backButtonGradient}
-              onPress={() => router.back()}
-            >
-              <Ionicons name="arrow-back" size={22} color="#fff" />
-              <Text style={styles.backButtonTextWhite}>Back to Continents</Text>
-            </TouchableOpacity>
-          )}
-          <View style={styles.headerTextContainer}>
-            <Text style={styles.headerTitle}>
-              {continent ? `${(continent as string).charAt(0).toUpperCase() + (continent as string).slice(1)}` : 'Explore Countries'}
-            </Text>
-            <Text style={styles.headerSubtitle}>
-              {continent ? 'Discover amazing landmarks' : 'Choose your next destination'}
-            </Text>
+          {/* Title Row with Back Button */}
+          <View style={styles.titleRow}>
+            {continent && (
+              <TouchableOpacity 
+                style={styles.backButtonInline}
+                onPress={() => router.back()}
+              >
+                <Ionicons name="arrow-back" size={22} color="#fff" />
+              </TouchableOpacity>
+            )}
+            <View style={styles.headerTextContainer}>
+              <Text style={styles.headerTitle}>
+                {continent ? `${(continent as string).charAt(0).toUpperCase() + (continent as string).slice(1)}` : 'Explore Countries'}
+              </Text>
+              <Text style={styles.headerSubtitle}>
+                {continent ? 'Discover amazing landmarks' : 'Choose your next destination'}
+              </Text>
+            </View>
           </View>
         </LinearGradient>
 
