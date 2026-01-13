@@ -970,8 +970,9 @@ const styles = StyleSheet.create({
     color: '#C9A961',
   },
   progressMini: {
-    alignItems: 'flex-end',
-    gap: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   progressMiniText: {
     fontSize: 10,
