@@ -343,10 +343,10 @@ class CountryVisit(BaseModel):
     created_at: datetime
 
 class CountryVisitCreate(BaseModel):
-    country_name: str
-    continent: str
+    country_id: str  # Country ID - backend will look up name and continent
     photos: List[str] = []  # Base64 images
-    diary: Optional[str] = None
+    diary_notes: Optional[str] = None  # Diary entry
+    visibility: Optional[str] = "public"  # Privacy setting
     visited_at: Optional[str] = None  # ISO format date
 
 # ============= END COUNTRY VISIT MODELS =============
