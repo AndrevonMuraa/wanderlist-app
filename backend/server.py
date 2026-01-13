@@ -1100,6 +1100,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         "has_tips": len(travel_tips) > 0,
         "has_photos": len(photos) > 0,
         "photo_count": len(photos),
+        "visibility": data.visibility or current_user.default_privacy or "public",  # Privacy setting
         "created_at": datetime.now(timezone.utc),
         "likes_count": 0,
         "comments_count": 0
