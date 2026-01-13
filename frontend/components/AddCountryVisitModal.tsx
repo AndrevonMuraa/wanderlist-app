@@ -160,6 +160,12 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
             />
           </View>
 
+          {/* Privacy Setting */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Who can see this?</Text>
+            <PrivacySelector selected={privacy} onChange={setPrivacy} />
+          </View>
+
           {/* Submit */}
           <TouchableOpacity
             onPress={handleSubmit}
