@@ -119,11 +119,12 @@ export default function ContinentsScreen() {
 
       if (response.ok) {
         const data = await response.json();
-        // Update continents with progress data
-        if (data.continents && Array.isArray(data.continents)) {
+        // Update continents with progress data if available
+        const continentProgress = data?.continents;
+        if (continentProgress && Array.isArray(continentProgress)) {
           setContinents(prev => prev.map(continent => {
-            const progress = data.continents.find((c: any) => 
-              c.name?.toLowerCase() === continent.name.toLowerCase()
+            const progress = continentProgress.find((c: any) => 
+              c?.name?.toLowerCase() === continent.name.toLowerCase()
             );
             if (progress) {
               return {
