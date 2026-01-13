@@ -613,8 +613,40 @@ const styles = StyleSheet.create({
   },
   gradientHeader: {
     paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
     paddingBottom: theme.spacing.xl,
+  },
+  brandingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xs,
+  },
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  brandingText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  profileButton: {
+    padding: 2,
+  },
+  profileCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileInitial: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#fff',
   },
   backButtonGradient: {
     flexDirection: 'row',
