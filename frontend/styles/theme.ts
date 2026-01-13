@@ -205,12 +205,52 @@ export const shadows = {
   },
 };
 
+// =============================================================================
+// SIGNATURE GRADIENT - "Ocean to Sand"
+// =============================================================================
+// Our core brand gradient that flows from vibrant ocean turquoise to warm sand.
+// Use this for headers, primary buttons, and key UI elements.
+//
+// Usage with LinearGradient:
+//   <LinearGradient
+//     colors={gradients.oceanToSand}
+//     start={gradients.horizontal.start}
+//     end={gradients.horizontal.end}
+//     style={styles.yourStyle}
+//   />
+// =============================================================================
+
+export const gradients = {
+  // Primary brand gradient - Ocean to Sand
+  oceanToSand: ['#4DB8D8', '#E8DCC8'] as const,
+  
+  // Alternative gradients for variety
+  oceanDeep: ['#4DB8D8', '#2E9AB5'] as const,      // Ocean variations
+  sandWarm: ['#E8DCC8', '#D4A574'] as const,       // Warm sand to copper
+  sunsetGold: ['#E8DCC8', '#C9A961'] as const,     // Sand to luxury gold
+  
+  // Gradient directions
+  horizontal: {
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 0 },
+  },
+  vertical: {
+    start: { x: 0, y: 0 },
+    end: { x: 0, y: 1 },
+  },
+  diagonal: {
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 1 },
+  },
+};
+
 export const theme = {
   colors,
   spacing,
   borderRadius,
   typography,
   shadows,
+  gradients,
 };
 
 export default theme;
