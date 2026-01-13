@@ -2653,3 +2653,65 @@ agent_communication:
     4. Upgrade prompt correctly hidden for Premium users
     
     NO ISSUES FOUND. All features are production-ready! 🎉"
+  - agent: "testing"
+    message: "🎉 ✅ COUNTRY VISITS & PROFILE UPDATE API TESTING COMPLETE - 100% SUCCESS!
+    
+    URL: https://trip-journal-1.preview.emergentagent.com/api
+    TEST CREDENTIALS: mobile@test.com / test123
+    DATE: Backend API Testing for Country Visits Feature and Profile Update
+    
+    ✅ ALL BACKEND ENDPOINTS TESTED (8/8 tests passed - 100% success rate):
+    
+    🌍 COUNTRY VISITS FEATURE (50 POINTS PER VISIT):
+    ✅ POST /api/country-visits - Create country visit:
+       - Successfully creates country visit with country_id (france), photos (base64 array, max 10), diary_notes, visibility
+       - Awards 50 points bonus as specified in requirements
+       - Returns country_visit_id and points_earned correctly
+       - Properly looks up country_name and continent from country_id
+    
+    ✅ GET /api/country-visits - List user's country visits:
+       - Returns array of user's country visits with all required fields
+       - Includes country_name, continent, photos, points_earned
+       - Retrieved 4 existing visits successfully
+    
+    ✅ GET /api/country-visits/{country_visit_id} - Get specific visit details:
+       - Returns complete visit details including country name (France), continent (Europe)
+       - Includes photos array, diary notes, all metadata
+       - Proper data structure and field population
+    
+    ✅ DELETE /api/country-visits/{country_visit_id} - Delete a visit:
+       - Successfully deletes country visit and confirms with 404 verification
+       - Properly removes associated activities and deducts points
+       - Ownership verification working correctly
+    
+    👤 PROFILE UPDATE (PROFILE PICTURE UPLOAD):
+    ✅ PUT /api/auth/profile - Update profile:
+       - Successfully updates all profile fields: name (string), picture (base64 image), bio (max 200 chars), location
+       - Profile picture upload supports base64 image format as required
+       - Bio character limit properly enforced at 200 characters
+       - All fields updated correctly and returned in response
+    
+    🔒 AUTHENTICATION REQUIREMENTS:
+    ✅ All endpoints properly require authentication:
+       - Unauthenticated requests return 401 status
+       - JWT token authentication working correctly
+       - Proper security implementation verified
+    
+    🎯 CRITICAL FEATURES VERIFIED:
+    ✓ Country visits create successfully with 50 points bonus
+    ✓ Country visit includes country_name, continent from lookup
+    ✓ Profile update saves all fields correctly (name, picture, bio, location)
+    ✓ All endpoints require authentication
+    ✓ Base64 image upload working for both country visits and profile pictures
+    ✓ Points system working correctly (50 points per country visit)
+    ✓ Full CRUD operations for country visits
+    
+    📊 TEST RESULTS SUMMARY:
+    - Total Tests: 8
+    - Passed: 8
+    - Failed: 0
+    - Success Rate: 100.0%
+    
+    🚀 CONCLUSION:
+    ALL BACKEND API REQUIREMENTS FROM REVIEW REQUEST ARE WORKING PERFECTLY!
+    Both Country Visits Feature and Profile Update endpoints are production-ready with full functionality."
