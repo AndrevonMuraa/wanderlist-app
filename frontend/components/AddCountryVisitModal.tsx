@@ -108,7 +108,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <View style={styles.container}>
         <LinearGradient
-          colors={[theme.colors.primary, theme.colors.primaryDark]}
+          colors={['#3BB8C3', '#2AA8B3']}
           style={styles.header}
         >
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
