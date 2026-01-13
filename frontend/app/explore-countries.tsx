@@ -263,17 +263,9 @@ export default function ExploreCountriesScreen() {
                     {hasProgress ? (
                       <View style={styles.progressMini}>
                         <Text style={styles.progressMiniText}>{country.visited}/{country.landmark_count}</Text>
-                        <View style={styles.progressBarTiny}>
-                          <View 
-                            style={[
-                              styles.progressFillTiny,
-                              { 
-                                width: `${country.percentage || 0}%`,
-                                backgroundColor: isComplete ? '#4CAF50' : theme.colors.primary
-                              }
-                            ]} 
-                          />
-                        </View>
+                        {isComplete && (
+                          <Ionicons name="checkmark-circle" size={16} color="#4CAF50" />
+                        )}
                       </View>
                     ) : (
                       <TouchableOpacity 
