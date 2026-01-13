@@ -201,7 +201,7 @@ export default function LeaderboardScreen() {
     return (
       <Surface style={styles.userRankCard} elevation={2}>
         <LinearGradient
-          colors={['#667eea', '#764ba2']}
+          colors={['#3BB8C3', '#2AA8B3']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.userRankGradient}
