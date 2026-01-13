@@ -2205,8 +2205,6 @@ async def delete_country_visit(country_visit_id: str, current_user: User = Depen
         raise HTTPException(status_code=404, detail="Country visit not found")
     return {"message": "Country visit deleted"}
 
-    return {"message": "Added to bucket list", "bucket_list_id": bucket_list_id}
-
 @api_router.delete("/bucket-list/{bucket_list_id}")
 async def remove_from_bucket_list(bucket_list_id: str, current_user: User = Depends(get_current_user)):
     """Remove a landmark from bucket list"""
