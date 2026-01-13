@@ -690,6 +690,14 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.xs / 2,
     textAlign: 'center',
   },
+  difficultyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.md,
+  },
+  difficultyContent: {
+    flex: 1,
+  },
   // Coordinates
   coordinatesRow: {
     flexDirection: 'row',
