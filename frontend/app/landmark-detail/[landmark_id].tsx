@@ -328,47 +328,31 @@ export default function LandmarkDetailScreen() {
           </Surface>
         </View>
 
-        {/* Quick Info Section */}
-        {(landmark.best_time_to_visit || landmark.duration || landmark.difficulty) && (
+        {/* Quick Info Section - Only Difficulty */}
+        {landmark.difficulty && (
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <Ionicons name="flash" size={24} color={theme.colors.primary} />
               <Text style={styles.sectionTitle}>Quick Info</Text>
             </View>
-            <View style={styles.quickInfoGrid}>
-              {landmark.best_time_to_visit && (
-                <Surface style={styles.quickInfoCard}>
-                  <Ionicons name="calendar" size={28} color={theme.colors.primary} />
-                  <Text style={styles.quickInfoLabel}>Best Time</Text>
-                  <Text style={styles.quickInfoValue}>{landmark.best_time_to_visit}</Text>
-                </Surface>
-              )}
-
-              {landmark.duration && (
-                <Surface style={styles.quickInfoCard}>
-                  <Ionicons name="time" size={28} color={theme.colors.primary} />
-                  <Text style={styles.quickInfoLabel}>Duration</Text>
-                  <Text style={styles.quickInfoValue}>{landmark.duration}</Text>
-                </Surface>
-              )}
-
-              {landmark.difficulty && (
-                <Surface style={styles.quickInfoCard}>
-                  <Ionicons 
-                    name={getDifficultyIcon(landmark.difficulty)} 
-                    size={28} 
-                    color={getDifficultyColor(landmark.difficulty)} 
-                  />
-                  <Text style={styles.quickInfoLabel}>Difficulty</Text>
+            <Surface style={styles.card}>
+              <View style={styles.difficultyRow}>
+                <Ionicons 
+                  name={getDifficultyIcon(landmark.difficulty)} 
+                  size={28} 
+                  color={getDifficultyColor(landmark.difficulty)} 
+                />
+                <View style={styles.difficultyContent}>
+                  <Text style={styles.quickInfoLabel}>Difficulty Level</Text>
                   <Text style={[
                     styles.quickInfoValue,
                     { color: getDifficultyColor(landmark.difficulty) }
                   ]}>
                     {landmark.difficulty}
                   </Text>
-                </Surface>
-              )}
-            </View>
+                </View>
+              </View>
+            </Surface>
           </View>
         )}
 
