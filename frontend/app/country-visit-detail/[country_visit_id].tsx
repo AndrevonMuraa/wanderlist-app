@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,9 @@ import {
   Dimensions,
   Platform,
   ActivityIndicator,
+  Share,
+  FlatList,
+  Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -31,14 +34,51 @@ const getToken = async (): Promise<string | null> => {
 interface CountryVisit {
   country_visit_id: string;
   user_id: string;
+  user_name?: string;
   country_id: string;
   country_name: string;
+  continent?: string;
   photos: string[];
   diary: string;
   visibility: string;
   points_earned: number;
+  visited_at?: string;
   created_at: string;
 }
+
+// Country flag mapping
+const countryFlags: Record<string, string> = {
+  france: '🇫🇷',
+  spain: '🇪🇸',
+  italy: '🇮🇹',
+  germany: '🇩🇪',
+  'united kingdom': '🇬🇧',
+  japan: '🇯🇵',
+  australia: '🇦🇺',
+  brazil: '🇧🇷',
+  canada: '🇨🇦',
+  china: '🇨🇳',
+  india: '🇮🇳',
+  mexico: '🇲🇽',
+  usa: '🇺🇸',
+  'united states': '🇺🇸',
+  egypt: '🇪🇬',
+  'south africa': '🇿🇦',
+  thailand: '🇹🇭',
+  greece: '🇬🇷',
+  portugal: '🇵🇹',
+  netherlands: '🇳🇱',
+  switzerland: '🇨🇭',
+  austria: '🇦🇹',
+  belgium: '🇧🇪',
+  sweden: '🇸🇪',
+  norway: '🇳🇴',
+};
+
+const getCountryFlag = (countryName: string): string => {
+  const key = countryName.toLowerCase();
+  return countryFlags[key] || '🏳️';
+};
 
 export default function CountryVisitDetailScreen() {
   const router = useRouter();
@@ -46,6 +86,8 @@ export default function CountryVisitDetailScreen() {
   const [visit, setVisit] = useState<CountryVisit | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+  const flatListRef = useRef<FlatList>(null);
+  const scrollX = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     fetchVisitDetails();
@@ -81,16 +123,58 @@ export default function CountryVisitDetailScreen() {
     });
   };
 
-  const getVisibilityIcon = (visibility: string) => {
+  const getVisibilityInfo = (visibility: string) => {
     switch (visibility) {
       case 'public':
-        return 'globe-outline';
+        return { icon: 'globe-outline', label: 'Public', emoji: '🌐' };
       case 'friends':
-        return 'people-outline';
+        return { icon: 'people-outline', label: 'Friends Only', emoji: '👥' };
       case 'private':
-        return 'lock-closed-outline';
+        return { icon: 'lock-closed-outline', label: 'Private', emoji: '🔒' };
       default:
-        return 'globe-outline';
+        return { icon: 'globe-outline', label: 'Public', emoji: '🌐' };
+    }
+  };
+
+  const handleShare = async () => {
+    if (!visit) return;
+    
+    try {
+      const message = `🌍 My trip to ${visit.country_name}!\n\n${visit.diary ? `"${visit.diary.substring(0, 100)}${visit.diary.length > 100 ? '...' : ''}"` : 'Amazing memories!'}\n\n📸 ${visit.photos.length} photo${visit.photos.length !== 1 ? 's' : ''} | ⭐ ${visit.points_earned} points\n\n#WanderList #Travel #${visit.country_name.replace(/\s/g, '')}`;
+      
+      await Share.share({
+        message,
+        title: `My ${visit.country_name} Adventure`,
+      });
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+  };
+
+  const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
+    if (viewableItems.length > 0) {
+      setSelectedPhotoIndex(viewableItems[0].index || 0);
+    }
+  }).current;
+
+  const viewabilityConfig = useRef({
+    itemVisiblePercentThreshold: 50,
+  }).current;
+
+  const scrollToIndex = (index: number) => {
+    flatListRef.current?.scrollToIndex({ index, animated: true });
+    setSelectedPhotoIndex(index);
+  };
+
+  const goToPrevPhoto = () => {
+    if (selectedPhotoIndex > 0) {
+      scrollToIndex(selectedPhotoIndex - 1);
+    }
+  };
+
+  const goToNextPhoto = () => {
+    if (visit && selectedPhotoIndex < visit.photos.length - 1) {
+      scrollToIndex(selectedPhotoIndex + 1);
     }
   };
 
@@ -123,6 +207,8 @@ export default function CountryVisitDetailScreen() {
     );
   }
 
+  const visibilityInfo = getVisibilityInfo(visit.visibility);
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Universal Turquoise Header */}
@@ -131,25 +217,75 @@ export default function CountryVisitDetailScreen() {
           <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
         <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>{visit.country_name}</Text>
-          <Text style={styles.headerSubtitle}>Country Visit</Text>
+          <View style={styles.headerTitleRow}>
+            <Text style={styles.headerFlag}>{getCountryFlag(visit.country_name)}</Text>
+            <Text style={styles.headerTitle}>{visit.country_name}</Text>
+          </View>
+          <Text style={styles.headerSubtitle}>
+            {visit.continent || 'Country Visit'}
+          </Text>
         </View>
-        <View style={styles.visibilityBadge}>
-          <Ionicons name={getVisibilityIcon(visit.visibility)} size={18} color="#fff" />
-        </View>
+        <TouchableOpacity onPress={handleShare} style={styles.shareButton}>
+          <Ionicons name="share-social-outline" size={22} color="#fff" />
+        </TouchableOpacity>
       </LinearGradient>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Photo Gallery */}
+        {/* Photo Gallery with Swipe */}
         {visit.photos && visit.photos.length > 0 && (
           <View style={styles.gallerySection}>
-            {/* Main Photo */}
+            {/* Swipeable Photo Gallery */}
             <View style={styles.mainPhotoContainer}>
-              <Image
-                source={{ uri: visit.photos[selectedPhotoIndex] }}
-                style={styles.mainPhoto}
-                resizeMode="cover"
+              <FlatList
+                ref={flatListRef}
+                data={visit.photos}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                onViewableItemsChanged={onViewableItemsChanged}
+                viewabilityConfig={viewabilityConfig}
+                keyExtractor={(_, index) => index.toString()}
+                getItemLayout={(_, index) => ({
+                  length: width,
+                  offset: width * index,
+                  index,
+                })}
+                renderItem={({ item }) => (
+                  <Image
+                    source={{ uri: item }}
+                    style={styles.mainPhoto}
+                    resizeMode="cover"
+                  />
+                )}
+                onScroll={Animated.event(
+                  [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                  { useNativeDriver: false }
+                )}
               />
+
+              {/* Navigation Arrows */}
+              {visit.photos.length > 1 && (
+                <>
+                  {selectedPhotoIndex > 0 && (
+                    <TouchableOpacity
+                      style={[styles.navArrow, styles.navArrowLeft]}
+                      onPress={goToPrevPhoto}
+                    >
+                      <Ionicons name="chevron-back" size={28} color="#fff" />
+                    </TouchableOpacity>
+                  )}
+                  {selectedPhotoIndex < visit.photos.length - 1 && (
+                    <TouchableOpacity
+                      style={[styles.navArrow, styles.navArrowRight]}
+                      onPress={goToNextPhoto}
+                    >
+                      <Ionicons name="chevron-forward" size={28} color="#fff" />
+                    </TouchableOpacity>
+                  )}
+                </>
+              )}
+
+              {/* Photo Counter */}
               {visit.photos.length > 1 && (
                 <View style={styles.photoCounter}>
                   <Text style={styles.photoCounterText}>
@@ -158,6 +294,25 @@ export default function CountryVisitDetailScreen() {
                 </View>
               )}
             </View>
+
+            {/* Dot Indicators */}
+            {visit.photos.length > 1 && (
+              <View style={styles.dotContainer}>
+                {visit.photos.map((_, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => scrollToIndex(index)}
+                  >
+                    <View
+                      style={[
+                        styles.dot,
+                        selectedPhotoIndex === index && styles.dotActive,
+                      ]}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
 
             {/* Thumbnail Strip */}
             {visit.photos.length > 1 && (
@@ -170,7 +325,7 @@ export default function CountryVisitDetailScreen() {
                 {visit.photos.map((photo, index) => (
                   <TouchableOpacity
                     key={index}
-                    onPress={() => setSelectedPhotoIndex(index)}
+                    onPress={() => scrollToIndex(index)}
                     style={[
                       styles.thumbnailContainer,
                       selectedPhotoIndex === index && styles.thumbnailSelected,
@@ -190,13 +345,19 @@ export default function CountryVisitDetailScreen() {
             <View style={styles.infoItem}>
               <Ionicons name="calendar" size={20} color={theme.colors.primary} />
               <Text style={styles.infoLabel}>Visited</Text>
-              <Text style={styles.infoValue}>{formatDate(visit.created_at)}</Text>
+              <Text style={styles.infoValue}>{formatDate(visit.visited_at || visit.created_at)}</Text>
             </View>
             <View style={styles.infoDivider} />
             <View style={styles.infoItem}>
               <Ionicons name="star" size={20} color="#FFD700" />
               <Text style={styles.infoLabel}>Points Earned</Text>
               <Text style={styles.infoValue}>{visit.points_earned}</Text>
+            </View>
+            <View style={styles.infoDivider} />
+            <View style={styles.infoItem}>
+              <Text style={styles.privacyEmoji}>{visibilityInfo.emoji}</Text>
+              <Text style={styles.infoLabel}>Visibility</Text>
+              <Text style={styles.infoValue}>{visibilityInfo.label}</Text>
             </View>
           </View>
         </Surface>
@@ -221,6 +382,17 @@ export default function CountryVisitDetailScreen() {
             </View>
           </Surface>
         )}
+
+        {/* Share Button */}
+        <TouchableOpacity style={styles.shareCard} onPress={handleShare} activeOpacity={0.8}>
+          <LinearGradient
+            colors={[theme.colors.primary, '#2AA8B3']}
+            style={styles.shareGradient}
+          >
+            <Ionicons name="share-social" size={22} color="#fff" />
+            <Text style={styles.shareText}>Share This Memory</Text>
+          </LinearGradient>
+        </TouchableOpacity>
 
         <View style={styles.bottomSpacer} />
       </ScrollView>
@@ -255,6 +427,14 @@ const styles = StyleSheet.create({
   headerContent: {
     flex: 1,
   },
+  headerTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  headerFlag: {
+    fontSize: 22,
+  },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
@@ -268,7 +448,7 @@ const styles = StyleSheet.create({
   headerSpacer: {
     width: 40,
   },
-  visibilityBadge: {
+  shareButton: {
     padding: theme.spacing.xs,
   },
   errorContainer: {
@@ -296,8 +476,25 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   mainPhoto: {
-    width: '100%',
-    height: '100%',
+    width: width,
+    height: width * 0.75,
+  },
+  navArrow: {
+    position: 'absolute',
+    top: '50%',
+    marginTop: -24,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  navArrowLeft: {
+    left: theme.spacing.sm,
+  },
+  navArrowRight: {
+    right: theme.spacing.sm,
   },
   photoCounter: {
     position: 'absolute',
@@ -312,6 +509,23 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontWeight: '600',
+  },
+  dotContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: theme.spacing.sm,
+    gap: 8,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: theme.colors.border,
+  },
+  dotActive: {
+    backgroundColor: theme.colors.primary,
+    width: 12,
   },
   thumbnailStrip: {
     marginTop: theme.spacing.sm,
@@ -358,15 +572,19 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.border,
   },
   infoLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: theme.colors.textSecondary,
     marginTop: theme.spacing.xs,
   },
   infoValue: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '700',
     color: theme.colors.text,
     marginTop: 2,
+    textAlign: 'center',
+  },
+  privacyEmoji: {
+    fontSize: 20,
   },
   // Diary
   diaryCard: {
@@ -401,6 +619,24 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
     fontSize: 14,
     color: theme.colors.textLight,
+  },
+  // Share Card
+  shareCard: {
+    marginHorizontal: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    overflow: 'hidden',
+  },
+  shareGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.md,
+    gap: theme.spacing.sm,
+  },
+  shareText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
   },
   bottomSpacer: {
     height: theme.spacing.xl,
