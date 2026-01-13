@@ -79,6 +79,7 @@ interface Continent {
   gradient: readonly [string, string];
   totalPoints: number;
   description: string;
+  accentColor: string;
   visited?: number;
   percentage?: number;
 }
