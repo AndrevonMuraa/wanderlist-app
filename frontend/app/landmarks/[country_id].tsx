@@ -212,9 +212,9 @@ export default function LandmarksScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <LinearGradient
-        colors={gradients.primary.colors}
-        start={gradients.primary.start}
-        end={gradients.primary.end}
+        colors={gradients.oceanToSand}
+        start={gradients.horizontal.start}
+        end={gradients.horizontal.end}
         style={styles.header}
       >
         {/* Branding Row */}
