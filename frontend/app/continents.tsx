@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
   // Sub Header (scrolls with content)
   subHeaderGradient: {
     paddingHorizontal: theme.spacing.md,
-    paddingTop: 0,
+    paddingTop: 8,
     paddingBottom: theme.spacing.md,
   },
   // Old Header Styles (now unused but keeping for reference)
