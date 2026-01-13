@@ -2185,26 +2185,6 @@ async def add_country_visit(data: CountryVisitCreate, current_user: User = Depen
     
     return CountryVisit(**country_visit)
 
-@api_router.get("/country-visits")
-async def get_country_visits(current_user: User = Depends(get_current_user)):
-    """Get user's country visits"""
-    visits = await db.country_visits.find(
-        {"user_id": current_user.user_id},
-        {"_id": 0}
-    ).sort("visited_at", -1).to_list(1000)
-    return [CountryVisit(**v) for v in visits]
-
-@api_router.delete("/country-visits/{country_visit_id}")
-async def delete_country_visit(country_visit_id: str, current_user: User = Depends(get_current_user)):
-    """Delete a country visit"""
-    result = await db.country_visits.delete_one({
-        "country_visit_id": country_visit_id,
-        "user_id": current_user.user_id
-    })
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail="Country visit not found")
-    return {"message": "Country visit deleted"}
-
 @api_router.delete("/bucket-list/{bucket_list_id}")
 async def remove_from_bucket_list(bucket_list_id: str, current_user: User = Depends(get_current_user)):
     """Remove a landmark from bucket list"""
