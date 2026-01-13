@@ -604,108 +604,17 @@ export default function CountryVisitDetailScreen() {
         </TouchableOpacity>
       </Modal>
 
-      {/* Fullscreen Photo Modal */}
-      <Modal
+      {/* Fullscreen Photo Viewer with Pinch-to-Zoom and Rotate */}
+      <PhotoViewer
         visible={showFullscreen}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowFullscreen(false)}
-      >
-        <View style={styles.fullscreenContainer}>
-          {/* Close button */}
-          <TouchableOpacity 
-            style={styles.closeFullscreen}
-            onPress={() => setShowFullscreen(false)}
-          >
-            <Ionicons name="close" size={28} color="#fff" />
-          </TouchableOpacity>
-
-          {/* Photo counter */}
-          {visit.photos.length > 1 && (
-            <View style={styles.fullscreenCounter}>
-              <Text style={styles.fullscreenCounterText}>
-                {fullscreenIndex + 1} / {visit.photos.length}
-              </Text>
-            </View>
-          )}
-
-          {/* Fullscreen gallery */}
-          <FlatList
-            ref={fullscreenListRef}
-            data={visit.photos}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            onViewableItemsChanged={onFullscreenViewableItemsChanged}
-            viewabilityConfig={viewabilityConfig}
-            initialScrollIndex={fullscreenIndex}
-            getItemLayout={(_, index) => ({
-              length: width,
-              offset: width * index,
-              index,
-            })}
-            keyExtractor={(_, index) => `fullscreen-${index}`}
-            renderItem={({ item }) => (
-              <View style={styles.fullscreenImageContainer}>
-                <Image
-                  source={{ uri: item }}
-                  style={styles.fullscreenImage}
-                  resizeMode="contain"
-                />
-              </View>
-            )}
-          />
-
-          {/* Navigation arrows */}
-          {visit.photos.length > 1 && (
-            <>
-              {fullscreenIndex > 0 && (
-                <TouchableOpacity
-                  style={[styles.fullscreenArrow, styles.fullscreenArrowLeft]}
-                  onPress={goToPrevFullscreen}
-                >
-                  <Ionicons name="chevron-back" size={36} color="#fff" />
-                </TouchableOpacity>
-              )}
-              {fullscreenIndex < visit.photos.length - 1 && (
-                <TouchableOpacity
-                  style={[styles.fullscreenArrow, styles.fullscreenArrowRight]}
-                  onPress={goToNextFullscreen}
-                >
-                  <Ionicons name="chevron-forward" size={36} color="#fff" />
-                </TouchableOpacity>
-              )}
-            </>
-          )}
-
-          {/* Thumbnail strip at bottom */}
-          {visit.photos.length > 1 && (
-            <View style={styles.fullscreenThumbnails}>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.fullscreenThumbnailContent}
-              >
-                {visit.photos.map((photo, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      setFullscreenIndex(index);
-                      fullscreenListRef.current?.scrollToIndex({ index, animated: true });
-                    }}
-                    style={[
-                      styles.fullscreenThumb,
-                      fullscreenIndex === index && styles.fullscreenThumbActive,
-                    ]}
-                  >
-                    <Image source={{ uri: photo }} style={styles.fullscreenThumbImage} />
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </View>
-          )}
-        </View>
-      </Modal>
+        photos={visit.photos}
+        initialIndex={fullscreenIndex}
+        onClose={() => setShowFullscreen(false)}
+        onPhotosUpdate={(newPhotos) => {
+          setVisit(prev => prev ? { ...prev, photos: newPhotos } : null);
+        }}
+        editable={true}
+      />
 
       {/* Delete Confirmation Dialog */}
       <Portal>
