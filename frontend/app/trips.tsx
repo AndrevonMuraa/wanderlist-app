@@ -278,11 +278,32 @@ export default function TripsScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Turquoise Header - Gold Standard */}
+      {/* Universal Turquoise Header */}
       <LinearGradient
-        colors={[theme.colors.primary, theme.colors.primaryDark]}
+        colors={['#3BB8C3', '#2AA8B3']}
         style={styles.headerGradient}
       >
+        {/* Top Row: Branding + Profile */}
+        <View style={styles.brandingRow}>
+          <TouchableOpacity 
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="earth" size={18} color="#fff" />
+            <Text style={styles.brandingText}>WanderList</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={styles.profileButton}
+            onPress={() => router.push('/(tabs)/profile')}
+          >
+            <View style={styles.profileCircle}>
+              <Ionicons name="person" size={14} color="#fff" />
+            </View>
+          </TouchableOpacity>
+        </View>
+        
         <View style={styles.headerContent}>
           <View>
             <Text style={styles.headerTitle}>My Trips</Text>
@@ -314,12 +335,6 @@ export default function TripsScreen() {
         >
           <Ionicons name="bookmark" size={20} color={theme.colors.textSecondary} />
           <Text style={styles.tabLabel}>Bucket List</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.tabButton, styles.tabButtonActive]}
-        >
-          <Ionicons name="map" size={20} color={theme.colors.primary} />
-          <Text style={[styles.tabLabel, styles.tabLabelActive]}>My Trips</Text>
         </TouchableOpacity>
       </View>
 
