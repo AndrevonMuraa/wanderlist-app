@@ -275,6 +275,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
+  headerBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#3BB8C3',
+    zIndex: 999,
+  },
   contentContainer: {
     flex: 1,
   },
