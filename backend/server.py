@@ -687,6 +687,22 @@ async def update_profile(profile_data: ProfileUpdate, current_user: User = Depen
     updated_user = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
     return UserPublic(**updated_user)
 
+@api_router.put("/auth/privacy")
+async def update_default_privacy(
+    privacy: str = Body(..., embed=True),
+    current_user: User = Depends(get_current_user)
+):
+    """Update user's default privacy setting"""
+    if privacy not in ["public", "friends", "private"]:
+        raise HTTPException(status_code=400, detail="Invalid privacy setting")
+    
+    await db.users.update_one(
+        {"user_id": current_user.user_id},
+        {"$set": {"default_privacy": privacy}}
+    )
+    
+    return {"message": "Privacy setting updated", "default_privacy": privacy}
+
 @api_router.post("/auth/logout")
 async def logout(response: Response, session_token: Optional[str] = Cookie(None)):
     if session_token:
