@@ -53,6 +53,7 @@ interface Activity {
   has_tips?: boolean;
   has_photos?: boolean;
   photo_count?: number;
+  visibility?: 'public' | 'friends' | 'private';
 }
 
 interface Friend {
