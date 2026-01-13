@@ -2,27 +2,18 @@ import { Platform } from 'react-native';
 
 // Determine the correct backend URL based on environment
 const getBackendURL = () => {
-  // For native mobile, always use the external URL
-  if (Platform.OS !== 'web') {
-    return process.env.EXPO_PUBLIC_BACKEND_URL || '';
-  }
-  
   // For web, check if we're accessing via localhost or remote URL
-  if (typeof window !== 'undefined') {
+  if (typeof window !== 'undefined' && Platform.OS === 'web') {
     const hostname = window.location.hostname;
     
-    // If accessing via localhost, use relative URLs (proxy will handle routing)
+    // If accessing via localhost, use port 8001 directly
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return '';
+      return 'http://localhost:8001';
     }
-    
-    // If accessing via remote URL (like emergentagent.com), use full backend URL
-    // This handles iPhone browsers accessing the web version
-    return process.env.EXPO_PUBLIC_BACKEND_URL || '';
   }
   
-  // Default fallback
-  return '';
+  // For all other cases, use the environment variable
+  return process.env.EXPO_PUBLIC_BACKEND_URL || '';
 };
 
 export const BACKEND_URL = getBackendURL();
