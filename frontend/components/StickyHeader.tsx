@@ -279,7 +279,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: theme.spacing.md,
-    paddingBottom: 4,
   },
   subHeader: {
     paddingHorizontal: theme.spacing.md,
