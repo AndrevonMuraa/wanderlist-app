@@ -333,6 +333,7 @@ const styles = StyleSheet.create({
   mainRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    minHeight: 50,
   },
   titleContainer: {
     flex: 1,
