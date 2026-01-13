@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
   },
   subHeader: {
     paddingHorizontal: theme.spacing.md,
-    paddingTop: theme.spacing.xs,
+    paddingTop: 0,
     paddingBottom: theme.spacing.md,
   },
   brandingRow: {
