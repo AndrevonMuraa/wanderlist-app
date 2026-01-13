@@ -156,11 +156,11 @@ export default function SearchScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <LinearGradient
-        colors={[theme.colors.primary, theme.colors.primaryDark]}
+        colors={['#3BB8C3', '#2AA8B3']}
         style={styles.header}
       >
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
+          <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Search Landmarks</Text>
         <View style={styles.headerSpacer} />
