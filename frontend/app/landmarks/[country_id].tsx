@@ -7,7 +7,7 @@ import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
-import theme from '../../styles/theme';
+import theme, { gradients } from '../../styles/theme';
 import UpgradeModal from '../../components/UpgradeModal';
 import { BACKEND_URL } from '../../utils/config';
 import { ProgressBar } from '../../components/ProgressBar';
