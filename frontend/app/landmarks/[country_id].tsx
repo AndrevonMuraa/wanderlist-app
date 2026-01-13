@@ -323,30 +323,61 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   header: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.sm,
+    paddingBottom: theme.spacing.md,
+  },
+  brandingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xs,
+  },
+  brandingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: theme.spacing.md,
-    paddingTop: theme.spacing.lg,
-    paddingBottom: theme.spacing.lg,
+    gap: 6,
   },
-  backButton: {
-    marginRight: theme.spacing.md,
-    padding: theme.spacing.md,
-    minWidth: 44,
-    minHeight: 44,
+  brandingText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  profileButton: {
+    padding: 2,
+  },
+  profileCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  profileInitial: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backButton: {
+    padding: theme.spacing.xs,
+    marginRight: theme.spacing.sm,
   },
   headerContent: {
     flex: 1,
   },
   headerTitle: {
-    ...theme.typography.h2,
+    fontSize: 24,
+    fontWeight: '800',
     color: '#fff',
-    marginBottom: theme.spacing.xs,
+    marginBottom: 2,
   },
   headerSubtitle: {
-    ...theme.typography.bodySmall,
+    fontSize: 13,
     color: 'rgba(255,255,255,0.9)',
   },
   listContainer: {
