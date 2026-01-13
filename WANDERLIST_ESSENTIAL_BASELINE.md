@@ -204,7 +204,7 @@ If starting a new session:
 3. Check services: `sudo supervisorctl status`
 4. Test login: `mobile@test.com` / `test123`
 
-**Preview URL:** https://travelgram-7.preview.emergentagent.com
+**Preview URL:** https://trip-journal-1.preview.emergentagent.com
 
 ---
 
