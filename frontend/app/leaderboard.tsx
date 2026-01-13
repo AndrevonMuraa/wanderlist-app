@@ -438,9 +438,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
-  content: {
-    flex: 1,
-  },
   filterSection: {
     paddingHorizontal: 16,
     paddingTop: 16,
