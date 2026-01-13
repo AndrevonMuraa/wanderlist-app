@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.sm,
+    paddingBottom: 6,
   },
   subHeader: {
     paddingHorizontal: theme.spacing.md,
