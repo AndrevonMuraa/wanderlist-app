@@ -225,7 +225,6 @@ export default function ProfileScreen() {
                 <Ionicons name="information-circle-outline" size={22} color="#fff" />
               </TouchableOpacity>
             </View>
-          </View>
         </LinearGradient>
 
         {/* FINAL: User Left, Rank Right, Stats Row */}
