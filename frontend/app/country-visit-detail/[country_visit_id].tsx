@@ -252,12 +252,6 @@ export default function CountryVisitDetailScreen() {
     }
   }).current;
 
-  const onFullscreenViewableItemsChanged = useRef(({ viewableItems }: any) => {
-    if (viewableItems.length > 0) {
-      setFullscreenIndex(viewableItems[0].index || 0);
-    }
-  }).current;
-
   const viewabilityConfig = useRef({
     itemVisiblePercentThreshold: 50,
   }).current;
@@ -276,18 +270,6 @@ export default function CountryVisitDetailScreen() {
   const goToNextPhoto = () => {
     if (visit && selectedPhotoIndex < visit.photos.length - 1) {
       scrollToIndex(selectedPhotoIndex + 1);
-    }
-  };
-
-  const goToPrevFullscreen = () => {
-    if (fullscreenIndex > 0) {
-      fullscreenListRef.current?.scrollToIndex({ index: fullscreenIndex - 1, animated: true });
-    }
-  };
-
-  const goToNextFullscreen = () => {
-    if (visit && fullscreenIndex < visit.photos.length - 1) {
-      fullscreenListRef.current?.scrollToIndex({ index: fullscreenIndex + 1, animated: true });
     }
   };
 
