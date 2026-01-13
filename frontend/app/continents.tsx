@@ -272,7 +272,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  // Universal Header Styles
+  contentContainer: {
+    flex: 1,
+  },
+  // Sub Header (scrolls with content)
+  subHeaderGradient: {
+    paddingHorizontal: theme.spacing.md,
+    paddingTop: theme.spacing.xs,
+    paddingBottom: theme.spacing.md,
+  },
+  // Old Header Styles (now unused but keeping for reference)
   headerGradient: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.sm,
