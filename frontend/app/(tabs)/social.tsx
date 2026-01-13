@@ -580,13 +580,37 @@ export default function SocialHubScreen() {
         }
         showsVerticalScrollIndicator={false}
       >
-        {/* Turquoise Gradient Header */}
+        {/* Universal Header with Branding */}
         <LinearGradient
-          colors={[theme.colors.primary, theme.colors.primaryDark]}
+          colors={['#3BB8C3', '#2AA8B3']}
           style={styles.headerGradient}
         >
+          {/* Top Row: Branding + Profile */}
+          <View style={styles.brandingRow}>
+            <TouchableOpacity 
+              style={styles.brandingContainer}
+              onPress={() => router.push('/about')}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="earth" size={18} color="#fff" />
+              <Text style={styles.brandingText}>WanderList</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.profileButtonHeader}
+              onPress={() => router.push('/(tabs)/profile')}
+            >
+              <View style={styles.profileCircleHeader}>
+                <Text style={styles.profileInitialHeader}>
+                  {user?.name?.charAt(0).toUpperCase() || 'U'}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          {/* Main Content */}
           <Text style={styles.headerTitle}>Social Hub</Text>
-          <Text style={styles.headerSubtitle}>Stay connected with your travel community</Text>
+          <Text style={styles.headerSubtitle}>Connect with your travel community</Text>
         </LinearGradient>
 
         {/* Activity Feed Section */}
