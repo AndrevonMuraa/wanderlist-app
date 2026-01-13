@@ -202,11 +202,9 @@ export default function LandmarkDetailScreen() {
   if (!landmark) {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
-        {/* Turquoise Header */}
+        {/* Universal Turquoise Header */}
         <LinearGradient
-          colors={[theme.colors.primary, theme.colors.secondary]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
+          colors={['#3BB8C3', '#2AA8B3']}
           style={styles.headerGradient}
         >
           <TouchableOpacity 
@@ -214,7 +212,7 @@ export default function LandmarkDetailScreen() {
             style={styles.backButton}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons name="arrow-back" size={24} color="#fff" />
+            <Ionicons name="arrow-back" size={22} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.headerTitleWhite}>Landmark Not Found</Text>
           <View style={styles.headerRight} />
@@ -229,9 +227,7 @@ export default function LandmarkDetailScreen() {
             onPress={handleGoBack}
           >
             <LinearGradient
-              colors={[theme.colors.primary, theme.colors.secondary]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
+              colors={['#3BB8C3', '#2AA8B3']}
               style={styles.backButtonGradient}
             >
               <Ionicons name="arrow-back-circle" size={20} color="#fff" />
