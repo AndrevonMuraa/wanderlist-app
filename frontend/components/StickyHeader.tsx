@@ -155,7 +155,7 @@ export const FixedTopBar: React.FC<{ onProfilePress?: () => void }> = ({ onProfi
       colors={['#3BB8C3', '#3BB8C3']}
       style={[
         styles.fixedBar,
-        { paddingTop: Platform.OS === 'ios' ? insets.top : StatusBar.currentHeight || 20 }
+        { paddingTop: Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 16) }
       ]}
     >
       <TouchableOpacity 
