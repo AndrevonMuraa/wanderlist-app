@@ -8,16 +8,72 @@ import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import * as SecureStore from 'expo-secure-store';
 import { useAuth } from '../contexts/AuthContext';
-import { FixedTopBar } from '../components/StickyHeader';
 
 const { width } = Dimensions.get('window');
 
-const getToken = async () => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  }
-  return await SecureStore.getItemAsync('auth_token');
-};
+// Continent data
+const CONTINENTS = [
+  {
+    id: 'europe',
+    name: 'Europe',
+    countries: 12,
+    landmarks: 48,
+    image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800',
+    gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
+    totalPoints: 2400,
+    description: 'Historic cities & culture',
+  },
+  {
+    id: 'asia',
+    name: 'Asia',
+    countries: 15,
+    landmarks: 52,
+    image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800',
+    gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
+    totalPoints: 3100,
+    description: 'Ancient traditions & temples',
+  },
+  {
+    id: 'north-america',
+    name: 'North America',
+    countries: 8,
+    landmarks: 36,
+    image: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800',
+    gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
+    totalPoints: 1800,
+    description: 'Natural wonders & cities',
+  },
+  {
+    id: 'south-america',
+    name: 'South America',
+    countries: 10,
+    landmarks: 28,
+    image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800',
+    gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
+    totalPoints: 1400,
+    description: 'Vibrant cultures & rainforests',
+  },
+  {
+    id: 'africa',
+    name: 'Africa',
+    countries: 12,
+    landmarks: 32,
+    image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800',
+    gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
+    totalPoints: 1600,
+    description: 'Wildlife & ancient history',
+  },
+  {
+    id: 'oceania',
+    name: 'Oceania',
+    countries: 5,
+    landmarks: 20,
+    image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800',
+    gradient: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)'] as const,
+    totalPoints: 1000,
+    description: 'Island paradise & reefs',
+  },
+];
 
 interface Continent {
   id: string;
@@ -25,71 +81,20 @@ interface Continent {
   countries: number;
   landmarks: number;
   image: string;
-  gradient: string[];
-  icon: string;
+  gradient: readonly [string, string];
+  totalPoints: number;
   description: string;
   visited?: number;
   percentage?: number;
-  totalPoints: number;
 }
 
-const CONTINENTS: Continent[] = [
-  {
-    id: 'europe',
-    name: 'Europe',
-    countries: 10,
-    landmarks: 113,
-    image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80',
-    gradient: ['rgba(0, 0, 0, 0.05)', 'rgba(52, 152, 219, 0.35)'],
-    icon: 'business-outline',
-    description: 'Historic castles and cultural heritage',
-    totalPoints: 1130,
-  },
-  {
-    id: 'asia',
-    name: 'Asia',
-    countries: 10,
-    landmarks: 116,
-    image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80',
-    gradient: ['rgba(0, 0, 0, 0.05)', 'rgba(231, 76, 60, 0.35)'],
-    icon: 'earth-outline',
-    description: 'Ancient temples and modern wonders',
-    totalPoints: 1160,
-  },
-  {
-    id: 'africa',
-    name: 'Africa',
-    countries: 10,
-    landmarks: 103,
-    image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80',
-    gradient: ['rgba(0, 0, 0, 0.05)', 'rgba(243, 156, 18, 0.35)'],
-    icon: 'sunny-outline',
-    description: 'Wild savannas and ancient civilizations',
-    totalPoints: 1030,
-  },
-  {
-    id: 'americas',
-    name: 'Americas',
-    countries: 10,
-    landmarks: 113,
-    image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&q=80',
-    gradient: ['rgba(0, 0, 0, 0.05)', 'rgba(46, 204, 113, 0.35)'],
-    icon: 'leaf-outline',
-    description: 'Rainforests to mountain peaks',
-    totalPoints: 1130,
-  },
-  {
-    id: 'oceania',
-    name: 'Oceania',
-    countries: 8,
-    landmarks: 83,
-    image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800&q=80',
-    gradient: ['rgba(0, 0, 0, 0.05)', 'rgba(26, 188, 156, 0.35)'],
-    icon: 'water-outline',
-    description: 'Tropical islands and coastal beauty',
-    totalPoints: 830,
-  },
-];
+const getToken = async (): Promise<string | null> => {
+  if (Platform.OS === 'web') {
+    return localStorage.getItem('auth_token');
+  } else {
+    return await SecureStore.getItemAsync('auth_token');
+  }
+};
 
 export default function ContinentsScreen() {
   const router = useRouter();
@@ -98,8 +103,8 @@ export default function ContinentsScreen() {
   const [loading, setLoading] = useState(true);
   const insets = useSafeAreaInsets();
 
-  // Calculate the height of the fixed top bar (compact)
-  const fixedBarHeight = (Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20)) + 40;
+  // Calculate safe area padding
+  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   useEffect(() => {
     fetchProgress();
@@ -113,18 +118,21 @@ export default function ContinentsScreen() {
       });
 
       if (response.ok) {
-        const progressData = await response.json();
-        
-        const updatedContinents = CONTINENTS.map(continent => {
-          const continentProgress = progressData.continents[continent.name];
-          return {
-            ...continent,
-            visited: continentProgress?.visited || 0,
-            percentage: continentProgress?.percentage || 0,
-          };
-        });
-        
-        setContinents(updatedContinents);
+        const data = await response.json();
+        // Update continents with progress data
+        setContinents(prev => prev.map(continent => {
+          const progress = data.continents?.find((c: any) => 
+            c.name.toLowerCase() === continent.name.toLowerCase()
+          );
+          if (progress) {
+            return {
+              ...continent,
+              visited: progress.visited_countries || 0,
+              percentage: progress.percentage || 0
+            };
+          }
+          return continent;
+        }));
       }
     } catch (error) {
       console.error('Error fetching progress:', error);
@@ -134,41 +142,66 @@ export default function ContinentsScreen() {
   };
 
   const handleContinentPress = (continentId: string) => {
-    router.push(`/explore-countries?continent=${continentId}`);
+    const continent = continents.find(c => c.id === continentId);
+    if (continent) {
+      router.push(`/explore-countries?continent=${encodeURIComponent(continent.name)}`);
+    }
   };
 
   return (
     <View style={styles.container}>
-      {/* Fixed Top Bar - Stays in place when scrolling */}
-      <FixedTopBar />
-
-      {/* Content with proper padding for fixed bar */}
-      <View style={[styles.contentContainer, { paddingTop: fixedBarHeight }]}>
-        {/* Sub Header with title - Scrolls with content */}
-        <LinearGradient
-          colors={['#3BB8C3', '#2AA8B3']}
-          style={styles.subHeaderGradient}
-        >
-          <View style={styles.mainRow}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.headerTitle}>Explore Continents</Text>
-              <Text style={styles.headerSubtitle}>Choose your next adventure</Text>
+      {/* UNIFIED FIXED HEADER - Both branding and title */}
+      <LinearGradient
+        colors={['#3BB8C3', '#2AA8B3']}
+        style={[styles.fixedHeader, { paddingTop: topPadding }]}
+      >
+        {/* Top Row: Branding + Profile */}
+        <View style={styles.brandingRow}>
+          <TouchableOpacity 
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="earth" size={18} color="#fff" />
+            <Text style={styles.brandingText}>WanderList</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={styles.profileButton}
+            onPress={() => router.push('/(tabs)/profile')}
+          >
+            <View style={styles.profileCircle}>
+              <Text style={styles.profileInitial}>
+                {user?.name?.charAt(0).toUpperCase() || 'U'}
+              </Text>
             </View>
+          </TouchableOpacity>
+        </View>
 
-            <TouchableOpacity 
-              style={styles.searchButton}
-              onPress={() => router.push('/search')}
-            >
-              <Ionicons name="search" size={20} color="#fff" />
-            </TouchableOpacity>
+        {/* Title Row */}
+        <View style={styles.titleRow}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.headerTitle}>Explore Continents</Text>
+            <Text style={styles.headerSubtitle}>Choose your next adventure</Text>
           </View>
-        </LinearGradient>
+          <TouchableOpacity 
+            style={styles.searchButton}
+            onPress={() => router.push('/search')}
+          >
+            <Ionicons name="search" size={20} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
 
+      {/* SCROLLABLE CONTENT */}
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Quick Navigation Tabs */}
         <View style={styles.tabContainer}>
-          <TouchableOpacity 
-            style={[styles.tabButton, styles.tabButtonActive]}
-          >
+          <TouchableOpacity style={[styles.tabButton, styles.tabButtonActive]}>
             <Ionicons name="earth" size={18} color={theme.colors.primary} />
             <Text style={[styles.tabLabel, styles.tabLabelActive]}>Explore</Text>
           </TouchableOpacity>
@@ -182,60 +215,33 @@ export default function ContinentsScreen() {
         </View>
 
         {/* Continent Cards */}
-        <ScrollView 
-          style={styles.scrollView}
-          contentContainerStyle={styles.cardsContainer}
-          showsVerticalScrollIndicator={false}
-        >
+        <View style={styles.cardsContainer}>
           {continents.map((continent, index) => (
             <TouchableOpacity
               key={continent.id}
-              style={[
-                styles.cardWrapper,
-                index === continents.length - 1 && styles.lastCardWrapper
-              ]}
+              style={[styles.cardWrapper, index === continents.length - 1 && styles.lastCardWrapper]}
               onPress={() => handleContinentPress(continent.id)}
               activeOpacity={0.9}
             >
               <View style={styles.card}>
-                {/* Background Image */}
-                <Image 
-                  source={{ uri: continent.image }} 
-                  style={styles.cardImage}
-                  resizeMode="cover"
-                />
-                
-                {/* Gradient Overlay */}
-                <LinearGradient
-                  colors={continent.gradient}
-                  style={styles.cardGradient}
-                >
-                  {/* Top Row: Points Badge with Golden Star */}
+                <Image source={{ uri: continent.image }} style={styles.cardImage} resizeMode="cover" />
+                <LinearGradient colors={continent.gradient} style={styles.cardGradient}>
                   <View style={styles.cardTopRow}>
                     <View style={styles.pointsBadge}>
                       <Ionicons name="star" size={14} color="#FFD700" />
                       <Text style={styles.pointsText}>{continent.totalPoints.toLocaleString()}</Text>
                     </View>
                   </View>
-
-                  {/* Content */}
                   <View style={styles.cardContent}>
                     <Text style={styles.cardTitle}>{continent.name}</Text>
                     <Text style={styles.cardDescription}>{continent.description}</Text>
-                    
-                    {/* Progress Bar */}
                     {continent.percentage !== undefined && continent.percentage > 0 ? (
                       <View style={styles.progressSection}>
                         <Text style={styles.progressLabel}>
                           {continent.visited}/{continent.countries} countries visited
                         </Text>
                         <View style={styles.progressBarContainer}>
-                          <View 
-                            style={[
-                              styles.progressBarFill, 
-                              { width: `${continent.percentage}%` }
-                            ]} 
-                          />
+                          <View style={[styles.progressBarFill, { width: `${continent.percentage}%` }]} />
                         </View>
                       </View>
                     ) : (
@@ -251,8 +257,6 @@ export default function ContinentsScreen() {
                         </View>
                       </View>
                     )}
-
-                    {/* Arrow Icon - Transparent */}
                     <View style={styles.cardArrow}>
                       <Ionicons name="arrow-forward" size={24} color="rgba(255,255,255,0.6)" />
                     </View>
@@ -261,8 +265,8 @@ export default function ContinentsScreen() {
               </View>
             </TouchableOpacity>
           ))}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -272,34 +276,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  headerBackground: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#3BB8C3',
-    zIndex: 999,
-  },
-  contentContainer: {
-    flex: 1,
-  },
-  // Sub Header (scrolls with content)
-  subHeaderGradient: {
+  // Fixed Header
+  fixedHeader: {
     paddingHorizontal: theme.spacing.md,
-    paddingTop: 12,
-    paddingBottom: theme.spacing.md,
-  },
-  // Old Header Styles (now unused but keeping for reference)
-  headerGradient: {
-    paddingHorizontal: theme.spacing.md,
-    paddingTop: theme.spacing.sm,
     paddingBottom: theme.spacing.md,
   },
   brandingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacing.xs,
+    marginBottom: 8,
   },
   brandingContainer: {
     flexDirection: 'row',
@@ -327,10 +313,9 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#fff',
   },
-  mainRow: {
+  titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 50,
   },
   titleContainer: {
     flex: 1,
@@ -339,7 +324,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: '#fff',
-    textAlign: 'left',
   },
   headerSubtitle: {
     fontSize: 13,
@@ -355,7 +339,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: theme.spacing.sm,
   },
-  // Tab Styles
+  // Scroll Content
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 100,
+  },
+  // Tabs
   tabContainer: {
     flexDirection: 'row',
     backgroundColor: theme.colors.surface,
@@ -368,12 +359,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: theme.spacing.md,
     gap: theme.spacing.xs,
-    paddingVertical: 12,
-    borderBottomWidth: 2,
-    borderBottomColor: 'transparent',
   },
   tabButtonActive: {
+    borderBottomWidth: 2,
     borderBottomColor: theme.colors.primary,
   },
   tabLabel: {
@@ -384,136 +374,110 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: theme.colors.primary,
   },
-  // Scroll & Cards
-  scrollView: {
-    flex: 1,
-  },
+  // Cards
   cardsContainer: {
-    paddingHorizontal: theme.spacing.md,
-    paddingTop: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
+    padding: theme.spacing.md,
   },
   cardWrapper: {
     marginBottom: theme.spacing.md,
   },
   lastCardWrapper: {
-    marginBottom: theme.spacing.sm,
+    marginBottom: 0,
   },
   card: {
-    height: 120,
-    borderRadius: theme.borderRadius.lg,
+    height: 200,
+    borderRadius: theme.borderRadius.xxl,
     overflow: 'hidden',
     ...theme.shadows.card,
   },
   cardImage: {
-    ...StyleSheet.absoluteFillObject,
     width: '100%',
     height: '100%',
+    position: 'absolute',
   },
   cardGradient: {
-    ...StyleSheet.absoluteFillObject,
-    padding: theme.spacing.md,
+    flex: 1,
+    padding: theme.spacing.lg,
     justifyContent: 'space-between',
   },
   cardTopRow: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    alignItems: 'flex-start',
   },
   pointsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
+    borderRadius: theme.borderRadius.lg,
     gap: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 16,
   },
   pointsText: {
-    fontSize: 13,
-    fontWeight: '700',
     color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
   },
   cardContent: {
     flex: 1,
     justifyContent: 'flex-end',
   },
   cardTitle: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 24,
+    fontWeight: '800',
     color: '#fff',
-    marginBottom: theme.spacing.xs / 2,
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    marginBottom: theme.spacing.xs,
   },
   cardDescription: {
-    fontSize: 12,
+    fontSize: 14,
     color: 'rgba(255, 255, 255, 0.9)',
-    marginBottom: theme.spacing.xs,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    marginBottom: theme.spacing.sm,
   },
   progressSection: {
-    marginBottom: theme.spacing.xs,
+    marginTop: theme.spacing.xs,
   },
   progressLabel: {
-    fontSize: 11,
-    color: 'rgba(255, 255, 255, 0.9)',
-    fontWeight: '600',
-    marginBottom: 4,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.8)',
+    marginBottom: 6,
   },
   progressBarContainer: {
-    height: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    borderRadius: 2,
+    height: 6,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 3,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 2,
+    backgroundColor: '#FFD700',
+    borderRadius: 3,
   },
   cardStats: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    borderRadius: theme.borderRadius.md,
-    padding: theme.spacing.sm,
-    alignSelf: 'flex-start',
   },
   statItem: {
     alignItems: 'center',
-    paddingHorizontal: theme.spacing.sm,
   },
   statNumber: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 20,
+    fontWeight: '800',
     color: '#fff',
   },
   statLabel: {
     fontSize: 11,
     color: 'rgba(255, 255, 255, 0.8)',
-    marginTop: 2,
+    textTransform: 'uppercase',
   },
   statDivider: {
     width: 1,
-    height: 24,
+    height: 30,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    marginHorizontal: theme.spacing.lg,
   },
   cardArrow: {
     position: 'absolute',
-    right: 8,
-    bottom: 8,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-    alignItems: 'center',
+    right: 0,
+    bottom: 0,
   },
 });
