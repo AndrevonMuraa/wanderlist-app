@@ -214,13 +214,6 @@ export default function BucketListScreen() {
           <Ionicons name="bookmark" size={20} color={theme.colors.primary} />
           <Text style={[styles.tabLabel, styles.tabLabelActive]}>Bucket List</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.tabButton}
-          onPress={() => router.push('/trips')}
-        >
-          <Ionicons name="map" size={20} color={theme.colors.textSecondary} />
-          <Text style={styles.tabLabel}>My Trips</Text>
-        </TouchableOpacity>
       </View>
 
       <ScrollView
