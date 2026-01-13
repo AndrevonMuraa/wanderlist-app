@@ -96,6 +96,10 @@ export default function ContinentsScreen() {
   const { user } = useAuth();
   const [continents, setContinents] = useState<Continent[]>(CONTINENTS);
   const [loading, setLoading] = useState(true);
+  const insets = useSafeAreaInsets();
+
+  // Calculate the height of the fixed top bar
+  const fixedBarHeight = (Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 24)) + 44;
 
   useEffect(() => {
     fetchProgress();
