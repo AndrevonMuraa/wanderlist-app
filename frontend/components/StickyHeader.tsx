@@ -218,7 +218,7 @@ export const SubHeader: React.FC<{
 
   return (
     <LinearGradient
-      colors={['#35B0BB', '#2AA8B3']}
+      colors={['#3BB8C3', '#2AA8B3']}
       style={styles.subHeader}
     >
       <View style={styles.mainRow}>
