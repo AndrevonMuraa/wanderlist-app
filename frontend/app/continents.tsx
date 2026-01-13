@@ -436,6 +436,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-between',
   },
+  statsAndProgress: {
+    flex: 1,
+  },
   cardContent: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -451,15 +454,15 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.9)',
   },
   progressSection: {
-    marginTop: theme.spacing.xs,
+    marginTop: 8,
   },
   progressLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: 'rgba(255, 255, 255, 0.8)',
-    marginBottom: 6,
+    marginTop: 4,
   },
   progressBarContainer: {
-    height: 6,
+    height: 5,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: 3,
     overflow: 'hidden',
