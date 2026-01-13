@@ -231,33 +231,23 @@ export default function ContinentsScreen() {
                       <Text style={styles.cardTitle}>{continent.name}</Text>
                       <Text style={styles.cardDescription}>{continent.description}</Text>
                     </View>
-                    <View style={styles.pointsBadge}>
+                    <View style={[styles.pointsBadge, { backgroundColor: `${continent.accentColor}30` }]}>
                       <Ionicons name="star" size={14} color="#FFD700" />
                       <Text style={styles.pointsText}>{continent.totalPoints.toLocaleString()}</Text>
                     </View>
                   </View>
                   
-                  {/* Bottom Section: Stats + Progress + Arrow */}
+                  {/* Bottom Section: Stats + Arrow */}
                   <View style={styles.cardBottomSection}>
-                    <View style={styles.statsAndProgress}>
-                      {/* Always show Countries & Landmarks count */}
-                      <View style={styles.cardStats}>
-                        <View style={styles.statItem}>
-                          <Text style={styles.statNumber}>{continent.countries}</Text>
-                          <Text style={styles.statLabel}>Countries</Text>
-                        </View>
-                        <View style={styles.statDivider} />
-                        <View style={styles.statItem}>
-                          <Text style={styles.statNumber}>{continent.landmarks}</Text>
-                          <Text style={styles.statLabel}>Landmarks</Text>
-                        </View>
-                      </View>
-                      
-                      {/* Show progress bar if user has visited */}
+                    <View style={[styles.statsOverlay, { backgroundColor: `${continent.accentColor}40` }]}>
+                      <Text style={styles.statsText}>
+                        {continent.countries} Countries  |  {continent.landmarks} Landmarks
+                      </Text>
+                      {/* Show progress if user has visited */}
                       {continent.percentage !== undefined && continent.percentage > 0 && (
-                        <View style={styles.progressSection}>
+                        <View style={styles.progressRow}>
                           <View style={styles.progressBarContainer}>
-                            <View style={[styles.progressBarFill, { width: `${continent.percentage}%` }]} />
+                            <View style={[styles.progressBarFill, { width: `${continent.percentage}%`, backgroundColor: continent.accentColor }]} />
                           </View>
                           <Text style={styles.progressLabel}>
                             {continent.visited}/{continent.countries} visited
@@ -265,8 +255,8 @@ export default function ContinentsScreen() {
                         </View>
                       )}
                     </View>
-                    <View style={styles.cardArrow}>
-                      <Ionicons name="arrow-forward" size={24} color="rgba(255,255,255,0.6)" />
+                    <View style={[styles.arrowCircle, { backgroundColor: continent.accentColor }]}>
+                      <Ionicons name="arrow-forward" size={20} color="#fff" />
                     </View>
                   </View>
                 </LinearGradient>
