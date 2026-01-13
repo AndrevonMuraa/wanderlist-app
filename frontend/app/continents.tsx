@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   card: {
-    height: 200,
+    height: 140,
     borderRadius: theme.borderRadius.xxl,
     overflow: 'hidden',
     ...theme.shadows.card,
