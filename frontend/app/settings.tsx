@@ -267,6 +267,22 @@ const styles = StyleSheet.create({
   privacyContainer: {
     marginTop: theme.spacing.sm,
   },
+  privacyLegend: {
+    marginTop: theme.spacing.md,
+    paddingTop: theme.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+    gap: theme.spacing.xs,
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+  },
+  legendText: {
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+  },
   bottomSpacer: {
     height: theme.spacing.xl,
   },
