@@ -101,7 +101,6 @@ export default function CountryVisitDetailScreen() {
   const [showOptionsMenu, setShowOptionsMenu] = useState(false);
   
   const flatListRef = useRef<FlatList>(null);
-  const fullscreenListRef = useRef<FlatList>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
