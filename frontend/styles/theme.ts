@@ -13,6 +13,7 @@ export const colors = {
   
   // Luxury Accent Colors
   accent: '#C9A961',         // Rich gold - luxury touch
+  accentYellow: '#FFD700',   // Golden star color
   accentBronze: '#B8956A',   // Bronze
   accentCopper: '#D4A574',   // Copper warmth
   
