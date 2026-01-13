@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
-import theme from '../../styles/theme';
+import theme, { gradients } from '../../styles/theme';
 import { useAuth } from '../../contexts/AuthContext';
 import { CircularProgress } from '../../components/CircularProgress';
 import { ProgressBar } from '../../components/ProgressBar';
