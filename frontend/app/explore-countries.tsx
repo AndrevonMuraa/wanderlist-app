@@ -488,20 +488,6 @@ export default function ExploreCountriesScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
-        <View style={styles.logoContainer}>
-          <Ionicons name="earth" size={32} color={theme.colors.primary} />
-          <Text style={styles.logo}>WanderList</Text>
-        </View>
-        <TouchableOpacity style={styles.profileButton} onPress={() => router.push('/(tabs)/profile')}>
-          <View style={styles.profileCircle}>
-            <Text style={styles.profileInitial}>
-              {user?.name?.charAt(0).toUpperCase() || 'U'}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-
       <SectionList
         sections={sections}
         renderItem={renderCountryCard}
