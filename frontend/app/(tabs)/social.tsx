@@ -801,19 +801,51 @@ const styles = StyleSheet.create({
     paddingBottom: theme.spacing.md,
   },
   headerGradient: {
-    paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.md,
+    paddingTop: theme.spacing.sm,
     paddingBottom: theme.spacing.md,
   },
+  brandingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xs,
+  },
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  brandingText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  profileButtonHeader: {
+    padding: 2,
+  },
+  profileCircleHeader: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileInitialHeader: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#fff',
+  },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '800',
     color: '#fff',
-    marginBottom: 4,
   },
   headerSubtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: 'rgba(255,255,255,0.9)',
+    marginTop: 2,
   },
   section: {
     marginBottom: theme.spacing.lg,
