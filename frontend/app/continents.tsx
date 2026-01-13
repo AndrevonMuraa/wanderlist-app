@@ -415,7 +415,6 @@ const styles = StyleSheet.create({
   pointsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
     paddingHorizontal: theme.spacing.sm,
     paddingVertical: theme.spacing.xs,
     borderRadius: theme.borderRadius.lg,
@@ -432,8 +431,46 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-between',
   },
-  statsAndProgress: {
+  statsOverlay: {
     flex: 1,
+    borderRadius: theme.borderRadius.md,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+    marginRight: theme.spacing.md,
+  },
+  statsText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  progressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 6,
+    gap: 8,
+  },
+  progressBarContainer: {
+    flex: 1,
+    height: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    borderRadius: 2,
+  },
+  progressLabel: {
+    fontSize: 10,
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '500',
+  },
+  arrowCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cardContent: {
     flex: 1,
@@ -448,50 +485,5 @@ const styles = StyleSheet.create({
   cardDescription: {
     fontSize: 14,
     color: 'rgba(255, 255, 255, 0.9)',
-  },
-  progressSection: {
-    marginTop: 8,
-  },
-  progressLabel: {
-    fontSize: 11,
-    color: 'rgba(255, 255, 255, 0.8)',
-    marginTop: 4,
-  },
-  progressBarContainer: {
-    height: 5,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    borderRadius: 3,
-    overflow: 'hidden',
-  },
-  progressBarFill: {
-    height: '100%',
-    backgroundColor: '#FFD700',
-    borderRadius: 3,
-  },
-  cardStats: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  statItem: {
-    alignItems: 'center',
-  },
-  statNumber: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#fff',
-  },
-  statLabel: {
-    fontSize: 11,
-    color: 'rgba(255, 255, 255, 0.8)',
-    textTransform: 'uppercase',
-  },
-  statDivider: {
-    width: 1,
-    height: 30,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    marginHorizontal: theme.spacing.lg,
-  },
-  cardArrow: {
-    marginLeft: theme.spacing.md,
   },
 });
