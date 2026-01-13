@@ -154,7 +154,7 @@ export default function ContinentsScreen() {
         >
           <View style={styles.mainRow}>
             <View style={styles.titleContainer}>
-              <Text style={styles.headerTitle}>Explore Continents</Text>
+              <Text style={styles.headerTitle}>EXPLORE</Text>
               <Text style={styles.headerSubtitle}>Choose your next adventure</Text>
             </View>
 
