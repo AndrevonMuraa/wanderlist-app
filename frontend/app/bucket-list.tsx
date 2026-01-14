@@ -323,8 +323,7 @@ const styles = StyleSheet.create({
   // Sticky header styles
   stickyHeader: {
     paddingHorizontal: theme.spacing.md,
-    paddingTop: theme.spacing.sm,
-    paddingBottom: theme.spacing.sm,
+    paddingBottom: theme.spacing.md,
   },
   headerRow: {
     flexDirection: 'row',
