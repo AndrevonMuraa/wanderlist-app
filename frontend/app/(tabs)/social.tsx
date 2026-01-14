@@ -798,7 +798,7 @@ export default function SocialHubScreen() {
 
         <View style={{ height: theme.spacing.xl }} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
