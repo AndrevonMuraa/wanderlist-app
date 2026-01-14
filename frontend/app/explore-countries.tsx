@@ -347,7 +347,7 @@ export default function ExploreCountriesScreen() {
     </TouchableOpacity>
   );
 
-  const renderListHeader = () => {
+  const renderStatsHeader = () => {
     // Calculate stats for visual display
     const totalCountries = sections.reduce((sum, section) => sum + section.data.flat().length, 0);
     
@@ -361,53 +361,6 @@ export default function ExploreCountriesScreen() {
 
     return (
       <View>
-        {/* Universal Gradient Header - Testing "Mark as Visited" colors */}
-        <LinearGradient
-          colors={gradients.oceanToSand}
-          start={gradients.horizontal.start}
-          end={gradients.horizontal.end}
-          style={styles.gradientHeader}
-        >
-          {/* Branding Row */}
-          <View style={styles.brandingRow}>
-            <TouchableOpacity 
-              style={styles.brandingContainer}
-              onPress={() => router.push('/about')}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="earth" size={18} color="#fff" />
-              <Text style={styles.brandingText}>WanderList</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.profileButton}
-              onPress={() => router.push('/(tabs)/profile')}
-            >
-              <View style={styles.profileCircle}>
-                <Text style={styles.profileInitial}>
-                  {user?.name?.charAt(0).toUpperCase() || 'U'}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          
-          {/* Title Row with Back Button */}
-          <View style={styles.titleRow}>
-            {continent && (
-              <TouchableOpacity 
-                style={styles.backButtonInline}
-                onPress={() => router.back()}
-              >
-                <Ionicons name="arrow-back" size={22} color="#fff" />
-              </TouchableOpacity>
-            )}
-            <View style={styles.headerTextContainer}>
-              <Text style={styles.headerTitle}>
-                {continent ? `${(continent as string).charAt(0).toUpperCase() + (continent as string).slice(1)}` : 'Explore Countries'}
-              </Text>
-            </View>
-          </View>
-        </LinearGradient>
 
         {/* Visual Stats Section */}
         <View style={styles.statsContainerNew}>
