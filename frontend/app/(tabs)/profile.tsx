@@ -165,9 +165,9 @@ export default function ProfileScreen() {
     router.replace('/');
   };
 
-  // Get safe area insets for proper header padding
+  // Get safe area insets for proper header padding (matches Explore Continents)
   const insets = useSafeAreaInsets();
-  const topPadding = Platform.OS === 'ios' ? insets.top : insets.top + 8;
+  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   return (
     <View style={styles.container}>
