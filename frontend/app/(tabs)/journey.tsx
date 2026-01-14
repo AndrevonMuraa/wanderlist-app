@@ -175,36 +175,40 @@ export default function JourneyScreen() {
 
   const nextMilestone = getNextMilestone();
   const topContinent = getTopContinent();
+  
+  // Get safe area insets for proper header padding
+  const insets = useSafeAreaInsets();
+  const topPadding = Platform.OS === 'ios' ? insets.top : insets.top + 8;
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
+      {/* Sticky Header */}
+      <LinearGradient
+        colors={gradients.oceanToSand}
+        start={gradients.horizontal.start}
+        end={gradients.horizontal.end}
+        style={[styles.header, { paddingTop: topPadding }]}
+      >
+        {/* Single Row: Title Left, Branding Right */}
+        <View style={styles.headerRow}>
+          <Text style={styles.greeting}>My Journey</Text>
+          <TouchableOpacity 
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="earth" size={16} color="#2A2A2A" />
+            <Text style={styles.brandingTextDark}>WanderList</Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+
       <ScrollView
         style={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {/* Universal Header with Branding - Compact Design */}
-        <LinearGradient
-          colors={gradients.oceanToSand}
-          start={gradients.horizontal.start}
-          end={gradients.horizontal.end}
-          style={styles.header}
-        >
-          {/* Single Row: Title Left, Branding Right */}
-          <View style={styles.headerRow}>
-            <Text style={styles.greeting}>My Journey</Text>
-            <TouchableOpacity 
-              style={styles.brandingContainer}
-              onPress={() => router.push('/about')}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="earth" size={16} color="#2A2A2A" />
-              <Text style={styles.brandingTextDark}>WanderList</Text>
-            </TouchableOpacity>
-          </View>
-        </LinearGradient>
-
         {/* Travel Statistics Dashboard - Compressed */}
         {stats && progressStats && (
           <Surface style={styles.statsCard}>
