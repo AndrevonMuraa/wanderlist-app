@@ -184,39 +184,24 @@ export default function JourneyScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {/* Universal Header with Branding */}
+        {/* Universal Header with Branding - Compact Design */}
         <LinearGradient
           colors={gradients.oceanToSand}
           start={gradients.horizontal.start}
           end={gradients.horizontal.end}
           style={styles.header}
         >
-          {/* Top Row: Branding + Profile */}
-          <View style={styles.brandingRow}>
+          {/* Single Row: Title Left, Branding Right */}
+          <View style={styles.headerRow}>
+            <Text style={styles.greeting}>My Journey</Text>
             <TouchableOpacity 
               style={styles.brandingContainer}
               onPress={() => router.push('/about')}
               activeOpacity={0.7}
             >
-              <Ionicons name="earth" size={18} color="#fff" />
-              <Text style={styles.brandingText}>WanderList</Text>
+              <Ionicons name="earth" size={16} color="#2A2A2A" />
+              <Text style={styles.brandingTextDark}>WanderList</Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.profileButton}
-              onPress={() => router.push('/(tabs)/profile')}
-            >
-              <View style={styles.profileCircle}>
-                <Text style={styles.profileInitial}>
-                  {user?.name?.charAt(0).toUpperCase() || 'U'}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          {/* Main Content */}
-          <View style={styles.greetingContainer}>
-            <Text style={styles.greeting}>My Journey</Text>
           </View>
         </LinearGradient>
 
