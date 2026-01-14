@@ -806,60 +806,35 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
-  header: {
-    padding: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
-  },
-  headerGradient: {
+  stickyHeader: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.sm,
-    paddingBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.sm,
   },
-  brandingRow: {
+  headerRow: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing.xs,
-  },
-  brandingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  brandingText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#fff',
-  },
-  profileButtonHeader: {
-    padding: 2,
-  },
-  profileCircleHeader: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileInitialHeader: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#fff',
   },
   headerTitle: {
     fontSize: 22,
     fontWeight: '800',
     color: '#fff',
   },
-  headerSubtitle: {
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  brandingTextDark: {
     fontSize: 13,
-    color: 'rgba(255,255,255,0.9)',
-    marginTop: 2,
+    fontWeight: '700',
+    color: '#2A2A2A',
   },
   section: {
     marginBottom: theme.spacing.lg,
     paddingHorizontal: theme.spacing.lg,
+    marginTop: theme.spacing.md,
   },
   sectionHeader: {
     flexDirection: 'row',
