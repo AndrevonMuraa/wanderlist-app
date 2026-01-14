@@ -282,25 +282,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  titleWithSearch: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
+    minHeight: 32,
   },
   headerTitle: {
     fontSize: 22,
     fontWeight: '700',
     color: '#fff',
-  },
-  searchButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: theme.spacing.sm,
   },
   // Scroll Content
   scrollView: {
