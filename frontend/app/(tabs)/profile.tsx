@@ -167,35 +167,23 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <ScrollView>
-        {/* Universal Header with Branding */}
-        <LinearGradient
-          colors={gradients.oceanToSand}
-          start={gradients.horizontal.start}
-          end={gradients.horizontal.end}
-          style={styles.header}
-        >
-          {/* Top Row: Branding */}
-          <View style={styles.brandingRow}>
-            <TouchableOpacity 
-              style={styles.brandingContainer}
-              onPress={() => router.push('/about')}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="earth" size={18} color="#fff" />
-              <Text style={styles.brandingText}>WanderList</Text>
-            </TouchableOpacity>
-          </View>
-          
-          {/* Main Row: Title + Actions */}
-          <View style={styles.headerMainRow}>
+      {/* Sticky Header */}
+      <LinearGradient
+        colors={gradients.oceanToSand}
+        start={gradients.horizontal.start}
+        end={gradients.horizontal.end}
+        style={styles.stickyHeader}
+      >
+        {/* Single Row: Title + Actions Left, Branding Right */}
+        <View style={styles.headerRow}>
+          <View style={styles.titleWithActions}>
             <Text style={styles.headerTitle}>Profile</Text>
             <View style={styles.headerButtons}>
               <TouchableOpacity
-                style={styles.notificationButton}
+                style={styles.headerIconButton}
                 onPress={() => router.push('/notifications')}
               >
-                <Ionicons name="notifications-outline" size={22} color="#fff" />
+                <Ionicons name="notifications-outline" size={20} color="#fff" />
                 {unreadCount > 0 && (
                   <View style={styles.notificationBadge}>
                     <Text style={styles.notificationBadgeText}>
@@ -204,29 +192,20 @@ export default function ProfileScreen() {
                   </View>
                 )}
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.headerIconButton}
-                onPress={async () => {
-                  if (stats) {
-                    await shareProgress(
-                      stats.total_visits || 0,
-                      stats.countries_visited || 0,
-                      progressStats?.totalPoints || 0
-                    );
-                  }
-                }}
-              >
-                <Ionicons name="share-social-outline" size={22} color="#fff" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.headerIconButton}
-                onPress={() => router.push('/about')}
-              >
-                <Ionicons name="information-circle-outline" size={22} color="#fff" />
-              </TouchableOpacity>
             </View>
           </View>
-        </LinearGradient>
+          <TouchableOpacity 
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="earth" size={16} color="#2A2A2A" />
+            <Text style={styles.brandingTextDark}>WanderList</Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+
+      <ScrollView>
 
         {/* FINAL: User Left, Rank Right, Stats Row */}
         <Surface style={styles.profileCard}>
