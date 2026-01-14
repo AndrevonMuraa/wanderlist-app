@@ -7,7 +7,8 @@ import {
   Platform, 
   RefreshControl, 
   Image,
-  Alert 
+  Alert,
+  StatusBar
 } from 'react-native';
 import { Text, Surface, Avatar, Badge } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
