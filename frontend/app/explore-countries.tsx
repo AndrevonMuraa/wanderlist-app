@@ -512,13 +512,46 @@ export default function ExploreCountriesScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
+      {/* Sticky Header */}
+      <LinearGradient
+        colors={gradients.oceanToSand}
+        start={gradients.horizontal.start}
+        end={gradients.horizontal.end}
+        style={styles.stickyHeader}
+      >
+        {/* Single Row: Back + Title Left, Branding Right */}
+        <View style={styles.headerRow}>
+          <View style={styles.titleWithBack}>
+            {continent && (
+              <TouchableOpacity 
+                style={styles.backButtonInline}
+                onPress={() => router.back()}
+              >
+                <Ionicons name="arrow-back" size={22} color="#fff" />
+              </TouchableOpacity>
+            )}
+            <Text style={styles.headerTitle}>
+              {continent ? `${(continent as string).charAt(0).toUpperCase() + (continent as string).slice(1)}` : 'Explore Countries'}
+            </Text>
+          </View>
+          <TouchableOpacity 
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="earth" size={16} color="#2A2A2A" />
+            <Text style={styles.brandingTextDark}>WanderList</Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+
       <SectionList
         sections={sections}
         renderItem={renderCountryCard}
         renderSectionHeader={renderSectionHeader}
         keyExtractor={(item, index) => `row-${index}-${item.map(c => c.country_id).join('-')}`}
         contentContainerStyle={[styles.listContainer, { paddingBottom: Platform.OS === 'ios' ? 100 : 90 }]}
-        ListHeaderComponent={renderListHeader}
+        ListHeaderComponent={renderStatsHeader}
         ListFooterComponent={renderListFooter}
         stickySectionHeadersEnabled={false}
         refreshControl={
