@@ -186,9 +186,9 @@ export default function BucketListScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Universal Header with New Gradient */}
       <LinearGradient
-        colors={['#4DB8D8', '#E8DCC8']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
+        colors={gradients.oceanToSand}
+        start={gradients.horizontal.start}
+        end={gradients.horizontal.end}
         style={styles.headerGradient}
       >
         {/* Top Row: Branding + Profile */}
