@@ -547,6 +547,40 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: theme.colors.background,
   },
+  stickyHeader: {
+    paddingHorizontal: theme.spacing.md,
+    paddingTop: theme.spacing.sm,
+    paddingBottom: theme.spacing.sm,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  titleWithBack: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  backButtonInline: {
+    padding: theme.spacing.xs,
+    marginRight: theme.spacing.xs,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  brandingTextDark: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#2A2A2A',
+  },
   searchContainer: {
     paddingHorizontal: theme.spacing.md,
     marginBottom: theme.spacing.md,
