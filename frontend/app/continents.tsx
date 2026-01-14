@@ -281,43 +281,30 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#fff',
   },
-  profileButton: {
-    padding: 2,
-  },
-  profileCircle: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileInitial: {
-    fontSize: 12,
+  brandingTextDark: {
+    fontSize: 13,
     fontWeight: '700',
-    color: '#fff',
+    color: '#2A2A2A',
   },
-  titleRow: {
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  titleContainer: {
+  titleWithSearch: {
+    flexDirection: 'row',
+    alignItems: 'center',
     flex: 1,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
     color: '#fff',
   },
-  headerSubtitle: {
-    fontSize: 13,
-    color: 'rgba(255, 255, 255, 0.9)',
-    marginTop: 2,
-  },
   searchButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
