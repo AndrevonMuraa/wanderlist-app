@@ -461,52 +461,32 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.sm,
-    paddingBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.sm,
   },
-  brandingRow: {
+  headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacing.xs,
   },
   brandingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
   },
   brandingText: {
     fontSize: 14,
     fontWeight: '700',
     color: '#fff',
   },
-  profileButton: {
-    padding: 2,
-  },
-  profileCircle: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileInitial: {
-    fontSize: 12,
+  brandingTextDark: {
+    fontSize: 13,
     fontWeight: '700',
-    color: '#fff',
-  },
-  greetingContainer: {
-    marginTop: theme.spacing.xs,
+    color: '#2A2A2A',
   },
   greeting: {
     fontSize: 22,
     fontWeight: '800',
     color: '#fff',
-  },
-  subGreeting: {
-    fontSize: 13,
-    color: 'rgba(255, 255, 255, 0.9)',
-    marginTop: 2,
   },
   statsCard: {
     margin: theme.spacing.md,
