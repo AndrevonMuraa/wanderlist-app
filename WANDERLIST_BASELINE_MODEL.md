@@ -22,16 +22,55 @@ This baseline model ensures:
 
 ---
 
-## 📊 CURRENT APP STATE (Baseline v4.19)
+## 📊 CURRENT APP STATE (Baseline v4.20)
 
 ### Production Status: **PRODUCTION READY - Fully Polished & Feature Complete**
 
-**Last Updated:** January 9, 2026 (Session 12 - Full Production Polish & Bug Fixes)
-**Version:** 4.19.0
+**Last Updated:** January 14, 2026 (Session 13 - Major UI/UX Header Redesign)
+**Version:** 4.20.0
 **Total Countries:** 48 (Europe: 10, Asia: 10, Africa: 10, Americas: 10, Oceania: 8)
 **Total Landmarks:** 580 total (480 official + 100 premium)
 **Test Data:** 101 visits, 7 countries at 100%, 3 users, Adventurer rank achieved
-**Major Updates (v4.19):**
+
+**Major Updates (v4.20) - UI/UX Header Redesign:**
+
+### 🎨 Design System Updates
+- **"Ocean to Sand" Gradient** - New signature brand gradient (`#4DB8D8` → `#E8DCC8`) applied to all headers
+- **Gradient Constants in Theme** - Added `gradients.oceanToSand`, `gradients.horizontal` to `/frontend/styles/theme.ts`
+- **Design Philosophy Documentation** - Theme file now documents the "Ocean to Sand" design philosophy
+
+### 📱 Header Redesign (All Pages)
+- **Compact Single-Row Headers** - All headers reduced to single row with title left, branding right
+- **Removed Profile Buttons** - Profile button removed from all headers
+- **WanderList Branding** - 🌍 WanderList moved to right side with dark text (#2A2A2A) for visibility
+- **Sticky Headers** - All headers now stick to top while scrolling
+- **Consistent Header Height** - All headers use `minHeight: 32` and same `topPadding` calculation
+- **Removed Subtitle Text** - Removed "Choose your next adventure", "Good morning...", "Connect with your travel community", "Discover amazing landmarks", landmark counters
+
+### 🗺️ Continent Cards Redesign
+- **Restored Classic Card Design** - Cards now match original design with colored gradient overlays
+- **Unique Accent Colors** - Europe (turquoise), Asia (orange), Africa (golden), Americas (green), Oceania (blue)
+- **Card Layout** - Title/description top-left, points badge top-right, stats bottom-left, arrow button bottom-right
+- **Smaller Cards** - Height reduced from 200px to 140px (~1/3 smaller)
+- **New Images** - Updated continent images to match original design aesthetic
+- **Combined Americas** - North/South America merged into single "Americas" card
+
+### 🔧 Technical Changes
+- **Safe Area Handling** - Changed from `<SafeAreaView edges={['top']}>` to `<View>` with manual `topPadding`
+- **StatusBar Import** - Added StatusBar import to journey.tsx, social.tsx, profile.tsx
+- **topPadding Formula** - Standardized: `Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20)`
+
+### 📁 Files Modified
+- `/frontend/styles/theme.ts` - Added gradients constants and design documentation
+- `/frontend/app/continents.tsx` - New header, card design, removed search button
+- `/frontend/app/explore-countries.tsx` - Sticky compact header
+- `/frontend/app/landmarks/[country_id].tsx` - Sticky compact header
+- `/frontend/app/(tabs)/journey.tsx` - Sticky compact header
+- `/frontend/app/(tabs)/social.tsx` - Sticky compact header
+- `/frontend/app/(tabs)/profile.tsx` - Sticky compact header
+- `/frontend/app/bucket-list.tsx` - Sticky compact header
+
+**Previous Major Updates (v4.19):**
 - **Landmark Count Fix** - Backend now counts ALL landmarks (official + premium) correctly (CRITICAL FIX)
 - **Centralized BACKEND_URL** - Fixed 4 files to use utils/config.ts (prevents remote URL issues)
 - **Visit Detail Page** - Full-featured page with photo gallery, diary, tips (/visit-detail/[visit_id])
@@ -44,7 +83,7 @@ This baseline model ensures:
 - **Backend Visit Fix** - Fixed undefined visits variable in badge system
 - **Deployment Fix** - Changed from --tunnel to --web mode for stability
 
-**Previous Major Updates:** 
+**Previous Major Updates (v4.18):** 
 - **Streamlined Add Visit Flow** - Dual-mode interface: Quick Mode (fast check-in with photo + note) and Detailed Mode (full diary/tips). Reduces friction by 70% for casual users (NEW in v4.18)
 - **Camera Integration** - Direct camera access with takePhoto() for instant capture, plus gallery picker for multiple photos (NEW in v4.18)
 - **Smart Form State** - Intelligent data transfer: quick note automatically copies to diary when switching to detailed mode (NEW in v4.18)
