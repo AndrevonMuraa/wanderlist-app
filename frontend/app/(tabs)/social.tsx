@@ -594,6 +594,27 @@ export default function SocialHubScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
+      {/* Sticky Header */}
+      <LinearGradient
+        colors={gradients.oceanToSand}
+        start={gradients.horizontal.start}
+        end={gradients.horizontal.end}
+        style={styles.stickyHeader}
+      >
+        {/* Single Row: Title Left, Branding Right */}
+        <View style={styles.headerRow}>
+          <Text style={styles.headerTitle}>Social Hub</Text>
+          <TouchableOpacity 
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="earth" size={16} color="#2A2A2A" />
+            <Text style={styles.brandingTextDark}>WanderList</Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+
       <ScrollView
         style={styles.scrollView}
         refreshControl={
@@ -601,39 +622,6 @@ export default function SocialHubScreen() {
         }
         showsVerticalScrollIndicator={false}
       >
-        {/* Universal Header with Branding */}
-        <LinearGradient
-          colors={gradients.oceanToSand}
-          start={gradients.horizontal.start}
-          end={gradients.horizontal.end}
-          style={styles.headerGradient}
-        >
-          {/* Top Row: Branding + Profile */}
-          <View style={styles.brandingRow}>
-            <TouchableOpacity 
-              style={styles.brandingContainer}
-              onPress={() => router.push('/about')}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="earth" size={18} color="#fff" />
-              <Text style={styles.brandingText}>WanderList</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.profileButtonHeader}
-              onPress={() => router.push('/(tabs)/profile')}
-            >
-              <View style={styles.profileCircleHeader}>
-                <Text style={styles.profileInitialHeader}>
-                  {user?.name?.charAt(0).toUpperCase() || 'U'}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          {/* Main Content */}
-          <Text style={styles.headerTitle}>Social Hub</Text>
-        </LinearGradient>
 
         {/* Activity Feed Section */}
         <View style={styles.section}>
