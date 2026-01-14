@@ -158,15 +158,7 @@ export default function ContinentsScreen() {
       >
         {/* Single Row: Title Left, Branding Right */}
         <View style={styles.headerRow}>
-          <View style={styles.titleWithSearch}>
-            <Text style={styles.headerTitle}>Explore Continents</Text>
-            <TouchableOpacity 
-              style={styles.searchButton}
-              onPress={() => router.push('/search')}
-            >
-              <Ionicons name="search" size={20} color="#fff" />
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.headerTitle}>Explore Continents</Text>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
