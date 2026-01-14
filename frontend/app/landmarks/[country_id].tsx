@@ -211,45 +211,33 @@ export default function LandmarksScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
+      {/* Sticky Header */}
       <LinearGradient
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
         end={gradients.horizontal.end}
         style={styles.header}
       >
-        {/* Branding Row */}
-        <View style={styles.brandingRow}>
+        {/* Single Row: Back + Title Left, Branding Right */}
+        <View style={styles.headerRow}>
+          <View style={styles.titleWithBack}>
+            <TouchableOpacity 
+              onPress={() => router.back()} 
+              style={styles.backButton}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="arrow-back" size={22} color="#fff" />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>{name}</Text>
+          </View>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <Ionicons name="earth" size={18} color="#fff" />
-            <Text style={styles.brandingText}>WanderList</Text>
+            <Ionicons name="earth" size={16} color="#2A2A2A" />
+            <Text style={styles.brandingTextDark}>WanderList</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={styles.profileButton}
-            onPress={() => router.push('/(tabs)/profile')}
-          >
-            <View style={styles.profileCircle}>
-              <Text style={styles.profileInitial}>U</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        
-        {/* Title Row with Back Button */}
-        <View style={styles.titleRow}>
-          <TouchableOpacity 
-            onPress={() => router.back()} 
-            style={styles.backButton}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="arrow-back" size={22} color="#fff" />
-          </TouchableOpacity>
-          <View style={styles.headerContent}>
-            <Text style={styles.headerTitle}>{name}</Text>
-          </View>
         </View>
       </LinearGradient>
 
