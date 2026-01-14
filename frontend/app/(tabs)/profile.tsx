@@ -165,14 +165,18 @@ export default function ProfileScreen() {
     router.replace('/');
   };
 
+  // Get safe area insets for proper header padding
+  const insets = useSafeAreaInsets();
+  const topPadding = Platform.OS === 'ios' ? insets.top : insets.top + 8;
+
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       {/* Sticky Header */}
       <LinearGradient
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
         end={gradients.horizontal.end}
-        style={styles.stickyHeader}
+        style={[styles.stickyHeader, { paddingTop: topPadding }]}
       >
         {/* Single Row: Title + Actions Left, Branding Right */}
         <View style={styles.headerRow}>
