@@ -1,4 +1,4 @@
-# WanderList - Essential Baseline (v4.25)
+# WanderList - Essential Baseline (v4.26)
 
 > **Purpose:** Critical information for session continuity
 > **Read this:** At session start if forked, or when encountering issues
@@ -7,10 +7,10 @@
 
 ## 📊 **Current State**
 
-**Version:** 4.25.0 - STABLE ✅  
-**Status:** Visual Overhaul Complete + Privacy System Implemented  
-**Last Build:** January 13, 2026  
-**Next Version:** v4.26 - Additional Features
+**Version:** 4.26.0 - STABLE ✅  
+**Status:** Major UI/UX Header Redesign Complete  
+**Last Build:** January 14, 2026  
+**Next Version:** v4.27 - Additional Features
 
 **Tech Stack:** Expo (React Native) + FastAPI + MongoDB  
 **Database:** 48 countries, 528 landmarks, test data populated  
@@ -24,15 +24,29 @@
 
 ---
 
-## 🎨 **v4.25 Design System**
+## 🎨 **v4.26 Design System (UPDATED)**
 
-### Universal Header
-- **Colors:** `#3BB8C3` → `#2AA8B3` (lighter turquoise gradient)
-- **Components:** WanderList branding (links to About) + Profile button
-- **Applied to:** 21+ pages across the app
+### "Ocean to Sand" Gradient (NEW)
+- **Colors:** `#4DB8D8` → `#E8DCC8` (turquoise to warm sand)
+- **Direction:** Horizontal (left to right)
+- **Theme constant:** `gradients.oceanToSand`
+- **Usage:** All headers across the app
+
+### Universal Header (REDESIGNED)
+- **Layout:** Single row - Title left, WanderList branding right
+- **Branding:** 🌍 WanderList in dark text (#2A2A2A) for visibility
+- **Profile Button:** REMOVED from all headers
+- **Sticky:** All headers stick to top while scrolling
+- **Height:** Consistent `minHeight: 32` on headerRow
+
+### Continent Cards (REDESIGNED)
+- **Height:** 140px (reduced from 200px)
+- **Accent colors:** Europe (turquoise), Asia (orange), Africa (golden), Americas (green), Oceania (blue)
+- **Layout:** Title/description top-left, points top-right, stats bottom-left, arrow bottom-right
 
 ### Color Palette
-- Primary: `#3BB8C3` (Turquoise)
+- Primary: `#4DB8D8` (Ocean turquoise)
+- Secondary: `#E8DCC8` (Warm sand)
 - Golden Stars: `#FFD700`
 - Privacy Public: `#27ae60` (Green)
 - Privacy Friends: `#3498db` (Blue)
@@ -40,7 +54,7 @@
 
 ---
 
-## 🔒 **Privacy System (NEW in v4.25)**
+## 🔒 **Privacy System (v4.25)**
 
 ### Privacy Levels
 | Icon | Color | Level | Who Can See |
