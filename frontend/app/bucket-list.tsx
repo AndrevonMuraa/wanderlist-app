@@ -184,41 +184,24 @@ export default function BucketListScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Universal Header with New Gradient */}
+      {/* Sticky Header */}
       <LinearGradient
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
         end={gradients.horizontal.end}
-        style={styles.headerGradient}
+        style={styles.stickyHeader}
       >
-        {/* Top Row: Branding + Profile */}
-        <View style={styles.brandingRow}>
+        {/* Single Row: Title Left, Branding Right */}
+        <View style={styles.headerRow}>
+          <Text style={styles.headerTitle}>Bucket List</Text>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <Ionicons name="earth" size={18} color="#fff" />
-            <Text style={styles.brandingText}>WanderList</Text>
+            <Ionicons name="earth" size={16} color="#2A2A2A" />
+            <Text style={styles.brandingTextDark}>WanderList</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={styles.profileButton}
-            onPress={() => router.push('/(tabs)/profile')}
-          >
-            <View style={styles.profileCircle}>
-              <Ionicons name="person" size={14} color="#fff" />
-            </View>
-          </TouchableOpacity>
-        </View>
-        
-        <View style={styles.headerContent}>
-          <View>
-            <Text style={styles.headerTitle}>Bucket List</Text>
-            <Text style={styles.headerSubtitle}>
-              {bucketList.length === 0 ? 'Save landmarks to visit' : `${bucketList.length} saved`}
-            </Text>
-          </View>
         </View>
       </LinearGradient>
 
@@ -248,7 +231,6 @@ export default function BucketListScreen() {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>Bucket List</Text>
           <Text style={styles.subtitle}>
             {bucketList.length === 0
               ? 'No landmarks saved yet'
