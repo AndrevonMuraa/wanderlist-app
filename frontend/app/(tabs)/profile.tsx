@@ -446,16 +446,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  header: {
+  stickyHeader: {
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.sm,
-    paddingBottom: theme.spacing.md,
-  },
-  brandingRow: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginBottom: theme.spacing.xs,
+    paddingBottom: theme.spacing.sm,
   },
   brandingContainer: {
     flexDirection: 'row',
