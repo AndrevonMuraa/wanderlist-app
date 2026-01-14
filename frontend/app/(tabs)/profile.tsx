@@ -460,17 +460,22 @@ const styles = StyleSheet.create({
   brandingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
   },
-  brandingText: {
-    fontSize: 14,
+  brandingTextDark: {
+    fontSize: 13,
     fontWeight: '700',
-    color: '#fff',
+    color: '#2A2A2A',
   },
-  headerMainRow: {
+  headerRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  titleWithActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
   headerTitle: {
     fontSize: 22,
@@ -479,35 +484,27 @@ const styles = StyleSheet.create({
   },
   headerButtons: {
     flexDirection: 'row',
-    gap: theme.spacing.sm,
+    marginLeft: theme.spacing.sm,
   },
-  notificationButton: {
+  headerIconButton: {
     padding: theme.spacing.xs,
-    position: 'relative',
   },
   notificationBadge: {
     position: 'absolute',
-    top: 2,
-    right: 2,
+    top: 0,
+    right: 0,
     backgroundColor: '#FF6B6B',
-    borderRadius: 10,
-    minWidth: 16,
-    height: 16,
+    borderRadius: 8,
+    minWidth: 14,
+    height: 14,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 4,
+    paddingHorizontal: 3,
   },
   notificationBadgeText: {
     color: '#fff',
     fontWeight: '700',
-    fontSize: 9,
-  },
-  editButton: {
-    padding: theme.spacing.xs,
-  },
-  headerIconButton: {
-    padding: theme.spacing.xs,
-    marginRight: theme.spacing.sm,
+    fontSize: 8,
   },
   profileCard: {
     margin: theme.spacing.md,
