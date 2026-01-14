@@ -441,7 +441,7 @@ export default function ProfileScreen() {
           }
         }}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
