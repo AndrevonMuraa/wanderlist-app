@@ -312,62 +312,38 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   header: {
-    paddingHorizontal: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.sm,
-    paddingBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.sm,
   },
-  brandingRow: {
+  headerRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacing.xs,
+    justifyContent: 'space-between',
+  },
+  titleWithBack: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  backButton: {
+    padding: theme.spacing.xs,
+    marginRight: theme.spacing.xs,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#fff',
   },
   brandingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
   },
-  brandingText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#fff',
-  },
-  profileButton: {
-    padding: 2,
-  },
-  profileCircle: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  profileInitial: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#fff',
-  },
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  backButton: {
-    padding: theme.spacing.xs,
-    marginRight: theme.spacing.sm,
-  },
-  headerContent: {
-    flex: 1,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#fff',
-    marginBottom: 2,
-  },
-  headerSubtitle: {
+  brandingTextDark: {
     fontSize: 13,
-    color: 'rgba(255,255,255,0.9)',
+    fontWeight: '700',
+    color: '#2A2A2A',
   },
   listContainer: {
     padding: theme.spacing.md,
