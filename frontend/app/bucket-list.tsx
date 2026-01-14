@@ -320,35 +320,32 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: theme.colors.primary,
   },
-  // Universal header branding styles
-  brandingRow: {
+  // Sticky header styles
+  stickyHeader: {
+    paddingHorizontal: theme.spacing.md,
+    paddingTop: theme.spacing.sm,
+    paddingBottom: theme.spacing.sm,
+  },
+  headerRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacing.xs,
+    justifyContent: 'space-between',
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#fff',
   },
   brandingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
   },
-  brandingText: {
-    fontSize: 14,
+  brandingTextDark: {
+    fontSize: 13,
     fontWeight: '700',
-    color: '#fff',
+    color: '#2A2A2A',
   },
-  profileButton: {
-    padding: 2,
-  },
-  profileCircle: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -358,14 +355,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    padding: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
-  },
-  title: {
-    ...theme.typography.h1,
-    color: theme.colors.text,
-    fontWeight: '700',
-    marginBottom: theme.spacing.xs / 2,
+    padding: theme.spacing.md,
+    paddingBottom: theme.spacing.sm,
   },
   subtitle: {
     ...theme.typography.body,
