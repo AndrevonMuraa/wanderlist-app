@@ -445,7 +445,7 @@ export default function JourneyScreen() {
           <Ionicons name="add" size={28} color="#fff" />
         </LinearGradient>
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 }
 
