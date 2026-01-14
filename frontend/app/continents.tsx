@@ -156,39 +156,24 @@ export default function ContinentsScreen() {
         end={gradients.horizontal.end}
         style={[styles.fixedHeader, { paddingTop: topPadding }]}
       >
-        {/* Top Row: Branding + Profile */}
-        <View style={styles.brandingRow}>
+        {/* Single Row: Title Left, Branding Right */}
+        <View style={styles.headerRow}>
+          <View style={styles.titleWithSearch}>
+            <Text style={styles.headerTitle}>Explore Continents</Text>
+            <TouchableOpacity 
+              style={styles.searchButton}
+              onPress={() => router.push('/search')}
+            >
+              <Ionicons name="search" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <Ionicons name="earth" size={18} color="#fff" />
-            <Text style={styles.brandingText}>WanderList</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={styles.profileButton}
-            onPress={() => router.push('/(tabs)/profile')}
-          >
-            <View style={styles.profileCircle}>
-              <Text style={styles.profileInitial}>
-                {user?.name?.charAt(0).toUpperCase() || 'U'}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        {/* Title Row */}
-        <View style={styles.titleRow}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.headerTitle}>Explore Continents</Text>
-          </View>
-          <TouchableOpacity 
-            style={styles.searchButton}
-            onPress={() => router.push('/search')}
-          >
-            <Ionicons name="search" size={20} color="#fff" />
+            <Ionicons name="earth" size={16} color="#2A2A2A" />
+            <Text style={styles.brandingTextDark}>WanderList</Text>
           </TouchableOpacity>
         </View>
       </LinearGradient>
