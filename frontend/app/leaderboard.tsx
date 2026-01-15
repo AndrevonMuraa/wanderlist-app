@@ -8,7 +8,6 @@ import {
   RefreshControl,
 } from 'react-native';
 import { Text, Surface, Avatar, SegmentedButtons, Chip } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -16,6 +15,7 @@ import * as SecureStore from 'expo-secure-store';
 import theme from '../styles/theme';
 import RankBadge from '../components/RankBadge';
 import { getUserRank } from '../utils/rankSystem';
+import UniversalHeader from '../components/UniversalHeader';
 
 const BACKEND_URL = Platform.OS === 'web' ? '' : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
 
@@ -201,7 +201,7 @@ export default function LeaderboardScreen() {
     return (
       <Surface style={styles.userRankCard} elevation={2}>
         <LinearGradient
-          colors={['#3BB8C3', '#2AA8B3']}
+          colors={['#4DB8D8', '#2E9AB5']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.userRankGradient}
@@ -222,34 +222,8 @@ export default function LeaderboardScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Universal Header with Branding */}
-      <LinearGradient
-        colors={['#3BB8C3', '#2AA8B3']}
-        style={styles.headerGradient}
-      >
-        {/* Top Row: Branding + Back */}
-        <View style={styles.brandingRow}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={22} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.brandingContainer}
-            onPress={() => router.push('/about')}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="earth" size={18} color="#fff" />
-            <Text style={styles.brandingText}>WanderList</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Main Content */}
-        <View style={styles.headerMain}>
-          <Text style={styles.headerTitleNew}>Leaderboard</Text>
-          <Ionicons name="trophy" size={24} color="#FFD700" />
-        </View>
-        <Text style={styles.headerSubtitle}>Compete with travelers worldwide</Text>
-      </LinearGradient>
+    <View style={styles.container}>
+      <UniversalHeader title="Leaderboard" />
 
       <ScrollView
         style={styles.content}
@@ -378,7 +352,7 @@ export default function LeaderboardScreen() {
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -386,54 +360,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
-  },
-  headerGradient: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 16,
-  },
-  brandingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-    gap: 12,
-  },
-  backButton: {
-    padding: 4,
-  },
-  brandingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  brandingText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#fff',
-  },
-  headerMain: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  headerTitleNew: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#fff',
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#fff',
-  },
-  headerSubtitle: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.9)',
-    marginTop: 2,
-  },
-  headerRight: {
-    width: 40,
-    alignItems: 'flex-end',
   },
   content: {
     flex: 1,
