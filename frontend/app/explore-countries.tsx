@@ -264,26 +264,15 @@ export default function ExploreCountriesScreen() {
                       <Text style={styles.pointsText}>{pointReward} points</Text>
                     </View>
                     
-                    <View style={styles.cardActions}>
-                      {hasProgress && (
-                        <View style={styles.progressMini}>
-                          <Text style={styles.progressMiniText}>{country.visited}/{country.landmark_count}</Text>
-                          {isComplete && (
-                            <Ionicons name="checkmark-circle" size={16} color="#4CAF50" />
-                          )}
-                        </View>
-                      )}
-                      <TouchableOpacity 
-                        style={styles.cameraButton}
-                        onPress={(e) => {
-                          e.stopPropagation();
-                          setSelectedCountry({ id: country.country_id, name: country.name });
-                          setShowCountryVisitModal(true);
-                        }}
-                      >
-                        <Ionicons name="camera" size={18} color={theme.colors.primary} />
-                      </TouchableOpacity>
-                    </View>
+                    {/* Progress indicator - only shown when user has visited landmarks */}
+                    {hasProgress && (
+                      <View style={styles.progressMini}>
+                        <Text style={styles.progressMiniText}>{country.visited}/{country.landmark_count}</Text>
+                        {isComplete && (
+                          <Ionicons name="checkmark-circle" size={16} color="#4CAF50" />
+                        )}
+                      </View>
+                    )}
                   </View>
                 </View>
               </TouchableOpacity>
