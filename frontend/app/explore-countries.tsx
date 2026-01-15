@@ -11,7 +11,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import theme, { gradients } from '../styles/theme';
 import { CountryCardSkeleton } from '../components/Skeleton';
 import { PersistentTabBar } from '../components/PersistentTabBar';
-import { AddCountryVisitModal } from '../components/AddCountryVisitModal';
 
 const { width } = Dimensions.get('window');
 // Responsive grid: mobile (2 cols), tablet (3 cols), desktop (4 cols)
