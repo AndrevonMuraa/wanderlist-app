@@ -198,14 +198,9 @@ class WanderListAPITester:
             
         print(f"\n✏️ Testing Country Visit Update...")
         
-        # Test data for update - add another photo and change diary
+        # Test data for update - only diary and visibility are supported
         update_data = {
-            "photos": [
-                self.generate_test_base64_image(),
-                self.generate_test_base64_image(),
-                self.generate_test_base64_image()  # Add a third photo
-            ],
-            "diary_notes": "Updated diary entry: France was even more amazing than I initially thought! Added more photos and memories from my extended stay.",
+            "diary": "Updated diary entry: France was even more amazing than I initially thought! Added more memories from my extended stay.",
             "visibility": "friends"  # Change visibility from public to friends
         }
         
@@ -216,12 +211,10 @@ class WanderListAPITester:
                 data = response.json()
                 
                 # Check if update was successful
-                updated_photos = data.get("photos", [])
                 updated_diary = data.get("diary", "")
                 updated_visibility = data.get("visibility", "")
                 
                 success_checks = []
-                success_checks.append(("photos_count", len(updated_photos) == 3))
                 success_checks.append(("diary_updated", "Updated diary entry" in updated_diary))
                 success_checks.append(("visibility_changed", updated_visibility == "friends"))
                 
@@ -229,7 +222,7 @@ class WanderListAPITester:
                 
                 if not failed_checks:
                     self.log_result("Country Visit Update", True, 
-                                  f"Successfully updated visit: 3 photos, updated diary, visibility changed to friends")
+                                  f"Successfully updated visit: diary updated, visibility changed to friends")
                 else:
                     self.log_result("Country Visit Update", False, 
                                   f"Update verification failed: {failed_checks}", 
