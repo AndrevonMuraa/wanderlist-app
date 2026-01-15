@@ -7,7 +7,6 @@ import {
   Platform,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -16,6 +15,7 @@ import theme from '../styles/theme';
 import RankBadge from '../components/RankBadge';
 import { RANKS, getUserRank, Rank } from '../utils/rankSystem';
 import { BACKEND_URL } from '../utils/config';
+import UniversalHeader from '../components/UniversalHeader';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -167,18 +167,8 @@ export default function RanksScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Universal Header */}
-      <LinearGradient
-        colors={['#3BB8C3', '#2AA8B3']}
-        style={styles.header}
-      >
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Rank System</Text>
-        <View style={styles.headerRight} />
-      </LinearGradient>
+    <View style={styles.container}>
+      <UniversalHeader title="Rank System" />
 
       <ScrollView 
         style={styles.scrollView}
@@ -265,7 +255,7 @@ export default function RanksScreen() {
 
         <View style={{ height: theme.spacing.xxl }} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -273,24 +263,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.md,
-  },
-  backButton: {
-    padding: theme.spacing.xs,
-  },
-  headerTitle: {
-    ...theme.typography.h3,
-    color: '#fff',
-    fontWeight: '700',
-  },
-  headerRight: {
-    width: 40,
   },
   scrollView: {
     flex: 1,
