@@ -264,7 +264,7 @@ export default function AddVisitScreen() {
         type={celebrationType}
         onComplete={() => setShowCelebration(false)}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
