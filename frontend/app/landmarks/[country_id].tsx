@@ -12,6 +12,7 @@ import UpgradeModal from '../../components/UpgradeModal';
 import { BACKEND_URL } from '../../utils/config';
 import { ProgressBar } from '../../components/ProgressBar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
+import { AddCountryVisitModal } from '../../components/AddCountryVisitModal';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
@@ -41,6 +42,7 @@ export default function LandmarksScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showCountryVisitModal, setShowCountryVisitModal] = useState(false);
   const [countryProgress, setCountryProgress] = useState<{visited: number; total: number; percentage: number} | null>(null);
   const [visitedLandmarkIds, setVisitedLandmarkIds] = useState<Set<string>>(new Set());
   const router = useRouter();
