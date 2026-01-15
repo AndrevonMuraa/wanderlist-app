@@ -518,21 +518,6 @@ export default function ExploreCountriesScreen() {
         }
       />
       
-      {selectedCountry && (
-        <AddCountryVisitModal
-          visible={showCountryVisitModal}
-          countryId={selectedCountry.id}
-          countryName={selectedCountry.name}
-          onClose={() => {
-            setShowCountryVisitModal(false);
-            setSelectedCountry(null);
-          }}
-          onSuccess={() => {
-            fetchData();
-          }}
-        />
-      )}
-      
       <PersistentTabBar />
     </View>
   );
