@@ -190,6 +190,61 @@ class WanderListAPITester:
         except Exception as e:
             self.log_result("Country Visit Details", False, f"Error: {str(e)}")
     
+    def test_country_visit_update(self, country_visit_id):
+        """Test PUT /api/country-visits/{country_visit_id} - Update a country visit"""
+        if not country_visit_id:
+            self.log_result("Country Visit Update", False, "No country_visit_id provided for testing")
+            return
+            
+        print(f"\n✏️ Testing Country Visit Update...")
+        
+        # Test data for update - add another photo and change diary
+        update_data = {
+            "photos": [
+                self.generate_test_base64_image(),
+                self.generate_test_base64_image(),
+                self.generate_test_base64_image()  # Add a third photo
+            ],
+            "diary_notes": "Updated diary entry: France was even more amazing than I initially thought! Added more photos and memories from my extended stay.",
+            "visibility": "friends"  # Change visibility from public to friends
+        }
+        
+        try:
+            response = self.session.put(f"{BASE_URL}/country-visits/{country_visit_id}", json=update_data)
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Check if update was successful
+                updated_photos = data.get("photos", [])
+                updated_diary = data.get("diary", "")
+                updated_visibility = data.get("visibility", "")
+                
+                success_checks = []
+                success_checks.append(("photos_count", len(updated_photos) == 3))
+                success_checks.append(("diary_updated", "Updated diary entry" in updated_diary))
+                success_checks.append(("visibility_changed", updated_visibility == "friends"))
+                
+                failed_checks = [check for check, success in success_checks if not success]
+                
+                if not failed_checks:
+                    self.log_result("Country Visit Update", True, 
+                                  f"Successfully updated visit: 3 photos, updated diary, visibility changed to friends")
+                else:
+                    self.log_result("Country Visit Update", False, 
+                                  f"Update verification failed: {failed_checks}", 
+                                  {"expected": update_data, "received": data})
+                    
+            elif response.status_code == 404:
+                self.log_result("Country Visit Update", False, "Country visit not found for update")
+            else:
+                self.log_result("Country Visit Update", False, 
+                              f"Failed with status {response.status_code}", 
+                              {"response": response.text})
+                
+        except Exception as e:
+            self.log_result("Country Visit Update", False, f"Error: {str(e)}")
+
     def test_country_visit_delete(self, country_visit_id):
         """Test DELETE /api/country-visits/{country_visit_id} - Delete a visit"""
         if not country_visit_id:
