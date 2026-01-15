@@ -557,4 +557,29 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: theme.spacing.sm,
   },
+  // Floating Action Button
+  fabContainer: {
+    position: 'absolute',
+    bottom: Platform.OS === 'ios' ? 100 : 90,
+    left: theme.spacing.lg,
+    right: theme.spacing.lg,
+  },
+  fab: {
+    borderRadius: theme.borderRadius.xl,
+    overflow: 'hidden',
+    ...theme.shadows.card,
+  },
+  fabGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.md,
+    gap: theme.spacing.sm,
+  },
+  fabText: {
+    ...theme.typography.body,
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16,
+  },
 });
