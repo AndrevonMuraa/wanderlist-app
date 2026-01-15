@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: theme.spacing.sm,
   },
-  // Floating Action Button
+  // Floating Action Button - matching landmark-detail style
   fabContainer: {
     position: 'absolute',
     bottom: Platform.OS === 'ios' ? 100 : 90,
@@ -573,13 +573,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: theme.spacing.md,
+    paddingVertical: theme.spacing.md + 2,
     gap: theme.spacing.sm,
   },
   fabText: {
-    ...theme.typography.body,
+    ...theme.typography.h3,
     color: '#fff',
     fontWeight: '700',
-    fontSize: 16,
   },
 });
