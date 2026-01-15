@@ -444,12 +444,23 @@ export default function ExploreCountriesScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
-        <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeText}>Discover the World</Text>
-          <Text style={styles.welcomeSubtext}>Loading amazing destinations...</Text>
-        </View>
+      <View style={styles.container}>
+        <LinearGradient
+          colors={gradients.oceanToSand}
+          start={gradients.horizontal.start}
+          end={gradients.horizontal.end}
+          style={[styles.stickyHeader, { paddingTop: topPadding }]}
+        >
+          <View style={styles.headerRow}>
+            <Text style={styles.headerTitle}>Discover the World</Text>
+            <View style={styles.brandingContainer}>
+              <Ionicons name="earth" size={16} color="#2A2A2A" />
+              <Text style={styles.brandingTextDark}>WanderList</Text>
+            </View>
+          </View>
+        </LinearGradient>
         <View style={styles.skeletonContainer}>
+          <Text style={styles.welcomeSubtext}>Loading amazing destinations...</Text>
           <View style={styles.rowContainer}>
             <CountryCardSkeleton />
             <CountryCardSkeleton />
@@ -463,18 +474,18 @@ export default function ExploreCountriesScreen() {
             <CountryCardSkeleton />
           </View>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Sticky Header */}
+    <View style={styles.container}>
+      {/* Sticky Header - with paddingTop for safe area */}
       <LinearGradient
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
         end={gradients.horizontal.end}
-        style={styles.stickyHeader}
+        style={[styles.stickyHeader, { paddingTop: topPadding }]}
       >
         {/* Single Row: Back + Title Left, Branding Right */}
         <View style={styles.headerRow}>
