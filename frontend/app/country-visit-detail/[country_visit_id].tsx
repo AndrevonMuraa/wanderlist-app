@@ -17,7 +17,6 @@ import {
   TextInput,
   KeyboardAvoidingView,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -26,6 +25,7 @@ import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import PhotoViewer from '../../components/PhotoViewer';
+import UniversalHeader from '../../components/UniversalHeader';
 
 const { width, height } = Dimensions.get('window');
 
