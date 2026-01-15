@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Switch, TouchableOpacity, Alert, Platform } from 'react-native';
 import { Text, Surface, List, Divider } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
@@ -10,6 +8,7 @@ import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 import { PrivacySelector } from '../components/PrivacySelector';
+import UniversalHeader from '../components/UniversalHeader';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -69,22 +68,10 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
+      <UniversalHeader title="Settings" />
+      
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-        {/* Universal Header */}
-        <LinearGradient
-          colors={['#3BB8C3', '#2AA8B3']}
-          style={styles.header}
-        >
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={22} color="#fff" />
-          </TouchableOpacity>
-          <View style={styles.headerContent}>
-            <Text style={styles.headerTitle}>Settings</Text>
-            <Text style={styles.headerSubtitle}>Manage your preferences</Text>
-          </View>
-        </LinearGradient>
-
         {/* Privacy Settings */}
         <Surface style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -202,7 +189,7 @@ export default function SettingsScreen() {
         <View style={styles.bottomSpacer} />
       </ScrollView>
       <PersistentTabBar />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -216,29 +203,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: Platform.OS === 'ios' ? 100 : 90,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: theme.spacing.lg,
     paddingTop: theme.spacing.md,
-  },
-  backButton: {
-    padding: theme.spacing.sm,
-    marginRight: theme.spacing.sm,
-  },
-  headerContent: {
-    flex: 1,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#fff',
-    marginBottom: 4,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.9)',
   },
   section: {
     margin: theme.spacing.md,
