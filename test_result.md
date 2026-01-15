@@ -662,6 +662,18 @@ frontend:
         agent: "testing"
         comment: "✅ PROFILE FEATURES TEST COMPLETE - ALL 4 IMPROVEMENTS VERIFIED! Comprehensive testing on mobile viewport (390x844). Feature 1: COMPACT STATS DISPLAY - Shows 101 | 7 | 1235 with vertical dividers, clean white card design, displays VISITS/COUNTRIES/POINTS labels correctly. Feature 2: EDIT PROFILE BUTTON - Pencil icon in top-right header opens Edit Profile page with all required fields (Profile Picture with camera icon, Name field required/50 chars, Bio field optional/200 chars with counter, Location field optional/50 chars), Save button with validation, Close button working. Feature 3: SETTINGS BUTTON - Menu item at bottom of profile opens Settings page with Privacy section containing PrivacySelector component with 3 options (Public/globe icon 'Visible to everyone', Friends Only/people icon 'Only friends can see', Private/lock icon 'Only you can see'), plus Notifications, Language, and Account sections, back button functional. Feature 4: UPGRADE PROMPT - Correctly NOT VISIBLE for Premium users (no 'Your Plan Limits' card, no 'Upgrade Plan' button, no friend limit indicator). All navigation flows tested (Profile → Edit → Back, Profile → Settings → Back). All features production-ready with no issues found!"
 
+  - task: "Country Visit Flow End-to-End Testing"
+    implemented: true
+    working: false
+    file: "frontend/components/AddCountryVisitModal.tsx, frontend/app/my-country-visits.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "COUNTRY VISIT FLOW END-TO-END TEST COMPLETE - MIXED RESULTS (7/8 - 87.5% success): ✅ LOGIN FLOW: Quick Test Login working perfectly. ✅ EXPLORE NAVIGATION: All 4 bottom tabs functional, continent cards displaying correctly. ✅ CONTINENT TO COUNTRY NAVIGATION: Successfully navigated Explore → Europe → France. ✅ FRANCE LANDMARKS PAGE: Loaded correctly with proper structure. ❌ COUNTRY VISIT FEATURE ACCESS: No share/camera buttons found on France landmarks page (0 buttons detected) - main issue preventing modal access. ✅ MY JOURNEY TAB: Working perfectly with user stats (8 Countries, 88 Landmarks, 1320 Points). ✅ MY COUNTRY VISITS ACCESS: Menu option clearly visible in Profile page. ✅ UNIVERSAL HEADER CONSISTENCY: Headers consistent across all pages. CRITICAL ISSUE: Country Visit Modal not accessible from landmarks page. Backend Activity feed API returning 500 error (user_name field missing). Overall: Country Visit flow structure exists but access mechanism missing on landmarks page."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
