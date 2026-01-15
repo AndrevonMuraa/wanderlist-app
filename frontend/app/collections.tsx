@@ -11,7 +11,6 @@ import {
   RefreshControl,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -20,6 +19,7 @@ import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 import { lightHaptic, successHaptic } from '../utils/haptics';
+import UniversalHeader from '../components/UniversalHeader';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -164,34 +164,14 @@ export default function CollectionsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
+      <UniversalHeader title="My Collections" />
+      
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        {/* Universal Turquoise Header */}
-        <LinearGradient
-          colors={['#3BB8C3', '#2AA8B3']}
-          style={styles.header}
-        >
-          <TouchableOpacity 
-            onPress={() => router.push('/(tabs)/profile')} 
-            style={styles.backButton}
-          >
-            <Ionicons name="arrow-back" size={22} color="#fff" />
-          </TouchableOpacity>
-          <View style={styles.headerContent}>
-            <View>
-              <Text style={styles.headerTitle}>My Collections</Text>
-              <Text style={styles.headerSubtitle}>Organize your dream destinations</Text>
-            </View>
-            <View style={styles.premiumBadge}>
-              <Ionicons name="diamond" size={20} color="#FFD700" />
-            </View>
-          </View>
-        </LinearGradient>
-
         {/* Create Collection Button */}
         <TouchableOpacity
           onPress={async () => {
@@ -202,7 +182,7 @@ export default function CollectionsScreen() {
           style={styles.createButtonContainer}
         >
           <LinearGradient
-            colors={[theme.colors.accent, theme.colors.accentDark]}
+            colors={[theme.colors.accent, theme.colors.accentBronze]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.createButton}
@@ -371,7 +351,7 @@ export default function CollectionsScreen() {
       </Modal>
 
       <PersistentTabBar />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -385,31 +365,11 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: Platform.OS === 'ios' ? 100 : 90,
-  },
-  header: {
-    padding: theme.spacing.lg,
     paddingTop: theme.spacing.md,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#fff',
-    marginBottom: 4,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.9)',
-  },
-  premiumBadge: {
-    padding: theme.spacing.xs,
   },
   createButtonContainer: {
     margin: theme.spacing.md,
+    marginTop: 0,
     borderRadius: theme.borderRadius.xl,
     overflow: 'hidden',
     ...theme.shadows.card,
@@ -530,7 +490,7 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
   },
   input: {
-    backgroundColor: theme.colors.backgroundSecondary,
+    backgroundColor: theme.colors.background,
     borderRadius: theme.borderRadius.lg,
     padding: theme.spacing.md,
     fontSize: 16,
@@ -560,7 +520,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: theme.colors.backgroundSecondary,
+    backgroundColor: theme.colors.background,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
