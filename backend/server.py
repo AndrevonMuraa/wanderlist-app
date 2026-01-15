@@ -1809,6 +1809,16 @@ async def get_activity_feed(current_user: User = Depends(get_current_user), limi
     # Enrich activities with like and comment counts, and check if current user liked
     enriched_activities = []
     for activity in activities:
+        # Skip activities missing required fields
+        if not activity.get("user_name"):
+            # Try to get user_name from user_id
+            user = await db.users.find_one({"user_id": activity.get("user_id")})
+            if user:
+                activity["user_name"] = user.get("name", "Unknown User")
+                activity["user_picture"] = user.get("picture")
+            else:
+                activity["user_name"] = "Unknown User"
+        
         # Get likes count
         likes_count = await db.likes.count_documents({"activity_id": activity["activity_id"]})
         
@@ -1825,7 +1835,12 @@ async def get_activity_feed(current_user: User = Depends(get_current_user), limi
         activity["comments_count"] = comments_count
         activity["is_liked"] = bool(user_like)
         
-        enriched_activities.append(Activity(**activity))
+        try:
+            enriched_activities.append(Activity(**activity))
+        except Exception as e:
+            # Log the error but continue processing other activities
+            print(f"Error processing activity {activity.get('activity_id')}: {e}")
+            continue
     
     return enriched_activities
 
