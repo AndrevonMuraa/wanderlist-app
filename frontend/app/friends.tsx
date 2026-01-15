@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Image, RefreshControl, Alert, TouchableOpacity, Platform } from 'react-native';
-import { Text, ActivityIndicator, Surface, Searchbar, Button, FAB, Chip } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text, ActivityIndicator, Surface, Searchbar, Button, Chip } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import UpgradeModal from '../components/UpgradeModal';
 import { useUpgradePrompt } from '../hooks/useUpgradePrompt';
 import { useAuth } from '../contexts/AuthContext';
+import UniversalHeader from '../components/UniversalHeader';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
@@ -246,24 +245,18 @@ export default function FriendsScreen() {
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
+      <View style={styles.container}>
+        <UniversalHeader title="Friends" />
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        </View>
       </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <LinearGradient
-        colors={['#3BB8C3', '#2AA8B3']}
-        style={styles.header}
-      >
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Friends</Text>
-        <View style={styles.headerSpacer} />
-      </LinearGradient>
+    <View style={styles.container}>
+      <UniversalHeader title="Friends" />
 
       <Surface style={styles.searchCard}>
         <View style={styles.searchHeader}>
@@ -348,7 +341,7 @@ export default function FriendsScreen() {
         onUpgrade={handleUpgrade}
         reason={upgradeReason}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -361,21 +354,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    paddingTop: 20,
-  },
-  backButton: {
-    marginRight: 16,
-    padding: 8,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
   },
   searchCard: {
     margin: 16,
@@ -441,9 +419,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  friendInfo: {
-    flex: 1,
   },
   requestText: {
     flex: 1,
