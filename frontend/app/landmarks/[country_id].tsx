@@ -207,20 +207,45 @@ export default function LandmarksScreen() {
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
+      <View style={styles.container}>
+        <LinearGradient
+          colors={gradients.oceanToSand}
+          start={gradients.horizontal.start}
+          end={gradients.horizontal.end}
+          style={[styles.header, { paddingTop: topPadding }]}
+        >
+          <View style={styles.headerRow}>
+            <View style={styles.titleWithBack}>
+              <TouchableOpacity 
+                onPress={() => router.back()} 
+                style={styles.backButton}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="arrow-back" size={22} color="#fff" />
+              </TouchableOpacity>
+              <Text style={styles.headerTitle}>{name || 'Loading...'}</Text>
+            </View>
+            <View style={styles.brandingContainer}>
+              <Ionicons name="earth" size={16} color="#2A2A2A" />
+              <Text style={styles.brandingTextDark}>WanderList</Text>
+            </View>
+          </View>
+        </LinearGradient>
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        </View>
       </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Sticky Header */}
+    <View style={styles.container}>
+      {/* Sticky Header - with paddingTop for safe area */}
       <LinearGradient
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
         end={gradients.horizontal.end}
-        style={styles.header}
+        style={[styles.header, { paddingTop: topPadding }]}
       >
         {/* Single Row: Back + Title Left, Branding Right */}
         <View style={styles.headerRow}>
