@@ -36,9 +36,13 @@ export const UniversalHeader: React.FC<UniversalHeaderProps> = ({
               <Ionicons name="arrow-back" size={22} color="#fff" />
             </TouchableOpacity>
           )}
-          <Text style={styles.headerTitle}>{title}</Text>
-          {rightElement}
+          <Text style={styles.headerTitle} numberOfLines={1}>{title}</Text>
         </View>
+        {rightElement && (
+          <View style={styles.rightElementContainer}>
+            {rightElement}
+          </View>
+        )}
         <TouchableOpacity 
           style={styles.brandingContainer}
           onPress={() => router.push('/about')}
