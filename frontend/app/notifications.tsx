@@ -6,14 +6,15 @@ import {
   TouchableOpacity,
   RefreshControl,
   Platform,
+  StatusBar,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
-import theme from '../styles/theme';
+import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 
 const getToken = async (): Promise<string | null> => {
