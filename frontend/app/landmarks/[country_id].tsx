@@ -44,6 +44,10 @@ export default function LandmarksScreen() {
   const [countryProgress, setCountryProgress] = useState<{visited: number; total: number; percentage: number} | null>(null);
   const [visitedLandmarkIds, setVisitedLandmarkIds] = useState<Set<string>>(new Set());
   const router = useRouter();
+  const insets = useSafeAreaInsets();
+  
+  // Calculate safe area padding - same as continents.tsx (golden standard)
+  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   useEffect(() => {
     fetchData();
