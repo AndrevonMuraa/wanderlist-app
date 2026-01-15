@@ -325,7 +325,7 @@ export default function LandmarksScreen() {
         onUpgrade={handleUpgrade}
       />
       <PersistentTabBar />
-    </SafeAreaView>
+    </View>
   );
 }
 
