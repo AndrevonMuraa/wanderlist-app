@@ -276,6 +276,9 @@ const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     backgroundColor: theme.colors.background,
+  },
+  loadingInner: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -283,30 +286,5 @@ const styles = StyleSheet.create({
     ...theme.typography.body,
     color: theme.colors.textSecondary,
     marginTop: theme.spacing.md,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: theme.spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-    backgroundColor: theme.colors.surface,
-  },
-  backButton: {
-    padding: theme.spacing.xs,
-    marginRight: theme.spacing.sm,
-  },
-  headerContent: {
-    flex: 1,
-  },
-  headerTitle: {
-    ...theme.typography.h3,
-    color: theme.colors.text,
-    fontWeight: '700',
-  },
-  headerSubtitle: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    marginTop: 2,
   },
 });
