@@ -9,12 +9,12 @@ import {
   Alert 
 } from 'react-native';
 import { Text, ActivityIndicator, Surface } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
+import UniversalHeader from '../../components/UniversalHeader';
 
 const BACKEND_URL = Platform.OS === 'web' 
   ? '' 
@@ -190,33 +190,20 @@ export default function LandmarkDetailScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <View style={styles.container}>
+        <UniversalHeader title="Loading..." />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
           <Text style={styles.loadingText}>Loading landmark...</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   if (!landmark) {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
-        {/* Universal Turquoise Header */}
-        <LinearGradient
-          colors={['#3BB8C3', '#2AA8B3']}
-          style={styles.headerGradient}
-        >
-          <TouchableOpacity 
-            onPress={handleGoBack}
-            style={styles.backButton}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Ionicons name="arrow-back" size={22} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitleWhite}>Landmark Not Found</Text>
-          <View style={styles.headerRight} />
-        </LinearGradient>
+      <View style={styles.container}>
+        <UniversalHeader title="Landmark Not Found" />
 
         <View style={styles.errorContainer}>
           <Ionicons name="alert-circle" size={64} color={theme.colors.accent} />
@@ -227,7 +214,7 @@ export default function LandmarkDetailScreen() {
             onPress={handleGoBack}
           >
             <LinearGradient
-              colors={['#3BB8C3', '#2AA8B3']}
+              colors={[theme.colors.ocean, theme.colors.primary]}
               style={styles.backButtonGradient}
             >
               <Ionicons name="arrow-back-circle" size={20} color="#fff" />
@@ -235,42 +222,31 @@ export default function LandmarkDetailScreen() {
             </LinearGradient>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   const isPremium = landmark.category === 'premium';
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Universal Turquoise Header */}
-      <LinearGradient
-        colors={['#3BB8C3', '#2AA8B3']}
-        style={styles.headerGradient}
-      >
-        <TouchableOpacity 
-          onPress={handleGoBack}
-          style={styles.backButton}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitleWhite} numberOfLines={1}>
-          {landmark.name}
-        </Text>
-        <TouchableOpacity
-          onPress={handleToggleBucketList}
-          style={styles.headerRight}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          disabled={bucketListLoading}
-        >
-          <Ionicons
-            name={inBucketList ? "heart" : "heart-outline"}
-            size={24}
-            color={inBucketList ? "#FF6B6B" : "#fff"}
-          />
-        </TouchableOpacity>
-      </LinearGradient>
+    <View style={styles.container}>
+      <UniversalHeader 
+        title={landmark.name}
+        rightElement={
+          <TouchableOpacity
+            onPress={handleToggleBucketList}
+            style={styles.headerRight}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            disabled={bucketListLoading}
+          >
+            <Ionicons
+              name={inBucketList ? "heart" : "heart-outline"}
+              size={24}
+              color={inBucketList ? "#FF6B6B" : "#fff"}
+            />
+          </TouchableOpacity>
+        }
+      />
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Hero Section - Icon Based */}
@@ -464,7 +440,7 @@ export default function LandmarkDetailScreen() {
           </TouchableOpacity>
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -517,28 +493,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '700',
   },
-  // Turquoise Gradient Header
-  headerGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.md,
-    ...theme.shadows.sm,
-  },
-  backButton: {
-    padding: theme.spacing.xs,
-    width: 40,
-  },
-  headerTitleWhite: {
-    ...theme.typography.h3,
-    color: '#fff',
-    fontWeight: '700',
-    flex: 1,
-    textAlign: 'center',
-  },
   headerRight: {
-    width: 40,
+    padding: theme.spacing.xs,
   },
   scrollView: {
     flex: 1,
