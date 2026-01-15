@@ -150,40 +150,50 @@ export default function NotificationsScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <View style={styles.container}>
         <View style={styles.centerContainer}>
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
+  
+  // Get safe area insets for proper header padding
+  const insets = useSafeAreaInsets();
+  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Universal Header */}
+    <View style={styles.container}>
+      {/* Sticky Header */}
       <LinearGradient
-        colors={['#3BB8C3', '#2AA8B3']}
-        style={styles.header}
+        colors={gradients.oceanToSand}
+        start={gradients.horizontal.start}
+        end={gradients.horizontal.end}
+        style={[styles.header, { paddingTop: topPadding }]}
       >
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <View style={styles.headerCenter}>
-          <Text style={styles.headerTitle}>Notifications</Text>
-          {unreadCount > 0 && (
-            <View style={styles.unreadBadge}>
-              <Text style={styles.unreadText}>{unreadCount}</Text>
-            </View>
-          )}
-        </View>
-        {unreadCount > 0 && (
-          <TouchableOpacity onPress={handleMarkAllRead} style={styles.markAllButton}>
-            <Ionicons name="checkmark-done" size={22} color="#fff" />
+        <View style={styles.headerRow}>
+          <View style={styles.titleWithBack}>
+            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+              <Ionicons name="arrow-back" size={22} color="#fff" />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Notifications</Text>
+            {unreadCount > 0 && (
+              <View style={styles.unreadBadge}>
+                <Text style={styles.unreadText}>{unreadCount}</Text>
+              </View>
+            )}
+          </View>
+          <TouchableOpacity 
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="earth" size={16} color="#2A2A2A" />
+            <Text style={styles.brandingTextDark}>WanderList</Text>
           </TouchableOpacity>
-        )}
-        {unreadCount === 0 && <View style={styles.headerRight} />}
+        </View>
       </LinearGradient>
 
       <ScrollView
