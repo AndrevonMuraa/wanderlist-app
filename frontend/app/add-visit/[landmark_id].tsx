@@ -232,24 +232,19 @@ export default function AddVisitScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.loadingContainer} edges={['top']}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-        <Text style={styles.loadingText}>Loading landmark...</Text>
-      </SafeAreaView>
+      <View style={styles.loadingContainer}>
+        <UniversalHeader title="Add Visit" />
+        <View style={styles.loadingInner}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <Text style={styles.loadingText}>Loading landmark...</Text>
+        </View>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.headerGradient}>
-        <TouchableOpacity onPress={handleClose} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>Add Visit</Text>
-          <Text style={styles.headerSubtitle}>{landmark?.name || name}</Text>
-        </View>
-      </LinearGradient>
+    <View style={styles.container}>
+      <UniversalHeader title="Add Visit" />
 
       {/* Modern Modal Component */}
       {landmark && (
