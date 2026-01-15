@@ -394,6 +394,13 @@ class WanderListAPITester:
         # Get specific country visit details
         self.test_country_visit_details(country_visit_id)
         
+        # Update country visit (add/edit photos, diary)
+        self.test_country_visit_update(country_visit_id)
+        
+        # Verify the update was successful by getting details again
+        print(f"\n🔍 Re-testing Country Visit Details after Update...")
+        self.test_country_visit_details(country_visit_id)
+        
         # Delete country visit
         self.test_country_visit_delete(country_visit_id)
         
