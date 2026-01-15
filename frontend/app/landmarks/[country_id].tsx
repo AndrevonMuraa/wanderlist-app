@@ -329,13 +329,13 @@ export default function LandmarksScreen() {
           activeOpacity={0.8}
         >
           <LinearGradient
-            colors={[theme.colors.accent, theme.colors.accentBronze]}
+            colors={[theme.colors.primary, theme.colors.secondary]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.fabGradient}
           >
-            <Ionicons name="camera" size={22} color="#fff" />
-            <Text style={styles.fabText}>Mark Country Visited</Text>
+            <Ionicons name="checkmark-circle" size={24} color="#fff" />
+            <Text style={styles.fabText}>Mark as Visited</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
