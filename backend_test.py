@@ -438,11 +438,14 @@ class WanderListAPITester:
                     print(f"  - {result['test']}: {result['message']}")
         
         print(f"\n🎯 CRITICAL FEATURES TESTED:")
-        print(f"  ✓ Country Visits API (POST, GET, GET by ID, DELETE)")
+        print(f"  ✓ Country Visits API (POST, GET, GET by ID, PUT, DELETE)")
         print(f"  ✓ Profile Update API (name, picture, bio, location)")
         print(f"  ✓ Authentication Requirements")
         print(f"  ✓ 50 Points Bonus for Country Visits")
         print(f"  ✓ Country Name & Continent Lookup")
+        print(f"  ✓ Visibility Settings (public, friends, private)")
+        print(f"  ✓ Photo Upload & Management (base64 images)")
+        print(f"  ✓ Diary Notes Update Functionality")
 
 if __name__ == "__main__":
     tester = WanderListAPITester()
