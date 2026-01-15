@@ -11,7 +11,6 @@ import {
   RefreshControl,
   Dimensions,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -19,6 +18,7 @@ import { Surface } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
+import UniversalHeader from '../components/UniversalHeader';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - theme.spacing.md * 3) / 2;
@@ -133,37 +133,19 @@ export default function MyCountryVisitsScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
-        <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={22} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>My Country Visits</Text>
-          <View style={{ width: 40 }} />
-        </LinearGradient>
+      <View style={styles.container}>
+        <UniversalHeader title="My Country Visits" />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
           <Text style={styles.loadingText}>Loading your visits...</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Universal Turquoise Header */}
-      <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>My Country Visits</Text>
-          <Text style={styles.headerSubtitle}>
-            {visits.length} visit{visits.length !== 1 ? 's' : ''} • {totalPoints} pts
-          </Text>
-        </View>
-        <View style={{ width: 40 }} />
-      </LinearGradient>
+    <View style={styles.container}>
+      <UniversalHeader title="My Country Visits" />
 
       <ScrollView
         style={styles.scrollView}
@@ -283,7 +265,7 @@ export default function MyCountryVisitsScreen() {
 
         <View style={styles.bottomSpacer} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -291,29 +273,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.md,
-  },
-  backButton: {
-    padding: theme.spacing.xs,
-    marginRight: theme.spacing.sm,
-  },
-  headerContent: {
-    flex: 1,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#fff',
-  },
-  headerSubtitle: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.8)',
-    marginTop: 2,
   },
   loadingContainer: {
     flex: 1,
