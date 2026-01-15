@@ -1001,21 +1001,6 @@ const styles = StyleSheet.create({
   progressFillTiny: {
     height: '100%',
   },
-  shareButton: {
-    padding: theme.spacing.xs,
-    backgroundColor: theme.colors.primary + '15',
-    borderRadius: theme.borderRadius.sm,
-  },
-  cardActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.sm,
-  },
-  cameraButton: {
-    padding: theme.spacing.xs,
-    backgroundColor: theme.colors.primary + '15',
-    borderRadius: theme.borderRadius.sm,
-  },
   flagImageCompact: {
     width: '100%',
     height: 50,
