@@ -80,6 +80,10 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     color: '#fff',
+    flex: 1,
+  },
+  rightElementContainer: {
+    marginRight: theme.spacing.sm,
   },
   brandingContainer: {
     flexDirection: 'row',
