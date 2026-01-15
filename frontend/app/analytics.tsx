@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Dimensions, Platform, TouchableOpacity } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../contexts/AuthContext';
@@ -12,6 +10,7 @@ import { BACKEND_URL } from '../utils/config';
 import { CircularProgress } from '../components/CircularProgress';
 import { ProgressBar } from '../components/ProgressBar';
 import { PersistentTabBar } from '../components/PersistentTabBar';
+import UniversalHeader from '../components/UniversalHeader';
 
 const { width } = Dimensions.get('window');
 
@@ -111,21 +110,23 @@ export default function AnalyticsScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <UniversalHeader title="Travel Analytics" />
         <View style={styles.loadingContainer}>
           <Text>Loading your analytics...</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   if (!analytics) {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <UniversalHeader title="Travel Analytics" />
         <View style={styles.errorContainer}>
           <Text>Unable to load analytics</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
@@ -134,25 +135,10 @@ export default function AnalyticsScreen() {
     .slice(0, 5);
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
+      <UniversalHeader title="Travel Analytics" />
+      
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-        {/* Header */}
-        <LinearGradient
-          colors={['#3BB8C3', '#2AA8B3']}
-          style={styles.header}
-        >
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={22} color="#fff" />
-          </TouchableOpacity>
-          <View style={styles.headerContent}>
-            <Text style={styles.headerTitle}>Travel Analytics</Text>
-            <Text style={styles.headerSubtitle}>Your journey by the numbers</Text>
-          </View>
-          <View style={styles.premiumBadge}>
-            <Ionicons name="diamond" size={20} color="#FFD700" />
-          </View>
-        </LinearGradient>
-
         {/* Key Stats Grid */}
         <View style={styles.statsGrid}>
           <View style={[styles.statCard, { backgroundColor: theme.colors.surface }]}>
@@ -307,7 +293,7 @@ export default function AnalyticsScreen() {
         <View style={styles.bottomSpacer} />
       </ScrollView>
       <PersistentTabBar />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -321,6 +307,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: Platform.OS === 'ios' ? 100 : 90,
+    paddingTop: theme.spacing.md,
   },
   loadingContainer: {
     flex: 1,
@@ -332,32 +319,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: theme.spacing.lg,
-    paddingTop: theme.spacing.md,
-  },
-  backButton: {
-    padding: theme.spacing.sm,
-    marginRight: theme.spacing.sm,
-  },
-  headerContent: {
-    flex: 1,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#fff',
-    marginBottom: 4,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.9)',
-  },
-  premiumBadge: {
-    padding: theme.spacing.sm,
-  },
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -365,7 +326,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   statCard: {
-    width: '48%',  // Fixed percentage instead of calculated
+    width: '48%',
     padding: theme.spacing.lg,
     borderRadius: theme.borderRadius.xl,
     alignItems: 'center',
@@ -383,13 +344,13 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#2A2A2A',  // Hardcoded dark text
+    color: '#2A2A2A',
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B6B6B',  // Hardcoded medium gray
+    color: '#6B6B6B',
   },
   section: {
     margin: theme.spacing.md,
@@ -502,7 +463,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
   },
   insightCard: {
-    backgroundColor: theme.colors.backgroundSecondary,
+    backgroundColor: theme.colors.background,
     borderRadius: theme.borderRadius.lg,
     padding: theme.spacing.md,
     marginBottom: theme.spacing.sm,
