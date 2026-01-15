@@ -6,16 +6,15 @@ import {
   TouchableOpacity,
   Platform,
   RefreshControl,
-  StatusBar,
 } from 'react-native';
 import { Text, Surface, ProgressBar as PaperProgressBar } from 'react-native-paper';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
-import theme, { gradients } from '../styles/theme';
+import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
+import UniversalHeader from '../components/UniversalHeader';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -162,52 +161,31 @@ export default function AchievementsScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
-        <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.headerGradient}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={22} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Achievements</Text>
-          <View style={styles.headerRight} />
-        </LinearGradient>
+      <View style={styles.container}>
+        <UniversalHeader title="Achievements" />
         <View style={styles.loadingContainer}>
           <Text>Loading achievements...</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   if (!data) {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
-        <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.headerGradient}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={22} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Achievements</Text>
-          <View style={styles.headerRight} />
-        </LinearGradient>
+      <View style={styles.container}>
+        <UniversalHeader title="Achievements" />
         <View style={styles.errorContainer}>
           <Text>Failed to load achievements</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   const displayedBadges = selectedTab === 'earned' ? data.earned_badges : data.locked_badges;
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Universal Turquoise Header */}
-      <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.headerGradient}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Achievements</Text>
-        <View style={styles.headerRight}>
-          <Ionicons name="trophy" size={22} color="#FFD700" />
-        </View>
-      </LinearGradient>
+    <View style={styles.container}>
+      <UniversalHeader title="Achievements" />
 
       <ScrollView
         style={styles.content}
@@ -297,51 +275,14 @@ export default function AchievementsScreen() {
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  headerGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  backButton: {
-    padding: 8,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#fff',
-    marginBottom: 4,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.9)',
-  },
-  headerRight: {
-    width: 40,
-    alignItems: 'flex-end',
-  },
-  content: {
-    flex: 1,
+    backgroundColor: theme.colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -352,6 +293,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  content: {
+    flex: 1,
   },
   statsCard: {
     margin: 16,
