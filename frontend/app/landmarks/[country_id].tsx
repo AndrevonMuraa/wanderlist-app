@@ -321,11 +321,42 @@ export default function LandmarksScreen() {
         }
       />
 
+      {/* Floating Action Button - Mark Country as Visited */}
+      <View style={styles.fabContainer}>
+        <TouchableOpacity 
+          style={styles.fab}
+          onPress={() => setShowCountryVisitModal(true)}
+          activeOpacity={0.8}
+        >
+          <LinearGradient
+            colors={[theme.colors.accent, theme.colors.accentBronze]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.fabGradient}
+          >
+            <Ionicons name="camera" size={22} color="#fff" />
+            <Text style={styles.fabText}>Mark Country Visited</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
+
       <UpgradeModal
         visible={showUpgradeModal}
         onClose={() => setShowUpgradeModal(false)}
         onUpgrade={handleUpgrade}
       />
+      
+      {/* Country Visit Modal */}
+      <AddCountryVisitModal
+        visible={showCountryVisitModal}
+        countryId={country_id as string}
+        countryName={name as string}
+        onClose={() => setShowCountryVisitModal(false)}
+        onSuccess={() => {
+          fetchLandmarks();
+        }}
+      />
+      
       <PersistentTabBar />
     </View>
   );
