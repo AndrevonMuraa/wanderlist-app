@@ -11,14 +11,13 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
+import UniversalHeader from '../components/UniversalHeader';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -136,11 +135,19 @@ export default function EditProfileScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <View style={styles.container}>
+        <UniversalHeader 
+          title="Edit Profile" 
+          rightElement={
+            <TouchableOpacity style={styles.saveButton} disabled>
+              <Text style={[styles.saveText, styles.saveTextDisabled]}>Save</Text>
+            </TouchableOpacity>
+          }
+        />
         <View style={styles.centerContainer}>
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
@@ -148,20 +155,10 @@ export default function EditProfileScreen() {
   const bioRemaining = 200 - bioLength;
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}
-      >
-        {/* Universal Header */}
-        <LinearGradient
-          colors={['#3BB8C3', '#2AA8B3']}
-          style={styles.header}
-        >
-          <TouchableOpacity onPress={() => router.push('/(tabs)/profile')} style={styles.backButton}>
-            <Ionicons name="close" size={24} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Edit Profile</Text>
+    <View style={styles.container}>
+      <UniversalHeader 
+        title="Edit Profile" 
+        rightElement={
           <TouchableOpacity
             onPress={handleSave}
             style={styles.saveButton}
@@ -171,8 +168,13 @@ export default function EditProfileScreen() {
               {saving ? 'Saving...' : 'Save'}
             </Text>
           </TouchableOpacity>
-        </LinearGradient>
-
+        }
+      />
+      
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardView}
+      >
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
@@ -252,7 +254,7 @@ export default function EditProfileScreen() {
           <View style={{ height: theme.spacing.xl }} />
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -260,6 +262,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
+  },
+  keyboardView: {
+    flex: 1,
   },
   centerContainer: {
     flex: 1,
@@ -269,22 +274,6 @@ const styles = StyleSheet.create({
   loadingText: {
     ...theme.typography.body,
     color: theme.colors.textSecondary,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: theme.spacing.lg,
-  },
-  backButton: {
-    padding: theme.spacing.xs,
-  },
-  headerTitle: {
-    ...theme.typography.h2,
-    color: '#fff',
-    fontWeight: '700',
-    flex: 1,
-    marginHorizontal: theme.spacing.md,
   },
   saveButton: {
     padding: theme.spacing.xs,
