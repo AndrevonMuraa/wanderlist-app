@@ -252,7 +252,7 @@ export default function NotificationsScreen() {
 
         <View style={{ height: theme.spacing.xl }} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -271,13 +271,52 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
   },
   header: {
+    paddingHorizontal: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+  },
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: theme.spacing.lg,
+    minHeight: 32,
+  },
+  titleWithBack: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
   backButton: {
     padding: theme.spacing.xs,
+    marginRight: theme.spacing.xs,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  brandingTextDark: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#2A2A2A',
+  },
+  unreadBadge: {
+    backgroundColor: '#FF6B6B',
+    borderRadius: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    marginLeft: theme.spacing.sm,
+  },
+  unreadText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  scrollView: {
   },
   headerCenter: {
     flex: 1,
