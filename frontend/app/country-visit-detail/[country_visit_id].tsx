@@ -631,7 +631,7 @@ export default function CountryVisitDetailScreen() {
           </Dialog.Actions>
         </Dialog>
       </Portal>
-    </SafeAreaView>
+    </View>
   );
 }
 
