@@ -275,60 +275,45 @@ export default function CountryVisitDetailScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <View style={styles.container}>
+        <UniversalHeader title="Loading..." />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
           <Text style={styles.loadingText}>Loading visit...</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   if (!visit) {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
-        <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={22} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Visit Not Found</Text>
-          <View style={styles.headerSpacer} />
-        </LinearGradient>
+      <View style={styles.container}>
+        <UniversalHeader title="Visit Not Found" />
         <View style={styles.errorContainer}>
           <Ionicons name="alert-circle" size={64} color={theme.colors.textLight} />
           <Text style={styles.errorText}>This visit could not be found</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   const visibilityInfo = getVisibilityInfo(visit.visibility);
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Universal Turquoise Header */}
-      <LinearGradient colors={['#3BB8C3', '#2AA8B3']} style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <View style={styles.headerContent}>
-          <View style={styles.headerTitleRow}>
-            <Text style={styles.headerFlag}>{getCountryFlag(visit.country_name)}</Text>
-            <Text style={styles.headerTitle}>{visit.country_name}</Text>
+    <View style={styles.container}>
+      <UniversalHeader 
+        title={visit.country_name}
+        rightElement={
+          <View style={styles.headerActions}>
+            <TouchableOpacity onPress={handleShare} style={styles.headerIconBtn}>
+              <Ionicons name="share-social-outline" size={22} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowOptionsMenu(true)} style={styles.headerIconBtn}>
+              <Ionicons name="ellipsis-vertical" size={22} color="#fff" />
+            </TouchableOpacity>
           </View>
-          <Text style={styles.headerSubtitle}>
-            {visit.continent || 'Country Visit'}
-          </Text>
-        </View>
-        <View style={styles.headerActions}>
-          <TouchableOpacity onPress={handleShare} style={styles.headerIconBtn}>
-            <Ionicons name="share-social-outline" size={22} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setShowOptionsMenu(true)} style={styles.headerIconBtn}>
-            <Ionicons name="ellipsis-vertical" size={22} color="#fff" />
-          </TouchableOpacity>
-        </View>
-      </LinearGradient>
+        }
+      />
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Photo Gallery with Swipe */}
