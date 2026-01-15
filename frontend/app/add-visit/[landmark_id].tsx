@@ -2,20 +2,18 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
   Platform,
   Alert,
   ActivityIndicator,
 } from 'react-native';
 import { Text } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { BACKEND_URL } from '../../utils/config';
 import theme from '../../styles/theme';
 import AddVisitModal from '../../components/AddVisitModal';
 import CelebrationEffect from '../../components/CelebrationEffect';
 import { checkLevelUp } from '../../utils/rankSystem';
+import UniversalHeader from '../../components/UniversalHeader';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
