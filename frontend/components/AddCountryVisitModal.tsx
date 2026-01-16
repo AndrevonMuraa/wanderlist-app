@@ -37,6 +37,10 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
   const [diary, setDiary] = useState('');
   const [privacy, setPrivacy] = useState<'public' | 'friends' | 'private'>('public');
   const [submitting, setSubmitting] = useState(false);
+  const insets = useSafeAreaInsets();
+  
+  // Calculate safe area padding
+  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   const pickImages = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
