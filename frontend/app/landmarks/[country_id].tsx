@@ -649,4 +649,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '700',
   },
+  fabRemoveHint: {
+    marginLeft: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: 2,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: theme.borderRadius.sm,
+  },
+  fabRemoveHintText: {
+    fontSize: 11,
+    color: '#fff',
+    fontWeight: '600',
+  },
 });
