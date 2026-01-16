@@ -218,9 +218,9 @@ class DualPointsSystemTester:
         # Update our baseline for next test
         current_personal, current_leaderboard = self.get_user_stats()
         
-        # Step 5: Test country visit WITH photos (Sweden)
-        self.log("\n📸 STEP 4: Testing country visit WITH photos (Sweden)...")
-        if not self.create_country_visit_with_photos("sweden"):
+        # Step 5: Test country visit WITH photos (Switzerland)
+        self.log("\n📸 STEP 4: Testing country visit WITH photos (Switzerland)...")
+        if not self.create_country_visit_with_photos("switzerland"):
             return False
         
         # Step 6: Verify both points types increased (+50 each)
