@@ -234,6 +234,7 @@ export default function ExploreCountriesScreen() {
         {item.map((country) => {
           const isComplete = country.percentage === 100;
           const hasProgress = (country.visited || 0) > 0;
+          const isCountryVisited = country.countryVisited || false; // Country marked as visited (manual or via landmarks)
           const flagUrl = getFlagUrl(country.name);
           const pointReward = country.landmark_count * 10;
           
@@ -258,8 +259,8 @@ export default function ExploreCountriesScreen() {
                       <Text style={styles.countryNameOnFlag}>{country.name}</Text>
                     </LinearGradient>
                     
-                    {/* Completion Badge */}
-                    {isComplete && (
+                    {/* Visited Badge - shows when country is visited (manual or via landmarks) */}
+                    {isCountryVisited && (
                       <View style={styles.completeBadgeTop}>
                         <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
                       </View>
