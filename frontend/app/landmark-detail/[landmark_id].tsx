@@ -61,11 +61,14 @@ export default function LandmarkDetailScreen() {
   const [inBucketList, setInBucketList] = useState(false);
   const [bucketListId, setBucketListId] = useState<string | null>(null);
   const [bucketListLoading, setBucketListLoading] = useState(false);
+  const [isVisited, setIsVisited] = useState(false);
+  const [visitId, setVisitId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     fetchLandmark();
     checkBucketListStatus();
+    checkVisitStatus();
   }, []);
 
   const fetchLandmark = async () => {
@@ -85,6 +88,26 @@ export default function LandmarkDetailScreen() {
       console.error('Error fetching landmark:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkVisitStatus = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/visits`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        const visits = await response.json();
+        const visit = visits.find((v: any) => v.landmark_id === landmark_id);
+        if (visit) {
+          setIsVisited(true);
+          setVisitId(visit.visit_id);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking visit status:', error);
     }
   };
 
