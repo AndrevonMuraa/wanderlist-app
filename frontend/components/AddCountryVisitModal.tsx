@@ -211,26 +211,46 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   header: {
+    paddingHorizontal: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+  },
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: theme.spacing.lg,
-    paddingTop: Platform.OS === 'ios' ? 50 : theme.spacing.lg,
+    justifyContent: 'space-between',
+    minHeight: 32,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
   closeButton: {
-    padding: theme.spacing.sm,
+    padding: theme.spacing.xs,
     marginRight: theme.spacing.sm,
   },
-  headerContent: {
+  headerTitleContainer: {
     flex: 1,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: '800',
+    fontSize: 22,
+    fontWeight: '700',
     color: '#fff',
   },
   headerSubtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: 'rgba(255,255,255,0.9)',
+    marginTop: 2,
+  },
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  brandingText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#2A2A2A',
   },
   scrollView: {
     flex: 1,
