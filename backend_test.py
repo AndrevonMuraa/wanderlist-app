@@ -67,7 +67,7 @@ class DualPointsSystemTester:
             self.log(f"❌ Failed to get stats: {response.status_code} - {response.text}", "ERROR")
             return None, None
     
-    def create_country_visit_without_photos(self, country_id="denmark"):
+    def create_country_visit_without_photos(self, country_id="norway"):
         """Test creating a country visit WITHOUT photos"""
         self.log(f"🏛️ Testing country visit WITHOUT photos for {country_id}...")
         
