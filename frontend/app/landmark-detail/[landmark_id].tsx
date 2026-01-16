@@ -174,6 +174,42 @@ export default function LandmarkDetailScreen() {
     router.push(`/add-visit/${landmark_id}?name=${encodeURIComponent(landmark?.name || '')}`);
   };
 
+  const handleUnmarkVisit = async () => {
+    if (!visitId) return;
+    
+    Alert.alert(
+      'Remove Visit',
+      'Are you sure you want to remove this visit? This will also remove any points earned.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const token = await getToken();
+              const response = await fetch(`${BACKEND_URL}/api/visits/${visitId}`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${token}` },
+              });
+
+              if (response.ok) {
+                setIsVisited(false);
+                setVisitId(null);
+                Alert.alert('Success', 'Visit removed successfully');
+              } else {
+                Alert.alert('Error', 'Failed to remove visit');
+              }
+            } catch (error) {
+              console.error('Error removing visit:', error);
+              Alert.alert('Error', 'Failed to remove visit');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   const handleGoBack = () => {
     if (router.canGoBack()) {
       router.back();
