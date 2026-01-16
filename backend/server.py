@@ -2933,17 +2933,34 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
     visibility = data.visibility or current_user.default_privacy or "public"
     
     if existing_visit:
-        # Upgrade existing visit with new photos/diary (no additional points)
+        # Upgrade existing visit with new photos/diary
+        # If adding photos for the first time, also award leaderboard points
+        existing_has_photos = bool(existing_visit.get("photos", []))
+        leaderboard_points_to_add = 0
+        
+        # If upgrading from no photos to having photos, award leaderboard points
+        if has_photos and not existing_has_photos:
+            leaderboard_points_to_add = existing_visit.get("points_earned", 50)
+        
         await db.country_visits.update_one(
             {"country_visit_id": existing_visit["country_visit_id"]},
             {"$set": {
                 "photos": data.photos,
                 "diary": data.diary_notes,
                 "visibility": visibility,
-                "source": "manual",  # Upgrade source to manual
+                "source": "manual",
+                "has_photos": has_photos,
+                "leaderboard_points_earned": existing_visit.get("points_earned", 50) if has_photos else 0,
                 "updated_at": datetime.now(timezone.utc)
             }}
         )
+        
+        # If adding photos for first time, award leaderboard points
+        if leaderboard_points_to_add > 0:
+            await db.users.update_one(
+                {"user_id": current_user.user_id},
+                {"$inc": {"leaderboard_points": leaderboard_points_to_add}}
+            )
         
         # Update activity if exists
         await db.activities.update_one(
@@ -2952,15 +2969,18 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
                 "photos": data.photos,
                 "diary": data.diary_notes,
                 "visibility": visibility,
+                "has_photos": has_photos,
                 "updated_at": datetime.now(timezone.utc)
             }}
         )
         
         return {
-            "message": "Country visit updated with photos and diary",
+            "message": "Country visit updated" + (" with photos - leaderboard points earned!" if leaderboard_points_to_add > 0 else ""),
             "country_visit_id": existing_visit["country_visit_id"],
-            "points_earned": 0,  # No additional points for upgrade
-            "was_upgrade": True
+            "points_earned": 0,
+            "leaderboard_points_earned": leaderboard_points_to_add,
+            "was_upgrade": True,
+            "has_photos": has_photos
         }
     
     # Award 50 points for new country visit
