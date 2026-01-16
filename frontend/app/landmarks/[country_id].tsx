@@ -152,6 +152,42 @@ export default function LandmarksScreen() {
     console.log('User wants to upgrade to:', tier);
   };
 
+  const handleRemoveCountryVisit = async () => {
+    if (!countryVisitId) return;
+    
+    Alert.alert(
+      'Remove Visit',
+      `Are you sure you want to remove your visit to ${name}? This will also remove any photos and points earned.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const token = await getToken();
+              const response = await fetch(`${BACKEND_URL}/api/country-visits/${countryVisitId}`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${token}` },
+              });
+
+              if (response.ok) {
+                setIsCountryVisited(false);
+                setCountryVisitId(null);
+                Alert.alert('Success', 'Country visit removed successfully');
+              } else {
+                Alert.alert('Error', 'Failed to remove country visit');
+              }
+            } catch (error) {
+              console.error('Error removing country visit:', error);
+              Alert.alert('Error', 'Failed to remove country visit');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   const renderLandmark = ({ item }: { item: Landmark }) => {
     const isVisited = visitedLandmarkIds.has(item.landmark_id);
     const isPremium = item.category === 'premium';
