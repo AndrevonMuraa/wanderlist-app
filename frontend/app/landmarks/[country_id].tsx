@@ -61,16 +61,22 @@ export default function LandmarksScreen() {
   const checkCountryVisitStatus = async () => {
     try {
       const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/country-visits`, {
+      // Use the new check endpoint that considers both manual visits AND landmark visits
+      const response = await fetch(`${BACKEND_URL}/api/country-visits/check/${country_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.ok) {
-        const visits = await response.json();
-        const visit = visits.find((v: any) => v.country_id === country_id);
-        if (visit) {
+        const visitStatus = await response.json();
+        if (visitStatus.visited) {
           setIsCountryVisited(true);
-          setCountryVisitId(visit.country_visit_id);
+          // Only set countryVisitId if there's an actual record (not just landmark-based)
+          if (visitStatus.country_visit_id) {
+            setCountryVisitId(visitStatus.country_visit_id);
+          }
+        } else {
+          setIsCountryVisited(false);
+          setCountryVisitId(null);
         }
       }
     } catch (error) {
