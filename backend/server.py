@@ -1053,14 +1053,31 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         streak_milestone_reached = True
         new_milestone = current_streak
     
-    # Update user document with new streak data
+    # Update user document with new streak data AND award points
+    # Points are always awarded to personal total
+    # Leaderboard points only awarded if visit has photos (verified)
+    landmark_points = landmark.get("points", 10)
+    has_photos = bool(data.photo_base64 or len(photos) > 0)
+    
+    update_fields = {
+        "current_streak": current_streak,
+        "longest_streak": longest_streak,
+        "last_visit_date": today
+    }
+    
+    # Always increment personal points
+    increment_fields = {"points": landmark_points}
+    
+    # Only increment leaderboard_points if visit has photos
+    if has_photos:
+        increment_fields["leaderboard_points"] = landmark_points
+    
     await db.users.update_one(
         {"user_id": current_user.user_id},
-        {"$set": {
-            "current_streak": current_streak,
-            "longest_streak": longest_streak,
-            "last_visit_date": today
-        }}
+        {
+            "$set": update_fields,
+            "$inc": increment_fields
+        }
     )
     
     # Create rich activity for social feed (includes diary, tips, photos)
