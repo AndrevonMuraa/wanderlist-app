@@ -112,16 +112,27 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <View style={styles.container}>
+        {/* Updated Header with Ocean to Sand gradient */}
         <LinearGradient
-          colors={['#3BB8C3', '#2AA8B3']}
-          style={styles.header}
+          colors={gradients.oceanToSand}
+          start={gradients.horizontal.start}
+          end={gradients.horizontal.end}
+          style={[styles.header, { paddingTop: topPadding }]}
         >
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close" size={28} color="#fff" />
-          </TouchableOpacity>
-          <View style={styles.headerContent}>
-            <Text style={styles.headerTitle}>Visit {countryName}</Text>
-            <Text style={styles.headerSubtitle}>Share your country experience</Text>
+          <View style={styles.headerRow}>
+            <View style={styles.headerLeft}>
+              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                <Ionicons name="close" size={24} color="#fff" />
+              </TouchableOpacity>
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Visit {countryName}</Text>
+                <Text style={styles.headerSubtitle}>Share your experience</Text>
+              </View>
+            </View>
+            <View style={styles.brandingContainer}>
+              <Ionicons name="earth" size={16} color="#2A2A2A" />
+              <Text style={styles.brandingText}>WanderList</Text>
+            </View>
           </View>
         </LinearGradient>
 
