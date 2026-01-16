@@ -45,6 +45,8 @@ export default function LandmarksScreen() {
   const [showCountryVisitModal, setShowCountryVisitModal] = useState(false);
   const [countryProgress, setCountryProgress] = useState<{visited: number; total: number; percentage: number} | null>(null);
   const [visitedLandmarkIds, setVisitedLandmarkIds] = useState<Set<string>>(new Set());
+  const [isCountryVisited, setIsCountryVisited] = useState(false);
+  const [countryVisitId, setCountryVisitId] = useState<string | null>(null);
   const router = useRouter();
   const insets = useSafeAreaInsets();
   
@@ -53,7 +55,28 @@ export default function LandmarksScreen() {
 
   useEffect(() => {
     fetchData();
+    checkCountryVisitStatus();
   }, []);
+
+  const checkCountryVisitStatus = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/country-visits`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        const visits = await response.json();
+        const visit = visits.find((v: any) => v.country_id === country_id);
+        if (visit) {
+          setIsCountryVisited(true);
+          setCountryVisitId(visit.country_visit_id);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking country visit status:', error);
+    }
+  };
 
   const fetchData = async () => {
     try {
