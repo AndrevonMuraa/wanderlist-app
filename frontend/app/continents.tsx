@@ -359,6 +359,9 @@ const styles = StyleSheet.create({
   cardTitleSection: {
     flex: 1,
     marginRight: theme.spacing.md,
+    borderRadius: theme.borderRadius.md,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
   },
   cardTopRow: {
     flexDirection: 'row',
