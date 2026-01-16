@@ -205,7 +205,7 @@ export default function ContinentsScreen() {
                 <LinearGradient colors={continent.gradient} style={styles.cardGradient}>
                   {/* Top Section: Title (left) + Points (right) */}
                   <View style={styles.cardTopSection}>
-                    <View style={styles.cardTitleSection}>
+                    <View style={[styles.cardTitleSection, { backgroundColor: `${continent.accentColor}40` }]}>
                       <Text style={styles.cardTitle}>{continent.name}</Text>
                       <Text style={styles.cardDescription}>{continent.description}</Text>
                     </View>
