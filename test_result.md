@@ -895,6 +895,53 @@ agent_communication:
     
     PRIORITY: HIGH - This is a visual consistency issue that affects user experience across the entire app."
   - agent: "testing"
+    message: "🎉 ✅ DUAL POINTS SYSTEM TESTING COMPLETE - PERFECT RESULTS!
+    
+    DATE: Dual Points System Comprehensive Testing
+    TEST CREDENTIALS: mobile@test.com/test123
+    
+    ✅ COMPREHENSIVE TESTING RESULTS (6/6 tests passed - 100% success rate):
+    
+    1. ✅ AUTHENTICATION & BASELINE
+       - Successfully logged in with test credentials
+       - Retrieved initial stats: Personal Points: 370, Leaderboard Points: 0
+       - Confirmed premium user status for testing
+    
+    2. ✅ COUNTRY VISIT WITHOUT PHOTOS (Norway)
+       - Created country visit with empty photos array []
+       - Response: has_photos=false, points_earned=50, leaderboard_points_earned=0
+       - CORRECT BEHAVIOR: Personal points only awarded for visits without photos
+    
+    3. ✅ POINTS VERIFICATION AFTER NO-PHOTO VISIT
+       - Personal points increased: 370 → 420 (+50) ✓
+       - Leaderboard points unchanged: 0 → 0 (+0) ✓
+       - Dual points system working as expected
+    
+    4. ✅ COUNTRY VISIT WITH PHOTOS (Switzerland)
+       - Created country visit with base64 photo included
+       - Response: has_photos=true, points_earned=50, leaderboard_points_earned=50
+       - CORRECT BEHAVIOR: Both point types awarded for visits with photos
+    
+    5. ✅ POINTS VERIFICATION AFTER PHOTO VISIT
+       - Personal points increased: 420 → 470 (+50) ✓
+       - Leaderboard points increased: 0 → 50 (+50) ✓
+       - Both point systems working correctly
+    
+    6. ✅ LEADERBOARD VERIFICATION
+       - GET /api/leaderboard returns correct structure
+       - First entry shows value=50 (leaderboard_points), personal_points=470
+       - CORRECT BEHAVIOR: Leaderboard uses leaderboard_points not total points
+    
+    🎯 DUAL POINTS SYSTEM CONFIRMED WORKING:
+    - Visits without photos: Personal points only (+50, +0)
+    - Visits with photos: Both points types (+50, +50)
+    - Leaderboard displays leaderboard_points for fair competition
+    - Photo verification requirement properly enforced
+    
+    SUCCESS RATE: 100% (6/6 critical tests passed)
+    
+    The dual points system is production-ready and working exactly as specified in the review request!"
+  - agent: "testing"
     message: "🎉 ✅ v4.24 FINAL COMPREHENSIVE TEST COMPLETE - 100% SUCCESS!
     
     URL: https://wanderlist-headers.preview.emergentagent.com
