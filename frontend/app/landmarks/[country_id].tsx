@@ -384,17 +384,24 @@ export default function LandmarksScreen() {
       <View style={styles.fabContainer}>
         <TouchableOpacity 
           style={styles.fab}
-          onPress={() => setShowCountryVisitModal(true)}
+          onPress={isCountryVisited ? handleRemoveCountryVisit : () => setShowCountryVisitModal(true)}
           activeOpacity={0.8}
         >
           <LinearGradient
-            colors={[theme.colors.primary, theme.colors.secondary]}
+            colors={isCountryVisited ? ['#4CAF50', '#66BB6A'] : [theme.colors.primary, theme.colors.secondary]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.fabGradient}
           >
             <Ionicons name="checkmark-circle" size={24} color="#fff" />
-            <Text style={styles.fabText}>Mark as Visited</Text>
+            <Text style={styles.fabText}>
+              {isCountryVisited ? "Visited" : "Mark as Visited"}
+            </Text>
+            {isCountryVisited && (
+              <View style={styles.fabRemoveHint}>
+                <Text style={styles.fabRemoveHintText}>Tap to remove</Text>
+              </View>
+            )}
           </LinearGradient>
         </TouchableOpacity>
       </View>
@@ -412,6 +419,8 @@ export default function LandmarksScreen() {
         countryName={name as string}
         onClose={() => setShowCountryVisitModal(false)}
         onSuccess={() => {
+          setIsCountryVisited(true);
+          checkCountryVisitStatus();
           fetchLandmarks();
         }}
       />
