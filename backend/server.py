@@ -3252,6 +3252,157 @@ async def check_country_visit_status(country_id: str, current_user: User = Depen
 
 # ============= END COUNTRY VISIT ENDPOINTS =============
 
+# ============= USER CREATED VISIT ENDPOINTS =============
+
+@api_router.post("/user-created-visits")
+async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: User = Depends(get_current_user)):
+    """
+    Create a user-created visit for countries/landmarks not in the app database.
+    No points are awarded for user-created visits.
+    """
+    
+    # Validate country name
+    if not data.country_name or len(data.country_name.strip()) < 2:
+        raise HTTPException(status_code=400, detail="Country name is required (at least 2 characters)")
+    
+    # Validate photos (max 10)
+    if len(data.photos) > 10:
+        raise HTTPException(status_code=400, detail="Maximum 10 photos allowed")
+    
+    # Parse visit date
+    visited_at = datetime.now(timezone.utc)
+    if data.visited_at:
+        try:
+            visited_at = datetime.fromisoformat(data.visited_at.replace('Z', '+00:00'))
+        except:
+            pass
+    
+    # Determine visibility
+    visibility = data.visibility or "public"
+    
+    # Create user created visit
+    user_created_visit_id = f"ucv_{uuid.uuid4().hex[:12]}"
+    user_created_visit = {
+        "user_created_visit_id": user_created_visit_id,
+        "user_id": current_user.user_id,
+        "user_name": current_user.name,
+        "user_picture": current_user.picture,
+        "country_name": data.country_name.strip(),
+        "landmark_name": data.landmark_name.strip() if data.landmark_name else None,
+        "photos": data.photos,
+        "diary": data.diary_notes,
+        "visibility": visibility,
+        "visited_at": visited_at,
+        "created_at": datetime.now(timezone.utc)
+    }
+    
+    await db.user_created_visits.insert_one(user_created_visit)
+    
+    # Create activity for feed (respects privacy settings)
+    activity_id = f"activity_{uuid.uuid4().hex[:12]}"
+    
+    # Build description for activity
+    if data.landmark_name:
+        activity_description = f"visited {data.landmark_name.strip()} in {data.country_name.strip()}"
+    else:
+        activity_description = f"visited {data.country_name.strip()}"
+    
+    activity = {
+        "activity_id": activity_id,
+        "user_id": current_user.user_id,
+        "user_name": current_user.name,
+        "user_picture": current_user.picture,
+        "activity_type": "user_created_visit",
+        "user_created_visit_id": user_created_visit_id,
+        "country_name": data.country_name.strip(),
+        "landmark_name": data.landmark_name.strip() if data.landmark_name else None,
+        "description": activity_description,
+        "photos": data.photos,
+        "diary": data.diary_notes,
+        "visibility": visibility,
+        "points_earned": 0,  # No points for user-created visits
+        "created_at": datetime.now(timezone.utc),
+        "likes_count": 0,
+        "comments_count": 0
+    }
+    await db.activities.insert_one(activity)
+    
+    return {
+        "message": "Custom visit recorded successfully!",
+        "user_created_visit_id": user_created_visit_id,
+        "country_name": data.country_name.strip(),
+        "landmark_name": data.landmark_name.strip() if data.landmark_name else None
+    }
+
+
+@api_router.get("/user-created-visits")
+async def get_user_created_visits(current_user: User = Depends(get_current_user)):
+    """Get all user-created visits for the current user"""
+    visits = await db.user_created_visits.find(
+        {"user_id": current_user.user_id},
+        {"_id": 0}
+    ).sort("visited_at", -1).to_list(1000)
+    
+    return visits
+
+
+@api_router.get("/user-created-visits/{user_id}/public")
+async def get_user_created_visits_public(user_id: str, current_user: User = Depends(get_current_user)):
+    """Get user-created visits for a specific user (respecting privacy settings)"""
+    
+    # Check if requesting own visits
+    if user_id == current_user.user_id:
+        # Return all own visits
+        visits = await db.user_created_visits.find(
+            {"user_id": user_id},
+            {"_id": 0}
+        ).sort("visited_at", -1).to_list(1000)
+        return visits
+    
+    # Check if users are friends
+    are_friends = await db.friends.find_one({
+        "$or": [
+            {"user_id": current_user.user_id, "friend_id": user_id, "status": "accepted"},
+            {"user_id": user_id, "friend_id": current_user.user_id, "status": "accepted"}
+        ]
+    })
+    
+    # Build visibility filter
+    visibility_filter = ["public"]
+    if are_friends:
+        visibility_filter.append("friends")
+    
+    visits = await db.user_created_visits.find(
+        {"user_id": user_id, "visibility": {"$in": visibility_filter}},
+        {"_id": 0}
+    ).sort("visited_at", -1).to_list(1000)
+    
+    return visits
+
+
+@api_router.delete("/user-created-visits/{visit_id}")
+async def delete_user_created_visit(visit_id: str, current_user: User = Depends(get_current_user)):
+    """Delete a user-created visit"""
+    
+    # Find the visit
+    visit = await db.user_created_visits.find_one({
+        "user_created_visit_id": visit_id,
+        "user_id": current_user.user_id
+    })
+    
+    if not visit:
+        raise HTTPException(status_code=404, detail="Visit not found or not authorized")
+    
+    # Delete the visit
+    await db.user_created_visits.delete_one({"user_created_visit_id": visit_id})
+    
+    # Delete associated activity
+    await db.activities.delete_one({"user_created_visit_id": visit_id})
+    
+    return {"message": "Custom visit deleted successfully"}
+
+# ============= END USER CREATED VISIT ENDPOINTS =============
+
 # ============= END ACTIVITY FEED ENDPOINTS =============
 
 # ============= ACHIEVEMENTS ENDPOINTS =============
