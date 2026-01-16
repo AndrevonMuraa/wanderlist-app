@@ -69,11 +69,22 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
   };
 
   const handleSubmit = async () => {
+    // Photos are now optional - but show confirmation if no photos
     if (photos.length === 0) {
-      Alert.alert('Add Photos', 'Please add at least one photo');
+      Alert.alert(
+        'No Photos',
+        'Without photos, this visit will only count towards your personal stats, not the public leaderboard. Continue anyway?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Continue', onPress: () => submitVisit() }
+        ]
+      );
       return;
     }
+    submitVisit();
+  };
 
+  const submitVisit = async () => {
     setSubmitting(true);
     try {
       const token = await getToken();
@@ -92,8 +103,16 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
       });
 
       if (response.ok) {
+        const result = await response.json();
         await successHaptic();
-        Alert.alert('Success!', `${countryName} visit recorded! +50 points`);
+        
+        // Show appropriate message based on whether photos were included
+        if (photos.length > 0) {
+          Alert.alert('Success!', `${countryName} visit recorded! +${result.points_earned} points added to leaderboard! 🏆`);
+        } else {
+          Alert.alert('Visit Recorded!', `${countryName} marked as visited! +${result.points_earned} personal points. Add photos anytime to earn leaderboard points! 📸`);
+        }
+        
         setPhotos([]);
         setDiary('');
         onSuccess();
