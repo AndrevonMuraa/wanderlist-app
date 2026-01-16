@@ -2985,6 +2985,7 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
     
     # Award 50 points for new country visit
     points_earned = 50
+    leaderboard_points_earned = 50 if has_photos else 0
     
     # Create country visit
     country_visit_id = f"cv_{uuid.uuid4().hex[:12]}"
@@ -3001,6 +3002,8 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
         "visibility": visibility,
         "visited_at": visited_at,
         "points_earned": points_earned,
+        "leaderboard_points_earned": leaderboard_points_earned,
+        "has_photos": has_photos,
         "source": "manual",
         "created_at": datetime.now(timezone.utc)
     }
@@ -3008,9 +3011,15 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
     await db.country_visits.insert_one(country_visit)
     
     # Award points to user
+    # Personal points: always awarded
+    # Leaderboard points: only if has photos
+    increment_fields = {"points": points_earned}
+    if has_photos:
+        increment_fields["leaderboard_points"] = leaderboard_points_earned
+    
     await db.users.update_one(
         {"user_id": current_user.user_id},
-        {"$inc": {"points": points_earned}}
+        {"$inc": increment_fields}
     )
     
     # Create activity for feed
