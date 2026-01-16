@@ -10,14 +10,14 @@ import {
   Image,
   Platform,
   Alert,
-  Dimensions,
-  Animated,
+  StatusBar,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import theme from '../styles/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import theme, { gradients } from '../styles/theme';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Surface } from 'react-native-paper';
+import { PrivacySelector } from './PrivacySelector';
 
 const { width } = Dimensions.get('window');
 
