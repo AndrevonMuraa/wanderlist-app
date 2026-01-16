@@ -424,6 +424,18 @@ backend:
         agent: "testing"
         comment: "🎉 DUAL POINTS SYSTEM TESTING COMPLETE - ALL TESTS PASSED! ✅ COMPREHENSIVE TESTING RESULTS (6/6 tests passed - 100% success rate): ✅ AUTHENTICATION: Successfully logged in with mobile@test.com/test123 credentials. ✅ INITIAL STATS: Retrieved baseline points (Personal: 370, Leaderboard: 0). ✅ COUNTRY VISIT WITHOUT PHOTOS (Norway): Created visit with empty photos array, correctly awarded personal points only (points_earned: 50, leaderboard_points_earned: 0, has_photos: false). ✅ POINTS VERIFICATION 1: Personal points increased by +50, leaderboard points remained at 0 as expected. ✅ COUNTRY VISIT WITH PHOTOS (Switzerland): Created visit with photo, correctly awarded both point types (points_earned: 50, leaderboard_points_earned: 50, has_photos: true). ✅ POINTS VERIFICATION 2: Both personal and leaderboard points increased by +50 as expected. ✅ LEADERBOARD VERIFICATION: GET /api/leaderboard correctly uses 'value' field representing leaderboard_points (50) not total personal points (470). The dual points system is working exactly as specified: visits without photos award personal points only, visits with photos award both personal and leaderboard points, and the leaderboard displays leaderboard_points for fair competition based on verified visits with photo proof."
 
+  - task: "User Created Visits API endpoints"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "🎉 USER CREATED VISITS FEATURE TESTING COMPLETE - ALL TESTS PASSED! ✅ COMPREHENSIVE TESTING RESULTS (8/8 tests passed - 100% success rate): ✅ AUTHENTICATION: Successfully logged in with mobile@test.com/test123 credentials. ✅ INITIAL STATS: Retrieved baseline points (Personal: 470, Leaderboard: 50) for verification. ✅ CREATE COUNTRY-ONLY VISIT: Successfully created custom visit to Monaco with empty photos array, diary notes 'Beautiful tiny country!', and public visibility. Returned proper user_created_visit_id. ✅ CREATE LANDMARK VISIT: Successfully created custom visit to Vaduz Castle in Liechtenstein with base64 photo, diary notes 'Amazing mountain castle!', and friends visibility. Returned proper user_created_visit_id. ✅ GET USER CREATED VISITS: Retrieved both visits correctly - Monaco and Liechtenstein with Vaduz Castle found in response. ✅ NO POINTS AWARDED VERIFICATION: Points correctly remained unchanged (Personal: 470→470, Leaderboard: 50→50) confirming no points are awarded for user-created visits as specified. ✅ DELETE VISIT: Successfully deleted Monaco visit using DELETE /api/user-created-visits/{id} endpoint. ✅ VERIFY DELETION: Confirmed Monaco visit was removed from the list, only Liechtenstein visit remains. All User Created Visits endpoints working perfectly: POST /api/user-created-visits (create), GET /api/user-created-visits (list), DELETE /api/user-created-visits/{id} (delete). Feature allows users to record visits to places not in app database without awarding points, exactly as specified in review request."
+
 frontend:
   - task: "Authentication Context with Google and JWT"
     implemented: true
