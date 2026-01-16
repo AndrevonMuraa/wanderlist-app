@@ -149,12 +149,15 @@ export default function ExploreCountriesScreen() {
         return;
       }
       
-      // Fetch countries and progress data in parallel
-      const [countriesResponse, progressResponse] = await Promise.all([
+      // Fetch countries, progress data, AND country visits in parallel
+      const [countriesResponse, progressResponse, countryVisitsResponse] = await Promise.all([
         fetch(`${BACKEND_URL}/api/countries`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
         fetch(`${BACKEND_URL}/api/progress`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${BACKEND_URL}/api/country-visits`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
@@ -163,6 +166,13 @@ export default function ExploreCountriesScreen() {
         let countries = await countriesResponse.json();
         const progress = await progressResponse.json();
         setProgressData(progress);
+        
+        // Get country visits (set of country_ids that have been visited)
+        let visitedCountryIds = new Set<string>();
+        if (countryVisitsResponse.ok) {
+          const countryVisits = await countryVisitsResponse.json();
+          visitedCountryIds = new Set(countryVisits.map((v: any) => v.country_id));
+        }
         
         // Filter by continent if specified
         if (continent) {
