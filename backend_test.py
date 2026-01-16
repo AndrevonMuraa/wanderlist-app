@@ -99,7 +99,7 @@ class DualPointsSystemTester:
             self.log(f"❌ Failed to create country visit: {response.status_code} - {response.text}", "ERROR")
             return False
     
-    def create_country_visit_with_photos(self, country_id="portugal"):
+    def create_country_visit_with_photos(self, country_id="sweden"):
         """Test creating a country visit WITH photos"""
         self.log(f"🏛️ Testing country visit WITH photos for {country_id}...")
         
