@@ -182,20 +182,30 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
             <PrivacySelector selected={privacy} onChange={setPrivacy} />
           </View>
 
+          {/* Info about leaderboard points */}
+          {photos.length === 0 && (
+            <View style={styles.infoBox}>
+              <Ionicons name="information-circle-outline" size={20} color="#FFA726" />
+              <Text style={styles.infoText}>
+                Add photos to earn leaderboard points! Without photos, points count for personal stats only.
+              </Text>
+            </View>
+          )}
+
           {/* Submit */}
           <TouchableOpacity
             onPress={handleSubmit}
-            disabled={submitting || photos.length === 0}
+            disabled={submitting}
             activeOpacity={0.9}
             style={styles.submitContainer}
           >
             <LinearGradient
-              colors={[theme.colors.primary, theme.colors.secondary]}
+              colors={photos.length > 0 ? [theme.colors.primary, theme.colors.secondary] : ['#78909C', '#546E7A']}
               style={styles.submitButton}
             >
               <Ionicons name="checkmark-circle" size={24} color="#fff" />
               <Text style={styles.submitText}>
-                {submitting ? 'Saving...' : 'Record Visit (+50 points)'}
+                {submitting ? 'Saving...' : photos.length > 0 ? 'Record Visit (+50 points)' : 'Mark as Visited (personal only)'}
               </Text>
             </LinearGradient>
           </TouchableOpacity>
