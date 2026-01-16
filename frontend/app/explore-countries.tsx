@@ -182,11 +182,12 @@ export default function ExploreCountriesScreen() {
           );
         }
         
-        // Merge progress data with countries
+        // Merge progress data AND country visit status with countries
         const enrichedCountries = countries.map((country: Country) => ({
           ...country,
           visited: progress.countries[country.country_id]?.visited || 0,
           percentage: progress.countries[country.country_id]?.percentage || 0,
+          countryVisited: visitedCountryIds.has(country.country_id) || (progress.countries[country.country_id]?.visited || 0) > 0,
         }));
         
         // Group countries by continent
