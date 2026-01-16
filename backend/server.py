@@ -1119,9 +1119,14 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         if country_visit_count == 1:  # First landmark in this country
             # Award country exploration bonus
             country_bonus_points = 20
+            # Country bonus: only award leaderboard points if visit has photos
+            bonus_increment = {"points": country_bonus_points}
+            if has_photos:
+                bonus_increment["leaderboard_points"] = country_bonus_points
+            
             await db.users.update_one(
                 {"user_id": current_user.user_id},
-                {"$inc": {"points": country_bonus_points}}
+                {"$inc": bonus_increment}
             )
             
             # AUTO-CREATE country visit record (if doesn't exist)
@@ -1142,12 +1147,13 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
                         "country_id": country_id,
                         "country_name": country_doc.get("name", "Unknown"),
                         "continent": country_doc.get("continent", "Unknown"),
-                        "photos": [],  # No photos for auto-created visit
+                        "photos": photos if has_photos else [],  # Include photos if present
                         "diary": None,
                         "visibility": "public",
                         "visited_at": datetime.now(timezone.utc),
-                        "points_earned": country_bonus_points,  # The 20 pts already awarded
-                        "source": "auto_landmark",  # Indicates this was auto-created from landmark visit
+                        "points_earned": country_bonus_points,
+                        "leaderboard_points_earned": country_bonus_points if has_photos else 0,
+                        "source": "auto_landmark",
                         "first_landmark_id": data.landmark_id,
                         "first_landmark_name": landmark.get("name"),
                         "created_at": datetime.now(timezone.utc)
