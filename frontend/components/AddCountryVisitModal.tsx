@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Modal, ScrollView, TouchableOpacity, TextInput, Image, Alert, Platform } from 'react-native';
+import { View, StyleSheet, Modal, ScrollView, TouchableOpacity, TextInput, Image, Alert, Platform, StatusBar } from 'react-native';
 import { Text } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
-import theme from '../styles/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { successHaptic, lightHaptic } from '../utils/haptics';
 import { PrivacySelector } from './PrivacySelector';
