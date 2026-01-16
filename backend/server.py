@@ -307,6 +307,31 @@ class TripLandmarkCreate(BaseModel):
 
 # ============= END TRIP PLANNING MODELS =============
 
+# ============= USER CREATED VISIT MODELS =============
+
+class UserCreatedVisit(BaseModel):
+    user_created_visit_id: str
+    user_id: str
+    user_name: str
+    user_picture: Optional[str] = None
+    country_name: str  # Free text input
+    landmark_name: Optional[str] = None  # Optional free text input
+    photos: List[str] = []  # Base64 images, max 10
+    diary: Optional[str] = None
+    visibility: str = "public"  # private, friends, public
+    visited_at: datetime
+    created_at: datetime
+
+class UserCreatedVisitCreate(BaseModel):
+    country_name: str  # Required - free text
+    landmark_name: Optional[str] = None  # Optional - free text
+    photos: List[str] = []  # Base64 images
+    diary_notes: Optional[str] = None
+    visibility: Optional[str] = "public"
+    visited_at: Optional[str] = None  # ISO format date
+
+# ============= END USER CREATED VISIT MODELS =============
+
 # ============= COUNTRY VISIT MODELS =============
 
 class CountryVisit(BaseModel):
