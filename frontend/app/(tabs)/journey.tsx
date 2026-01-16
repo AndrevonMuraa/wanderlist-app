@@ -11,6 +11,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { CircularProgress } from '../../components/CircularProgress';
 import { ProgressBar } from '../../components/ProgressBar';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import AddUserCreatedVisitModal from '../../components/AddUserCreatedVisitModal';
 import { BACKEND_URL } from '../../utils/config';
 
 const getToken = async (): Promise<string | null> => {
