@@ -36,8 +36,9 @@ interface Country {
   name: string;
   continent: string;
   landmark_count: number;
-  visited?: number; // Progress data
+  visited?: number; // Progress data (landmarks visited)
   percentage?: number;
+  countryVisited?: boolean; // Whether the country itself is marked as visited
 }
 
 interface ContinentSection {
