@@ -1712,6 +1712,9 @@ async def get_messages(friend_id: str, current_user: User = Depends(get_current_
 
 @api_router.get("/stats")
 async def get_stats(current_user: User = Depends(get_current_user)):
+    # Get user document
+    user = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
+    
     # Get user's visits
     visits = await db.visits.find({"user_id": current_user.user_id}, {"_id": 0}).to_list(1000)
     
@@ -1734,7 +1737,9 @@ async def get_stats(current_user: User = Depends(get_current_user)):
         "total_visits": len(visits),
         "countries_visited": len(countries),
         "continents_visited": len(continents),
-        "friends_count": friend_count
+        "friends_count": friend_count,
+        "points": user.get("points", 0),
+        "leaderboard_points": user.get("leaderboard_points", 0)
     }
 
 # ============= PROGRESS STATISTICS ENDPOINT =============
