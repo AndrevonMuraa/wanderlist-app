@@ -18,7 +18,7 @@ const CONTINENTS = [
     name: 'Europe',
     countries: 10,
     landmarks: 113,
-    image: 'https://images.unsplash.com/photo-1754843240798-010e6015d482?w=800',
+    image: 'https://images.unsplash.com/photo-1721260071259-a4888b538604?w=800',
     gradient: ['rgba(59,184,195,0.2)', 'rgba(59,184,195,0.7)'] as const,
     totalPoints: 2400,
     description: 'Historic castles and cultural heritage',
