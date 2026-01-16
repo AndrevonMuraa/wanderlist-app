@@ -1387,12 +1387,13 @@ async def get_enhanced_leaderboard(
     user_rank = None
     
     if category == "points":
-        # Get users sorted by points
+        # Get users sorted by LEADERBOARD points (only verified visits with photos)
         query = {}
         if user_filter:
             query["user_id"] = {"$in": user_filter}
         
-        users = await db.users.find(query, {"_id": 0}).sort("points", -1).limit(limit).to_list(limit)
+        # Use leaderboard_points for public leaderboard
+        users = await db.users.find(query, {"_id": 0}).sort("leaderboard_points", -1).limit(limit).to_list(limit)
         
         for idx, user in enumerate(users):
             leaderboard.append({
@@ -1400,7 +1401,8 @@ async def get_enhanced_leaderboard(
                 "name": user["name"],
                 "picture": user.get("picture"),
                 "username": user.get("username"),
-                "value": user.get("points", 0),
+                "value": user.get("leaderboard_points", 0),  # Use leaderboard_points
+                "personal_points": user.get("points", 0),  # Also include personal points for comparison
                 "rank": idx + 1,
                 "current_streak": user.get("current_streak", 0),
                 "longest_streak": user.get("longest_streak", 0)
