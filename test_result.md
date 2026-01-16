@@ -700,7 +700,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Country Visit Flow End-to-End Testing"
+    - "Dual Points System for Country Visits"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
