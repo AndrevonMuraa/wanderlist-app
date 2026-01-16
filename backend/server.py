@@ -2895,14 +2895,17 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
     
     Users can mark a country as visited without having visited any landmarks.
     If a country was already auto-marked via landmark visits, this upgrades it with photos/diary.
+    
+    Points Logic:
+    - Personal points (points): Always awarded for visits
+    - Leaderboard points (leaderboard_points): Only awarded when photos are included
     """
     
-    # Validate photos (max 10)
+    # Validate photos (max 10, but photos are now OPTIONAL)
     if len(data.photos) > 10:
         raise HTTPException(status_code=400, detail="Maximum 10 photos allowed")
     
-    if len(data.photos) == 0:
-        raise HTTPException(status_code=400, detail="At least one photo is required")
+    has_photos = len(data.photos) > 0
     
     # Look up country details from database
     country = await db.countries.find_one({"country_id": data.country_id}, {"_id": 0})
