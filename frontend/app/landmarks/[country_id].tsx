@@ -159,7 +159,16 @@ export default function LandmarksScreen() {
   };
 
   const handleRemoveCountryVisit = async () => {
-    if (!countryVisitId) return;
+    // If no country_visit_id, the visit was detected via landmarks only
+    // In this case, we can't remove it directly - need to inform the user
+    if (!countryVisitId) {
+      Alert.alert(
+        'Cannot Remove',
+        `This country is marked as visited because you have visited landmarks here. To unmark the country, you would need to remove your individual landmark visits.`,
+        [{ text: 'OK', style: 'default' }]
+      );
+      return;
+    }
     
     Alert.alert(
       'Remove Visit',
@@ -178,8 +187,8 @@ export default function LandmarksScreen() {
               });
 
               if (response.ok) {
-                setIsCountryVisited(false);
-                setCountryVisitId(null);
+                // Re-check status because they might still be "visited" via landmarks
+                await checkCountryVisitStatus();
                 Alert.alert('Success', 'Country visit removed successfully');
               } else {
                 Alert.alert('Error', 'Failed to remove country visit');
