@@ -1107,6 +1107,36 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
                 {"$inc": {"points": country_bonus_points}}
             )
             
+            # AUTO-CREATE country visit record (if doesn't exist)
+            existing_country_visit = await db.country_visits.find_one({
+                "user_id": current_user.user_id,
+                "country_id": country_id
+            })
+            
+            if not existing_country_visit:
+                country_doc = await db.countries.find_one({"country_id": country_id})
+                if country_doc:
+                    auto_country_visit_id = f"cv_{uuid.uuid4().hex[:12]}"
+                    auto_country_visit = {
+                        "country_visit_id": auto_country_visit_id,
+                        "user_id": current_user.user_id,
+                        "user_name": current_user.name,
+                        "user_picture": current_user.picture,
+                        "country_id": country_id,
+                        "country_name": country_doc.get("name", "Unknown"),
+                        "continent": country_doc.get("continent", "Unknown"),
+                        "photos": [],  # No photos for auto-created visit
+                        "diary": None,
+                        "visibility": "public",
+                        "visited_at": datetime.now(timezone.utc),
+                        "points_earned": country_bonus_points,  # The 20 pts already awarded
+                        "source": "auto_landmark",  # Indicates this was auto-created from landmark visit
+                        "first_landmark_id": data.landmark_id,
+                        "first_landmark_name": landmark.get("name"),
+                        "created_at": datetime.now(timezone.utc)
+                    }
+                    await db.country_visits.insert_one(auto_country_visit)
+            
             # Check continent for auto-reward
             country_doc = await db.countries.find_one({"country_id": country_id})
             if country_doc:
