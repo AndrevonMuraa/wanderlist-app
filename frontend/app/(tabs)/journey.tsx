@@ -449,13 +449,94 @@ export default function JourneyScreen() {
           </Surface>
         )}
 
+        {/* Custom Visits Section */}
+        <Surface style={styles.customVisitsCard}>
+          <View style={styles.customVisitsHeader}>
+            <View style={styles.customVisitsHeaderLeft}>
+              <Ionicons name="globe-outline" size={24} color={theme.colors.accent} />
+              <Text style={styles.sectionTitle}>Custom Visits</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.addCustomButton}
+              onPress={() => setShowCustomVisitModal(true)}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="add-circle" size={20} color={theme.colors.primary} />
+              <Text style={styles.addCustomButtonText}>Add Visit</Text>
+            </TouchableOpacity>
+          </View>
+          
+          <Text style={styles.customVisitsDescription}>
+            Record visits to places not in our database
+          </Text>
+
+          {userCreatedVisits.length === 0 ? (
+            <TouchableOpacity 
+              style={styles.emptyCustomVisits}
+              onPress={() => setShowCustomVisitModal(true)}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="airplane-outline" size={40} color={theme.colors.textLight} />
+              <Text style={styles.emptyCustomText}>No custom visits yet</Text>
+              <Text style={styles.emptyCustomSubtext}>Tap to add your first custom visit!</Text>
+            </TouchableOpacity>
+          ) : (
+            <>
+              {userCreatedVisits.slice(0, 5).map((visit) => (
+                <View key={visit.user_created_visit_id} style={styles.customVisitItem}>
+                  <View style={styles.customVisitIcon}>
+                    <Ionicons 
+                      name={visit.landmark_name ? "location" : "flag"} 
+                      size={20} 
+                      color={theme.colors.accent} 
+                    />
+                  </View>
+                  <View style={styles.customVisitInfo}>
+                    <Text style={styles.customVisitName}>
+                      {visit.landmark_name || visit.country_name}
+                    </Text>
+                    <Text style={styles.customVisitCountry}>
+                      {visit.landmark_name ? visit.country_name : null}
+                      {visit.landmark_name ? ' • ' : ''}
+                      {new Date(visit.visited_at).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </Text>
+                  </View>
+                  <View style={styles.customVisitMeta}>
+                    {visit.photos.length > 0 && (
+                      <Ionicons name="images-outline" size={16} color={theme.colors.textLight} />
+                    )}
+                    <Ionicons 
+                      name={
+                        visit.visibility === 'public' ? 'globe-outline' : 
+                        visit.visibility === 'friends' ? 'people-outline' : 
+                        'lock-closed-outline'
+                      } 
+                      size={16} 
+                      color={theme.colors.textLight} 
+                    />
+                  </View>
+                </View>
+              ))}
+              {userCreatedVisits.length > 5 && (
+                <Text style={styles.viewMoreText}>
+                  +{userCreatedVisits.length - 5} more custom visits
+                </Text>
+              )}
+            </>
+          )}
+        </Surface>
+
         <View style={styles.bottomSpacer} />
       </ScrollView>
 
       {/* Floating Action Button */}
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => router.push('/add-country-visit')}
+        onPress={() => setShowCustomVisitModal(true)}
         activeOpacity={0.9}
       >
         <LinearGradient
@@ -467,6 +548,13 @@ export default function JourneyScreen() {
           <Ionicons name="add" size={28} color="#fff" />
         </LinearGradient>
       </TouchableOpacity>
+
+      {/* Custom Visit Modal */}
+      <AddUserCreatedVisitModal
+        visible={showCustomVisitModal}
+        onClose={() => setShowCustomVisitModal(false)}
+        onSuccess={fetchAllData}
+      />
     </View>
   );
 }
