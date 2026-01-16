@@ -3038,13 +3038,26 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
         "diary": data.diary_notes,
         "visibility": visibility,
         "points_earned": points_earned,
+        "has_photos": has_photos,
         "created_at": datetime.now(timezone.utc),
         "likes_count": 0,
         "comments_count": 0
     }
     await db.activities.insert_one(activity)
     
-    return {"message": "Country visit created", "country_visit_id": country_visit_id, "points_earned": points_earned}
+    # Build response message
+    if has_photos:
+        message = "Country visit recorded with photos! Points added to leaderboard."
+    else:
+        message = "Country visit recorded! Add photos to earn leaderboard points 📸"
+    
+    return {
+        "message": message,
+        "country_visit_id": country_visit_id,
+        "points_earned": points_earned,
+        "leaderboard_points_earned": leaderboard_points_earned,
+        "has_photos": has_photos
+    }
 
 @api_router.get("/country-visits")
 async def get_country_visits(current_user: User = Depends(get_current_user)):
