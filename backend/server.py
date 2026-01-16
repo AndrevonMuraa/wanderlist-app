@@ -3016,6 +3016,68 @@ async def update_country_visit(country_visit_id: str, data: dict, current_user: 
     )
     return updated_visit
 
+@api_router.get("/country-visits/check/{country_id}")
+async def check_country_visit_status(country_id: str, current_user: User = Depends(get_current_user)):
+    """
+    Check if a country has been visited by the user.
+    Returns visit status based on:
+    1. Explicit country visit record exists, OR
+    2. At least one landmark in the country has been visited
+    """
+    # First, check for explicit country visit record
+    country_visit = await db.country_visits.find_one(
+        {"user_id": current_user.user_id, "country_id": country_id},
+        {"_id": 0}
+    )
+    
+    if country_visit:
+        return {
+            "visited": True,
+            "source": country_visit.get("source", "manual"),
+            "country_visit_id": country_visit.get("country_visit_id"),
+            "visited_at": country_visit.get("visited_at"),
+            "has_photos": bool(country_visit.get("photos", [])),
+            "has_diary": bool(country_visit.get("diary"))
+        }
+    
+    # Check if any landmarks in this country have been visited
+    # Get all landmarks for this country
+    country_landmarks = await db.landmarks.find(
+        {"country_id": country_id},
+        {"landmark_id": 1}
+    ).to_list(1000)
+    
+    landmark_ids = [lm["landmark_id"] for lm in country_landmarks]
+    
+    if landmark_ids:
+        # Check if user has visited any of these landmarks
+        landmark_visit = await db.visits.find_one({
+            "user_id": current_user.user_id,
+            "landmark_id": {"$in": landmark_ids}
+        })
+        
+        if landmark_visit:
+            # User has visited a landmark but no country visit record exists
+            # This means they visited before auto-creation was implemented
+            # Return as visited via landmarks
+            return {
+                "visited": True,
+                "source": "landmark_visits",
+                "country_visit_id": None,
+                "visited_at": landmark_visit.get("visited_at"),
+                "has_photos": False,
+                "has_diary": False
+            }
+    
+    return {
+        "visited": False,
+        "source": None,
+        "country_visit_id": None,
+        "visited_at": None,
+        "has_photos": False,
+        "has_diary": False
+    }
+
 # ============= END COUNTRY VISIT ENDPOINTS =============
 
 # ============= END ACTIVITY FEED ENDPOINTS =============
