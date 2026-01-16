@@ -205,9 +205,9 @@ class DualPointsSystemTester:
         self.initial_points = initial_personal
         self.initial_leaderboard_points = initial_leaderboard
         
-        # Step 3: Test country visit WITHOUT photos (Denmark)
-        self.log("\n🏛️ STEP 2: Testing country visit WITHOUT photos (Denmark)...")
-        if not self.create_country_visit_without_photos("denmark"):
+        # Step 3: Test country visit WITHOUT photos (Norway)
+        self.log("\n🏛️ STEP 2: Testing country visit WITHOUT photos (Norway)...")
+        if not self.create_country_visit_without_photos("norway"):
             return False
         
         # Step 4: Verify points increased correctly (personal +50, leaderboard +0)
