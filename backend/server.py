@@ -2838,7 +2838,11 @@ async def delete_notification(notification_id: str, current_user: User = Depends
 
 @api_router.post("/country-visits")
 async def create_country_visit(data: CountryVisitCreate, current_user: User = Depends(get_current_user)):
-    """Create a country visit with photo collage and diary"""
+    """Create a country visit with photo collage and diary.
+    
+    Users can mark a country as visited without having visited any landmarks.
+    If a country was already auto-marked via landmark visits, this upgrades it with photos/diary.
+    """
     
     # Validate photos (max 10)
     if len(data.photos) > 10:
@@ -2855,6 +2859,12 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
     country_name = country.get("name", "Unknown")
     continent = country.get("continent", "Unknown")
     
+    # Check if country visit already exists (either manual or auto from landmark)
+    existing_visit = await db.country_visits.find_one({
+        "user_id": current_user.user_id,
+        "country_id": data.country_id
+    })
+    
     # Parse visit date
     visited_at = datetime.now(timezone.utc)
     if data.visited_at:
@@ -2866,7 +2876,38 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
     # Determine visibility (use provided or user's default)
     visibility = data.visibility or current_user.default_privacy or "public"
     
-    # Award 50 points for country visit (as shown in modal)
+    if existing_visit:
+        # Upgrade existing visit with new photos/diary (no additional points)
+        await db.country_visits.update_one(
+            {"country_visit_id": existing_visit["country_visit_id"]},
+            {"$set": {
+                "photos": data.photos,
+                "diary": data.diary_notes,
+                "visibility": visibility,
+                "source": "manual",  # Upgrade source to manual
+                "updated_at": datetime.now(timezone.utc)
+            }}
+        )
+        
+        # Update activity if exists
+        await db.activities.update_one(
+            {"country_visit_id": existing_visit["country_visit_id"]},
+            {"$set": {
+                "photos": data.photos,
+                "diary": data.diary_notes,
+                "visibility": visibility,
+                "updated_at": datetime.now(timezone.utc)
+            }}
+        )
+        
+        return {
+            "message": "Country visit updated with photos and diary",
+            "country_visit_id": existing_visit["country_visit_id"],
+            "points_earned": 0,  # No additional points for upgrade
+            "was_upgrade": True
+        }
+    
+    # Award 50 points for new country visit
     points_earned = 50
     
     # Create country visit
@@ -2884,6 +2925,7 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
         "visibility": visibility,
         "visited_at": visited_at,
         "points_earned": points_earned,
+        "source": "manual",
         "created_at": datetime.now(timezone.utc)
     }
     
