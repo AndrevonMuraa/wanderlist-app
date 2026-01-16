@@ -42,8 +42,9 @@ class CountryVisitTester:
                 "Authorization": f"Bearer {self.auth_token}"
             })
             
-            print(f"✅ Login successful! User: {self.user_data['name']} ({self.user_data['email']})")
+            print(f"✅ Login successful! User: {self.user_data.get('name', 'Unknown')} ({self.user_data.get('email', TEST_USER_EMAIL)})")
             print(f"   Subscription tier: {self.user_data.get('subscription_tier', 'free')}")
+            print(f"   User ID: {self.user_data.get('user_id', 'Unknown')}")
             return True
         else:
             print(f"❌ Login failed: {response.status_code} - {response.text}")
