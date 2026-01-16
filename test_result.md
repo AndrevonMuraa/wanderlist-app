@@ -412,6 +412,18 @@ backend:
         agent: "testing"
         comment: "✅ PROFILE UPDATE API WORKING PERFECTLY! ✅ PUT /api/auth/profile: Successfully updates all profile fields including name (string), picture (base64 image string), bio (string, max 200 chars), and location (string). All fields updated correctly and returned in response. Profile picture upload supports base64 image format as required. Bio character limit properly enforced at 200 characters. Authentication required and working correctly. All profile update functionality is production-ready!"
 
+  - task: "Dual Points System for Country Visits"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "🎉 DUAL POINTS SYSTEM TESTING COMPLETE - ALL TESTS PASSED! ✅ COMPREHENSIVE TESTING RESULTS (6/6 tests passed - 100% success rate): ✅ AUTHENTICATION: Successfully logged in with mobile@test.com/test123 credentials. ✅ INITIAL STATS: Retrieved baseline points (Personal: 370, Leaderboard: 0). ✅ COUNTRY VISIT WITHOUT PHOTOS (Norway): Created visit with empty photos array, correctly awarded personal points only (points_earned: 50, leaderboard_points_earned: 0, has_photos: false). ✅ POINTS VERIFICATION 1: Personal points increased by +50, leaderboard points remained at 0 as expected. ✅ COUNTRY VISIT WITH PHOTOS (Switzerland): Created visit with photo, correctly awarded both point types (points_earned: 50, leaderboard_points_earned: 50, has_photos: true). ✅ POINTS VERIFICATION 2: Both personal and leaderboard points increased by +50 as expected. ✅ LEADERBOARD VERIFICATION: GET /api/leaderboard correctly uses 'value' field representing leaderboard_points (50) not total personal points (470). The dual points system is working exactly as specified: visits without photos award personal points only, visits with photos award both personal and leaderboard points, and the leaderboard displays leaderboard_points for fair competition based on verified visits with photo proof."
+
 frontend:
   - task: "Authentication Context with Google and JWT"
     implemented: true
