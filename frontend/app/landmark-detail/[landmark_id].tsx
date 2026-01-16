@@ -468,17 +468,23 @@ export default function LandmarkDetailScreen() {
         <View style={styles.fabContainer}>
           <TouchableOpacity 
             style={styles.fab}
-            onPress={handleMarkAsVisited}
+            onPress={isVisited ? handleUnmarkVisit : handleMarkAsVisited}
             activeOpacity={0.8}
           >
             <LinearGradient
-              colors={[theme.colors.primary, theme.colors.secondary]}
+              colors={isVisited ? ['#FF6B6B', '#FF8E8E'] : [theme.colors.primary, theme.colors.secondary]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.fabGradient}
             >
-              <Ionicons name="checkmark-circle" size={24} color="#fff" />
-              <Text style={styles.fabText}>Mark as Visited</Text>
+              <Ionicons 
+                name={isVisited ? "close-circle" : "checkmark-circle"} 
+                size={24} 
+                color="#fff" 
+              />
+              <Text style={styles.fabText}>
+                {isVisited ? "Remove Visit" : "Mark as Visited"}
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
