@@ -1,21 +1,24 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for Country Visit Feature
-Tests the country visit endpoints as specified in the review request.
+Backend API Testing Script for WanderList Dual Points System
+Testing the new dual points system for country visits as per review request.
 """
 
 import requests
 import json
-import base64
-from datetime import datetime
 import sys
+import os
+from datetime import datetime
 
-# Configuration
-BASE_URL = "https://wanderlist-headers.preview.emergentagent.com/api"
-TEST_USER_EMAIL = "mobile@test.com"
-TEST_USER_PASSWORD = "test123"
+# Get backend URL from environment
+BACKEND_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://wanderlist-headers.preview.emergentagent.com')
+API_BASE = f"{BACKEND_URL}/api"
 
-class CountryVisitTester:
+# Test credentials from review request
+TEST_EMAIL = "mobile@test.com"
+TEST_PASSWORD = "test123"
+
+class DualPointsSystemTester:
     def __init__(self):
         self.session = requests.Session()
         self.auth_token = None
