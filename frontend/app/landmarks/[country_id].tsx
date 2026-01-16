@@ -421,7 +421,7 @@ export default function LandmarksScreen() {
         onSuccess={() => {
           setIsCountryVisited(true);
           checkCountryVisitStatus();
-          fetchLandmarks();
+          fetchData();
         }}
       />
       
