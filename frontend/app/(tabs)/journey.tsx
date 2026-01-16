@@ -101,7 +101,7 @@ export default function JourneyScreen() {
     try {
       const token = await getToken();
       
-      const [statsRes, progressRes, badgesRes, visitsRes] = await Promise.all([
+      const [statsRes, progressRes, badgesRes, visitsRes, customVisitsRes] = await Promise.all([
         fetch(`${BACKEND_URL}/api/stats`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
@@ -112,6 +112,9 @@ export default function JourneyScreen() {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
         fetch(`${BACKEND_URL}/api/visits`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${BACKEND_URL}/api/user-created-visits`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
@@ -134,6 +137,11 @@ export default function JourneyScreen() {
       if (visitsRes.ok) {
         const data = await visitsRes.json();
         setRecentVisits(data.slice(0, 5)); // Show 5 most recent
+      }
+      
+      if (customVisitsRes.ok) {
+        const data = await customVisitsRes.json();
+        setUserCreatedVisits(data);
       }
     } catch (error) {
       console.error('Error fetching journey data:', error);
