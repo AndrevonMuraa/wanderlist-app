@@ -70,11 +70,24 @@ interface Visit {
   points_earned: number;
 }
 
+interface UserCreatedVisit {
+  user_created_visit_id: string;
+  country_name: string;
+  landmark_name?: string;
+  photos: string[];
+  diary?: string;
+  visibility: string;
+  visited_at: string;
+  created_at: string;
+}
+
 export default function JourneyScreen() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [progressStats, setProgressStats] = useState<ProgressStats | null>(null);
   const [badges, setBadges] = useState<Badge[]>([]);
   const [recentVisits, setRecentVisits] = useState<Visit[]>([]);
+  const [userCreatedVisits, setUserCreatedVisits] = useState<UserCreatedVisit[]>([]);
+  const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
