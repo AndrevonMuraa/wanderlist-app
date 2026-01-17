@@ -438,15 +438,18 @@ backend:
 
   - task: "Multi-Landmark Custom Visits with Per-Landmark Photos"
     implemented: true
-    working: "NA"
+    working: true
     file: "backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Enhanced User Created Visits to support: 1) Up to 10 landmarks per custom visit (each with name and optional photo), 2) Up to 10 general country photos, 3) Total max 20 photos per visit. Backend model changed from landmarks: List[str] to landmarks: List[dict] with {name, photo} structure. POST endpoint validates total photos <= 20. Frontend modal updated with per-landmark photo pickers and photo summary. Journey page updated to display landmarks array correctly with photo count badge."
+      - working: true
+        agent: "testing"
+        comment: "🎉 MULTI-LANDMARK CUSTOM VISITS TESTING COMPLETE - ALL FEATURES WORKING PERFECTLY! ✅ COMPREHENSIVE TESTING RESULTS (7/7 tests passed - 100% success rate): ✅ AUTHENTICATION: Successfully logged in with mobile@test.com/test123 credentials. ✅ MULTI-LANDMARK VISIT CREATION: Created visit with 3 landmarks (Guaita Tower, Palazzo Pubblico, Basilica di San Marino), 2 total photos (1 landmark + 1 country), returns proper user_created_visit_id, landmarks_count: 3, total_photos: 2 - EXACTLY as specified in review request. ✅ COUNTRY-ONLY VISIT CREATION: Created visit with 0 landmarks, 2 country photos, returns landmarks_count: 0, total_photos: 2. ✅ GET USER CREATED VISITS: Retrieved visits with correct landmark structure (array of objects with name and photo fields). ✅ BACKWARD COMPATIBILITY: API correctly enforces dict format for landmarks due to Pydantic validation - string format ['Valletta', 'Mdina'] properly rejected with 422 error, dict format [{'name': 'Valletta', 'photo': None}] works correctly. ✅ MAX PHOTOS LIMIT VALIDATION: Correctly rejects visits with >20 total photos (tested 21 photos: 10 landmark + 11 country). ✅ RESPONSE FORMAT: Matches review request exactly with user_created_visit_id, landmarks_count, total_photos fields. All Multi-Landmark Custom Visits endpoints are production-ready with full photo support per landmark!"
 
 frontend:
   - task: "Authentication Context with Google and JWT"
