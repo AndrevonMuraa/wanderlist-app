@@ -3269,6 +3269,9 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
     if len(data.photos) > 10:
         raise HTTPException(status_code=400, detail="Maximum 10 photos allowed")
     
+    # Validate landmarks (max 10)
+    landmarks = [lm.strip() for lm in data.landmarks if lm and lm.strip()][:10]
+    
     # Parse visit date
     visited_at = datetime.now(timezone.utc)
     if data.visited_at:
@@ -3288,7 +3291,7 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
         "user_name": current_user.name,
         "user_picture": current_user.picture,
         "country_name": data.country_name.strip(),
-        "landmark_name": data.landmark_name.strip() if data.landmark_name else None,
+        "landmarks": landmarks,  # Array of landmark names
         "photos": data.photos,
         "diary": data.diary_notes,
         "visibility": visibility,
@@ -3302,8 +3305,11 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
     activity_id = f"activity_{uuid.uuid4().hex[:12]}"
     
     # Build description for activity
-    if data.landmark_name:
-        activity_description = f"visited {data.landmark_name.strip()} in {data.country_name.strip()}"
+    if landmarks:
+        if len(landmarks) == 1:
+            activity_description = f"visited {landmarks[0]} in {data.country_name.strip()}"
+        else:
+            activity_description = f"visited {len(landmarks)} places in {data.country_name.strip()}"
     else:
         activity_description = f"visited {data.country_name.strip()}"
     
@@ -3315,7 +3321,7 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
         "activity_type": "user_created_visit",
         "user_created_visit_id": user_created_visit_id,
         "country_name": data.country_name.strip(),
-        "landmark_name": data.landmark_name.strip() if data.landmark_name else None,
+        "landmarks": landmarks,  # Array of landmark names
         "description": activity_description,
         "photos": data.photos,
         "diary": data.diary_notes,
@@ -3331,7 +3337,8 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
         "message": "Custom visit recorded successfully!",
         "user_created_visit_id": user_created_visit_id,
         "country_name": data.country_name.strip(),
-        "landmark_name": data.landmark_name.strip() if data.landmark_name else None
+        "landmarks": landmarks,
+        "landmarks_count": len(landmarks)
     }
 
 
