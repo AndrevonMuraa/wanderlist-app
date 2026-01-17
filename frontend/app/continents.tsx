@@ -461,4 +461,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'rgba(255, 255, 255, 0.9)',
   },
+  cantFindContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.md,
+    marginHorizontal: theme.spacing.md,
+    marginTop: theme.spacing.sm,
+    marginBottom: theme.spacing.xl,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    gap: theme.spacing.sm,
+    ...theme.shadows.sm,
+  },
+  cantFindText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: theme.colors.primary,
+  },
 });
