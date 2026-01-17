@@ -740,6 +740,85 @@ async def get_temp_token(email: str = "mobile@test.com"):
 
 # ============= COUNTRY & LANDMARK ENDPOINTS =============
 
+@api_router.get("/continent-stats")
+async def get_continent_stats(current_user: User = Depends(get_current_user)):
+    """
+    Get dynamic statistics for all continents.
+    Returns landmark counts, total points, and country counts for each continent.
+    This endpoint provides real-time data to keep continent cards in sync with database.
+    """
+    # Aggregate landmark stats by continent
+    pipeline = [
+        {
+            "$group": {
+                "_id": "$continent",
+                "total_landmarks": {"$sum": 1},
+                "total_points": {"$sum": "$points"},
+                "countries": {"$addToSet": "$country_name"}
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "continent": "$_id",
+                "landmarks": "$total_landmarks",
+                "points": "$total_points",
+                "countries": {"$size": "$countries"}
+            }
+        },
+        {"$sort": {"continent": 1}}
+    ]
+    
+    stats = await db.landmarks.aggregate(pipeline).to_list(10)
+    
+    # Get user's visited landmarks by continent for progress
+    user_visits = await db.visits.find(
+        {"user_id": current_user.user_id},
+        {"landmark_id": 1}
+    ).to_list(10000)
+    visited_landmark_ids = [v["landmark_id"] for v in user_visits]
+    
+    # Get visited landmarks by continent
+    if visited_landmark_ids:
+        visited_pipeline = [
+            {"$match": {"landmark_id": {"$in": visited_landmark_ids}}},
+            {
+                "$group": {
+                    "_id": "$continent",
+                    "visited_count": {"$sum": 1},
+                    "visited_points": {"$sum": "$points"}
+                }
+            }
+        ]
+        visited_stats = await db.landmarks.aggregate(visited_pipeline).to_list(10)
+        visited_by_continent = {v["_id"]: v for v in visited_stats}
+    else:
+        visited_by_continent = {}
+    
+    # Combine stats with user progress
+    result = []
+    for stat in stats:
+        continent = stat["continent"]
+        visited_data = visited_by_continent.get(continent, {})
+        result.append({
+            "continent": continent,
+            "total_landmarks": stat["landmarks"],
+            "total_points": stat["points"],
+            "countries": stat["countries"],
+            "visited_landmarks": visited_data.get("visited_count", 0),
+            "visited_points": visited_data.get("visited_points", 0),
+            "progress_percent": round((visited_data.get("visited_count", 0) / stat["landmarks"]) * 100, 1) if stat["landmarks"] > 0 else 0
+        })
+    
+    return {
+        "continents": result,
+        "grand_total": {
+            "landmarks": sum(s["landmarks"] for s in stats),
+            "points": sum(s["points"] for s in stats),
+            "countries": sum(s["countries"] for s in stats)
+        }
+    }
+
 @api_router.get("/countries", response_model=List[Country])
 async def get_countries(current_user: User = Depends(get_current_user)):
     countries = await db.countries.find({}, {"_id": 0}).to_list(1000)
