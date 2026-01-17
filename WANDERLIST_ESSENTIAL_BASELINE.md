@@ -1,4 +1,4 @@
-# WanderList - Essential Baseline (v4.30)
+# WanderList - Essential Baseline (v4.31)
 
 > **Purpose:** Critical information for session continuity
 > **Read this:** At session start if forked, or when encountering issues
@@ -7,24 +7,61 @@
 
 ## 📊 **Current State**
 
-**Version:** 4.30.0 - STABLE ✅  
-**Status:** Dual Points System, Custom Visits, Photo Collection Complete  
+**Version:** 4.31.0 - STABLE ✅  
+**Status:** Multi-Landmark Photos, Dynamic Stats, Duplicate Cleanup Complete  
 **Last Build:** January 17, 2026  
-**Next Version:** v4.31 - Future Features
+**Next Version:** v4.32 - Future Features
 
 **Tech Stack:** Expo (React Native) + FastAPI + MongoDB  
-**Database:** 48 countries, 528 landmarks, test data populated  
+**Database:** 48 countries, **520 landmarks** (cleaned up), test data populated  
 
 **Test Accounts:**
 | Email | Password | Role |
 |-------|----------|------|
-| `mobile@test.com` | `test123` | Main user (108 landmarks, 8 countries) |
+| `mobile@test.com` | `test123` | Main user (84 landmarks, 8 countries) |
 | `friend@test.com` | `test123` | Friend user |
 | `stranger@test.com` | `test123` | Test user |
 
 ---
 
-## 🎨 **v4.30 Design System**
+## 🆕 **v4.31 Changes**
+
+### Multi-Landmark Custom Visits
+- Custom visits now support **up to 10 landmarks** per country
+- Each landmark can have its **own dedicated photo**
+- Total photos: 10 country photos + 10 landmark photos = **max 20 per visit**
+- Dynamic "+" button to add more landmarks in the modal
+
+### Dynamic Continent Stats
+- New endpoint: `GET /api/continent-stats` provides real-time data
+- Continent cards now fetch stats from database instead of hardcoded values
+- Stats include: landmarks, points, countries, and user progress per continent
+
+### Landmark Cleanup
+- Removed **15 duplicate landmarks** (similar names)
+- Fixed **2 ID collisions** (Uluru, Churchill)
+- Added **12 new authentic landmarks** as replacements
+- Updated orphan visits to point to correct landmarks
+
+### Updated Milestone System (520 landmarks)
+| Landmarks | % | Badge Name |
+|-----------|---|------------|
+| 10 | 1.9% | 🗺️ Explorer |
+| 25 | 4.8% | 🧗 Adventurer |
+| 50 | 9.6% | 🌍 Globetrotter |
+| 100 | 19.2% | ✈️ World Traveler |
+| **200** | **38.5%** | **🧭 Seasoned Traveler** (NEW) |
+| **350** | **67.3%** | **🏆 Legend** (moved from 250) |
+| 500 | 96.2% | 👑 Ultimate Explorer |
+
+### Code Cleanup
+- Removed unused **Trip Planning endpoints** (~14KB of code)
+- Removed unused **Trip models** (Trip, TripCreate, TripUpdate, TripLandmark, etc.)
+- Kept BucketList functionality
+
+---
+
+## 🎨 **Design System**
 
 ### "Ocean to Sand" Gradient (STANDARD)
 - **Colors:** `#26C6DA` → `#00BFA5` → `#FFE082` (cyan to teal to warm sand)
@@ -36,25 +73,16 @@
 - **Layout:** Single row - Close/Back left, Title center-left, WanderList branding right
 - **Branding:** 🌍 WanderList in dark text (#2A2A2A)
 - **Sticky:** All headers stick to top while scrolling
-- **Height:** Consistent across all pages
-- **Component:** `UniversalHeader.tsx` for sub-pages
 
-### Continent Cards
+### Continent Cards (Updated v4.31)
 - **Height:** 140px
-- **Text Background:** Semi-transparent accent color overlay (40% opacity) for better text visibility
-- **Europe Image:** Welsh castle with ocean (updated in v4.30)
-- **Accent colors:** Europe (turquoise), Asia (orange), Africa (golden), Americas (green), Oceania (blue)
-
-### Color Palette
-- Primary: `#00BFA5` (Teal)
-- Secondary: `#26C6DA` (Cyan)
-- Accent: `#E8DCC8` (Warm sand)
-- Golden Stars: `#FFD700`
-- Success/Visited: `#4CAF50` (Green)
+- **Text Background:** Semi-transparent accent color overlay (40% opacity)
+- **Data Source:** Dynamic from `/api/continent-stats` endpoint
+- **Stats shown:** Points, Countries, Landmarks
 
 ---
 
-## 💰 **Dual Points System (NEW v4.30)**
+## 💰 **Dual Points System**
 
 ### Two Point Types
 | Point Type | Description | When Awarded |
@@ -65,102 +93,71 @@
 ### Points Logic
 | Action | Personal Points | Leaderboard Points |
 |--------|----------------|-------------------|
-| Landmark visit WITH photo | ✅ +10 pts | ✅ +10 pts |
-| Landmark visit WITHOUT photo | ✅ +10 pts | ❌ 0 pts |
+| Landmark visit WITH photo | ✅ +10/25 pts | ✅ +10/25 pts |
+| Landmark visit WITHOUT photo | ✅ +10/25 pts | ❌ 0 pts |
 | Country visit WITH photo | ✅ +50 pts | ✅ +50 pts |
 | Country visit WITHOUT photo | ✅ +50 pts | ❌ 0 pts |
 | Custom visits | ❌ 0 pts | ❌ 0 pts |
 
-### Key Behaviors
-- Photos are **OPTIONAL** for all visits
-- Confirmation dialog shown when submitting without photos
-- Leaderboard uses `leaderboard_points` for rankings
-- User stats show both point values
-
 ---
 
-## 🌍 **User Created Visits (NEW v4.30)**
+## 🌍 **User Created Visits (v4.31)**
 
-### Purpose
-Allow users to record visits to countries/landmarks NOT in the database.
+### Features
+- **Up to 10 landmarks** per custom visit (with optional individual photos)
+- **Up to 10 country photos** (general trip photos)
+- **Max 20 total photos** per visit
+- No points awarded for custom visits
 
 ### Entry Points
 1. **Journey Page** → "Custom Visits" section → "Add Visit" button
-2. **Explore Page** → "Can't find your destination?" link at bottom
+2. **Explore Page** → "Can't find your destination?" link
 
 ### API Endpoints
 - `POST /api/user-created-visits` - Create custom visit
 - `GET /api/user-created-visits` - List user's custom visits
 - `DELETE /api/user-created-visits/{id}` - Delete custom visit
 
-### Data Structure
+### Data Structure (v4.31)
 ```json
 {
-  "country_name": "Monaco",           // Required
-  "landmark_name": "Prince's Palace", // Optional
-  "photos": [],                       // Optional
-  "diary_notes": "...",               // Optional
+  "country_name": "Monaco",
+  "landmarks": [
+    {"name": "Prince's Palace", "photo": "base64..."},
+    {"name": "Monte Carlo Casino", "photo": null}
+  ],
+  "photos": ["base64..."],
+  "diary_notes": "...",
   "visibility": "public|friends|private"
 }
 ```
 
-### Key Behaviors
-- **NO POINTS** awarded for custom visits
-- Appears in Activity Feed (respects privacy)
-- Country required, landmark optional
-- Photos optional
-
 ---
 
-## 📸 **Photo Collection (NEW v4.30)**
-
-### Purpose
-Aggregate all user photos into one reminiscence-friendly page.
+## 📸 **Photo Collection**
 
 ### Entry Point
 - **Journey Page** → "My Photos" card
-
-### API Endpoint
-- `GET /api/photos/collection` - Returns all photos with metadata
 
 ### Features
 - **Stats Banner:** X Photos • X Countries • X Years
 - **Filter Tabs:** All | By Country | By Year | By Type
 - **Photo Grid:** 3-column Instagram-style layout
 - **Fullscreen Viewer:** Tap photo to view, swipe between photos
-- **Type Indicators:** Colored badges (landmark/country/custom)
-- **"View Visit" Button:** Navigate to original visit
 
 ### Data Sources
 Photos aggregated from:
 - `/api/visits` (landmark visit photos)
 - `/api/country-visits` (country visit photos)  
-- `/api/user-created-visits` (custom visit photos)
+- `/api/user-created-visits` (custom visit photos + landmark photos)
 
 ---
 
-## 🔒 **Privacy System**
-
-### Privacy Levels
-| Icon | Color | Level | Who Can See |
-|------|-------|-------|-------------|
-| 🌐 | Green | Public | Everyone |
-| 👥 | Blue | Friends | Only friends |
-| 🔒 | Red | Private | Only you |
-
-### Applies To
-- Landmark visits
-- Country visits
-- Custom visits
-- Activity feed items
-
----
-
-## 📱 **Navigation Structure (v4.30)**
+## 📱 **Navigation Structure**
 
 ### Bottom Tabs
 ```
-├── Explore (continents.tsx) - Main entry
+├── Explore (continents.tsx) - Main entry, dynamic continent stats
 ├── My Journey (journey.tsx) - Stats, visits, photos
 ├── Social (social.tsx) - Activity feed
 └── Profile (profile.tsx) - Settings
@@ -170,93 +167,55 @@ Photos aggregated from:
 ```
 My Journey:
 ├── Your Stats (points, streak)
-├── Overall Progress
+├── Overall Progress (X/520 landmarks)
 ├── Next Milestone
 ├── Recent Visits
 ├── My Country Visits → /my-country-visits
-├── My Photos → /photo-collection (NEW)
-└── Custom Visits (with Add Visit button) (NEW)
+├── My Photos → /photo-collection
+└── Custom Visits (with multi-landmark support)
 ```
-
-### Explore Page
-```
-Explore:
-├── Continent Cards
-└── "Can't find your destination?" → Custom Visit Modal (NEW)
-```
-
-### Profile Page (Simplified)
-```
-Profile:
-├── About WanderList
-├── Settings
-└── Logout
-```
-Note: "My Country Visits" moved to Journey page in v4.30
 
 ---
 
-## 📁 **Key Files (v4.30)**
+## 📁 **Key Files**
 
-### Frontend - New/Modified
+### Frontend
 ```
 /app/frontend/app/
-├── photo-collection.tsx          # NEW - Photo gallery
-├── continents.tsx                # MODIFIED - "Can't find" link + modal
-├── (tabs)/journey.tsx            # MODIFIED - My Photos, Custom Visits sections
-├── (tabs)/profile.tsx            # MODIFIED - Removed My Country Visits
-├── country-visit-detail/[country_visit_id].tsx  # MODIFIED - Removed redundant share icon
+├── continents.tsx           # Dynamic continent stats from API
+├── photo-collection.tsx     # Photo gallery feature
+├── (tabs)/journey.tsx       # Multi-landmark display support
 
 /app/frontend/components/
-├── AddUserCreatedVisitModal.tsx  # NEW - Custom visit modal
-├── AddCountryVisitModal.tsx      # MODIFIED - Photos optional
-├── AddVisitModal.tsx             # MODIFIED - Photos optional
+├── AddUserCreatedVisitModal.tsx  # Multi-landmark + per-photo support
 ```
 
-### Backend - New Endpoints
+### Backend
 ```
 /app/backend/server.py:
-├── GET  /api/photos/collection           # NEW - Photo aggregation
-├── POST /api/user-created-visits         # NEW - Create custom visit
-├── GET  /api/user-created-visits         # NEW - List custom visits
-├── DELETE /api/user-created-visits/{id}  # NEW - Delete custom visit
-├── GET  /api/country-visits/check/{id}   # NEW - Check visit status
-```
-
-### Backend - Modified Endpoints
-```
-├── POST /api/visits          # MODIFIED - Dual points, photos optional
-├── POST /api/country-visits  # MODIFIED - Dual points, photos optional
-├── GET  /api/leaderboard     # MODIFIED - Uses leaderboard_points
-├── GET  /api/stats           # MODIFIED - Returns both point types
+├── GET  /api/continent-stats        # NEW - Dynamic continent data
+├── POST /api/user-created-visits    # Updated - Multi-landmark support
+├── GET  /api/photos/collection      # Photo aggregation
 ```
 
 ---
 
-## 🚨 **CRITICAL PATTERNS**
+## 🗑️ **Removed Code (v4.31)**
 
-### 1. BACKEND_URL Configuration
-```typescript
-// ✅ CORRECT - Always import from config
-import { BACKEND_URL } from '../utils/config';
-```
+### Trip Planning Feature (Removed)
+The following endpoints and models were removed as unused:
+- `GET /api/trips`
+- `POST /api/trips`
+- `GET /api/trips/{trip_id}`
+- `PUT /api/trips/{trip_id}`
+- `DELETE /api/trips/{trip_id}`
+- `POST /api/trips/{trip_id}/landmarks`
+- `DELETE /api/trips/{trip_id}/landmarks/{id}`
+- `PUT /api/trips/{trip_id}/landmarks/{id}/visited`
+- `POST /api/trips/{trip_id}/complete-review`
+- `POST /api/trips/{trip_id}/convert-to-visits`
 
-### 2. Header Design
-```typescript
-// ✅ CORRECT - Ocean to Sand gradient
-colors={gradients.oceanToSand}
-// or
-colors={['#26C6DA', '#00BFA5', '#FFE082']}
-```
-
-### 3. Modal Design Pattern
-All modals must follow this structure:
-- Ocean to Sand gradient header
-- Close (X) button left
-- Title and subtitle
-- WanderList branding right
-- Form sections with consistent styling
-- Gradient submit button
+Models removed: `Trip`, `TripCreate`, `TripUpdate`, `TripLandmark`, `TripLandmarkCreate`, `TripPlan`
 
 ---
 
@@ -276,21 +235,17 @@ tail -f /var/log/supervisor/backend.err.log
 
 ---
 
-## ✅ **v4.30 Verified Working**
+## ✅ **v4.31 Verified Working**
 
-- [x] Dual points system (personal vs leaderboard)
-- [x] Photos optional for all visits
-- [x] User created visits (custom visits)
-- [x] Photo collection page with filters
-- [x] "Can't find your destination?" on Explore
-- [x] My Photos entry on Journey page
-- [x] Custom Visits section on Journey page
-- [x] Europe card background updated (Welsh castle)
-- [x] Continent card text visibility improved
-- [x] Redundant share icon removed from country visit detail
-- [x] My Country Visits moved from Profile to Journey
-- [x] All headers use Ocean to Sand gradient
-- [x] Consistent modal designs
+- [x] Multi-landmark custom visits (up to 10 landmarks)
+- [x] Per-landmark photos in custom visits
+- [x] Dynamic continent stats endpoint
+- [x] Continent cards fetch real-time data
+- [x] Duplicate landmarks cleaned up (520 total)
+- [x] Updated milestone system
+- [x] Orphan visits fixed
+- [x] Trip planning code removed
+- [x] All existing features still working
 
 ---
 
@@ -298,13 +253,29 @@ tail -f /var/log/supervisor/backend.err.log
 
 1. **Google OAuth** - Broken (`403: disallowed_useragent`)
    - Workaround: Use email/password login
-   - Fix requires: User's Google Cloud credentials
+   - Fix: Requires Google Cloud OAuth credentials
 
 ---
 
-## 📋 **Future Considerations**
+## 📊 **Database Stats (v4.31)**
 
-- Subscription Center UI
-- User Travel Preferences
-- In-app Support & Help section
-- Google OAuth fix (needs credentials)
+| Continent | Landmarks | Points | Countries |
+|-----------|-----------|--------|-----------|
+| Europe | 113 | 1,655 | 10 |
+| Asia | 112 | 1,435 | 10 |
+| Americas | 110 | 1,430 | 10 |
+| Africa | 102 | 1,155 | 10 |
+| Oceania | 83 | 905 | 8 |
+| **TOTAL** | **520** | **6,580** | **48** |
+
+---
+
+## 🔒 **Privacy System**
+
+| Icon | Color | Level | Who Can See |
+|------|-------|-------|-------------|
+| 🌐 | Green | Public | Everyone |
+| 👥 | Blue | Friends | Only friends |
+| 🔒 | Red | Private | Only you |
+
+Applies to: Landmark visits, Country visits, Custom visits, Activity feed
