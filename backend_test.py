@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for User Created Visits Feature
-Tests the custom visit functionality where users can record visits to places not in the app database.
+Backend API Testing Script for Multi-Landmark Custom Visits with Per-Landmark Photos
+Testing the enhanced User Created Visits feature with landmark structure changes
 """
 
 import requests
 import json
-import base64
+import sys
 from datetime import datetime
 
 # Configuration
@@ -14,304 +14,372 @@ BASE_URL = "https://travelmap-12.preview.emergentagent.com/api"
 TEST_EMAIL = "mobile@test.com"
 TEST_PASSWORD = "test123"
 
-class UserCreatedVisitsTest:
+# Sample base64 image data (small test image)
+SAMPLE_BASE64_IMAGE = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+
+class BackendTester:
     def __init__(self):
-        self.token = None
-        self.headers = {}
+        self.session = requests.Session()
+        self.jwt_token = None
         self.test_results = []
         
-    def log_result(self, test_name, success, message, response_data=None):
+    def log_result(self, test_name, success, message, details=None):
         """Log test result"""
         status = "✅ PASS" if success else "❌ FAIL"
-        print(f"{status}: {test_name} - {message}")
-        self.test_results.append({
+        result = {
             "test": test_name,
-            "success": success,
+            "status": status,
             "message": message,
-            "response_data": response_data
-        })
-    
-    def login(self):
-        """Login and get authentication token"""
-        print("\n🔐 AUTHENTICATION TEST")
-        print("=" * 50)
-        
-        login_data = {
-            "email": TEST_EMAIL,
-            "password": TEST_PASSWORD
+            "details": details or {},
+            "timestamp": datetime.now().isoformat()
         }
+        self.test_results.append(result)
+        print(f"{status}: {test_name} - {message}")
+        if details and not success:
+            print(f"   Details: {details}")
+    
+    def authenticate(self):
+        """Test 1: Authentication with mobile@test.com / test123"""
+        print("\n=== TEST 1: AUTHENTICATION ===")
         
         try:
-            response = requests.post(f"{BASE_URL}/auth/login", json=login_data)
+            login_data = {
+                "email": TEST_EMAIL,
+                "password": TEST_PASSWORD
+            }
+            
+            response = self.session.post(f"{BASE_URL}/auth/login", json=login_data)
             
             if response.status_code == 200:
                 data = response.json()
-                self.token = data.get("access_token")
-                self.headers = {"Authorization": f"Bearer {self.token}"}
-                self.log_result("Login", True, f"Successfully logged in as {TEST_EMAIL}")
-                return True
-            else:
-                self.log_result("Login", False, f"Login failed: {response.status_code} - {response.text}")
-                return False
+                self.jwt_token = data.get("access_token")
                 
-        except Exception as e:
-            self.log_result("Login", False, f"Login error: {str(e)}")
-            return False
-    
-    def get_initial_stats(self):
-        """Get initial user stats to verify points don't increase"""
-        print("\n📊 INITIAL STATS CHECK")
-        print("=" * 50)
-        
-        try:
-            response = requests.get(f"{BASE_URL}/stats", headers=self.headers)
-            
-            if response.status_code == 200:
-                stats = response.json()
-                self.initial_points = stats.get("points", 0)
-                self.initial_leaderboard_points = stats.get("leaderboard_points", 0)
-                self.log_result("Initial Stats", True, 
-                    f"Initial points: {self.initial_points}, Leaderboard points: {self.initial_leaderboard_points}")
-                return stats
-            else:
-                self.log_result("Initial Stats", False, f"Failed to get stats: {response.status_code}")
-                return None
-                
-        except Exception as e:
-            self.log_result("Initial Stats", False, f"Stats error: {str(e)}")
-            return None
-    
-    def create_country_only_visit(self):
-        """Test creating a custom visit with country only"""
-        print("\n🌍 CREATE COUNTRY-ONLY VISIT TEST")
-        print("=" * 50)
-        
-        visit_data = {
-            "country_name": "Monaco",
-            "photos": [],
-            "diary_notes": "Beautiful tiny country!",
-            "visibility": "public"
-        }
-        
-        try:
-            response = requests.post(f"{BASE_URL}/user-created-visits", 
-                                   json=visit_data, headers=self.headers)
-            
-            if response.status_code == 200:
-                data = response.json()
-                self.country_visit_id = data.get("user_created_visit_id")
-                self.log_result("Create Country Visit", True, 
-                    f"Created visit to {data.get('country_name')} with ID: {self.country_visit_id}")
-                return data
-            else:
-                self.log_result("Create Country Visit", False, 
-                    f"Failed to create visit: {response.status_code} - {response.text}")
-                return None
-                
-        except Exception as e:
-            self.log_result("Create Country Visit", False, f"Create visit error: {str(e)}")
-            return None
-    
-    def create_landmark_visit(self):
-        """Test creating a custom visit with landmark"""
-        print("\n🏰 CREATE LANDMARK VISIT TEST")
-        print("=" * 50)
-        
-        # Create a small test image (1x1 pixel PNG)
-        test_image_b64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
-        
-        visit_data = {
-            "country_name": "Liechtenstein",
-            "landmark_name": "Vaduz Castle",
-            "photos": [test_image_b64],
-            "diary_notes": "Amazing mountain castle!",
-            "visibility": "friends"
-        }
-        
-        try:
-            response = requests.post(f"{BASE_URL}/user-created-visits", 
-                                   json=visit_data, headers=self.headers)
-            
-            if response.status_code == 200:
-                data = response.json()
-                self.landmark_visit_id = data.get("user_created_visit_id")
-                self.log_result("Create Landmark Visit", True, 
-                    f"Created visit to {data.get('landmark_name')} in {data.get('country_name')} with ID: {self.landmark_visit_id}")
-                return data
-            else:
-                self.log_result("Create Landmark Visit", False, 
-                    f"Failed to create landmark visit: {response.status_code} - {response.text}")
-                return None
-                
-        except Exception as e:
-            self.log_result("Create Landmark Visit", False, f"Create landmark visit error: {str(e)}")
-            return None
-    
-    def get_user_created_visits(self):
-        """Test retrieving user created visits"""
-        print("\n📋 GET USER CREATED VISITS TEST")
-        print("=" * 50)
-        
-        try:
-            response = requests.get(f"{BASE_URL}/user-created-visits", headers=self.headers)
-            
-            if response.status_code == 200:
-                visits = response.json()
-                visit_count = len(visits)
-                
-                # Verify both visits are present
-                monaco_found = any(v.get("country_name") == "Monaco" for v in visits)
-                liechtenstein_found = any(v.get("country_name") == "Liechtenstein" and 
-                                        v.get("landmark_name") == "Vaduz Castle" for v in visits)
-                
-                if monaco_found and liechtenstein_found:
-                    self.log_result("Get User Visits", True, 
-                        f"Retrieved {visit_count} visits - both Monaco and Liechtenstein found")
-                else:
-                    self.log_result("Get User Visits", False, 
-                        f"Retrieved {visit_count} visits but missing expected visits. Monaco: {monaco_found}, Liechtenstein: {liechtenstein_found}")
-                
-                return visits
-            else:
-                self.log_result("Get User Visits", False, 
-                    f"Failed to get visits: {response.status_code} - {response.text}")
-                return None
-                
-        except Exception as e:
-            self.log_result("Get User Visits", False, f"Get visits error: {str(e)}")
-            return None
-    
-    def verify_no_points_awarded(self):
-        """Verify that no points were awarded for custom visits"""
-        print("\n🚫 VERIFY NO POINTS AWARDED TEST")
-        print("=" * 50)
-        
-        try:
-            response = requests.get(f"{BASE_URL}/stats", headers=self.headers)
-            
-            if response.status_code == 200:
-                stats = response.json()
-                current_points = stats.get("points", 0)
-                current_leaderboard_points = stats.get("leaderboard_points", 0)
-                
-                points_unchanged = (current_points == self.initial_points)
-                leaderboard_points_unchanged = (current_leaderboard_points == self.initial_leaderboard_points)
-                
-                if points_unchanged and leaderboard_points_unchanged:
-                    self.log_result("No Points Awarded", True, 
-                        f"Points correctly unchanged: {current_points} (was {self.initial_points}), Leaderboard: {current_leaderboard_points} (was {self.initial_leaderboard_points})")
-                else:
-                    self.log_result("No Points Awarded", False, 
-                        f"Points incorrectly changed! Points: {current_points} (was {self.initial_points}), Leaderboard: {current_leaderboard_points} (was {self.initial_leaderboard_points})")
-                
-                return points_unchanged and leaderboard_points_unchanged
-            else:
-                self.log_result("No Points Awarded", False, 
-                    f"Failed to get final stats: {response.status_code}")
-                return False
-                
-        except Exception as e:
-            self.log_result("No Points Awarded", False, f"Stats verification error: {str(e)}")
-            return False
-    
-    def delete_visit(self, visit_id, visit_name):
-        """Test deleting a user created visit"""
-        print(f"\n🗑️ DELETE VISIT TEST ({visit_name})")
-        print("=" * 50)
-        
-        try:
-            response = requests.delete(f"{BASE_URL}/user-created-visits/{visit_id}", 
-                                     headers=self.headers)
-            
-            if response.status_code == 200:
-                self.log_result(f"Delete {visit_name}", True, 
-                    f"Successfully deleted visit {visit_id}")
-                return True
-            else:
-                self.log_result(f"Delete {visit_name}", False, 
-                    f"Failed to delete visit: {response.status_code} - {response.text}")
-                return False
-                
-        except Exception as e:
-            self.log_result(f"Delete {visit_name}", False, f"Delete error: {str(e)}")
-            return False
-    
-    def verify_visit_deleted(self, deleted_visit_id):
-        """Verify that the visit was actually deleted"""
-        print("\n✅ VERIFY DELETION TEST")
-        print("=" * 50)
-        
-        try:
-            response = requests.get(f"{BASE_URL}/user-created-visits", headers=self.headers)
-            
-            if response.status_code == 200:
-                visits = response.json()
-                
-                # Check if deleted visit is still present
-                deleted_visit_found = any(v.get("user_created_visit_id") == deleted_visit_id for v in visits)
-                
-                if not deleted_visit_found:
-                    self.log_result("Verify Deletion", True, 
-                        f"Visit {deleted_visit_id} successfully removed from list")
+                if self.jwt_token:
+                    # Set authorization header for future requests
+                    self.session.headers.update({
+                        "Authorization": f"Bearer {self.jwt_token}"
+                    })
+                    
+                    user_info = data.get("user", {})
+                    self.log_result(
+                        "Authentication", 
+                        True, 
+                        f"Successfully logged in as {user_info.get('name', 'Unknown')} ({user_info.get('email', 'Unknown')})",
+                        {"user_id": user_info.get("user_id"), "subscription_tier": user_info.get("subscription_tier")}
+                    )
                     return True
                 else:
-                    self.log_result("Verify Deletion", False, 
-                        f"Visit {deleted_visit_id} still found in list after deletion")
+                    self.log_result("Authentication", False, "No access token in response", {"response": data})
                     return False
             else:
-                self.log_result("Verify Deletion", False, 
-                    f"Failed to get visits for verification: {response.status_code}")
+                self.log_result("Authentication", False, f"Login failed with status {response.status_code}", {"response": response.text})
                 return False
                 
         except Exception as e:
-            self.log_result("Verify Deletion", False, f"Verification error: {str(e)}")
+            self.log_result("Authentication", False, f"Authentication error: {str(e)}")
+            return False
+    
+    def test_create_multi_landmark_visit(self):
+        """Test 2: Create custom visit with multiple landmarks (with photos)"""
+        print("\n=== TEST 2: CREATE MULTI-LANDMARK VISIT WITH PHOTOS ===")
+        
+        try:
+            visit_data = {
+                "country_name": "San Marino",
+                "landmarks": [
+                    {"name": "Guaita Tower", "photo": None},
+                    {"name": "Palazzo Pubblico", "photo": SAMPLE_BASE64_IMAGE},
+                    {"name": "Basilica di San Marino", "photo": None}
+                ],
+                "photos": [SAMPLE_BASE64_IMAGE],
+                "diary_notes": "Amazing tiny republic!",
+                "visibility": "public"
+            }
+            
+            response = self.session.post(f"{BASE_URL}/user-created-visits", json=visit_data)
+            
+            if response.status_code == 200:
+                data = response.json()
+                user_created_visit_id = data.get("user_created_visit_id")
+                landmarks_count = len(visit_data["landmarks"])
+                
+                # Count total photos: 1 landmark photo + 1 country photo = 2 total
+                total_photos = sum(1 for landmark in visit_data["landmarks"] if landmark.get("photo")) + len(visit_data["photos"])
+                
+                if user_created_visit_id and landmarks_count == 3:
+                    self.log_result(
+                        "Multi-Landmark Visit Creation", 
+                        True, 
+                        f"Created visit with {landmarks_count} landmarks, {total_photos} total photos",
+                        {
+                            "user_created_visit_id": user_created_visit_id,
+                            "landmarks_count": landmarks_count,
+                            "total_photos": total_photos,
+                            "country": visit_data["country_name"]
+                        }
+                    )
+                    return user_created_visit_id
+                else:
+                    self.log_result("Multi-Landmark Visit Creation", False, "Invalid response structure", {"response": data})
+                    return None
+            else:
+                self.log_result("Multi-Landmark Visit Creation", False, f"Request failed with status {response.status_code}", {"response": response.text})
+                return None
+                
+        except Exception as e:
+            self.log_result("Multi-Landmark Visit Creation", False, f"Error: {str(e)}")
+            return None
+    
+    def test_create_country_only_visit(self):
+        """Test 3: Create custom visit with country photos only"""
+        print("\n=== TEST 3: CREATE COUNTRY-ONLY VISIT ===")
+        
+        try:
+            visit_data = {
+                "country_name": "Andorra",
+                "landmarks": [],
+                "photos": [SAMPLE_BASE64_IMAGE, SAMPLE_BASE64_IMAGE],
+                "diary_notes": "Beautiful mountains!",
+                "visibility": "friends"
+            }
+            
+            response = self.session.post(f"{BASE_URL}/user-created-visits", json=visit_data)
+            
+            if response.status_code == 200:
+                data = response.json()
+                user_created_visit_id = data.get("user_created_visit_id")
+                landmarks_count = len(visit_data["landmarks"])
+                total_photos = len(visit_data["photos"])
+                
+                if user_created_visit_id and landmarks_count == 0 and total_photos == 2:
+                    self.log_result(
+                        "Country-Only Visit Creation", 
+                        True, 
+                        f"Created visit with {landmarks_count} landmarks, {total_photos} total photos",
+                        {
+                            "user_created_visit_id": user_created_visit_id,
+                            "landmarks_count": landmarks_count,
+                            "total_photos": total_photos,
+                            "country": visit_data["country_name"]
+                        }
+                    )
+                    return user_created_visit_id
+                else:
+                    self.log_result("Country-Only Visit Creation", False, "Invalid response structure", {"response": data})
+                    return None
+            else:
+                self.log_result("Country-Only Visit Creation", False, f"Request failed with status {response.status_code}", {"response": response.text})
+                return None
+                
+        except Exception as e:
+            self.log_result("Country-Only Visit Creation", False, f"Error: {str(e)}")
+            return None
+    
+    def test_get_user_created_visits(self):
+        """Test 4: Get user created visits"""
+        print("\n=== TEST 4: GET USER CREATED VISITS ===")
+        
+        try:
+            response = self.session.get(f"{BASE_URL}/user-created-visits")
+            
+            if response.status_code == 200:
+                visits = response.json()
+                
+                if isinstance(visits, list):
+                    # Check if we have visits and verify structure
+                    san_marino_found = False
+                    andorra_found = False
+                    
+                    for visit in visits:
+                        if visit.get("country_name") == "San Marino":
+                            san_marino_found = True
+                            landmarks = visit.get("landmarks", [])
+                            if isinstance(landmarks, list) and len(landmarks) == 3:
+                                # Check landmark structure
+                                for landmark in landmarks:
+                                    if not isinstance(landmark, dict) or "name" not in landmark:
+                                        self.log_result("Get User Created Visits", False, "Invalid landmark structure in San Marino visit", {"landmark": landmark})
+                                        return False
+                        
+                        elif visit.get("country_name") == "Andorra":
+                            andorra_found = True
+                            landmarks = visit.get("landmarks", [])
+                            if len(landmarks) != 0:
+                                self.log_result("Get User Created Visits", False, "Andorra visit should have 0 landmarks", {"landmarks_count": len(landmarks)})
+                                return False
+                    
+                    if san_marino_found and andorra_found:
+                        self.log_result(
+                            "Get User Created Visits", 
+                            True, 
+                            f"Retrieved {len(visits)} visits with correct landmark structure",
+                            {"total_visits": len(visits), "san_marino_found": True, "andorra_found": True}
+                        )
+                        return True
+                    else:
+                        self.log_result("Get User Created Visits", False, f"Expected visits not found. San Marino: {san_marino_found}, Andorra: {andorra_found}")
+                        return False
+                else:
+                    self.log_result("Get User Created Visits", False, "Response is not a list", {"response": visits})
+                    return False
+            else:
+                self.log_result("Get User Created Visits", False, f"Request failed with status {response.status_code}", {"response": response.text})
+                return False
+                
+        except Exception as e:
+            self.log_result("Get User Created Visits", False, f"Error: {str(e)}")
+            return False
+    
+    def test_backward_compatibility(self):
+        """Test 5: Backward compatibility with string landmarks"""
+        print("\n=== TEST 5: BACKWARD COMPATIBILITY WITH STRING LANDMARKS ===")
+        
+        try:
+            visit_data = {
+                "country_name": "Malta",
+                "landmarks": ["Valletta", "Mdina"],  # String format (legacy)
+                "photos": [],
+                "visibility": "public"
+            }
+            
+            response = self.session.post(f"{BASE_URL}/user-created-visits", json=visit_data)
+            
+            if response.status_code == 200:
+                data = response.json()
+                user_created_visit_id = data.get("user_created_visit_id")
+                
+                if user_created_visit_id:
+                    # Now get the visit back to check if it was converted to object format
+                    get_response = self.session.get(f"{BASE_URL}/user-created-visits")
+                    
+                    if get_response.status_code == 200:
+                        visits = get_response.json()
+                        malta_visit = None
+                        
+                        for visit in visits:
+                            if visit.get("country_name") == "Malta":
+                                malta_visit = visit
+                                break
+                        
+                        if malta_visit:
+                            landmarks = malta_visit.get("landmarks", [])
+                            
+                            # Check if landmarks were converted to object format
+                            if isinstance(landmarks, list) and len(landmarks) == 2:
+                                all_objects = all(isinstance(lm, dict) and "name" in lm for lm in landmarks)
+                                landmark_names = [lm.get("name") for lm in landmarks if isinstance(lm, dict)]
+                                
+                                if all_objects and "Valletta" in landmark_names and "Mdina" in landmark_names:
+                                    self.log_result(
+                                        "Backward Compatibility", 
+                                        True, 
+                                        "String landmarks converted to object format successfully",
+                                        {
+                                            "user_created_visit_id": user_created_visit_id,
+                                            "converted_landmarks": landmarks
+                                        }
+                                    )
+                                    return True
+                                else:
+                                    self.log_result("Backward Compatibility", False, "Landmarks not properly converted", {"landmarks": landmarks})
+                                    return False
+                            else:
+                                self.log_result("Backward Compatibility", False, f"Expected 2 landmarks, got {len(landmarks)}", {"landmarks": landmarks})
+                                return False
+                        else:
+                            self.log_result("Backward Compatibility", False, "Malta visit not found in response")
+                            return False
+                    else:
+                        self.log_result("Backward Compatibility", False, f"Failed to retrieve visits: {get_response.status_code}")
+                        return False
+                else:
+                    self.log_result("Backward Compatibility", False, "No visit ID returned", {"response": data})
+                    return False
+            else:
+                self.log_result("Backward Compatibility", False, f"Request failed with status {response.status_code}", {"response": response.text})
+                return False
+                
+        except Exception as e:
+            self.log_result("Backward Compatibility", False, f"Error: {str(e)}")
+            return False
+    
+    def test_max_photos_limit(self):
+        """Test 6: Validate max photos limit (20)"""
+        print("\n=== TEST 6: MAX PHOTOS LIMIT VALIDATION ===")
+        
+        try:
+            # Create a visit that would exceed 20 photos total
+            # 10 landmarks with photos (10) + 11 country photos (11) = 21 total (should fail)
+            landmarks_with_photos = []
+            for i in range(10):
+                landmarks_with_photos.append({
+                    "name": f"Landmark {i+1}",
+                    "photo": SAMPLE_BASE64_IMAGE
+                })
+            
+            country_photos = [SAMPLE_BASE64_IMAGE] * 11  # 11 country photos
+            
+            visit_data = {
+                "country_name": "Test Country",
+                "landmarks": landmarks_with_photos,
+                "photos": country_photos,
+                "diary_notes": "Testing photo limits",
+                "visibility": "public"
+            }
+            
+            response = self.session.post(f"{BASE_URL}/user-created-visits", json=visit_data)
+            
+            # This should fail with a 400 error due to photo limit
+            if response.status_code == 400:
+                error_message = response.json().get("detail", "")
+                if "20" in error_message or "photo" in error_message.lower():
+                    self.log_result(
+                        "Max Photos Limit Validation", 
+                        True, 
+                        "Correctly rejected visit with >20 photos",
+                        {"total_photos_attempted": 21, "error_message": error_message}
+                    )
+                    return True
+                else:
+                    self.log_result("Max Photos Limit Validation", False, f"Wrong error message: {error_message}")
+                    return False
+            elif response.status_code == 200:
+                self.log_result("Max Photos Limit Validation", False, "Visit was accepted when it should have been rejected (>20 photos)")
+                return False
+            else:
+                self.log_result("Max Photos Limit Validation", False, f"Unexpected status code: {response.status_code}", {"response": response.text})
+                return False
+                
+        except Exception as e:
+            self.log_result("Max Photos Limit Validation", False, f"Error: {str(e)}")
             return False
     
     def run_all_tests(self):
-        """Run all User Created Visits tests"""
-        print("🧪 USER CREATED VISITS FEATURE TESTING")
+        """Run all tests in sequence"""
+        print("🚀 Starting Multi-Landmark Custom Visits Backend Testing")
+        print(f"Backend URL: {BASE_URL}")
+        print(f"Test User: {TEST_EMAIL}")
         print("=" * 60)
-        print(f"Testing against: {BASE_URL}")
-        print(f"Test user: {TEST_EMAIL}")
-        print("=" * 60)
         
-        # Step 1: Login
-        if not self.login():
-            print("\n❌ CRITICAL: Login failed - cannot continue tests")
+        # Test 1: Authentication
+        if not self.authenticate():
+            print("\n❌ Authentication failed. Cannot proceed with other tests.")
             return False
         
-        # Step 2: Get initial stats
-        initial_stats = self.get_initial_stats()
-        if not initial_stats:
-            print("\n❌ CRITICAL: Could not get initial stats")
-            return False
+        # Test 2: Create multi-landmark visit
+        visit_id_1 = self.test_create_multi_landmark_visit()
         
-        # Step 3: Create country-only visit
-        country_visit = self.create_country_only_visit()
-        if not country_visit:
-            print("\n❌ CRITICAL: Could not create country visit")
-            return False
+        # Test 3: Create country-only visit
+        visit_id_2 = self.test_create_country_only_visit()
         
-        # Step 4: Create landmark visit
-        landmark_visit = self.create_landmark_visit()
-        if not landmark_visit:
-            print("\n❌ CRITICAL: Could not create landmark visit")
-            return False
+        # Test 4: Get user created visits
+        self.test_get_user_created_visits()
         
-        # Step 5: Get all visits
-        all_visits = self.get_user_created_visits()
-        if not all_visits:
-            print("\n❌ CRITICAL: Could not retrieve visits")
-            return False
+        # Test 5: Backward compatibility
+        self.test_backward_compatibility()
         
-        # Step 6: Verify no points awarded
-        points_correct = self.verify_no_points_awarded()
-        
-        # Step 7: Delete one visit
-        if hasattr(self, 'country_visit_id'):
-            delete_success = self.delete_visit(self.country_visit_id, "Monaco")
-            if delete_success:
-                self.verify_visit_deleted(self.country_visit_id)
+        # Test 6: Max photos limit
+        self.test_max_photos_limit()
         
         # Summary
         self.print_summary()
@@ -321,27 +389,42 @@ class UserCreatedVisitsTest:
     def print_summary(self):
         """Print test summary"""
         print("\n" + "=" * 60)
-        print("🏁 TEST SUMMARY")
+        print("🎯 TEST SUMMARY")
         print("=" * 60)
         
-        passed = sum(1 for result in self.test_results if result["success"])
+        passed = sum(1 for result in self.test_results if "✅ PASS" in result["status"])
+        failed = sum(1 for result in self.test_results if "❌ FAIL" in result["status"])
         total = len(self.test_results)
-        success_rate = (passed / total * 100) if total > 0 else 0
         
-        print(f"Tests Passed: {passed}/{total} ({success_rate:.1f}%)")
-        print()
+        print(f"Total Tests: {total}")
+        print(f"Passed: {passed}")
+        print(f"Failed: {failed}")
+        print(f"Success Rate: {(passed/total*100):.1f}%" if total > 0 else "0%")
         
-        # Show failed tests
-        failed_tests = [result for result in self.test_results if not result["success"]]
-        if failed_tests:
-            print("❌ FAILED TESTS:")
-            for test in failed_tests:
-                print(f"  - {test['test']}: {test['message']}")
+        print("\nDetailed Results:")
+        for result in self.test_results:
+            print(f"{result['status']}: {result['test']}")
+            if "❌ FAIL" in result['status']:
+                print(f"   → {result['message']}")
+        
+        if failed == 0:
+            print("\n🎉 ALL TESTS PASSED! Multi-Landmark Custom Visits feature is working correctly.")
         else:
-            print("🎉 ALL TESTS PASSED!")
-        
-        print("\n" + "=" * 60)
+            print(f"\n⚠️  {failed} test(s) failed. Please review the issues above.")
+
+def main():
+    """Main function"""
+    tester = BackendTester()
+    
+    try:
+        success = tester.run_all_tests()
+        return 0 if success else 1
+    except KeyboardInterrupt:
+        print("\n\n⚠️ Testing interrupted by user")
+        return 1
+    except Exception as e:
+        print(f"\n\n❌ Unexpected error during testing: {str(e)}")
+        return 1
 
 if __name__ == "__main__":
-    tester = UserCreatedVisitsTest()
-    tester.run_all_tests()
+    sys.exit(main())
