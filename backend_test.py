@@ -10,7 +10,7 @@ import base64
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://wanderlist-headers.preview.emergentagent.com/api"
+BASE_URL = "https://travelmap-12.preview.emergentagent.com/api"
 TEST_EMAIL = "mobile@test.com"
 TEST_PASSWORD = "test123"
 
