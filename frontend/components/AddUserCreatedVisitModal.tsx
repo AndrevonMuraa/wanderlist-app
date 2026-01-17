@@ -1,66 +1,15 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-  Image,
-  Alert,
-  ActivityIndicator,
-  Platform,
-  StatusBar,
-} from 'react-native';
+import { View, StyleSheet, Modal, ScrollView, TouchableOpacity, TextInput, Image, Alert, Platform, StatusBar } from 'react-native';
+import { Text } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
-import * as Haptics from 'expo-haptics';
+import * as SecureStore from 'expo-secure-store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useAuth } from '../contexts/AuthContext';
-
-// Import theme from the correct path
-const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
-
-// Theme constants inline since we're in components folder
-const theme = {
-  colors: {
-    primary: '#00BFA5',
-    secondary: '#26C6DA',
-    text: '#1A1A1A',
-    textSecondary: '#757575',
-    background: '#FAFAFA',
-    backgroundSecondary: '#F5F5F5',
-    border: '#E0E0E0',
-  },
-  spacing: {
-    xs: 4,
-    sm: 8,
-    md: 16,
-    lg: 24,
-    xl: 32,
-  },
-  borderRadius: {
-    sm: 4,
-    md: 8,
-    lg: 12,
-    xl: 16,
-  },
-  shadows: {
-    lg: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.15,
-      shadowRadius: 8,
-      elevation: 8,
-    },
-  },
-};
-
-const gradients = {
-  oceanToSand: ['#26C6DA', '#00BFA5', '#FFE082'] as const,
-};
+import theme, { gradients } from '../styles/theme';
+import { BACKEND_URL } from '../utils/config';
+import { successHaptic } from '../utils/haptics';
+import { PrivacySelector } from './PrivacySelector';
 
 interface AddUserCreatedVisitModalProps {
   visible: boolean;
@@ -68,93 +17,66 @@ interface AddUserCreatedVisitModalProps {
   onSuccess: () => void;
 }
 
-type PrivacyOption = 'public' | 'friends' | 'private';
-
-const PrivacySelector = ({ 
-  selected, 
-  onChange 
-}: { 
-  selected: PrivacyOption; 
-  onChange: (value: PrivacyOption) => void;
-}) => {
-  const options: { value: PrivacyOption; label: string; icon: string }[] = [
-    { value: 'public', label: 'Public', icon: 'globe-outline' },
-    { value: 'friends', label: 'Friends Only', icon: 'people-outline' },
-    { value: 'private', label: 'Private', icon: 'lock-closed-outline' },
-  ];
-
-  return (
-    <View style={styles.privacyContainer}>
-      {options.map((option) => (
-        <TouchableOpacity
-          key={option.value}
-          style={[
-            styles.privacyOption,
-            selected === option.value && styles.privacyOptionSelected,
-          ]}
-          onPress={() => onChange(option.value)}
-        >
-          <Ionicons
-            name={option.icon as any}
-            size={18}
-            color={selected === option.value ? '#fff' : theme.colors.textSecondary}
-          />
-          <Text
-            style={[
-              styles.privacyOptionText,
-              selected === option.value && styles.privacyOptionTextSelected,
-            ]}
-          >
-            {option.label}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
+const getToken = async (): Promise<string | null> => {
+  if (Platform.OS === 'web') {
+    return localStorage.getItem('auth_token');
+  }
+  return await SecureStore.getItemAsync('auth_token');
 };
 
-export default function AddUserCreatedVisitModal({
+export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> = ({
   visible,
   onClose,
   onSuccess,
-}: AddUserCreatedVisitModalProps) {
-  const { getToken } = useAuth();
-  const insets = useSafeAreaInsets();
-  
+}) => {
   const [countryName, setCountryName] = useState('');
   const [landmarkName, setLandmarkName] = useState('');
   const [photos, setPhotos] = useState<string[]>([]);
   const [diary, setDiary] = useState('');
-  const [privacy, setPrivacy] = useState<PrivacyOption>('public');
+  const [privacy, setPrivacy] = useState<'public' | 'friends' | 'private'>('public');
   const [submitting, setSubmitting] = useState(false);
+  const insets = useSafeAreaInsets();
+  
+  // Calculate safe area padding
+  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
-  const successHaptic = async () => {
-    try {
-      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    } catch {}
-  };
-
-  const pickImage = async () => {
-    if (photos.length >= 10) {
-      Alert.alert('Limit Reached', 'Maximum 10 photos allowed');
+  const pickImages = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', 'Please allow access to your photo library');
       return;
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
+      allowsMultipleSelection: true,
       quality: 0.7,
       base64: true,
     });
 
-    if (!result.canceled && result.assets[0].base64) {
-      setPhotos([...photos, `data:image/jpeg;base64,${result.assets[0].base64}`]);
+    if (!result.canceled && result.assets) {
+      const newPhotos = result.assets
+        .slice(0, 10 - photos.length)
+        .map(asset => `data:image/jpeg;base64,${asset.base64}`);
+      setPhotos([...photos, ...newPhotos]);
     }
   };
 
   const removePhoto = (index: number) => {
     setPhotos(photos.filter((_, i) => i !== index));
+  };
+
+  const resetForm = () => {
+    setCountryName('');
+    setLandmarkName('');
+    setPhotos([]);
+    setDiary('');
+    setPrivacy('public');
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
   };
 
   const handleSubmit = async () => {
@@ -184,23 +106,15 @@ export default function AddUserCreatedVisitModal({
 
       if (response.ok) {
         await successHaptic();
-        const result = await response.json();
         
         // Build success message
-        let message = `${countryName}`;
+        let message = countryName;
         if (landmarkName) {
           message = `${landmarkName}, ${countryName}`;
         }
         
         Alert.alert('Success!', `Your visit to ${message} has been recorded!`);
-        
-        // Reset form
-        setCountryName('');
-        setLandmarkName('');
-        setPhotos([]);
-        setDiary('');
-        setPrivacy('public');
-        
+        resetForm();
         onSuccess();
         onClose();
       } else {
@@ -214,142 +128,112 @@ export default function AddUserCreatedVisitModal({
     }
   };
 
-  const handleClose = () => {
-    // Reset form on close
-    setCountryName('');
-    setLandmarkName('');
-    setPhotos([]);
-    setDiary('');
-    setPrivacy('public');
-    onClose();
-  };
-
-  const statusBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight || 0 : 0;
-  const headerPaddingTop = Platform.OS === 'ios' ? insets.top : Math.max(statusBarHeight, insets.top);
-
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      presentationStyle="pageSheet"
-      onRequestClose={handleClose}
-    >
+    <Modal visible={visible} animationType="slide" onRequestClose={handleClose}>
       <View style={styles.container}>
-        {/* Ocean to Sand Gradient Header */}
+        {/* Header with Ocean to Sand gradient - matching other modals */}
         <LinearGradient
           colors={gradients.oceanToSand}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={[styles.header, { paddingTop: headerPaddingTop + theme.spacing.md }]}
+          start={gradients.horizontal.start}
+          end={gradients.horizontal.end}
+          style={[styles.header, { paddingTop: topPadding }]}
         >
-          <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-            <Ionicons name="close" size={28} color="#fff" />
-          </TouchableOpacity>
-          
-          <View style={styles.headerContent}>
-            <Text style={styles.headerTitle}>Record Custom Visit</Text>
-            <Text style={styles.headerSubtitle}>Add places not in our database</Text>
-          </View>
-          
-          <View style={styles.headerBrand}>
-            <Text style={styles.brandText}>WanderList</Text>
+          <View style={styles.headerRow}>
+            <View style={styles.headerLeft}>
+              <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
+                <Ionicons name="close" size={24} color="#fff" />
+              </TouchableOpacity>
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Record Custom Visit</Text>
+                <Text style={styles.headerSubtitle}>Add places not in our database</Text>
+              </View>
+            </View>
+            <View style={styles.brandingContainer}>
+              <Ionicons name="earth" size={16} color="#2A2A2A" />
+              <Text style={styles.brandingText}>WanderList</Text>
+            </View>
           </View>
         </LinearGradient>
 
-        <ScrollView 
-          style={styles.content} 
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        >
-          {/* Country Name Input (Required) */}
+        <ScrollView style={styles.scrollView}>
+          {/* Country Name Input */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Ionicons name="flag" size={20} color={theme.colors.primary} />
               <Text style={styles.sectionTitle}>Country Name</Text>
-              <Text style={styles.requiredBadge}>Required</Text>
+              <View style={styles.requiredBadge}>
+                <Text style={styles.requiredText}>Required</Text>
+              </View>
             </View>
             <TextInput
               style={styles.textInput}
               placeholder="e.g., Monaco, Liechtenstein, Vatican City..."
-              placeholderTextColor={theme.colors.textSecondary}
+              placeholderTextColor={theme.colors.textLight}
               value={countryName}
               onChangeText={setCountryName}
               autoCapitalize="words"
             />
           </View>
 
-          {/* Landmark Name Input (Optional) */}
+          {/* Landmark Name Input */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Ionicons name="location" size={20} color={theme.colors.primary} />
               <Text style={styles.sectionTitle}>Landmark Name</Text>
-              <Text style={styles.optionalBadge}>Optional</Text>
+              <View style={styles.optionalBadge}>
+                <Text style={styles.optionalText}>Optional</Text>
+              </View>
             </View>
             <TextInput
               style={styles.textInput}
               placeholder="e.g., Prince's Palace, Monte Carlo Casino..."
-              placeholderTextColor={theme.colors.textSecondary}
+              placeholderTextColor={theme.colors.textLight}
               value={landmarkName}
               onChangeText={setLandmarkName}
               autoCapitalize="words"
             />
           </View>
 
-          {/* Photos Section */}
+          {/* Photo Collage */}
           <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Ionicons name="images" size={20} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Photos</Text>
-              <Text style={styles.photoCount}>{photos.length}/10</Text>
-            </View>
-            
+            <Text style={styles.sectionTitle}>Photos ({photos.length}/10)</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.photoScroll}>
               {photos.map((photo, index) => (
-                <View key={index} style={styles.photoContainer}>
+                <View key={index} style={styles.photoItem}>
                   <Image source={{ uri: photo }} style={styles.photo} />
                   <TouchableOpacity
-                    style={styles.removePhotoButton}
+                    style={styles.removePhoto}
                     onPress={() => removePhoto(index)}
                   >
-                    <Ionicons name="close-circle" size={24} color="#ff4444" />
+                    <Ionicons name="close-circle" size={24} color="#FF6B6B" />
                   </TouchableOpacity>
                 </View>
               ))}
-              
               {photos.length < 10 && (
-                <TouchableOpacity style={styles.addPhotoButton} onPress={pickImage}>
-                  <Ionicons name="add-circle-outline" size={40} color={theme.colors.primary} />
-                  <Text style={styles.addPhotoText}>Add Photo</Text>
+                <TouchableOpacity style={styles.addPhotoButton} onPress={pickImages}>
+                  <Ionicons name="add-circle" size={40} color={theme.colors.primary} />
+                  <Text style={styles.addPhotoText}>Add Photos</Text>
                 </TouchableOpacity>
               )}
             </ScrollView>
           </View>
 
-          {/* Travel Diary Section */}
+          {/* Diary */}
           <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Ionicons name="book" size={20} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Travel Diary</Text>
-              <Text style={styles.optionalBadge}>Optional</Text>
-            </View>
+            <Text style={styles.sectionTitle}>Travel Diary (Optional)</Text>
             <TextInput
               style={styles.diaryInput}
-              placeholder="Write about your experience..."
-              placeholderTextColor={theme.colors.textSecondary}
+              placeholder="Share your experience..."
+              placeholderTextColor={theme.colors.textLight}
               value={diary}
               onChangeText={setDiary}
               multiline
-              numberOfLines={4}
-              textAlignVertical="top"
+              numberOfLines={6}
+              maxLength={500}
             />
           </View>
 
           {/* Privacy Setting */}
           <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Ionicons name="eye" size={20} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Who can see this?</Text>
-            </View>
+            <Text style={styles.sectionTitle}>Who can see this?</Text>
             <PrivacySelector selected={privacy} onChange={setPrivacy} />
           </View>
 
@@ -357,11 +241,11 @@ export default function AddUserCreatedVisitModal({
           <View style={styles.infoBox}>
             <Ionicons name="information-circle-outline" size={20} color="#5C6BC0" />
             <Text style={styles.infoText}>
-              Custom visits don't earn points or count towards leaderboards. They're perfect for recording places outside our database!
+              Custom visits don't earn points or count towards leaderboards. Perfect for recording places outside our database!
             </Text>
           </View>
 
-          {/* Submit Button */}
+          {/* Submit Button - matching other modals */}
           <TouchableOpacity
             onPress={handleSubmit}
             disabled={submitting || countryName.trim().length < 2}
@@ -369,26 +253,23 @@ export default function AddUserCreatedVisitModal({
             style={styles.submitContainer}
           >
             <LinearGradient
-              colors={countryName.trim().length >= 2 ? [theme.colors.primary, theme.colors.secondary] : ['#9E9E9E', '#757575']}
+              colors={countryName.trim().length >= 2 ? [theme.colors.primary, theme.colors.secondary] : ['#78909C', '#546E7A']}
               style={styles.submitButton}
             >
-              {submitting ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <>
-                  <Ionicons name="checkmark-circle" size={24} color="#fff" />
-                  <Text style={styles.submitText}>Record Visit</Text>
-                </>
-              )}
+              <Ionicons name="checkmark-circle" size={24} color="#fff" />
+              <Text style={styles.submitText}>
+                {submitting ? 'Saving...' : 'Record Visit'}
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
-
-          <View style={{ height: 40 }} />
         </ScrollView>
       </View>
     </Modal>
   );
-}
+};
+
+// Export as default as well for compatibility
+export default AddUserCreatedVisitModal;
 
 const styles = StyleSheet.create({
   container: {
@@ -396,85 +277,87 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   header: {
-    paddingBottom: theme.spacing.lg,
-    paddingHorizontal: theme.spacing.lg,
-    borderBottomLeftRadius: theme.borderRadius.xl,
-    borderBottomRightRadius: theme.borderRadius.xl,
+    paddingHorizontal: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 32,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
   closeButton: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 50 : 16,
-    left: theme.spacing.md,
-    zIndex: 10,
     padding: theme.spacing.xs,
+    marginRight: theme.spacing.sm,
   },
-  headerContent: {
-    alignItems: 'center',
-    marginTop: theme.spacing.xl,
+  headerTitleContainer: {
+    flex: 1,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
     color: '#fff',
-    marginBottom: 4,
   },
   headerSubtitle: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.8)',
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.9)',
+    marginTop: 2,
   },
-  headerBrand: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 54 : 20,
-    right: theme.spacing.lg,
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
-  brandText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: 'rgba(255,255,255,0.7)',
-    letterSpacing: 1,
+  brandingText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#2A2A2A',
   },
-  content: {
+  scrollView: {
     flex: 1,
-    paddingTop: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
   },
   section: {
+    marginHorizontal: theme.spacing.lg,
     marginBottom: theme.spacing.lg,
-    paddingHorizontal: theme.spacing.lg,
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: theme.spacing.sm,
-    gap: theme.spacing.xs,
+    gap: theme.spacing.sm,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text,
-    flex: 1,
   },
   requiredBadge: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#fff',
     backgroundColor: theme.colors.primary,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
   },
-  optionalBadge: {
+  requiredText: {
     fontSize: 11,
-    fontWeight: '500',
-    color: theme.colors.textSecondary,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  optionalBadge: {
     backgroundColor: theme.colors.backgroundSecondary,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
   },
-  photoCount: {
-    fontSize: 13,
-    color: theme.colors.textSecondary,
+  optionalText: {
+    fontSize: 11,
     fontWeight: '500',
+    color: theme.colors.textLight,
   },
   textInput: {
     backgroundColor: theme.colors.backgroundSecondary,
@@ -486,9 +369,9 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.border,
   },
   photoScroll: {
-    flexDirection: 'row',
+    marginTop: theme.spacing.sm,
   },
-  photoContainer: {
+  photoItem: {
     marginRight: theme.spacing.sm,
     position: 'relative',
   },
@@ -497,27 +380,25 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: theme.borderRadius.md,
   },
-  removePhotoButton: {
+  removePhoto: {
     position: 'absolute',
     top: -8,
     right: -8,
-    backgroundColor: '#fff',
-    borderRadius: 12,
   },
   addPhotoButton: {
     width: 100,
     height: 100,
     borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.backgroundSecondary,
     borderWidth: 2,
     borderColor: theme.colors.border,
     borderStyle: 'dashed',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.backgroundSecondary,
   },
   addPhotoText: {
     fontSize: 12,
-    color: theme.colors.textSecondary,
+    color: theme.colors.textLight,
     marginTop: 4,
   },
   diaryInput: {
@@ -530,32 +411,6 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     borderWidth: 1,
     borderColor: theme.colors.border,
-  },
-  privacyContainer: {
-    flexDirection: 'row',
-    gap: theme.spacing.sm,
-  },
-  privacyOption: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.sm,
-    borderRadius: theme.borderRadius.md,
-    backgroundColor: theme.colors.backgroundSecondary,
-    gap: 6,
-  },
-  privacyOptionSelected: {
-    backgroundColor: theme.colors.primary,
-  },
-  privacyOptionText: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: theme.colors.textSecondary,
-  },
-  privacyOptionTextSelected: {
-    color: '#fff',
   },
   infoBox: {
     flexDirection: 'row',
@@ -575,6 +430,7 @@ const styles = StyleSheet.create({
   },
   submitContainer: {
     marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.xl,
     borderRadius: theme.borderRadius.xl,
     overflow: 'hidden',
     ...theme.shadows.lg,
