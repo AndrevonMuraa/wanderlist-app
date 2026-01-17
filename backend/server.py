@@ -248,7 +248,7 @@ class CommentCreate(BaseModel):
 
 # ============= END ACTIVITY FEED MODELS =============
 
-# ============= TRIP PLANNING & BUCKET LIST MODELS =============
+# ============= BUCKET LIST MODELS =============
 
 class BucketListItem(BaseModel):
     bucket_list_id: str
@@ -261,51 +261,7 @@ class BucketListCreate(BaseModel):
     landmark_id: str
     notes: Optional[str] = None
 
-class Trip(BaseModel):
-    trip_id: str
-    user_id: str
-    name: str
-    destination: str  # Country or region
-    start_date: Optional[datetime] = None
-    end_date: Optional[datetime] = None
-    budget: Optional[float] = None
-    notes: Optional[str] = None
-    status: str = "planned"  # "planned", "in_progress", "completed"
-    created_at: datetime
-    updated_at: datetime
-
-class TripCreate(BaseModel):
-    name: str
-    destination: str
-    start_date: Optional[str] = None
-    end_date: Optional[str] = None
-    budget: Optional[float] = None
-    notes: Optional[str] = None
-
-class TripUpdate(BaseModel):
-    name: Optional[str] = None
-    destination: Optional[str] = None
-    start_date: Optional[str] = None
-    end_date: Optional[str] = None
-    budget: Optional[float] = None
-    notes: Optional[str] = None
-    status: Optional[str] = None
-
-class TripLandmark(BaseModel):
-    trip_landmark_id: str
-    trip_id: str
-    landmark_id: str
-    day_number: Optional[int] = None
-    notes: Optional[str] = None
-    visited: bool = False
-    added_at: datetime
-
-class TripLandmarkCreate(BaseModel):
-    landmark_id: str
-    day_number: Optional[int] = None
-    notes: Optional[str] = None
-
-# ============= END TRIP PLANNING MODELS =============
+# ============= END BUCKET LIST MODELS =============
 
 # ============= USER CREATED VISIT MODELS =============
 
