@@ -527,45 +527,73 @@ export default function JourneyScreen() {
             </TouchableOpacity>
           ) : (
             <>
-              {userCreatedVisits.slice(0, 5).map((visit) => (
-                <View key={visit.user_created_visit_id} style={styles.customVisitItem}>
-                  <View style={styles.customVisitIcon}>
-                    <Ionicons 
-                      name={visit.landmark_name ? "location" : "flag"} 
-                      size={20} 
-                      color={theme.colors.accent} 
-                    />
+              {userCreatedVisits.slice(0, 5).map((visit) => {
+                // Get landmarks info
+                const landmarkNames = visit.landmarks?.map(lm => 
+                  typeof lm === 'string' ? lm : lm.name
+                ).filter(Boolean) || [];
+                const hasLandmarks = landmarkNames.length > 0;
+                const landmarkPhotosCount = visit.landmarks?.filter(lm => 
+                  typeof lm === 'object' && lm.photo
+                ).length || 0;
+                const totalPhotos = (visit.photos?.length || 0) + landmarkPhotosCount;
+                
+                // Build display text
+                let displayName = visit.country_name;
+                let displaySubtext = '';
+                
+                if (hasLandmarks) {
+                  if (landmarkNames.length === 1) {
+                    displayName = landmarkNames[0];
+                    displaySubtext = visit.country_name;
+                  } else {
+                    displayName = `${landmarkNames.length} places in ${visit.country_name}`;
+                    displaySubtext = landmarkNames.slice(0, 2).join(', ') + (landmarkNames.length > 2 ? '...' : '');
+                  }
+                }
+                
+                return (
+                  <View key={visit.user_created_visit_id} style={styles.customVisitItem}>
+                    <View style={styles.customVisitIcon}>
+                      <Ionicons 
+                        name={hasLandmarks ? "location" : "flag"} 
+                        size={20} 
+                        color={theme.colors.accent} 
+                      />
+                    </View>
+                    <View style={styles.customVisitInfo}>
+                      <Text style={styles.customVisitName} numberOfLines={1}>
+                        {displayName}
+                      </Text>
+                      <Text style={styles.customVisitCountry} numberOfLines={1}>
+                        {displaySubtext ? `${displaySubtext} • ` : ''}
+                        {new Date(visit.visited_at).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
+                      </Text>
+                    </View>
+                    <View style={styles.customVisitMeta}>
+                      {totalPhotos > 0 && (
+                        <View style={styles.photoCountBadge}>
+                          <Ionicons name="images-outline" size={14} color={theme.colors.textLight} />
+                          <Text style={styles.photoCountText}>{totalPhotos}</Text>
+                        </View>
+                      )}
+                      <Ionicons 
+                        name={
+                          visit.visibility === 'public' ? 'globe-outline' : 
+                          visit.visibility === 'friends' ? 'people-outline' : 
+                          'lock-closed-outline'
+                        } 
+                        size={16} 
+                        color={theme.colors.textLight} 
+                      />
+                    </View>
                   </View>
-                  <View style={styles.customVisitInfo}>
-                    <Text style={styles.customVisitName}>
-                      {visit.landmark_name || visit.country_name}
-                    </Text>
-                    <Text style={styles.customVisitCountry}>
-                      {visit.landmark_name ? visit.country_name : null}
-                      {visit.landmark_name ? ' • ' : ''}
-                      {new Date(visit.visited_at).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
-                    </Text>
-                  </View>
-                  <View style={styles.customVisitMeta}>
-                    {visit.photos.length > 0 && (
-                      <Ionicons name="images-outline" size={16} color={theme.colors.textLight} />
-                    )}
-                    <Ionicons 
-                      name={
-                        visit.visibility === 'public' ? 'globe-outline' : 
-                        visit.visibility === 'friends' ? 'people-outline' : 
-                        'lock-closed-outline'
-                      } 
-                      size={16} 
-                      color={theme.colors.textLight} 
-                    />
-                  </View>
-                </View>
-              ))}
+                );
+              })}
               {userCreatedVisits.length > 5 && (
                 <Text style={styles.viewMoreText}>
                   +{userCreatedVisits.length - 5} more custom visits
