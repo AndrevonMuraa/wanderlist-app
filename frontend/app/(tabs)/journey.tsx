@@ -915,21 +915,6 @@ const styles = StyleSheet.create({
   bottomSpacer: {
     height: theme.spacing.xl,
   },
-  fab: {
-    position: 'absolute',
-    bottom: theme.spacing.xl,
-    right: theme.spacing.xl,
-    borderRadius: 28,
-    ...theme.shadows.lg,
-    elevation: 8,
-  },
-  fabGradient: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   // Custom Visits Section Styles
   customVisitsCard: {
     margin: theme.spacing.md,
