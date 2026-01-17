@@ -3881,8 +3881,8 @@ async def check_and_award_badges(user_id: str):
         ]
     })
     
-    # Check milestone badges
-    milestones = [1, 10, 25, 50, 100, 250, 500]
+    # Check milestone badges (adjusted for 520 total landmarks)
+    milestones = [1, 10, 25, 50, 100, 200, 350, 500]
     for milestone in milestones:
         badge_type = f"milestone_{milestone}" if milestone > 1 else "first_visit"
         if visit_count >= milestone and badge_type not in existing_badge_types:
