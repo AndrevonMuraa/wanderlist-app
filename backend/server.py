@@ -426,19 +426,6 @@ class ActivityComment(BaseModel):
     comment_text: str
     created_at: datetime
 
-class TripPlan(BaseModel):
-    trip_id: str
-    user_id: str
-    title: str
-    description: Optional[str] = None
-    start_date: Optional[datetime] = None
-    end_date: Optional[datetime] = None
-    landmark_ids: List[str] = []
-    budget: Optional[float] = None
-    is_public: bool = False
-    created_at: datetime
-    updated_at: datetime
-
 # ============= AUTH HELPERS =============
 
 def hash_password(password: str) -> str:
