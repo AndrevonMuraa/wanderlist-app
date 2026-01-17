@@ -309,14 +309,19 @@ class TripLandmarkCreate(BaseModel):
 
 # ============= USER CREATED VISIT MODELS =============
 
+class LandmarkEntry(BaseModel):
+    """A landmark with an optional photo"""
+    name: str
+    photo: Optional[str] = None  # Base64 image for this specific landmark
+
 class UserCreatedVisit(BaseModel):
     user_created_visit_id: str
     user_id: str
     user_name: str
     user_picture: Optional[str] = None
     country_name: str  # Free text input
-    landmarks: List[str] = []  # Optional list of landmark names (max 10)
-    photos: List[str] = []  # Base64 images, max 10
+    landmarks: List[dict] = []  # List of {name: str, photo: Optional[str]} (max 10)
+    photos: List[str] = []  # General country photos, max 10 (total with landmark photos: max 20)
     diary: Optional[str] = None
     visibility: str = "public"  # private, friends, public
     visited_at: datetime
@@ -324,8 +329,8 @@ class UserCreatedVisit(BaseModel):
 
 class UserCreatedVisitCreate(BaseModel):
     country_name: str  # Required - free text
-    landmarks: List[str] = []  # Optional list of landmark names (max 10)
-    photos: List[str] = []  # Base64 images
+    landmarks: List[dict] = []  # List of {name: str, photo: Optional[str]} (max 10)
+    photos: List[str] = []  # General country photos (max 10)
     diary_notes: Optional[str] = None
     visibility: Optional[str] = "public"
     visited_at: Optional[str] = None  # ISO format date
