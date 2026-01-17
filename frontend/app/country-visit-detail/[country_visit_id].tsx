@@ -305,9 +305,6 @@ export default function CountryVisitDetailScreen() {
         title={visit.country_name}
         rightElement={
           <View style={styles.headerActions}>
-            <TouchableOpacity onPress={handleShare} style={styles.headerIconBtn}>
-              <Ionicons name="share-social-outline" size={22} color="#fff" />
-            </TouchableOpacity>
             <TouchableOpacity onPress={() => setShowOptionsMenu(true)} style={styles.headerIconBtn}>
               <Ionicons name="ellipsis-vertical" size={22} color="#fff" />
             </TouchableOpacity>
