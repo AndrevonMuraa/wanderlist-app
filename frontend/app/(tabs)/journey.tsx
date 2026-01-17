@@ -935,6 +935,43 @@ const styles = StyleSheet.create({
   bottomSpacer: {
     height: theme.spacing.xl,
   },
+  // My Country Visits Section Styles
+  countryVisitsCard: {
+    margin: theme.spacing.md,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+    overflow: 'hidden',
+  },
+  countryVisitsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: theme.spacing.md,
+  },
+  countryVisitsLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.md,
+  },
+  countryVisitsIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.colors.primaryLight + '20',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  countryVisitsTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+  countryVisitsSubtitle: {
+    fontSize: 13,
+    color: theme.colors.textLight,
+    marginTop: 2,
+  },
   // Custom Visits Section Styles
   customVisitsCard: {
     margin: theme.spacing.md,
