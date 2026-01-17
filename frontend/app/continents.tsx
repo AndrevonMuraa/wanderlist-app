@@ -105,29 +105,49 @@ export default function ContinentsScreen() {
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   useEffect(() => {
-    fetchProgress();
+    fetchContinentStats();
   }, []);
 
-  const fetchProgress = async () => {
+  const fetchContinentStats = async () => {
     try {
       const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/progress`, {
+      
+      // Fetch dynamic continent stats from backend
+      const response = await fetch(`${BACKEND_URL}/api/continent-stats`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
       if (response.ok) {
         const data = await response.json();
-        // Update continents with progress data if available
-        // data.continents is an object like { "Europe": {...}, "Asia": {...} }
-        const continentProgress = data?.continents;
-        if (continentProgress && typeof continentProgress === 'object') {
+        
+        // Update continents with real-time stats from database
+        if (data.continents && Array.isArray(data.continents)) {
           setContinents(prev => prev.map(continent => {
-            // Match by continent name (key in the object)
-            const progress = continentProgress[continent.name];
-            if (progress) {
+            // Find matching continent stats by name
+            const stats = data.continents.find(
+              (s: any) => s.continent?.toLowerCase() === continent.name.toLowerCase()
+            );
+            
+            if (stats) {
               return {
                 ...continent,
-                visited: progress.visited || 0,
+                landmarks: stats.total_landmarks,
+                totalPoints: stats.total_points,
+                countries: stats.countries,
+                visited: stats.visited_landmarks,
+                percentage: stats.progress_percent,
+              };
+            }
+            return continent;
+          }));
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching continent stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
                 percentage: progress.percentage || 0
               };
             }
