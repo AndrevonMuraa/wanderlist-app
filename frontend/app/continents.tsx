@@ -244,7 +244,25 @@ export default function ContinentsScreen() {
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* Can't find your destination? Link */}
+        <TouchableOpacity 
+          style={styles.cantFindContainer}
+          onPress={() => setShowCustomVisitModal(true)}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="help-circle-outline" size={20} color={theme.colors.primary} />
+          <Text style={styles.cantFindText}>Can't find your destination?</Text>
+          <Ionicons name="chevron-forward" size={18} color={theme.colors.primary} />
+        </TouchableOpacity>
       </ScrollView>
+
+      {/* Custom Visit Modal */}
+      <AddUserCreatedVisitModal
+        visible={showCustomVisitModal}
+        onClose={() => setShowCustomVisitModal(false)}
+        onSuccess={() => setShowCustomVisitModal(false)}
+      />
     </View>
   );
 }
