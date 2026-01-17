@@ -3478,6 +3478,10 @@ async def get_photo_collection(current_user: User = Depends(get_current_user)):
     
     for visit in custom_visits:
         visit_photos = visit.get("photos", [])
+        # Get landmarks (handle both old single landmark_name and new landmarks array)
+        landmarks = visit.get("landmarks", [])
+        landmark_name = landmarks[0] if landmarks else visit.get("landmark_name")
+        
         for i, photo in enumerate(visit_photos):
             if photo:
                 photos.append({
@@ -3485,7 +3489,7 @@ async def get_photo_collection(current_user: User = Depends(get_current_user)):
                     "visit_type": "custom",
                     "visit_id": visit.get("user_created_visit_id"),
                     "landmark_id": None,
-                    "landmark_name": visit.get("landmark_name"),
+                    "landmark_name": landmark_name,
                     "country_name": visit.get("country_name", "Unknown"),
                     "country_id": None,
                     "visited_at": visit.get("visited_at") or visit.get("created_at"),
