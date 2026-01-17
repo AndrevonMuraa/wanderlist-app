@@ -30,7 +30,7 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
   onSuccess,
 }) => {
   const [countryName, setCountryName] = useState('');
-  const [landmarkName, setLandmarkName] = useState('');
+  const [landmarks, setLandmarks] = useState<string[]>(['']); // Start with one empty input
   const [photos, setPhotos] = useState<string[]>([]);
   const [diary, setDiary] = useState('');
   const [privacy, setPrivacy] = useState<'public' | 'friends' | 'private'>('public');
@@ -66,9 +66,31 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
     setPhotos(photos.filter((_, i) => i !== index));
   };
 
+  // Landmark management functions
+  const updateLandmark = (index: number, value: string) => {
+    const newLandmarks = [...landmarks];
+    newLandmarks[index] = value;
+    setLandmarks(newLandmarks);
+  };
+
+  const addLandmark = () => {
+    if (landmarks.length < 10) {
+      setLandmarks([...landmarks, '']);
+    }
+  };
+
+  const removeLandmark = (index: number) => {
+    if (landmarks.length > 1) {
+      setLandmarks(landmarks.filter((_, i) => i !== index));
+    } else {
+      // If only one, just clear it
+      setLandmarks(['']);
+    }
+  };
+
   const resetForm = () => {
     setCountryName('');
-    setLandmarkName('');
+    setLandmarks(['']);
     setPhotos([]);
     setDiary('');
     setPrivacy('public');
@@ -86,6 +108,9 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
       return;
     }
 
+    // Filter out empty landmarks
+    const validLandmarks = landmarks.filter(lm => lm.trim().length > 0);
+
     setSubmitting(true);
     try {
       const token = await getToken();
@@ -97,7 +122,7 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
         },
         body: JSON.stringify({
           country_name: countryName.trim(),
-          landmark_name: landmarkName.trim() || undefined,
+          landmarks: validLandmarks,
           photos,
           diary_notes: diary || undefined,
           visibility: privacy,
@@ -109,8 +134,10 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
         
         // Build success message
         let message = countryName;
-        if (landmarkName) {
-          message = `${landmarkName}, ${countryName}`;
+        if (validLandmarks.length === 1) {
+          message = `${validLandmarks[0]}, ${countryName}`;
+        } else if (validLandmarks.length > 1) {
+          message = `${validLandmarks.length} places in ${countryName}`;
         }
         
         Alert.alert('Success!', `Your visit to ${message} has been recorded!`);
@@ -127,6 +154,9 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
       setSubmitting(false);
     }
   };
+
+  // Count non-empty landmarks for display
+  const filledLandmarksCount = landmarks.filter(lm => lm.trim().length > 0).length;
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={handleClose}>
@@ -155,7 +185,7 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
           </View>
         </LinearGradient>
 
-        <ScrollView style={styles.scrollView}>
+        <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
           {/* Country Name Input */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
@@ -174,22 +204,45 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
             />
           </View>
 
-          {/* Landmark Name Input */}
+          {/* Landmarks Section - Dynamic inputs */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Landmark Name</Text>
+              <Text style={styles.sectionTitle}>
+                Landmarks {filledLandmarksCount > 0 ? `(${filledLandmarksCount})` : ''}
+              </Text>
               <View style={styles.optionalBadge}>
-                <Text style={styles.optionalText}>Optional</Text>
+                <Text style={styles.optionalText}>Optional • Max 10</Text>
               </View>
             </View>
-            <TextInput
-              style={styles.textInput}
-              placeholder="e.g., Prince's Palace, Monte Carlo Casino..."
-              placeholderTextColor={theme.colors.textLight}
-              value={landmarkName}
-              onChangeText={setLandmarkName}
-              autoCapitalize="words"
-            />
+            
+            {landmarks.map((landmark, index) => (
+              <View key={index} style={styles.landmarkInputRow}>
+                <TextInput
+                  style={[styles.textInput, styles.landmarkInput]}
+                  placeholder={index === 0 ? "e.g., Prince's Palace, Monte Carlo Casino..." : "Add another landmark..."}
+                  placeholderTextColor={theme.colors.textLight}
+                  value={landmark}
+                  onChangeText={(value) => updateLandmark(index, value)}
+                  autoCapitalize="words"
+                />
+                {(landmarks.length > 1 || landmark.trim().length > 0) && (
+                  <TouchableOpacity 
+                    style={styles.removeLandmarkButton}
+                    onPress={() => removeLandmark(index)}
+                  >
+                    <Ionicons name="close-circle" size={24} color={theme.colors.textLight} />
+                  </TouchableOpacity>
+                )}
+              </View>
+            ))}
+            
+            {/* Add Landmark Button */}
+            {landmarks.length < 10 && (
+              <TouchableOpacity style={styles.addLandmarkButton} onPress={addLandmark}>
+                <Ionicons name="add-circle" size={22} color={theme.colors.primary} />
+                <Text style={styles.addLandmarkText}>Add another landmark</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Photo Collage */}
@@ -367,6 +420,30 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     borderWidth: 1,
     borderColor: theme.colors.border,
+  },
+  landmarkInputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing.sm,
+  },
+  landmarkInput: {
+    flex: 1,
+    marginBottom: 0,
+  },
+  removeLandmarkButton: {
+    padding: theme.spacing.sm,
+    marginLeft: theme.spacing.xs,
+  },
+  addLandmarkButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: theme.spacing.sm,
+    gap: theme.spacing.sm,
+  },
+  addLandmarkText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: theme.colors.primary,
   },
   photoScroll: {
     marginTop: theme.spacing.sm,
