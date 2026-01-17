@@ -163,13 +163,20 @@ export default function JourneyScreen() {
 
   const getNextMilestone = () => {
     const visited = progressStats?.overall.visited || 0;
-    const milestones = [10, 25, 50, 100, 250, 500];
+    // Milestones adjusted for 520 total landmarks
+    const milestones = [10, 25, 50, 100, 200, 350, 500];
     const next = milestones.find(m => m > visited);
     if (next) {
       return {
         target: next,
         remaining: next - visited,
-        name: next === 10 ? 'Explorer' : next === 25 ? 'Adventurer' : next === 50 ? 'Globetrotter' : next === 100 ? 'World Traveler' : next === 250 ? 'Legend' : 'Ultimate Explorer'
+        name: next === 10 ? 'Explorer' : 
+              next === 25 ? 'Adventurer' : 
+              next === 50 ? 'Globetrotter' : 
+              next === 100 ? 'World Traveler' : 
+              next === 200 ? 'Seasoned Traveler' :
+              next === 350 ? 'Legend' : 
+              'Ultimate Explorer'
       };
     }
     return null;
