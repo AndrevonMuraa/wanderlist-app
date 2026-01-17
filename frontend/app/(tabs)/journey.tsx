@@ -469,6 +469,26 @@ export default function JourneyScreen() {
           </TouchableOpacity>
         </Surface>
 
+        {/* My Photos Section */}
+        <Surface style={styles.countryVisitsCard}>
+          <TouchableOpacity
+            style={styles.countryVisitsRow}
+            onPress={() => router.push('/photo-collection')}
+            activeOpacity={0.7}
+          >
+            <View style={styles.countryVisitsLeft}>
+              <View style={[styles.countryVisitsIcon, { backgroundColor: theme.colors.accentLight + '20' }]}>
+                <Ionicons name="images" size={22} color={theme.colors.accent} />
+              </View>
+              <View>
+                <Text style={styles.countryVisitsTitle}>My Photos</Text>
+                <Text style={styles.countryVisitsSubtitle}>All your travel memories in one place</Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={22} color={theme.colors.textLight} />
+          </TouchableOpacity>
+        </Surface>
+
         {/* Custom Visits Section */}
         <Surface style={styles.customVisitsCard}>
           <View style={styles.customVisitsHeader}>
