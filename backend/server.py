@@ -1315,8 +1315,9 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
                     await db.activities.insert_one(continent_completion_activity)
     
     # Check for milestones and create activity if reached
+    # Milestones adjusted for 520 total landmarks
     visit_count = await db.visits.count_documents({"user_id": current_user.user_id})
-    if visit_count in [10, 25, 50, 100, 250, 500]:
+    if visit_count in [10, 25, 50, 100, 200, 350, 500]:
         milestone_activity_id = f"activity_{uuid.uuid4().hex[:12]}"
         milestone_activity = {
             "activity_id": milestone_activity_id,
