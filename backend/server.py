@@ -3785,9 +3785,19 @@ BADGE_DEFINITIONS = {
         "description": "100 landmarks! Triple digits! You're unstoppable - the world is your playground! 🚀",
         "icon": "✈️"
     },
+    "milestone_200": {
+        "name": "Seasoned Traveler",
+        "description": "200 landmarks explored! You've seen corners of the world most only dream about! 🌏",
+        "icon": "🧭"
+    },
     "milestone_250": {
+        "name": "Elite Explorer",
+        "description": "250 landmarks?! Half the world knows your name. You're writing history! 🌟",
+        "icon": "🎖️"
+    },
+    "milestone_350": {
         "name": "Legend",
-        "description": "250 landmarks?! You're living proof that dreams become reality. LEGENDARY status! 👑",
+        "description": "350 landmarks conquered! You're living proof that dreams become reality. LEGENDARY status! 👑",
         "icon": "🏆"
     },
     "milestone_500": {
