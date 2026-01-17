@@ -533,22 +533,6 @@ export default function JourneyScreen() {
         <View style={styles.bottomSpacer} />
       </ScrollView>
 
-      {/* Floating Action Button */}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => setShowCustomVisitModal(true)}
-        activeOpacity={0.9}
-      >
-        <LinearGradient
-          colors={[theme.colors.primary, theme.colors.secondary]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.fabGradient}
-        >
-          <Ionicons name="add" size={28} color="#fff" />
-        </LinearGradient>
-      </TouchableOpacity>
-
       {/* Custom Visit Modal */}
       <AddUserCreatedVisitModal
         visible={showCustomVisitModal}
