@@ -436,6 +436,18 @@ backend:
         agent: "testing"
         comment: "🎉 USER CREATED VISITS FEATURE TESTING COMPLETE - ALL TESTS PASSED! ✅ COMPREHENSIVE TESTING RESULTS (8/8 tests passed - 100% success rate): ✅ AUTHENTICATION: Successfully logged in with mobile@test.com/test123 credentials. ✅ INITIAL STATS: Retrieved baseline points (Personal: 470, Leaderboard: 50) for verification. ✅ CREATE COUNTRY-ONLY VISIT: Successfully created custom visit to Monaco with empty photos array, diary notes 'Beautiful tiny country!', and public visibility. Returned proper user_created_visit_id. ✅ CREATE LANDMARK VISIT: Successfully created custom visit to Vaduz Castle in Liechtenstein with base64 photo, diary notes 'Amazing mountain castle!', and friends visibility. Returned proper user_created_visit_id. ✅ GET USER CREATED VISITS: Retrieved both visits correctly - Monaco and Liechtenstein with Vaduz Castle found in response. ✅ NO POINTS AWARDED VERIFICATION: Points correctly remained unchanged (Personal: 470→470, Leaderboard: 50→50) confirming no points are awarded for user-created visits as specified. ✅ DELETE VISIT: Successfully deleted Monaco visit using DELETE /api/user-created-visits/{id} endpoint. ✅ VERIFY DELETION: Confirmed Monaco visit was removed from the list, only Liechtenstein visit remains. All User Created Visits endpoints working perfectly: POST /api/user-created-visits (create), GET /api/user-created-visits (list), DELETE /api/user-created-visits/{id} (delete). Feature allows users to record visits to places not in app database without awarding points, exactly as specified in review request."
 
+  - task: "Multi-Landmark Custom Visits with Per-Landmark Photos"
+    implemented: true
+    working: "NA"
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Enhanced User Created Visits to support: 1) Up to 10 landmarks per custom visit (each with name and optional photo), 2) Up to 10 general country photos, 3) Total max 20 photos per visit. Backend model changed from landmarks: List[str] to landmarks: List[dict] with {name, photo} structure. POST endpoint validates total photos <= 20. Frontend modal updated with per-landmark photo pickers and photo summary. Journey page updated to display landmarks array correctly with photo count badge."
+
 frontend:
   - task: "Authentication Context with Google and JWT"
     implemented: true
