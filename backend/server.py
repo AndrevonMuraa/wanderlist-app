@@ -315,7 +315,7 @@ class UserCreatedVisit(BaseModel):
     user_name: str
     user_picture: Optional[str] = None
     country_name: str  # Free text input
-    landmark_name: Optional[str] = None  # Optional free text input
+    landmarks: List[str] = []  # Optional list of landmark names (max 10)
     photos: List[str] = []  # Base64 images, max 10
     diary: Optional[str] = None
     visibility: str = "public"  # private, friends, public
@@ -324,7 +324,7 @@ class UserCreatedVisit(BaseModel):
 
 class UserCreatedVisitCreate(BaseModel):
     country_name: str  # Required - free text
-    landmark_name: Optional[str] = None  # Optional - free text
+    landmarks: List[str] = []  # Optional list of landmark names (max 10)
     photos: List[str] = []  # Base64 images
     diary_notes: Optional[str] = None
     visibility: Optional[str] = "public"
