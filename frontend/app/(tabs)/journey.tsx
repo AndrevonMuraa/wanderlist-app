@@ -1116,6 +1116,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
+  photoCountBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    backgroundColor: theme.colors.backgroundSecondary,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 10,
+  },
+  photoCountText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: theme.colors.textLight,
+  },
   viewMoreText: {
     fontSize: 13,
     color: theme.colors.primary,
