@@ -8,6 +8,7 @@ import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import * as SecureStore from 'expo-secure-store';
 import { useAuth } from '../contexts/AuthContext';
+import AddUserCreatedVisitModal from '../components/AddUserCreatedVisitModal';
 
 const { width } = Dimensions.get('window');
 
