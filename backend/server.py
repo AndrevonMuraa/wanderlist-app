@@ -3264,18 +3264,44 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
     """
     Create a user-created visit for countries/landmarks not in the app database.
     No points are awarded for user-created visits.
+    
+    Landmarks can now have individual photos:
+    - landmarks: List of {name: str, photo: Optional[str]} (max 10 landmarks)
+    - photos: General country photos (max 10)
+    - Total photos: max 20 (10 country + 10 landmark photos)
     """
     
     # Validate country name
     if not data.country_name or len(data.country_name.strip()) < 2:
         raise HTTPException(status_code=400, detail="Country name is required (at least 2 characters)")
     
-    # Validate photos (max 10)
+    # Validate general photos (max 10)
     if len(data.photos) > 10:
-        raise HTTPException(status_code=400, detail="Maximum 10 photos allowed")
+        raise HTTPException(status_code=400, detail="Maximum 10 general photos allowed")
     
-    # Validate landmarks (max 10)
-    landmarks = [lm.strip() for lm in data.landmarks if lm and lm.strip()][:10]
+    # Process and validate landmarks (max 10)
+    # Each landmark is a dict with 'name' (required) and 'photo' (optional)
+    processed_landmarks = []
+    for lm in data.landmarks[:10]:  # Max 10 landmarks
+        if isinstance(lm, dict):
+            name = lm.get('name', '').strip() if lm.get('name') else ''
+            if name:  # Only include landmarks with valid names
+                processed_landmarks.append({
+                    'name': name,
+                    'photo': lm.get('photo')  # Can be None or base64 string
+                })
+        elif isinstance(lm, str) and lm.strip():
+            # Backward compatibility: if just a string, convert to dict
+            processed_landmarks.append({
+                'name': lm.strip(),
+                'photo': None
+            })
+    
+    # Count total photos for validation
+    landmark_photos_count = sum(1 for lm in processed_landmarks if lm.get('photo'))
+    total_photos = len(data.photos) + landmark_photos_count
+    if total_photos > 20:
+        raise HTTPException(status_code=400, detail="Maximum 20 total photos allowed (10 country + 10 landmark)")
     
     # Parse visit date
     visited_at = datetime.now(timezone.utc)
@@ -3296,8 +3322,8 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
         "user_name": current_user.name,
         "user_picture": current_user.picture,
         "country_name": data.country_name.strip(),
-        "landmarks": landmarks,  # Array of landmark names
-        "photos": data.photos,
+        "landmarks": processed_landmarks,  # Array of {name, photo} objects
+        "photos": data.photos,  # General country photos
         "diary": data.diary_notes,
         "visibility": visibility,
         "visited_at": visited_at,
@@ -3310,11 +3336,12 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
     activity_id = f"activity_{uuid.uuid4().hex[:12]}"
     
     # Build description for activity
-    if landmarks:
-        if len(landmarks) == 1:
-            activity_description = f"visited {landmarks[0]} in {data.country_name.strip()}"
+    landmark_names = [lm['name'] for lm in processed_landmarks]
+    if landmark_names:
+        if len(landmark_names) == 1:
+            activity_description = f"visited {landmark_names[0]} in {data.country_name.strip()}"
         else:
-            activity_description = f"visited {len(landmarks)} places in {data.country_name.strip()}"
+            activity_description = f"visited {len(landmark_names)} places in {data.country_name.strip()}"
     else:
         activity_description = f"visited {data.country_name.strip()}"
     
@@ -3326,7 +3353,7 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
         "activity_type": "user_created_visit",
         "user_created_visit_id": user_created_visit_id,
         "country_name": data.country_name.strip(),
-        "landmarks": landmarks,  # Array of landmark names
+        "landmarks": processed_landmarks,  # Array of {name, photo} objects
         "description": activity_description,
         "photos": data.photos,
         "diary": data.diary_notes,
@@ -3342,8 +3369,9 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
         "message": "Custom visit recorded successfully!",
         "user_created_visit_id": user_created_visit_id,
         "country_name": data.country_name.strip(),
-        "landmarks": landmarks,
-        "landmarks_count": len(landmarks)
+        "landmarks": processed_landmarks,
+        "landmarks_count": len(processed_landmarks),
+        "total_photos": total_photos
     }
 
 
