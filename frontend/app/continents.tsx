@@ -148,19 +148,6 @@ export default function ContinentsScreen() {
       setLoading(false);
     }
   };
-                percentage: progress.percentage || 0
-              };
-            }
-            return continent;
-          }));
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching progress:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleContinentPress = (continentId: string) => {
     const continent = continents.find(c => c.id === continentId);
