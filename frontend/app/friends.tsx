@@ -9,6 +9,8 @@ import UpgradeModal from '../components/UpgradeModal';
 import { useUpgradePrompt } from '../hooks/useUpgradePrompt';
 import { useAuth } from '../contexts/AuthContext';
 import UniversalHeader from '../components/UniversalHeader';
+import ProFeatureLock from '../components/ProFeatureLock';
+import { useSubscription } from '../hooks/useSubscription';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
