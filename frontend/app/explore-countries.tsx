@@ -493,6 +493,7 @@ export default function ExploreCountriesScreen() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   marginRight: 12,
+                  overflow: 'hidden',
                 }}>
                   <Ionicons name="arrow-back" size={22} color="#fff" />
                 </View>
