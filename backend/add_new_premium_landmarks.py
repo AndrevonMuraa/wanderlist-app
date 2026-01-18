@@ -312,8 +312,9 @@ def add_premium_landmarks():
                 continue
             
             # Create landmark document
+            clean_name = landmark['name'].lower().replace(' ', '_').replace("'", '')
             doc = {
-                "landmark_id": f"{country_id}_{landmark['name'].lower().replace(' ', '_').replace(\"'\", '')}",
+                "landmark_id": f"{country_id}_{clean_name}",
                 "country_id": country_id,
                 "country_name": country_name,
                 "continent": continent,
