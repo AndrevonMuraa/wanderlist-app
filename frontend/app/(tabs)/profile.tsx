@@ -718,7 +718,13 @@ const styles = StyleSheet.create({
     paddingTop: theme.spacing.md,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
+  },
   gridHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+  },
   rankBadgeSmall: {
     marginTop: 6,
   },
@@ -727,11 +733,6 @@ const styles = StyleSheet.create({
     height: 30,
     backgroundColor: theme.colors.border,
   },
-
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
   userHeroSection: {
     alignItems: 'center',
     marginBottom: theme.spacing.lg,
