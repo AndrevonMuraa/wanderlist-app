@@ -354,34 +354,6 @@ export default function LandmarkDetailScreen() {
           </Surface>
         </View>
 
-        {/* Quick Info Section - Only Difficulty */}
-        {landmark.difficulty && (
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Ionicons name="flash" size={24} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Quick Info</Text>
-            </View>
-            <Surface style={styles.card}>
-              <View style={styles.difficultyRow}>
-                <Ionicons 
-                  name={getDifficultyIcon(landmark.difficulty)} 
-                  size={28} 
-                  color={getDifficultyColor(landmark.difficulty)} 
-                />
-                <View style={styles.difficultyContent}>
-                  <Text style={styles.quickInfoLabel}>Difficulty Level</Text>
-                  <Text style={[
-                    styles.quickInfoValue,
-                    { color: getDifficultyColor(landmark.difficulty) }
-                  ]}>
-                    {landmark.difficulty}
-                  </Text>
-                </View>
-              </View>
-            </Surface>
-          </View>
-        )}
-
         {/* Coordinates Section */}
         {landmark.latitude && landmark.longitude && (
           <View style={styles.section}>
