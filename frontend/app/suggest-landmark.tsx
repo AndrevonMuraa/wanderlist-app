@@ -7,12 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
-
-// For web, use relative URLs (same origin) which routes to localhost:8001 via proxy
-// For mobile, use the external URL
-const BACKEND_URL = Platform.OS === 'web' 
-  ? '' 
-  : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
+import { BACKEND_URL } from '../utils/config';
 
 interface Country {
   country_id: string;
