@@ -327,14 +327,12 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   headerRight: {
-    flexDirection: 'row',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 6,
-  },
-  headerBrand: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#fff',
   },
   scrollView: {
     flex: 1,
