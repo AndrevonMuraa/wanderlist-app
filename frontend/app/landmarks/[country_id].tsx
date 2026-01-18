@@ -50,9 +50,12 @@ export default function LandmarksScreen() {
   const [visitedLandmarkIds, setVisitedLandmarkIds] = useState<Set<string>>(new Set());
   const [isCountryVisited, setIsCountryVisited] = useState(false);
   const [countryVisitId, setCountryVisitId] = useState<string | null>(null);
+  
+  // All hooks must be called in consistent order
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { canAccessPremiumLandmarks } = useSubscription();
+  const subscriptionData = useSubscription();
+  const canAccessPremiumLandmarks = subscriptionData.canAccessPremiumLandmarks;
   
   // Calculate safe area padding - same as continents.tsx (golden standard)
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
