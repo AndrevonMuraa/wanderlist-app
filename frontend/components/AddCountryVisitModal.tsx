@@ -6,10 +6,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { successHaptic, lightHaptic } from '../utils/haptics';
 import { PrivacySelector } from './PrivacySelector';
+import { useSubscription } from '../hooks/useSubscription';
 
 interface AddCountryVisitModalProps {
   visible: boolean;
@@ -38,11 +40,36 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
   const [privacy, setPrivacy] = useState<'public' | 'friends' | 'private'>('public');
   const [submitting, setSubmitting] = useState(false);
   const insets = useSafeAreaInsets();
+  const router = useRouter();
+  
+  // Get subscription limits
+  const subscriptionData = useSubscription();
+  const maxPhotos = subscriptionData.maxPhotosPerVisit;
+  const isProUser = subscriptionData.isPro;
   
   // Calculate safe area padding
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   const pickImages = async () => {
+    if (photos.length >= maxPhotos) {
+      if (!isProUser) {
+        Alert.alert(
+          'Photo Limit Reached',
+          `Free users can add up to ${maxPhotos} photo per visit. Upgrade to Pro for up to 10 photos!`,
+          [
+            { text: 'Maybe Later', style: 'cancel' },
+            { text: 'Upgrade to Pro', onPress: () => {
+              onClose();
+              router.push('/subscription');
+            }}
+          ]
+        );
+      } else {
+        Alert.alert('Limit Reached', `You can add up to ${maxPhotos} photos per visit`);
+      }
+      return;
+    }
+
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       Alert.alert('Permission needed', 'Please allow access to your photo library');
@@ -51,14 +78,14 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
+      allowsMultipleSelection: isProUser, // Only Pro users can select multiple
       quality: 0.7,
       base64: true,
     });
 
     if (!result.canceled && result.assets) {
       const newPhotos = result.assets
-        .slice(0, 10 - photos.length)
+        .slice(0, maxPhotos - photos.length)
         .map(asset => `data:image/jpeg;base64,${asset.base64}`);
       setPhotos([...photos, ...newPhotos]);
     }
