@@ -842,12 +842,6 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     textTransform: 'uppercase',
   },
-
-    fontSize: 22,
-    fontWeight: '700',
-    color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
-  },
   rankHeroSection: {
     marginTop: theme.spacing.xs,
   },
