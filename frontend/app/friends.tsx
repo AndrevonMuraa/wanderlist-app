@@ -43,9 +43,15 @@ export default function FriendsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [sending, setSending] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
+  
+  // All hooks must be called in consistent order
   const router = useRouter();
   const { user } = useAuth();
-  const { isAtFriendLimit, maxFriends, isPro, friendsRemaining } = useSubscription();
+  const subscriptionData = useSubscription();
+  const isAtFriendLimit = subscriptionData.isAtFriendLimit;
+  const maxFriends = subscriptionData.maxFriends;
+  const isPro = subscriptionData.isPro;
+  const friendsRemaining = subscriptionData.friendsRemaining;
 
   // Navigate back to social tab explicitly
   const handleBack = () => {
