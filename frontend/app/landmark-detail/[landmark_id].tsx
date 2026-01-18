@@ -42,7 +42,6 @@ interface Landmark {
   facts?: LandmarkFact[];
   best_time_to_visit?: string;
   duration?: string;
-  difficulty?: string;
   latitude?: number | null;
   longitude?: number | null;
   category: string;
