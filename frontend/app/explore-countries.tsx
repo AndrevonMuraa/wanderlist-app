@@ -965,15 +965,20 @@ const styles = StyleSheet.create({
     paddingLeft: theme.spacing.xs,
   },
   countryCard: {
-    height: 160,  // Slightly taller for better flag display
+    height: 160,
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
     backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
+    // Enhanced shadow for premium 3D effect
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
   },
   flagSectionFull: {
     width: '100%',
-    height: '70%',  // Flag takes 70% of card
+    height: '70%',
     position: 'relative',
     overflow: 'hidden',
   },
@@ -983,6 +988,45 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
+  },
+  // Premium texture overlays
+  glossOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '60%',
+    zIndex: 1,
+  },
+  vignetteOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 2,
+  },
+  textureOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 3,
+    // Subtle linen/fabric texture effect using repeated pattern
+    backgroundColor: 'transparent',
+    opacity: 0.03,
+    // Creates a subtle noise/grain effect
+    backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.03) 1px, rgba(0,0,0,0.03) 2px)',
+  },
+  edgeHighlight: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 1,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    zIndex: 4,
   },
   flagNameGradient: {
     position: 'absolute',
