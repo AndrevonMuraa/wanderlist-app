@@ -308,7 +308,7 @@ export default function FriendsScreen() {
             style={styles.upgradeHint}
             onPress={() => setShowProLock(true)}
           >
-            <Ionicons name="diamond" size={16} color="#764ba2" />
+            <Ionicons name="star" size={16} color={theme.colors.accent} />
             <Text style={styles.upgradeHintText}>
               Friend limit ({maxFriends}) reached • Upgrade for unlimited
             </Text>
