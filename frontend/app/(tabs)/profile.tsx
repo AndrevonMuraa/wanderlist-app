@@ -843,19 +843,6 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginBottom: theme.spacing.sm,
   },
-  tierBadgeHero: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    marginBottom: theme.spacing.md,
-  },
-  tierTextHero: {
-    fontSize: 12,
-    fontWeight: '600',
-  },
   rankHeroSection: {
     marginTop: theme.spacing.xs,
   },
