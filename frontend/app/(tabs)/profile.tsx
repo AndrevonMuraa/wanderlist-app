@@ -669,8 +669,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: theme.spacing.sm,
   },
-
-  },
   compactStatLabel: {
     fontSize: 11,
     fontWeight: '600',
