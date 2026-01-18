@@ -237,7 +237,7 @@ export default function ExploreCountriesScreen() {
           const hasProgress = (country.visited || 0) > 0;
           const isCountryVisited = country.countryVisited || false; // Country marked as visited (manual or via landmarks)
           const flagUrl = getFlagUrl(country.name);
-          const pointReward = country.landmark_count * 10;
+          const pointReward = country.total_points || (country.landmark_count * 10); // Use API points or fallback
           
           return (
             <View key={country.country_id} style={styles.cardContainer}>
