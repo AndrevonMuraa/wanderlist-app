@@ -42,8 +42,10 @@ export default function FriendsScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [sending, setSending] = useState(false);
+  const [showProLock, setShowProLock] = useState(false);
   const router = useRouter();
   const { user } = useAuth();
+  const { isAtFriendLimit, maxFriends, isPro, friendsRemaining } = useSubscription();
 
   // Navigate back to social tab explicitly
   const handleBack = () => {
@@ -60,9 +62,8 @@ export default function FriendsScreen() {
     }
   });
   
-  // Get friend limit based on tier
-  const friendLimit = user?.subscription_tier === 'free' ? 5 : (user?.subscription_tier === 'basic' ? 25 : 999);
-  const isAtLimit = friends.length >= friendLimit && user?.subscription_tier !== 'premium';
+  // Get friend limit based on subscription
+  const isAtLimit = isAtFriendLimit;
 
   useEffect(() => {
     fetchData();
