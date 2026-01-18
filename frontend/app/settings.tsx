@@ -24,6 +24,11 @@ export default function SettingsScreen() {
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [language, setLanguage] = useState('en');
 
+  // Navigate back to profile explicitly
+  const handleBack = () => {
+    router.push('/(tabs)/profile');
+  };
+
   useEffect(() => {
     loadSettings();
   }, []);
