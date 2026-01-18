@@ -14,16 +14,16 @@ import { useSubscription } from '../hooks/useSubscription';
 
 const { width } = Dimensions.get('window');
 
-// Continent data - matches backend continents (Updated for 520 landmarks)
+// Continent data - matches backend continents (Updated for 502 landmarks - Jan 2025)
 const CONTINENTS = [
   {
     id: 'europe',
     name: 'Europe',
     countries: 10,
-    landmarks: 113,
+    landmarks: 107,
     image: 'https://images.unsplash.com/photo-1683660107861-c555be9775b9?w=800',
     gradient: ['rgba(59,184,195,0.2)', 'rgba(59,184,195,0.7)'] as const,
-    totalPoints: 1655,
+    totalPoints: 1505,
     description: 'Historic castles and cultural heritage',
     accentColor: '#3BB8C3', // Turquoise/Cyan
   },
@@ -31,10 +31,10 @@ const CONTINENTS = [
     id: 'asia',
     name: 'Asia',
     countries: 10,
-    landmarks: 112,
+    landmarks: 106,
     image: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800',
     gradient: ['rgba(255,140,66,0.2)', 'rgba(255,140,66,0.7)'] as const,
-    totalPoints: 1435,
+    totalPoints: 1300,
     description: 'Ancient temples and modern wonders',
     accentColor: '#FF8C42', // Orange
   },
@@ -42,10 +42,10 @@ const CONTINENTS = [
     id: 'africa',
     name: 'Africa',
     countries: 10,
-    landmarks: 102,
+    landmarks: 101,
     image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800',
     gradient: ['rgba(218,165,32,0.2)', 'rgba(218,165,32,0.7)'] as const,
-    totalPoints: 1155,
+    totalPoints: 1130,
     description: 'Wild savannas and ancient civilizations',
     accentColor: '#DAA520', // Golden
   },
@@ -53,10 +53,10 @@ const CONTINENTS = [
     id: 'americas',
     name: 'Americas',
     countries: 10,
-    landmarks: 110,
+    landmarks: 107,
     image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800',
     gradient: ['rgba(76,175,80,0.2)', 'rgba(76,175,80,0.7)'] as const,
-    totalPoints: 1430,
+    totalPoints: 1355,
     description: 'Rainforests to mountain peaks',
     accentColor: '#4CAF50', // Green
   },
@@ -64,10 +64,10 @@ const CONTINENTS = [
     id: 'oceania',
     name: 'Oceania',
     countries: 8,
-    landmarks: 83,
+    landmarks: 81,
     image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800',
     gradient: ['rgba(33,150,243,0.2)', 'rgba(33,150,243,0.7)'] as const,
-    totalPoints: 905,
+    totalPoints: 855,
     description: 'Island paradise and coral reefs',
     accentColor: '#2196F3', // Blue
   },
