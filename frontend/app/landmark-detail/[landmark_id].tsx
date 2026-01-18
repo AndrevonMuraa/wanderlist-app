@@ -624,41 +624,6 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     lineHeight: 24,
   },
-  // Quick Info Grid
-  quickInfoGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.spacing.sm,
-  },
-  quickInfoCard: {
-    flex: 1,
-    minWidth: (width - theme.spacing.lg * 2 - theme.spacing.sm) / 2,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.lg,
-    alignItems: 'center',
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
-  },
-  quickInfoLabel: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    marginTop: theme.spacing.sm,
-  },
-  quickInfoValue: {
-    ...theme.typography.body,
-    color: theme.colors.text,
-    fontWeight: '700',
-    marginTop: theme.spacing.xs / 2,
-    textAlign: 'center',
-  },
-  difficultyRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.md,
-  },
-  difficultyContent: {
-    flex: 1,
-  },
   // Coordinates
   coordinatesRow: {
     flexDirection: 'row',
