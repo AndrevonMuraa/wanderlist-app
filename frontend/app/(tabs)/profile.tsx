@@ -677,6 +677,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   compactStatDivider: {
+    width: 1,
+    height: 24,
+    backgroundColor: theme.colors.border,
+  },
   profileRow: {
     flexDirection: 'row',
     alignItems: 'center',
