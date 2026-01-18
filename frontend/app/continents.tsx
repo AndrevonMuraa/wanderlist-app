@@ -258,13 +258,34 @@ export default function ContinentsScreen() {
 
         {/* Can't find your destination? Link */}
         <TouchableOpacity 
-          style={styles.cantFindContainer}
-          onPress={() => setShowCustomVisitModal(true)}
+          style={[styles.cantFindContainer, !canCreateCustomVisits && styles.cantFindContainerLocked]}
+          onPress={() => {
+            if (canCreateCustomVisits) {
+              setShowCustomVisitModal(true);
+            } else {
+              setShowProLock(true);
+            }
+          }}
           activeOpacity={0.7}
         >
-          <Ionicons name="help-circle-outline" size={20} color={theme.colors.primary} />
-          <Text style={styles.cantFindText}>Can't find your destination?</Text>
-          <Ionicons name="chevron-forward" size={18} color={theme.colors.primary} />
+          <Ionicons 
+            name={canCreateCustomVisits ? "help-circle-outline" : "lock-closed"} 
+            size={20} 
+            color={canCreateCustomVisits ? theme.colors.primary : "#764ba2"} 
+          />
+          <Text style={[styles.cantFindText, !canCreateCustomVisits && styles.cantFindTextLocked]}>
+            {canCreateCustomVisits ? "Can't find your destination?" : "Custom Visits (Pro)"}
+          </Text>
+          {!canCreateCustomVisits && (
+            <View style={styles.proTagSmall}>
+              <Text style={styles.proTagSmallText}>PRO</Text>
+            </View>
+          )}
+          <Ionicons 
+            name="chevron-forward" 
+            size={18} 
+            color={canCreateCustomVisits ? theme.colors.primary : "#764ba2"} 
+          />
         </TouchableOpacity>
       </ScrollView>
 
@@ -273,6 +294,13 @@ export default function ContinentsScreen() {
         visible={showCustomVisitModal}
         onClose={() => setShowCustomVisitModal(false)}
         onSuccess={() => setShowCustomVisitModal(false)}
+      />
+
+      {/* Pro Feature Lock Modal */}
+      <ProFeatureLock
+        visible={showProLock}
+        onClose={() => setShowProLock(false)}
+        feature="custom_visits"
       />
     </View>
   );
