@@ -291,20 +291,30 @@ export default function FriendsScreen() {
             mode="contained"
             onPress={handleSendRequest}
             loading={sending}
-            disabled={sending || isAtLimit}
-            style={[styles.sendButton, isAtLimit && styles.sendButtonDisabled]}
+            disabled={sending}
+            style={[styles.sendButton, (isAtLimit && !isPro) && styles.sendButtonDisabled]}
           >
-            {isAtLimit ? 'Limit' : 'Send'}
+            {isAtLimit && !isPro ? 'Limit' : 'Send'}
           </Button>
         </View>
-        {isAtLimit && (
+        {isAtLimit && !isPro && (
           <TouchableOpacity 
             style={styles.upgradeHint}
-            onPress={() => checkResponse({ status: 403, json: async () => ({ detail: `Friend limit reached (${friends.length}/${friendLimit})` }) } as any)}
+            onPress={() => setShowProLock(true)}
           >
-            <Ionicons name="information-circle" size={16} color={theme.colors.primary} />
-            <Text style={styles.upgradeHintText}>Tap to view upgrade options</Text>
+            <Ionicons name="diamond" size={16} color="#764ba2" />
+            <Text style={styles.upgradeHintText}>
+              Friend limit ({maxFriends}) reached • Upgrade for unlimited
+            </Text>
           </TouchableOpacity>
+        )}
+        {!isPro && !isAtLimit && (
+          <View style={styles.limitInfo}>
+            <Ionicons name="information-circle-outline" size={14} color={theme.colors.textLight} />
+            <Text style={styles.limitInfoText}>
+              {friendsRemaining} friend slot{friendsRemaining !== 1 ? 's' : ''} remaining (Free tier: {maxFriends} max)
+            </Text>
+          </View>
         )}
       </Surface>
 
