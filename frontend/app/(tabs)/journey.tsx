@@ -1187,4 +1187,55 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
     fontWeight: '500',
   },
+  // Pro badge for locked features
+  proBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(118, 75, 162, 0.1)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+    marginLeft: theme.spacing.xs,
+  },
+  proBadgeText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#764ba2',
+  },
+  addCustomButtonLocked: {
+    backgroundColor: 'rgba(118, 75, 162, 0.1)',
+  },
+  addCustomButtonTextLocked: {
+    color: '#764ba2',
+  },
+  emptyCustomVisitsLocked: {
+    alignItems: 'center',
+    paddingVertical: theme.spacing.xl,
+    borderWidth: 1,
+    borderColor: 'rgba(118, 75, 162, 0.3)',
+    borderStyle: 'dashed',
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: 'rgba(118, 75, 162, 0.05)',
+  },
+  lockIconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: 'rgba(118, 75, 162, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: theme.spacing.sm,
+  },
+  emptyCustomTextLocked: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#764ba2',
+    marginTop: theme.spacing.xs,
+  },
+  emptyCustomSubtextLocked: {
+    fontSize: 13,
+    color: theme.colors.textLight,
+    marginTop: 4,
+  },
 });
