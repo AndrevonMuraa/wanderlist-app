@@ -380,13 +380,13 @@ export default function ExploreCountriesScreen() {
     // Calculate stats for visual display
     const totalCountries = sections.reduce((sum, section) => sum + section.data.flat().length, 0);
     
-    // Calculate landmark counts from actual data
+    // Calculate landmark counts and total available points from actual data
     const allCountries = sections.reduce((acc: Country[], section) => [...acc, ...section.data.flat()], []);
     const totalLandmarks = allCountries.reduce((sum, country) => sum + country.landmark_count, 0);
+    const totalAvailablePoints = allCountries.reduce((sum, country) => sum + (country.total_points || country.landmark_count * 10), 0);
     
     const totalVisited = sections.reduce((sum, section) => 
       sum + section.data.flat().reduce((visitedSum, country) => visitedSum + (country.visited || 0), 0), 0);
-    const totalPoints = progressData?.totalPoints || 0;
 
     return (
       <View>
