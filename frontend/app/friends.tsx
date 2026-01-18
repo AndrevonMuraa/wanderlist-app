@@ -261,7 +261,7 @@ export default function FriendsScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="Friends" />
+      <UniversalHeader title="Friends" onBack={handleBack} />
 
       <Surface style={styles.searchCard}>
         <View style={styles.searchHeader}>
