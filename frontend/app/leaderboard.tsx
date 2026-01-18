@@ -300,36 +300,63 @@ export default function LeaderboardScreen() {
           </View>
         </View>
 
-        {/* Friends Toggle */}
+        {/* Friends Toggle - Enhanced UI */}
         <View style={styles.filterSection}>
-          <TouchableOpacity
-            style={styles.friendsToggle}
-            onPress={() => setFriendsOnly(!friendsOnly)}
-          >
-            <View style={styles.friendsToggleLeft}>
-              <Ionicons
-                name={friendsOnly ? 'people' : 'earth'}
-                size={20}
-                color={theme.colors.primary}
-              />
-              <Text style={styles.friendsToggleText}>
-                {friendsOnly ? 'Friends Only' : 'Global Leaderboard'}
-              </Text>
-            </View>
-            <View
+          <View style={styles.leaderboardTypeContainer}>
+            <TouchableOpacity
               style={[
-                styles.toggleSwitch,
-                friendsOnly && styles.toggleSwitchActive,
+                styles.leaderboardTypeButton,
+                !friendsOnly && styles.leaderboardTypeButtonActive,
               ]}
+              onPress={() => setFriendsOnly(false)}
+              activeOpacity={0.8}
             >
-              <View
-                style={[
-                  styles.toggleThumb,
-                  friendsOnly && styles.toggleThumbActive,
-                ]}
-              />
-            </View>
-          </TouchableOpacity>
+              {!friendsOnly && (
+                <LinearGradient
+                  colors={[theme.colors.primary, theme.colors.secondary]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.leaderboardTypeGradient}
+                >
+                  <Ionicons name="earth" size={18} color="#fff" />
+                  <Text style={styles.leaderboardTypeTextActive}>Global</Text>
+                </LinearGradient>
+              )}
+              {friendsOnly && (
+                <View style={styles.leaderboardTypeContent}>
+                  <Ionicons name="earth" size={18} color={theme.colors.textSecondary} />
+                  <Text style={styles.leaderboardTypeText}>Global</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.leaderboardTypeButton,
+                friendsOnly && styles.leaderboardTypeButtonActive,
+              ]}
+              onPress={() => setFriendsOnly(true)}
+              activeOpacity={0.8}
+            >
+              {friendsOnly && (
+                <LinearGradient
+                  colors={['#667eea', '#764ba2']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.leaderboardTypeGradient}
+                >
+                  <Ionicons name="people" size={18} color="#fff" />
+                  <Text style={styles.leaderboardTypeTextActive}>Friends</Text>
+                </LinearGradient>
+              )}
+              {!friendsOnly && (
+                <View style={styles.leaderboardTypeContent}>
+                  <Ionicons name="people" size={18} color={theme.colors.textSecondary} />
+                  <Text style={styles.leaderboardTypeText}>Friends</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* User Rank Card */}
