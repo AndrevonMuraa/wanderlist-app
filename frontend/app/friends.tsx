@@ -497,9 +497,21 @@ const styles = StyleSheet.create({
   },
   upgradeHintText: {
     fontSize: 13,
-    color: theme.colors.primary,
+    color: '#764ba2',
     marginLeft: 6,
     fontWeight: '600',
+    flex: 1,
+  },
+  limitInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    paddingVertical: 6,
+  },
+  limitInfoText: {
+    fontSize: 12,
+    color: theme.colors.textLight,
+    marginLeft: 4,
   },
   messageButton: {
     padding: 8,
