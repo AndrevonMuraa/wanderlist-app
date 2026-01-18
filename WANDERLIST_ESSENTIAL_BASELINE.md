@@ -1,4 +1,4 @@
-# WanderList - Essential Baseline (v4.32)
+# WanderList - Essential Baseline (v4.40)
 
 > **Purpose:** Critical information for session continuity
 > **Read this:** At session start if forked, or when encountering issues
@@ -7,62 +7,125 @@
 
 ## 📊 **Current State**
 
-**Version:** 4.32.0 - STABLE ✅  
-**Status:** Premium UI Polish, Help System, Navigation Fixes Complete  
+**Version:** 4.40.0 - STABLE ✅  
+**Status:** WanderList Pro Subscription Model Implemented  
 **Last Build:** January 18, 2026  
-**Next Phase:** Monetization Strategy Design
+**Next Phase:** User Testing & Polish
 
 **Tech Stack:** Expo (React Native) + FastAPI + MongoDB  
-**Database:** 48 countries, **520 landmarks** (deduplicated), test data populated  
+**Database:** 48 countries, **520 landmarks** (428 official + 92 premium), test data populated  
 
 **Test Accounts:**
 | Email | Password | Role |
 |-------|----------|------|
-| `mobile@test.com` | `test123` | Main user (84 landmarks, 8 countries) |
+| `mobile@test.com` | `test123` | Main user (Free tier, can toggle to Pro) |
 | `friend@test.com` | `test123` | Friend user |
 | `stranger@test.com` | `test123` | Test user |
 
 ---
 
-## 🆕 **v4.32 Changes (Latest)**
+## 🆕 **v4.40 Changes (Latest)**
 
-### Premium Flag Design
-- **Glossy shine effect** - White gradient overlay (25% → 5% → transparent)
-- **Vignette effect** - Darker edges for depth
-- **Texture overlay** - Subtle linen pattern (3% opacity)
-- **Edge highlight** - 1px white line at top
-- **Enhanced shadows** - Cards float with 4px shadow
-- **Flags fill entire card** - No blank space, using `cover` mode
-- **Premium typography** - Larger names, letter spacing, gold points color
+### WanderList Pro Subscription Model
+Complete freemium model implementation with backend enforcement and frontend UI:
 
-### Help & Support System
-- **Updated About page** → "About & Help" (`/about`)
-- **FAQ Section** - 6 expandable questions covering:
-  - Points system (dual points explained)
-  - Custom visits
-  - Privacy settings
-  - Photo collection
-  - Milestone badges
-  - Account deletion
-- **Contact Support Form** - Subject + message with send functionality
-- **Updated stats** - 520 landmarks, 6,580 points, v4.31
+**Tiers:**
+| Feature | Free | Pro ($3.99/mo or $29.99/yr) |
+|---------|------|------------------------------|
+| Official Landmarks (428) | ✅ | ✅ |
+| Premium Landmarks (92) | 🔒 Locked | ✅ Unlocked |
+| Custom Visits | 🔒 Locked | ✅ Unlimited |
+| Photos per Visit | 1 | 10 |
+| Friends | 5 max | Unlimited |
 
-### Navigation Fixes
-All back buttons now navigate to correct parent pages:
-| Page | Back → |
-|------|--------|
-| Settings | Profile |
-| Friends | Social |
-| Edit Profile | Profile |
-| Notifications | Profile |
-| My Country Visits | Journey |
-| Photo Collection | Journey |
-| Leaderboard | Social |
+**Backend Endpoints:**
+- `GET /api/subscription/status` - Get current tier and limits
+- `POST /api/subscription/test-toggle` - Toggle between free/pro (dev only)
+- `POST /api/subscription/cancel` - Downgrade to free
 
-### Code Cleanup
-- **Removed Trip Planning** (~14KB of unused code)
-- Deleted 10 endpoints: `/api/trips/*`
-- Removed models: Trip, TripCreate, TripUpdate, TripLandmark, TripPlan
+**Frontend UI:**
+- `/subscription` - Beautiful subscription page with feature comparison
+- Pro feature lock modal with upgrade CTA
+- Photo limit enforcement in visit modals
+- Friend limit display and warnings
+- Premium landmarks show purple lock icon
+
+### Premium Visual Identity (Purple Theme)
+All premium elements now use consistent purple (#764ba2):
+- Premium landmark diamond icons
+- PREMIUM badges on landmark cards
+- Pro feature lock modals
+- Upgrade hints and CTAs
+
+### Friends Leaderboard Toggle
+- Enhanced Global/Friends segmented control
+- Gold gradient for Friends selection
+- Proper "No friends on leaderboard" empty state
+
+### Activity Feed Page
+- New `/feed` route (was causing "Unmatched Route" error)
+- Full activity history with pagination
+- Like functionality
+- Support for all activity types including `user_created_visit`
+
+### UI Redesigns
+**Settings Page:**
+- Light theme with white cards
+- Colored section icons
+- Privacy options with selection state
+- Clean toggle switches
+
+**Friends Page:**
+- Gradient header
+- White card design
+- Clean email input with icons
+- Friend limit badge (4/5 format)
+- Premium badge for pro users
+
+### Bug Fixes
+- Fixed Social page leaderboard showing "No rankings yet"
+- Fixed Activity Feed "Full list" navigation error
+- Changed "My Country Visits" icon from camera to flag
+
+### Removed
+- "Premium Features" section from explore-countries footer
+
+---
+
+## 💎 **Subscription System**
+
+### User Model Fields
+```python
+subscription_tier: str = "free"  # "free" or "pro"
+subscription_expires_at: Optional[datetime] = None
+```
+
+### Subscription Status Response
+```json
+{
+  "subscription_tier": "free",
+  "is_pro": false,
+  "expires_at": null,
+  "limits": {
+    "max_friends": 5,
+    "photos_per_visit": 1,
+    "can_access_premium_landmarks": false,
+    "can_create_custom_visits": false
+  },
+  "usage": {
+    "friends_count": 4,
+    "friends_limit": 5,
+    "friends_remaining": 1
+  }
+}
+```
+
+### Frontend Hook
+```typescript
+import { useSubscription } from '../hooks/useSubscription';
+
+const { isPro, canAccessPremiumLandmarks, canCreateCustomVisits, maxPhotosPerVisit } = useSubscription();
+```
 
 ---
 
@@ -74,21 +137,25 @@ All back buttons now navigate to correct parent pages:
 - **Theme constant:** `gradients.oceanToSand`
 - **Usage:** ALL headers across the app (mandatory)
 
-### Premium Flag Cards
-```javascript
-// Layered effects on flag cards:
-1. Base flag image (resizeMode: "cover")
-2. Glossy shine gradient (top 60%)
-3. Vignette gradient (full coverage)
-4. Texture overlay (3% opacity)
-5. Edge highlight (1px white line)
-6. Name gradient (bottom fade to black)
-```
+### Premium/Pro Colors
+- **Primary Purple:** `#764ba2`
+- **Secondary Purple:** `#667eea`
+- **Pro Gradient:** `['#667eea', '#764ba2']`
+- **Pro Background:** `rgba(118, 75, 162, 0.1)`
 
-### Universal Header
-- Added `onBack` prop for explicit navigation
-- Back button uses custom handler when provided
-- Falls back to `router.back()` if no handler
+### Card Design (Light Theme)
+```javascript
+{
+  backgroundColor: '#fff',
+  borderRadius: 20,
+  padding: 20,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.08,
+  shadowRadius: 12,
+  elevation: 4,
+}
+```
 
 ---
 
@@ -127,92 +194,56 @@ All back buttons now navigate to correct parent pages:
 
 ---
 
-## 🌍 **User Created Visits**
-
-### Features
-- **Up to 10 landmarks** per custom visit
-- **Per-landmark photos** - Each landmark can have 1 photo
-- **Up to 10 country photos** - General trip photos
-- **Max 20 total photos** per visit
-- No points awarded
-
-### Data Structure
-```json
-{
-  "country_name": "Monaco",
-  "landmarks": [
-    {"name": "Prince's Palace", "photo": "base64..."},
-    {"name": "Monte Carlo Casino", "photo": null}
-  ],
-  "photos": ["base64...", "base64..."],
-  "diary_notes": "Amazing trip!",
-  "visibility": "public"
-}
-```
-
-### Entry Points
-1. Journey Page → "Custom Visits" → "Add Visit"
-2. Explore Page → "Can't find your destination?"
-
----
-
-## 📸 **Photo Collection**
-
-### Entry Point
-Journey Page → "My Photos" card
-
-### Features
-- Stats banner: X Photos • X Countries • X Years
-- Filter tabs: All | By Country | By Year | By Type
-- 3-column Instagram-style grid
-- Fullscreen viewer with swipe
-
-### Data Sources
-- Landmark visits (`/api/visits`)
-- Country visits (`/api/country-visits`)
-- Custom visits (`/api/user-created-visits`)
-
----
-
 ## 📱 **Navigation Structure**
 
 ### Bottom Tabs
 ```
 ├── Explore (continents.tsx) - Dynamic continent stats
 ├── My Journey (journey.tsx) - Stats, visits, photos
-├── Social (social.tsx) - Activity feed
-└── Profile (profile.tsx) - Settings
+├── Social (social.tsx) - Activity feed, leaderboard
+└── Profile (profile.tsx) - Settings, subscription
 ```
 
 ### Key Routes
 ```
-/about          - Help & Support (FAQ, Contact)
-/settings       - App settings
-/friends        - Friend management
-/notifications  - User notifications
-/leaderboard    - Global rankings
-/achievements   - Badges earned
-/photo-collection - Photo gallery
+/subscription      - WanderList Pro subscription page
+/feed              - Full activity feed
+/about             - Help & Support (FAQ, Contact)
+/settings          - App settings (redesigned)
+/friends           - Friend management (redesigned)
+/notifications     - User notifications
+/leaderboard       - Global/Friends rankings
+/achievements      - Badges earned
+/photo-collection  - Photo gallery
 /my-country-visits - Country visit list
-/edit-profile   - Profile editor
+/edit-profile      - Profile editor
 ```
 
 ---
 
 ## 📁 **Key Files**
 
-### Frontend - Premium UI
+### Subscription System
 ```
-/app/frontend/app/explore-countries.tsx  # Premium flag cards
-/app/frontend/app/about.tsx              # Help & Support
-/app/frontend/components/UniversalHeader.tsx  # onBack prop
+/app/frontend/hooks/useSubscription.ts       # Subscription hook
+/app/frontend/components/ProFeatureLock.tsx  # Upgrade modal
+/app/frontend/app/subscription.tsx           # Subscription page
+/app/backend/server.py                       # Subscription endpoints
 ```
 
-### Backend - Core APIs
+### Redesigned Pages
 ```
-GET  /api/continent-stats     # Dynamic continent data
-POST /api/user-created-visits # Multi-landmark support
-GET  /api/photos/collection   # Photo aggregation
+/app/frontend/app/settings.tsx   # Light theme settings
+/app/frontend/app/friends.tsx    # Light theme friends
+/app/frontend/app/feed.tsx       # Activity feed (new)
+```
+
+### Premium UI
+```
+/app/frontend/app/landmarks/[country_id].tsx    # Purple premium icons
+/app/frontend/app/landmark-detail/[landmark_id].tsx
+/app/frontend/app/bucket-list.tsx
+/app/frontend/app/landmark-search.tsx
 ```
 
 ---
@@ -228,6 +259,10 @@ GET  /api/photos/collection   # Photo aggregation
 | Oceania | 83 | 905 | 8 |
 | **TOTAL** | **520** | **6,580** | **48** |
 
+**Landmark Types:**
+- Official: 428 (accessible to all)
+- Premium: 92 (Pro subscribers only)
+
 ---
 
 ## 🔧 **Service Commands**
@@ -242,21 +277,30 @@ sudo supervisorctl status
 # View logs
 tail -f /var/log/supervisor/expo.err.log
 tail -f /var/log/supervisor/backend.err.log
+
+# Toggle subscription (for testing)
+curl -X POST http://localhost:8001/api/subscription/test-toggle \
+  -H "Authorization: Bearer <token>"
 ```
 
 ---
 
-## ✅ **Verified Working (v4.32)**
+## ✅ **Verified Working (v4.40)**
 
-- [x] Premium flag cards with glossy effects
-- [x] Help & Support with FAQ and Contact form
-- [x] All back buttons navigate correctly
-- [x] Multi-landmark custom visits
-- [x] Dynamic continent stats
-- [x] Photo collection gallery
-- [x] Dual points system
-- [x] Updated milestones (520 landmarks)
-- [x] Trip planning code removed
+- [x] WanderList Pro subscription backend
+- [x] Subscription page UI
+- [x] Pro feature lock modals
+- [x] Photo upload limits (1 for free, 10 for pro)
+- [x] Friend limits (5 for free, unlimited for pro)
+- [x] Premium landmarks locked for free users
+- [x] Custom visits locked for free users
+- [x] Purple premium visual identity
+- [x] Friends leaderboard toggle
+- [x] Activity feed page
+- [x] Settings page (light theme)
+- [x] Friends page (light theme)
+- [x] Social leaderboard data fix
+- [x] Flag icon for country visits
 
 ---
 
@@ -280,36 +324,37 @@ tail -f /var/log/supervisor/backend.err.log
 
 ## 🚀 **Next Development Phase**
 
-### Monetization Strategy (Upcoming)
-Potential areas to explore:
-- Premium subscription tiers
-- In-app purchases
-- Ad integration
-- Premium landmarks/content
-- Subscription center UI
+### Immediate (P0)
+- User testing of subscription flow
+- Verify all Pro restrictions work correctly
+- Test photo limits in visit modals
 
 ### Future Features (Backlog)
+- Payment integration (Stripe/Apple Pay)
 - User travel preferences
-- Trip planning (if re-implemented)
 - Enhanced social features
 - Offline mode
+- Push notifications
 
 ---
 
-## 📝 **Session Summary (v4.32)**
+## 📝 **Session Summary (v4.40)**
 
 ### Completed This Session:
-1. ✅ Multi-landmark custom visits with per-photo support
-2. ✅ Dynamic continent stats API endpoint
-3. ✅ Removed unused Trip Planning code
-4. ✅ Help & Support system (FAQ + Contact)
-5. ✅ Fixed all back button navigation
-6. ✅ Premium flag design with texture overlays
-7. ✅ Country flags fill cards completely
-8. ✅ Updated baseline documentation
+1. ✅ WanderList Pro subscription model (backend + frontend)
+2. ✅ Pro feature lock modals with upgrade CTA
+3. ✅ Photo upload limits enforcement
+4. ✅ Friend limits with warning badges
+5. ✅ Purple premium visual identity
+6. ✅ Friends leaderboard toggle
+7. ✅ Activity feed page (/feed)
+8. ✅ Settings page redesign (light theme)
+9. ✅ Friends page redesign (light theme)
+10. ✅ Social leaderboard data fix
+11. ✅ Country visits flag icon
+12. ✅ Removed premium features section
 
-### Ready for Next Phase:
-- Core features complete and polished
-- UI has premium feel
-- Help system in place
-- Ready to design monetization strategy
+### Testing Notes:
+- Use `/api/subscription/test-toggle` to switch between free/pro
+- Test user: `mobile@test.com` / `test123`
+- Current tier shown on Profile page and Subscription page
