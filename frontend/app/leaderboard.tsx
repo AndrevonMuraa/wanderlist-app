@@ -456,6 +456,50 @@ const styles = StyleSheet.create({
   toggleThumbActive: {
     transform: [{ translateX: 22 }],
   },
+  // New enhanced leaderboard type toggle
+  leaderboardTypeContainer: {
+    flexDirection: 'row',
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: 16,
+    padding: 4,
+    gap: 4,
+  },
+  leaderboardTypeButton: {
+    flex: 1,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  leaderboardTypeButtonActive: {
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+  },
+  leaderboardTypeGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    gap: 8,
+  },
+  leaderboardTypeContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    gap: 8,
+  },
+  leaderboardTypeText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  leaderboardTypeTextActive: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#fff',
+  },
   userRankCard: {
     margin: 16,
     marginTop: 8,
