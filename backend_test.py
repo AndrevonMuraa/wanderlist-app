@@ -168,7 +168,7 @@ class WanderListTester:
                 return False
             
             progress_data = progress_response.json()
-            user_points = progress_data.get("total_points", 0)
+            user_points = progress_data.get("totalPoints", 0)
             self.log_result("Get Progress", True, f"User has {user_points} total points")
             
             # 2. Get user stats
