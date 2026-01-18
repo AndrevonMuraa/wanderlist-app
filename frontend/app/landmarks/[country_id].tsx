@@ -540,9 +540,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(32, 178, 170, 0.3)',
   },
   landmarkIconPremium: {
-    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+    backgroundColor: 'rgba(233, 30, 99, 0.1)',
     borderWidth: 1.5,
-    borderColor: 'rgba(255, 215, 0, 0.4)',
+    borderColor: 'rgba(233, 30, 99, 0.4)',
   },
   // Text Container (Middle)
   landmarkTextContainer: {
