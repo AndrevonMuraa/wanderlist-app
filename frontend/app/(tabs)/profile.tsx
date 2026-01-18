@@ -940,16 +940,6 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     textTransform: 'uppercase',
   },
-
-    width: 1,
-    height: 35,
-    backgroundColor: '#E0E0E0',  // Explicit border color
-  },
-
-    paddingVertical: theme.spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
-  },
   rankProgressCard: {
     margin: theme.spacing.md,
     marginTop: 0,
