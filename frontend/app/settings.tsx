@@ -218,34 +218,6 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        {/* Language Settings */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <View style={[styles.sectionIconCircle, { backgroundColor: 'rgba(46, 204, 113, 0.1)' }]}>
-              <Ionicons name="language" size={22} color="#2ecc71" />
-            </View>
-            <View style={styles.sectionHeaderText}>
-              <Text style={styles.sectionTitle}>Language</Text>
-              <Text style={styles.sectionSubtitle}>App display language</Text>
-            </View>
-          </View>
-          
-          <TouchableOpacity style={styles.languageOption} activeOpacity={0.7}>
-            <View style={styles.settingItemLeft}>
-              <View style={[styles.settingIcon, { backgroundColor: 'rgba(52, 73, 94, 0.1)' }]}>
-                <Text style={styles.flagEmoji}>🇺🇸</Text>
-              </View>
-              <View style={styles.settingTexts}>
-                <Text style={styles.settingLabel}>English</Text>
-                <Text style={styles.settingDescription}>United States</Text>
-              </View>
-            </View>
-            <View style={styles.selectedLanguage}>
-              <Ionicons name="checkmark-circle" size={22} color={theme.colors.primary} />
-            </View>
-          </TouchableOpacity>
-        </View>
-
         {/* Account Settings */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
