@@ -74,7 +74,7 @@ export default function SettingsScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="Settings" />
+      <UniversalHeader title="Settings" onBack={handleBack} />
       
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         {/* Privacy Settings */}
