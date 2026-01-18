@@ -503,7 +503,7 @@ const styles = StyleSheet.create({
   },
   upgradeHintText: {
     fontSize: 13,
-    color: '#764ba2',
+    color: theme.colors.accent,
     marginLeft: 6,
     fontWeight: '600',
     flex: 1,
