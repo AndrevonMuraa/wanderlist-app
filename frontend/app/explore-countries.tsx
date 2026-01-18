@@ -249,7 +249,8 @@ export default function ExploreCountriesScreen() {
                   <ImageBackground
                     source={{ uri: flagUrl }}
                     style={styles.flagSectionFull}
-                    resizeMode="cover"
+                    resizeMode="contain"
+                    imageStyle={styles.flagImageStyle}
                   >
                     {/* Country Name Overlay */}
                     <LinearGradient
