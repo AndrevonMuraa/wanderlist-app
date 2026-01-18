@@ -180,7 +180,7 @@ export default function NotificationsScreen() {
       >
         <View style={styles.headerRow}>
           <View style={styles.titleWithBack}>
-            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <TouchableOpacity onPress={handleBack} style={styles.backButton}>
               <Ionicons name="arrow-back" size={22} color="#fff" />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Notifications</Text>
