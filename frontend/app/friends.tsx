@@ -355,6 +355,12 @@ export default function FriendsScreen() {
         onUpgrade={handleUpgrade}
         reason={upgradeReason}
       />
+
+      <ProFeatureLock
+        visible={showProLock}
+        onClose={() => setShowProLock(false)}
+        feature="unlimited_friends"
+      />
     </View>
   );
 }
