@@ -1288,12 +1288,6 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginBottom: 2,
   },
-  statLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: theme.colors.text,
-    marginBottom: 2,
-  },
   statSubtext: {
     fontSize: 10,
     color: theme.colors.textSecondary,
