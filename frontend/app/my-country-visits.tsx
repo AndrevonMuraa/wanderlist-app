@@ -139,7 +139,7 @@ export default function MyCountryVisitsScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <UniversalHeader title="My Country Visits" />
+        <UniversalHeader title="My Country Visits" onBack={handleBack} />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
           <Text style={styles.loadingText}>Loading your visits...</Text>
@@ -150,7 +150,7 @@ export default function MyCountryVisitsScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="My Country Visits" />
+      <UniversalHeader title="My Country Visits" onBack={handleBack} />
 
       <ScrollView
         style={styles.scrollView}
