@@ -111,15 +111,8 @@ export default function FriendsScreen() {
     }
 
     // Check if at friend limit before sending request
-    if (isAtLimit) {
-      Alert.alert(
-        'Friend Limit Reached',
-        `You've reached your friend limit (${friendLimit} friends). Upgrade to add more friends!`,
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'View Plans', onPress: () => checkResponse({ status: 403, json: async () => ({ detail: `Friend limit reached (${friends.length}/${friendLimit})` }) } as any) }
-        ]
-      );
+    if (isAtLimit && !isPro) {
+      setShowProLock(true);
       return;
     }
 
@@ -137,8 +130,13 @@ export default function FriendsScreen() {
       });
 
       // Check for 403 (limit exceeded)
-      const canProceed = await checkResponse(response);
-      if (!canProceed) {
+      if (response.status === 403) {
+        const error = await response.json();
+        if (error.detail?.includes('limit') || error.detail?.includes('friend')) {
+          setShowProLock(true);
+        } else {
+          Alert.alert('Error', error.detail || 'Failed to send request');
+        }
         setSending(false);
         return;
       }
@@ -160,15 +158,8 @@ export default function FriendsScreen() {
 
   const handleAcceptRequest = async (friendshipId: string) => {
     // Check if at friend limit before accepting
-    if (isAtLimit) {
-      Alert.alert(
-        'Friend Limit Reached',
-        `You've reached your friend limit (${friendLimit} friends). Upgrade to accept more friend requests!`,
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'View Plans', onPress: () => checkResponse({ status: 403, json: async () => ({ detail: `Friend limit reached (${friends.length}/${friendLimit})` }) } as any) }
-        ]
-      );
+    if (isAtLimit && !isPro) {
+      setShowProLock(true);
       return;
     }
 
@@ -182,8 +173,13 @@ export default function FriendsScreen() {
       });
 
       // Check for 403 (limit exceeded)
-      const canProceed = await checkResponse(response);
-      if (!canProceed) {
+      if (response.status === 403) {
+        const error = await response.json();
+        if (error.detail?.includes('limit') || error.detail?.includes('friend')) {
+          setShowProLock(true);
+        } else {
+          Alert.alert('Error', error.detail || 'Failed to accept request');
+        }
         return;
       }
 
