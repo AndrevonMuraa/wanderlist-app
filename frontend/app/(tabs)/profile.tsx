@@ -923,8 +923,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
   },
-
-  },
   statItemCompact: {
     alignItems: 'center',
   },
