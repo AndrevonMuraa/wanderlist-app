@@ -330,11 +330,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#fff',
-  },
   brandingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
