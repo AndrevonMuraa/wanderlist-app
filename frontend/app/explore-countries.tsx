@@ -36,6 +36,7 @@ interface Country {
   name: string;
   continent: string;
   landmark_count: number;
+  total_points: number; // Total available points (official*10 + premium*25)
   visited?: number; // Progress data (landmarks visited)
   percentage?: number;
   countryVisited?: boolean; // Whether the country itself is marked as visited
