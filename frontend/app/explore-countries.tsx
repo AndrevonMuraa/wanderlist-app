@@ -1292,6 +1292,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 4,
   },
+  footerSpacer: {
+    height: theme.spacing.xl,
+  },
   progressText: {
     fontSize: 11,
     color: '#fff',
