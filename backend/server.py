@@ -442,6 +442,44 @@ def create_access_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt, expire
 
+# ============= SUBSCRIPTION HELPERS =============
+
+def is_user_pro(user: "User") -> bool:
+    """Check if user has an active Pro subscription"""
+    if user.subscription_tier != "pro":
+        return False
+    
+    # Check if subscription has expired
+    if user.subscription_expires_at:
+        expires_at = user.subscription_expires_at
+        if expires_at.tzinfo is None:
+            expires_at = expires_at.replace(tzinfo=timezone.utc)
+        if expires_at <= datetime.now(timezone.utc):
+            return False
+    
+    return True
+
+# Subscription limits
+LIMITS = {
+    "free": {
+        "max_friends": 5,
+        "photos_per_visit": 1,
+        "can_access_premium_landmarks": False,
+        "can_create_custom_visits": False,
+    },
+    "pro": {
+        "max_friends": 999999,  # Effectively unlimited
+        "photos_per_visit": 10,
+        "can_access_premium_landmarks": True,
+        "can_create_custom_visits": True,
+    }
+}
+
+def get_user_limits(user: "User") -> dict:
+    """Get the limits for a user based on their subscription"""
+    tier = "pro" if is_user_pro(user) else "free"
+    return LIMITS[tier]
+
 async def get_current_user_from_token(token: str) -> Optional[User]:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
