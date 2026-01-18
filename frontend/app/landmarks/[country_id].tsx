@@ -233,7 +233,7 @@ export default function LandmarksScreen() {
               <Ionicons 
                 name={isPremium ? "diamond" : "location"} 
                 size={20} 
-                color={isPremium ? "#E91E63" : theme.colors.primary} 
+                color={isPremium ? "#764ba2" : theme.colors.primary} 
               />
             </View>
             
@@ -252,7 +252,7 @@ export default function LandmarksScreen() {
                   <Ionicons 
                     name="star" 
                     size={12} 
-                    color={isPremium ? "#E91E63" : "#FFA726"} 
+                    color={isPremium ? "#764ba2" : "#FFA726"} 
                   />
                   <Text style={styles.pointsTextList}>
                     {item.points || 10} pts
