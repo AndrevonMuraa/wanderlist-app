@@ -382,6 +382,16 @@ export default function ProfileScreen() {
           />
           <Divider style={styles.divider} />
           <List.Item
+            title="WanderList Pro"
+            description="Upgrade for premium features"
+            left={props => <List.Icon {...props} icon="diamond" color="#764ba2" />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
+            onPress={() => router.push('/subscription')}
+            titleStyle={styles.listItemTitle}
+            descriptionStyle={styles.listItemDescription}
+          />
+          <Divider style={styles.divider} />
+          <List.Item
             title="Settings"
             description="App preferences and account"
             left={props => <List.Icon {...props} icon="cog-outline" color={theme.colors.primary} />}
