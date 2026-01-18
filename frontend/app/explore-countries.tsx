@@ -419,7 +419,7 @@ export default function ExploreCountriesScreen() {
                 <View style={[styles.statIconCircle, { backgroundColor: theme.colors.accentYellow + '20' }]}>
                   <Ionicons name="star" size={24} color={theme.colors.accentYellow} />
                 </View>
-                <Text style={styles.statNumberLarge}>{totalPoints}</Text>
+                <Text style={styles.statNumberLarge}>{totalAvailablePoints}</Text>
                 <Text style={styles.statLabelNew}>Points</Text>
               </View>
             </View>
