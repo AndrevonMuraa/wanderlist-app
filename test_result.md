@@ -3405,6 +3405,45 @@ agent_communication:
        - Click action: Opens Edit Profile page
        - Fields present:
          * Profile Picture (with camera icon to change)
+
+  - agent: "main"
+    message: "🚀 FORKED SESSION - COMPREHENSIVE END-TO-END TESTING REQUEST
+    
+    CONTEXT: This is a forked session after major v4.80 changes:
+    - 58 new premium landmarks added (now 560 total: 427 official + 133 premium)
+    - Points system aligned (7,595 total points available)
+    - 2 duplicate landmarks removed
+    - UI/UX bugs fixed across 5 screens
+    
+    TESTING FOCUS:
+    1. **Authentication Flow**: Quick Test Login + email/password login
+    2. **Core User Journey**:
+       - Navigate to a country (e.g., France)
+       - Visit a landmark
+       - Verify points awarded (10 for official, 25 for premium)
+       - Check progress/stats update
+    3. **Points System Verification**:
+       - GET /api/progress - verify total points tracking
+       - GET /api/stats - verify visits/countries/continents
+       - GET /api/continent-stats - verify database totals match:
+         * Total landmarks: 560
+         * Total points: 7,595
+         * Total countries: 48
+    4. **Badge/Achievement System**: 
+       - GET /api/achievements - verify earned achievements
+       - Check milestone unlocking
+    5. **Leaderboard**: Verify user ranking updates
+    6. **Data Integrity**:
+       - Verify no duplicate landmarks
+       - All 48 countries accessible
+       - All 5 continents have landmarks
+    
+    TEST CREDENTIALS:
+    - Email: mobile@test.com
+    - Password: test123
+    
+    PRIORITY: Verify the entire flow works end-to-end after all the v4.80 changes."
+
          * Name field (required, max 50 chars)
          * Bio field (optional, 200 char limit with counter)
          * Location field (optional, max 50 chars)
