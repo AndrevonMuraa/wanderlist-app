@@ -896,7 +896,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   statsChip: {
-    backgroundColor: theme.colors.primary + '15',
+    backgroundColor: `${theme.colors.primary}15`,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 10,
