@@ -59,6 +59,11 @@ export default function LeaderboardScreen() {
   const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  // Navigate back to social tab explicitly
+  const handleBack = () => {
+    router.push('/(tabs)/social');
+  };
+
   useEffect(() => {
     loadLeaderboard();
   }, [timePeriod, category, friendsOnly]);
