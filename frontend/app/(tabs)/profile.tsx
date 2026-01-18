@@ -602,6 +602,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#2A2A2A',  // Explicit dark color
     marginBottom: 4,
+  },
   compactContainer: {
     margin: theme.spacing.md,
   },
