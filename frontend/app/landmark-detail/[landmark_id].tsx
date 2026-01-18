@@ -6,7 +6,8 @@ import {
   TouchableOpacity, 
   Platform,
   Dimensions,
-  Alert 
+  Alert,
+  Image
 } from 'react-native';
 import { Text, ActivityIndicator, Surface } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
