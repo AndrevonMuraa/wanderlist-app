@@ -318,7 +318,7 @@ export default function LandmarkDetailScreen() {
               <Ionicons 
                 name={isPremium ? "diamond" : "location"} 
                 size={56} 
-                color={isPremium ? "#FFD700" : theme.colors.primary} 
+                color={isPremium ? "#E91E63" : theme.colors.primary} 
               />
             </View>
             
@@ -334,7 +334,7 @@ export default function LandmarkDetailScreen() {
             <View style={styles.badgesRow}>
               {isPremium && (
                 <View style={styles.premiumBadge}>
-                  <Ionicons name="diamond" size={12} color="#B8860B" />
+                  <Ionicons name="diamond" size={12} color="#E91E63" />
                   <Text style={styles.premiumBadgeText}>PREMIUM</Text>
                 </View>
               )}
