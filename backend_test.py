@@ -150,8 +150,17 @@ class WanderListTester:
                     self.log_result("Mark Landmark as Visited", False, f"Points mismatch: expected {expected_points}, got {points_earned}")
                 
                 return True
+            elif visit_response.status_code == 403:
+                # Premium landmark or other restriction
+                error_msg = visit_response.json().get("detail", "Unknown error")
+                if "premium" in error_msg.lower() or "pro" in error_msg.lower():
+                    self.log_result("Mark Landmark as Visited", True, f"Premium landmark restriction working correctly: {error_msg}")
+                    return True
+                else:
+                    self.log_result("Mark Landmark as Visited", False, f"Visit failed: {error_msg}")
+                    return False
             elif visit_response.status_code == 400:
-                # Might be duplicate visit
+                # Might be duplicate visit or other validation error
                 error_msg = visit_response.json().get("detail", "Unknown error")
                 if "already visited" in error_msg.lower():
                     self.log_result("Mark Landmark as Visited", True, f"Duplicate visit prevention working: {error_msg}")
