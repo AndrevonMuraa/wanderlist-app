@@ -292,7 +292,9 @@ export default function JourneyScreen() {
 
               <View style={styles.statBoxCompact}>
                 <Ionicons name="trophy" size={20} color={theme.colors.accentBronze} />
-                <Text style={styles.statValueCompact}>#{stats.rank || '-'}</Text>
+                <Text style={styles.statValueCompact}>
+                  {stats.rank && stats.rank > 0 ? `#${stats.rank}` : 'N/A'}
+                </Text>
                 <Text style={styles.statLabelCompact}>Rank</Text>
               </View>
 
