@@ -1,4 +1,4 @@
-# WanderList - Essential Baseline (v4.50)
+# WanderList - Essential Baseline (v4.60)
 
 > **Purpose:** Critical information for session continuity
 > **Read this:** At session start if forked, or when encountering issues
@@ -7,13 +7,13 @@
 
 ## 📊 **Current State**
 
-**Version:** 4.50.0 - STABLE ✅  
+**Version:** 4.60.0 - STABLE ✅  
 **Status:** Production Ready with WanderList Pro Subscription  
 **Last Build:** January 18, 2026  
 **Next Phase:** User Testing & Deployment
 
 **Tech Stack:** Expo (React Native) + FastAPI + MongoDB  
-**Database:** 48 countries, **492 landmarks** (389 official + 103 premium), Oceania fully populated  
+**Database:** 48 countries, **502 landmarks** (427 official + 75 premium), All duplicates removed  
 
 **Test Accounts:**
 | Email | Password | Role |
@@ -24,60 +24,63 @@
 
 ---
 
-## 🆕 **v4.50 Changes (Latest)**
+## 🆕 **v4.60 Changes (Latest)**
 
-### Database Cleanup & Fixes
-- **Duplicate landmarks removed** - All 52+ duplicate entries cleaned up
-- **Uluru/Ayers Rock** - Now single entry (no more duplicates)
-- **Oceania fully populated** - All 8 countries now have landmarks:
-  - Australia: 12 landmarks
-  - New Zealand: 10 landmarks
-  - Fiji: 5 landmarks
-  - French Polynesia: 5 landmarks
-  - Cook Islands: 3 landmarks
-  - Samoa: 3 landmarks
-  - Vanuatu: 3 landmarks
-  - Tonga: 3 landmarks
+### Major Code Refactoring
+- **Profile page (`profile.tsx`) refactored** - Reduced from 1,172 lines to 581 lines (~50% reduction)
+  - Removed 70+ unused style definitions
+  - Moved all inline styles to StyleSheet
+  - Organized styles into logical sections with comments
+  - Removed unused imports (CircularProgress, ProgressBar, RankProgress, etc.)
 
-### Premium Landmarks Sorting
-- **Official landmarks always appear first** in all listing views
-- **Premium landmarks appear at the bottom** after official ones
-- Sorting maintained across all sort options (name, points, upvotes)
+### Database Cleanup (COMPREHENSIVE)
+- **109+ duplicate landmarks removed** - Complete database cleanup
+- **502 total landmarks** now (all unique, no duplicates)
+- **Li River duplicate fixed** - Kept "Li River Karst Mountains" (official)
+- **Cusco duplicate fixed** - Removed duplicate "Cusco Historic Center"
+- **All continents verified:**
+  - Europe: 107 landmarks, 1,505 points, 10 countries
+  - Americas: 107 landmarks, 1,355 points, 10 countries
+  - Asia: 106 landmarks, 1,300 points, 10 countries
+  - Africa: 101 landmarks, 1,130 points, 10 countries
+  - Oceania: 81 landmarks, 855 points, 8 countries
 
-### Settings Page Cleanup
-- **Removed Email Notifications** - Only Push Notifications toggle remains
-- **Removed Language Selector** - App only has one language (English)
-- **Header fixed** - Now matches standard app header style with branding
+### Seed Data Protection (IMPORTANT)
+- **`seed_data.py` updated** with automatic duplicate detection
+- When re-seeding, duplicates are automatically skipped
+- 66 overlapping premium landmarks identified and blocked
+- Clear logging when duplicates are skipped during seeding
 
-### Profile Page Cleanup
-- **Removed "Your Plan Limits"** section completely
-- Cleaner profile view without redundant upgrade prompts
-- 12 unused style definitions removed (~70 lines of code)
+### Premium Landmarks Cleanup
+- **`premium_landmarks.py` cleaned** - Removed 66 duplicate entries
+- **Before:** 100 premium landmarks (many duplicates)
+- **After:** 34 unique premium landmarks across 17 countries
+- File now well-documented with comments
 
-### Header Standardization
-All pages now have consistent headers with:
-- **Circular back button** with light background (`rgba(255,255,255,0.2)`)
-- **Page title** next to back button
-- **Earth icon + "WanderList" branding** on right side (links to About page)
+### Dynamic Continent Stats
+- **Continent cards now fetch from API** (`/api/continent-stats`)
+- Hardcoded values are fallbacks only (shown briefly while loading)
+- Real-time landmark counts, points, and progress
+- Auto-updates if landmarks are added/removed
 
-Pages updated for consistent headers:
-- Settings, Friends, Notifications, Explore Countries
-- Landmarks, About, Subscription, Feed
-- All message and detail pages
+### Rank System Updated (ACHIEVABLE)
+- **Legend rank now achievable** - Reduced from 10,000 to 5,000 points
+- Total available points: 6,145 (from 502 landmarks)
+- All ranks are now achievable:
+  - Explorer: 0-499 points
+  - Adventurer: 500-1,499 points
+  - Voyager: 1,500-2,999 points
+  - Globetrotter: 3,000-4,999 points
+  - Legend: 5,000+ points ✅
 
-### Landmark Detail Page
-- **Removed "Quick Info" (difficulty)** feature completely
-- Cleaner landmark detail view
-- Removed unused helper functions and styles
-
-### Code Cleanup
-- Removed duplicate style definitions across multiple files:
-  - bucket-list.tsx
-  - notifications.tsx
-  - explore-countries.tsx
-  - profile.tsx
-- Fixed syntax errors from corrupted edits
-- Balanced brace structures in StyleSheet definitions
+### Backend Testing Verified
+- **95.7% test pass rate** (22/23 tests)
+- All critical flows working:
+  - Authentication ✅
+  - Landmark visiting ✅
+  - Points calculation ✅
+  - Badge/achievement unlocking ✅
+  - Data integrity ✅
 
 ---
 
@@ -86,8 +89,8 @@ Pages updated for consistent headers:
 ### Tiers
 | Feature | Free | Pro ($3.99/mo or $29.99/yr) |
 |---------|------|------------------------------|
-| Official Landmarks (389) | ✅ | ✅ |
-| Premium Landmarks (103) | 🔒 Locked | ✅ Unlocked |
+| Official Landmarks (427) | ✅ | ✅ |
+| Premium Landmarks (75) | 🔒 Locked | ✅ Unlocked |
 | Custom Visits | 🔒 Locked | ✅ Unlimited |
 | Photos per Visit | 1 | 10 |
 | Friends | 5 max | Unlimited |
@@ -180,19 +183,24 @@ brandingTextDark: {
 | Country visit (no photo) | +50 | 0 |
 | Custom visits | 0 | 0 |
 
+### Total Points Available
+- **6,145 total points** from 502 landmarks
+- Official: 427 × 10 = 4,270 points
+- Premium: 75 × 25 = 1,875 points
+
 ---
 
-## 🏆 **Milestone System (492 landmarks)**
+## 🏆 **Milestone System (502 landmarks)**
 
 | Landmarks | % | Badge Name | Icon |
 |-----------|---|------------|------|
 | 10 | 2.0% | Explorer | 🗺️ |
-| 25 | 5.1% | Adventurer | 🧗 |
-| 50 | 10.2% | Globetrotter | 🌍 |
-| 100 | 20.3% | World Traveler | ✈️ |
-| 200 | 40.7% | Seasoned Traveler | 🧭 |
-| 350 | 71.1% | Legend | 🏆 |
-| 480 | 97.6% | Ultimate Explorer | 👑 |
+| 25 | 5.0% | Adventurer | 🧗 |
+| 50 | 10.0% | Globetrotter | 🌍 |
+| 100 | 19.9% | World Traveler | ✈️ |
+| 200 | 39.8% | Seasoned Traveler | 🧭 |
+| 350 | 69.7% | Legend | 🏆 |
+| 500 | 99.6% | Ultimate Explorer | 👑 |
 
 ---
 
@@ -218,6 +226,7 @@ Explore (map) → Journey (compass) → Social (people) → Bucket List (bookmar
 - `/subscription` - WanderList Pro page
 - `/feed` - Full activity feed
 - `/about` - About WanderList
+- `/continents` - Continent selection with dynamic stats
 
 ---
 
@@ -239,9 +248,10 @@ sudo supervisorctl status           # Check services
 ### Database Seeding
 ```bash
 cd /app/backend
-python3 seed_data.py              # Base countries/landmarks
+python3 seed_data.py              # Base countries/landmarks (auto-skips duplicates)
 python3 seed_data_expansion.py    # Expanded content (48 countries)
 # Premium landmarks are in premium_landmarks.py - auto-seeded
+# NOTE: Duplicate detection is built-in - safe to re-run
 ```
 
 ---
@@ -264,30 +274,48 @@ python3 seed_data_expansion.py    # Expanded content (48 countries)
 ### Frontend
 | File | Purpose |
 |------|---------|
+| `/app/frontend/app/(tabs)/profile.tsx` | User profile (REFACTORED - 581 lines) |
+| `/app/frontend/app/continents.tsx` | Continent cards (DYNAMIC from API) |
 | `/app/frontend/hooks/useSubscription.ts` | Subscription state management |
 | `/app/frontend/components/ProFeatureLock.tsx` | Upgrade prompt modal |
 | `/app/frontend/components/UniversalHeader.tsx` | Reusable page header |
 | `/app/frontend/utils/theme.ts` | Design system constants |
 | `/app/frontend/utils/config.ts` | API configuration |
+| `/app/frontend/utils/rankSystem.ts` | Rank thresholds (UPDATED) |
 
 ### Backend
 | File | Purpose |
 |------|---------|
 | `/app/backend/server.py` | Main FastAPI application |
-| `/app/backend/premium_landmarks.py` | Premium landmark definitions |
-| `/app/backend/seed_data_expansion.py` | Database seeding script |
+| `/app/backend/premium_landmarks.py` | Premium landmark definitions (CLEANED - 34 unique) |
+| `/app/backend/seed_data.py` | Database seeding (PROTECTED - auto-skips duplicates) |
+| `/app/backend/seed_data_expansion.py` | Expanded content seeding |
 
 ---
 
 ## ✅ **Session Checklist for New Fork**
 
 1. [ ] Run `sudo supervisorctl status` - Verify services running
-2. [ ] Check database has data: `curl http://localhost:8001/api/countries` (after login)
-3. [ ] If database empty, run seed scripts
+2. [ ] Check database has data: `curl http://localhost:8001/api/countries` (should return 48 countries)
+3. [ ] If database empty, run seed scripts (duplicates auto-skipped)
 4. [ ] Test login with `mobile@test.com` / `test123`
 5. [ ] Verify all 5 tabs load correctly
-6. [ ] Check Settings page loads (was recently fixed)
-7. [ ] Check Profile page loads (was recently fixed)
+6. [ ] Check continent cards show dynamic stats (502 landmarks, 6145 points total)
+7. [ ] Verify Profile page loads correctly (recently refactored)
+8. [ ] Check Settings page loads (recently cleaned)
+
+### Quick Database Verification
+```bash
+cd /app/backend && python3 -c "
+from pymongo import MongoClient
+client = MongoClient('mongodb://localhost:27017')
+db = client.test_database
+print(f'Countries: {db.countries.count_documents({})}')
+print(f'Landmarks: {db.landmarks.count_documents({})}')
+print(f'Users: {db.users.count_documents({})}')
+"
+# Expected: Countries: 48, Landmarks: 502, Users: 3+
+```
 
 ---
 
@@ -295,6 +323,7 @@ python3 seed_data_expansion.py    # Expanded content (48 countries)
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 4.60 | Jan 18, 2026 | Profile refactoring, comprehensive duplicate cleanup, seed data protection, dynamic continent stats, rank system update |
 | 4.50 | Jan 18, 2026 | Duplicate cleanup, header standardization, settings/profile cleanup, Oceania landmarks |
 | 4.40 | Jan 18, 2026 | WanderList Pro subscription, premium landmarks, UI redesigns |
 | 4.30 | Jan 17, 2026 | Activity feed, friends leaderboard, bug fixes |
@@ -304,4 +333,19 @@ python3 seed_data_expansion.py    # Expanded content (48 countries)
 
 ---
 
-*Last Updated: January 18, 2026*
+## 🔑 **Critical Numbers to Remember**
+
+| Metric | Value |
+|--------|-------|
+| Total Landmarks | 502 |
+| Official Landmarks | 427 |
+| Premium Landmarks | 75 |
+| Total Points Available | 6,145 |
+| Total Countries | 48 |
+| Total Continents | 5 |
+| Legend Rank Threshold | 5,000 points |
+| Max Milestone Badge | 500 landmarks |
+
+---
+
+*Last Updated: January 18, 2026 - v4.60*
