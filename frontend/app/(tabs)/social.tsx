@@ -158,7 +158,9 @@ export default function SocialHubScreen() {
       });
       if (response.ok) {
         const data = await response.json();
-        setLeaderboard(data.slice(0, 5)); // Show top 5
+        // API returns { leaderboard: [...], user_rank: ..., total_users: ... }
+        const entries = data.leaderboard || data;
+        setLeaderboard(entries.slice(0, 5)); // Show top 5
       }
     } catch (error) {
       console.error('Error loading leaderboard:', error);
