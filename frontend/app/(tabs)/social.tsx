@@ -563,7 +563,7 @@ export default function SocialHubScreen() {
   );
 
   const renderLeaderboardItem = (entry: LeaderboardEntry, index: number) => {
-    const userRank = getUserRank(entry.total_points);
+    const userRank = getUserRank(entry.value || 0);
     
     return (
       <View key={index} style={styles.leaderboardItem}>
@@ -589,7 +589,7 @@ export default function SocialHubScreen() {
         </View>
         <View style={styles.leaderboardRight}>
           <Ionicons name="star" size={14} color="#FFD700" />
-          <Text style={styles.leaderboardPoints}>{entry.total_points}</Text>
+          <Text style={styles.leaderboardPoints}>{entry.value || 0}</Text>
         </View>
       </View>
     );
