@@ -95,10 +95,12 @@ export default function JourneyScreen() {
   const [recentVisits, setRecentVisits] = useState<Visit[]>([]);
   const [userCreatedVisits, setUserCreatedVisits] = useState<UserCreatedVisit[]>([]);
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
+  const [showProLock, setShowProLock] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { user } = useAuth();
+  const { canCreateCustomVisits, isPro } = useSubscription();
 
   useEffect(() => {
     fetchAllData();
