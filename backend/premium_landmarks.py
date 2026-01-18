@@ -118,7 +118,7 @@ PREMIUM_LANDMARKS = {
     ],
     "colombia": [
         {"name": "Lost City (Ciudad Perdida)", "description": "Ancient terraced city hidden in Sierra Nevada, older than Machu Picchu.", "image_url": "", "points": 25},
-        {"name": "Salt Cathedral of Zipaquirá", "description": "Underground church built within salt mines, 180 meters below the surface.", "image_url": "", "points": 25},
+        # NOTE: "Salt Cathedral of Zipaquirá" removed - duplicate of official landmark
     ],
     "costa_rica": [
         {"name": "Tortuguero National Park", "description": "Remote rainforest canals accessible only by boat, major sea turtle nesting site.", "image_url": "", "points": 25},
