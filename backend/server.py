@@ -1060,13 +1060,26 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         raise HTTPException(status_code=404, detail="Landmark not found")
     
     # Check if landmark is premium and user has access
-    if landmark.get("category") == "premium" and current_user.subscription_tier == "free":
-        raise HTTPException(status_code=403, detail="Premium subscription required to visit this landmark")
+    if landmark.get("category") == "premium" and not is_user_pro(current_user):
+        raise HTTPException(
+            status_code=403, 
+            detail="WanderList Pro required to visit premium landmarks. Upgrade to unlock 92 premium landmarks!"
+        )
     
-    # Validate photo collage limit (max 10 photos)
+    # Get user limits based on subscription
+    limits = get_user_limits(current_user)
+    max_photos = limits["photos_per_visit"]
+    
+    # Validate photo limit based on subscription tier
     photos = data.photos or []
-    if len(photos) > 10:
-        raise HTTPException(status_code=400, detail="Maximum 10 photos allowed per visit")
+    if len(photos) > max_photos:
+        if max_photos == 1:
+            raise HTTPException(
+                status_code=403, 
+                detail="Free users can add 1 photo per visit. Upgrade to WanderList Pro for up to 10 photos!"
+            )
+        else:
+            raise HTTPException(status_code=400, detail=f"Maximum {max_photos} photos allowed per visit")
     
     # Validate travel tips limit (max 5 tips)
     travel_tips = data.travel_tips or []
