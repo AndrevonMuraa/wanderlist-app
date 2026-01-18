@@ -44,6 +44,7 @@ export default function LandmarksScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showProLock, setShowProLock] = useState(false);
   const [showCountryVisitModal, setShowCountryVisitModal] = useState(false);
   const [countryProgress, setCountryProgress] = useState<{visited: number; total: number; percentage: number} | null>(null);
   const [visitedLandmarkIds, setVisitedLandmarkIds] = useState<Set<string>>(new Set());
@@ -51,6 +52,7 @@ export default function LandmarksScreen() {
   const [countryVisitId, setCountryVisitId] = useState<string | null>(null);
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { canAccessPremiumLandmarks } = useSubscription();
   
   // Calculate safe area padding - same as continents.tsx (golden standard)
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
