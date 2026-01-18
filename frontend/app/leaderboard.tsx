@@ -340,7 +340,7 @@ export default function LeaderboardScreen() {
             >
               {friendsOnly && (
                 <LinearGradient
-                  colors={['#667eea', '#764ba2']}
+                  colors={[theme.colors.accent, '#B8860B']}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.leaderboardTypeGradient}
