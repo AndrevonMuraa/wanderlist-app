@@ -285,7 +285,7 @@ export default function PhotoCollectionScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <UniversalHeader title="My Photos" />
+        <UniversalHeader title="My Photos" onBack={handleBack} />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
           <Text style={styles.loadingText}>Loading your photos...</Text>
@@ -298,7 +298,7 @@ export default function PhotoCollectionScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="My Photos" />
+      <UniversalHeader title="My Photos" onBack={handleBack} />
 
       <FlatList
         data={groupedPhotos}
