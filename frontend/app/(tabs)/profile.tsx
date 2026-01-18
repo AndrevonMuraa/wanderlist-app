@@ -785,17 +785,6 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
   },
   userNameHero: {
-  userHeroSection: {
-    alignItems: 'center',
-    marginBottom: theme.spacing.md,
-  },
-  profileImageHero: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    marginBottom: theme.spacing.sm,
-  },
-  userNameHero: {
     fontSize: 20,
     fontWeight: '700',
     color: theme.colors.text,
