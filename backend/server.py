@@ -1645,9 +1645,9 @@ async def get_friends(current_user: User = Depends(get_current_user)):
 
 @api_router.post("/friends/request")
 async def send_friend_request(data: FriendRequest, current_user: User = Depends(get_current_user)):
-    # Check friend limits based on subscription tier
-    tier_limits = {"free": 5, "basic": 25, "premium": float('inf')}
-    max_friends = tier_limits[current_user.subscription_tier]
+    # Get user limits based on subscription
+    limits = get_user_limits(current_user)
+    max_friends = limits["max_friends"]
     
     # Count current accepted friendships
     friend_count = await db.friends.count_documents({
@@ -1658,10 +1658,9 @@ async def send_friend_request(data: FriendRequest, current_user: User = Depends(
     })
     
     if friend_count >= max_friends:
-        tier_name = "Basic" if current_user.subscription_tier == "free" else "Premium"
         raise HTTPException(
             status_code=403,
-            detail=f"Friend limit reached ({int(max_friends)} max). Upgrade to {tier_name} for more friends!"
+            detail=f"Friend limit reached ({max_friends} friends). Upgrade to WanderList Pro for unlimited friends!"
         )
     
     # Find friend by email or username
