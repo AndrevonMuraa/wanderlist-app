@@ -1272,19 +1272,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: theme.spacing.lg,
   },
-  statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.spacing.sm,
-    justifyContent: 'space-between',
-  },
-  statBox: {
-    width: '31%',
-    alignItems: 'center',
-    padding: theme.spacing.md,
-    backgroundColor: theme.colors.backgroundSecondary,
-    borderRadius: theme.borderRadius.lg,
-  },
   statIconContainer: {
     width: 48,
     height: 48,
