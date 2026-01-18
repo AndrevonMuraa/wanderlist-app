@@ -2947,11 +2947,20 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
     Create a user-created visit for countries/landmarks not in the app database.
     No points are awarded for user-created visits.
     
+    REQUIRES: WanderList Pro subscription
+    
     Landmarks can now have individual photos:
     - landmarks: List of {name: str, photo: Optional[str]} (max 10 landmarks)
     - photos: General country photos (max 10)
     - Total photos: max 20 (10 country + 10 landmark photos)
     """
+    
+    # Check if user has Pro subscription
+    if not is_user_pro(current_user):
+        raise HTTPException(
+            status_code=403,
+            detail="Custom visits require WanderList Pro. Upgrade to record visits to places not in our database!"
+        )
     
     # Validate country name
     if not data.country_name or len(data.country_name.strip()) < 2:
