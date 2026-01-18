@@ -6,8 +6,7 @@ import {
   TouchableOpacity, 
   Platform,
   Dimensions,
-  Alert,
-  Image
+  Alert
 } from 'react-native';
 import { Text, ActivityIndicator, Surface } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -40,8 +39,6 @@ interface Landmark {
   country_name: string;
   continent: string;
   description: string;
-  image_url?: string;
-  images?: string[];
   facts?: LandmarkFact[];
   best_time_to_visit?: string;
   duration?: string;
