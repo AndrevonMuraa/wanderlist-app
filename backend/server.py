@@ -3069,9 +3069,12 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
 async def get_user_created_visits(current_user: User = Depends(get_current_user)):
     """Get all user-created visits for the current user"""
     visits = await db.user_created_visits.find(
-        {"user_id": current_user.user_id},
-        {"_id": 0}
+        {"user_id": current_user.user_id}
     ).sort("visited_at", -1).to_list(1000)
+    
+    # Convert _id to visit_id for API response
+    for visit in visits:
+        visit["visit_id"] = str(visit.pop("_id"))
     
     return visits
 
