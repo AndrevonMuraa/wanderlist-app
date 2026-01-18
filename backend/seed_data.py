@@ -2217,11 +2217,21 @@ async def seed_database():
             }
             all_landmarks.append(landmark_doc)
     
-    await db.landmarks.insert_many(all_landmarks)
-    print(f"Inserted {len(all_landmarks)} landmarks")
+    # Build a set of official landmark names (normalized) by country for duplicate detection
+    official_names_by_country = {}
+    for lm in all_landmarks:
+        country = lm["country_id"]
+        name_normalized = lm["name"].lower().strip()
+        if country not in official_names_by_country:
+            official_names_by_country[country] = set()
+        official_names_by_country[country].add(name_normalized)
     
-    # Insert premium landmarks
+    await db.landmarks.insert_many(all_landmarks)
+    print(f"Inserted {len(all_landmarks)} official landmarks")
+    
+    # Insert premium landmarks (skip any that duplicate official landmarks)
     premium_landmark_docs = []
+    skipped_duplicates = []
     for country_id, premium_landmarks in PREMIUM_LANDMARKS.items():
         country_data = next((c for c in COUNTRIES_DATA if c["country_id"] == country_id), None)
         if not country_data:
@@ -2229,8 +2239,28 @@ async def seed_database():
         
         country_name = country_data["name"]
         continent = country_data["continent"]
+        official_names = official_names_by_country.get(country_id, set())
         
         for idx, landmark in enumerate(premium_landmarks):
+            # Check if this premium landmark name overlaps with official landmarks
+            premium_name_normalized = landmark["name"].lower().strip()
+            
+            # Skip if exact match or similar name exists in official landmarks
+            is_duplicate = False
+            for official_name in official_names:
+                # Check for exact match
+                if premium_name_normalized == official_name:
+                    is_duplicate = True
+                    break
+                # Check if one is contained in the other (e.g., "Li River" in "Li River Karst Mountains")
+                if premium_name_normalized in official_name or official_name in premium_name_normalized:
+                    is_duplicate = True
+                    break
+            
+            if is_duplicate:
+                skipped_duplicates.append(f"{country_id}: {landmark['name']}")
+                continue
+                
             premium_doc = {
                 "landmark_id": f"{country_id}_premium_{idx+1}",
                 "name": landmark["name"],
@@ -2253,6 +2283,11 @@ async def seed_database():
                 "created_at": datetime.now(timezone.utc)
             }
             premium_landmark_docs.append(premium_doc)
+    
+    if skipped_duplicates:
+        print(f"Skipped {len(skipped_duplicates)} duplicate premium landmarks:")
+        for dup in skipped_duplicates:
+            print(f"  - {dup}")
     
     await db.landmarks.insert_many(premium_landmark_docs)
     print(f"Inserted {len(premium_landmark_docs)} premium landmarks")
