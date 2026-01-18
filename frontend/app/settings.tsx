@@ -107,7 +107,7 @@ export default function SettingsScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header with gradient */}
+      {/* Header with gradient - matching standard app header style */}
       <LinearGradient
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
@@ -119,8 +119,7 @@ export default function SettingsScreen() {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Settings</Text>
         <View style={styles.headerRight}>
-          <Ionicons name="globe-outline" size={20} color="#fff" />
-          <Text style={styles.headerBrand}>WanderList</Text>
+          <Ionicons name="settings" size={20} color="#fff" />
         </View>
       </LinearGradient>
       
