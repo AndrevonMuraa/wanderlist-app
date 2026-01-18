@@ -101,6 +101,8 @@ export default function ContinentsScreen() {
   const [continents, setContinents] = useState<Continent[]>(CONTINENTS);
   const [loading, setLoading] = useState(true);
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
+  const [showProLock, setShowProLock] = useState(false);
+  const { canCreateCustomVisits } = useSubscription();
   const insets = useSafeAreaInsets();
 
   // Calculate safe area padding
