@@ -42,6 +42,11 @@ export default function FriendsScreen() {
   const [sending, setSending] = useState(false);
   const router = useRouter();
   const { user } = useAuth();
+
+  // Navigate back to social tab explicitly
+  const handleBack = () => {
+    router.push('/(tabs)/social');
+  };
   
   const { showUpgradeModal, upgradeReason, checkResponse, handleUpgrade, closeModal } = useUpgradePrompt({
     onUpgrade: (tier) => {
