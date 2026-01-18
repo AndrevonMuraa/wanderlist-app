@@ -14,16 +14,17 @@ import { useSubscription } from '../hooks/useSubscription';
 
 const { width } = Dimensions.get('window');
 
-// Continent data - matches backend continents (Updated for 502 landmarks - Jan 2025)
+// Continent data - FALLBACK VALUES (will be updated by API)
+// These are shown briefly while loading, then replaced with real-time data from /api/continent-stats
 const CONTINENTS = [
   {
     id: 'europe',
     name: 'Europe',
     countries: 10,
-    landmarks: 107,
+    landmarks: 107, // Fallback - API provides real count
     image: 'https://images.unsplash.com/photo-1683660107861-c555be9775b9?w=800',
     gradient: ['rgba(59,184,195,0.2)', 'rgba(59,184,195,0.7)'] as const,
-    totalPoints: 1505,
+    totalPoints: 1505, // Fallback - API provides real total
     description: 'Historic castles and cultural heritage',
     accentColor: '#3BB8C3', // Turquoise/Cyan
   },
