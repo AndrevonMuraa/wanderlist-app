@@ -54,7 +54,6 @@ export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const [defaultPrivacy, setDefaultPrivacy] = useState<'public' | 'friends' | 'private'>('public');
   const [pushNotifications, setPushNotifications] = useState(true);
-  const [emailNotifications, setEmailNotifications] = useState(true);
 
   // Navigate back to profile explicitly
   const handleBack = () => {
