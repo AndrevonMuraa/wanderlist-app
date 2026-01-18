@@ -98,9 +98,13 @@ export default function JourneyScreen() {
   const [showProLock, setShowProLock] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  
+  // All hooks must be called in consistent order
   const router = useRouter();
   const { user } = useAuth();
-  const { canCreateCustomVisits, isPro } = useSubscription();
+  const subscriptionData = useSubscription();
+  const canCreateCustomVisits = subscriptionData.canCreateCustomVisits;
+  const isPro = subscriptionData.isPro;
 
   useEffect(() => {
     fetchAllData();
