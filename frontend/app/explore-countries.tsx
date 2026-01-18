@@ -633,10 +633,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  backButtonInline: {
-    padding: theme.spacing.xs,
-    marginRight: theme.spacing.sm,
-  },
   headerTextContainer: {
     flex: 1,
   },
