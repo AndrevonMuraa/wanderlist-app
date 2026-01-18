@@ -146,8 +146,8 @@ export default function LandmarksScreen() {
 
   const handleLandmarkPress = (landmark: Landmark) => {
     if (landmark.is_locked) {
-      // Show upgrade modal for locked landmarks
-      setShowUpgradeModal(true);
+      // Show pro feature lock modal for locked premium landmarks
+      setShowProLock(true);
     } else {
       // Navigate to landmark detail for unlocked landmarks
       router.push(`/landmark-detail/${landmark.landmark_id}`);
