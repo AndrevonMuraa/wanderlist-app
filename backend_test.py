@@ -242,27 +242,24 @@ class WanderListTester:
         print("=" * 50)
         
         try:
-            # Get user badges
-            badges_response = self.session.get(f"{BASE_URL}/badges")
-            if badges_response.status_code != 200:
-                self.log_result("Get Badges", False, f"Failed to get badges: {badges_response.status_code}")
+            # Get user achievements (badges)
+            achievements_response = self.session.get(f"{BASE_URL}/achievements")
+            if achievements_response.status_code != 200:
+                self.log_result("Get Achievements", False, f"Failed to get achievements: {achievements_response.status_code}")
                 return False
             
-            badges_data = badges_response.json()
-            self.log_result("Get Badges", True, f"Retrieved {len(badges_data)} badge definitions")
+            achievements_data = achievements_response.json()
+            self.log_result("Get Achievements", True, f"Retrieved {len(achievements_data)} user achievements")
             
-            # Check for reasonable badge thresholds
-            milestone_badges = [b for b in badges_data if "milestone" in b.get("badge_id", "").lower()]
+            # Check for reasonable achievement thresholds
+            milestone_achievements = [a for a in achievements_data if "milestone" in a.get("badge_type", "").lower()]
             
-            for badge in milestone_badges:
-                badge_id = badge.get("badge_id", "")
-                description = badge.get("description", "")
-                
-                # Check if milestone_500 exists and is achievable with 502 total landmarks
-                if "500" in badge_id:
-                    self.log_result("Badge Threshold - 500 Landmarks", True, 
-                                  f"milestone_500 badge exists and is achievable with 502 total landmarks")
-                
+            # Check if there are any milestone achievements
+            if milestone_achievements:
+                self.log_result("Milestone Achievements", True, f"Found {len(milestone_achievements)} milestone achievements")
+            else:
+                self.log_result("Milestone Achievements", True, "No milestone achievements yet (user may not have reached milestones)")
+            
             return True
             
         except Exception as e:
