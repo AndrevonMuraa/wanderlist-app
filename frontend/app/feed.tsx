@@ -15,7 +15,7 @@ interface Activity {
   user_id: string;
   user_name: string;
   user_picture?: string;
-  activity_type: 'visit' | 'milestone' | 'country_complete' | 'continent_complete' | 'country_visit' | 'trip_completed';
+  activity_type: 'visit' | 'milestone' | 'country_complete' | 'continent_complete' | 'country_visit' | 'trip_completed' | 'user_created_visit';
   landmark_name?: string;
   country_name?: string;
   continent_name?: string;
@@ -23,6 +23,7 @@ interface Activity {
   created_at: string;
   is_liked: boolean;
   like_count: number;
+  likes_count?: number;
   visibility: 'public' | 'friends' | 'private';
   has_photos?: boolean;
   has_diary?: boolean;
