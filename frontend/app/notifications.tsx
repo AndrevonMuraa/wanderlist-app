@@ -43,6 +43,11 @@ export default function NotificationsScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
+  // Navigate back to profile tab explicitly
+  const handleBack = () => {
+    router.push('/(tabs)/profile');
+  };
+
   useEffect(() => {
     loadNotifications();
   }, []);
