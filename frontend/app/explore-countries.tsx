@@ -951,6 +951,12 @@ const styles = StyleSheet.create({
   flagSectionFull: {
     width: '100%',
     height: '70%',  // Flag takes 70% of card
+    backgroundColor: '#f5f5f5',  // Light background for flags with transparent parts
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  flagImageStyle: {
+    resizeMode: 'contain',
   },
   flagNameGradient: {
     position: 'absolute',
