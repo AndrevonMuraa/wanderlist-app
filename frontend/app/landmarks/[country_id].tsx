@@ -9,6 +9,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import theme, { gradients } from '../../styles/theme';
 import UpgradeModal from '../../components/UpgradeModal';
+import ProFeatureLock from '../../components/ProFeatureLock';
+import { useSubscription } from '../../hooks/useSubscription';
 import { BACKEND_URL } from '../../utils/config';
 import { ProgressBar } from '../../components/ProgressBar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
