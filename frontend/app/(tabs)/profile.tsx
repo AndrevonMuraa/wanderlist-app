@@ -314,62 +314,6 @@ export default function ProfileScreen() {
         {/* Badges - Removed, duplicates Journey */}
 
         {/* Menu - Simplified */}
-        {/* Friend Limit Card for Free Users */}
-        {user?.subscription_tier === 'free' && stats && (
-          <Surface style={styles.limitsCard}>
-            <View style={styles.limitHeader}>
-              <Ionicons name="information-circle-outline" size={24} color={theme.colors.primary} />
-              <Text style={styles.limitTitle}>Your Plan Limits</Text>
-            </View>
-            
-            <View style={styles.limitItem}>
-              <View style={styles.limitInfo}>
-                <Ionicons name="people-outline" size={20} color={theme.colors.textSecondary} />
-                <Text style={styles.limitLabel}>Friends</Text>
-              </View>
-              <View style={styles.limitProgress}>
-                <Text style={[
-                  styles.limitValue,
-                  stats.friends_count >= 5 && { color: theme.colors.error }
-                ]}>
-                  {stats.friends_count}/5
-                </Text>
-                <View style={styles.progressBarContainer}>
-                  <View 
-                    style={[
-                      styles.progressBar,
-                      { 
-                        width: `${(stats.friends_count / 5) * 100}%`,
-                        backgroundColor: stats.friends_count >= 5 ? theme.colors.error : theme.colors.primary
-                      }
-                    ]} 
-                  />
-                </View>
-              </View>
-            </View>
-
-            <TouchableOpacity 
-              style={styles.upgradeButton} 
-              onPress={() => setShowUpgradeModal(true)}
-              activeOpacity={0.8}
-            >
-              <LinearGradient
-                colors={[theme.colors.primary, theme.colors.primaryDark]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.upgradeGradient}
-              >
-                <Ionicons name="rocket-outline" size={20} color="#fff" />
-                <Text style={styles.upgradeButtonText}>Upgrade Plan</Text>
-                <Ionicons name="arrow-forward" size={18} color="#fff" />
-              </LinearGradient>
-            </TouchableOpacity>
-          </Surface>
-        )}
-
-        {/* Stats - Removed, duplicates Journey/Explore */}
-
-        {/* Menu - Simplified */}
         <Surface style={styles.menuCard}>
           <List.Item
             title="About WanderList"
