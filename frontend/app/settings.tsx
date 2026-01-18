@@ -215,27 +215,6 @@ export default function SettingsScreen() {
                 ios_backgroundColor="#E0E0E0"
               />
             </View>
-            
-            <View style={styles.settingDivider} />
-            
-            <View style={styles.settingItem}>
-              <View style={styles.settingItemLeft}>
-                <View style={[styles.settingIcon, { backgroundColor: 'rgba(155, 89, 182, 0.1)' }]}>
-                  <Ionicons name="mail-outline" size={18} color="#9b59b6" />
-                </View>
-                <View style={styles.settingTexts}>
-                  <Text style={styles.settingLabel}>Email Notifications</Text>
-                  <Text style={styles.settingDescription}>Updates and travel tips</Text>
-                </View>
-              </View>
-              <Switch
-                value={emailNotifications}
-                onValueChange={setEmailNotifications}
-                trackColor={{ false: '#E0E0E0', true: theme.colors.primary + '60' }}
-                thumbColor={emailNotifications ? theme.colors.primary : '#f4f3f4'}
-                ios_backgroundColor="#E0E0E0"
-              />
-            </View>
           </View>
         </View>
 
