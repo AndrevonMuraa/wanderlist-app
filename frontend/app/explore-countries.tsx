@@ -245,16 +245,16 @@ export default function ExploreCountriesScreen() {
                 activeOpacity={0.9}
               >
                 <View style={styles.countryCard}>
-                  {/* Full Flag - Top 70% */}
-                  <ImageBackground
-                    source={{ uri: flagUrl }}
-                    style={styles.flagSectionFull}
-                    resizeMode="contain"
-                    imageStyle={styles.flagImageStyle}
-                  >
+                  {/* Full Flag - Top Section */}
+                  <View style={styles.flagSectionFull}>
+                    <Image
+                      source={{ uri: flagUrl }}
+                      style={styles.flagImage}
+                      resizeMode="cover"
+                    />
                     {/* Country Name Overlay */}
                     <LinearGradient
-                      colors={['transparent', 'rgba(0,0,0,0.6)']}
+                      colors={['transparent', 'rgba(0,0,0,0.7)']}
                       style={styles.flagNameGradient}
                     >
                       <Text style={styles.countryNameOnFlag}>{country.name}</Text>
@@ -266,7 +266,7 @@ export default function ExploreCountriesScreen() {
                         <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
                       </View>
                     )}
-                  </ImageBackground>
+                  </View>
                   
                   {/* Info Bar - Bottom 30% */}
                   <View style={styles.infoBar}>
