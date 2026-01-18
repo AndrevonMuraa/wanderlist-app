@@ -346,6 +346,26 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginBottom: theme.spacing.md,
   },
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing.md,
+  },
+  upgradePhotoHint: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(118, 75, 162, 0.1)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  upgradePhotoHintText: {
+    fontSize: 11,
+    color: '#764ba2',
+    fontWeight: '600',
+  },
   photoScroll: {
     marginTop: theme.spacing.sm,
   },
