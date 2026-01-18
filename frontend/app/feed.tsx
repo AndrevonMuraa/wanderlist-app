@@ -341,8 +341,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: theme.spacing.sm,
   },
-    alignItems: 'center',
-  },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
