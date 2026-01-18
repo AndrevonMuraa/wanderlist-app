@@ -16,8 +16,7 @@ import theme from '../styles/theme';
 import RankBadge from '../components/RankBadge';
 import { getUserRank } from '../utils/rankSystem';
 import UniversalHeader from '../components/UniversalHeader';
-
-const BACKEND_URL = Platform.OS === 'web' ? '' : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
+import { BACKEND_URL } from '../utils/config';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
