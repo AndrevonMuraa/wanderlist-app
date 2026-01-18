@@ -15,10 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 import UniversalHeader from '../../components/UniversalHeader';
-
-const BACKEND_URL = Platform.OS === 'web' 
-  ? '' 
-  : (process.env.EXPO_PUBLIC_BACKEND_URL || '');
+import { BACKEND_URL } from '../../utils/config';
 
 const { width } = Dimensions.get('window');
 
