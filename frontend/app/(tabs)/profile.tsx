@@ -376,23 +376,16 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
+  // ============ CONTAINER ============
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
   },
+
+  // ============ HEADER ============
   stickyHeader: {
     paddingHorizontal: theme.spacing.md,
     paddingBottom: theme.spacing.md,
-  },
-  brandingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  brandingTextDark: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#2A2A2A',
   },
   headerRow: {
     flexDirection: 'row',
@@ -434,6 +427,18 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 8,
   },
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  brandingTextDark: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#2A2A2A',
+  },
+
+  // ============ PROFILE CARD ============
   profileCard: {
     margin: theme.spacing.md,
     padding: theme.spacing.md,
@@ -441,245 +446,20 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
-  profileImage: {
-    width: 80,  // Reduced from 100
-    height: 80,
-    borderRadius: 40,
-    marginBottom: theme.spacing.sm,  // Reduced from md
-  },
-  defaultProfileImage: {
-    backgroundColor: theme.colors.surfaceTinted,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  userName: {
-    ...theme.typography.h2,
-    color: theme.colors.text,
-    marginBottom: theme.spacing.xs,
-  },
-  userBio: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
-    textAlign: 'center',
-    marginBottom: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.md,
-    lineHeight: 20,
-  },
-  locationRow: {
+
+  // ============ USER & RANK ROW ============
+  userRankRow: {
     flexDirection: 'row',
+    marginTop: 4,
+    marginBottom: 8,
+    width: '100%',
     alignItems: 'center',
-    gap: 4,
-    marginBottom: theme.spacing.sm,
-  },
-  userLocation: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-  },
-  userEmail: {
-    ...theme.typography.bodySmall,
-    color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.md,
-  },
-  premiumBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    borderRadius: theme.borderRadius.round,
-  },
-  premiumText: {
-    marginLeft: theme.spacing.xs,
-    ...theme.typography.labelSmall,
-    fontWeight: '700',
-  },
-  freemiumText: {
-    marginLeft: theme.spacing.xs,
-    ...theme.typography.labelSmall,
-    fontWeight: '700',
-    color: theme.colors.textSecondary,
-  },
-  rankContainer: {
-    marginTop: theme.spacing.lg,
-    alignItems: 'center',
-  },
-  compactStatsCard: {
-    marginHorizontal: theme.spacing.md,
-    marginTop: theme.spacing.sm,
-    marginBottom: theme.spacing.md,
-    paddingVertical: theme.spacing.lg,
-    paddingHorizontal: theme.spacing.md,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#F0F0F0',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  compactStatsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  compactStat: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  compactStatNumber: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#2A2A2A',  // Explicit dark color
-    marginBottom: 4,
-  },
-  compactContainer: {
-    margin: theme.spacing.md,
-  },
-  topRow: {
-    flexDirection: 'row',
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: '#FFFFFF',
-    ...theme.shadows.card,
-    marginBottom: theme.spacing.sm,
   },
   userSection: {
-    flexDirection: 'row',
-    flex: 1,
-    alignItems: 'center',
-  },
-  compactProfileImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: theme.spacing.sm,
-  },
-  userInfo: {
-    flex: 1,
-  },
-  compactUserName: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: theme.colors.text,
-    marginBottom: 4,
-  },
-  compactBadge: {
+    flex: 65,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: theme.spacing.xs,
-    paddingVertical: 2,
-    borderRadius: theme.borderRadius.sm,
-    alignSelf: 'flex-start',
-  },
-  compactBadgeText: {
-    fontSize: 10,
-    fontWeight: '600',
-  },
-  quickStats: {
-    flexDirection: 'row',
-    gap: theme.spacing.md,
-  },
-  quickStatItem: {
-    alignItems: 'center',
-  },
-  quickStatNumber: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: theme.colors.text,
-  },
-  quickStatLabel: {
-    fontSize: 9,
-    fontWeight: '600',
-    color: theme.colors.textSecondary,
-    textTransform: 'uppercase',
-  },
-  compactRankSection: {
-    alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-  },
-  compactStatLabel: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#6B6B6B',  // Explicit gray
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  compactStatDivider: {
-    width: 1,
-    height: 24,
-    backgroundColor: theme.colors.border,
-  },
-  profileRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: theme.spacing.md,
-  },
-  profileImageCompact: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: theme.spacing.md,
-  },
-  profileInfo: {
-    flex: 1,
-  },
-  userNameCompact: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: theme.colors.text,
-    marginBottom: 6,
-  },
-  tierBadgeCompact: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    alignSelf: 'flex-start',
-  },
-  tierText: {
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  statsRowCompact: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingTop: theme.spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
-  },
-  gridHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
-  },
-  rankBadgeSmall: {
-    marginTop: 6,
-  },
-  statDivider: {
-    width: 1,
-    height: 30,
-    backgroundColor: theme.colors.border,
-  },
-  userHeroSection: {
-    alignItems: 'center',
-    marginBottom: theme.spacing.lg,
-  },
-  heroRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    marginBottom: theme.spacing.md,
-    width: '100%',
-  },
-  userLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 2,
+    paddingRight: 4,
   },
   profileImageLarge: {
     width: 85,
@@ -687,8 +467,14 @@ const styles = StyleSheet.create({
     borderRadius: 42.5,
     marginRight: theme.spacing.md,
   },
-  userInfoLeft: {
+  userDetails: {
     flex: 1,
+    marginLeft: 8,
+  },
+  nameEditRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
   },
   userNameLarge: {
     fontSize: 24,
@@ -696,7 +482,18 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginBottom: 6,
   },
-  tierBadgeLarge: {
+  editButton: {
+    marginLeft: 6,
+    padding: 2,
+  },
+  rankSection: {
+    flex: 35,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+
+  // ============ TIER BADGE ============
+  tierBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
@@ -705,226 +502,48 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     alignSelf: 'flex-start',
   },
-  tierTextLarge: {
+  tierText: {
     fontSize: 12,
     fontWeight: '600',
   },
-  rankRight: {
-    marginLeft: theme.spacing.sm,
+  tierPremium: {
+    color: theme.colors.accent,
+  },
+  tierBasic: {
+    color: theme.colors.primary,
+  },
+  tierFree: {
+    color: theme.colors.textSecondary,
   },
 
-  profileImageHero: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    marginBottom: theme.spacing.md,
-  },
-  userNameHero: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: theme.colors.text,
-    marginBottom: theme.spacing.xs,
-  },
-  tierRankRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.sm,
-    marginTop: theme.spacing.xs,
-  },
-  tierBadgeHero: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  tierTextHero: {
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  statsGrid2x2: {
-    paddingTop: theme.spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
-    width: '100%',
-  },
+  // ============ STATS ROW ============
   statsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: theme.spacing.sm,
-  },
-  statBox2x2: {
-    alignItems: 'center',
-    paddingVertical: theme.spacing.xs,
-    flex: 1,
-  },
-  statNum2x2: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: theme.colors.text,
-    marginTop: 4,
-    marginBottom: 2,
-  },
-  statLabel2x2: {
-    fontSize: 9,
-    fontWeight: '600',
-    color: theme.colors.textSecondary,
-    textTransform: 'uppercase',
-  },
-  rankHeroSection: {
-    marginTop: theme.spacing.xs,
-  },
-  elegantStatsSection: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingTop: theme.spacing.md,
-    paddingHorizontal: theme.spacing.sm,
+    paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
+    borderTopColor: '#E0E0E0',
   },
-  elegantStatItem: {
-    alignItems: 'center',
-    gap: 4,
-  },
-  elegantStatValue: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: theme.colors.text,
-  },
-  elegantStatLabel: {
-    fontSize: 9,
-    fontWeight: '600',
-    color: theme.colors.textSecondary,
-    textTransform: 'uppercase',
-  },
-  gridProfileImage: {
-    width: 45,
-    height: 45,
-    borderRadius: 22,
-    marginRight: theme.spacing.sm,
-  },
-  gridUserInfo: {
+  statItem: {
     flex: 1,
+    alignItems: 'center',
   },
-  gridUserName: {
+  statValue: {
     fontSize: 16,
-    fontWeight: '700',
-    color: theme.colors.text,
-    marginBottom: 6,
-  },
-  gridStatsChips: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-  },
-  statsChip: {
-    backgroundColor: `${theme.colors.primary}15`,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 10,
-  },
-  chipText: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: theme.colors.text,
-  },
-  featureGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.spacing.sm,
-  },
-  gridCard: {
-    width: '48%',
-    aspectRatio: 1.2,
-    borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-  },
-  gridCardTitle: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: theme.colors.text,
-  },
-  statItemCompact: {
-    alignItems: 'center',
-  },
-  statNumCompact: {
-    fontSize: 20,
     fontWeight: '800',
-    color: theme.colors.text,
-    marginBottom: 4,
+    color: '#2A2A2A',
+    marginTop: 2,
   },
-  statLabelCompact: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: theme.colors.textSecondary,
-    textTransform: 'uppercase',
-  },
-  rankProgressCard: {
-    margin: theme.spacing.md,
-    marginTop: 0,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.lg,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
-  streakCard: {
-    margin: theme.spacing.md,
-    marginTop: 0,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.lg,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
-  statsCard: {
-    margin: theme.spacing.md,
-    marginTop: 0,
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
-  sectionTitle: {
-    ...theme.typography.h3,
-    color: theme.colors.text,
-    marginBottom: theme.spacing.md,
-  },
-  statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  statBox: {
-    width: '48%',
-    alignItems: 'center',
-    padding: theme.spacing.md,
-    backgroundColor: theme.colors.surfaceTinted,
-    borderRadius: theme.borderRadius.lg,
-    marginBottom: theme.spacing.md,
-  },
-  statIconCircle: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-  },
-  statNumber: {
-    ...theme.typography.h2,
-    color: theme.colors.text,
-    marginTop: theme.spacing.xs,
+  statValueGold: {
+    color: '#C9A961',
   },
   statLabel: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    marginTop: theme.spacing.xs,
+    fontSize: 8,
+    fontWeight: '600',
+    color: '#6B6B6B',
+    textTransform: 'uppercase',
   },
+
+  // ============ MENU CARD ============
   menuCard: {
     margin: theme.spacing.md,
     marginTop: 0,
@@ -945,6 +564,8 @@ const styles = StyleSheet.create({
   divider: {
     backgroundColor: theme.colors.border,
   },
+
+  // ============ FOOTER ============
   logoutButton: {
     margin: theme.spacing.md,
     borderColor: theme.colors.error,
@@ -956,216 +577,5 @@ const styles = StyleSheet.create({
     ...theme.typography.caption,
     color: theme.colors.textLight,
     marginBottom: theme.spacing.xl,
-  },
-  progressCard: {
-    margin: theme.spacing.md,
-    padding: theme.spacing.xl,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
-  overallProgressContainer: {
-    alignItems: 'center',
-    marginTop: theme.spacing.lg,
-    marginBottom: theme.spacing.xl,
-  },
-  progressDescription: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
-    textAlign: 'center',
-    marginTop: theme.spacing.md,
-    maxWidth: '80%',
-  },
-  continentalSection: {
-    marginTop: theme.spacing.md,
-  },
-  subsectionTitle: {
-    ...theme.typography.h3,
-    color: theme.colors.text,
-    fontWeight: '700',
-    marginBottom: theme.spacing.md,
-  },
-  continentItem: {
-    marginBottom: theme.spacing.md,
-  },
-  continentHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing.xs,
-  },
-  continentNameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.xs,
-  },
-  continentName: {
-    ...theme.typography.body,
-    color: theme.colors.text,
-    fontWeight: '600',
-  },
-  continentCount: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    fontWeight: '500',
-  },
-  continentProgressBar: {
-    marginTop: theme.spacing.xs / 2,
-  },
-  badgesCard: {
-    margin: theme.spacing.md,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
-  badgesHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing.md,
-  },
-  badgeCount: {
-    ...theme.typography.caption,
-    color: theme.colors.primary,
-    fontWeight: '700',
-  },
-  badgesGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.spacing.md,
-  },
-  badgeItem: {
-    width: '28%',
-    alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-  },
-  badgeIconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: theme.colors.backgroundSecondary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: theme.spacing.xs,
-    position: 'relative',
-    ...theme.shadows.sm,
-  },
-  badgeEmoji: {
-    fontSize: 32,
-  },
-  featuredBadge: {
-    position: 'absolute',
-    top: 2,
-    right: 2,
-    backgroundColor: theme.colors.surface,
-    borderRadius: 10,
-    width: 20,
-    height: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...theme.shadows.sm,
-  },
-  badgeName: {
-    ...theme.typography.caption,
-    color: theme.colors.text,
-    fontWeight: '600',
-    textAlign: 'center',
-    fontSize: 11,
-  },
-  viewAllBadges: {
-    width: '28%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: theme.spacing.sm,
-  },
-  viewAllText: {
-    ...theme.typography.caption,
-    color: theme.colors.primary,
-    fontWeight: '600',
-    marginTop: theme.spacing.xs / 2,
-  },
-  statsHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing.lg,
-  },
-  statIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: theme.colors.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-    ...theme.shadows.sm,
-  },
-  statValue: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: theme.colors.text,
-    marginBottom: 2,
-  },
-  statSubtext: {
-    fontSize: 10,
-    color: theme.colors.textSecondary,
-  },
-  milestonesCard: {
-    margin: theme.spacing.md,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
-  timelineContainer: {
-    marginTop: theme.spacing.md,
-  },
-  timelineItem: {
-    flexDirection: 'row',
-    marginBottom: theme.spacing.lg,
-    position: 'relative',
-  },
-  timelineDot: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: theme.colors.backgroundSecondary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 2,
-    ...theme.shadows.sm,
-  },
-  timelineEmoji: {
-    fontSize: 24,
-  },
-  timelineLine: {
-    position: 'absolute',
-    left: 23,
-    top: 48,
-    width: 2,
-    height: '100%',
-    backgroundColor: theme.colors.border,
-  },
-  timelineContent: {
-    flex: 1,
-    marginLeft: theme.spacing.md,
-    paddingTop: 4,
-  },
-  milestoneName: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: theme.colors.text,
-    marginBottom: 2,
-  },
-  milestoneDescription: {
-    fontSize: 13,
-    color: theme.colors.textSecondary,
-    marginBottom: 4,
-  },
-  milestoneDate: {
-    fontSize: 11,
-    color: theme.colors.textLight,
-    fontWeight: '600',
   },
 });
