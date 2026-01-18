@@ -12,6 +12,8 @@ import { CircularProgress } from '../../components/CircularProgress';
 import { ProgressBar } from '../../components/ProgressBar';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import AddUserCreatedVisitModal from '../../components/AddUserCreatedVisitModal';
+import ProFeatureLock from '../../components/ProFeatureLock';
+import { useSubscription } from '../../hooks/useSubscription';
 import { BACKEND_URL } from '../../utils/config';
 
 const getToken = async (): Promise<string | null> => {
