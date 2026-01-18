@@ -431,6 +431,13 @@ export default function LandmarksScreen() {
         onUpgrade={handleUpgrade}
       />
       
+      {/* Pro Feature Lock Modal */}
+      <ProFeatureLock
+        visible={showProLock}
+        onClose={() => setShowProLock(false)}
+        feature="premium_landmarks"
+      />
+      
       {/* Country Visit Modal */}
       <AddCountryVisitModal
         visible={showCountryVisitModal}
