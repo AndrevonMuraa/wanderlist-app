@@ -1034,22 +1034,32 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: theme.spacing.sm,
+    paddingTop: theme.spacing.lg,
+    zIndex: 5,
   },
   countryNameOnFlag: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '700',
     color: '#fff',
-    textShadowColor: 'rgba(0,0,0,0.75)',
+    textShadowColor: 'rgba(0,0,0,0.8)',
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    textShadowRadius: 4,
+    letterSpacing: 0.3,
   },
   completeBadgeTop: {
     position: 'absolute',
-    top: theme.spacing.xs,
-    right: theme.spacing.xs,
+    top: theme.spacing.sm,
+    right: theme.spacing.sm,
     backgroundColor: 'rgba(255,255,255,0.95)',
-    borderRadius: 12,
-    padding: 2,
+    borderRadius: 14,
+    padding: 3,
+    zIndex: 6,
+    // Premium shadow
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
   },
   infoBar: {
     height: '30%',
@@ -1058,8 +1068,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: theme.spacing.md,
     backgroundColor: theme.colors.surface,
+    // Subtle top border with gradient effect
     borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
+    borderTopColor: 'rgba(0,0,0,0.08)',
   },
   pointsSection: {
     flexDirection: 'row',
@@ -1069,7 +1080,8 @@ const styles = StyleSheet.create({
   pointsText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#C9A961',
+    color: '#B8860B',  // Darker gold for premium feel
+    letterSpacing: 0.2,
   },
   progressMini: {
     flexDirection: 'row',
