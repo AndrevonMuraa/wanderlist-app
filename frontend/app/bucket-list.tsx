@@ -438,11 +438,11 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: theme.borderRadius.sm,
     borderWidth: 1,
-    borderColor: 'rgba(233, 30, 99, 0.3)',
+    borderColor: 'rgba(118, 75, 162, 0.3)',
   },
   premiumText: {
     ...theme.typography.caption,
-    color: '#E91E63',
+    color: '#764ba2',
     fontWeight: '700',
     fontSize: 10,
   },
