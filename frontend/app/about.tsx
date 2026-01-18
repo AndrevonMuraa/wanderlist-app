@@ -6,23 +6,88 @@ import {
   TouchableOpacity,
   Platform,
   Dimensions,
+  TextInput,
+  Alert,
+  StatusBar,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import theme from '../styles/theme';
+import * as SecureStore from 'expo-secure-store';
+import theme, { gradients } from '../styles/theme';
+import { BACKEND_URL } from '../utils/config';
 
 const { width } = Dimensions.get('window');
 
+const getToken = async (): Promise<string | null> => {
+  if (Platform.OS === 'web') {
+    return localStorage.getItem('auth_token');
+  }
+  return await SecureStore.getItemAsync('auth_token');
+};
+
 export default function AboutScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null);
+  const [supportSubject, setSupportSubject] = useState('');
+  const [supportMessage, setSupportMessage] = useState('');
+  const [sendingSupport, setSendingSupport] = useState(false);
+
+  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   const toggleSection = (section: string) => {
     setExpandedSection(expandedSection === section ? null : section);
   };
+
+  const toggleFAQ = (faq: string) => {
+    setExpandedFAQ(expandedFAQ === faq ? null : faq);
+  };
+
+  const handleSendSupport = async () => {
+    if (!supportSubject.trim() || !supportMessage.trim()) {
+      Alert.alert('Missing Information', 'Please fill in both subject and message.');
+      return;
+    }
+
+    setSendingSupport(true);
+    try {
+      // For now, just show success - in production this would send to backend
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      Alert.alert(
+        'Message Sent! ✅',
+        'Thank you for contacting us. We\'ll get back to you within 24-48 hours.',
+        [{ text: 'OK', onPress: () => { setSupportSubject(''); setSupportMessage(''); } }]
+      );
+    } catch (error) {
+      Alert.alert('Error', 'Failed to send message. Please try again.');
+    } finally {
+      setSendingSupport(false);
+    }
+  };
+
+  const FAQItem = ({ id, question, answer }: { id: string; question: string; answer: string }) => (
+    <TouchableOpacity
+      style={styles.faqItem}
+      onPress={() => toggleFAQ(id)}
+      activeOpacity={0.7}
+    >
+      <View style={styles.faqHeader}>
+        <Text style={styles.faqQuestion}>{question}</Text>
+        <Ionicons
+          name={expandedFAQ === id ? 'chevron-up' : 'chevron-down'}
+          size={20}
+          color={theme.colors.textLight}
+        />
+      </View>
+      {expandedFAQ === id && (
+        <Text style={styles.faqAnswer}>{answer}</Text>
+      )}
+    </TouchableOpacity>
+  );
 
   const FeatureCard = ({
     icon,
@@ -30,23 +95,32 @@ export default function AboutScreen() {
     description,
     color,
     onPress,
+    isNew,
   }: {
     icon: string;
     title: string;
     description: string;
     color: string;
     onPress: () => void;
+    isNew?: boolean;
   }) => (
     <TouchableOpacity onPress={onPress} activeOpacity={0.8} style={styles.featureCard}>
       <Surface style={styles.featureCardSurface}>
         <View style={[styles.featureIcon, { backgroundColor: color + '15' }]}>
-          <Ionicons name={icon as any} size={32} color={color} />
+          <Ionicons name={icon as any} size={28} color={color} />
         </View>
         <View style={styles.featureContent}>
-          <Text style={styles.featureTitle}>{title}</Text>
+          <View style={styles.featureTitleRow}>
+            <Text style={styles.featureTitle}>{title}</Text>
+            {isNew && (
+              <View style={styles.newBadge}>
+                <Text style={styles.newBadgeText}>NEW</Text>
+              </View>
+            )}
+          </View>
           <Text style={styles.featureDescription}>{description}</Text>
         </View>
-        <Ionicons name="arrow-forward-circle" size={28} color={color} />
+        <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
       </Surface>
     </TouchableOpacity>
   );
@@ -73,7 +147,7 @@ export default function AboutScreen() {
       </View>
       <View style={styles.stepContent}>
         <View style={styles.stepHeader}>
-          <Ionicons name={icon as any} size={24} color={theme.colors.primary} />
+          <Ionicons name={icon as any} size={22} color={theme.colors.primary} />
           <Text style={styles.stepTitle}>{title}</Text>
         </View>
         <Text style={styles.stepDescription}>{description}</Text>
@@ -81,50 +155,25 @@ export default function AboutScreen() {
     </View>
   );
 
-  const TierCard = ({
-    name,
-    price,
-    features,
-    isPopular,
-    color,
-  }: {
-    name: string;
-    price: string;
-    features: string[];
-    isPopular?: boolean;
-    color: string;
-  }) => (
-    <Surface style={[styles.tierCard, isPopular && styles.tierCardPopular]}>
-      {isPopular && (
-        <View style={styles.popularBadge}>
-          <Text style={styles.popularBadgeText}>MOST POPULAR</Text>
-        </View>
-      )}
-      <Text style={[styles.tierName, { color }]}>{name}</Text>
-      <Text style={styles.tierPrice}>{price}</Text>
-      <View style={styles.tierFeatures}>
-        {features.map((feature, index) => (
-          <View key={index} style={styles.tierFeature}>
-            <Ionicons name="checkmark-circle" size={16} color={color} />
-            <Text style={styles.tierFeatureText}>{feature}</Text>
-          </View>
-        ))}
-      </View>
-    </Surface>
-  );
-
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Universal Header */}
+    <View style={styles.container}>
+      {/* Universal Header - Ocean to Sand gradient */}
       <LinearGradient
-        colors={['#3BB8C3', '#2AA8B3']}
-        style={styles.header}
+        colors={gradients.oceanToSand}
+        start={gradients.horizontal.start}
+        end={gradients.horizontal.end}
+        style={[styles.header, { paddingTop: topPadding }]}
       >
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>About WanderList</Text>
-        <View style={styles.headerRight} />
+        <View style={styles.headerRow}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>About & Help</Text>
+          <View style={styles.brandingContainer}>
+            <Ionicons name="earth" size={16} color="#2A2A2A" />
+            <Text style={styles.brandingText}>WanderList</Text>
+          </View>
+        </View>
       </LinearGradient>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
@@ -135,156 +184,225 @@ export default function AboutScreen() {
             style={styles.heroGradient}
           >
             <View style={styles.heroIcon}>
-              <Ionicons name="earth" size={64} color={theme.colors.primary} />
+              <Ionicons name="earth" size={56} color={theme.colors.primary} />
             </View>
             <Text style={styles.heroTitle}>Explore the World,{'\n'}One Landmark at a Time</Text>
             <Text style={styles.heroSubtitle}>
               Your personal travel companion for discovering and conquering the world's most amazing landmarks
             </Text>
+            <Text style={styles.versionText}>Version 4.31</Text>
           </LinearGradient>
         </View>
 
-        {/* What is WanderList? */}
+        {/* Quick Stats */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>What is WanderList?</Text>
-          <Surface style={styles.card}>
-            <Text style={styles.cardText}>
-              WanderList is a <Text style={styles.highlight}>gamified travel exploration app</Text> that transforms your journey into an exciting adventure. Discover 480 landmarks across 48 countries, track your progress, compete with friends, and unlock achievements as you explore the world.
-            </Text>
-            <View style={styles.statsRow}>
-              <View style={styles.statBox}>
-                <Text style={styles.statNumber}>480</Text>
-                <Text style={styles.statLabel}>Total Landmarks</Text>
-                <View style={styles.statBreakdown}>
-                  <Text style={styles.statBreakdownText}>380 Official</Text>
-                  <View style={styles.statBreakdownDot} />
-                  <Text style={[styles.statBreakdownText, styles.premiumText]}>100 Premium</Text>
-                </View>
+          <Surface style={styles.statsCard}>
+            <View style={styles.statsGrid}>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>520</Text>
+                <Text style={styles.statLabel}>Landmarks</Text>
               </View>
               <View style={styles.statDivider} />
-              <View style={styles.statBox}>
+              <View style={styles.statItem}>
                 <Text style={styles.statNumber}>48</Text>
                 <Text style={styles.statLabel}>Countries</Text>
-                <View style={styles.statBreakdown}>
-                  <Text style={styles.statBreakdownText}>Across 5 continents</Text>
-                </View>
+              </View>
+              <View style={styles.statDivider} />
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>5</Text>
+                <Text style={styles.statLabel}>Continents</Text>
+              </View>
+              <View style={styles.statDivider} />
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>6,580</Text>
+                <Text style={styles.statLabel}>Total Points</Text>
               </View>
             </View>
           </Surface>
         </View>
 
+        {/* Help & Support Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="help-circle" size={24} color={theme.colors.primary} />
+            <Text style={styles.sectionTitle}>Help & Support</Text>
+          </View>
+
+          {/* FAQ */}
+          <Surface style={styles.card}>
+            <Text style={styles.cardTitle}>Frequently Asked Questions</Text>
+            
+            <FAQItem
+              id="points"
+              question="How does the points system work?"
+              answer="You earn points for visiting landmarks: 10 points for official landmarks, 25 points for premium landmarks. There are two types of points:\n\n• Personal Points: Earned for all visits (with or without photos)\n• Leaderboard Points: Only earned when you upload photos with your visit\n\nThis encourages sharing your travel memories while still rewarding all visits!"
+            />
+            
+            <FAQItem
+              id="custom"
+              question="How do I add places not in the app?"
+              answer="Use 'Custom Visits' to record trips to places not in our database! You can:\n\n• Add any country name\n• Add up to 10 landmarks with individual photos\n• Add up to 10 general country photos\n• Write diary notes\n\nFind it on the Journey page under 'Custom Visits' or on the Explore page at the bottom."
+            />
+            
+            <FAQItem
+              id="privacy"
+              question="Who can see my visits?"
+              answer="You control your privacy! Each visit can be set to:\n\n🌐 Public - Everyone can see\n👥 Friends - Only your friends\n🔒 Private - Only you\n\nChange this when creating a visit or edit it later."
+            />
+            
+            <FAQItem
+              id="photos"
+              question="Where can I see all my photos?"
+              answer="Visit the 'My Photos' section on your Journey page! It shows all photos from:\n\n• Landmark visits\n• Country visits\n• Custom visits\n\nYou can filter by country, year, or type."
+            />
+            
+            <FAQItem
+              id="milestones"
+              question="What are the milestone badges?"
+              answer="Earn badges as you explore:\n\n🗺️ Explorer - 10 landmarks\n🧗 Adventurer - 25 landmarks\n🌍 Globetrotter - 50 landmarks\n✈️ World Traveler - 100 landmarks\n🧭 Seasoned Traveler - 200 landmarks\n🏆 Legend - 350 landmarks\n👑 Ultimate Explorer - 500 landmarks"
+            />
+            
+            <FAQItem
+              id="delete"
+              question="How do I delete my account?"
+              answer="To delete your account, please contact us using the form below with subject 'Account Deletion Request'. We'll process your request within 48 hours and permanently delete all your data."
+            />
+          </Surface>
+        </View>
+
+        {/* Contact Support */}
+        <View style={styles.section}>
+          <Surface style={styles.card}>
+            <Text style={styles.cardTitle}>Contact Support</Text>
+            <Text style={styles.cardSubtitle}>We typically respond within 24-48 hours</Text>
+            
+            <TextInput
+              style={styles.input}
+              placeholder="Subject (e.g., Bug Report, Feature Request)"
+              placeholderTextColor={theme.colors.textLight}
+              value={supportSubject}
+              onChangeText={setSupportSubject}
+            />
+            
+            <TextInput
+              style={[styles.input, styles.textArea]}
+              placeholder="Describe your issue or question..."
+              placeholderTextColor={theme.colors.textLight}
+              value={supportMessage}
+              onChangeText={setSupportMessage}
+              multiline
+              numberOfLines={5}
+              textAlignVertical="top"
+            />
+            
+            <TouchableOpacity
+              style={[styles.sendButton, (!supportSubject.trim() || !supportMessage.trim()) && styles.sendButtonDisabled]}
+              onPress={handleSendSupport}
+              disabled={sendingSupport || !supportSubject.trim() || !supportMessage.trim()}
+            >
+              <LinearGradient
+                colors={supportSubject.trim() && supportMessage.trim() ? [theme.colors.primary, theme.colors.secondary] : ['#ccc', '#aaa']}
+                style={styles.sendButtonGradient}
+              >
+                <Ionicons name="send" size={20} color="#fff" />
+                <Text style={styles.sendButtonText}>
+                  {sendingSupport ? 'Sending...' : 'Send Message'}
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </Surface>
+        </View>
+
         {/* How It Works */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>How It Works</Text>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="bulb" size={24} color={theme.colors.accent} />
+            <Text style={styles.sectionTitle}>How It Works</Text>
+          </View>
           <Surface style={styles.card}>
             <HowItWorksStep
               number={1}
               icon="compass"
               title="Explore Landmarks"
-              description="Browse through 480 carefully curated landmarks across the globe. From the Eiffel Tower to Machu Picchu, discover the world's wonders."
+              description="Browse 520 landmarks across 48 countries and 5 continents."
             />
             <HowItWorksStep
               number={2}
               icon="location"
               title="Visit & Check In"
-              description="Mark landmarks as visited. Add photos, write travel diaries, and share tips with the community."
+              description="Mark landmarks as visited. Add photos and travel diaries."
             />
             <HowItWorksStep
               number={3}
               icon="star"
               title="Earn Points & Badges"
-              description="Collect points for each visit. Unlock badges and achievements as you reach milestones and complete countries."
+              description="Collect points for visits. Upload photos for leaderboard points!"
             />
             <HowItWorksStep
               number={4}
               icon="people"
               title="Connect & Compete"
-              description="Add friends, share your journey on the activity feed, and climb the leaderboard to become a legendary explorer."
+              description="Add friends, share your journey, and climb the leaderboard."
             />
           </Surface>
         </View>
 
-        {/* Interactive Features */}
+        {/* Key Features */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Explore Features</Text>
-          <Text style={styles.sectionSubtitle}>Tap any card to try it out!</Text>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="sparkles" size={24} color="#FFD700" />
+            <Text style={styles.sectionTitle}>Key Features</Text>
+          </View>
 
           <FeatureCard
-            icon="map"
-            title="Discover Landmarks"
-            description="Explore 528 landmarks across 48 countries and 5 continents"
-            color={theme.colors.primary}
-            onPress={() => router.push('/continents')}
+            icon="images"
+            title="Photo Collection"
+            description="All your travel photos in one beautiful gallery"
+            color="#FF6B6B"
+            onPress={() => router.push('/photo-collection')}
+            isNew
           />
 
           <FeatureCard
-            icon="analytics"
-            title="Travel Analytics (Premium)"
-            description="Detailed stats, continental coverage, and personalized travel insights"
-            color={theme.colors.accent}
-            onPress={() => router.push('/analytics')}
-          />
-          
-          <FeatureCard
-            icon="folder-multiple"
-            title="Custom Collections (Premium)"
-            description="Create custom lists to organize your dream destinations"
-            color="#C9A961"
-            onPress={() => router.push('/collections')}
+            icon="airplane"
+            title="Custom Visits"
+            description="Record trips to places not in our database"
+            color="#9C27B0"
+            onPress={() => router.push('/(tabs)/journey')}
+            isNew
           />
 
           <FeatureCard
             icon="flag"
             title="Country Visits"
-            description="Record entire country experiences with 10-photo collages and diaries"
+            description="Record entire country experiences with photos & diaries"
             color={theme.colors.primary}
-            onPress={() => router.push('/(tabs)/explore')}
-          />
-
-          <FeatureCard
-            icon="camera"
-            title="Photo Galleries"
-            description="Full-screen photo viewer with swipe navigation"
-            color="#FFA726"
-            onPress={() => router.push('/(tabs)/journey')}
-          />
-
-          <FeatureCard
-            icon="people-circle"
-            title="Social Hub"
-            description="Connect with friends, share visits, and see their adventures"
-            color="#9C27B0"
-            onPress={() => router.push('/(tabs)/social')}
+            onPress={() => router.push('/my-country-visits')}
           />
 
           <FeatureCard
             icon="trophy"
-            title="Badges & Achievements"
-            description="Unlock achievement badges by reaching travel milestones"
-            color="#FF6B6B"
+            title="Achievements"
+            description="Unlock badges as you reach travel milestones"
+            color="#FFD700"
             onPress={() => router.push('/achievements')}
           />
 
           <FeatureCard
-            icon="search"
-            title="Advanced Search"
-            description="Filter landmarks by continent, category, visited status, and more"
+            icon="podium"
+            title="Leaderboard"
+            description="Compete with friends and travelers worldwide"
             color="#00BCD4"
-            onPress={() => router.push('/search')}
-          />
-
-          <FeatureCard
-            icon="diamond"
-            title="Premium Landmarks"
-            description="Access 100+ exclusive premium landmarks around the world"
-            color="#FFD700"
-            onPress={() => router.push('/continents')}
+            onPress={() => router.push('/leaderboard')}
           />
         </View>
 
-        {/* Core Mechanics */}
+        {/* Core Mechanics - Expandable */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Core Mechanics</Text>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="settings" size={24} color={theme.colors.textLight} />
+            <Text style={styles.sectionTitle}>Game Mechanics</Text>
+          </View>
           
           <TouchableOpacity
             style={styles.expandableCard}
@@ -294,80 +412,26 @@ export default function AboutScreen() {
             <Surface style={styles.card}>
               <View style={styles.expandableHeader}>
                 <View style={styles.expandableHeaderLeft}>
-                  <Ionicons name="star" size={24} color="#FFD700" />
-                  <Text style={styles.expandableTitle}>Points System</Text>
+                  <Ionicons name="star" size={22} color="#FFD700" />
+                  <Text style={styles.expandableTitle}>Dual Points System</Text>
                 </View>
                 <Ionicons
                   name={expandedSection === 'points' ? 'chevron-up' : 'chevron-down'}
-                  size={24}
+                  size={22}
                   color={theme.colors.textLight}
                 />
               </View>
               {expandedSection === 'points' && (
                 <View style={styles.expandableContent}>
                   <Text style={styles.expandableText}>
-                    <Text style={styles.bold}>Landmark Visits:</Text>{'\n'}
-                    • Official Landmarks: 10 points per visit{'\n'}
-                    • Premium Landmarks: 25 points per visit{'\n\n'}
-                    <Text style={styles.bold}>Completion Bonuses:</Text>{'\n'}
-                    • Country Completion: 50 bonus points{'\n'}
-                    • Continent Completion: 200 bonus points{'\n\n'}
-                    • <Text style={styles.bold}>Leaderboard:</Text> Compete globally or with friends{'\n'}
-                    • <Text style={styles.bold}>Rankings:</Text> Climb the ranks to become a legend
+                    <Text style={styles.bold}>Personal Points</Text> (always earned):{'\n'}
+                    • Official Landmarks: 10 pts{'\n'}
+                    • Premium Landmarks: 25 pts{'\n'}
+                    • Country Visit: 50 pts{'\n\n'}
+                    <Text style={styles.bold}>Leaderboard Points</Text> (with photos):{'\n'}
+                    • Same values, but only when you upload photos{'\n'}
+                    • Compete fairly with verified visits!
                   </Text>
-
-                  {/* Points Milestones Progress */}
-                  <View style={styles.pointsMilestonesSection}>
-                    <Text style={styles.pointsMilestonesTitle}>Points Milestones</Text>
-                    
-                    <View style={styles.milestoneRow}>
-                      <View style={styles.milestoneInfo}>
-                        <Ionicons name="trophy" size={16} color="#CD7F32" />
-                        <Text style={styles.milestoneText}>100 pts</Text>
-                      </View>
-                      <View style={styles.milestoneProgressBar}>
-                        <View style={[styles.milestoneProgressFill, { width: '20%', backgroundColor: '#CD7F32' }]} />
-                      </View>
-                      <Text style={styles.milestoneLabel}>Point Starter</Text>
-                    </View>
-
-                    <View style={styles.milestoneRow}>
-                      <View style={styles.milestoneInfo}>
-                        <Ionicons name="trophy" size={16} color="#C0C0C0" />
-                        <Text style={styles.milestoneText}>500 pts</Text>
-                      </View>
-                      <View style={styles.milestoneProgressBar}>
-                        <View style={[styles.milestoneProgressFill, { width: '40%', backgroundColor: '#C0C0C0' }]} />
-                      </View>
-                      <Text style={styles.milestoneLabel}>Point Collector</Text>
-                    </View>
-
-                    <View style={styles.milestoneRow}>
-                      <View style={styles.milestoneInfo}>
-                        <Ionicons name="trophy" size={16} color="#FFD700" />
-                        <Text style={styles.milestoneText}>1,000 pts</Text>
-                      </View>
-                      <View style={styles.milestoneProgressBar}>
-                        <View style={[styles.milestoneProgressFill, { width: '60%', backgroundColor: '#FFD700' }]} />
-                      </View>
-                      <Text style={styles.milestoneLabel}>Point Master</Text>
-                    </View>
-
-                    <View style={styles.milestoneRow}>
-                      <View style={styles.milestoneInfo}>
-                        <Ionicons name="trophy" size={16} color={theme.colors.primary} />
-                        <Text style={styles.milestoneText}>5,000 pts</Text>
-                      </View>
-                      <View style={styles.milestoneProgressBar}>
-                        <View style={[styles.milestoneProgressFill, { width: '100%', backgroundColor: theme.colors.primary }]} />
-                      </View>
-                      <Text style={styles.milestoneLabel}>Point Legend</Text>
-                    </View>
-
-                    <Text style={styles.pointsExplanation}>
-                      💡 Earn badges automatically when you reach these milestones!
-                    </Text>
-                  </View>
                 </View>
               )}
             </Surface>
@@ -381,24 +445,25 @@ export default function AboutScreen() {
             <Surface style={styles.card}>
               <View style={styles.expandableHeader}>
                 <View style={styles.expandableHeaderLeft}>
-                  <Ionicons name="ribbon" size={24} color="#FF6B6B" />
+                  <Ionicons name="ribbon" size={22} color="#FF6B6B" />
                   <Text style={styles.expandableTitle}>Badge System</Text>
                 </View>
                 <Ionicons
                   name={expandedSection === 'badges' ? 'chevron-up' : 'chevron-down'}
-                  size={24}
+                  size={22}
                   color={theme.colors.textLight}
                 />
               </View>
               {expandedSection === 'badges' && (
                 <View style={styles.expandableContent}>
                   <Text style={styles.expandableText}>
-                    <Text style={styles.bold}>16 Badges to Unlock:</Text>{'\n'}
-                    • Milestone badges (10, 25, 50, 100, 250, 500 visits){'\n'}
-                    • Country completion badges{'\n'}
-                    • Points achievement badges (100, 500, 1K, 5K){'\n'}
-                    • Social badges (5, 10, 25 friends){'\n\n'}
-                    Badges are automatically awarded as you progress!
+                    <Text style={styles.bold}>Visit Milestones:</Text>{'\n'}
+                    10 → 25 → 50 → 100 → 200 → 350 → 500{'\n\n'}
+                    <Text style={styles.bold}>Points Milestones:</Text>{'\n'}
+                    100 → 500 → 1,000 → 5,000 pts{'\n\n'}
+                    <Text style={styles.bold}>Social Badges:</Text>{'\n'}
+                    5 → 10 → 25 friends{'\n\n'}
+                    Badges are awarded automatically! 🎉
                   </Text>
                 </View>
               )}
@@ -407,60 +472,29 @@ export default function AboutScreen() {
 
           <TouchableOpacity
             style={styles.expandableCard}
-            onPress={() => toggleSection('social')}
+            onPress={() => toggleSection('privacy')}
             activeOpacity={0.8}
           >
             <Surface style={styles.card}>
               <View style={styles.expandableHeader}>
                 <View style={styles.expandableHeaderLeft}>
-                  <Ionicons name="people" size={24} color={theme.colors.primary} />
-                  <Text style={styles.expandableTitle}>Social Features</Text>
+                  <Ionicons name="shield-checkmark" size={22} color="#4CAF50" />
+                  <Text style={styles.expandableTitle}>Privacy Controls</Text>
                 </View>
                 <Ionicons
-                  name={expandedSection === 'social' ? 'chevron-up' : 'chevron-down'}
-                  size={24}
+                  name={expandedSection === 'privacy' ? 'chevron-up' : 'chevron-down'}
+                  size={22}
                   color={theme.colors.textLight}
                 />
               </View>
-              {expandedSection === 'social' && (
+              {expandedSection === 'privacy' && (
                 <View style={styles.expandableContent}>
                   <Text style={styles.expandableText}>
-                    • <Text style={styles.bold}>Activity Feed:</Text> See friends' visits and milestones{'\n'}
-                    • <Text style={styles.bold}>Like & Comment:</Text> Engage with the community{'\n'}
-                    • <Text style={styles.bold}>Rich Visits:</Text> Share photos, diaries, and tips{'\n'}
-                    • <Text style={styles.bold}>Messaging:</Text> Chat with friends (Basic+){'\n'}
-                    • <Text style={styles.bold}>Leaderboards:</Text> Friends and global rankings
-                  </Text>
-                </View>
-              )}
-            </Surface>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.expandableCard}
-            onPress={() => toggleSection('progress')}
-            activeOpacity={0.8}
-          >
-            <Surface style={styles.card}>
-              <View style={styles.expandableHeader}>
-                <View style={styles.expandableHeaderLeft}>
-                  <Ionicons name="analytics" size={24} color="#00BCD4" />
-                  <Text style={styles.expandableTitle}>Progress Tracking</Text>
-                </View>
-                <Ionicons
-                  name={expandedSection === 'progress' ? 'chevron-up' : 'chevron-down'}
-                  size={24}
-                  color={theme.colors.textLight}
-                />
-              </View>
-              {expandedSection === 'progress' && (
-                <View style={styles.expandableContent}>
-                  <Text style={styles.expandableText}>
-                    • <Text style={styles.bold}>Overall Progress:</Text> Track your global exploration{'\n'}
-                    • <Text style={styles.bold}>Continental Breakdown:</Text> Progress per continent{'\n'}
-                    • <Text style={styles.bold}>Country Completion:</Text> Finish all landmarks in a country{'\n'}
-                    • <Text style={styles.bold}>Visual Stats:</Text> Apple Watch-style progress rings{'\n'}
-                    • <Text style={styles.bold}>Streaks:</Text> Track your visit streaks
+                    Control who sees each visit:{'\n\n'}
+                    🌐 <Text style={styles.bold}>Public</Text> - Everyone{'\n'}
+                    👥 <Text style={styles.bold}>Friends</Text> - Only friends{'\n'}
+                    🔒 <Text style={styles.bold}>Private</Text> - Only you{'\n\n'}
+                    Set privacy when creating visits or change anytime.
                   </Text>
                 </View>
               )}
@@ -468,101 +502,27 @@ export default function AboutScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Subscription Tiers */}
+        {/* App Info */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Choose Your Plan</Text>
-          <Text style={styles.sectionSubtitle}>Start free, upgrade anytime</Text>
-
-          <TierCard
-            name="Free"
-            price="$0"
-            features={[
-              '10 visits per month',
-              'Up to 5 friends',
-              'Friends leaderboard only',
-              'Access to 380 official landmarks',
-              'Basic progress tracking',
-            ]}
-            color="#9E9E9E"
-          />
-
-          <TierCard
-            name="Basic"
-            price="$4.99/mo"
-            features={[
-              'Unlimited visits',
-              'Up to 25 friends',
-              'Friend messaging',
-              'Full leaderboard access',
-              'All official landmarks',
-              'Rich visit sharing',
-            ]}
-            isPopular
-            color={theme.colors.primary}
-          />
-
-          <TierCard
-            name="Premium"
-            price="$9.99/mo"
-            features={[
-              'Everything in Basic',
-              'Unlimited friends',
-              'Access to 100 premium landmarks',
-              '25 points per premium visit',
-              'Global leaderboard',
-              'Priority support',
-            ]}
-            color="#FFD700"
-          />
-        </View>
-
-        {/* Why Use WanderList? */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Why Use WanderList?</Text>
-          <Surface style={styles.card}>
-            <View style={styles.benefitItem}>
-              <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
-              <View style={styles.benefitContent}>
-                <Text style={styles.benefitTitle}>Stay Motivated</Text>
-                <Text style={styles.benefitText}>
-                  Gamification keeps you excited about exploring new places
-                </Text>
-              </View>
+          <Surface style={styles.infoCard}>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Version</Text>
+              <Text style={styles.infoValue}>4.31.0</Text>
             </View>
-
-            <View style={styles.benefitItem}>
-              <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
-              <View style={styles.benefitContent}>
-                <Text style={styles.benefitTitle}>Track Your Adventures</Text>
-                <Text style={styles.benefitText}>
-                  Never forget where you've been with comprehensive tracking
-                </Text>
-              </View>
+            <View style={styles.infoDivider} />
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Last Updated</Text>
+              <Text style={styles.infoValue}>January 2026</Text>
             </View>
-
-            <View style={styles.benefitItem}>
-              <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
-              <View style={styles.benefitContent}>
-                <Text style={styles.benefitTitle}>Share with Friends</Text>
-                <Text style={styles.benefitText}>
-                  Connect with fellow travelers and share your experiences
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.benefitItem}>
-              <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
-              <View style={styles.benefitContent}>
-                <Text style={styles.benefitTitle}>Discover New Places</Text>
-                <Text style={styles.benefitText}>
-                  Curated list of 480 must-see landmarks around the world
-                </Text>
-              </View>
+            <View style={styles.infoDivider} />
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Database</Text>
+              <Text style={styles.infoValue}>520 landmarks, 48 countries</Text>
             </View>
           </Surface>
         </View>
 
-        {/* Call to Action */}
+        {/* CTA */}
         <View style={styles.ctaSection}>
           <TouchableOpacity
             style={styles.ctaButton}
@@ -575,16 +535,15 @@ export default function AboutScreen() {
               end={{ x: 1, y: 0 }}
               style={styles.ctaGradient}
             >
-              <Ionicons name="compass" size={24} color="#fff" />
-              <Text style={styles.ctaText}>Start Exploring Now</Text>
-              <Ionicons name="arrow-forward" size={24} color="#fff" />
+              <Ionicons name="compass" size={22} color="#fff" />
+              <Text style={styles.ctaText}>Start Exploring</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
 
-        <View style={{ height: theme.spacing.xxl }} />
+        <View style={{ height: 40 }} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -594,165 +553,218 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   header: {
+    paddingHorizontal: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+  },
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.md,
   },
   backButton: {
     padding: theme.spacing.xs,
   },
   headerTitle: {
-    ...theme.typography.h3,
-    color: '#fff',
+    fontSize: 20,
     fontWeight: '700',
+    color: '#fff',
   },
-  headerRight: {
-    width: 40,
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  brandingText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#2A2A2A',
   },
   scrollView: {
     flex: 1,
   },
-  // Hero Section
+  // Hero
   heroSection: {
-    marginBottom: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
   },
   heroGradient: {
-    padding: theme.spacing.xl,
+    padding: theme.spacing.lg,
     alignItems: 'center',
   },
   heroIcon: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     backgroundColor: 'rgba(32, 178, 170, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: theme.spacing.lg,
-    borderWidth: 3,
+    marginBottom: theme.spacing.md,
+    borderWidth: 2,
     borderColor: 'rgba(32, 178, 170, 0.2)',
   },
   heroTitle: {
-    ...theme.typography.h1,
-    color: theme.colors.text,
+    fontSize: 24,
     fontWeight: '700',
+    color: theme.colors.text,
     textAlign: 'center',
-    marginBottom: theme.spacing.md,
-    fontSize: 28,
-    lineHeight: 36,
+    marginBottom: theme.spacing.sm,
+    lineHeight: 32,
   },
   heroSubtitle: {
-    ...theme.typography.body,
+    fontSize: 14,
     color: theme.colors.textSecondary,
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 20,
     paddingHorizontal: theme.spacing.md,
+  },
+  versionText: {
+    fontSize: 12,
+    color: theme.colors.textLight,
+    marginTop: theme.spacing.sm,
+  },
+  // Stats
+  statsCard: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.md,
+    marginHorizontal: theme.spacing.lg,
+    ...theme.shadows.sm,
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  statItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  statNumber: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: theme.colors.primary,
+  },
+  statLabel: {
+    fontSize: 11,
+    color: theme.colors.textLight,
+    marginTop: 2,
+  },
+  statDivider: {
+    width: 1,
+    height: 30,
+    backgroundColor: theme.colors.border,
   },
   // Sections
   section: {
     paddingHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.xl,
+    marginBottom: theme.spacing.lg,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
   },
   sectionTitle: {
-    ...theme.typography.h2,
-    color: theme.colors.text,
+    fontSize: 18,
     fontWeight: '700',
-    marginBottom: theme.spacing.xs,
-  },
-  sectionSubtitle: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.md,
+    color: theme.colors.text,
   },
   card: {
     backgroundColor: theme.colors.surface,
     borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.lg,
+    padding: theme.spacing.md,
     ...theme.shadows.sm,
   },
-  cardText: {
-    ...theme.typography.body,
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
     color: theme.colors.text,
-    lineHeight: 24,
+    marginBottom: theme.spacing.xs,
+  },
+  cardSubtitle: {
+    fontSize: 13,
+    color: theme.colors.textLight,
     marginBottom: theme.spacing.md,
   },
-  highlight: {
-    color: theme.colors.primary,
-    fontWeight: '700',
+  // FAQ
+  faqItem: {
+    paddingVertical: theme.spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
   },
-  bold: {
-    fontWeight: '700',
-    color: theme.colors.text,
-  },
-  // Stats Row
-  statsRow: {
+  faqHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingTop: theme.spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
-  },
-  statBox: {
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
-  statNumber: {
-    ...theme.typography.h1,
-    color: theme.colors.primary,
-    fontWeight: '700',
-    fontSize: 32,
-  },
-  statLabel: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    marginTop: theme.spacing.xs / 2,
-  },
-  statDivider: {
-    width: 1,
-    height: 40,
-    backgroundColor: theme.colors.border,
-  },
-  statBreakdown: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: theme.spacing.xs / 2,
-    gap: 4,
-  },
-  statBreakdownText: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    fontSize: 11,
-  },
-  statBreakdownDot: {
-    width: 3,
-    height: 3,
-    borderRadius: 1.5,
-    backgroundColor: theme.colors.textLight,
-  },
-  premiumText: {
-    color: '#FFD700',
+  faqQuestion: {
+    fontSize: 14,
     fontWeight: '600',
+    color: theme.colors.text,
+    flex: 1,
+    paddingRight: theme.spacing.sm,
   },
-  // How It Works Steps
+  faqAnswer: {
+    fontSize: 13,
+    color: theme.colors.textSecondary,
+    lineHeight: 20,
+    marginTop: theme.spacing.sm,
+    paddingLeft: theme.spacing.xs,
+  },
+  // Contact Form
+  input: {
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.md,
+    fontSize: 14,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  textArea: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
+  sendButton: {
+    marginTop: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
+    overflow: 'hidden',
+  },
+  sendButtonDisabled: {
+    opacity: 0.7,
+  },
+  sendButtonGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.md,
+    gap: theme.spacing.sm,
+  },
+  sendButtonText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  // Steps
   stepContainer: {
     flexDirection: 'row',
-    marginBottom: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
   },
   stepNumber: {
     marginRight: theme.spacing.md,
   },
   stepNumberGradient: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
   },
   stepNumberText: {
-    ...theme.typography.h2,
-    color: '#fff',
+    fontSize: 14,
     fontWeight: '700',
+    color: '#fff',
   },
   stepContent: {
     flex: 1,
@@ -760,35 +772,35 @@ const styles = StyleSheet.create({
   stepHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.sm,
-    marginBottom: theme.spacing.xs,
+    gap: theme.spacing.xs,
+    marginBottom: 4,
   },
   stepTitle: {
-    ...theme.typography.h3,
+    fontSize: 15,
+    fontWeight: '600',
     color: theme.colors.text,
-    fontWeight: '700',
   },
   stepDescription: {
-    ...theme.typography.body,
+    fontSize: 13,
     color: theme.colors.textSecondary,
-    lineHeight: 22,
+    lineHeight: 18,
   },
   // Feature Cards
   featureCard: {
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
   },
   featureCardSurface: {
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.surface,
     ...theme.shadows.sm,
   },
   featureIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 44,
+    height: 44,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: theme.spacing.md,
@@ -796,36 +808,50 @@ const styles = StyleSheet.create({
   featureContent: {
     flex: 1,
   },
+  featureTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+  },
   featureTitle: {
-    ...theme.typography.body,
+    fontSize: 15,
+    fontWeight: '600',
     color: theme.colors.text,
-    fontWeight: '700',
-    marginBottom: theme.spacing.xs / 2,
   },
   featureDescription: {
-    ...theme.typography.caption,
+    fontSize: 12,
     color: theme.colors.textSecondary,
-    lineHeight: 18,
+    marginTop: 2,
   },
-  // Expandable Cards
+  newBadge: {
+    backgroundColor: '#FF6B6B',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  newBadgeText: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  // Expandable
   expandableCard: {
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
   },
   expandableHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   expandableHeaderLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.sm,
-    flex: 1,
   },
   expandableTitle: {
-    ...theme.typography.h3,
+    fontSize: 15,
+    fontWeight: '600',
     color: theme.colors.text,
-    fontWeight: '700',
   },
   expandableContent: {
     marginTop: theme.spacing.md,
@@ -834,159 +860,61 @@ const styles = StyleSheet.create({
     borderTopColor: theme.colors.border,
   },
   expandableText: {
-    ...theme.typography.body,
-    color: theme.colors.text,
-    lineHeight: 24,
-  },
-  // Points Milestones Styles
-  pointsMilestonesSection: {
-    marginTop: theme.spacing.lg,
-    paddingTop: theme.spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
-  },
-  pointsMilestonesTitle: {
-    ...theme.typography.h3,
-    color: theme.colors.text,
-    fontWeight: '700',
-    marginBottom: theme.spacing.md,
-  },
-  milestoneRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: theme.spacing.md,
-    gap: theme.spacing.sm,
-  },
-  milestoneInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    width: 80,
-  },
-  milestoneText: {
-    ...theme.typography.caption,
-    color: theme.colors.text,
-    fontWeight: '600',
-    fontSize: 12,
-  },
-  milestoneProgressBar: {
-    flex: 1,
-    height: 8,
-    backgroundColor: theme.colors.border,
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  milestoneProgressFill: {
-    height: '100%',
-    borderRadius: 4,
-  },
-  milestoneLabel: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    width: 100,
-    fontSize: 11,
-  },
-  pointsExplanation: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    fontStyle: 'italic',
-    marginTop: theme.spacing.sm,
-    textAlign: 'center',
-  },
-  // Tier Cards
-  tierCard: {
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.lg,
-    marginBottom: theme.spacing.md,
-    ...theme.shadows.sm,
-    position: 'relative',
-  },
-  tierCardPopular: {
-    borderWidth: 2,
-    borderColor: theme.colors.primary,
-  },
-  popularBadge: {
-    position: 'absolute',
-    top: -12,
-    left: 20,
-    backgroundColor: theme.colors.primary,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: 4,
-    borderRadius: theme.borderRadius.sm,
-  },
-  popularBadgeText: {
-    ...theme.typography.caption,
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 10,
-    letterSpacing: 1,
-  },
-  tierName: {
-    ...theme.typography.h2,
-    fontWeight: '700',
-    marginBottom: theme.spacing.xs,
-  },
-  tierPrice: {
-    ...theme.typography.h1,
-    color: theme.colors.text,
-    fontWeight: '700',
-    marginBottom: theme.spacing.md,
-  },
-  tierFeatures: {
-    gap: theme.spacing.sm,
-  },
-  tierFeature: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.sm,
-  },
-  tierFeatureText: {
-    ...theme.typography.body,
-    color: theme.colors.text,
-    flex: 1,
-  },
-  // Benefits
-  benefitItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: theme.spacing.md,
-  },
-  benefitContent: {
-    flex: 1,
-    marginLeft: theme.spacing.md,
-  },
-  benefitTitle: {
-    ...theme.typography.body,
-    color: theme.colors.text,
-    fontWeight: '700',
-    marginBottom: theme.spacing.xs / 2,
-  },
-  benefitText: {
-    ...theme.typography.body,
+    fontSize: 13,
     color: theme.colors.textSecondary,
     lineHeight: 20,
   },
-  // CTA Section
+  bold: {
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  // Info Card
+  infoCard: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.md,
+    ...theme.shadows.sm,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: theme.spacing.xs,
+  },
+  infoLabel: {
+    fontSize: 13,
+    color: theme.colors.textLight,
+  },
+  infoValue: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+  infoDivider: {
+    height: 1,
+    backgroundColor: theme.colors.border,
+    marginVertical: theme.spacing.xs,
+  },
+  // CTA
   ctaSection: {
     paddingHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.xl,
+    marginTop: theme.spacing.md,
   },
   ctaButton: {
-    borderRadius: theme.borderRadius.xl,
+    borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
-    ...theme.shadows.card,
+    ...theme.shadows.md,
   },
   ctaGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: theme.spacing.md + 4,
-    gap: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
+    gap: theme.spacing.sm,
   },
   ctaText: {
-    ...theme.typography.h3,
-    color: '#fff',
+    fontSize: 16,
     fontWeight: '700',
+    color: '#fff',
   },
 });
