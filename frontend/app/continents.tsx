@@ -9,6 +9,8 @@ import { BACKEND_URL } from '../utils/config';
 import * as SecureStore from 'expo-secure-store';
 import { useAuth } from '../contexts/AuthContext';
 import AddUserCreatedVisitModal from '../components/AddUserCreatedVisitModal';
+import ProFeatureLock from '../components/ProFeatureLock';
+import { useSubscription } from '../hooks/useSubscription';
 
 const { width } = Dimensions.get('window');
 
