@@ -279,7 +279,7 @@ export default function SocialHubScreen() {
           </View>
         </View>
 
-        {activity.activity_type === 'visit' && (
+        {(activity.activity_type === 'visit' || activity.activity_type === 'user_created_visit') && (
           <View style={styles.activityContent}>
             <Text style={styles.activityText}>
               Visited <Text style={styles.activityHighlight}>{activity.landmark_name}</Text>
