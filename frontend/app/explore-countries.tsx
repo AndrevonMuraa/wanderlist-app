@@ -482,7 +482,10 @@ export default function ExploreCountriesScreen() {
           <View style={styles.titleWithBack}>
             {continent && (
               <TouchableOpacity 
-                style={{
+                onPress={() => router.back()}
+                activeOpacity={0.7}
+              >
+                <View style={{
                   width: 36,
                   height: 36,
                   borderRadius: 18,
@@ -490,10 +493,9 @@ export default function ExploreCountriesScreen() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   marginRight: 12,
-                }}
-                onPress={() => router.back()}
-              >
-                <Ionicons name="arrow-back" size={22} color="#fff" />
+                }}>
+                  <Ionicons name="arrow-back" size={22} color="#fff" />
+                </View>
               </TouchableOpacity>
             )}
             <Text style={styles.headerTitle}>
