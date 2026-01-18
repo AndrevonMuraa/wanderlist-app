@@ -642,12 +642,6 @@ const styles = StyleSheet.create({
   headerTextContainer: {
     flex: 1,
   },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#fff',
-    marginBottom: 2,
-  },
   headerSubtitle: {
     fontSize: 13,
     color: 'rgba(255, 255, 255, 0.9)',
