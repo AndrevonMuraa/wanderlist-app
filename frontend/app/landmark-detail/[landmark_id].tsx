@@ -40,6 +40,8 @@ interface Landmark {
   country_name: string;
   continent: string;
   description: string;
+  image_url?: string;
+  images?: string[];
   facts?: LandmarkFact[];
   best_time_to_visit?: string;
   duration?: string;
