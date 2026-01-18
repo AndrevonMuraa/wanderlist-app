@@ -228,7 +228,7 @@ export default function LeaderboardScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="Leaderboard" />
+      <UniversalHeader title="Leaderboard" onBack={handleBack} />
 
       <ScrollView
         style={styles.content}
