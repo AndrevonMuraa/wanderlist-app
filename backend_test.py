@@ -11,7 +11,7 @@ from datetime import datetime
 import base64
 
 # Configuration
-BASE_URL = "https://data-integrity-31.preview.emergentagent.com/api"
+BASE_URL = "https://travel-app-repair.preview.emergentagent.com/api"
 TEST_EMAIL = "mobile@test.com"
 TEST_PASSWORD = "test123"
 
