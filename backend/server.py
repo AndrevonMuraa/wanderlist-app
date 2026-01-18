@@ -121,7 +121,7 @@ class Landmark(BaseModel):
     continent: str
     description: str
     category: str  # "official", "premium", or "user_suggested"
-    image_url: str
+    image_url: Optional[str] = None
     images: Optional[List[str]] = []  # Array of image URLs for gallery
     facts: Optional[List[LandmarkFact]] = []  # Historical/cultural facts
     best_time_to_visit: Optional[str] = "Year-round"
