@@ -1090,11 +1090,6 @@ const styles = StyleSheet.create({
     gap: theme.spacing.md,
     marginBottom: theme.spacing.xs,
   },
-  statItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
   statText: {
     fontSize: 11,
     fontWeight: '600',
