@@ -470,22 +470,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.border,
     marginLeft: 62,
   },
-  languageOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 14,
-    backgroundColor: theme.colors.background,
-    borderRadius: 14,
-  },
-  flagEmoji: {
-    fontSize: 20,
-  },
-  selectedLanguage: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
   accountList: {
     backgroundColor: theme.colors.background,
     borderRadius: 14,
