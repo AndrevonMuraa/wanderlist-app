@@ -872,10 +872,6 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     textTransform: 'uppercase',
   },
-
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-  },
   gridProfileImage: {
     width: 45,
     height: 45,
