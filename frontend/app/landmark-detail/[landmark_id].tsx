@@ -279,40 +279,76 @@ export default function LandmarkDetailScreen() {
       />
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Hero Section - Icon Based */}
+        {/* Hero Section with Image */}
         <Surface style={styles.heroCard}>
-          <View style={styles.heroContent}>
-            <View style={[
-              styles.landmarkIconLarge,
-              isPremium ? styles.landmarkIconPremium : styles.landmarkIconOfficial
-            ]}>
-              <Ionicons 
-                name={isPremium ? "diamond" : "location"} 
-                size={56} 
-                color={isPremium ? "#764ba2" : theme.colors.primary} 
+          {landmark.image_url ? (
+            <View style={styles.imageContainer}>
+              <Image 
+                source={{ uri: landmark.image_url }} 
+                style={styles.heroImage}
+                resizeMode="cover"
               />
-            </View>
-            
-            <Text style={styles.landmarkName}>{landmark.name}</Text>
-            
-            <View style={styles.locationRow}>
-              <Ionicons name="location" size={16} color={theme.colors.primary} />
-              <Text style={styles.locationText}>
-                {landmark.country_name} • {landmark.continent}
-              </Text>
-            </View>
-
-            <View style={styles.badgesRow}>
+              <LinearGradient
+                colors={['transparent', 'rgba(0,0,0,0.7)']}
+                style={styles.imageGradient}
+              />
+              <View style={styles.imageOverlay}>
+                <Text style={styles.landmarkNameOverlay}>{landmark.name}</Text>
+                <View style={styles.locationRowOverlay}>
+                  <Ionicons name="location" size={14} color="#fff" />
+                  <Text style={styles.locationTextOverlay}>
+                    {landmark.country_name} • {landmark.continent}
+                  </Text>
+                </View>
+              </View>
               {isPremium && (
+                <View style={styles.premiumBadgeImage}>
+                  <Ionicons name="diamond" size={12} color="#fff" />
+                  <Text style={styles.premiumBadgeImageText}>PREMIUM</Text>
+                </View>
+              )}
+            </View>
+          ) : (
+            <View style={styles.heroContent}>
+              <View style={[
+                styles.landmarkIconLarge,
+                isPremium ? styles.landmarkIconPremium : styles.landmarkIconOfficial
+              ]}>
+                <Ionicons 
+                  name={isPremium ? "diamond" : "location"} 
+                  size={56} 
+                  color={isPremium ? "#764ba2" : theme.colors.primary} 
+                />
+              </View>
+              <Text style={styles.landmarkName}>{landmark.name}</Text>
+              <View style={styles.locationRow}>
+                <Ionicons name="location" size={16} color={theme.colors.primary} />
+                <Text style={styles.locationText}>
+                  {landmark.country_name} • {landmark.continent}
+                </Text>
+              </View>
+            </View>
+          )}
+          
+          {/* Points Badge - Always visible below image/icon */}
+          <View style={styles.badgesContainer}>
+            <View style={styles.badgesRow}>
+              {isPremium && !landmark.image_url && (
                 <View style={styles.premiumBadge}>
                   <Ionicons name="diamond" size={12} color="#764ba2" />
                   <Text style={styles.premiumBadgeText}>PREMIUM</Text>
                 </View>
               )}
               <View style={styles.pointsBadge}>
-                <Ionicons name="star" size={12} color="#FFD700" />
+                <Ionicons name="star" size={14} color="#FFD700" />
                 <Text style={styles.pointsBadgeText}>{landmark.points} points</Text>
               </View>
+              {landmark.duration && (
+                <View style={styles.durationBadge}>
+                  <Ionicons name="time" size={14} color={theme.colors.primary} />
+                  <Text style={styles.durationBadgeText}>{landmark.duration}</Text>
+                </View>
+              )}
             </View>
           </View>
         </Surface>
