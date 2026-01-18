@@ -280,7 +280,7 @@ export default function FriendsScreen() {
               ]}
               textStyle={styles.limitChipText}
             >
-              {friends.length}/{friendLimit}
+              {friends.length}/{maxFriends}
             </Chip>
           )}
         </View>
