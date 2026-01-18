@@ -341,9 +341,6 @@ const styles = StyleSheet.create({
   headerRight: {
     width: 40,
   },
-  scrollView: {
-    flex: 1,
-  },
   notificationCard: {
     flexDirection: 'row',
     alignItems: 'center',
