@@ -429,41 +429,7 @@ export default function ExploreCountriesScreen() {
   };
 
   const renderListFooter = () => (
-    <View style={styles.featuresSection}>
-      <Text style={styles.featuresSectionTitle}>Premium Features</Text>
-      
-      {renderFeatureCard(
-        'analytics',
-        'Travel Analytics',
-        'Premium: View detailed stats & insights',
-        () => router.push('/analytics'),
-        theme.colors.primary
-      )}
-      
-      {renderFeatureCard(
-        'folder-multiple',
-        'My Collections',
-        'Premium: Organize your dream destinations',
-        () => router.push('/collections'),
-        theme.colors.accent
-      )}
-      
-      {renderFeatureCard(
-        'trophy',
-        'Leaderboard',
-        "Compete with travelers worldwide",
-        () => router.push('/leaderboard'),
-        theme.colors.accentYellow
-      )}
-      
-      {renderFeatureCard(
-        'ribbon',
-        'Achievements',
-        'Unlock badges and milestones',
-        () => router.push('/achievements'),
-        theme.colors.accentBronze
-      )}
-    </View>
+    <View style={styles.footerSpacer} />
   );
 
   if (loading) {
