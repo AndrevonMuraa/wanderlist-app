@@ -3428,9 +3428,6 @@ async def manually_check_achievements(current_user: User = Depends(get_current_u
 
 # ============= END ACHIEVEMENTS ENDPOINTS =============
 
-# Include the router in the main app
-app.include_router(api_router)
-
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
