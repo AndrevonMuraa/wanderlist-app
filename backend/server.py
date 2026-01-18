@@ -107,6 +107,7 @@ class Country(BaseModel):
     continent: str
     image_url: Optional[str] = None
     landmark_count: int = 0
+    total_points: int = 0  # Total available points (official*10 + premium*25)
 
 class LandmarkFact(BaseModel):
     title: Optional[str] = None
