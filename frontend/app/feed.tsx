@@ -259,12 +259,12 @@ export default function FeedScreen() {
               size={20} 
               color={activity.is_liked ? "#FF4B6E" : theme.colors.textSecondary} 
             />
-            {activity.like_count > 0 && (
+            {(activity.likes_count || activity.like_count || 0) > 0 && (
               <Text style={[
                 styles.likeCount,
                 activity.is_liked && styles.likeCountActive
               ]}>
-                {activity.like_count}
+                {activity.likes_count || activity.like_count || 0}
               </Text>
             )}
           </TouchableOpacity>
