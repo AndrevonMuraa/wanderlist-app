@@ -805,10 +805,19 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
 async def get_countries(current_user: User = Depends(get_current_user)):
     countries = await db.countries.find({}, {"_id": 0}).to_list(1000)
     
-    # Count ALL landmarks for each country (official + premium)
+    # Count ALL landmarks for each country and calculate total available points
     for country in countries:
-        count = await db.landmarks.count_documents({"country_id": country["country_id"]})
-        country["landmark_count"] = count
+        # Get all landmarks for this country
+        landmarks = await db.landmarks.find(
+            {"country_id": country["country_id"]}, 
+            {"category": 1, "points": 1}
+        ).to_list(1000)
+        
+        country["landmark_count"] = len(landmarks)
+        
+        # Calculate total available points (official=10pts, premium=25pts)
+        total_points = sum(lm.get("points", 10) for lm in landmarks)
+        country["total_points"] = total_points
     
     return [Country(**c) for c in countries]
 
