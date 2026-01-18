@@ -178,6 +178,20 @@ export default function FeedScreen() {
             </>
           )}
 
+          {activity.activity_type === 'user_created_visit' && (
+            <>
+              <Text style={styles.activityText}>
+                Explored <Text style={styles.activityHighlight}>{activity.country_name || 'a new destination'}</Text>
+              </Text>
+              {activity.points_earned > 0 && (
+                <View style={styles.activityPoints}>
+                  <Ionicons name="compass" size={14} color={theme.colors.accent} />
+                  <Text style={styles.pointsText}>+{activity.points_earned} pts</Text>
+                </View>
+              )}
+            </>
+          )}
+
           {activity.activity_type === 'country_visit' && (
             <>
               <Text style={styles.activityText}>
