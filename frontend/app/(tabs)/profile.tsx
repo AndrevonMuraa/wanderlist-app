@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform, Alert, StatusBar } from 'react-native';
-import { Text, Surface, Button, Divider, Switch, List, Dialog, Portal } from 'react-native-paper';
+import { Text, Surface, Button, Divider, List, Dialog, Portal } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../../contexts/AuthContext';
 import { useRouter } from 'expo-router';
@@ -10,16 +10,9 @@ import { BACKEND_URL } from '../../utils/config';
 import * as SecureStore from 'expo-secure-store';
 import theme, { gradients } from '../../styles/theme';
 import UpgradeModal from '../../components/UpgradeModal';
-import { CircularProgress } from '../../components/CircularProgress';
-import { ProgressBar } from '../../components/ProgressBar';
 import RankBadge from '../../components/RankBadge';
-import RankProgress from '../../components/RankProgress';
-import StreakDisplay from '../../components/StreakDisplay';
 import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
-
-// Helper to get token (works on both web and native)
-import { shareProgress } from '../../utils/shareUtils';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
