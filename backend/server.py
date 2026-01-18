@@ -895,17 +895,24 @@ async def get_landmarks(
             landmark_dict["is_locked"] = False
         results.append(landmark_dict)
     
-    # Sort results
+    # Sort results - ALWAYS put official landmarks first, then premium
+    # Category sort: official (0) comes before premium (1)
+    def get_category_order(x):
+        return 0 if x.get("category") == "official" else 1
+    
     if sort_by == "upvotes_desc":
-        results.sort(key=lambda x: x.get("upvotes", 0), reverse=True)
+        results.sort(key=lambda x: (get_category_order(x), -x.get("upvotes", 0)))
     elif sort_by == "points_desc":
-        results.sort(key=lambda x: x.get("points", 0), reverse=True)
+        results.sort(key=lambda x: (get_category_order(x), -x.get("points", 0)))
     elif sort_by == "points_asc":
-        results.sort(key=lambda x: x.get("points", 0))
+        results.sort(key=lambda x: (get_category_order(x), x.get("points", 0)))
     elif sort_by == "name_asc":
-        results.sort(key=lambda x: x.get("name", ""))
+        results.sort(key=lambda x: (get_category_order(x), x.get("name", "")))
     elif sort_by == "name_desc":
-        results.sort(key=lambda x: x.get("name", ""), reverse=True)
+        results.sort(key=lambda x: (get_category_order(x), x.get("name", "")[::-1]))
+    else:
+        # Default sort: official first, then by name
+        results.sort(key=lambda x: (get_category_order(x), x.get("name", "")))
     
     return [Landmark(**r) for r in results]
 
