@@ -511,22 +511,54 @@ export default function JourneyScreen() {
             <View style={styles.customVisitsHeaderLeft}>
               <Ionicons name="globe-outline" size={24} color={theme.colors.accent} />
               <Text style={styles.sectionTitle}>Custom Visits</Text>
+              {!canCreateCustomVisits && (
+                <View style={styles.proBadge}>
+                  <Ionicons name="diamond" size={12} color="#764ba2" />
+                  <Text style={styles.proBadgeText}>PRO</Text>
+                </View>
+              )}
             </View>
             <TouchableOpacity
-              style={styles.addCustomButton}
-              onPress={() => setShowCustomVisitModal(true)}
+              style={[styles.addCustomButton, !canCreateCustomVisits && styles.addCustomButtonLocked]}
+              onPress={() => {
+                if (canCreateCustomVisits) {
+                  setShowCustomVisitModal(true);
+                } else {
+                  setShowProLock(true);
+                }
+              }}
               activeOpacity={0.8}
             >
-              <Ionicons name="add-circle" size={20} color={theme.colors.primary} />
-              <Text style={styles.addCustomButtonText}>Add Visit</Text>
+              <Ionicons 
+                name={canCreateCustomVisits ? "add-circle" : "lock-closed"} 
+                size={20} 
+                color={canCreateCustomVisits ? theme.colors.primary : "#764ba2"} 
+              />
+              <Text style={[styles.addCustomButtonText, !canCreateCustomVisits && styles.addCustomButtonTextLocked]}>
+                {canCreateCustomVisits ? "Add Visit" : "Unlock"}
+              </Text>
             </TouchableOpacity>
           </View>
           
           <Text style={styles.customVisitsDescription}>
-            Record visits to places not in our database
+            {canCreateCustomVisits 
+              ? "Record visits to places not in our database" 
+              : "Upgrade to Pro to record visits to any destination worldwide"}
           </Text>
 
-          {userCreatedVisits.length === 0 ? (
+          {!canCreateCustomVisits ? (
+            <TouchableOpacity 
+              style={styles.emptyCustomVisitsLocked}
+              onPress={() => setShowProLock(true)}
+              activeOpacity={0.8}
+            >
+              <View style={styles.lockIconContainer}>
+                <Ionicons name="lock-closed" size={36} color="#764ba2" />
+              </View>
+              <Text style={styles.emptyCustomTextLocked}>Pro Feature</Text>
+              <Text style={styles.emptyCustomSubtextLocked}>Tap to learn more about Custom Visits</Text>
+            </TouchableOpacity>
+          ) : userCreatedVisits.length === 0 ? (
             <TouchableOpacity 
               style={styles.emptyCustomVisits}
               onPress={() => setShowCustomVisitModal(true)}
