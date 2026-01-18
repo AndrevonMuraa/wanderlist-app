@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderList Icon Mockups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            padding: 40px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .option {
+            background: #252540;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+        .option h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #26C6DA;
+        }
+        .option .desc {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+        .icon-container {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Option 1: Globe + Pin */
+        .icon-1 {
+            background: linear-gradient(135deg, #26C6DA 0%, #00BFA5 50%, #FFE082 100%);
+        }
+        .globe {
+            width: 100px;
+            height: 100px;
+            border: 4px solid white;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .globe::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: white;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .globe::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 100%;
+            border: 4px solid white;
+            border-radius: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-top: none;
+            border-bottom: none;
+        }
+        .pin-1 {
+            position: absolute;
+            top: 35px;
+            right: 45px;
+            width: 30px;
+            height: 40px;
+        }
+        .pin-1::before {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #FF5252;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+        }
+        .pin-1::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            top: 5px;
+            left: 5px;
+        }
+
+        /* Option 4: W Monogram */
+        .icon-4 {
+            background: linear-gradient(135deg, #26C6DA 0%, #00BFA5 50%, #FFE082 100%);
+        }
+        .w-letter {
+            font-size: 110px;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            font-family: 'Georgia', serif;
+            line-height: 1;
+        }
+
+        /* Option A: Combined - W inside Globe */
+        .icon-combined-a {
+            background: linear-gradient(135deg, #26C6DA 0%, #00BFA5 50%, #FFE082 100%);
+        }
+        .globe-w-container {
+            position: relative;
+        }
+        .globe-w {
+            width: 120px;
+            height: 120px;
+            border: 5px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .globe-w .w-inside {
+            font-size: 70px;
+            font-weight: 800;
+            color: white;
+            font-family: 'Georgia', serif;
+        }
+        .mini-pin {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 35px;
+            height: 35px;
+            background: #FF5252;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Option B: Combined - W with travel path */
+        .icon-combined-b {
+            background: linear-gradient(135deg, #26C6DA 0%, #00BFA5 50%, #FFE082 100%);
+        }
+        .w-travel {
+            position: relative;
+        }
+        .w-travel .w-main {
+            font-size: 100px;
+            font-weight: 800;
+            color: white;
+            font-family: 'Georgia', serif;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .travel-dot {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: #FF5252;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+        .dot-1 { top: 25px; left: 10px; }
+        .dot-2 { top: 10px; right: 10px; }
+        .dot-3 { bottom: 30px; left: 50%; transform: translateX(-50%); }
+
+        /* Option C: Combined - Globe outline with W */
+        .icon-combined-c {
+            background: linear-gradient(135deg, #26C6DA 0%, #00BFA5 50%, #FFE082 100%);
+        }
+        .globe-outline {
+            width: 140px;
+            height: 140px;
+            border: 4px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .globe-outline::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.4);
+            top: 50%;
+        }
+        .globe-outline .w-center {
+            font-size: 80px;
+            font-weight: 800;
+            color: white;
+            font-family: 'Georgia', serif;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 1;
+        }
+        .pin-top {
+            position: absolute;
+            top: -8px;
+            right: 25px;
+        }
+        .pin-top::before {
+            content: '';
+            display: block;
+            width: 22px;
+            height: 22px;
+            background: #FF5252;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+        }
+
+        .sizes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .size-preview {
+            text-align: center;
+        }
+        .size-preview span {
+            display: block;
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .mini-icon {
+            border-radius: 12px;
+            background: linear-gradient(135deg, #26C6DA 0%, #00BFA5 50%, #FFE082 100%);
+        }
+        .size-60 { width: 60px; height: 60px; }
+        .size-40 { width: 40px; height: 40px; border-radius: 9px; }
+        .size-29 { width: 29px; height: 29px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+    <h1>🎨 WanderList Icon Design Options</h1>
+    <p class="subtitle">Using "Ocean to Sand" gradient: #26C6DA → #00BFA5 → #FFE082</p>
+    
+    <div class="options-grid">
+        <!-- Option 1: Globe + Pin -->
+        <div class="option">
+            <h2>Option 1</h2>
+            <p class="desc">Globe + Location Pin</p>
+            <div class="icon-container icon-1">
+                <div class="globe"></div>
+                <div class="pin-1"></div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-60" style="display:flex;align-items:center;justify-content:center;">
+                        <span style="font-size:24px;">🌍</span>
+                    </div>
+                    <span>60px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-40" style="display:flex;align-items:center;justify-content:center;">
+                        <span style="font-size:16px;">🌍</span>
+                    </div>
+                    <span>40px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 4: W Monogram -->
+        <div class="option">
+            <h2>Option 4</h2>
+            <p class="desc">W Monogram</p>
+            <div class="icon-container icon-4">
+                <span class="w-letter">W</span>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-60" style="display:flex;align-items:center;justify-content:center;">
+                        <span style="font-size:32px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                    </div>
+                    <span>60px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-40" style="display:flex;align-items:center;justify-content:center;">
+                        <span style="font-size:22px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                    </div>
+                    <span>40px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Combined A: W inside Globe Circle -->
+        <div class="option">
+            <h2>Combined A</h2>
+            <p class="desc">W in Globe Circle + Pin</p>
+            <div class="icon-container icon-combined-a">
+                <div class="globe-w-container">
+                    <div class="globe-w">
+                        <span class="w-inside">W</span>
+                    </div>
+                    <div class="mini-pin"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-60" style="display:flex;align-items:center;justify-content:center;position:relative;">
+                        <div style="width:40px;height:40px;border:3px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:22px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>60px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-40" style="display:flex;align-items:center;justify-content:center;">
+                        <div style="width:28px;height:28px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:14px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>40px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Combined B: W with Travel Dots -->
+        <div class="option">
+            <h2>Combined B</h2>
+            <p class="desc">W with Travel Path Dots</p>
+            <div class="icon-container icon-combined-b">
+                <div class="w-travel">
+                    <span class="w-main">W</span>
+                    <div class="travel-dot dot-1"></div>
+                    <div class="travel-dot dot-2"></div>
+                    <div class="travel-dot dot-3"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-60" style="display:flex;align-items:center;justify-content:center;position:relative;">
+                        <span style="font-size:32px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        <div style="position:absolute;top:8px;right:12px;width:8px;height:8px;background:#FF5252;border-radius:50%;border:2px solid white;"></div>
+                    </div>
+                    <span>60px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-40" style="display:flex;align-items:center;justify-content:center;position:relative;">
+                        <span style="font-size:22px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        <div style="position:absolute;top:5px;right:8px;width:6px;height:6px;background:#FF5252;border-radius:50%;"></div>
+                    </div>
+                    <span>40px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Combined C: Globe Outline with W -->
+        <div class="option">
+            <h2>Combined C</h2>
+            <p class="desc">Subtle Globe + W + Pin</p>
+            <div class="icon-container icon-combined-c">
+                <div class="globe-outline">
+                    <span class="w-center">W</span>
+                    <div class="pin-top"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-60" style="display:flex;align-items:center;justify-content:center;position:relative;">
+                        <div style="width:44px;height:44px;border:2px solid rgba(255,255,255,0.5);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:26px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>60px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-40" style="display:flex;align-items:center;justify-content:center;">
+                        <div style="width:30px;height:30px;border:2px solid rgba(255,255,255,0.5);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:16px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>40px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendation -->
+        <div class="option" style="background: linear-gradient(135deg, #1a3a1a, #252540);">
+            <h2 style="color: #4CAF50;">⭐ My Pick</h2>
+            <p class="desc">Combined A - Best balance</p>
+            <div class="icon-container icon-combined-a" style="box-shadow: 0 0 30px rgba(38,198,218,0.5);">
+                <div class="globe-w-container">
+                    <div class="globe-w">
+                        <span class="w-inside">W</span>
+                    </div>
+                    <div class="mini-pin"></div>
+                </div>
+            </div>
+            <p style="font-size: 11px; color: #4CAF50; margin-top: 10px;">
+                ✓ Readable at all sizes<br>
+                ✓ Travel theme clear<br>
+                ✓ Modern & distinctive
+            </p>
+        </div>
+    </div>
+</body>
+</html>
