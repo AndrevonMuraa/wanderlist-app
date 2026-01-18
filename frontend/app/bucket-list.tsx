@@ -156,7 +156,7 @@ export default function BucketListScreen() {
             </View>
             {item.landmark.category === 'premium' && (
               <View style={styles.premiumBadge}>
-                <Ionicons name="diamond" size={10} color="#FFD700" />
+                <Ionicons name="diamond" size={10} color="#E91E63" />
                 <Text style={styles.premiumText}>PREMIUM</Text>
               </View>
             )}
