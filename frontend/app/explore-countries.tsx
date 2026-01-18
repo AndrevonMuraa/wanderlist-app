@@ -247,14 +247,37 @@ export default function ExploreCountriesScreen() {
                 <View style={styles.countryCard}>
                   {/* Full Flag - Top Section */}
                   <View style={styles.flagSectionFull}>
+                    {/* Base Flag Image */}
                     <Image
                       source={{ uri: flagUrl }}
                       style={styles.flagImage}
                       resizeMode="cover"
                     />
+                    
+                    {/* Premium Texture Overlays */}
+                    {/* 1. Glossy Shine Effect - Top highlight */}
+                    <LinearGradient
+                      colors={['rgba(255,255,255,0.25)', 'rgba(255,255,255,0.05)', 'transparent']}
+                      locations={[0, 0.3, 0.6]}
+                      style={styles.glossOverlay}
+                    />
+                    
+                    {/* 2. Vignette Effect - Darker edges for depth */}
+                    <LinearGradient
+                      colors={['transparent', 'transparent', 'rgba(0,0,0,0.15)']}
+                      locations={[0, 0.7, 1]}
+                      style={styles.vignetteOverlay}
+                    />
+                    
+                    {/* 3. Subtle fabric/linen texture effect */}
+                    <View style={styles.textureOverlay} />
+                    
+                    {/* 4. Edge highlight for 3D effect */}
+                    <View style={styles.edgeHighlight} />
+                    
                     {/* Country Name Overlay */}
                     <LinearGradient
-                      colors={['transparent', 'rgba(0,0,0,0.7)']}
+                      colors={['transparent', 'rgba(0,0,0,0.75)']}
                       style={styles.flagNameGradient}
                     >
                       <Text style={styles.countryNameOnFlag}>{country.name}</Text>
