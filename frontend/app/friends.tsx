@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Image, RefreshControl, Alert, TouchableOpacity, Platform } from 'react-native';
-import { Text, ActivityIndicator, Surface, Searchbar, Button, Chip } from 'react-native-paper';
+import { View, StyleSheet, FlatList, Image, RefreshControl, Alert, TouchableOpacity, Platform, StatusBar, TextInput } from 'react-native';
+import { Text, ActivityIndicator } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import theme from '../styles/theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
-import UpgradeModal from '../components/UpgradeModal';
-import { useUpgradePrompt } from '../hooks/useUpgradePrompt';
 import { useAuth } from '../contexts/AuthContext';
-import UniversalHeader from '../components/UniversalHeader';
 import ProFeatureLock from '../components/ProFeatureLock';
 import { useSubscription } from '../hooks/useSubscription';
+import { PersistentTabBar } from '../components/PersistentTabBar';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
@@ -44,8 +44,8 @@ export default function FriendsScreen() {
   const [sending, setSending] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
   
-  // All hooks must be called in consistent order
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const subscriptionData = useSubscription();
   const isAtFriendLimit = subscriptionData.isAtFriendLimit;
@@ -53,22 +53,10 @@ export default function FriendsScreen() {
   const isPro = subscriptionData.isPro;
   const friendsRemaining = subscriptionData.friendsRemaining;
 
-  // Navigate back to social tab explicitly
   const handleBack = () => {
     router.push('/(tabs)/social');
   };
   
-  const { showUpgradeModal, upgradeReason, checkResponse, handleUpgrade, closeModal } = useUpgradePrompt({
-    onUpgrade: (tier) => {
-      if (Platform.OS === 'web') {
-        alert(`Upgrade to ${tier} would redirect to payment page`);
-      } else {
-        Alert.alert('Upgrade', `Upgrade to ${tier} would redirect to payment page`);
-      }
-    }
-  });
-  
-  // Get friend limit based on subscription
   const isAtLimit = isAtFriendLimit;
 
   useEffect(() => {
@@ -98,7 +86,7 @@ export default function FriendsScreen() {
         setPendingRequests(requestsData);
       }
     } catch (error) {
-      console.error('Error fetching friends:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -116,7 +104,6 @@ export default function FriendsScreen() {
       return;
     }
 
-    // Check if at friend limit before sending request
     if (isAtLimit && !isPro) {
       setShowProLock(true);
       return;
@@ -135,7 +122,6 @@ export default function FriendsScreen() {
         body: JSON.stringify({ friend_email: searchEmail })
       });
 
-      // Check for 403 (limit exceeded)
       if (response.status === 403) {
         const error = await response.json();
         if (error.detail?.includes('limit') || error.detail?.includes('friend')) {
@@ -163,7 +149,6 @@ export default function FriendsScreen() {
   };
 
   const handleAcceptRequest = async (friendshipId: string) => {
-    // Check if at friend limit before accepting
     if (isAtLimit && !isPro) {
       setShowProLock(true);
       return;
@@ -178,7 +163,6 @@ export default function FriendsScreen() {
         }
       });
 
-      // Check for 403 (limit exceeded)
       if (response.status === 403) {
         const error = await response.json();
         if (error.detail?.includes('limit') || error.detail?.includes('friend')) {
@@ -201,18 +185,27 @@ export default function FriendsScreen() {
     }
   };
 
+  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 24);
+
   const renderFriend = ({ item }: { item: User }) => (
-    <Surface style={styles.friendCard}>
+    <View style={styles.friendCard}>
       <View style={styles.friendInfo}>
         {item.picture ? (
           <Image source={{ uri: item.picture }} style={styles.avatar} />
         ) : (
           <View style={[styles.avatar, styles.defaultAvatar]}>
-            <Ionicons name="person" size={24} color="#666" />
+            <Ionicons name="person" size={24} color={theme.colors.textLight} />
           </View>
         )}
-        <View style={{ flex: 1 }}>
-          <Text style={styles.friendName}>{item.name}</Text>
+        <View style={styles.friendTextContainer}>
+          <View style={styles.friendNameRow}>
+            <Text style={styles.friendName}>{item.name}</Text>
+            {item.is_premium && (
+              <View style={styles.premiumBadge}>
+                <Ionicons name="diamond" size={10} color="#764ba2" />
+              </View>
+            )}
+          </View>
           <Text style={styles.friendEmail}>@{item.username}</Text>
         </View>
       </View>
@@ -222,41 +215,147 @@ export default function FriendsScreen() {
       >
         <Ionicons name="chatbubble-outline" size={20} color={theme.colors.primary} />
       </TouchableOpacity>
-      {item.is_premium && (
-        <Ionicons name="star" size={20} color="#FFD700" />
-      )}
-    </Surface>
+    </View>
   );
 
   const renderRequest = ({ item }: { item: FriendRequest }) => (
-    <Surface style={styles.requestCard}>
-      <View style={styles.requestInfo}>
+    <View style={styles.requestCard}>
+      <View style={styles.friendInfo}>
         {item.user.picture ? (
           <Image source={{ uri: item.user.picture }} style={styles.avatar} />
         ) : (
           <View style={[styles.avatar, styles.defaultAvatar]}>
-            <Ionicons name="person" size={24} color="#666" />
+            <Ionicons name="person" size={24} color={theme.colors.textLight} />
           </View>
         )}
-        <View style={styles.requestText}>
+        <View style={styles.friendTextContainer}>
           <Text style={styles.friendName}>{item.user.name}</Text>
           <Text style={styles.friendEmail}>@{item.user.username}</Text>
         </View>
       </View>
-      <Button
-        mode="contained"
-        compact
+      <TouchableOpacity
+        style={styles.acceptButton}
         onPress={() => handleAcceptRequest(item.friendship_id)}
       >
-        Accept
-      </Button>
-    </Surface>
+        <Text style={styles.acceptButtonText}>Accept</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderHeader = () => (
+    <>
+      {/* Add Friend Section */}
+      <View style={styles.addFriendCard}>
+        <View style={styles.sectionHeader}>
+          <View style={[styles.sectionIconCircle, { backgroundColor: 'rgba(77, 184, 216, 0.1)' }]}>
+            <Ionicons name="person-add" size={22} color={theme.colors.primary} />
+          </View>
+          <View style={styles.sectionHeaderText}>
+            <Text style={styles.sectionTitle}>Add Friend</Text>
+            <Text style={styles.sectionSubtitle}>
+              {isPro ? 'Unlimited friends' : `${friendsRemaining} slot${friendsRemaining !== 1 ? 's' : ''} remaining`}
+            </Text>
+          </View>
+          {!isPro && (
+            <View style={[styles.limitBadge, isAtLimit && styles.limitBadgeError]}>
+              <Text style={[styles.limitBadgeText, isAtLimit && styles.limitBadgeTextError]}>
+                {friends.length}/{maxFriends}
+              </Text>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.searchRow}>
+          <View style={styles.searchInputContainer}>
+            <Ionicons name="mail-outline" size={18} color={theme.colors.textLight} style={styles.searchIcon} />
+            <TextInput
+              placeholder="Enter email address"
+              value={searchEmail}
+              onChangeText={setSearchEmail}
+              style={styles.searchInput}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              placeholderTextColor={theme.colors.textLight}
+            />
+          </View>
+          <TouchableOpacity
+            style={[styles.sendButton, sending && styles.sendButtonDisabled]}
+            onPress={handleSendRequest}
+            disabled={sending}
+          >
+            {sending ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <>
+                <Ionicons name="paper-plane" size={16} color="#fff" />
+                <Text style={styles.sendButtonText}>Send</Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+
+        {isAtLimit && !isPro && (
+          <TouchableOpacity 
+            style={styles.upgradeHint}
+            onPress={() => setShowProLock(true)}
+          >
+            <View style={styles.upgradeHintIcon}>
+              <Ionicons name="diamond" size={14} color="#764ba2" />
+            </View>
+            <Text style={styles.upgradeHintText}>
+              Upgrade to Pro for unlimited friends
+            </Text>
+            <Ionicons name="chevron-forward" size={16} color="#764ba2" />
+          </TouchableOpacity>
+        )}
+      </View>
+
+      {/* Pending Requests */}
+      {pendingRequests.length > 0 && (
+        <View style={styles.section}>
+          <View style={styles.sectionTitleRow}>
+            <View style={[styles.sectionIconSmall, { backgroundColor: 'rgba(255, 152, 0, 0.1)' }]}>
+              <Ionicons name="time" size={16} color="#FF9800" />
+            </View>
+            <Text style={styles.sectionTitleSmall}>
+              Pending Requests ({pendingRequests.length})
+            </Text>
+          </View>
+          {pendingRequests.map((item) => (
+            <View key={item.friendship_id}>
+              {renderRequest({ item })}
+            </View>
+          ))}
+        </View>
+      )}
+
+      {/* My Friends Header */}
+      <View style={styles.sectionTitleRow}>
+        <View style={[styles.sectionIconSmall, { backgroundColor: 'rgba(76, 175, 80, 0.1)' }]}>
+          <Ionicons name="people" size={16} color="#4CAF50" />
+        </View>
+        <Text style={styles.sectionTitleSmall}>
+          My Friends ({friends.length})
+        </Text>
+      </View>
+    </>
   );
 
   if (loading) {
     return (
       <View style={styles.container}>
-        <UniversalHeader title="Friends" />
+        <LinearGradient
+          colors={gradients.oceanToSand}
+          start={gradients.horizontal.start}
+          end={gradients.horizontal.end}
+          style={[styles.header, { paddingTop: topPadding + 10 }]}
+        >
+          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Friends</Text>
+          <View style={styles.headerRight} />
+        </LinearGradient>
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
@@ -266,101 +365,44 @@ export default function FriendsScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="Friends" onBack={handleBack} />
-
-      <Surface style={styles.searchCard}>
-        <View style={styles.searchHeader}>
-          <Text style={styles.sectionTitle}>Add Friend</Text>
-          {user?.subscription_tier === 'free' && (
-            <Chip 
-              icon={() => <Ionicons name="people" size={14} color={isAtLimit ? theme.colors.error : theme.colors.textSecondary} />}
-              style={[
-                styles.limitChip,
-                isAtLimit && styles.limitChipError
-              ]}
-              textStyle={styles.limitChipText}
-            >
-              {friends.length}/{maxFriends}
-            </Chip>
-          )}
+      {/* Header */}
+      <LinearGradient
+        colors={gradients.oceanToSand}
+        start={gradients.horizontal.start}
+        end={gradients.horizontal.end}
+        style={[styles.header, { paddingTop: topPadding + 10 }]}
+      >
+        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Friends</Text>
+        <View style={styles.headerRight}>
+          <Ionicons name="people" size={20} color="#fff" />
         </View>
-        <View style={styles.searchRow}>
-          <Searchbar
-            placeholder="Enter email address"
-            value={searchEmail}
-            onChangeText={setSearchEmail}
-            style={styles.searchBar}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          <Button
-            mode="contained"
-            onPress={handleSendRequest}
-            loading={sending}
-            disabled={sending}
-            style={[styles.sendButton, (isAtLimit && !isPro) && styles.sendButtonDisabled]}
-          >
-            {isAtLimit && !isPro ? 'Limit' : 'Send'}
-          </Button>
-        </View>
-        {isAtLimit && !isPro && (
-          <TouchableOpacity 
-            style={styles.upgradeHint}
-            onPress={() => setShowProLock(true)}
-          >
-            <Ionicons name="star" size={16} color={theme.colors.accent} />
-            <Text style={styles.upgradeHintText}>
-              Friend limit ({maxFriends}) reached • Upgrade for unlimited
-            </Text>
-          </TouchableOpacity>
-        )}
-        {!isPro && !isAtLimit && (
-          <View style={styles.limitInfo}>
-            <Ionicons name="information-circle-outline" size={14} color={theme.colors.textLight} />
-            <Text style={styles.limitInfoText}>
-              {friendsRemaining} friend slot{friendsRemaining !== 1 ? 's' : ''} remaining (Free tier: {maxFriends} max)
-            </Text>
-          </View>
-        )}
-      </Surface>
+      </LinearGradient>
 
-      {pendingRequests.length > 0 && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Pending Requests ({pendingRequests.length})</Text>
-          <FlatList
-            data={pendingRequests}
-            renderItem={renderRequest}
-            keyExtractor={(item) => item.friendship_id}
-            scrollEnabled={false}
-          />
-        </View>
-      )}
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>My Friends ({friends.length})</Text>
-        <FlatList
-          data={friends}
-          renderItem={renderFriend}
-          keyExtractor={(item) => item.user_id}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Ionicons name="people" size={64} color="#ccc" />
-              <Text style={styles.emptyText}>No friends yet</Text>
-              <Text style={styles.emptySubtext}>Add friends to see their rankings!</Text>
+      <FlatList
+        data={friends}
+        renderItem={renderFriend}
+        keyExtractor={(item) => item.user_id}
+        ListHeaderComponent={renderHeader}
+        contentContainerStyle={styles.listContent}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <View style={styles.emptyIconCircle}>
+              <Ionicons name="people-outline" size={48} color={theme.colors.textLight} />
             </View>
-          }
-        />
-      </View>
-
-      <UpgradeModal 
-        visible={showUpgradeModal}
-        onClose={closeModal}
-        onUpgrade={handleUpgrade}
-        reason={upgradeReason}
+            <Text style={styles.emptyText}>No friends yet</Text>
+            <Text style={styles.emptySubtext}>Add friends to see their travel stats and compete on the leaderboard!</Text>
+          </View>
+        }
+        showsVerticalScrollIndicator={false}
       />
+
+      <PersistentTabBar />
 
       <ProFeatureLock
         visible={showProLock}
@@ -376,61 +418,205 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
+  header: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  headerRight: {
+    width: 40,
+    alignItems: 'center',
+  },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  searchCard: {
-    margin: 16,
-    padding: 16,
-    borderRadius: 12,
-    elevation: 2,
+  listContent: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: Platform.OS === 'ios' ? 120 : 100,
+  },
+  addFriendCard: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  sectionIconCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  sectionHeaderText: {
+    flex: 1,
   },
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 12,
+    fontSize: 18,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: 2,
+  },
+  sectionSubtitle: {
+    fontSize: 13,
+    color: theme.colors.textSecondary,
+  },
+  limitBadge: {
+    backgroundColor: theme.colors.background,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  limitBadgeError: {
+    backgroundColor: 'rgba(244, 67, 54, 0.1)',
+  },
+  limitBadgeText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  limitBadgeTextError: {
+    color: '#F44336',
   },
   searchRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 10,
   },
-  searchBar: {
+  searchInputContainer: {
     flex: 1,
-    marginRight: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.background,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    height: 48,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 15,
+    color: theme.colors.text,
   },
   sendButton: {
-    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: theme.colors.primary,
+    paddingHorizontal: 16,
+    height: 48,
+    borderRadius: 12,
+    gap: 6,
+  },
+  sendButtonDisabled: {
+    opacity: 0.7,
+  },
+  sendButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  upgradeHint: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+    padding: 12,
+    backgroundColor: 'rgba(118, 75, 162, 0.08)',
+    borderRadius: 12,
+    gap: 10,
+  },
+  upgradeHintIcon: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'rgba(118, 75, 162, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  upgradeHintText: {
+    flex: 1,
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#764ba2',
   },
   section: {
-    padding: 16,
-    paddingTop: 0,
+    marginBottom: 16,
+  },
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    gap: 8,
+  },
+  sectionIconSmall: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sectionTitleSmall: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: theme.colors.text,
   },
   friendCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    marginBottom: 12,
-    borderRadius: 12,
+    backgroundColor: '#fff',
+    padding: 14,
+    marginBottom: 10,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
     elevation: 2,
-  },
-  friendInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
   },
   requestCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
-    marginBottom: 12,
-    borderRadius: 12,
+    backgroundColor: '#fff',
+    padding: 14,
+    marginBottom: 10,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
     elevation: 2,
   },
-  requestInfo: {
+  friendInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
@@ -442,87 +628,80 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   defaultAvatar: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: theme.colors.background,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  requestText: {
+  friendTextContainer: {
     flex: 1,
   },
+  friendNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
   friendName: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
-    marginBottom: 2,
+    color: theme.colors.text,
+  },
+  premiumBadge: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: 'rgba(118, 75, 162, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   friendEmail: {
     fontSize: 13,
-    color: '#666',
+    color: theme.colors.textSecondary,
+    marginTop: 2,
+  },
+  messageButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: `${theme.colors.primary}10`,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  acceptButton: {
+    backgroundColor: theme.colors.primary,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  acceptButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#fff',
   },
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 48,
   },
+  emptyIconCircle: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: theme.colors.background,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
   emptyText: {
-    fontSize: 16,
-    color: '#999',
-    marginTop: 16,
+    fontSize: 17,
+    fontWeight: '600',
+    color: theme.colors.text,
+    marginBottom: 8,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#ccc',
-    marginTop: 8,
-  },
-  searchHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  limitChip: {
-    backgroundColor: theme.colors.surface,
-    height: 28,
-  },
-  limitChipError: {
-    backgroundColor: theme.colors.error + '15',
-  },
-  limitChipText: {
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  sendButtonDisabled: {
-    opacity: 0.5,
-  },
-  upgradeHint: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-    padding: 8,
-    backgroundColor: theme.colors.primary + '10',
-    borderRadius: 8,
-  },
-  upgradeHintText: {
-    fontSize: 13,
-    color: theme.colors.accent,
-    marginLeft: 6,
-    fontWeight: '600',
-    flex: 1,
-  },
-  limitInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-    paddingVertical: 6,
-  },
-  limitInfoText: {
-    fontSize: 12,
-    color: theme.colors.textLight,
-    marginLeft: 4,
-  },
-  messageButton: {
-    padding: 8,
-    marginLeft: 8,
-    borderRadius: 20,
-    backgroundColor: theme.colors.primary + '15',
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+    paddingHorizontal: 40,
+    lineHeight: 20,
   },
 });
