@@ -216,34 +216,6 @@ export default function LandmarkDetailScreen() {
     }
   };
 
-  const getDifficultyColor = (difficulty?: string) => {
-    if (!difficulty) return theme.colors.textLight;
-    switch (difficulty.toLowerCase()) {
-      case 'easy':
-        return '#4CAF50';
-      case 'moderate':
-        return '#FFA726';
-      case 'challenging':
-        return '#FF6B6B';
-      default:
-        return theme.colors.textLight;
-    }
-  };
-
-  const getDifficultyIcon = (difficulty?: string) => {
-    if (!difficulty) return 'help-circle';
-    switch (difficulty.toLowerCase()) {
-      case 'easy':
-        return 'walk';
-      case 'moderate':
-        return 'trail-sign';
-      case 'challenging':
-        return 'fitness';
-      default:
-        return 'help-circle';
-    }
-  };
-
   if (loading) {
     return (
       <View style={styles.container}>
