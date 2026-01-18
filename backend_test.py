@@ -1,7 +1,21 @@
 #!/usr/bin/env python3
 """
-WanderList Backend API Testing Suite
-Comprehensive testing for the travel app backend APIs
+WanderList v4.80 Comprehensive Backend Testing
+End-to-End API Testing for Major Data Changes Verification
+
+CRITICAL TESTS TO RUN:
+1. Authentication Flow - POST /api/auth/login with test credentials
+2. Database Integrity Verification (MOST IMPORTANT) - GET /api/continent-stats
+   - Total landmarks: 560 (was 502, increased by 58)
+   - Total points: 7,595 (was 6,145, increased)  
+   - Total countries: 48
+3. Points System Verification - GET /api/progress, GET /api/stats
+4. Landmark Visiting Flow - Test visiting landmarks and point awards
+5. Premium Landmark Restrictions - Test access controls
+6. Country Data Verification - GET /api/countries with total_points field
+7. Achievements/Badges - GET /api/achievements
+8. Leaderboard - GET /api/leaderboard with filters
+9. Duplicate Check - Verify no duplicate landmarks (especially Peru)
 """
 
 import requests
