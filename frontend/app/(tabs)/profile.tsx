@@ -263,7 +263,7 @@ export default function ProfileScreen() {
               <View style={styles.statItem}>
                 <Ionicons name="location" size={16} color="#4DB8D8" />
                 <Text style={styles.statValue}>
-                  {progressStats.totalLandmarks || stats.total_visits || 0}
+                  {progressStats.overall?.visited || stats.total_visits || 0}
                 </Text>
                 <Text style={styles.statLabel}>Landmarks</Text>
               </View>
