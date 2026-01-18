@@ -11,16 +11,26 @@ interface UniversalHeaderProps {
   title: string;
   showBack?: boolean;
   rightElement?: React.ReactNode;
+  onBack?: () => void;  // Custom back handler
 }
 
 export const UniversalHeader: React.FC<UniversalHeaderProps> = ({
   title,
   showBack = true,
   rightElement,
+  onBack,
 }) => {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      router.back();
+    }
+  };
 
   return (
     <LinearGradient
@@ -32,7 +42,7 @@ export const UniversalHeader: React.FC<UniversalHeaderProps> = ({
       <View style={styles.headerRow}>
         <View style={styles.titleWithBack}>
           {showBack && (
-            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <TouchableOpacity onPress={handleBack} style={styles.backButton}>
               <Ionicons name="arrow-back" size={22} color="#fff" />
             </TouchableOpacity>
           )}
