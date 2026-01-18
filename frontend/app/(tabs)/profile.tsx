@@ -571,6 +571,7 @@ const styles = StyleSheet.create({
   rankContainer: {
     marginTop: theme.spacing.lg,
     alignItems: 'center',
+  },
   compactStatsCard: {
     marginHorizontal: theme.spacing.md,
     marginTop: theme.spacing.sm,
