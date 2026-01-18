@@ -3824,6 +3824,9 @@ async def toggle_subscription_for_testing(current_user: User = Depends(get_curre
 
 # ============= END SUBSCRIPTION ENDPOINTS =============
 
+# Include the router in the main app (MUST be after all routes are defined)
+app.include_router(api_router)
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
