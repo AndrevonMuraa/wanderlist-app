@@ -102,17 +102,29 @@ class WanderListTester:
             user_visits = visits_response.json()
             visited_landmark_ids = {visit["landmark_id"] for visit in user_visits}
             
-            # Find first unvisited landmark
+            # Find first unvisited landmark (prefer official landmarks)
             unvisited_landmark = None
             for landmark in landmarks:
-                if landmark["landmark_id"] not in visited_landmark_ids:
+                if landmark["landmark_id"] not in visited_landmark_ids and landmark.get("category") == "official":
                     unvisited_landmark = landmark
                     break
             
+            # If no unvisited official landmarks, try any unvisited landmark
             if not unvisited_landmark:
-                # If all are visited, use the first one for testing (will test duplicate prevention)
-                unvisited_landmark = landmarks[0]
-                self.log_result("Find Unvisited Landmark", True, f"All landmarks visited, using {unvisited_landmark['name']} for duplicate test")
+                for landmark in landmarks:
+                    if landmark["landmark_id"] not in visited_landmark_ids:
+                        unvisited_landmark = landmark
+                        break
+            
+            if not unvisited_landmark:
+                # If all are visited, use the first official one for testing (will test duplicate handling)
+                for landmark in landmarks:
+                    if landmark.get("category") == "official":
+                        unvisited_landmark = landmark
+                        break
+                if not unvisited_landmark:
+                    unvisited_landmark = landmarks[0]
+                self.log_result("Find Unvisited Landmark", True, f"All landmarks visited, using {unvisited_landmark['name']} for duplicate/premium test")
             else:
                 self.log_result("Find Unvisited Landmark", True, f"Found unvisited landmark: {unvisited_landmark['name']}")
             
