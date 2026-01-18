@@ -36,7 +36,7 @@ interface Activity {
   user_id: string;
   user_name: string;
   user_picture?: string;
-  activity_type: 'visit' | 'milestone' | 'country_complete' | 'continent_complete' | 'country_visit' | 'trip_completed';
+  activity_type: 'visit' | 'milestone' | 'country_complete' | 'continent_complete' | 'country_visit' | 'trip_completed' | 'user_created_visit';
   landmark_name?: string;
   country_name?: string;
   country_id?: string;
