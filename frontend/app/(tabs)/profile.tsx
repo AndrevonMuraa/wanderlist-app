@@ -207,48 +207,48 @@ export default function ProfileScreen() {
 
         {/* FINAL: User Left, Rank Right, Stats Row */}
         <Surface style={styles.profileCard}>
-          {/* Top: User & Rank - Tight & Balanced */}
-          <View style={{ flexDirection: 'row', marginTop: 4, marginBottom: 8, width: '100%', alignItems: 'center' }}>
-            {/* Left: User */}
-            <View style={{ flex: 65, flexDirection: 'row', alignItems: 'center', paddingRight: 4 }}>
+          {/* Top: User & Rank Row */}
+          <View style={styles.userRankRow}>
+            {/* Left: User Info */}
+            <View style={styles.userSection}>
               {user?.picture ? (
                 <Image source={{ uri: user.picture }} style={styles.profileImageLarge} />
               ) : (
                 <DefaultAvatar name={user?.name || 'User'} size={85} />
               )}
-              <View style={{ flex: 1, marginLeft: 8 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
+              <View style={styles.userDetails}>
+                <View style={styles.nameEditRow}>
                   <Text style={styles.userNameLarge}>{user?.name}</Text>
                   <TouchableOpacity 
                     onPress={() => router.push('/edit-profile')}
-                    style={{ marginLeft: 6, padding: 2 }}
+                    style={styles.editButton}
                   >
                     <Ionicons name="create-outline" size={18} color={theme.colors.primary} />
                   </TouchableOpacity>
                 </View>
-                <View style={styles.tierBadgeLarge}>
+                <View style={styles.tierBadge}>
                   {user?.subscription_tier === 'premium' ? (
                     <>
                       <Ionicons name="diamond" size={12} color={theme.colors.accent} />
-                      <Text style={[styles.tierTextLarge, { color: theme.colors.accent }]}>Premium user</Text>
+                      <Text style={[styles.tierText, styles.tierPremium]}>Premium user</Text>
                     </>
                   ) : user?.subscription_tier === 'basic' ? (
                     <>
                       <Ionicons name="ribbon" size={12} color={theme.colors.primary} />
-                      <Text style={[styles.tierTextLarge, { color: theme.colors.primary }]}>Basic user</Text>
+                      <Text style={[styles.tierText, styles.tierBasic]}>Basic user</Text>
                     </>
                   ) : (
                     <>
                       <Ionicons name="person-outline" size={12} color={theme.colors.textSecondary} />
-                      <Text style={[styles.tierTextLarge, { color: theme.colors.textSecondary }]}>Freemium user</Text>
+                      <Text style={[styles.tierText, styles.tierFree]}>Freemium user</Text>
                     </>
                   )}
                 </View>
               </View>
             </View>
             
-            {/* Right: Rank - 35% - Vertically Centered */}
-            <View style={{ flex: 35, alignItems: 'flex-end', justifyContent: 'center' }}>
+            {/* Right: Rank Badge */}
+            <View style={styles.rankSection}>
               <RankBadge 
                 rank={getUserRank(progressStats?.totalPoints || 0)} 
                 size="medium"
@@ -257,44 +257,36 @@ export default function ProfileScreen() {
             </View>
           </View>
           
-          {/* Stats - One Horizontal Row */}
+          {/* Stats Row */}
           {stats && progressStats && (
-            <View style={{ flexDirection: 'row', paddingTop: 16, borderTopWidth: 1, borderTopColor: '#E0E0E0' }}>
-              <View style={{ flex: 1, alignItems: 'center' }}>
+            <View style={styles.statsRow}>
+              <View style={styles.statItem}>
                 <Ionicons name="location" size={16} color="#4DB8D8" />
-                <Text style={{ fontSize: 16, fontWeight: '800', color: '#2A2A2A', marginTop: 2 }}>
+                <Text style={styles.statValue}>
                   {progressStats.totalLandmarks || stats.total_visits || 0}
                 </Text>
-                <Text style={{ fontSize: 8, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
-                  Landmarks
-                </Text>
+                <Text style={styles.statLabel}>Landmarks</Text>
               </View>
-              <View style={{ flex: 1, alignItems: 'center' }}>
+              <View style={styles.statItem}>
                 <Ionicons name="flag" size={16} color="#FF6B6B" />
-                <Text style={{ fontSize: 16, fontWeight: '800', color: '#2A2A2A', marginTop: 2 }}>
+                <Text style={styles.statValue}>
                   {stats.countries_visited || 0}
                 </Text>
-                <Text style={{ fontSize: 8, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
-                  Countries
-                </Text>
+                <Text style={styles.statLabel}>Countries</Text>
               </View>
-              <View style={{ flex: 1, alignItems: 'center' }}>
+              <View style={styles.statItem}>
                 <Ionicons name="earth" size={16} color="#66BB6A" />
-                <Text style={{ fontSize: 16, fontWeight: '800', color: '#2A2A2A', marginTop: 2 }}>
+                <Text style={styles.statValue}>
                   {stats.continents_visited || 0}
                 </Text>
-                <Text style={{ fontSize: 8, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
-                  Continents
-                </Text>
+                <Text style={styles.statLabel}>Continents</Text>
               </View>
-              <View style={{ flex: 1, alignItems: 'center' }}>
+              <View style={styles.statItem}>
                 <Ionicons name="star" size={16} color="#FFD700" />
-                <Text style={{ fontSize: 16, fontWeight: '800', color: '#C9A961', marginTop: 2 }}>
+                <Text style={[styles.statValue, styles.statValueGold]}>
                   {progressStats.totalPoints || 0}
                 </Text>
-                <Text style={{ fontSize: 8, fontWeight: '600', color: '#6B6B6B', textTransform: 'uppercase' }}>
-                  Points
-                </Text>
+                <Text style={styles.statLabel}>Points</Text>
               </View>
             </View>
           )}
