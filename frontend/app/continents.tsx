@@ -519,4 +519,23 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.primary,
   },
+  cantFindContainerLocked: {
+    backgroundColor: 'rgba(118, 75, 162, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(118, 75, 162, 0.2)',
+  },
+  cantFindTextLocked: {
+    color: '#764ba2',
+  },
+  proTagSmall: {
+    backgroundColor: '#764ba2',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  proTagSmallText: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#fff',
+  },
 });
