@@ -43,6 +43,11 @@ export default function EditProfileScreen() {
   const [location, setLocation] = useState('');
   const [picture, setPicture] = useState<string | undefined>();
 
+  // Navigate back to profile tab explicitly
+  const handleBack = () => {
+    router.push('/(tabs)/profile');
+  };
+
   useEffect(() => {
     loadProfile();
   }, []);
