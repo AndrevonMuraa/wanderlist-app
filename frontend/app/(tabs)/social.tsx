@@ -68,7 +68,7 @@ interface Friend {
 interface LeaderboardEntry {
   name: string;
   picture?: string;
-  total_points: number;
+  value: number;
   rank: number;
 }
 
