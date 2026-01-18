@@ -370,14 +370,23 @@ export default function FriendsScreen() {
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
         end={gradients.horizontal.end}
-        style={[styles.header, { paddingTop: topPadding + 10 }]}
+        style={[styles.header, { paddingTop: topPadding }]}
       >
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Friends</Text>
-        <View style={styles.headerRight}>
-          <Ionicons name="people" size={20} color="#fff" />
+        <View style={styles.headerRow}>
+          <View style={styles.headerLeft}>
+            <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+              <Ionicons name="arrow-back" size={24} color="#fff" />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Friends</Text>
+          </View>
+          <TouchableOpacity 
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="earth" size={16} color="#2A2A2A" />
+            <Text style={styles.brandingTextDark}>WanderList</Text>
+          </TouchableOpacity>
         </View>
       </LinearGradient>
 
