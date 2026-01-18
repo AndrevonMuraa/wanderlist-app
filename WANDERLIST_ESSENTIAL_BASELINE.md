@@ -1,4 +1,4 @@
-# WanderList - Essential Baseline (v4.31)
+# WanderList - Essential Baseline (v4.32)
 
 > **Purpose:** Critical information for session continuity
 > **Read this:** At session start if forked, or when encountering issues
@@ -7,13 +7,13 @@
 
 ## 📊 **Current State**
 
-**Version:** 4.31.0 - STABLE ✅  
-**Status:** Multi-Landmark Photos, Dynamic Stats, Duplicate Cleanup Complete  
-**Last Build:** January 17, 2026  
-**Next Version:** v4.32 - Future Features
+**Version:** 4.32.0 - STABLE ✅  
+**Status:** Premium UI Polish, Help System, Navigation Fixes Complete  
+**Last Build:** January 18, 2026  
+**Next Phase:** Monetization Strategy Design
 
 **Tech Stack:** Expo (React Native) + FastAPI + MongoDB  
-**Database:** 48 countries, **520 landmarks** (cleaned up), test data populated  
+**Database:** 48 countries, **520 landmarks** (deduplicated), test data populated  
 
 **Test Accounts:**
 | Email | Password | Role |
@@ -24,40 +24,45 @@
 
 ---
 
-## 🆕 **v4.31 Changes**
+## 🆕 **v4.32 Changes (Latest)**
 
-### Multi-Landmark Custom Visits
-- Custom visits now support **up to 10 landmarks** per country
-- Each landmark can have its **own dedicated photo**
-- Total photos: 10 country photos + 10 landmark photos = **max 20 per visit**
-- Dynamic "+" button to add more landmarks in the modal
+### Premium Flag Design
+- **Glossy shine effect** - White gradient overlay (25% → 5% → transparent)
+- **Vignette effect** - Darker edges for depth
+- **Texture overlay** - Subtle linen pattern (3% opacity)
+- **Edge highlight** - 1px white line at top
+- **Enhanced shadows** - Cards float with 4px shadow
+- **Flags fill entire card** - No blank space, using `cover` mode
+- **Premium typography** - Larger names, letter spacing, gold points color
 
-### Dynamic Continent Stats
-- New endpoint: `GET /api/continent-stats` provides real-time data
-- Continent cards now fetch stats from database instead of hardcoded values
-- Stats include: landmarks, points, countries, and user progress per continent
+### Help & Support System
+- **Updated About page** → "About & Help" (`/about`)
+- **FAQ Section** - 6 expandable questions covering:
+  - Points system (dual points explained)
+  - Custom visits
+  - Privacy settings
+  - Photo collection
+  - Milestone badges
+  - Account deletion
+- **Contact Support Form** - Subject + message with send functionality
+- **Updated stats** - 520 landmarks, 6,580 points, v4.31
 
-### Landmark Cleanup
-- Removed **15 duplicate landmarks** (similar names)
-- Fixed **2 ID collisions** (Uluru, Churchill)
-- Added **12 new authentic landmarks** as replacements
-- Updated orphan visits to point to correct landmarks
-
-### Updated Milestone System (520 landmarks)
-| Landmarks | % | Badge Name |
-|-----------|---|------------|
-| 10 | 1.9% | 🗺️ Explorer |
-| 25 | 4.8% | 🧗 Adventurer |
-| 50 | 9.6% | 🌍 Globetrotter |
-| 100 | 19.2% | ✈️ World Traveler |
-| **200** | **38.5%** | **🧭 Seasoned Traveler** (NEW) |
-| **350** | **67.3%** | **🏆 Legend** (moved from 250) |
-| 500 | 96.2% | 👑 Ultimate Explorer |
+### Navigation Fixes
+All back buttons now navigate to correct parent pages:
+| Page | Back → |
+|------|--------|
+| Settings | Profile |
+| Friends | Social |
+| Edit Profile | Profile |
+| Notifications | Profile |
+| My Country Visits | Journey |
+| Photo Collection | Journey |
+| Leaderboard | Social |
 
 ### Code Cleanup
-- Removed unused **Trip Planning endpoints** (~14KB of code)
-- Removed unused **Trip models** (Trip, TripCreate, TripUpdate, TripLandmark, etc.)
-- Kept BucketList functionality
+- **Removed Trip Planning** (~14KB of unused code)
+- Deleted 10 endpoints: `/api/trips/*`
+- Removed models: Trip, TripCreate, TripUpdate, TripLandmark, TripPlan
 
 ---
 
@@ -69,16 +74,21 @@
 - **Theme constant:** `gradients.oceanToSand`
 - **Usage:** ALL headers across the app (mandatory)
 
-### Universal Header (STANDARD)
-- **Layout:** Single row - Close/Back left, Title center-left, WanderList branding right
-- **Branding:** 🌍 WanderList in dark text (#2A2A2A)
-- **Sticky:** All headers stick to top while scrolling
+### Premium Flag Cards
+```javascript
+// Layered effects on flag cards:
+1. Base flag image (resizeMode: "cover")
+2. Glossy shine gradient (top 60%)
+3. Vignette gradient (full coverage)
+4. Texture overlay (3% opacity)
+5. Edge highlight (1px white line)
+6. Name gradient (bottom fade to black)
+```
 
-### Continent Cards (Updated v4.31)
-- **Height:** 140px
-- **Text Background:** Semi-transparent accent color overlay (40% opacity)
-- **Data Source:** Dynamic from `/api/continent-stats` endpoint
-- **Stats shown:** Points, Countries, Landmarks
+### Universal Header
+- Added `onBack` prop for explicit navigation
+- Back button uses custom handler when provided
+- Falls back to `router.back()` if no handler
 
 ---
 
@@ -90,35 +100,43 @@
 | `points` | Personal/total points | Always (all visits) |
 | `leaderboard_points` | Public leaderboard | Only with photos |
 
-### Points Logic
-| Action | Personal Points | Leaderboard Points |
-|--------|----------------|-------------------|
-| Landmark visit WITH photo | ✅ +10/25 pts | ✅ +10/25 pts |
-| Landmark visit WITHOUT photo | ✅ +10/25 pts | ❌ 0 pts |
-| Country visit WITH photo | ✅ +50 pts | ✅ +50 pts |
-| Country visit WITHOUT photo | ✅ +50 pts | ❌ 0 pts |
-| Custom visits | ❌ 0 pts | ❌ 0 pts |
+### Points Values
+| Action | Personal | Leaderboard |
+|--------|----------|-------------|
+| Official landmark (+photo) | +10 | +10 |
+| Official landmark (no photo) | +10 | 0 |
+| Premium landmark (+photo) | +25 | +25 |
+| Premium landmark (no photo) | +25 | 0 |
+| Country visit (+photo) | +50 | +50 |
+| Country visit (no photo) | +50 | 0 |
+| Custom visits | 0 | 0 |
 
 ---
 
-## 🌍 **User Created Visits (v4.31)**
+## 🏆 **Milestone System (520 landmarks)**
+
+| Landmarks | % | Badge Name | Icon |
+|-----------|---|------------|------|
+| 10 | 1.9% | Explorer | 🗺️ |
+| 25 | 4.8% | Adventurer | 🧗 |
+| 50 | 9.6% | Globetrotter | 🌍 |
+| 100 | 19.2% | World Traveler | ✈️ |
+| 200 | 38.5% | Seasoned Traveler | 🧭 |
+| 350 | 67.3% | Legend | 🏆 |
+| 500 | 96.2% | Ultimate Explorer | 👑 |
+
+---
+
+## 🌍 **User Created Visits**
 
 ### Features
-- **Up to 10 landmarks** per custom visit (with optional individual photos)
-- **Up to 10 country photos** (general trip photos)
+- **Up to 10 landmarks** per custom visit
+- **Per-landmark photos** - Each landmark can have 1 photo
+- **Up to 10 country photos** - General trip photos
 - **Max 20 total photos** per visit
-- No points awarded for custom visits
+- No points awarded
 
-### Entry Points
-1. **Journey Page** → "Custom Visits" section → "Add Visit" button
-2. **Explore Page** → "Can't find your destination?" link
-
-### API Endpoints
-- `POST /api/user-created-visits` - Create custom visit
-- `GET /api/user-created-visits` - List user's custom visits
-- `DELETE /api/user-created-visits/{id}` - Delete custom visit
-
-### Data Structure (v4.31)
+### Data Structure
 ```json
 {
   "country_name": "Monaco",
@@ -126,30 +144,33 @@
     {"name": "Prince's Palace", "photo": "base64..."},
     {"name": "Monte Carlo Casino", "photo": null}
   ],
-  "photos": ["base64..."],
-  "diary_notes": "...",
-  "visibility": "public|friends|private"
+  "photos": ["base64...", "base64..."],
+  "diary_notes": "Amazing trip!",
+  "visibility": "public"
 }
 ```
+
+### Entry Points
+1. Journey Page → "Custom Visits" → "Add Visit"
+2. Explore Page → "Can't find your destination?"
 
 ---
 
 ## 📸 **Photo Collection**
 
 ### Entry Point
-- **Journey Page** → "My Photos" card
+Journey Page → "My Photos" card
 
 ### Features
-- **Stats Banner:** X Photos • X Countries • X Years
-- **Filter Tabs:** All | By Country | By Year | By Type
-- **Photo Grid:** 3-column Instagram-style layout
-- **Fullscreen Viewer:** Tap photo to view, swipe between photos
+- Stats banner: X Photos • X Countries • X Years
+- Filter tabs: All | By Country | By Year | By Type
+- 3-column Instagram-style grid
+- Fullscreen viewer with swipe
 
 ### Data Sources
-Photos aggregated from:
-- `/api/visits` (landmark visit photos)
-- `/api/country-visits` (country visit photos)  
-- `/api/user-created-visits` (custom visit photos + landmark photos)
+- Landmark visits (`/api/visits`)
+- Country visits (`/api/country-visits`)
+- Custom visits (`/api/user-created-visits`)
 
 ---
 
@@ -157,65 +178,55 @@ Photos aggregated from:
 
 ### Bottom Tabs
 ```
-├── Explore (continents.tsx) - Main entry, dynamic continent stats
+├── Explore (continents.tsx) - Dynamic continent stats
 ├── My Journey (journey.tsx) - Stats, visits, photos
 ├── Social (social.tsx) - Activity feed
 └── Profile (profile.tsx) - Settings
 ```
 
-### Journey Page Sections
+### Key Routes
 ```
-My Journey:
-├── Your Stats (points, streak)
-├── Overall Progress (X/520 landmarks)
-├── Next Milestone
-├── Recent Visits
-├── My Country Visits → /my-country-visits
-├── My Photos → /photo-collection
-└── Custom Visits (with multi-landmark support)
+/about          - Help & Support (FAQ, Contact)
+/settings       - App settings
+/friends        - Friend management
+/notifications  - User notifications
+/leaderboard    - Global rankings
+/achievements   - Badges earned
+/photo-collection - Photo gallery
+/my-country-visits - Country visit list
+/edit-profile   - Profile editor
 ```
 
 ---
 
 ## 📁 **Key Files**
 
-### Frontend
+### Frontend - Premium UI
 ```
-/app/frontend/app/
-├── continents.tsx           # Dynamic continent stats from API
-├── photo-collection.tsx     # Photo gallery feature
-├── (tabs)/journey.tsx       # Multi-landmark display support
-
-/app/frontend/components/
-├── AddUserCreatedVisitModal.tsx  # Multi-landmark + per-photo support
+/app/frontend/app/explore-countries.tsx  # Premium flag cards
+/app/frontend/app/about.tsx              # Help & Support
+/app/frontend/components/UniversalHeader.tsx  # onBack prop
 ```
 
-### Backend
+### Backend - Core APIs
 ```
-/app/backend/server.py:
-├── GET  /api/continent-stats        # NEW - Dynamic continent data
-├── POST /api/user-created-visits    # Updated - Multi-landmark support
-├── GET  /api/photos/collection      # Photo aggregation
+GET  /api/continent-stats     # Dynamic continent data
+POST /api/user-created-visits # Multi-landmark support
+GET  /api/photos/collection   # Photo aggregation
 ```
 
 ---
 
-## 🗑️ **Removed Code (v4.31)**
+## 📊 **Database Stats**
 
-### Trip Planning Feature (Removed)
-The following endpoints and models were removed as unused:
-- `GET /api/trips`
-- `POST /api/trips`
-- `GET /api/trips/{trip_id}`
-- `PUT /api/trips/{trip_id}`
-- `DELETE /api/trips/{trip_id}`
-- `POST /api/trips/{trip_id}/landmarks`
-- `DELETE /api/trips/{trip_id}/landmarks/{id}`
-- `PUT /api/trips/{trip_id}/landmarks/{id}/visited`
-- `POST /api/trips/{trip_id}/complete-review`
-- `POST /api/trips/{trip_id}/convert-to-visits`
-
-Models removed: `Trip`, `TripCreate`, `TripUpdate`, `TripLandmark`, `TripLandmarkCreate`, `TripPlan`
+| Continent | Landmarks | Points | Countries |
+|-----------|-----------|--------|-----------|
+| Europe | 113 | 1,655 | 10 |
+| Asia | 112 | 1,435 | 10 |
+| Americas | 110 | 1,430 | 10 |
+| Africa | 102 | 1,155 | 10 |
+| Oceania | 83 | 905 | 8 |
+| **TOTAL** | **520** | **6,580** | **48** |
 
 ---
 
@@ -235,17 +246,17 @@ tail -f /var/log/supervisor/backend.err.log
 
 ---
 
-## ✅ **v4.31 Verified Working**
+## ✅ **Verified Working (v4.32)**
 
-- [x] Multi-landmark custom visits (up to 10 landmarks)
-- [x] Per-landmark photos in custom visits
-- [x] Dynamic continent stats endpoint
-- [x] Continent cards fetch real-time data
-- [x] Duplicate landmarks cleaned up (520 total)
-- [x] Updated milestone system
-- [x] Orphan visits fixed
+- [x] Premium flag cards with glossy effects
+- [x] Help & Support with FAQ and Contact form
+- [x] All back buttons navigate correctly
+- [x] Multi-landmark custom visits
+- [x] Dynamic continent stats
+- [x] Photo collection gallery
+- [x] Dual points system
+- [x] Updated milestones (520 landmarks)
 - [x] Trip planning code removed
-- [x] All existing features still working
 
 ---
 
@@ -257,19 +268,6 @@ tail -f /var/log/supervisor/backend.err.log
 
 ---
 
-## 📊 **Database Stats (v4.31)**
-
-| Continent | Landmarks | Points | Countries |
-|-----------|-----------|--------|-----------|
-| Europe | 113 | 1,655 | 10 |
-| Asia | 112 | 1,435 | 10 |
-| Americas | 110 | 1,430 | 10 |
-| Africa | 102 | 1,155 | 10 |
-| Oceania | 83 | 905 | 8 |
-| **TOTAL** | **520** | **6,580** | **48** |
-
----
-
 ## 🔒 **Privacy System**
 
 | Icon | Color | Level | Who Can See |
@@ -278,4 +276,40 @@ tail -f /var/log/supervisor/backend.err.log
 | 👥 | Blue | Friends | Only friends |
 | 🔒 | Red | Private | Only you |
 
-Applies to: Landmark visits, Country visits, Custom visits, Activity feed
+---
+
+## 🚀 **Next Development Phase**
+
+### Monetization Strategy (Upcoming)
+Potential areas to explore:
+- Premium subscription tiers
+- In-app purchases
+- Ad integration
+- Premium landmarks/content
+- Subscription center UI
+
+### Future Features (Backlog)
+- User travel preferences
+- Trip planning (if re-implemented)
+- Enhanced social features
+- Offline mode
+
+---
+
+## 📝 **Session Summary (v4.32)**
+
+### Completed This Session:
+1. ✅ Multi-landmark custom visits with per-photo support
+2. ✅ Dynamic continent stats API endpoint
+3. ✅ Removed unused Trip Planning code
+4. ✅ Help & Support system (FAQ + Contact)
+5. ✅ Fixed all back button navigation
+6. ✅ Premium flag design with texture overlays
+7. ✅ Country flags fill cards completely
+8. ✅ Updated baseline documentation
+
+### Ready for Next Phase:
+- Core features complete and polished
+- UI has premium feel
+- Help system in place
+- Ready to design monetization strategy
