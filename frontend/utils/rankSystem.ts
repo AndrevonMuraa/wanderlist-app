@@ -1,4 +1,5 @@
 // User Rank System Configuration
+// Total points available in app: ~6,145 (502 landmarks)
 
 export interface Rank {
   name: string;
@@ -23,7 +24,7 @@ export const RANKS: Rank[] = [
   {
     name: 'Adventurer',
     minPoints: 500,
-    maxPoints: 1999,
+    maxPoints: 1499,
     color: '#C0C0C0',
     icon: 'navigate',
     gradient: ['#C0C0C0', '#A8A8A8'],
@@ -31,8 +32,8 @@ export const RANKS: Rank[] = [
   },
   {
     name: 'Voyager',
-    minPoints: 2000,
-    maxPoints: 4999,
+    minPoints: 1500,
+    maxPoints: 2999,
     color: '#FFD700',
     icon: 'airplane',
     gradient: ['#FFD700', '#FFA500'],
@@ -40,8 +41,8 @@ export const RANKS: Rank[] = [
   },
   {
     name: 'Globetrotter',
-    minPoints: 5000,
-    maxPoints: 9999,
+    minPoints: 3000,
+    maxPoints: 4999,
     color: '#20B2AA',
     icon: 'earth',
     gradient: ['#20B2AA', '#48D1CC'],
@@ -49,7 +50,7 @@ export const RANKS: Rank[] = [
   },
   {
     name: 'Legend',
-    minPoints: 10000,
+    minPoints: 5000,
     maxPoints: Infinity,
     color: '#9C27B0',
     icon: 'trophy',
