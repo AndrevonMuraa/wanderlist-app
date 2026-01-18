@@ -614,11 +614,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: theme.spacing.xs,
   },
-  brandingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
   brandingText: {
     fontSize: 14,
     fontWeight: '700',
