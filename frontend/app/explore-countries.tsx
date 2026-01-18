@@ -1188,10 +1188,6 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
   },
-  flagImage: {
-    width: '100%',
-    height: '100%',
-  },
   flagOverlay: {
     position: 'absolute',
     top: 0,
