@@ -1,4 +1,4 @@
-# WanderList - Essential Baseline (v4.40)
+# WanderList - Essential Baseline (v4.50)
 
 > **Purpose:** Critical information for session continuity
 > **Read this:** At session start if forked, or when encountering issues
@@ -7,13 +7,13 @@
 
 ## 📊 **Current State**
 
-**Version:** 4.40.0 - STABLE ✅  
-**Status:** WanderList Pro Subscription Model Implemented  
+**Version:** 4.50.0 - STABLE ✅  
+**Status:** Production Ready with WanderList Pro Subscription  
 **Last Build:** January 18, 2026  
-**Next Phase:** User Testing & Polish
+**Next Phase:** User Testing & Deployment
 
 **Tech Stack:** Expo (React Native) + FastAPI + MongoDB  
-**Database:** 48 countries, **520 landmarks** (428 official + 92 premium), test data populated  
+**Database:** 48 countries, **492 landmarks** (389 official + 103 premium), Oceania fully populated  
 
 **Test Accounts:**
 | Email | Password | Role |
@@ -24,101 +24,78 @@
 
 ---
 
-## 🆕 **v4.40 Changes (Latest)**
+## 🆕 **v4.50 Changes (Latest)**
 
-### WanderList Pro Subscription Model
-Complete freemium model implementation with backend enforcement and frontend UI:
+### Database Cleanup & Fixes
+- **Duplicate landmarks removed** - All 52+ duplicate entries cleaned up
+- **Uluru/Ayers Rock** - Now single entry (no more duplicates)
+- **Oceania fully populated** - All 8 countries now have landmarks:
+  - Australia: 12 landmarks
+  - New Zealand: 10 landmarks
+  - Fiji: 5 landmarks
+  - French Polynesia: 5 landmarks
+  - Cook Islands: 3 landmarks
+  - Samoa: 3 landmarks
+  - Vanuatu: 3 landmarks
+  - Tonga: 3 landmarks
 
-**Tiers:**
-| Feature | Free | Pro ($3.99/mo or $29.99/yr) |
-|---------|------|------------------------------|
-| Official Landmarks (428) | ✅ | ✅ |
-| Premium Landmarks (92) | 🔒 Locked | ✅ Unlocked |
-| Custom Visits | 🔒 Locked | ✅ Unlimited |
-| Photos per Visit | 1 | 10 |
-| Friends | 5 max | Unlimited |
+### Premium Landmarks Sorting
+- **Official landmarks always appear first** in all listing views
+- **Premium landmarks appear at the bottom** after official ones
+- Sorting maintained across all sort options (name, points, upvotes)
 
-**Backend Endpoints:**
-- `GET /api/subscription/status` - Get current tier and limits
-- `POST /api/subscription/test-toggle` - Toggle between free/pro (dev only)
-- `POST /api/subscription/cancel` - Downgrade to free
+### Settings Page Cleanup
+- **Removed Email Notifications** - Only Push Notifications toggle remains
+- **Removed Language Selector** - App only has one language (English)
+- **Header fixed** - Now matches standard app header style with branding
 
-**Frontend UI:**
-- `/subscription` - Beautiful subscription page with feature comparison
-- Pro feature lock modal with upgrade CTA
-- Photo limit enforcement in visit modals
-- Friend limit display and warnings
-- Premium landmarks show purple lock icon
+### Profile Page Cleanup
+- **Removed "Your Plan Limits"** section completely
+- Cleaner profile view without redundant upgrade prompts
+- 12 unused style definitions removed (~70 lines of code)
 
-### Premium Visual Identity (Purple Theme)
-All premium elements now use consistent purple (#764ba2):
-- Premium landmark diamond icons
-- PREMIUM badges on landmark cards
-- Pro feature lock modals
-- Upgrade hints and CTAs
+### Header Standardization
+All pages now have consistent headers with:
+- **Circular back button** with light background (`rgba(255,255,255,0.2)`)
+- **Page title** next to back button
+- **Earth icon + "WanderList" branding** on right side (links to About page)
 
-### Friends Leaderboard Toggle
-- Enhanced Global/Friends segmented control
-- Gold gradient for Friends selection
-- Proper "No friends on leaderboard" empty state
+Pages updated for consistent headers:
+- Settings, Friends, Notifications, Explore Countries
+- Landmarks, About, Subscription, Feed
+- All message and detail pages
 
-### Activity Feed Page
-- New `/feed` route (was causing "Unmatched Route" error)
-- Full activity history with pagination
-- Like functionality
-- Support for all activity types including `user_created_visit`
+### Landmark Detail Page
+- **Removed "Quick Info" (difficulty)** feature completely
+- Cleaner landmark detail view
+- Removed unused helper functions and styles
 
-### UI Redesigns
-**Settings Page:**
-- Light theme with white cards
-- Colored section icons
-- Privacy options with selection state
-- Clean toggle switches
-
-**Friends Page:**
-- Gradient header
-- White card design
-- Clean email input with icons
-- Friend limit badge (4/5 format)
-- Premium badge for pro users
-
-### Bug Fixes
-- Fixed Social page leaderboard showing "No rankings yet"
-- Fixed Activity Feed "Full list" navigation error
-- Changed "My Country Visits" icon from camera to flag
-
-### Removed
-- "Premium Features" section from explore-countries footer
+### Code Cleanup
+- Removed duplicate style definitions across multiple files:
+  - bucket-list.tsx
+  - notifications.tsx
+  - explore-countries.tsx
+  - profile.tsx
+- Fixed syntax errors from corrupted edits
+- Balanced brace structures in StyleSheet definitions
 
 ---
 
 ## 💎 **Subscription System**
 
-### User Model Fields
-```python
-subscription_tier: str = "free"  # "free" or "pro"
-subscription_expires_at: Optional[datetime] = None
-```
+### Tiers
+| Feature | Free | Pro ($3.99/mo or $29.99/yr) |
+|---------|------|------------------------------|
+| Official Landmarks (389) | ✅ | ✅ |
+| Premium Landmarks (103) | 🔒 Locked | ✅ Unlocked |
+| Custom Visits | 🔒 Locked | ✅ Unlimited |
+| Photos per Visit | 1 | 10 |
+| Friends | 5 max | Unlimited |
 
-### Subscription Status Response
-```json
-{
-  "subscription_tier": "free",
-  "is_pro": false,
-  "expires_at": null,
-  "limits": {
-    "max_friends": 5,
-    "photos_per_visit": 1,
-    "can_access_premium_landmarks": false,
-    "can_create_custom_visits": false
-  },
-  "usage": {
-    "friends_count": 4,
-    "friends_limit": 5,
-    "friends_remaining": 1
-  }
-}
-```
+### Backend Endpoints
+- `GET /api/subscription/status` - Get current tier and limits
+- `POST /api/subscription/test-toggle` - Toggle between free/pro (dev only)
+- `POST /api/subscription/cancel` - Downgrade to free
 
 ### Frontend Hook
 ```typescript
@@ -136,6 +113,31 @@ const { isPro, canAccessPremiumLandmarks, canCreateCustomVisits, maxPhotosPerVis
 - **Direction:** Horizontal (left to right)
 - **Theme constant:** `gradients.oceanToSand`
 - **Usage:** ALL headers across the app (mandatory)
+
+### Standard Header Style
+```javascript
+// Back Button (circular with light background)
+backButton: {
+  width: 36,
+  height: 36,
+  borderRadius: 18,
+  backgroundColor: 'rgba(255,255,255,0.2)',
+  justifyContent: 'center',
+  alignItems: 'center',
+}
+
+// Branding (right side of header)
+brandingContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 4,
+}
+brandingTextDark: {
+  fontSize: 13,
+  fontWeight: '700',
+  color: '#2A2A2A',
+}
+```
 
 ### Premium/Pro Colors
 - **Primary Purple:** `#764ba2`
@@ -180,17 +182,17 @@ const { isPro, canAccessPremiumLandmarks, canCreateCustomVisits, maxPhotosPerVis
 
 ---
 
-## 🏆 **Milestone System (520 landmarks)**
+## 🏆 **Milestone System (492 landmarks)**
 
 | Landmarks | % | Badge Name | Icon |
 |-----------|---|------------|------|
-| 10 | 1.9% | Explorer | 🗺️ |
-| 25 | 4.8% | Adventurer | 🧗 |
-| 50 | 9.6% | Globetrotter | 🌍 |
-| 100 | 19.2% | World Traveler | ✈️ |
-| 200 | 38.5% | Seasoned Traveler | 🧭 |
-| 350 | 67.3% | Legend | 🏆 |
-| 500 | 96.2% | Ultimate Explorer | 👑 |
+| 10 | 2.0% | Explorer | 🗺️ |
+| 25 | 5.1% | Adventurer | 🧗 |
+| 50 | 10.2% | Globetrotter | 🌍 |
+| 100 | 20.3% | World Traveler | ✈️ |
+| 200 | 40.7% | Seasoned Traveler | 🧭 |
+| 350 | 71.1% | Legend | 🏆 |
+| 480 | 97.6% | Ultimate Explorer | 👑 |
 
 ---
 
@@ -198,163 +200,108 @@ const { isPro, canAccessPremiumLandmarks, canCreateCustomVisits, maxPhotosPerVis
 
 ### Bottom Tabs
 ```
-├── Explore (continents.tsx) - Dynamic continent stats
-├── My Journey (journey.tsx) - Stats, visits, photos
-├── Social (social.tsx) - Activity feed, leaderboard
-└── Profile (profile.tsx) - Settings, subscription
+Explore (map) → Journey (compass) → Social (people) → Bucket List (bookmark) → Profile (person)
 ```
 
 ### Key Routes
-```
-/subscription      - WanderList Pro subscription page
-/feed              - Full activity feed
-/about             - Help & Support (FAQ, Contact)
-/settings          - App settings (redesigned)
-/friends           - Friend management (redesigned)
-/notifications     - User notifications
-/leaderboard       - Global/Friends rankings
-/achievements      - Badges earned
-/photo-collection  - Photo gallery
-/my-country-visits - Country visit list
-/edit-profile      - Profile editor
-```
+- `/` - Login/Register
+- `/(tabs)/explore` - Main continent exploration
+- `/(tabs)/journey` - Personal travel stats
+- `/(tabs)/social` - Activity feed & leaderboard
+- `/(tabs)/bucket-list` - Saved landmarks
+- `/(tabs)/profile` - User profile & settings
+- `/explore-countries?continent=X` - Countries in continent
+- `/landmarks/[country_id]` - Landmarks in country
+- `/landmark-detail/[landmark_id]` - Landmark details
+- `/settings` - App settings (privacy, notifications)
+- `/friends` - Friend management
+- `/subscription` - WanderList Pro page
+- `/feed` - Full activity feed
+- `/about` - About WanderList
 
 ---
 
-## 📁 **Key Files**
+## 🔧 **Critical Configuration**
 
-### Subscription System
-```
-/app/frontend/hooks/useSubscription.ts       # Subscription hook
-/app/frontend/components/ProFeatureLock.tsx  # Upgrade modal
-/app/frontend/app/subscription.tsx           # Subscription page
-/app/backend/server.py                       # Subscription endpoints
-```
+### Environment Variables
+**NEVER MODIFY:**
+- `EXPO_PACKAGER_PROXY_URL`
+- `EXPO_PACKAGER_HOSTNAME`
+- `MONGO_URL`
 
-### Redesigned Pages
-```
-/app/frontend/app/settings.tsx   # Light theme settings
-/app/frontend/app/friends.tsx    # Light theme friends
-/app/frontend/app/feed.tsx       # Activity feed (new)
-```
-
-### Premium UI
-```
-/app/frontend/app/landmarks/[country_id].tsx    # Purple premium icons
-/app/frontend/app/landmark-detail/[landmark_id].tsx
-/app/frontend/app/bucket-list.tsx
-/app/frontend/app/landmark-search.tsx
-```
-
----
-
-## 📊 **Database Stats**
-
-| Continent | Landmarks | Points | Countries |
-|-----------|-----------|--------|-----------|
-| Europe | 113 | 1,655 | 10 |
-| Asia | 112 | 1,435 | 10 |
-| Americas | 110 | 1,430 | 10 |
-| Africa | 102 | 1,155 | 10 |
-| Oceania | 83 | 905 | 8 |
-| **TOTAL** | **520** | **6,580** | **48** |
-
-**Landmark Types:**
-- Official: 428 (accessible to all)
-- Premium: 92 (Pro subscribers only)
-
----
-
-## 🔧 **Service Commands**
-
+### Service Commands
 ```bash
-# Restart services
-sudo supervisorctl restart backend expo
+sudo supervisorctl restart backend  # Restart FastAPI
+sudo supervisorctl restart expo     # Restart Expo
+sudo supervisorctl status           # Check services
+```
 
-# Check status
-sudo supervisorctl status
-
-# View logs
-tail -f /var/log/supervisor/expo.err.log
-tail -f /var/log/supervisor/backend.err.log
-
-# Toggle subscription (for testing)
-curl -X POST http://localhost:8001/api/subscription/test-toggle \
-  -H "Authorization: Bearer <token>"
+### Database Seeding
+```bash
+cd /app/backend
+python3 seed_data.py              # Base countries/landmarks
+python3 seed_data_expansion.py    # Expanded content (48 countries)
+# Premium landmarks are in premium_landmarks.py - auto-seeded
 ```
 
 ---
 
-## ✅ **Verified Working (v4.40)**
+## 🐛 **Known Issues**
 
-- [x] WanderList Pro subscription backend
-- [x] Subscription page UI
-- [x] Pro feature lock modals
-- [x] Photo upload limits (1 for free, 10 for pro)
-- [x] Friend limits (5 for free, unlimited for pro)
-- [x] Premium landmarks locked for free users
-- [x] Custom visits locked for free users
-- [x] Purple premium visual identity
-- [x] Friends leaderboard toggle
-- [x] Activity feed page
-- [x] Settings page (light theme)
-- [x] Friends page (light theme)
-- [x] Social leaderboard data fix
-- [x] Flag icon for country visits
+### Google OAuth (NOT WORKING)
+- **Error:** `403: disallowed_useragent`
+- **Status:** Not fixed - requires user's Google Cloud credentials
+- **Workaround:** Use email/password login
+
+### Web Preview Notes
+- Some RN styles may render slightly differently on web
+- Use Expo Go app for accurate mobile testing
 
 ---
 
-## 🔴 **Known Issues**
+## 📂 **Key Files Reference**
 
-1. **Google OAuth** - Broken (`403: disallowed_useragent`)
-   - Workaround: Use email/password login
-   - Fix: Requires Google Cloud OAuth credentials
+### Frontend
+| File | Purpose |
+|------|---------|
+| `/app/frontend/hooks/useSubscription.ts` | Subscription state management |
+| `/app/frontend/components/ProFeatureLock.tsx` | Upgrade prompt modal |
+| `/app/frontend/components/UniversalHeader.tsx` | Reusable page header |
+| `/app/frontend/utils/theme.ts` | Design system constants |
+| `/app/frontend/utils/config.ts` | API configuration |
 
----
-
-## 🔒 **Privacy System**
-
-| Icon | Color | Level | Who Can See |
-|------|-------|-------|-------------|
-| 🌐 | Green | Public | Everyone |
-| 👥 | Blue | Friends | Only friends |
-| 🔒 | Red | Private | Only you |
-
----
-
-## 🚀 **Next Development Phase**
-
-### Immediate (P0)
-- User testing of subscription flow
-- Verify all Pro restrictions work correctly
-- Test photo limits in visit modals
-
-### Future Features (Backlog)
-- Payment integration (Stripe/Apple Pay)
-- User travel preferences
-- Enhanced social features
-- Offline mode
-- Push notifications
+### Backend
+| File | Purpose |
+|------|---------|
+| `/app/backend/server.py` | Main FastAPI application |
+| `/app/backend/premium_landmarks.py` | Premium landmark definitions |
+| `/app/backend/seed_data_expansion.py` | Database seeding script |
 
 ---
 
-## 📝 **Session Summary (v4.40)**
+## ✅ **Session Checklist for New Fork**
 
-### Completed This Session:
-1. ✅ WanderList Pro subscription model (backend + frontend)
-2. ✅ Pro feature lock modals with upgrade CTA
-3. ✅ Photo upload limits enforcement
-4. ✅ Friend limits with warning badges
-5. ✅ Purple premium visual identity
-6. ✅ Friends leaderboard toggle
-7. ✅ Activity feed page (/feed)
-8. ✅ Settings page redesign (light theme)
-9. ✅ Friends page redesign (light theme)
-10. ✅ Social leaderboard data fix
-11. ✅ Country visits flag icon
-12. ✅ Removed premium features section
+1. [ ] Run `sudo supervisorctl status` - Verify services running
+2. [ ] Check database has data: `curl http://localhost:8001/api/countries` (after login)
+3. [ ] If database empty, run seed scripts
+4. [ ] Test login with `mobile@test.com` / `test123`
+5. [ ] Verify all 5 tabs load correctly
+6. [ ] Check Settings page loads (was recently fixed)
+7. [ ] Check Profile page loads (was recently fixed)
 
-### Testing Notes:
-- Use `/api/subscription/test-toggle` to switch between free/pro
-- Test user: `mobile@test.com` / `test123`
-- Current tier shown on Profile page and Subscription page
+---
+
+## 📝 **Version History**
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 4.50 | Jan 18, 2026 | Duplicate cleanup, header standardization, settings/profile cleanup, Oceania landmarks |
+| 4.40 | Jan 18, 2026 | WanderList Pro subscription, premium landmarks, UI redesigns |
+| 4.30 | Jan 17, 2026 | Activity feed, friends leaderboard, bug fixes |
+| 4.20 | Jan 16, 2026 | Points system, milestone badges |
+| 4.10 | Jan 15, 2026 | Country visits, photo uploads |
+| 4.00 | Jan 14, 2026 | Initial stable release |
+
+---
+
+*Last Updated: January 18, 2026*
