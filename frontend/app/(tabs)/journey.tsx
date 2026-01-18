@@ -478,7 +478,7 @@ export default function JourneyScreen() {
           >
             <View style={styles.countryVisitsLeft}>
               <View style={styles.countryVisitsIcon}>
-                <Ionicons name="camera" size={22} color={theme.colors.primary} />
+                <Ionicons name="flag" size={22} color={theme.colors.primary} />
               </View>
               <View>
                 <Text style={styles.countryVisitsTitle}>My Country Visits</Text>
