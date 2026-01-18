@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Get backend URL from environment
-BACKEND_URL = "https://explorer-upgrade.preview.emergentagent.com/api"
+BACKEND_URL = "https://landmark-photo.preview.emergentagent.com/api"
 
 class Colors:
     GREEN = '\033[92m'
