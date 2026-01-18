@@ -172,8 +172,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#6200ee',
   },
   backButton: {
-    marginRight: 16,
-    padding: 8,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
   },
   headerContent: {
     flex: 1,
