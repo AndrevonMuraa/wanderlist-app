@@ -1266,13 +1266,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginTop: theme.spacing.xs / 2,
   },
-  statsCard: {
-    margin: theme.spacing.md,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
   statsHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
