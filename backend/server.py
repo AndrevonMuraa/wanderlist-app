@@ -44,7 +44,8 @@ class User(BaseModel):
     bio: Optional[str] = None  # User bio (max 200 chars)
     location: Optional[str] = None  # User location/home country
     is_premium: bool = False  # Deprecated, kept for backward compatibility
-    subscription_tier: str = "free"  # "free", "basic", "premium"
+    subscription_tier: str = "free"  # "free" or "pro"
+    subscription_expires_at: Optional[datetime] = None  # When pro subscription expires
     password_hash: Optional[str] = None
     current_streak: int = 0  # Current consecutive days streak
     longest_streak: int = 0  # Longest streak ever achieved
@@ -59,7 +60,7 @@ class UserPublic(BaseModel):
     bio: Optional[str] = None
     location: Optional[str] = None
     is_premium: bool = False  # Deprecated
-    subscription_tier: str = "free"
+    subscription_tier: str = "free"  # "free" or "pro"
     default_privacy: str = "public"  # "public", "friends", "private"
 
 class ProfileUpdate(BaseModel):
