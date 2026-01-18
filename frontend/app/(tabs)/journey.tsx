@@ -655,6 +655,13 @@ export default function JourneyScreen() {
         onClose={() => setShowCustomVisitModal(false)}
         onSuccess={fetchAllData}
       />
+
+      {/* Pro Feature Lock Modal */}
+      <ProFeatureLock
+        visible={showProLock}
+        onClose={() => setShowProLock(false)}
+        feature="custom_visits"
+      />
     </View>
   );
 }
