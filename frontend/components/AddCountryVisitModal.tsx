@@ -400,6 +400,28 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     marginTop: 4,
   },
+  addPhotoButtonLocked: {
+    width: 100,
+    height: 100,
+    borderRadius: theme.borderRadius.md,
+    borderWidth: 2,
+    borderColor: 'rgba(118, 75, 162, 0.3)',
+    borderStyle: 'dashed',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(118, 75, 162, 0.05)',
+  },
+  addPhotoTextLocked: {
+    fontSize: 11,
+    color: '#764ba2',
+    marginTop: 4,
+    fontWeight: '600',
+  },
+  addPhotoSubtext: {
+    fontSize: 9,
+    color: '#764ba2',
+    opacity: 0.7,
+  },
   diaryInput: {
     backgroundColor: theme.colors.backgroundSecondary,
     borderRadius: theme.borderRadius.lg,
