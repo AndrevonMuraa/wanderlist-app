@@ -282,13 +282,18 @@ export default function SocialHubScreen() {
         {(activity.activity_type === 'visit' || activity.activity_type === 'user_created_visit') && (
           <View style={styles.activityContent}>
             <Text style={styles.activityText}>
-              Visited <Text style={styles.activityHighlight}>{activity.landmark_name}</Text>
-              {activity.country_name && ` in ${activity.country_name}`}
+              {activity.activity_type === 'user_created_visit' ? 'Explored ' : 'Visited '}
+              <Text style={styles.activityHighlight}>
+                {activity.landmark_name || activity.country_name || 'a new destination'}
+              </Text>
+              {activity.activity_type === 'visit' && activity.country_name && ` in ${activity.country_name}`}
             </Text>
-            <View style={styles.activityPoints}>
-              <Ionicons name="star" size={14} color="#FFD700" />
-              <Text style={styles.pointsText}>+{activity.points_earned} pts</Text>
-            </View>
+            {activity.points_earned && activity.points_earned > 0 && (
+              <View style={styles.activityPoints}>
+                <Ionicons name="star" size={14} color="#FFD700" />
+                <Text style={styles.pointsText}>+{activity.points_earned} pts</Text>
+              </View>
+            )}
 
             {/* Rich Content Indicators */}
             {hasRichContent && (
