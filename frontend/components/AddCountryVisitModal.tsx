@@ -185,7 +185,21 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
         <ScrollView style={styles.scrollView}>
           {/* Photo Collage */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Photos ({photos.length}/10)</Text>
+            <View style={styles.sectionTitleRow}>
+              <Text style={styles.sectionTitle}>Photos ({photos.length}/{maxPhotos})</Text>
+              {!isProUser && (
+                <TouchableOpacity 
+                  style={styles.upgradePhotoHint}
+                  onPress={() => {
+                    onClose();
+                    router.push('/subscription');
+                  }}
+                >
+                  <Ionicons name="diamond" size={12} color="#764ba2" />
+                  <Text style={styles.upgradePhotoHintText}>Get 10 photos</Text>
+                </TouchableOpacity>
+              )}
+            </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.photoScroll}>
               {photos.map((photo, index) => (
                 <View key={index} style={styles.photoItem}>
@@ -198,12 +212,24 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
                   </TouchableOpacity>
                 </View>
               ))}
-              {photos.length < 10 && (
+              {photos.length < maxPhotos ? (
                 <TouchableOpacity style={styles.addPhotoButton} onPress={pickImages}>
                   <Ionicons name="add-circle" size={40} color={theme.colors.primary} />
                   <Text style={styles.addPhotoText}>Add Photos</Text>
                 </TouchableOpacity>
-              )}
+              ) : !isProUser ? (
+                <TouchableOpacity 
+                  style={styles.addPhotoButtonLocked}
+                  onPress={() => {
+                    onClose();
+                    router.push('/subscription');
+                  }}
+                >
+                  <Ionicons name="lock-closed" size={24} color="#764ba2" />
+                  <Text style={styles.addPhotoTextLocked}>Upgrade</Text>
+                  <Text style={styles.addPhotoSubtext}>for more</Text>
+                </TouchableOpacity>
+              ) : null}
             </ScrollView>
           </View>
 
