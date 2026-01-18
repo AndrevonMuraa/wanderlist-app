@@ -102,7 +102,10 @@ export default function ContinentsScreen() {
   const [loading, setLoading] = useState(true);
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
-  const { canCreateCustomVisits } = useSubscription();
+  
+  // All hooks must be called in consistent order
+  const subscriptionData = useSubscription();
+  const canCreateCustomVisits = subscriptionData.canCreateCustomVisits;
   const insets = useSafeAreaInsets();
 
   // Calculate safe area padding
