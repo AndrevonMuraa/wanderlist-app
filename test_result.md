@@ -726,9 +726,13 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "End-to-End Testing: Full user flow verification"
+    - "Points System: Visit landmarks → earn points → check progress"
+    - "Badges & Ranks: Achievement unlocking verification"
+    - "Database Integrity: 560 landmarks, 48 countries, 7595 total points"
   stuck_tasks: []
-  test_all: false
+  test_all: true
   test_priority: "high_first"
 
 agent_communication:
