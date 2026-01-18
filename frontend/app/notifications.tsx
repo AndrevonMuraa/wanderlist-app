@@ -335,26 +335,6 @@ const styles = StyleSheet.create({
     marginHorizontal: theme.spacing.md,
     gap: theme.spacing.sm,
   },
-  headerTitle: {
-    ...theme.typography.h2,
-    color: '#fff',
-    fontWeight: '700',
-  },
-  unreadBadge: {
-    backgroundColor: '#FF6B6B',
-    borderRadius: theme.borderRadius.full,
-    minWidth: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacing.xs,
-  },
-  unreadText: {
-    ...theme.typography.caption,
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 12,
-  },
   markAllButton: {
     padding: theme.spacing.xs,
   },
