@@ -164,6 +164,7 @@ export default function EditProfileScreen() {
     <View style={styles.container}>
       <UniversalHeader 
         title="Edit Profile" 
+        onBack={handleBack}
         rightElement={
           <TouchableOpacity
             onPress={handleSave}
