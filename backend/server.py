@@ -2610,9 +2610,19 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
     - Leaderboard points (leaderboard_points): Only awarded when photos are included
     """
     
-    # Validate photos (max 10, but photos are now OPTIONAL)
-    if len(data.photos) > 10:
-        raise HTTPException(status_code=400, detail="Maximum 10 photos allowed")
+    # Get user limits based on subscription
+    limits = get_user_limits(current_user)
+    max_photos = limits["photos_per_visit"]
+    
+    # Validate photos based on subscription tier
+    if len(data.photos) > max_photos:
+        if max_photos == 1:
+            raise HTTPException(
+                status_code=403, 
+                detail="Free users can add 1 photo per country visit. Upgrade to WanderList Pro for up to 10 photos!"
+            )
+        else:
+            raise HTTPException(status_code=400, detail=f"Maximum {max_photos} photos allowed")
     
     has_photos = len(data.photos) > 0
     
