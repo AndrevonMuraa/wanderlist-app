@@ -59,7 +59,7 @@ export default function LoginScreen() {
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.logoContainer}>
             <View style={styles.iconCircle}>
-              <Ionicons name="earth" size={56} color={theme.colors.primary} />
+              <BrandedGlobeIcon size={90} showPin={true} showW={true} />
             </View>
             <Text style={styles.title}>Welcome to WanderList</Text>
             <Text style={styles.subtitle}>Explore iconic landmarks across the world</Text>
