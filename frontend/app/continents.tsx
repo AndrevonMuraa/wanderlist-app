@@ -11,6 +11,7 @@ import { useAuth } from '../contexts/AuthContext';
 import AddUserCreatedVisitModal from '../components/AddUserCreatedVisitModal';
 import ProFeatureLock from '../components/ProFeatureLock';
 import { useSubscription } from '../hooks/useSubscription';
+import { HeaderBranding } from '../components/BrandedGlobeIcon';
 
 const { width } = Dimensions.get('window');
 
