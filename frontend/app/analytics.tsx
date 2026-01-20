@@ -12,6 +12,7 @@ import { ProgressBar } from '../components/ProgressBar';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 import UniversalHeader from '../components/UniversalHeader';
 
+import { HeaderBranding } from '../components/BrandedGlobeIcon';
 const { width } = Dimensions.get('window');
 
 interface AnalyticsData {

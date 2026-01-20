@@ -17,6 +17,7 @@ import { RANKS, getUserRank, Rank } from '../utils/rankSystem';
 import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
 
+import { HeaderBranding } from '../components/BrandedGlobeIcon';
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
     return localStorage.getItem('auth_token');

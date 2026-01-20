@@ -17,6 +17,7 @@ import * as SecureStore from 'expo-secure-store';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 
+import { HeaderBranding } from '../components/BrandedGlobeIcon';
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
     return localStorage.getItem('auth_token');
@@ -195,8 +196,7 @@ export default function NotificationsScreen() {
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <Ionicons name="earth" size={16} color="#2A2A2A" />
-            <Text style={styles.brandingTextDark}>WanderList</Text>
+            <HeaderBranding size={16} textColor="#2A2A2A" />
           </TouchableOpacity>
         </View>
       </LinearGradient>

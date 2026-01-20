@@ -17,6 +17,7 @@ import * as SecureStore from 'expo-secure-store';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 
+import { HeaderBranding } from '../components/BrandedGlobeIcon';
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
     return localStorage.getItem('auth_token');
@@ -138,9 +139,8 @@ export default function SubscriptionScreen() {
             </TouchableOpacity>
             <Text style={styles.headerTitle}>WanderList Pro</Text>
             <View style={styles.brandingContainer}>
-              <Ionicons name="earth" size={16} color="#2A2A2A" />
-              <Text style={styles.brandingText}>WanderList</Text>
-            </View>
+            <HeaderBranding size={16} textColor="#2A2A2A" />
+          </View>
           </View>
         </LinearGradient>
         <View style={styles.loadingContainer}>
@@ -167,8 +167,7 @@ export default function SubscriptionScreen() {
           </TouchableOpacity>
           <Text style={styles.headerTitle}>WanderList Pro</Text>
           <View style={styles.brandingContainer}>
-            <Ionicons name="earth" size={16} color="#2A2A2A" />
-            <Text style={styles.brandingText}>WanderList</Text>
+            <HeaderBranding size={16} textColor="#2A2A2A" />
           </View>
         </View>
       </LinearGradient>

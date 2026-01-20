@@ -20,6 +20,7 @@ import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
 
+import { HeaderBranding } from '../components/BrandedGlobeIcon';
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - theme.spacing.md * 3) / 2;
 

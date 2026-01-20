@@ -12,6 +12,7 @@ import ProFeatureLock from '../components/ProFeatureLock';
 import { useSubscription } from '../hooks/useSubscription';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 
+import { HeaderBranding } from '../components/BrandedGlobeIcon';
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -384,8 +385,7 @@ export default function FriendsScreen() {
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <Ionicons name="earth" size={16} color="#2A2A2A" />
-            <Text style={styles.brandingTextDark}>WanderList</Text>
+            <HeaderBranding size={16} textColor="#2A2A2A" />
           </TouchableOpacity>
         </View>
       </LinearGradient>
