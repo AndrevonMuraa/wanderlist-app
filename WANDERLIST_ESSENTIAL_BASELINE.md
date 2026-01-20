@@ -1,4 +1,4 @@
-# WanderList - Essential Baseline (v4.86)
+# WanderList - Essential Baseline (v1.0.0)
 
 > **Purpose:** Critical information for session continuity
 > **Read this:** At session start if forked, or when encountering issues
@@ -7,10 +7,10 @@
 
 ## 📊 **Current State**
 
-**Version:** 4.86.0 - STABLE ✅  
-**Status:** Production Ready with Legal Pages  
+**Version:** 1.0.0 - STABLE ✅  
+**Status:** App Store Ready  
 **Last Build:** January 20, 2026  
-**Next Phase:** App Store Screenshots & Metadata
+**Next Phase:** App Store Submission
 
 **Tech Stack:** Expo (React Native) + FastAPI + MongoDB  
 **Database:** 48 countries, **560 landmarks** (427 official + 133 premium), All duplicates removed  
@@ -24,7 +24,43 @@
 
 ---
 
-## 🆕 **v4.85 Changes (Latest)**
+## 🆕 **v1.0.0 Changes (Latest Session)**
+
+### App Store Readiness Complete
+- **Privacy Policy page** (`/privacy-policy`) - 10 comprehensive sections
+- **Terms of Service page** (`/terms-of-service`) - 13 sections including subscriptions
+- **Legal links** on Login page (Privacy Policy • Terms of Service)
+- **Legal section** in Settings page with navigation to both pages
+- **App Store Metadata** document created (`/app/APP_STORE_METADATA.md`)
+- **Screenshot Guide** created (`/app/SCREENSHOT_GUIDE.md`)
+- **Feature Graphic** generated (1024×500px) for Google Play
+
+### UI/UX Fixes
+- **Profile Edit Button**: Fixed touch target (was 2px, now 28x28px with hitSlop)
+  - Solid turquoise background with white pencil icon
+  - No longer overlaps with rank badge
+- **Username Text**: Reduced from 24px to 18px for better fit
+- **Version Numbers**: Unified to v1.0.0 across About and Settings pages
+- **Continent Icons**: Updated to use Ionicons matching My Journey page
+  - Europe: `business-outline` (🏛️)
+  - Asia: `earth-outline` (🌏)
+  - Africa: `sunny-outline` (☀️)
+  - Americas: `leaf-outline` (🌿)
+  - Oceania: `water-outline` (🌊)
+- **Bucket List Header**: Fixed vertical alignment to match Explore page
+- **Bucket List Tabs**: Fixed styling to match Explore page (padding, font size)
+- **Tab Navigation**: Fixed bottom tab bar disappearing when switching Explore/Bucket List
+  - Changed `router.push` to `router.replace` for proper navigation
+
+### Backend Fix
+- **Continent Progress Bars**: Fixed incorrect values (was showing landmarks, now shows countries)
+  - Backend now returns `visited_countries` count
+  - Progress calculated as countries visited / total countries
+  - Example: "3/10 visited" means 3 countries with landmarks visited
+
+---
+
+## 🆕 **v4.85-v4.86 Changes (Previous Session)**
 
 ### App Icon & Splash Screen Created
 - **New app icon** (1024×1024) with Globe Lines design:
