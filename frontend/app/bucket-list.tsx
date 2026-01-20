@@ -282,10 +282,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: '800',
+    fontSize: 22,
+    fontWeight: '700',
     color: '#fff',
-    marginBottom: 4,
   },
   headerSubtitle: {
     fontSize: 14,
