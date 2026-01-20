@@ -310,7 +310,7 @@ export default function LandmarksScreen() {
               <Text style={styles.headerTitle}>{name || 'Loading...'}</Text>
             </View>
             <View style={styles.brandingContainer}>
-              <HeaderBranding size={16} textColor="#2A2A2A" />
+              <HeaderBranding size={18} textColor="#2A2A2A" />
             </View>
           </View>
         </LinearGradient>
@@ -347,7 +347,7 @@ export default function LandmarksScreen() {
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <HeaderBranding size={16} textColor="#2A2A2A" />
+            <HeaderBranding size={18} textColor="#2A2A2A" />
           </TouchableOpacity>
         </View>
       </LinearGradient>

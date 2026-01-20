@@ -385,7 +385,7 @@ export default function FriendsScreen() {
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <HeaderBranding size={16} textColor="#2A2A2A" />
+            <HeaderBranding size={18} textColor="#2A2A2A" />
           </TouchableOpacity>
         </View>
       </LinearGradient>

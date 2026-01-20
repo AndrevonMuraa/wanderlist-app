@@ -171,7 +171,7 @@ export default function AboutScreen() {
           </TouchableOpacity>
           <Text style={styles.headerTitle}>About & Help</Text>
           <View style={styles.brandingContainer}>
-            <HeaderBranding size={16} textColor="#2A2A2A" />
+            <HeaderBranding size={18} textColor="#2A2A2A" />
           </View>
         </View>
       </LinearGradient>

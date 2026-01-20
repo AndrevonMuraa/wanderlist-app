@@ -139,7 +139,7 @@ export default function SubscriptionScreen() {
             </TouchableOpacity>
             <Text style={styles.headerTitle}>WanderList Pro</Text>
             <View style={styles.brandingContainer}>
-            <HeaderBranding size={16} textColor="#2A2A2A" />
+            <HeaderBranding size={18} textColor="#2A2A2A" />
           </View>
           </View>
         </LinearGradient>
@@ -167,7 +167,7 @@ export default function SubscriptionScreen() {
           </TouchableOpacity>
           <Text style={styles.headerTitle}>WanderList Pro</Text>
           <View style={styles.brandingContainer}>
-            <HeaderBranding size={16} textColor="#2A2A2A" />
+            <HeaderBranding size={18} textColor="#2A2A2A" />
           </View>
         </View>
       </LinearGradient>

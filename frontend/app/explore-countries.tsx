@@ -446,7 +446,7 @@ export default function ExploreCountriesScreen() {
           <View style={styles.headerRow}>
             <Text style={styles.headerTitle}>Discover the World</Text>
             <View style={styles.brandingContainer}>
-              <HeaderBranding size={16} textColor="#2A2A2A" />
+              <HeaderBranding size={18} textColor="#2A2A2A" />
             </View>
           </View>
         </LinearGradient>
@@ -509,7 +509,7 @@ export default function ExploreCountriesScreen() {
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <HeaderBranding size={16} textColor="#2A2A2A" />
+            <HeaderBranding size={18} textColor="#2A2A2A" />
           </TouchableOpacity>
         </View>
       </LinearGradient>
