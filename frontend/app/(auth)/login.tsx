@@ -276,4 +276,21 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontWeight: '600',
   },
+  legalLinks: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+  },
+  legalText: {
+    fontSize: 13,
+    color: theme.colors.textSecondary,
+  },
+  legalDivider: {
+    marginHorizontal: theme.spacing.sm,
+    color: theme.colors.textSecondary,
+  },
 });
