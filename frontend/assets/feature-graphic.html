@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>WanderList Feature Graphic</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #1a1a2e;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .feature-graphic {
+            width: 1024px;
+            height: 500px;
+            background: linear-gradient(135deg, #4DB8D8 0%, #7DCBE3 25%, #C9CAAE 65%, #E8DCC8 100%);
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        /* Decorative elements */
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: #fff;
+            top: -150px;
+            left: -100px;
+        }
+        
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background: #fff;
+            bottom: -100px;
+            right: -50px;
+        }
+        
+        .circle-3 {
+            width: 200px;
+            height: 200px;
+            background: #4DB8D8;
+            top: 50%;
+            right: 20%;
+            opacity: 0.15;
+        }
+        
+        /* World map dots pattern */
+        .map-dots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        /* Main content */
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 40px 60px;
+        }
+        
+        .left-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .right-section {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Logo/Icon */
+        .app-icon {
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, #4DB8D8, #7DCBE3, #E8DCC8);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 40px rgba(77, 184, 216, 0.4);
+            position: relative;
+        }
+        
+        .globe-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+        }
+        
+        .globe {
+            width: 140px;
+            height: 140px;
+            border: 4px solid rgba(255,255,255,0.9);
+            border-radius: 50%;
+            position: relative;
+            background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%);
+        }
+        
+        /* Globe lines */
+        .globe::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255,255,255,0.7);
+            transform: translateY(-50%);
+        }
+        
+        .globe::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 3px;
+            background: rgba(255,255,255,0.7);
+            transform: translateX(-50%);
+        }
+        
+        .globe-curve-1 {
+            position: absolute;
+            top: 25%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255,255,255,0.5);
+        }
+        
+        .globe-curve-2 {
+            position: absolute;
+            top: 75%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255,255,255,0.5);
+        }
+        
+        .w-letter {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .location-pin {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 40px;
+            height: 40px;
+            background: #C9A961;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(45deg);
+            box-shadow: 0 4px 15px rgba(201, 169, 97, 0.5);
+        }
+        
+        .location-pin::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            border-radius: 50%;
+        }
+        
+        /* Text content */
+        .app-name {
+            font-size: 72px;
+            font-weight: 800;
+            color: #2A2A2A;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -1px;
+        }
+        
+        .tagline {
+            font-size: 28px;
+            color: #4a4a4a;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+        
+        .features {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.4);
+            padding: 12px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .feature-icon {
+            font-size: 24px;
+        }
+        
+        .feature-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2A2A2A;
+        }
+        
+        /* Floating landmarks */
+        .landmark {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0.3;
+        }
+        
+        .landmark-1 { top: 30px; left: 50px; }
+        .landmark-2 { top: 80px; right: 280px; }
+        .landmark-3 { bottom: 40px; left: 200px; }
+        .landmark-4 { bottom: 80px; right: 320px; }
+    </style>
+</head>
+<body>
+    <div class="feature-graphic">
+        <!-- Decorative circles -->
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+        
+        <!-- Map dots pattern -->
+        <div class="map-dots"></div>
+        
+        <!-- Floating landmark emojis -->
+        <div class="landmark landmark-1">🗼</div>
+        <div class="landmark landmark-2">🏛️</div>
+        <div class="landmark landmark-3">🗽</div>
+        <div class="landmark landmark-4">⛩️</div>
+        
+        <!-- Main content -->
+        <div class="content">
+            <div class="left-section">
+                <div class="app-name">WanderList</div>
+                <div class="tagline">Explore the World, One Landmark at a Time</div>
+                <div class="features">
+                    <div class="feature">
+                        <span class="feature-icon">🌍</span>
+                        <span class="feature-text">560+ Landmarks</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🏆</span>
+                        <span class="feature-text">48 Countries</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">📸</span>
+                        <span class="feature-text">Track Visits</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-section">
+                <div class="app-icon">
+                    <div class="globe-container">
+                        <div class="globe">
+                            <div class="globe-curve-1"></div>
+                            <div class="globe-curve-2"></div>
+                        </div>
+                        <span class="w-letter">W</span>
+                    </div>
+                    <div class="location-pin"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
