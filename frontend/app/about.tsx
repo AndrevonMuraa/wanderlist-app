@@ -18,6 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
+import { HeaderBranding } from '../components/BrandedGlobeIcon';
 
 const { width } = Dimensions.get('window');
 
