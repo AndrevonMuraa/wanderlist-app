@@ -22,6 +22,7 @@ import RankBadge from '../../components/RankBadge';
 import CommentsSection from '../../components/CommentsSection';
 import { getUserRank } from '../../utils/rankSystem';
 import { BACKEND_URL } from '../../utils/config';
+import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
