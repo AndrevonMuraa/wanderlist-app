@@ -286,7 +286,7 @@ export default function FeedScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header - compact with back button, title, and branding */}
+      {/* Header - matching other sub-pages */}
       <LinearGradient
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
@@ -295,7 +295,7 @@ export default function FeedScreen() {
       >
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#2A2A2A" />
+            <Ionicons name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Activity Feed</Text>
           <TouchableOpacity 
