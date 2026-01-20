@@ -822,7 +822,7 @@ const styles = StyleSheet.create({
   },
   stickyHeader: {
     paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.sm,
   },
   headerRow: {
     flexDirection: 'row',
@@ -832,7 +832,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 22,
-    fontWeight: '800',
+    fontWeight: '700',
     color: '#fff',
   },
   brandingContainer: {
