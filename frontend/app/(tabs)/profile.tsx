@@ -13,6 +13,7 @@ import UpgradeModal from '../../components/UpgradeModal';
 import RankBadge from '../../components/RankBadge';
 import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
+import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
