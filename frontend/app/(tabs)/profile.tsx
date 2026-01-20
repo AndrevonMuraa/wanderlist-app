@@ -482,7 +482,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: theme.colors.text,
-    marginBottom: 6,
   },
   editButton: {
     marginLeft: 8,
