@@ -333,28 +333,32 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   header: {
-    paddingHorizontal: 16,
-    paddingBottom: 16,
+    paddingHorizontal: theme.spacing.md,
+    paddingBottom: theme.spacing.sm,
+  },
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    minHeight: 32,
   },
   backButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.3)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: theme.spacing.sm,
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#fff',
+    color: '#2A2A2A',
+    flex: 1,
+    textAlign: 'center',
   },
-  headerRight: {
-    width: 40,
+  brandingContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
   listContent: {
