@@ -15,6 +15,7 @@ import { BACKEND_URL } from '../../utils/config';
 import { ProgressBar } from '../../components/ProgressBar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
 import { AddCountryVisitModal } from '../../components/AddCountryVisitModal';
+import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
