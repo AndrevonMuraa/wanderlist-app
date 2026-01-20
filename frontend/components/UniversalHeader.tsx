@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme, { gradients } from '../styles/theme';
+import { HeaderBranding } from './BrandedGlobeIcon';
 
 interface UniversalHeaderProps {
   title: string;
@@ -58,8 +59,7 @@ export const UniversalHeader: React.FC<UniversalHeaderProps> = ({
           onPress={() => router.push('/about')}
           activeOpacity={0.7}
         >
-          <Ionicons name="earth" size={16} color="#2A2A2A" />
-          <Text style={styles.brandingTextDark}>WanderList</Text>
+          <HeaderBranding size={18} textColor="#2A2A2A" />
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -69,7 +69,7 @@ export const UniversalHeader: React.FC<UniversalHeaderProps> = ({
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
+    paddingBottom: theme.spacing.sm,
   },
   headerRow: {
     flexDirection: 'row',
@@ -103,12 +103,6 @@ const styles = StyleSheet.create({
   brandingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-  },
-  brandingTextDark: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#2A2A2A',
   },
 });
 
