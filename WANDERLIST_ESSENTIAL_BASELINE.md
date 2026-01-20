@@ -1,4 +1,4 @@
-# WanderList - Essential Baseline (v4.80)
+# WanderList - Essential Baseline (v4.85)
 
 > **Purpose:** Critical information for session continuity
 > **Read this:** At session start if forked, or when encountering issues
@@ -7,10 +7,10 @@
 
 ## 📊 **Current State**
 
-**Version:** 4.80.0 - STABLE ✅  
-**Status:** Production Ready with WanderList Pro Subscription  
-**Last Build:** January 18, 2026  
-**Next Phase:** User Testing & Deployment
+**Version:** 4.85.0 - STABLE ✅  
+**Status:** Production Ready with Full Branding  
+**Last Build:** January 20, 2026  
+**Next Phase:** App Store Preparation & Deployment
 
 **Tech Stack:** Expo (React Native) + FastAPI + MongoDB  
 **Database:** 48 countries, **560 landmarks** (427 official + 133 premium), All duplicates removed  
@@ -24,49 +24,145 @@
 
 ---
 
-## 🆕 **v4.80 Changes (Latest)**
+## 🆕 **v4.85 Changes (Latest)**
 
-### Premium Landmarks Expansion
-- **58 new unique premium landmarks** added to 28 countries that previously had 0 premium
-- **Regions enhanced:**
-  - Oceania (7): Cook Islands, Fiji, Samoa, Tonga, Vanuatu, French Polynesia, New Zealand
-  - Americas (5): Argentina, Chile, Colombia, Costa Rica, Ecuador
-  - Africa (8): Botswana, Kenya, Mauritius, Morocco, Namibia, Seychelles, Tanzania, Tunisia
-  - Asia (5): Indonesia, Malaysia, Singapore, South Korea, Vietnam
-  - Europe (3): Netherlands, Portugal, Switzerland
+### App Icon & Splash Screen Created
+- **New app icon** (1024×1024) with Globe Lines design:
+  - Globe with latitude/longitude lines
+  - White "W" letter centered
+  - Gold location pin (#C9A961)
+  - Ocean to Sand gradient background
+- **New splash screen** (1284×2778) - Decorative style:
+  - White container with turquoise globe icon
+  - "WanderList" title + tagline
+  - Decorative background circles
+- **Android adaptive icon** configured with turquoise background
 
-### Duplicate Cleanup
-- **2 duplicate premium landmarks removed:**
-  - "Salt Cathedral of Zipaquirá" (Colombia) - duplicate of official version
-  - "Uluru (Ayers Rock)" (Australia) - duplicate of official version
-- Comprehensive similarity analysis performed (exact match, normalized names, keyword search)
+### Branding Component Created
+- **New component:** `/app/frontend/components/BrandedGlobeIcon.tsx`
+  - `BrandedGlobeIcon` - Full icon with gradient, globe lines, W, and pin
+  - `HeaderBranding` - Compact version for headers (globe + "WanderList" text)
+- **SVG-based** globe with latitude/longitude lines using `react-native-svg`
 
-### Points System Alignment
-- **Backend `/api/countries` now returns `total_points`** per country
-- Points correctly calculated as: `(official × 10) + (premium × 25)`
-- **Frontend updated** to display accurate points on country cards
-- Stats header shows total available points instead of user's earned points
+### Headers Updated Across All Pages (17+ pages)
+All headers now use the new `HeaderBranding` component at `size={18}`:
 
-### UI/UX Fixes (5 issues)
-1. **Social Feed** - Points display changed from "0" to "+0 pts" format
-2. **Journey Rank** - Shows "N/A" instead of "#-" when not ranked
-3. **Profile Avatar** - Displays user initials correctly
-4. **Profile Stats** - Landmarks count now matches Journey (uses correct API field)
-5. **Explore Cards** - Dynamic continent stats from API
+**Main Tab Pages:**
+- `(tabs)/journey.tsx` - My Journey
+- `(tabs)/social.tsx` - Social Hub
+- `(tabs)/profile.tsx` - Profile
 
-### Image Fields Removed
-- All `image_url` and `images` fields removed from landmarks database
-- Backend model updated - `image_url` now optional
-- Landmark detail page uses clean icon-based design
+**Explore Flow:**
+- `continents.tsx` - Explore Continents (reference design)
+- `explore-countries.tsx` - Country List
+- `landmarks/[country_id].tsx` - Landmarks
 
-### Updated Stats by Continent
-| Continent | Countries | Landmarks | Official | Premium | Points |
-|-----------|-----------|-----------|----------|---------|--------|
-| Europe | 10 | 115 | 78 | 37 | 1,705 |
-| Asia | 10 | 120 | 90 | 30 | 1,650 |
-| Africa | 10 | 117 | 93 | 24 | 1,530 |
-| Americas | 10 | 116 | 88 | 28 | 1,580 |
-| Oceania | 8 | 92 | 78 | 14 | 1,130 |
+**Sub-Pages:**
+- `feed.tsx` - Activity Feed (with back button + white title)
+- `about.tsx` - About & Help (hero icon also updated to branded globe)
+- `settings.tsx` - Settings
+- `bucket-list.tsx` - Bucket List
+- `notifications.tsx` - Notifications
+- `friends.tsx` - Friends
+- `leaderboard.tsx` - Leaderboard
+- `my-country-visits.tsx` - My Country Visits
+- `ranks.tsx` - Ranks
+- `subscription.tsx` - Subscription
+- `analytics.tsx` - Analytics
+
+**Reusable Components:**
+- `components/UniversalHeader.tsx` - Updated with HeaderBranding
+
+### Login Page Branding
+- Large branded globe icon (size 90) on login screen
+- Replaces old generic earth icon
+
+### app.json Configuration Updated
+- **App name:** "frontend" → "WanderList"
+- **Slug:** "frontend" → "wanderlist"
+- **Scheme:** "frontend" → "wanderlist"
+- **Splash background:** `#4DB8D8` (turquoise)
+- **Android adaptive icon background:** `#4DB8D8`
+- **iOS permissions added:**
+  - `NSCameraUsageDescription`: "Take photos of landmarks you visit"
+  - `NSPhotoLibraryUsageDescription`: "Save and share your travel photos"
+- **Android permissions added:** CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
+
+### Comprehensive Testing Completed
+- **Backend:** 9/9 tests passed (100%)
+  - Authentication, database integrity, points system, premium restrictions
+  - Countries API with `total_points`, achievements, leaderboard
+  - Duplicate landmark verification
+- **Frontend:** 10/10 tests passed (100%)
+  - Login, navigation, explore flow, points display
+  - Stats consistency, premium features, responsive design
+
+---
+
+## 🎨 **Design System**
+
+### Theme Colors (from `/app/frontend/styles/theme.ts`)
+| Color | Hex | Usage |
+|-------|-----|-------|
+| Primary (Turquoise) | `#4DB8D8` | Headers, buttons, accents |
+| Secondary (Sand) | `#E8DCC8` | Gradient end, backgrounds |
+| Accent (Gold) | `#C9A961` | Location pins, premium indicators |
+
+### "Ocean to Sand" Gradient (STANDARD)
+- **Colors:** `#4DB8D8` → `#7DCBE3` → `#C9CAAE` → `#E8DCC8`
+- **Direction:** Horizontal or diagonal (135deg for icon)
+- **Theme constant:** `gradients.oceanToSand`
+- **Usage:** ALL headers across the app (mandatory)
+
+### Standard Header Style
+```javascript
+// Header Container
+header: {
+  paddingHorizontal: 16,
+  paddingBottom: 16,  // or theme.spacing.md
+}
+
+// Header Row
+headerRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  minHeight: 32,
+}
+
+// Back Button (circular with light background)
+backButton: {
+  width: 36, height: 36, borderRadius: 18,
+  backgroundColor: 'rgba(255,255,255,0.2)',
+  justifyContent: 'center', alignItems: 'center',
+  marginRight: 12,
+}
+
+// Title (white, left-aligned on sub-pages)
+headerTitle: {
+  fontSize: 22, fontWeight: '700', color: '#fff', flex: 1,
+}
+
+// Branding (right side of header)
+<HeaderBranding size={18} textColor="#2A2A2A" />
+```
+
+### Branded Globe Icon Usage
+```typescript
+// Import
+import BrandedGlobeIcon, { HeaderBranding } from '../components/BrandedGlobeIcon';
+
+// In headers (size 18, matches Explore page)
+<HeaderBranding size={18} textColor="#2A2A2A" />
+
+// For login/hero sections (larger)
+<BrandedGlobeIcon size={90} showPin={true} showW={true} />
+```
+
+### Premium/Pro Colors
+- **Primary Purple:** `#764ba2`
+- **Secondary Purple:** `#667eea`
+- **Pro Gradient:** `['#667eea', '#764ba2']`
 
 ---
 
@@ -91,35 +187,6 @@
 import { useSubscription } from '../hooks/useSubscription';
 const { isPro, canAccessPremiumLandmarks, canCreateCustomVisits, maxPhotosPerVisit } = useSubscription();
 ```
-
----
-
-## 🎨 **Design System**
-
-### "Ocean to Sand" Gradient (STANDARD)
-- **Colors:** `#26C6DA` → `#00BFA5` → `#FFE082` (cyan to teal to warm sand)
-- **Direction:** Horizontal (left to right)
-- **Theme constant:** `gradients.oceanToSand`
-- **Usage:** ALL headers across the app (mandatory)
-
-### Standard Header Style
-```javascript
-// Back Button (circular with light background)
-backButton: {
-  width: 36, height: 36, borderRadius: 18,
-  backgroundColor: 'rgba(255,255,255,0.2)',
-  justifyContent: 'center', alignItems: 'center',
-}
-
-// Branding (right side of header)
-brandingContainer: { flexDirection: 'row', alignItems: 'center', gap: 4 }
-brandingTextDark: { fontSize: 13, fontWeight: '700', color: '#2A2A2A' }
-```
-
-### Premium/Pro Colors
-- **Primary Purple:** `#764ba2`
-- **Secondary Purple:** `#667eea`
-- **Pro Gradient:** `['#667eea', '#764ba2']`
 
 ---
 
@@ -170,19 +237,21 @@ Explore (map) → Journey (compass) → Social (people) → Bucket List (bookmar
 ```
 
 ### Key Routes
-- `/` - Login/Register
+- `/` - Login/Register (with branded globe icon)
 - `/(tabs)/explore` - Main continent exploration
 - `/(tabs)/journey` - Personal travel stats
-- `/(tabs)/social` - Activity feed & leaderboard
+- `/(tabs)/social` - Social hub & activity feed preview
 - `/(tabs)/bucket-list` - Saved landmarks
 - `/(tabs)/profile` - User profile & settings
 - `/explore-countries?continent=X` - Countries in continent (shows accurate points)
 - `/landmarks/[country_id]` - Landmarks in country
 - `/landmark-detail/[landmark_id]` - Landmark details (icon-based, no images)
+- `/feed` - Full activity feed (sub-page with back button)
 - `/settings` - App settings
 - `/friends` - Friend management
 - `/subscription` - WanderList Pro page
 - `/continents` - Continent selection with dynamic stats
+- `/about` - About & Help (with branded hero icon)
 
 ---
 
@@ -206,7 +275,7 @@ sudo supervisorctl status           # Check services
 cd /app/backend
 python3 seed_data.py              # Base countries/landmarks (auto-skips duplicates)
 python3 seed_data_expansion.py    # Expanded content (48 countries)
-# Premium landmarks in premium_landmarks.py - 92 unique landmarks
+# Premium landmarks in premium_landmarks.py - 133 unique landmarks
 # NOTE: Duplicate detection built-in - safe to re-run
 ```
 
@@ -217,28 +286,44 @@ python3 seed_data_expansion.py    # Expanded content (48 countries)
 ### Google OAuth (NOT WORKING)
 - **Error:** `403: disallowed_useragent`
 - **Status:** Not fixed - requires user's Google Cloud credentials
-- **Workaround:** Use email/password login
+- **Workaround:** Use email/password login or Quick Test Login
 
 ---
 
 ## 📂 **Key Files Reference**
 
-### Frontend
+### Frontend - Branding
+| File | Purpose |
+|------|---------|
+| `/app/frontend/components/BrandedGlobeIcon.tsx` | Globe icon + HeaderBranding components |
+| `/app/frontend/app/(auth)/login.tsx` | Login page with branded icon |
+| `/app/frontend/components/UniversalHeader.tsx` | Reusable header with branding |
+| `/app/frontend/app.json` | App config (name, icons, splash) |
+
+### Frontend - Pages
 | File | Purpose |
 |------|---------|
 | `/app/frontend/app/(tabs)/profile.tsx` | User profile (refactored) |
-| `/app/frontend/app/(tabs)/social.tsx` | Social feed (points display fixed) |
+| `/app/frontend/app/(tabs)/social.tsx` | Social hub (points display fixed) |
 | `/app/frontend/app/(tabs)/journey.tsx` | Journey stats (rank display fixed) |
+| `/app/frontend/app/feed.tsx` | Activity feed sub-page |
 | `/app/frontend/app/explore-countries.tsx` | Country list (uses `total_points` from API) |
 | `/app/frontend/app/continents.tsx` | Continent cards (dynamic from API) |
 | `/app/frontend/app/landmark-detail/[landmark_id].tsx` | Landmark detail (icon-based) |
 | `/app/frontend/utils/rankSystem.ts` | Rank thresholds (7,595 pts max) |
 
+### Frontend - Assets
+| File | Purpose |
+|------|---------|
+| `/app/frontend/assets/images/icon.png` | App icon (1024×1024) |
+| `/app/frontend/assets/images/adaptive-icon.png` | Android adaptive icon |
+| `/app/frontend/assets/images/splash-image.png` | Splash screen (1284×2778) |
+
 ### Backend
 | File | Purpose |
 |------|---------|
 | `/app/backend/server.py` | Main API (Country model has `total_points`) |
-| `/app/backend/premium_landmarks.py` | Premium definitions (92 unique, no duplicates) |
+| `/app/backend/premium_landmarks.py` | Premium definitions (133 unique, no duplicates) |
 | `/app/backend/seed_data.py` | Database seeding (auto-skips duplicates) |
 
 ---
@@ -253,6 +338,8 @@ python3 seed_data_expansion.py    # Expanded content (48 countries)
 6. [ ] Check continent cards show dynamic stats (~560 landmarks, ~7595 points)
 7. [ ] Verify country cards show accurate points (not hardcoded)
 8. [ ] Check landmark detail page shows icon (not image)
+9. [ ] Verify all headers show globe branding (size 18)
+10. [ ] Check login page shows branded globe icon
 
 ### Quick Database Verification
 ```bash
@@ -274,6 +361,7 @@ print(f'Users: {db.users.count_documents({})}')
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 4.85 | Jan 20, 2026 | App icon & splash, branding component, headers updated (17+ pages), app.json config |
 | 4.80 | Jan 18, 2026 | +58 premium landmarks, points system alignment, duplicate cleanup, 5 UI/UX fixes |
 | 4.70 | Jan 18, 2026 | Premium expansion attempt, image removal, documentation |
 | 4.60 | Jan 18, 2026 | Profile refactoring, duplicate cleanup, seed data protection |
@@ -294,7 +382,29 @@ print(f'Users: {db.users.count_documents({})}')
 | Total Continents | 5 |
 | Legend Rank Threshold | 5,000 points |
 | Max Milestone Badge | 500 landmarks |
+| HeaderBranding Size | 18 (standard across all pages) |
 
 ---
 
-*Last Updated: January 18, 2026 - v4.80*
+## 🚀 **App Store Readiness**
+
+### Completed ✅
+- [x] App icon (1024×1024)
+- [x] Splash screen
+- [x] Android adaptive icon
+- [x] App name configured ("WanderList")
+- [x] iOS permission descriptions
+- [x] Android permissions
+
+### Remaining for App Store Submission
+- [ ] Bundle Identifier (iOS) - needs `ios.bundleIdentifier` in app.json
+- [ ] Package Name (Android) - needs `android.package` in app.json
+- [ ] Privacy Policy URL
+- [ ] Sign in with Apple (required if offering Google OAuth)
+- [ ] App Store screenshots
+- [ ] Feature graphic (Android)
+- [ ] Fix Google OAuth or remove the button
+
+---
+
+*Last Updated: January 20, 2026 - v4.85*
