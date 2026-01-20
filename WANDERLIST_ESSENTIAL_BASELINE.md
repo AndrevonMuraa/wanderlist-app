@@ -393,18 +393,32 @@ print(f'Users: {db.users.count_documents({})}')
 - [x] Splash screen
 - [x] Android adaptive icon
 - [x] App name configured ("WanderList")
-- [x] iOS permission descriptions
-- [x] Android permissions
+- [x] iOS permission descriptions (Camera, Photo Library, Photo Library Add)
+- [x] Android permissions (Camera, Storage, Media Images)
+- [x] Bundle Identifier (iOS): `com.wanderlist.app`
+- [x] Package Name (Android): `com.wanderlist.app`
+- [x] Privacy Policy page (`/privacy-policy`)
+- [x] Terms of Service page (`/terms-of-service`)
+- [x] Legal links on Login page
+- [x] Legal section in Settings page
+- [x] Android versionCode: 1
 
 ### Remaining for App Store Submission
-- [ ] Bundle Identifier (iOS) - needs `ios.bundleIdentifier` in app.json
-- [ ] Package Name (Android) - needs `android.package` in app.json
-- [ ] Privacy Policy URL
+- [ ] Privacy Policy hosted URL (replace placeholder `https://wanderlist.app/privacy`)
+- [ ] Terms of Service hosted URL (replace placeholder `https://wanderlist.app/terms`)
 - [ ] Sign in with Apple (required if offering Google OAuth)
-- [ ] App Store screenshots
-- [ ] Feature graphic (Android)
+- [ ] App Store screenshots (5-10 screenshots per device size)
+- [ ] Feature graphic (Android) - 1024×500px
 - [ ] Fix Google OAuth or remove the button
+- [ ] App Store description and metadata
+- [ ] Age rating questionnaire
+
+### Legal Pages Structure
+| Page | Route | Purpose |
+|------|-------|---------|
+| Privacy Policy | `/privacy-policy` | Data collection, usage, controls |
+| Terms of Service | `/terms-of-service` | Usage agreement, subscriptions, liability |
 
 ---
 
-*Last Updated: January 20, 2026 - v4.85*
+*Last Updated: January 20, 2026 - v4.86*
