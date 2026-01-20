@@ -637,12 +637,12 @@ export default function SocialHubScreen() {
         showsVerticalScrollIndicator={false}
       >
 
-        {/* Activity Feed Section */}
+        {/* Recent Activity Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="newspaper" size={24} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Activity Feed</Text>
+              <Ionicons name="time" size={22} color={theme.colors.primary} />
+              <Text style={styles.sectionTitle}>Recent Activity</Text>
             </View>
             <TouchableOpacity onPress={() => router.push('/feed')}>
               <Text style={styles.seeAllButton}>See All →</Text>
