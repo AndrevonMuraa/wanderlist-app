@@ -609,7 +609,7 @@ export default function SocialHubScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Sticky Header */}
+      {/* Compact Header - matching other pages */}
       <LinearGradient
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
@@ -618,7 +618,7 @@ export default function SocialHubScreen() {
       >
         {/* Single Row: Title Left, Branding Right */}
         <View style={styles.headerRow}>
-          <Text style={styles.headerTitle}>Social Hub</Text>
+          <Text style={styles.headerTitle}>Activity Feed</Text>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
