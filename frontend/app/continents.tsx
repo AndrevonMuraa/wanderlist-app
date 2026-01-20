@@ -143,7 +143,7 @@ export default function ContinentsScreen() {
                 landmarks: stats.total_landmarks,
                 totalPoints: stats.total_points,
                 countries: stats.countries,
-                visited: stats.visited_landmarks,
+                visited: stats.visited_countries,
                 percentage: stats.progress_percent,
               };
             }
