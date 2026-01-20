@@ -222,8 +222,10 @@ export default function ProfileScreen() {
                   <TouchableOpacity 
                     onPress={() => router.push('/edit-profile')}
                     style={styles.editButton}
+                    activeOpacity={0.7}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   >
-                    <Ionicons name="create-outline" size={18} color={theme.colors.primary} />
+                    <Ionicons name="create-outline" size={20} color={theme.colors.primary} />
                   </TouchableOpacity>
                 </View>
                 <View style={styles.tierBadge}>
