@@ -1,4 +1,4 @@
-# WanderList - Essential Baseline (v4.85)
+# WanderList - Essential Baseline (v4.86)
 
 > **Purpose:** Critical information for session continuity
 > **Read this:** At session start if forked, or when encountering issues
@@ -7,10 +7,10 @@
 
 ## 📊 **Current State**
 
-**Version:** 4.85.0 - STABLE ✅  
-**Status:** Production Ready with Full Branding  
+**Version:** 4.86.0 - STABLE ✅  
+**Status:** Production Ready with Legal Pages  
 **Last Build:** January 20, 2026  
-**Next Phase:** App Store Preparation & Deployment
+**Next Phase:** App Store Screenshots & Metadata
 
 **Tech Stack:** Expo (React Native) + FastAPI + MongoDB  
 **Database:** 48 countries, **560 landmarks** (427 official + 133 premium), All duplicates removed  
