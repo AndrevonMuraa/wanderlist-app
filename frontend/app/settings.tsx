@@ -298,10 +298,55 @@ export default function SettingsScreen() {
           </View>
         </View>
 
+        {/* Legal Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <View style={[styles.sectionIconCircle, { backgroundColor: 'rgba(77, 184, 216, 0.1)' }]}>
+              <Ionicons name="document-text" size={22} color={theme.colors.primary} />
+            </View>
+            <View style={styles.sectionHeaderText}>
+              <Text style={styles.sectionTitle}>Legal</Text>
+              <Text style={styles.sectionSubtitle}>Privacy and terms information</Text>
+            </View>
+          </View>
+          
+          <View style={styles.accountList}>
+            <TouchableOpacity 
+              style={styles.accountItem}
+              onPress={() => router.push('/privacy-policy')}
+              activeOpacity={0.7}
+            >
+              <View style={styles.settingItemLeft}>
+                <View style={[styles.settingIcon, { backgroundColor: 'rgba(46, 204, 113, 0.1)' }]}>
+                  <Ionicons name="shield-checkmark" size={18} color="#2ecc71" />
+                </View>
+                <Text style={styles.accountLabel}>Privacy Policy</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+            </TouchableOpacity>
+            
+            <View style={styles.settingDivider} />
+            
+            <TouchableOpacity 
+              style={styles.accountItem}
+              onPress={() => router.push('/terms-of-service')}
+              activeOpacity={0.7}
+            >
+              <View style={styles.settingItemLeft}>
+                <View style={[styles.settingIcon, { backgroundColor: 'rgba(52, 152, 219, 0.1)' }]}>
+                  <Ionicons name="reader" size={18} color="#3498db" />
+                </View>
+                <Text style={styles.accountLabel}>Terms of Service</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
         {/* App Version */}
         <View style={styles.versionContainer}>
-          <Text style={styles.versionText}>WanderList v4.32</Text>
-          <Text style={styles.copyrightText}>© 2025 WanderList. All rights reserved.</Text>
+          <Text style={styles.versionText}>WanderList v4.85</Text>
+          <Text style={styles.copyrightText}>© 2026 WanderList. All rights reserved.</Text>
         </View>
 
         <View style={styles.bottomSpacer} />
