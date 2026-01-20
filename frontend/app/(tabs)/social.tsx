@@ -623,8 +623,7 @@ export default function SocialHubScreen() {
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <Ionicons name="earth" size={16} color="#2A2A2A" />
-            <Text style={styles.brandingTextDark}>WanderList</Text>
+            <HeaderBranding size={16} textColor="#2A2A2A" />
           </TouchableOpacity>
         </View>
       </LinearGradient>
