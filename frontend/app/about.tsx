@@ -507,7 +507,7 @@ export default function AboutScreen() {
           <Surface style={styles.infoCard}>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Version</Text>
-              <Text style={styles.infoValue}>4.31.0</Text>
+              <Text style={styles.infoValue}>1.0.0</Text>
             </View>
             <View style={styles.infoDivider} />
             <View style={styles.infoRow}>
