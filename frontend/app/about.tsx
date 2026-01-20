@@ -171,8 +171,7 @@ export default function AboutScreen() {
           </TouchableOpacity>
           <Text style={styles.headerTitle}>About & Help</Text>
           <View style={styles.brandingContainer}>
-            <Ionicons name="earth" size={16} color="#2A2A2A" />
-            <Text style={styles.brandingText}>WanderList</Text>
+            <HeaderBranding size={16} textColor="#2A2A2A" />
           </View>
         </View>
       </LinearGradient>
@@ -185,13 +184,13 @@ export default function AboutScreen() {
             style={styles.heroGradient}
           >
             <View style={styles.heroIcon}>
-              <Ionicons name="earth" size={56} color={theme.colors.primary} />
+              <HeaderBranding size={56} showText={false} />
             </View>
             <Text style={styles.heroTitle}>Explore the World,{'\n'}One Landmark at a Time</Text>
             <Text style={styles.heroSubtitle}>
               Your personal travel companion for discovering and conquering the world's most amazing landmarks
             </Text>
-            <Text style={styles.versionText}>Version 4.31</Text>
+            <Text style={styles.versionText}>Version 4.80</Text>
           </LinearGradient>
         </View>
 
