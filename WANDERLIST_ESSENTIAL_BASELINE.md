@@ -439,15 +439,16 @@ print(f'Users: {db.users.count_documents({})}')
 - [x] Legal links on Login page
 - [x] Legal section in Settings page
 - [x] Android versionCode: 1
+- [x] App Store Metadata document (`/app/APP_STORE_METADATA.md`)
+- [x] Screenshot Guide (`/app/SCREENSHOT_GUIDE.md`)
+- [x] Feature Graphic (1024×500px) (`/app/frontend/assets/images/feature-graphic.png`)
+- [x] Version unified to v1.0.0
 
 ### Remaining for App Store Submission
 - [ ] Privacy Policy hosted URL (replace placeholder `https://wanderlist.app/privacy`)
 - [ ] Terms of Service hosted URL (replace placeholder `https://wanderlist.app/terms`)
-- [ ] Sign in with Apple (required if offering Google OAuth)
-- [ ] App Store screenshots (5-10 screenshots per device size)
-- [ ] Feature graphic (Android) - 1024×500px
-- [ ] Fix Google OAuth or remove the button
-- [ ] App Store description and metadata
+- [ ] Sign in with Apple (required if offering Google OAuth) OR remove Google OAuth
+- [ ] Capture high-resolution screenshots on physical device/simulator
 - [ ] Age rating questionnaire
 
 ### Legal Pages Structure
@@ -460,11 +461,29 @@ print(f'Users: {db.users.count_documents({})}')
 See `/app/APP_STORE_METADATA.md` for complete submission content including:
 - App descriptions (iOS & Android)
 - Keywords and ASO optimization
-- Screenshot recommendations
+- Screenshot recommendations (8 scenes)
 - In-app purchase configuration
 - Review information
 - Submission checklist
 
+### Documentation Created This Session
+| File | Purpose |
+|------|---------|
+| `/app/APP_STORE_METADATA.md` | Complete App Store/Play Store submission content |
+| `/app/SCREENSHOT_GUIDE.md` | Screenshot capture instructions and recommendations |
+| `/app/frontend/assets/images/feature-graphic.png` | Android promotional banner (1024×500) |
+| `/app/frontend/assets/feature-graphic.html` | Feature graphic design template |
+
 ---
 
-*Last Updated: January 20, 2026 - v4.86*
+## 📝 **Version History**
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | Jan 20, 2026 | App Store ready: Legal pages, metadata docs, feature graphic, UI fixes (edit button, icons, tabs, navigation, progress bars) |
+| 4.86 | Jan 20, 2026 | Privacy Policy page, Terms of Service page, Legal links on login, Legal section in Settings, Bundle ID & Package Name, enhanced permissions |
+| 4.85 | Jan 20, 2026 | App icon & splash, branding component, headers updated (17+ pages), app.json config |
+
+---
+
+*Last Updated: January 20, 2026 - v1.0.0*
