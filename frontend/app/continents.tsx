@@ -201,7 +201,7 @@ export default function ContinentsScreen() {
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.tabButton}
-            onPress={() => router.push('/bucket-list')}
+            onPress={() => router.replace('/bucket-list')}
           >
             <Ionicons name="bookmark" size={18} color={theme.colors.textSecondary} />
             <Text style={styles.tabLabel}>Bucket List</Text>
