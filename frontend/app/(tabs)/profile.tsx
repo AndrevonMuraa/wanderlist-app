@@ -483,8 +483,14 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   editButton: {
-    marginLeft: 6,
-    padding: 2,
+    marginLeft: 8,
+    padding: 10,
+    borderRadius: 20,
+    backgroundColor: theme.colors.primary + '15',
+    minWidth: 44,
+    minHeight: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   rankSection: {
     flex: 35,
