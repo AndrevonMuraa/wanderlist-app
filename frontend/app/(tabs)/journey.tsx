@@ -15,6 +15,7 @@ import AddUserCreatedVisitModal from '../../components/AddUserCreatedVisitModal'
 import ProFeatureLock from '../../components/ProFeatureLock';
 import { useSubscription } from '../../hooks/useSubscription';
 import { BACKEND_URL } from '../../utils/config';
+import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
