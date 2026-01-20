@@ -189,13 +189,13 @@ export default function BucketListScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       {/* Sticky Header */}
       <LinearGradient
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
         end={gradients.horizontal.end}
-        style={styles.stickyHeader}
+        style={[styles.stickyHeader, { paddingTop: topPadding }]}
       >
         {/* Single Row: Title Left, Branding Right */}
         <View style={styles.headerRow}>
