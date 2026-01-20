@@ -113,14 +113,15 @@ const getFlagUrl = (countryName: string): string => {
   return `https://flagcdn.com/w320/${code}.png`;
 };
 
-// Continent icons
-const CONTINENT_ICONS: Record<string, string> = {
-  'Africa': '🌍',
-  'Asia': '🌏',
-  'Europe': '🇪🇺',
-  'North America': '🌎',
-  'South America': '🌎',
-  'Oceania': '🌏',
+// Continent icons - using Ionicons names to match Journey page
+const CONTINENT_ICON_NAMES: Record<string, string> = {
+  'Africa': 'sunny-outline',
+  'Asia': 'earth-outline',
+  'Europe': 'business-outline',
+  'North America': 'leaf-outline',
+  'South America': 'leaf-outline',
+  'Americas': 'leaf-outline',
+  'Oceania': 'water-outline',
 };
 
 export default function ExploreCountriesScreen() {
