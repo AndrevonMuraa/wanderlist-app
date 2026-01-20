@@ -286,19 +286,25 @@ export default function FeedScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
+      {/* Header - compact with back button, title, and branding */}
       <LinearGradient
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
         end={gradients.horizontal.end}
-        style={[styles.header, { paddingTop: topPadding + 10 }]}
+        style={[styles.header, { paddingTop: topPadding }]}
       >
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Activity Feed</Text>
-        <View style={styles.headerRight}>
-          <Ionicons name="newspaper-outline" size={20} color="#fff" />
+        <View style={styles.headerRow}>
+          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="#2A2A2A" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Activity Feed</Text>
+          <TouchableOpacity 
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <HeaderBranding size={16} textColor="#2A2A2A" />
+          </TouchableOpacity>
         </View>
       </LinearGradient>
 
