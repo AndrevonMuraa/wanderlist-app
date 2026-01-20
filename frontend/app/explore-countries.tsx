@@ -446,8 +446,7 @@ export default function ExploreCountriesScreen() {
           <View style={styles.headerRow}>
             <Text style={styles.headerTitle}>Discover the World</Text>
             <View style={styles.brandingContainer}>
-              <Ionicons name="earth" size={16} color="#2A2A2A" />
-              <Text style={styles.brandingTextDark}>WanderList</Text>
+              <HeaderBranding size={16} textColor="#2A2A2A" />
             </View>
           </View>
         </LinearGradient>
