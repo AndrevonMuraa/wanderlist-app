@@ -149,6 +149,17 @@ export default function LoginScreen() {
             >
               <Text style={styles.linkText}>Don't have an account? Sign up</Text>
             </TouchableOpacity>
+
+            {/* Legal Links */}
+            <View style={styles.legalLinks}>
+              <TouchableOpacity onPress={() => router.push('/privacy-policy')}>
+                <Text style={styles.legalText}>Privacy Policy</Text>
+              </TouchableOpacity>
+              <Text style={styles.legalDivider}>•</Text>
+              <TouchableOpacity onPress={() => router.push('/terms-of-service')}>
+                <Text style={styles.legalText}>Terms of Service</Text>
+              </TouchableOpacity>
+            </View>
           </Surface>
         </ScrollView>
       </KeyboardAvoidingView>
