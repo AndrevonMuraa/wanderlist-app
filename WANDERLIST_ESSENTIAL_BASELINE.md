@@ -420,6 +420,15 @@ print(f'Users: {db.users.count_documents({})}')
 | Privacy Policy | `/privacy-policy` | Data collection, usage, controls |
 | Terms of Service | `/terms-of-service` | Usage agreement, subscriptions, liability |
 
+### App Store Metadata
+See `/app/APP_STORE_METADATA.md` for complete submission content including:
+- App descriptions (iOS & Android)
+- Keywords and ASO optimization
+- Screenshot recommendations
+- In-app purchase configuration
+- Review information
+- Submission checklist
+
 ---
 
 *Last Updated: January 20, 2026 - v4.86*
