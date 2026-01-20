@@ -226,10 +226,10 @@ export default function ProfileScreen() {
                     }}
                     style={styles.editButton}
                     activeOpacity={0.6}
-                    hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     testID="edit-profile-button"
                   >
-                    <Ionicons name="pencil" size={16} color="#fff" />
+                    <Ionicons name="pencil" size={14} color="#fff" />
                   </TouchableOpacity>
                 </View>
                 <View style={styles.tierBadge}>
