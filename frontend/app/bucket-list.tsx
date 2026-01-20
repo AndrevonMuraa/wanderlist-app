@@ -44,9 +44,13 @@ interface BucketListItem {
 
 export default function BucketListScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [bucketList, setBucketList] = useState<BucketListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  // Calculate top padding like other pages
+  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   useEffect(() => {
     loadBucketList();
