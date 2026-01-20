@@ -220,12 +220,16 @@ export default function ProfileScreen() {
                 <View style={styles.nameEditRow}>
                   <Text style={styles.userNameLarge}>{user?.name}</Text>
                   <TouchableOpacity 
-                    onPress={() => router.push('/edit-profile')}
+                    onPress={() => {
+                      console.log('Edit button pressed!');
+                      router.push('/edit-profile');
+                    }}
                     style={styles.editButton}
-                    activeOpacity={0.7}
-                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    activeOpacity={0.6}
+                    hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+                    testID="edit-profile-button"
                   >
-                    <Ionicons name="create-outline" size={20} color={theme.colors.primary} />
+                    <Ionicons name="pencil" size={18} color={theme.colors.primary} />
                   </TouchableOpacity>
                 </View>
                 <View style={styles.tierBadge}>
