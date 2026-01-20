@@ -9,6 +9,7 @@ import * as SecureStore from 'expo-secure-store';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { PersistentTabBar } from '../components/PersistentTabBar';
+import { HeaderBranding } from '../components/BrandedGlobeIcon';
 
 interface Activity {
   activity_id: string;
