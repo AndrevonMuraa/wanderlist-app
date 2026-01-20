@@ -333,8 +333,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   header: {
-    paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.sm,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
   },
   headerRow: {
     flexDirection: 'row',
@@ -343,13 +343,13 @@ const styles = StyleSheet.create({
     minHeight: 32,
   },
   backButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: theme.spacing.sm,
+    marginRight: 12,
   },
   headerTitle: {
     fontSize: 22,
