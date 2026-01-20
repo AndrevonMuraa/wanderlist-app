@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderList - Generated Assets Preview</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            padding: 40px;
+        }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 28px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 40px; }
+        .assets-grid {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .asset {
+            text-align: center;
+        }
+        .asset h3 {
+            color: #4DB8D8;
+            margin-bottom: 15px;
+        }
+        .asset p {
+            color: #888;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        .icon-preview {
+            width: 200px;
+            height: 200px;
+            border-radius: 44px;
+            overflow: hidden;
+            margin: 0 auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .icon-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .icon-sizes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .icon-size {
+            text-align: center;
+        }
+        .icon-size img {
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .icon-size span {
+            display: block;
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .splash-preview {
+            width: 200px;
+            height: 433px;
+            border-radius: 25px;
+            overflow: hidden;
+            margin: 0 auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            background: #000;
+            padding: 5px;
+        }
+        .splash-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+        .success-box {
+            background: linear-gradient(135deg, #1a3a2a, #252540);
+            border: 2px solid #4CAF50;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        .success-box h3 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        .success-box ul {
+            text-align: left;
+            list-style: none;
+            padding: 0;
+        }
+        .success-box li {
+            padding: 8px 0;
+            color: #aaa;
+            font-size: 14px;
+        }
+        .success-box li::before {
+            content: '✓ ';
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 WanderList - Generated Assets</h1>
+    <p class="subtitle">Production-ready icon and splash screen</p>
+    
+    <div class="assets-grid">
+        <!-- App Icon -->
+        <div class="asset">
+            <h3>App Icon</h3>
+            <p>1024 × 1024 PNG</p>
+            <div class="icon-preview">
+                <img src="frontend/assets/images/icon.png" alt="WanderList App Icon">
+            </div>
+            <div class="icon-sizes">
+                <div class="icon-size">
+                    <img src="frontend/assets/images/icon.png" width="60" height="60" alt="60px">
+                    <span>60px</span>
+                </div>
+                <div class="icon-size">
+                    <img src="frontend/assets/images/icon.png" width="40" height="40" alt="40px">
+                    <span>40px</span>
+                </div>
+                <div class="icon-size">
+                    <img src="frontend/assets/images/icon.png" width="29" height="29" alt="29px">
+                    <span>29px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Splash Screen -->
+        <div class="asset">
+            <h3>Splash Screen</h3>
+            <p>1284 × 2778 PNG</p>
+            <div class="splash-preview">
+                <img src="frontend/assets/images/splash-image.png" alt="WanderList Splash Screen">
+            </div>
+        </div>
+    </div>
+
+    <div class="success-box">
+        <h3>✅ Assets Generated Successfully!</h3>
+        <ul>
+            <li><strong>icon.png</strong> - Main app icon (iOS & Android)</li>
+            <li><strong>adaptive-icon.png</strong> - Android adaptive icon foreground</li>
+            <li><strong>splash-image.png</strong> - Splash screen for app launch</li>
+            <li><strong>app.json</strong> - Updated with new branding settings</li>
+        </ul>
+        <p style="margin-top: 15px; color: #4DB8D8; font-size: 13px;">
+            App name changed from "frontend" to "WanderList"<br>
+            iOS & Android permissions configured for camera/photos
+        </p>
+    </div>
+</body>
+</html>
