@@ -229,7 +229,7 @@ export default function ProfileScreen() {
                     hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
                     testID="edit-profile-button"
                   >
-                    <Ionicons name="pencil" size={18} color={theme.colors.primary} />
+                    <Ionicons name="pencil" size={16} color="#fff" />
                   </TouchableOpacity>
                 </View>
                 <View style={styles.tierBadge}>
