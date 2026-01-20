@@ -361,6 +361,7 @@ print(f'Users: {db.users.count_documents({})}')
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 4.86 | Jan 20, 2026 | Privacy Policy page, Terms of Service page, Legal links on login, Legal section in Settings, Bundle ID & Package Name, enhanced permissions |
 | 4.85 | Jan 20, 2026 | App icon & splash, branding component, headers updated (17+ pages), app.json config |
 | 4.80 | Jan 18, 2026 | +58 premium landmarks, points system alignment, duplicate cleanup, 5 UI/UX fixes |
 | 4.70 | Jan 18, 2026 | Premium expansion attempt, image removal, documentation |
