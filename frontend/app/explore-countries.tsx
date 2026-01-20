@@ -345,7 +345,11 @@ export default function ExploreCountriesScreen() {
             <View style={styles.sectionHeaderContent}>
               <View style={styles.sectionHeaderLeft}>
                 <View style={styles.continentIconCircle}>
-                  <Text style={styles.continentIcon}>{CONTINENT_ICONS[section.continent] || '🌍'}</Text>
+                  <Ionicons 
+                    name={(CONTINENT_ICON_NAMES[section.continent] || 'globe-outline') as any} 
+                    size={24} 
+                    color={theme.colors.primary} 
+                  />
                 </View>
                 <View style={styles.sectionHeaderTextContainer}>
                   <Text style={styles.sectionTitle}>{section.continent}</Text>
