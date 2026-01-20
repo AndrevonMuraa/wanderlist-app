@@ -190,7 +190,7 @@ export default function AboutScreen() {
             <Text style={styles.heroSubtitle}>
               Your personal travel companion for discovering and conquering the world's most amazing landmarks
             </Text>
-            <Text style={styles.versionText}>Version 4.80</Text>
+            <Text style={styles.versionText}>Version 1.0.0</Text>
           </LinearGradient>
         </View>
 
