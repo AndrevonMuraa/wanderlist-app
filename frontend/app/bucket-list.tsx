@@ -214,7 +214,7 @@ export default function BucketListScreen() {
       <View style={styles.tabContainer}>
         <TouchableOpacity 
           style={styles.tabButton}
-          onPress={() => router.push('/continents')}
+          onPress={() => router.replace('/(tabs)/explore')}
         >
           <Ionicons name="earth" size={20} color={theme.colors.textSecondary} />
           <Text style={styles.tabLabel}>Explore</Text>
