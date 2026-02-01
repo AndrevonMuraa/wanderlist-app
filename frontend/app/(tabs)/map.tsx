@@ -115,6 +115,7 @@ interface VisitedPlace {
 
 export default function MapScreen() {
   const { user } = useAuth();
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [visitedPlaces, setVisitedPlaces] = useState<VisitedPlace[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<VisitedPlace | null>(null);
