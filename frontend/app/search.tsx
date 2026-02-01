@@ -54,7 +54,7 @@ export default function SearchScreen() {
       
       // Fetch all landmarks and visits in parallel
       const [landmarksRes, visitsRes] = await Promise.all([
-        fetch(`${BACKEND_URL}/api/landmarks/all`, {
+        fetch(`${BACKEND_URL}/api/landmarks?limit=1000`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
         fetch(`${BACKEND_URL}/api/visits`, {
