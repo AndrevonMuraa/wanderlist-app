@@ -330,6 +330,79 @@ export default function EditProfileScreen() {
             />
           </Surface>
 
+          {/* Banner Image */}
+          <Surface style={styles.pictureSection}>
+            <Text style={styles.sectionTitle}>Profile Banner</Text>
+            <TouchableOpacity 
+              style={styles.bannerContainer}
+              onPress={handlePickBanner}
+              activeOpacity={0.7}
+            >
+              {bannerImage ? (
+                <Image
+                  source={{ uri: bannerImage }}
+                  style={styles.bannerImage}
+                />
+              ) : (
+                <View style={styles.bannerPlaceholder}>
+                  <Ionicons name="image-outline" size={36} color={theme.colors.textLight} />
+                  <Text style={styles.bannerPlaceholderText}>Tap to add a banner</Text>
+                </View>
+              )}
+              <View style={styles.bannerEditIcon}>
+                <Ionicons name="camera" size={18} color="#fff" />
+              </View>
+            </TouchableOpacity>
+            <Text style={styles.pictureHint}>Recommended: 3:1 aspect ratio</Text>
+          </Surface>
+
+          {/* Featured Badges */}
+          {achievements.length > 0 && (
+            <Surface style={styles.inputSection}>
+              <View style={styles.labelRow}>
+                <Text style={styles.sectionTitle}>Featured Badges</Text>
+                <Text style={styles.charCount}>
+                  {featuredBadges.length}/3 selected
+                </Text>
+              </View>
+              <Text style={styles.badgeHint}>
+                Select up to 3 badges to display on your profile
+              </Text>
+              <View style={styles.badgeGrid}>
+                {achievements.map((achievement) => {
+                  const isSelected = featuredBadges.includes(achievement.achievement_id);
+                  return (
+                    <TouchableOpacity
+                      key={achievement.achievement_id}
+                      style={[
+                        styles.badgeItem,
+                        isSelected && styles.badgeItemSelected,
+                      ]}
+                      onPress={() => toggleFeaturedBadge(achievement.achievement_id)}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={styles.badgeIcon}>{achievement.badge_icon}</Text>
+                      <Text 
+                        style={[
+                          styles.badgeName, 
+                          isSelected && styles.badgeNameSelected
+                        ]}
+                        numberOfLines={2}
+                      >
+                        {achievement.badge_name}
+                      </Text>
+                      {isSelected && (
+                        <View style={styles.badgeCheck}>
+                          <Ionicons name="checkmark" size={12} color="#fff" />
+                        </View>
+                      )}
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </Surface>
+          )}
+
           <View style={{ height: theme.spacing.xl }} />
         </ScrollView>
       </KeyboardAvoidingView>
