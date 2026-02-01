@@ -51,8 +51,8 @@ export default function LanguageSettingsScreen() {
         </Surface>
 
         <Text style={styles.hint}>
-          {currentLanguage === 'no' 
-            ? 'Appen vil automatisk bruke telefonens språk ved oppstart.'
+          {currentLanguage === 'es' 
+            ? 'La app usará automáticamente el idioma de tu teléfono al iniciar.'
             : 'The app will automatically use your phone\'s language on startup.'}
         </Text>
       </View>
