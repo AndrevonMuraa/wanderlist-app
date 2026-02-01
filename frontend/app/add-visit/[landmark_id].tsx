@@ -14,6 +14,8 @@ import AddVisitModal from '../../components/AddVisitModal';
 import CelebrationEffect from '../../components/CelebrationEffect';
 import { checkLevelUp } from '../../utils/rankSystem';
 import UniversalHeader from '../../components/UniversalHeader';
+import { trackVisitForReview, maybePromptForReview } from '../../utils/appReview';
+import { sendAchievementNotification, sendStreakMilestoneNotification } from '../../utils/notifications';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
