@@ -371,6 +371,23 @@ export default function SubscriptionScreen() {
             <Text style={styles.disclaimer}>
               Payment will be processed securely. Cancel anytime.
             </Text>
+
+            {/* Mock Mode Indicator */}
+            {isMockMode && (
+              <View style={styles.mockModeIndicator}>
+                <Ionicons name="flask" size={16} color="#f59e0b" />
+                <Text style={styles.mockModeText}>Test Mode - No real charges</Text>
+              </View>
+            )}
+
+            {/* Restore Purchases */}
+            <TouchableOpacity
+              style={styles.restoreButton}
+              onPress={handleRestore}
+              disabled={upgrading}
+            >
+              <Text style={styles.restoreText}>Restore Purchases</Text>
+            </TouchableOpacity>
           </View>
         )}
 
