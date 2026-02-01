@@ -101,6 +101,7 @@ const getToken = async (): Promise<string | null> => {
 export default function ContinentsScreen() {
   const router = useRouter();
   const { user } = useAuth();
+  const { colors, gradientColors, isDark } = useTheme();
   const [continents, setContinents] = useState<Continent[]>(CONTINENTS);
   const [loading, setLoading] = useState(true);
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
