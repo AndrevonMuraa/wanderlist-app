@@ -35,9 +35,6 @@ i18n
     resources: {
       en: { translation: en },
       es: { translation: es },
-      no: { translation: no },
-      de: { translation: de },
-      fr: { translation: fr },
     },
     lng: 'en', // Default, will be overridden
     fallbackLng: 'en',
