@@ -178,16 +178,25 @@ export default function ContinentsScreen() {
         end={gradients.horizontal.end}
         style={[styles.fixedHeader, { paddingTop: topPadding }]}
       >
-        {/* Single Row: Title Left, Branding Right */}
+        {/* Single Row: Title Left, Search + Branding Right */}
         <View style={styles.headerRow}>
           <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>{t('explore.title')}</Text>
-          <TouchableOpacity 
-            style={styles.brandingContainer}
-            onPress={() => router.push('/about')}
-            activeOpacity={0.7}
-          >
-            <HeaderBranding size={18} textColor="#2A2A2A" />
-          </TouchableOpacity>
+          <View style={styles.headerRightRow}>
+            <TouchableOpacity 
+              style={styles.searchButton}
+              onPress={() => router.push('/search')}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="search" size={22} color={isDark ? colors.text : '#fff'} />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.brandingContainer}
+              onPress={() => router.push('/about')}
+              activeOpacity={0.7}
+            >
+              <HeaderBranding size={18} textColor="#2A2A2A" />
+            </TouchableOpacity>
+          </View>
         </View>
       </LinearGradient>
 
