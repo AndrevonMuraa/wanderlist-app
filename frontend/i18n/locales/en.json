@@ -180,7 +180,9 @@
     "weeklySummaryDesc": "Weekly travel stats and highlights",
     "enableAll": "Enable All",
     "disableAll": "Disable All",
-    "mobileOnly": "Push notifications are only available on mobile devices."
+    "mobileOnly": "Push notifications are only available on mobile devices.",
+    "noNotifications": "No Notifications",
+    "emptyMessage": "You'll see notifications here when someone interacts with your content"
   },
   "settings": {
     "title": "Settings",
