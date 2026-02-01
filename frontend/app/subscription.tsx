@@ -697,4 +697,30 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: theme.colors.textLight,
   },
+  // Mock Mode & Restore
+  mockModeIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: theme.spacing.md,
+    padding: theme.spacing.sm,
+    backgroundColor: '#fef3c7',
+    borderRadius: theme.borderRadius.md,
+    gap: 6,
+  },
+  mockModeText: {
+    fontSize: 13,
+    color: '#92400e',
+    fontWeight: '500',
+  },
+  restoreButton: {
+    marginTop: theme.spacing.md,
+    alignItems: 'center',
+    padding: theme.spacing.sm,
+  },
+  restoreText: {
+    fontSize: 14,
+    color: theme.colors.primary,
+    fontWeight: '500',
+  },
 });
