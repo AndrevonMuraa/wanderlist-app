@@ -62,8 +62,8 @@ class AdminNotificationTester:
             
             if response.status_code == 200:
                 data = response.json()
-                self.auth_token = data["token"]
-                user_info = data["user"]
+                self.auth_token = data.get("token")
+                user_info = data.get("user", {})
                 
                 print_success(f"Authentication successful for {user_info['name']} ({user_info['email']})")
                 print_info(f"User role: {user_info.get('role', 'user')}")
