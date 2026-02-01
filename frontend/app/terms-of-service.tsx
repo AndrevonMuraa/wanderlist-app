@@ -144,9 +144,37 @@ export default function TermsOfServiceScreen() {
           </Section>
         </Surface>
 
+        {/* Content Moderation - NEW */}
+        <Surface style={styles.card}>
+          <Section title="4. Content Moderation & Reporting">
+            <Text style={styles.subTitle}>Community Guidelines</Text>
+            <Text style={styles.paragraph}>
+              WanderList is committed to maintaining a safe and respectful community. All user-generated content, including photos, diary entries, and tips, must comply with our guidelines.
+            </Text>
+            
+            <Text style={[styles.subTitle, { marginTop: 16 }]}>Prohibited Content</Text>
+            <BulletPoint text="Inappropriate, offensive, or explicit material" />
+            <BulletPoint text="Harassment, hate speech, or bullying" />
+            <BulletPoint text="Spam or misleading information" />
+            <BulletPoint text="Copyright-infringing content" />
+            <BulletPoint text="Photos that do not depict the claimed landmark" />
+            <BulletPoint text="Fake or fabricated visits" />
+            
+            <Text style={[styles.subTitle, { marginTop: 16 }]}>Reporting</Text>
+            <Text style={styles.paragraph}>
+              Users can report inappropriate content or behavior using the report feature. Reports are reviewed by our moderation team within 24-48 hours. False reports may result in account restrictions.
+            </Text>
+            
+            <Text style={[styles.subTitle, { marginTop: 16 }]}>Enforcement</Text>
+            <Text style={styles.paragraph}>
+              Violations may result in content removal, temporary suspension, or permanent account termination depending on severity and frequency.
+            </Text>
+          </Section>
+        </Surface>
+
         {/* Subscription & Payments */}
         <Surface style={styles.card}>
-          <Section title="4. Subscriptions & Payments">
+          <Section title="5. Subscriptions & Payments">
             <Text style={styles.subTitle}>WanderList Pro</Text>
             <Text style={styles.paragraph}>
               WanderList Pro is a premium subscription that unlocks additional features including premium landmarks, custom visits, and extended photo limits.
@@ -170,7 +198,7 @@ export default function TermsOfServiceScreen() {
 
         {/* Points & Rewards */}
         <Surface style={styles.card}>
-          <Section title="5. Points & Rewards">
+          <Section title="6. Points, Rewards & Fair Play">
             <Text style={styles.paragraph}>
               WanderList awards points for visiting landmarks. Points are:
             </Text>
@@ -178,6 +206,16 @@ export default function TermsOfServiceScreen() {
             <BulletPoint text="Not redeemable for cash or prizes" />
             <BulletPoint text="Non-transferable between accounts" />
             <BulletPoint text="Subject to adjustment if awarded in error" />
+            
+            <Text style={[styles.subTitle, { marginTop: 16 }]}>Anti-Cheat Policy</Text>
+            <Text style={styles.paragraph}>
+              To ensure fair competition on leaderboards:
+            </Text>
+            <BulletPoint text="Visits require photo proof to earn leaderboard points" />
+            <BulletPoint text="Photos are subject to verification and review" />
+            <BulletPoint text="Suspicious activity patterns are monitored" />
+            <BulletPoint text="Fraudulent visits will be removed and points deducted" />
+            <BulletPoint text="Repeated violations result in leaderboard ban or account termination" />
             
             <Text style={[styles.paragraph, { marginTop: 12 }]}>
               We reserve the right to modify the points system at any time. Leaderboard rankings are based on leaderboard points (visits with photos) to ensure fair competition.
