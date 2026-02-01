@@ -226,11 +226,11 @@ export default function ContinentsScreen() {
                 <LinearGradient colors={continent.gradient} style={styles.cardGradient}>
                   {/* Top Section: Title (left) + Points (right) */}
                   <View style={styles.cardTopSection}>
-                    <View style={[styles.cardTitleSection, { backgroundColor: `${continent.accentColor}40` }]}>
+                    <View style={styles.cardTitleSection}>
                       <Text style={styles.cardTitle}>{continent.name}</Text>
                       <Text style={styles.cardDescription}>{continent.description}</Text>
                     </View>
-                    <View style={[styles.pointsBadge, { backgroundColor: `${continent.accentColor}30` }]}>
+                    <View style={styles.pointsBadge}>
                       <Ionicons name="star" size={14} color="#FFD700" />
                       <Text style={styles.pointsText}>{continent.totalPoints.toLocaleString()}</Text>
                     </View>
