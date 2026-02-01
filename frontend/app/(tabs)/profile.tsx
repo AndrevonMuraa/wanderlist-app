@@ -167,10 +167,10 @@ export default function ProfileScreen() {
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Sticky Header */}
       <LinearGradient
-        colors={gradients.oceanToSand}
+        colors={gradientColors}
         start={gradients.horizontal.start}
         end={gradients.horizontal.end}
         style={[styles.stickyHeader, { paddingTop: topPadding }]}
@@ -178,13 +178,13 @@ export default function ProfileScreen() {
         {/* Single Row: Title + Actions Left, Branding Right */}
         <View style={styles.headerRow}>
           <View style={styles.titleWithActions}>
-            <Text style={styles.headerTitle}>Profile</Text>
+            <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>Profile</Text>
             <View style={styles.headerButtons}>
               <TouchableOpacity
                 style={styles.headerIconButton}
                 onPress={() => router.push('/notifications')}
               >
-                <Ionicons name="notifications-outline" size={20} color="#fff" />
+                <Ionicons name="notifications-outline" size={20} color={isDark ? colors.text : '#fff'} />
                 {unreadCount > 0 && (
                   <View style={styles.notificationBadge}>
                     <Text style={styles.notificationBadgeText}>
@@ -200,7 +200,7 @@ export default function ProfileScreen() {
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <HeaderBranding size={18} textColor="#2A2A2A" />
+            <HeaderBranding size={18} textColor={isDark ? colors.text : "#2A2A2A"} />
           </TouchableOpacity>
         </View>
       </LinearGradient>
@@ -208,7 +208,7 @@ export default function ProfileScreen() {
       <ScrollView>
 
         {/* FINAL: User Left, Rank Right, Stats Row */}
-        <Surface style={styles.profileCard}>
+        <Surface style={[styles.profileCard, { backgroundColor: colors.surface }]}>
           {/* Top: User & Rank Row */}
           <View style={styles.userRankRow}>
             {/* Left: User Info */}
@@ -220,13 +220,13 @@ export default function ProfileScreen() {
               )}
               <View style={styles.userDetails}>
                 <View style={styles.nameEditRow}>
-                  <Text style={styles.userNameLarge}>{user?.name}</Text>
+                  <Text style={[styles.userNameLarge, { color: colors.text }]}>{user?.name}</Text>
                   <TouchableOpacity 
                     onPress={() => {
                       console.log('Edit button pressed!');
                       router.push('/edit-profile');
                     }}
-                    style={styles.editButton}
+                    style={[styles.editButton, { backgroundColor: colors.primary }]}
                     activeOpacity={0.6}
                     hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     testID="edit-profile-button"
@@ -237,18 +237,18 @@ export default function ProfileScreen() {
                 <View style={styles.tierBadge}>
                   {user?.subscription_tier === 'premium' ? (
                     <>
-                      <Ionicons name="diamond" size={12} color={theme.colors.accent} />
-                      <Text style={[styles.tierText, styles.tierPremium]}>Premium user</Text>
+                      <Ionicons name="diamond" size={12} color={colors.accent} />
+                      <Text style={[styles.tierText, { color: colors.accent }]}>Premium user</Text>
                     </>
                   ) : user?.subscription_tier === 'basic' ? (
                     <>
-                      <Ionicons name="ribbon" size={12} color={theme.colors.primary} />
-                      <Text style={[styles.tierText, styles.tierBasic]}>Basic user</Text>
+                      <Ionicons name="ribbon" size={12} color={colors.primary} />
+                      <Text style={[styles.tierText, { color: colors.primary }]}>Basic user</Text>
                     </>
                   ) : (
                     <>
-                      <Ionicons name="person-outline" size={12} color={theme.colors.textSecondary} />
-                      <Text style={[styles.tierText, styles.tierFree]}>Freemium user</Text>
+                      <Ionicons name="person-outline" size={12} color={colors.textSecondary} />
+                      <Text style={[styles.tierText, { color: colors.textSecondary }]}>Freemium user</Text>
                     </>
                   )}
                 </View>
@@ -267,34 +267,34 @@ export default function ProfileScreen() {
           
           {/* Stats Row */}
           {stats && progressStats && (
-            <View style={styles.statsRow}>
+            <View style={[styles.statsRow, { borderTopColor: colors.border }]}>
               <View style={styles.statItem}>
                 <Ionicons name="location" size={16} color="#4DB8D8" />
-                <Text style={styles.statValue}>
+                <Text style={[styles.statValue, { color: colors.text }]}>
                   {progressStats.overall?.visited || stats.total_visits || 0}
                 </Text>
-                <Text style={styles.statLabel}>Landmarks</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Landmarks</Text>
               </View>
               <View style={styles.statItem}>
                 <Ionicons name="flag" size={16} color="#FF6B6B" />
-                <Text style={styles.statValue}>
+                <Text style={[styles.statValue, { color: colors.text }]}>
                   {stats.countries_visited || 0}
                 </Text>
-                <Text style={styles.statLabel}>Countries</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Countries</Text>
               </View>
               <View style={styles.statItem}>
                 <Ionicons name="earth" size={16} color="#66BB6A" />
-                <Text style={styles.statValue}>
+                <Text style={[styles.statValue, { color: colors.text }]}>
                   {stats.continents_visited || 0}
                 </Text>
-                <Text style={styles.statLabel}>Continents</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Continents</Text>
               </View>
               <View style={styles.statItem}>
                 <Ionicons name="star" size={16} color="#FFD700" />
-                <Text style={[styles.statValue, styles.statValueGold]}>
+                <Text style={[styles.statValue, { color: colors.accent }]}>
                   {progressStats.totalPoints || 0}
                 </Text>
-                <Text style={styles.statLabel}>Points</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Points</Text>
               </View>
             </View>
           )}
