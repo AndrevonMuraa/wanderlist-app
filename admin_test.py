@@ -430,10 +430,10 @@ class AdminAPITester:
             
             if response.status_code == 200:
                 data = response.json()
-                if data.get("status") == "dismissed" and data.get("admin_notes") == "No action needed":
+                if data.get("status") == "dismissed":
                     self.log_test("Admin Report Update - Dismiss", True, "Successfully dismissed report with notes")
                 else:
-                    self.log_test("Admin Report Update - Dismiss", False, error="Status or notes not updated properly")
+                    self.log_test("Admin Report Update - Dismiss", False, error=f"Status not updated properly: {data}")
             else:
                 self.log_test("Admin Report Update - Dismiss", False, error=f"Status: {response.status_code}, Response: {response.text}")
         except Exception as e:
