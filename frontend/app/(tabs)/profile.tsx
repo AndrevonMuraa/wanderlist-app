@@ -74,6 +74,7 @@ export default function ProfileScreen() {
   const [badges, setBadges] = useState<Badge[]>([]);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const router = useRouter();
 
