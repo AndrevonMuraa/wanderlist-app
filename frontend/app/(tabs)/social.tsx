@@ -644,7 +644,7 @@ export default function SocialHubScreen() {
       >
         {/* Single Row: Title Left, Branding Right */}
         <View style={styles.headerRow}>
-          <Text style={styles.headerTitle}>Social Hub</Text>
+          <Text style={styles.headerTitle}>{t('social.title')}</Text>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
@@ -668,10 +668,10 @@ export default function SocialHubScreen() {
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
               <Ionicons name="newspaper" size={24} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Activity Feed</Text>
+              <Text style={styles.sectionTitle}>{t('social.feed')}</Text>
             </View>
             <TouchableOpacity onPress={() => router.push('/feed')}>
-              <Text style={styles.seeAllButton}>See All →</Text>
+              <Text style={styles.seeAllButton}>{t('common.seeAll')} →</Text>
             </TouchableOpacity>
           </View>
 
@@ -683,15 +683,15 @@ export default function SocialHubScreen() {
                   style={styles.viewAllButton}
                   onPress={() => router.push('/feed')}
                 >
-                  <Text style={styles.viewAllText}>View All Activity</Text>
+                  <Text style={styles.viewAllText}>{t('common.viewAll')}</Text>
                   <Ionicons name="arrow-forward" size={16} color={theme.colors.primary} />
                 </TouchableOpacity>
               </>
             ) : (
               <View style={styles.emptyState}>
                 <Ionicons name="newspaper-outline" size={48} color={theme.colors.textLight} />
-                <Text style={styles.emptyText}>No recent activity</Text>
-                <Text style={styles.emptySubtext}>Start exploring landmarks!</Text>
+                <Text style={styles.emptyText}>{t('social.noActivity')}</Text>
+                <Text style={styles.emptySubtext}>{t('explore.startExploring')}</Text>
               </View>
             )}
           </Surface>
