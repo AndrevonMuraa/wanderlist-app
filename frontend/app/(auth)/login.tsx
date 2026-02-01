@@ -136,6 +136,17 @@ export default function LoginScreen() {
               Continue with Google
             </Button>
 
+            {/* Apple Sign-In Button - Only show on iOS */}
+            {Platform.OS === 'ios' && isAppleSignInAvailable && (
+              <AppleAuthentication.AppleAuthenticationButton
+                buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+                buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+                cornerRadius={8}
+                style={styles.appleButton}
+                onPress={handleAppleLogin}
+              />
+            )}
+
             {/* Quick Test Login Button */}
             <TouchableOpacity
               onPress={async () => {
