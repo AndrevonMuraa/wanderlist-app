@@ -86,28 +86,12 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
     onComplete();
   };
 
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+  const handleScroll = (event: any) => {
     const index = Math.round(event.nativeEvent.contentOffset.x / width);
     if (index !== currentIndex && index >= 0 && index < slides.length) {
       setCurrentIndex(index);
     }
   };
-
-  const renderSlide = (item: OnboardingSlide) => (
-    <View key={item.id} style={styles.slide}>
-      <LinearGradient
-        colors={item.gradient}
-        style={styles.iconContainer}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <Ionicons name={item.icon} size={80} color="#fff" />
-      </LinearGradient>
-      
-      <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.description}>{item.description}</Text>
-    </View>
-  );
 
   const renderDots = () => (
     <View style={styles.dotsContainer}>
