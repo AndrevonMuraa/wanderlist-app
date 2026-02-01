@@ -63,6 +63,8 @@ class UserPublic(BaseModel):
     picture: Optional[str] = None
     bio: Optional[str] = None
     location: Optional[str] = None
+    banner_image: Optional[str] = None  # Profile banner image
+    featured_badges: Optional[List[str]] = None  # Achievement IDs for featured badges
     is_premium: bool = False  # Deprecated
     subscription_tier: str = "free"  # "free" or "pro"
     default_privacy: str = "public"  # "public", "friends", "private"
