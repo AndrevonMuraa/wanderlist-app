@@ -246,6 +246,22 @@ export default function SettingsScreen() {
           <View style={[styles.accountList, { backgroundColor: colors.background }]}>
             <TouchableOpacity 
               style={styles.accountItem}
+              onPress={() => router.push('/appearance-settings')}
+              activeOpacity={0.7}
+            >
+              <View style={styles.settingItemLeft}>
+                <View style={[styles.settingIcon, { backgroundColor: isDark ? 'rgba(90, 100, 180, 0.15)' : 'rgba(255, 200, 50, 0.15)' }]}>
+                  <Ionicons name={isDark ? "moon" : "sunny"} size={18} color={isDark ? '#5A64B4' : '#F5A623'} />
+                </View>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>Appearance</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
+            </TouchableOpacity>
+            
+            <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
+            
+            <TouchableOpacity 
+              style={styles.accountItem}
               onPress={() => router.push('/language-settings')}
               activeOpacity={0.7}
             >
