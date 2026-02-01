@@ -272,6 +272,54 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const loginWithApple = async () => {
+    try {
+      if (Platform.OS !== 'ios') {
+        throw new Error('Apple Sign-In is only available on iOS');
+      }
+
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      // Send the credential to our backend
+      const response = await fetch(`${BACKEND_URL}/api/auth/apple/callback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          identity_token: credential.identityToken,
+          user_id: credential.user,
+          email: credential.email,
+          full_name: credential.fullName ? 
+            `${credential.fullName.givenName || ''} ${credential.fullName.familyName || ''}`.trim() : 
+            null,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        await setToken(data.access_token);
+        setUser(data.user);
+      } else {
+        const error = await response.json();
+        throw new Error(error.detail || 'Apple Sign-In failed');
+      }
+    } catch (error: any) {
+      if (error.code === 'ERR_REQUEST_CANCELED') {
+        // User cancelled the sign-in
+        console.log('Apple Sign-In was cancelled');
+        return;
+      }
+      console.error('Error with Apple login:', error);
+      throw error;
+    }
+  };
+
   const logout = async () => {
     try {
       const token = await getToken();
