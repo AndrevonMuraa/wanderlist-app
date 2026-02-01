@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { Text, TextInput, Button, Surface, Snackbar } from 'react-native-paper';
 import { useRouter } from 'expo-router';
@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import theme, { gradients } from '../../styles/theme';
 import BrandedGlobeIcon from '../../components/BrandedGlobeIcon';
+import OnboardingFlow, { shouldShowOnboarding } from '../../components/OnboardingFlow';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -16,8 +17,27 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showWebLoginInfo, setShowWebLoginInfo] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const { login, loginWithGoogle, loginWithApple, isAppleSignInAvailable } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    checkOnboarding();
+  }, []);
+
+  const checkOnboarding = async () => {
+    const shouldShow = await shouldShowOnboarding();
+    setShowOnboarding(shouldShow);
+  };
+
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false);
+  };
+
+  // Show onboarding for first-time users
+  if (showOnboarding) {
+    return <OnboardingFlow onComplete={handleOnboardingComplete} />;
+  }
 
   const handleLogin = async () => {
     if (!email || !password) {
