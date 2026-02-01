@@ -658,4 +658,15 @@ const styles = StyleSheet.create({
   bottomSpacer: {
     height: 20,
   },
+  adminBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+    marginRight: 8,
+  },
+  adminBadgeText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '700',
+  },
 });
