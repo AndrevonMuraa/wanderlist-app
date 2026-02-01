@@ -13,7 +13,9 @@
     "search": "Buscar",
     "noResults": "No se encontraron resultados",
     "seeAll": "Ver todo",
-    "settings": "Configuración"
+    "settings": "Configuración",
+    "viewAll": "Ver Todo",
+    "manage": "Gestionar"
   },
   "auth": {
     "login": "Iniciar sesión",
@@ -46,7 +48,8 @@
     "searchPlaceholder": "Buscar países o lugares...",
     "bucketList": "Lista de deseos",
     "visitedCount": "{{count}} visitados",
-    "totalCountries": "{{count}} países"
+    "totalCountries": "{{count}} países",
+    "startExploring": "¡Empieza a explorar lugares!"
   },
   "journey": {
     "title": "Mi Viaje",
