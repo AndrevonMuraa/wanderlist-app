@@ -233,8 +233,8 @@ export default function SettingsScreen() {
               <Ionicons name="notifications" size={22} color={colors.accent} />
             </View>
             <View style={styles.sectionHeaderText}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Notifications</Text>
-              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>Stay updated on your journey</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('notifications.title')}</Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>{t('notifications.pushNotifications')}</Text>
             </View>
           </View>
           
@@ -249,8 +249,8 @@ export default function SettingsScreen() {
                   <Ionicons name="phone-portrait-outline" size={18} color="#3498db" />
                 </View>
                 <View style={styles.settingTexts}>
-                  <Text style={[styles.settingLabel, { color: colors.text }]}>Push Notifications</Text>
-                  <Text style={[styles.settingDescription, { color: colors.textSecondary }]}>Likes, comments, achievements & more</Text>
+                  <Text style={[styles.settingLabel, { color: colors.text }]}>{t('notifications.pushNotifications')}</Text>
+                  <Text style={[styles.settingDescription, { color: colors.textSecondary }]}>{t('notifications.likesDesc')}</Text>
                 </View>
               </View>
               <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
@@ -265,8 +265,8 @@ export default function SettingsScreen() {
               <Ionicons name="person" size={22} color="#7f8c8d" />
             </View>
             <View style={styles.sectionHeaderText}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Account</Text>
-              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>Manage your account details</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('settings.account')}</Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>{t('settings.changeEmail')}</Text>
             </View>
           </View>
           
