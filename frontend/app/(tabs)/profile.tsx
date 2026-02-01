@@ -65,6 +65,7 @@ interface Badge {
 
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
+  const { colors, shadows, gradientColors, isDark } = useTheme();
   const [stats, setStats] = useState<UserStats | null>(null);
   const [progressStats, setProgressStats] = useState<ProgressStats | null>(null);
   const [badges, setBadges] = useState<Badge[]>([]);
