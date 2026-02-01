@@ -547,6 +547,16 @@ export default function SocialHubScreen() {
             />
             <Text style={styles.actionText}>{activity.likes_count}</Text>
           </TouchableOpacity>
+          
+          {/* Report button - only show for other users' activities */}
+          {activity.user_id !== user?.user_id && (
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => openReportModal('activity', activity.activity_id, `${activity.user_name}'s activity`)}
+            >
+              <Ionicons name="flag-outline" size={18} color={theme.colors.textLight} />
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Comments Section */}
