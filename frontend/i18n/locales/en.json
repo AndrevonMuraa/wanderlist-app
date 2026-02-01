@@ -106,7 +106,15 @@
     "like": "Like",
     "comment": "Comment",
     "share": "Share",
-    "report": "Report"
+    "report": "Report",
+    "pending": "Pending",
+    "viewAllFriends": "View All Friends",
+    "noFriendsYet": "No friends yet",
+    "addFriends": "Add Friends",
+    "messages": "Messages",
+    "leaderboard": "Leaderboard",
+    "topExplorers": "Top Explorers",
+    "viewFullLeaderboard": "View Full Leaderboard"
   },
   "profile": {
     "title": "Profile",
