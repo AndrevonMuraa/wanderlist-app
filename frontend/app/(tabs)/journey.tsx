@@ -280,7 +280,14 @@ export default function JourneyScreen() {
       >
         {/* Single Row: Title Left, Branding Right */}
         <View style={styles.headerRow}>
-          <Text style={[styles.greeting, { color: isDark ? colors.text : '#fff' }]}>{t('journey.title')}</Text>
+          <View style={styles.titleRow}>
+            <Text style={[styles.greeting, { color: isDark ? colors.text : '#fff' }]}>{t('journey.title')}</Text>
+            {isOfflineData && (
+              <View style={styles.offlineBadge}>
+                <Ionicons name="cloud-offline" size={12} color="#fff" />
+              </View>
+            )}
+          </View>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
@@ -291,10 +298,13 @@ export default function JourneyScreen() {
         </View>
       </LinearGradient>
 
+      {/* Offline Status Bar */}
+      <OfflineStatusBar onSyncPress={syncPendingVisits} />
+
       <ScrollView
         style={styles.scrollView}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
         }
       >
         {/* Travel Statistics Dashboard - Compressed */}
