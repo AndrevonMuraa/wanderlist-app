@@ -16,8 +16,37 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { register } = useAuth();
+  const { register, loginWithGoogle, loginWithApple, isAppleSignInAvailable } = useAuth();
   const router = useRouter();
+
+  const handleGoogleSignUp = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      await loginWithGoogle();
+    } catch (err: any) {
+      setError('Google sign-up failed. Please try again.');
+      setLoading(false);
+    }
+  };
+
+  const handleAppleSignUp = async () => {
+    if (Platform.OS !== 'ios') {
+      setError('Apple Sign-In is only available on iOS devices');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    try {
+      await loginWithApple();
+      router.replace('/(tabs)/explore');
+    } catch (err: any) {
+      if (err.message !== 'Apple Sign-In was cancelled') {
+        setError('Apple sign-up failed. Please try again.');
+      }
+      setLoading(false);
+    }
+  };
 
   const handleRegister = async () => {
     if (!name || !username || !email || !password) {
