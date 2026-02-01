@@ -287,7 +287,7 @@ export default function TermsOfServiceScreen() {
 
         {/* Termination */}
         <Surface style={styles.card}>
-          <Section title="10. Termination">
+          <Section title="11. Termination">
             <Text style={styles.paragraph}>
               We may terminate or suspend your account immediately, without prior notice, for any reason, including breach of these Terms. Upon termination:
             </Text>
