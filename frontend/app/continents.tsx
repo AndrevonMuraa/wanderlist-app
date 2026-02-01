@@ -168,17 +168,17 @@ export default function ContinentsScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* UNIFIED FIXED HEADER - Using Ocean to Sand gradient */}
       <LinearGradient
-        colors={gradients.oceanToSand}
+        colors={gradientColors}
         start={gradients.horizontal.start}
         end={gradients.horizontal.end}
         style={[styles.fixedHeader, { paddingTop: topPadding }]}
       >
         {/* Single Row: Title Left, Branding Right */}
         <View style={styles.headerRow}>
-          <Text style={styles.headerTitle}>Explore Continents</Text>
+          <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>Explore Continents</Text>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
