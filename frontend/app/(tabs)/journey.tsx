@@ -531,6 +531,26 @@ export default function JourneyScreen() {
           </TouchableOpacity>
         </Surface>
 
+        {/* Detailed Statistics Section */}
+        <Surface style={styles.countryVisitsCard}>
+          <TouchableOpacity
+            style={styles.countryVisitsRow}
+            onPress={() => router.push('/statistics')}
+            activeOpacity={0.7}
+          >
+            <View style={styles.countryVisitsLeft}>
+              <View style={[styles.countryVisitsIcon, { backgroundColor: '#AB47BC20' }]}>
+                <Ionicons name="stats-chart" size={22} color="#AB47BC" />
+              </View>
+              <View>
+                <Text style={styles.countryVisitsTitle}>Detailed Statistics</Text>
+                <Text style={styles.countryVisitsSubtitle}>Charts, rankings & travel insights</Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={22} color={theme.colors.textLight} />
+          </TouchableOpacity>
+        </Surface>
+
         {/* Custom Visits Section */}
         <Surface style={styles.customVisitsCard}>
           <View style={styles.customVisitsHeader}>
