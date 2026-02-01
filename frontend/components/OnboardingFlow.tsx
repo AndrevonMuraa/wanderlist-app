@@ -133,18 +133,20 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
         <Text style={styles.skipText}>Skip</Text>
       </TouchableOpacity>
 
-      {/* Slides */}
-      <ScrollView
-        ref={scrollViewRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={handleScroll}
-        scrollEventThrottle={16}
-        contentContainerStyle={styles.scrollContent}
-      >
-        {slides.map(renderSlide)}
-      </ScrollView>
+      {/* Current Slide Content */}
+      <View style={styles.slideContainer}>
+        <LinearGradient
+          colors={slides[currentIndex].gradient}
+          style={styles.iconContainer}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <Ionicons name={slides[currentIndex].icon} size={80} color="#fff" />
+        </LinearGradient>
+        
+        <Text style={styles.title}>{slides[currentIndex].title}</Text>
+        <Text style={styles.description}>{slides[currentIndex].description}</Text>
+      </View>
 
       {/* Bottom section */}
       <View style={styles.bottomContainer}>
