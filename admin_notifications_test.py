@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://world-language.preview.emergentagent.com/api"
+BASE_URL = "https://landmark-voyage.preview.emergentagent.com/api"
 TEST_EMAIL = "mobile@test.com"
 
 class Colors:
