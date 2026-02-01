@@ -81,7 +81,7 @@ export default function ProFeatureLock({ visible, onClose, feature, featureName 
           {/* Icon */}
           <View style={styles.iconContainer}>
             <LinearGradient
-              colors={['#667eea', '#764ba2']}
+              colors={['#4DB8D8', '#1E8A8A']}
               style={styles.iconGradient}
             >
               <Ionicons name={info.icon} size={32} color="#fff" />
@@ -90,7 +90,7 @@ export default function ProFeatureLock({ visible, onClose, feature, featureName 
 
           {/* Title */}
           <View style={styles.proTag}>
-            <Ionicons name="diamond" size={14} color="#764ba2" />
+            <Ionicons name="diamond" size={14} color="#1E8A8A" />
             <Text style={styles.proTagText}>PRO FEATURE</Text>
           </View>
           
