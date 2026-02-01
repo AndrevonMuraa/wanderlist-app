@@ -385,6 +385,27 @@ export default function SettingsScreen() {
             
             <TouchableOpacity 
               style={styles.accountItem}
+              onPress={handleClearCache}
+              activeOpacity={0.7}
+            >
+              <View style={styles.settingItemLeft}>
+                <View style={[styles.settingIcon, { backgroundColor: 'rgba(149, 165, 166, 0.15)' }]}>
+                  <Ionicons name="cloud-offline-outline" size={18} color="#95a5a6" />
+                </View>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>Clear Offline Cache</Text>
+              </View>
+              {pendingVisitsCount > 0 && (
+                <View style={[styles.cacheBadge, { backgroundColor: '#f59e0b' }]}>
+                  <Text style={styles.cacheBadgeText}>{pendingVisitsCount} pending</Text>
+                </View>
+              )}
+              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
+            </TouchableOpacity>
+            
+            <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
+            
+            <TouchableOpacity 
+              style={styles.accountItem}
               onPress={() => {
                 Alert.alert(
                   t('settings.deleteAccount'),
