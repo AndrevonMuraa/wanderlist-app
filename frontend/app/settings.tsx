@@ -296,7 +296,7 @@ export default function SettingsScreen() {
                 <View style={[styles.settingIcon, { backgroundColor: colors.accentTeal + '15' }]}>
                   <Ionicons name="language" size={18} color={colors.accentTeal} />
                 </View>
-                <Text style={[styles.accountLabel, { color: colors.text }]}>Language / Idioma</Text>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>{t('settings.language')}</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
@@ -305,14 +305,14 @@ export default function SettingsScreen() {
             
             <TouchableOpacity 
               style={styles.accountItem}
-              onPress={() => Alert.alert('Coming Soon', 'Email change feature coming soon')}
+              onPress={() => Alert.alert(t('common.settings'), t('settings.changeEmail'))}
               activeOpacity={0.7}
             >
               <View style={styles.settingItemLeft}>
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(52, 152, 219, 0.1)' }]}>
                   <Ionicons name="at" size={18} color="#3498db" />
                 </View>
-                <Text style={[styles.accountLabel, { color: colors.text }]}>Change Email</Text>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>{t('settings.changeEmail')}</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
@@ -321,14 +321,14 @@ export default function SettingsScreen() {
             
             <TouchableOpacity 
               style={styles.accountItem}
-              onPress={() => Alert.alert('Coming Soon', 'Password change feature coming soon')}
+              onPress={() => Alert.alert(t('common.settings'), t('settings.changePassword'))}
               activeOpacity={0.7}
             >
               <View style={styles.settingItemLeft}>
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(241, 196, 15, 0.1)' }]}>
                   <Ionicons name="key-outline" size={18} color="#f1c40f" />
                 </View>
-                <Text style={[styles.accountLabel, { color: colors.text }]}>Change Password</Text>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>{t('settings.changePassword')}</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
@@ -339,11 +339,11 @@ export default function SettingsScreen() {
               style={styles.accountItem}
               onPress={() => {
                 Alert.alert(
-                  'Delete Account',
-                  'This action cannot be undone. All your data will be permanently deleted.',
+                  t('settings.deleteAccount'),
+                  t('common.cancel'),
                   [
-                    { text: 'Cancel', style: 'cancel' },
-                    { text: 'Delete', style: 'destructive', onPress: () => {} },
+                    { text: t('common.cancel'), style: 'cancel' },
+                    { text: t('common.delete'), style: 'destructive', onPress: () => {} },
                   ]
                 );
               }}
@@ -353,7 +353,7 @@ export default function SettingsScreen() {
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(231, 76, 60, 0.1)' }]}>
                   <Ionicons name="trash-outline" size={18} color="#e74c3c" />
                 </View>
-                <Text style={[styles.accountLabel, { color: '#e74c3c' }]}>Delete Account</Text>
+                <Text style={[styles.accountLabel, { color: '#e74c3c' }]}>{t('settings.deleteAccount')}</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color="#e74c3c" />
             </TouchableOpacity>
