@@ -106,6 +106,7 @@ export default function JourneyScreen() {
   const router = useRouter();
   const { user } = useAuth();
   const { colors, shadows, gradientColors, isDark } = useTheme();
+  const { t } = useTranslation();
   const subscriptionData = useSubscription();
   const canCreateCustomVisits = subscriptionData.canCreateCustomVisits;
   const isPro = subscriptionData.isPro;
