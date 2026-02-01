@@ -224,20 +224,20 @@ class WanderMarkAPITester:
             )
         
         # Test activity feed
-        response = self.make_request("GET", "/activity-feed")
+        response = self.make_request("GET", "/feed")
         if response and response.status_code == 200:
             activities = response.json()
             response_text = json.dumps(activities)
             has_wanderlist = "wanderlist" in response_text.lower()
             
             self.log_test(
-                "Social - /activity-feed", 
+                "Social - /feed", 
                 True, 
                 f"Activities count: {len(activities)} | No WanderList refs: {not has_wanderlist}"
             )
         else:
             self.log_test(
-                "Social - /activity-feed", 
+                "Social - /feed", 
                 False, 
                 f"Failed with status {response.status_code if response else 'No response'}"
             )
