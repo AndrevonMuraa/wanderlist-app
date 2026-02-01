@@ -207,24 +207,22 @@ export default function SettingsScreen() {
           </View>
           
           <View style={styles.settingsList}>
-            <View style={styles.settingItem}>
+            <TouchableOpacity 
+              style={styles.settingItem}
+              onPress={() => router.push('/notification-settings')}
+              activeOpacity={0.7}
+            >
               <View style={styles.settingItemLeft}>
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(52, 152, 219, 0.1)' }]}>
                   <Ionicons name="phone-portrait-outline" size={18} color="#3498db" />
                 </View>
                 <View style={styles.settingTexts}>
                   <Text style={styles.settingLabel}>Push Notifications</Text>
-                  <Text style={styles.settingDescription}>Friend activity & achievements</Text>
+                  <Text style={styles.settingDescription}>Likes, comments, achievements & more</Text>
                 </View>
               </View>
-              <Switch
-                value={pushNotifications}
-                onValueChange={setPushNotifications}
-                trackColor={{ false: '#E0E0E0', true: theme.colors.primary + '60' }}
-                thumbColor={pushNotifications ? theme.colors.primary : '#f4f3f4'}
-                ios_backgroundColor="#E0E0E0"
-              />
-            </View>
+              <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+            </TouchableOpacity>
           </View>
         </View>
 
