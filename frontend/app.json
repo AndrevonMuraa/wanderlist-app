@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "WanderList",
-    "slug": "wanderlist",
+    "name": "WanderMark",
+    "slug": "wandermark",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "wanderlist",
+    "scheme": "wandermark",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
