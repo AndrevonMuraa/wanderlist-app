@@ -73,6 +73,8 @@ class ProfileUpdate(BaseModel):
     picture: Optional[str] = None  # Base64 image or URL
     bio: Optional[str] = None
     location: Optional[str] = None
+    banner_image: Optional[str] = None  # Base64 image for profile banner
+    featured_badges: Optional[List[str]] = None  # List of achievement_ids to feature
 
 class Badge(BaseModel):
     badge_id: str
