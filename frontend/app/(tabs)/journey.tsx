@@ -441,21 +441,21 @@ export default function JourneyScreen() {
 
         {/* Recent Visits */}
         {recentVisits.length > 0 && (
-          <Surface style={styles.recentVisitsCard}>
-            <Text style={styles.sectionTitle}>Recent Visits</Text>
+          <Surface style={[styles.recentVisitsCard, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Recent Visits</Text>
             {recentVisits.map((visit) => (
               <TouchableOpacity
                 key={visit.visit_id}
-                style={styles.visitItem}
+                style={[styles.visitItem, { borderBottomColor: colors.border }]}
                 onPress={() => router.push(`/visit-detail/${visit.visit_id}`)}
                 activeOpacity={0.7}
               >
-                <View style={styles.visitIcon}>
-                  <Ionicons name="location" size={20} color={theme.colors.primary} />
+                <View style={[styles.visitIcon, { backgroundColor: colors.primaryLight }]}>
+                  <Ionicons name="location" size={20} color={colors.primary} />
                 </View>
                 <View style={styles.visitInfo}>
-                  <Text style={styles.visitName}>{visit.landmark_name || 'Landmark'}</Text>
-                  <Text style={styles.visitDate}>
+                  <Text style={[styles.visitName, { color: colors.text }]}>{visit.landmark_name || 'Landmark'}</Text>
+                  <Text style={[styles.visitDate, { color: colors.textSecondary }]}>
                     {new Date(visit.visited_at).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
@@ -463,73 +463,73 @@ export default function JourneyScreen() {
                     })}
                   </Text>
                 </View>
-                <View style={styles.visitPoints}>
-                  <Ionicons name="star" size={14} color={theme.colors.accentYellow} />
-                  <Text style={styles.visitPointsText}>{visit.points_earned}</Text>
+                <View style={[styles.visitPoints, { backgroundColor: colors.surfaceTinted }]}>
+                  <Ionicons name="star" size={14} color={colors.accentYellow} />
+                  <Text style={[styles.visitPointsText, { color: colors.text }]}>{visit.points_earned}</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+                <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
               </TouchableOpacity>
             ))}
           </Surface>
         )}
 
         {/* My Country Visits Section */}
-        <Surface style={styles.countryVisitsCard}>
+        <Surface style={[styles.countryVisitsCard, { backgroundColor: colors.surface }]}>
           <TouchableOpacity
             style={styles.countryVisitsRow}
             onPress={() => router.push('/my-country-visits')}
             activeOpacity={0.7}
           >
             <View style={styles.countryVisitsLeft}>
-              <View style={styles.countryVisitsIcon}>
-                <Ionicons name="flag" size={22} color={theme.colors.primary} />
+              <View style={[styles.countryVisitsIcon, { backgroundColor: colors.primaryLight + '20' }]}>
+                <Ionicons name="flag" size={22} color={colors.primary} />
               </View>
               <View>
-                <Text style={styles.countryVisitsTitle}>My Country Visits</Text>
-                <Text style={styles.countryVisitsSubtitle}>Photo collages and travel diaries</Text>
+                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>My Country Visits</Text>
+                <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>Photo collages and travel diaries</Text>
               </View>
             </View>
-            <Ionicons name="chevron-forward" size={22} color={theme.colors.textLight} />
+            <Ionicons name="chevron-forward" size={22} color={colors.textLight} />
           </TouchableOpacity>
         </Surface>
 
         {/* My Photos Section */}
-        <Surface style={styles.countryVisitsCard}>
+        <Surface style={[styles.countryVisitsCard, { backgroundColor: colors.surface }]}>
           <TouchableOpacity
             style={styles.countryVisitsRow}
             onPress={() => router.push('/photo-collection')}
             activeOpacity={0.7}
           >
             <View style={styles.countryVisitsLeft}>
-              <View style={[styles.countryVisitsIcon, { backgroundColor: theme.colors.accentLight + '20' }]}>
-                <Ionicons name="images" size={22} color={theme.colors.accent} />
+              <View style={[styles.countryVisitsIcon, { backgroundColor: colors.accent + '20' }]}>
+                <Ionicons name="images" size={22} color={colors.accent} />
               </View>
               <View>
-                <Text style={styles.countryVisitsTitle}>My Photos</Text>
-                <Text style={styles.countryVisitsSubtitle}>All your travel memories in one place</Text>
+                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>My Photos</Text>
+                <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>All your travel memories in one place</Text>
               </View>
             </View>
-            <Ionicons name="chevron-forward" size={22} color={theme.colors.textLight} />
+            <Ionicons name="chevron-forward" size={22} color={colors.textLight} />
           </TouchableOpacity>
         </Surface>
 
         {/* Detailed Statistics Section */}
-        <Surface style={styles.countryVisitsCard}>
+        <Surface style={[styles.countryVisitsCard, { backgroundColor: colors.surface }]}>
           <TouchableOpacity
             style={styles.countryVisitsRow}
             onPress={() => router.push('/statistics')}
             activeOpacity={0.7}
           >
             <View style={styles.countryVisitsLeft}>
-              <View style={[styles.countryVisitsIcon, { backgroundColor: '#1E8A8A20' }]}>
-                <Ionicons name="stats-chart" size={22} color="#1E8A8A" />
+              <View style={[styles.countryVisitsIcon, { backgroundColor: colors.accentTeal + '20' }]}>
+                <Ionicons name="stats-chart" size={22} color={colors.accentTeal} />
               </View>
               <View>
-                <Text style={styles.countryVisitsTitle}>Detailed Statistics</Text>
-                <Text style={styles.countryVisitsSubtitle}>Charts, rankings & travel insights</Text>
+                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>Detailed Statistics</Text>
+                <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>Charts, rankings & travel insights</Text>
               </View>
             </View>
-            <Ionicons name="chevron-forward" size={22} color={theme.colors.textLight} />
+            <Ionicons name="chevron-forward" size={22} color={colors.textLight} />
           </TouchableOpacity>
         </Surface>
 
