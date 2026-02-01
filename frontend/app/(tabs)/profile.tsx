@@ -297,6 +297,16 @@ export default function ProfileScreen() {
               </View>
             </View>
           )}
+          
+          {/* Share Stats Button */}
+          <TouchableOpacity
+            style={[styles.shareStatsButton, { backgroundColor: colors.primary + '15' }]}
+            onPress={() => setShowShareModal(true)}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="share-social-outline" size={18} color={colors.primary} />
+            <Text style={[styles.shareStatsText, { color: colors.primary }]}>Share My Journey</Text>
+          </TouchableOpacity>
         </Surface>
 
 
