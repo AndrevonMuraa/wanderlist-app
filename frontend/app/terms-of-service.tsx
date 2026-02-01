@@ -308,7 +308,7 @@ export default function TermsOfServiceScreen() {
 
         {/* Governing Law */}
         <Surface style={styles.card}>
-          <Section title="12. Governing Law">
+          <Section title="13. Governing Law">
             <Text style={styles.paragraph}>
               These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which WanderList operates, without regard to conflict of law provisions.
             </Text>
