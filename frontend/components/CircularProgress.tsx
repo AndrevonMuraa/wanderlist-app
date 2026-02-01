@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import theme from '../styles/theme';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface CircularProgressProps {
   percentage: number;
@@ -16,10 +17,12 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
   percentage,
   size = 120,
   strokeWidth = 10,
-  color = theme.colors.primary,
+  color,
   label,
   sublabel,
 }) => {
+  const { colors } = useTheme();
+  const progressColor = color || colors.primary;
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const progress = circumference - (percentage / 100) * circumference;
@@ -32,7 +35,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke={theme.colors.border}
+          stroke={colors.border}
           strokeWidth={strokeWidth}
           fill="none"
         />
@@ -41,7 +44,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke={color}
+          stroke={progressColor}
           strokeWidth={strokeWidth}
           fill="none"
           strokeDasharray={`${circumference} ${circumference}`}
@@ -53,9 +56,9 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
       </Svg>
       
       <View style={styles.textContainer}>
-        <Text style={styles.percentageText}>{Math.round(percentage)}%</Text>
-        {label && <Text style={styles.labelText}>{label}</Text>}
-        {sublabel && <Text style={styles.sublabelText}>{sublabel}</Text>}
+        <Text style={[styles.percentageText, { color: colors.text }]}>{Math.round(percentage)}%</Text>
+        {label && <Text style={[styles.labelText, { color: colors.textSecondary }]}>{label}</Text>}
+        {sublabel && <Text style={[styles.sublabelText, { color: colors.textLight }]}>{sublabel}</Text>}
       </View>
     </View>
   );
