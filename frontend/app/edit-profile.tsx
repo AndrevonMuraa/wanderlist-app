@@ -32,6 +32,14 @@ interface UserProfile {
   picture?: string;
   bio?: string;
   location?: string;
+  banner_image?: string;
+  featured_badges?: string[];
+}
+
+interface Achievement {
+  achievement_id: string;
+  badge_name: string;
+  badge_icon: string;
 }
 
 export default function EditProfileScreen() {
