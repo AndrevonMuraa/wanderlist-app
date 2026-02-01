@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity, ActivityIndicator, Platform, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, TouchableOpacity, ActivityIndicator, Platform, ScrollView, Dimensions } from 'react-native';
 import { Text, Surface, Chip } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,19 +7,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { BACKEND_URL } from '../../utils/config';
 import theme from '../../styles/theme';
 
-// Only import MapView on native platforms
-let MapView: any = null;
-let Marker: any = null;
-let PROVIDER_GOOGLE: any = null;
-
-if (Platform.OS !== 'web') {
-  const Maps = require('react-native-maps');
-  MapView = Maps.default;
-  Marker = Maps.Marker;
-  PROVIDER_GOOGLE = Maps.PROVIDER_GOOGLE;
-}
-
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 // Country coordinates (center points for major countries)
 const COUNTRY_COORDINATES: { [key: string]: { latitude: number; longitude: number } } = {
@@ -100,6 +88,17 @@ const COUNTRY_COORDINATES: { [key: string]: { latitude: number; longitude: numbe
   'Fiji': { latitude: -17.7134, longitude: 178.0650 },
 };
 
+// Continent emoji mapping
+const CONTINENT_ICONS: { [key: string]: string } = {
+  'Europe': '🏰',
+  'Asia': '🏯',
+  'North America': '🗽',
+  'South America': '🌴',
+  'Africa': '🦁',
+  'Oceania': '🦘',
+  'Antarctica': '🐧',
+};
+
 interface VisitedPlace {
   id: string;
   name: string;
@@ -114,82 +113,91 @@ interface VisitedPlace {
 
 export default function MapScreen() {
   const { user } = useAuth();
-  const mapRef = useRef<MapView>(null);
   const [loading, setLoading] = useState(true);
   const [visitedPlaces, setVisitedPlaces] = useState<VisitedPlace[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<VisitedPlace | null>(null);
   const [filter, setFilter] = useState<'all' | 'landmarks' | 'countries'>('all');
-  const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
     if (user) {
       fetchVisitedPlaces();
+    } else {
+      setLoading(false);
     }
   }, [user]);
 
   const fetchVisitedPlaces = async () => {
     try {
       setLoading(true);
-      const token = Platform.OS === 'web' 
-        ? localStorage.getItem('auth_token')
-        : await require('expo-secure-store').getItemAsync('auth_token');
-
-      // Fetch visited landmarks
-      const landmarksResponse = await fetch(`${BACKEND_URL}/api/visits/my`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      let token: string | null = null;
       
-      // Fetch country visits
-      const countriesResponse = await fetch(`${BACKEND_URL}/api/country-visits`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      if (Platform.OS === 'web') {
+        token = localStorage.getItem('auth_token');
+      } else {
+        const SecureStore = require('expo-secure-store');
+        token = await SecureStore.getItemAsync('auth_token');
+      }
 
       const places: VisitedPlace[] = [];
 
-      if (landmarksResponse.ok) {
-        const landmarks = await landmarksResponse.json();
-        // Fetch landmark details to get coordinates
-        for (const visit of landmarks.slice(0, 50)) { // Limit to 50 for performance
-          try {
-            const landmarkResponse = await fetch(`${BACKEND_URL}/api/landmarks/${visit.landmark_id}`);
-            if (landmarkResponse.ok) {
-              const landmark = await landmarkResponse.json();
-              if (landmark.latitude && landmark.longitude) {
+      // Fetch country visits
+      try {
+        const countriesResponse = await fetch(`${BACKEND_URL}/api/country-visits`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (countriesResponse.ok) {
+          const countries = await countriesResponse.json();
+          for (const countryVisit of countries) {
+            const coords = COUNTRY_COORDINATES[countryVisit.country_name];
+            if (coords) {
+              places.push({
+                id: countryVisit.country_visit_id,
+                name: countryVisit.country_name,
+                type: 'country',
+                latitude: coords.latitude,
+                longitude: coords.longitude,
+                visitedAt: countryVisit.visited_at,
+                continent: countryVisit.continent,
+              });
+            }
+          }
+        }
+      } catch (e) {
+        console.log('Error fetching country visits:', e);
+      }
+
+      // Fetch visited landmarks
+      try {
+        const landmarksResponse = await fetch(`${BACKEND_URL}/api/visits/my`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (landmarksResponse.ok) {
+          const visits = await landmarksResponse.json();
+          // For each visit, we'd ideally get landmark coordinates
+          // For now, we'll use country coordinates as approximation
+          for (const visit of visits.slice(0, 20)) {
+            if (visit.landmark_name && visit.country_name) {
+              const coords = COUNTRY_COORDINATES[visit.country_name];
+              if (coords) {
+                // Add slight offset to avoid overlapping with country marker
                 places.push({
                   id: visit.visit_id,
-                  name: landmark.name,
+                  name: visit.landmark_name,
                   type: 'landmark',
-                  latitude: landmark.latitude,
-                  longitude: landmark.longitude,
+                  latitude: coords.latitude + (Math.random() * 2 - 1),
+                  longitude: coords.longitude + (Math.random() * 2 - 1),
                   visitedAt: visit.visited_at,
-                  photo: visit.photo_base64,
-                  country: landmark.country_name,
-                  continent: landmark.continent,
+                  country: visit.country_name,
+                  continent: visit.continent,
                 });
               }
             }
-          } catch (e) {
-            console.log('Error fetching landmark:', e);
           }
         }
-      }
-
-      if (countriesResponse.ok) {
-        const countries = await countriesResponse.json();
-        for (const countryVisit of countries) {
-          const coords = COUNTRY_COORDINATES[countryVisit.country_name];
-          if (coords) {
-            places.push({
-              id: countryVisit.country_visit_id,
-              name: countryVisit.country_name,
-              type: 'country',
-              latitude: coords.latitude,
-              longitude: coords.longitude,
-              visitedAt: countryVisit.visited_at,
-              continent: countryVisit.continent,
-            });
-          }
-        }
+      } catch (e) {
+        console.log('Error fetching landmark visits:', e);
       }
 
       setVisitedPlaces(places);
@@ -207,13 +215,13 @@ export default function MapScreen() {
     return true;
   });
 
-  const getMarkerColor = (type: string) => {
-    return type === 'landmark' ? theme.colors.primary : theme.colors.accent;
-  };
-
-  const handleMarkerPress = (place: VisitedPlace) => {
-    setSelectedPlace(place);
-  };
+  // Group places by continent
+  const placesByContinent = filteredPlaces.reduce((acc, place) => {
+    const continent = place.continent || 'Unknown';
+    if (!acc[continent]) acc[continent] = [];
+    acc[continent].push(place);
+    return acc;
+  }, {} as { [key: string]: VisitedPlace[] });
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -222,21 +230,6 @@ export default function MapScreen() {
       month: 'short', 
       day: 'numeric' 
     });
-  };
-
-  const centerOnUser = () => {
-    if (filteredPlaces.length > 0 && mapRef.current) {
-      const latitudes = filteredPlaces.map(p => p.latitude);
-      const longitudes = filteredPlaces.map(p => p.longitude);
-      
-      mapRef.current.fitToCoordinates(
-        filteredPlaces.map(p => ({ latitude: p.latitude, longitude: p.longitude })),
-        {
-          edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-          animated: true,
-        }
-      );
-    }
   };
 
   if (!user) {
@@ -254,10 +247,15 @@ export default function MapScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>My Travel Map</Text>
-        <Text style={styles.headerSubtitle}>
-          {visitedPlaces.length} places visited
-        </Text>
+        <View style={styles.headerContent}>
+          <Ionicons name="globe" size={32} color={theme.colors.primary} />
+          <View style={styles.headerText}>
+            <Text style={styles.headerTitle}>My Travel Map</Text>
+            <Text style={styles.headerSubtitle}>
+              {visitedPlaces.length} places visited
+            </Text>
+          </View>
+        </View>
       </View>
 
       {/* Filter Chips */}
@@ -276,7 +274,7 @@ export default function MapScreen() {
           style={[styles.chip, filter === 'landmarks' && styles.chipSelected]}
           textStyle={filter === 'landmarks' ? styles.chipTextSelected : styles.chipText}
         >
-          Landmarks ({visitedPlaces.filter(p => p.type === 'landmark').length})
+          🏛️ Landmarks ({visitedPlaces.filter(p => p.type === 'landmark').length})
         </Chip>
         <Chip
           selected={filter === 'countries'}
@@ -284,105 +282,100 @@ export default function MapScreen() {
           style={[styles.chip, filter === 'countries' && styles.chipSelected]}
           textStyle={filter === 'countries' ? styles.chipTextSelected : styles.chipText}
         >
-          Countries ({visitedPlaces.filter(p => p.type === 'country').length})
+          🌍 Countries ({visitedPlaces.filter(p => p.type === 'country').length})
         </Chip>
       </View>
 
-      {/* Map */}
-      <View style={styles.mapContainer}>
-        {loading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={theme.colors.primary} />
-            <Text style={styles.loadingText}>Loading your travels...</Text>
-          </View>
-        ) : (
-          <>
-            <MapView
-              ref={mapRef}
-              style={styles.map}
-              provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
-              initialRegion={{
-                latitude: 20,
-                longitude: 0,
-                latitudeDelta: 100,
-                longitudeDelta: 100,
-              }}
-              onMapReady={() => {
-                setMapReady(true);
-                if (filteredPlaces.length > 0) {
-                  setTimeout(centerOnUser, 500);
-                }
-              }}
-            >
-              {mapReady && filteredPlaces.map((place) => (
-                <Marker
-                  key={place.id}
-                  coordinate={{
-                    latitude: place.latitude,
-                    longitude: place.longitude,
-                  }}
-                  onPress={() => handleMarkerPress(place)}
-                  pinColor={getMarkerColor(place.type)}
-                >
-                </Marker>
-              ))}
-            </MapView>
-
-            {/* Floating Action Buttons */}
-            <View style={styles.fabContainer}>
-              <TouchableOpacity 
-                style={styles.fab} 
-                onPress={centerOnUser}
-              >
-                <Ionicons name="locate" size={24} color={theme.colors.primary} />
-              </TouchableOpacity>
+      {/* Content */}
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <Text style={styles.loadingText}>Loading your travels...</Text>
+        </View>
+      ) : filteredPlaces.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Surface style={styles.emptyCard}>
+            <Ionicons name="airplane-outline" size={64} color={theme.colors.primary} />
+            <Text style={styles.emptyTitle}>No places yet</Text>
+            <Text style={styles.emptySubtitle}>
+              Start exploring and your visited places will appear here on your travel map!
+            </Text>
+          </Surface>
+        </View>
+      ) : (
+        <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+          {/* World Map Visual */}
+          <Surface style={styles.mapCard}>
+            <View style={styles.worldMapContainer}>
+              <Text style={styles.worldMapEmoji}>🌍</Text>
+              <View style={styles.mapStatsRow}>
+                {Object.entries(placesByContinent).map(([continent, places]) => (
+                  <View key={continent} style={styles.continentBadge}>
+                    <Text style={styles.continentEmoji}>
+                      {CONTINENT_ICONS[continent] || '🌐'}
+                    </Text>
+                    <Text style={styles.continentCount}>{places.length}</Text>
+                  </View>
+                ))}
+              </View>
             </View>
+          </Surface>
 
-            {/* Selected Place Card */}
-            {selectedPlace && (
-              <Surface style={styles.placeCard}>
-                <TouchableOpacity 
-                  style={styles.closeButton}
-                  onPress={() => setSelectedPlace(null)}
+          {/* Places by Continent */}
+          {Object.entries(placesByContinent).sort().map(([continent, places]) => (
+            <View key={continent} style={styles.continentSection}>
+              <View style={styles.continentHeader}>
+                <Text style={styles.continentIcon}>{CONTINENT_ICONS[continent] || '🌐'}</Text>
+                <Text style={styles.continentName}>{continent}</Text>
+                <Text style={styles.continentPlaceCount}>{places.length} places</Text>
+              </View>
+              
+              {places.map((place) => (
+                <TouchableOpacity
+                  key={place.id}
+                  style={styles.placeItem}
+                  onPress={() => setSelectedPlace(selectedPlace?.id === place.id ? null : place)}
                 >
-                  <Ionicons name="close" size={20} color={theme.colors.textSecondary} />
-                </TouchableOpacity>
-                <View style={styles.placeCardContent}>
-                  <View style={styles.placeIcon}>
+                  <View style={[
+                    styles.placeIcon,
+                    { backgroundColor: place.type === 'landmark' ? theme.colors.primary + '20' : theme.colors.accent + '20' }
+                  ]}>
                     <Ionicons 
-                      name={selectedPlace.type === 'landmark' ? 'location' : 'flag'} 
-                      size={24} 
-                      color={getMarkerColor(selectedPlace.type)} 
+                      name={place.type === 'landmark' ? 'location' : 'flag'} 
+                      size={20} 
+                      color={place.type === 'landmark' ? theme.colors.primary : theme.colors.accent} 
                     />
                   </View>
                   <View style={styles.placeInfo}>
-                    <Text style={styles.placeName}>{selectedPlace.name}</Text>
-                    {selectedPlace.country && (
-                      <Text style={styles.placeCountry}>{selectedPlace.country}</Text>
+                    <Text style={styles.placeName}>{place.name}</Text>
+                    {place.country && place.type === 'landmark' && (
+                      <Text style={styles.placeCountry}>{place.country}</Text>
                     )}
                     <Text style={styles.placeDate}>
-                      Visited {formatDate(selectedPlace.visitedAt)}
+                      Visited {formatDate(place.visitedAt)}
                     </Text>
                   </View>
-                </View>
-              </Surface>
-            )}
+                  <Ionicons 
+                    name={selectedPlace?.id === place.id ? 'chevron-up' : 'chevron-forward'} 
+                    size={20} 
+                    color={theme.colors.textLight} 
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+          ))}
 
-            {/* Empty State */}
-            {filteredPlaces.length === 0 && !loading && (
-              <View style={styles.emptyOverlay}>
-                <Surface style={styles.emptyCard}>
-                  <Ionicons name="airplane-outline" size={48} color={theme.colors.primary} />
-                  <Text style={styles.emptyTitle}>No places yet</Text>
-                  <Text style={styles.emptySubtitle}>
-                    Start exploring and your visited places will appear here!
-                  </Text>
-                </Surface>
-              </View>
-            )}
-          </>
-        )}
-      </View>
+          {/* Note about native map */}
+          {Platform.OS === 'web' && (
+            <View style={styles.nativeMapNote}>
+              <Ionicons name="phone-portrait-outline" size={20} color={theme.colors.textSecondary} />
+              <Text style={styles.nativeMapNoteText}>
+                Open in the mobile app for an interactive map experience!
+              </Text>
+            </View>
+          )}
+        </ScrollView>
+      )}
 
       {/* Stats Bar */}
       <View style={styles.statsBar}>
@@ -402,7 +395,7 @@ export default function MapScreen() {
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
           <Text style={styles.statValue}>
-            {new Set(visitedPlaces.map(p => p.continent).filter(Boolean)).size}
+            {Object.keys(placesByContinent).length}
           </Text>
           <Text style={styles.statLabel}>Continents</Text>
         </View>
@@ -423,8 +416,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border,
   },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerText: {
+    marginLeft: theme.spacing.md,
+  },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
     color: theme.colors.text,
   },
@@ -439,6 +439,7 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.sm,
     backgroundColor: theme.colors.surface,
     gap: theme.spacing.sm,
+    flexWrap: 'wrap',
   },
   chip: {
     backgroundColor: theme.colors.background,
@@ -456,13 +457,6 @@ const styles = StyleSheet.create({
   chipTextSelected: {
     color: '#fff',
     fontSize: 12,
-  },
-  mapContainer: {
-    flex: 1,
-    position: 'relative',
-  },
-  map: {
-    flex: 1,
   },
   loadingContainer: {
     flex: 1,
@@ -487,73 +481,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
-  fabContainer: {
-    position: 'absolute',
-    right: theme.spacing.md,
-    bottom: theme.spacing.md,
-  },
-  fab: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: theme.colors.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...theme.shadows.md,
-  },
-  placeCard: {
-    position: 'absolute',
-    bottom: theme.spacing.lg,
-    left: theme.spacing.md,
-    right: theme.spacing.md + 56,
-    borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.md,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.lg,
-  },
-  closeButton: {
-    position: 'absolute',
-    top: theme.spacing.sm,
-    right: theme.spacing.sm,
-    padding: theme.spacing.xs,
-    zIndex: 1,
-  },
-  placeCardContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  placeIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: theme.colors.background,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: theme.spacing.md,
-  },
-  placeInfo: {
+  emptyContainer: {
     flex: 1,
-  },
-  placeName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: theme.colors.text,
-  },
-  placeCountry: {
-    fontSize: 14,
-    color: theme.colors.textSecondary,
-    marginTop: 2,
-  },
-  placeDate: {
-    fontSize: 12,
-    color: theme.colors.textLight,
-    marginTop: 4,
-  },
-  emptyOverlay: {
-    ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    padding: theme.spacing.xl,
   },
   emptyCard: {
     padding: theme.spacing.xl,
@@ -561,10 +493,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: theme.colors.surface,
     ...theme.shadows.lg,
-    maxWidth: 280,
+    maxWidth: 300,
   },
   emptyTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
     color: theme.colors.text,
     marginTop: theme.spacing.md,
@@ -574,6 +506,123 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     textAlign: 'center',
     marginTop: theme.spacing.sm,
+    lineHeight: 20,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    padding: theme.spacing.md,
+    paddingBottom: theme.spacing.xl,
+  },
+  mapCard: {
+    borderRadius: theme.borderRadius.xl,
+    padding: theme.spacing.lg,
+    backgroundColor: theme.colors.surface,
+    marginBottom: theme.spacing.lg,
+    ...theme.shadows.md,
+  },
+  worldMapContainer: {
+    alignItems: 'center',
+  },
+  worldMapEmoji: {
+    fontSize: 80,
+    marginBottom: theme.spacing.md,
+  },
+  mapStatsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: theme.spacing.sm,
+  },
+  continentBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.background,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
+    borderRadius: theme.borderRadius.md,
+  },
+  continentEmoji: {
+    fontSize: 16,
+    marginRight: theme.spacing.xs,
+  },
+  continentCount: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+  continentSection: {
+    marginBottom: theme.spacing.lg,
+  },
+  continentHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.xs,
+  },
+  continentIcon: {
+    fontSize: 24,
+    marginRight: theme.spacing.sm,
+  },
+  continentName: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: theme.colors.text,
+    flex: 1,
+  },
+  continentPlaceCount: {
+    fontSize: 14,
+    color: theme.colors.textSecondary,
+  },
+  placeItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
+    ...theme.shadows.sm,
+  },
+  placeIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: theme.spacing.md,
+  },
+  placeInfo: {
+    flex: 1,
+  },
+  placeName: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+  placeCountry: {
+    fontSize: 13,
+    color: theme.colors.textSecondary,
+    marginTop: 1,
+  },
+  placeDate: {
+    fontSize: 12,
+    color: theme.colors.textLight,
+    marginTop: 2,
+  },
+  nativeMapNote: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    marginTop: theme.spacing.md,
+  },
+  nativeMapNoteText: {
+    marginLeft: theme.spacing.sm,
+    fontSize: 13,
+    color: theme.colors.textSecondary,
   },
   statsBar: {
     flexDirection: 'row',
