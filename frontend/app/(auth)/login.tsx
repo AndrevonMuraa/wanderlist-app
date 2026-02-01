@@ -261,6 +261,11 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.md,
     paddingVertical: theme.spacing.xs,
   },
+  appleButton: {
+    width: '100%',
+    height: 48,
+    marginTop: theme.spacing.md,
+  },
   quickLoginButton: {
     flexDirection: 'row',
     alignItems: 'center',
