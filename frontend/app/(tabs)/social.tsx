@@ -832,6 +832,18 @@ export default function SocialHubScreen() {
 
         <View style={{ height: theme.spacing.xl }} />
       </ScrollView>
+
+      {/* Report Modal */}
+      <ReportModal
+        visible={reportModalVisible}
+        onClose={() => {
+          setReportModalVisible(false);
+          setReportTarget(null);
+        }}
+        reportType={reportTarget?.type || 'activity'}
+        targetId={reportTarget?.id || ''}
+        targetName={reportTarget?.name}
+      />
     </View>
   );
 }
