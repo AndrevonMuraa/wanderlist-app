@@ -109,10 +109,10 @@ export default function SettingsScreen() {
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header with gradient - matching standard app header style */}
       <LinearGradient
-        colors={gradients.oceanToSand}
+        colors={gradientColors}
         start={gradients.horizontal.start}
         end={gradients.horizontal.end}
         style={[styles.header, { paddingTop: topPadding }]}
@@ -121,16 +121,16 @@ export default function SettingsScreen() {
         <View style={styles.headerRow}>
           <View style={styles.headerLeft}>
             <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={24} color="#fff" />
+              <Ionicons name="arrow-back" size={24} color={isDark ? colors.text : '#fff'} />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>Settings</Text>
+            <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>Settings</Text>
           </View>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <HeaderBranding size={18} textColor="#2A2A2A" />
+            <HeaderBranding size={18} textColor={isDark ? colors.text : "#2A2A2A"} />
           </TouchableOpacity>
         </View>
       </LinearGradient>
