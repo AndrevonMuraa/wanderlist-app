@@ -181,7 +181,7 @@ export default function LandmarkSearchScreen() {
                       </View>
                       {landmark.category === 'premium' && (
                         <View style={styles.premiumBadge}>
-                          <Ionicons name="diamond" size={10} color="#764ba2" />
+                          <Ionicons name="diamond" size={10} color="#1E8A8A" />
                           <Text style={styles.premiumText}>PREMIUM</Text>
                         </View>
                       )}
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
   },
   premiumText: {
     ...theme.typography.caption,
-    color: '#764ba2',
+    color: '#1E8A8A',
     fontWeight: '700',
     fontSize: 10,
   },

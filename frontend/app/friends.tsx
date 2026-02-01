@@ -203,7 +203,7 @@ export default function FriendsScreen() {
             <Text style={styles.friendName}>{item.name}</Text>
             {item.is_premium && (
               <View style={styles.premiumBadge}>
-                <Ionicons name="diamond" size={10} color="#764ba2" />
+                <Ionicons name="diamond" size={10} color="#1E8A8A" />
               </View>
             )}
           </View>
@@ -301,12 +301,12 @@ export default function FriendsScreen() {
             onPress={() => setShowProLock(true)}
           >
             <View style={styles.upgradeHintIcon}>
-              <Ionicons name="diamond" size={14} color="#764ba2" />
+              <Ionicons name="diamond" size={14} color="#1E8A8A" />
             </View>
             <Text style={styles.upgradeHintText}>
               Upgrade to Pro for unlimited friends
             </Text>
-            <Ionicons name="chevron-forward" size={16} color="#764ba2" />
+            <Ionicons name="chevron-forward" size={16} color="#1E8A8A" />
           </TouchableOpacity>
         )}
       </View>
@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 13,
     fontWeight: '600',
-    color: '#764ba2',
+    color: '#1E8A8A',
   },
   section: {
     marginBottom: 16,

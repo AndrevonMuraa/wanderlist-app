@@ -51,7 +51,7 @@ export default function AutoLoginScreen() {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="#667eea" />
+      <ActivityIndicator size="large" color="#4DB8D8" />
       <Text style={styles.text}>{status}</Text>
     </View>
   );
