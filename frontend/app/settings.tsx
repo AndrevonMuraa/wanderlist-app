@@ -141,14 +141,14 @@ export default function SettingsScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Privacy Settings */}
-        <View style={styles.section}>
+        <View style={[styles.section, { backgroundColor: colors.surface }]}>
           <View style={styles.sectionHeader}>
-            <View style={[styles.sectionIconCircle, { backgroundColor: 'rgba(77, 184, 216, 0.1)' }]}>
-              <Ionicons name="shield-checkmark" size={22} color={theme.colors.primary} />
+            <View style={[styles.sectionIconCircle, { backgroundColor: colors.primary + '15' }]}>
+              <Ionicons name="shield-checkmark" size={22} color={colors.primary} />
             </View>
             <View style={styles.sectionHeaderText}>
-              <Text style={styles.sectionTitle}>Privacy</Text>
-              <Text style={styles.sectionSubtitle}>Who can see your visits and activity</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Privacy</Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>Who can see your visits and activity</Text>
             </View>
           </View>
           
@@ -160,7 +160,8 @@ export default function SettingsScreen() {
                   key={option.value}
                   style={[
                     styles.privacyOption,
-                    isSelected && styles.privacyOptionSelected,
+                    { backgroundColor: colors.background },
+                    isSelected && [styles.privacyOptionSelected, { backgroundColor: colors.surface }],
                     isSelected && { borderColor: option.color }
                   ]}
                   onPress={() => updatePrivacy(option.value)}
@@ -168,6 +169,7 @@ export default function SettingsScreen() {
                 >
                   <View style={[
                     styles.privacyIconCircle,
+                    { backgroundColor: colors.background },
                     isSelected && { backgroundColor: option.color }
                   ]}>
                     <Ionicons
@@ -179,11 +181,12 @@ export default function SettingsScreen() {
                   <View style={styles.privacyContent}>
                     <Text style={[
                       styles.privacyLabel,
+                      { color: colors.text },
                       isSelected && { color: option.color, fontWeight: '700' }
                     ]}>
                       {option.label}
                     </Text>
-                    <Text style={styles.privacyDescription}>{option.description}</Text>
+                    <Text style={[styles.privacyDescription, { color: colors.textSecondary }]}>{option.description}</Text>
                   </View>
                   {isSelected && (
                     <View style={[styles.checkCircle, { backgroundColor: option.color }]}>
@@ -197,18 +200,18 @@ export default function SettingsScreen() {
         </View>
 
         {/* Notification Settings */}
-        <View style={styles.section}>
+        <View style={[styles.section, { backgroundColor: colors.surface }]}>
           <View style={styles.sectionHeader}>
-            <View style={[styles.sectionIconCircle, { backgroundColor: 'rgba(201, 169, 97, 0.1)' }]}>
-              <Ionicons name="notifications" size={22} color={theme.colors.accent} />
+            <View style={[styles.sectionIconCircle, { backgroundColor: colors.accent + '15' }]}>
+              <Ionicons name="notifications" size={22} color={colors.accent} />
             </View>
             <View style={styles.sectionHeaderText}>
-              <Text style={styles.sectionTitle}>Notifications</Text>
-              <Text style={styles.sectionSubtitle}>Stay updated on your journey</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Notifications</Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>Stay updated on your journey</Text>
             </View>
           </View>
           
-          <View style={styles.settingsList}>
+          <View style={[styles.settingsList, { backgroundColor: colors.background }]}>
             <TouchableOpacity 
               style={styles.settingItem}
               onPress={() => router.push('/notification-settings')}
