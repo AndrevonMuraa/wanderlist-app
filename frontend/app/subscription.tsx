@@ -17,6 +17,8 @@ import * as SecureStore from 'expo-secure-store';
 import { useTranslation } from 'react-i18next';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
+import { usePurchases } from '../contexts/PurchaseContext';
+import { Package } from '../utils/purchases';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 const getToken = async (): Promise<string | null> => {
