@@ -288,26 +288,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithGoogle = async () => {
     try {
-      // For web, use current window location
-      // For mobile, use deep linking URL
-      const redirectUrl = Platform.OS === 'web' 
-        ? window.location.origin 
-        : Linking.createURL('/');
-      
-      console.log('Google OAuth Redirect URL:', redirectUrl);
-      
-      const authUrl = `${AUTH_URL}/?redirect=${encodeURIComponent(redirectUrl)}`;
-
-      if (Platform.OS === 'web') {
-        // For web, redirect directly
-        window.location.href = authUrl;
+      if (promptGoogleAsync) {
+        await promptGoogleAsync();
       } else {
-        // For mobile, use WebBrowser
-        const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUrl);
-        
-        if (result.type === 'success' && result.url) {
-          await handleUrl(result.url);
-        }
+        throw new Error('Google Sign-In is not ready');
       }
     } catch (error) {
       console.error('Error with Google login:', error);
