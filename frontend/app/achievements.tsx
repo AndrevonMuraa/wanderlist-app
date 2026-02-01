@@ -187,19 +187,19 @@ export default function AchievementsScreen() {
   const displayedBadges = selectedTab === 'earned' ? data.earned_badges : data.locked_badges;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <UniversalHeader title="Achievements" />
 
       <ScrollView
         style={styles.content}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
       >
         {/* Stats Card */}
         <Surface style={styles.statsCard} elevation={2}>
           <LinearGradient
-            colors={['#4DB8D8', '#1E8A8A']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+            colors={gradientColors}
+            start={gradients.horizontal.start}
+            end={gradients.horizontal.end}
             style={styles.statsGradient}
           >
             <View style={styles.statsContent}>
@@ -232,21 +232,33 @@ export default function AchievementsScreen() {
         </Surface>
 
         {/* Tabs */}
-        <View style={styles.tabsContainer}>
+        <View style={[styles.tabsContainer, { backgroundColor: colors.surface }]}>
           <TouchableOpacity
-            style={[styles.tab, selectedTab === 'earned' && styles.tabActive]}
+            style={[styles.tab, selectedTab === 'earned' && [styles.tabActive, { borderBottomColor: colors.primary }]]}
             onPress={() => setSelectedTab('earned')}
           >
-            <Text style={[styles.tabText, selectedTab === 'earned' && styles.tabTextActive]}>
+            <Ionicons 
+              name="trophy" 
+              size={18} 
+              color={selectedTab === 'earned' ? colors.primary : colors.textSecondary} 
+              style={{ marginRight: 6 }}
+            />
+            <Text style={[styles.tabText, { color: selectedTab === 'earned' ? colors.primary : colors.textSecondary }]}>
               Earned ({data.stats.earned_count})
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.tab, selectedTab === 'locked' && styles.tabActive]}
+            style={[styles.tab, selectedTab === 'locked' && [styles.tabActive, { borderBottomColor: colors.primary }]]}
             onPress={() => setSelectedTab('locked')}
           >
-            <Text style={[styles.tabText, selectedTab === 'locked' && styles.tabTextActive]}>
-              Locked ({data.stats.locked_count})
+            <Ionicons 
+              name="lock-closed" 
+              size={18} 
+              color={selectedTab === 'locked' ? colors.primary : colors.textSecondary} 
+              style={{ marginRight: 6 }}
+            />
+            <Text style={[styles.tabText, { color: selectedTab === 'locked' ? colors.primary : colors.textSecondary }]}>
+              In Progress ({data.stats.locked_count})
             </Text>
           </TouchableOpacity>
         </View>
@@ -254,18 +266,18 @@ export default function AchievementsScreen() {
         {/* Badges Grid */}
         <View style={styles.badgesSection}>
           {displayedBadges.length === 0 ? (
-            <Surface style={styles.emptyCard} elevation={1}>
+            <Surface style={[styles.emptyCard, { backgroundColor: colors.surface }]} elevation={1}>
               <Ionicons
                 name={selectedTab === 'earned' ? 'trophy-outline' : 'lock-closed-outline'}
                 size={48}
-                color="#ccc"
+                color={colors.textSecondary}
               />
-              <Text style={styles.emptyText}>
+              <Text style={[styles.emptyText, { color: colors.text }]}>
                 {selectedTab === 'earned' 
                   ? 'No achievements earned yet'
                   : 'All achievements unlocked!'}
               </Text>
-              <Text style={styles.emptySubtext}>
+              <Text style={[styles.emptySubtext, { color: colors.textSecondary }]}>
                 {selectedTab === 'earned'
                   ? 'Start your journey to unlock amazing badges!'
                   : 'Congratulations on completing everything!'}
