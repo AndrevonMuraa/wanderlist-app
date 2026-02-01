@@ -54,6 +54,7 @@ const PRIVACY_OPTIONS: PrivacyOption[] = [
 export default function SettingsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { colors, shadows, gradientColors, isDark } = useTheme();
   const [defaultPrivacy, setDefaultPrivacy] = useState<'public' | 'friends' | 'private'>('public');
   const [pushNotifications, setPushNotifications] = useState(true);
 
