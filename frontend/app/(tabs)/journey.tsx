@@ -539,7 +539,7 @@ export default function JourneyScreen() {
               <Text style={styles.sectionTitle}>Custom Visits</Text>
               {!canCreateCustomVisits && (
                 <View style={styles.proBadge}>
-                  <Ionicons name="diamond" size={12} color="#764ba2" />
+                  <Ionicons name="diamond" size={12} color="#1E8A8A" />
                   <Text style={styles.proBadgeText}>PRO</Text>
                 </View>
               )}
@@ -558,7 +558,7 @@ export default function JourneyScreen() {
               <Ionicons 
                 name={canCreateCustomVisits ? "add-circle" : "lock-closed"} 
                 size={20} 
-                color={canCreateCustomVisits ? theme.colors.primary : "#764ba2"} 
+                color={canCreateCustomVisits ? theme.colors.primary : "#1E8A8A"} 
               />
               <Text style={[styles.addCustomButtonText, !canCreateCustomVisits && styles.addCustomButtonTextLocked]}>
                 {canCreateCustomVisits ? "Add Visit" : "Unlock"}
@@ -579,7 +579,7 @@ export default function JourneyScreen() {
               activeOpacity={0.8}
             >
               <View style={styles.lockIconContainer}>
-                <Ionicons name="lock-closed" size={36} color="#764ba2" />
+                <Ionicons name="lock-closed" size={36} color="#1E8A8A" />
               </View>
               <Text style={styles.emptyCustomTextLocked}>Pro Feature</Text>
               <Text style={styles.emptyCustomSubtextLocked}>Tap to learn more about Custom Visits</Text>
@@ -1227,13 +1227,13 @@ const styles = StyleSheet.create({
   proBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#764ba2',
+    color: '#1E8A8A',
   },
   addCustomButtonLocked: {
     backgroundColor: 'rgba(118, 75, 162, 0.1)',
   },
   addCustomButtonTextLocked: {
-    color: '#764ba2',
+    color: '#1E8A8A',
   },
   emptyCustomVisitsLocked: {
     alignItems: 'center',
@@ -1256,7 +1256,7 @@ const styles = StyleSheet.create({
   emptyCustomTextLocked: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#764ba2',
+    color: '#1E8A8A',
     marginTop: theme.spacing.xs,
   },
   emptyCustomSubtextLocked: {
