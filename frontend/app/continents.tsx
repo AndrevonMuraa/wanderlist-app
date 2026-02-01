@@ -238,7 +238,7 @@ export default function ContinentsScreen() {
                   
                   {/* Bottom Section: Stats + Arrow */}
                   <View style={styles.cardBottomSection}>
-                    <View style={[styles.statsOverlay, { backgroundColor: `${continent.accentColor}40` }]}>
+                    <View style={styles.statsOverlay}>
                       <Text style={styles.statsText}>
                         {continent.countries} Countries  |  {continent.landmarks} Landmarks
                       </Text>
