@@ -50,6 +50,7 @@ interface SubscriptionStatus {
 export default function SubscriptionScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [upgrading, setUpgrading] = useState(false);
   const [status, setStatus] = useState<SubscriptionStatus | null>(null);
