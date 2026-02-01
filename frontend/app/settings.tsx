@@ -306,6 +306,29 @@ export default function SettingsScreen() {
               <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
             
+            {/* Admin Panel - Only visible to admins/moderators */}
+            {isAdmin && (
+              <>
+                <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
+                <TouchableOpacity 
+                  style={styles.accountItem}
+                  onPress={() => router.push('/admin')}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.settingItemLeft}>
+                    <View style={[styles.settingIcon, { backgroundColor: 'rgba(139, 92, 246, 0.15)' }]}>
+                      <Ionicons name="shield-checkmark" size={18} color="#8b5cf6" />
+                    </View>
+                    <Text style={[styles.accountLabel, { color: colors.text }]}>Admin Panel</Text>
+                  </View>
+                  <View style={[styles.adminBadge, { backgroundColor: '#8b5cf6' }]}>
+                    <Text style={styles.adminBadgeText}>{user?.role?.toUpperCase()}</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
+                </TouchableOpacity>
+              </>
+            )}
+            
             <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
             
             <TouchableOpacity 
