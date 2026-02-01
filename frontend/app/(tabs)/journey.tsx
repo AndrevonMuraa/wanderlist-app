@@ -238,7 +238,7 @@ export default function JourneyScreen() {
       >
         {/* Single Row: Title Left, Branding Right */}
         <View style={styles.headerRow}>
-          <Text style={[styles.greeting, { color: isDark ? colors.text : '#fff' }]}>My Journey</Text>
+          <Text style={[styles.greeting, { color: isDark ? colors.text : '#fff' }]}>{t('journey.title')}</Text>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
