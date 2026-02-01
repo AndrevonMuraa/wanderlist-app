@@ -2033,6 +2033,164 @@ async def make_user_admin(user_id: str, admin_user: User = Depends(get_super_adm
     
     return {"message": f"User {user_id} promoted to admin"}
 
+# ============= ADMIN PUSH NOTIFICATIONS =============
+
+class AdminNotificationRequest(BaseModel):
+    title: str
+    body: str
+    target: str = "all"  # "all", "pro", "free", "segment"
+    segment_user_ids: Optional[List[str]] = None
+
+@api_router.post("/admin/notifications/send")
+async def send_admin_notification(
+    notification: AdminNotificationRequest,
+    admin_user: User = Depends(get_admin_user)
+):
+    """Send push notification to users (admin only)"""
+    
+    # Build query based on target
+    query = {}
+    if notification.target == "pro":
+        query["subscription_tier"] = "pro"
+    elif notification.target == "free":
+        query["subscription_tier"] = "free"
+    elif notification.target == "segment" and notification.segment_user_ids:
+        query["user_id"] = {"$in": notification.segment_user_ids}
+    # "all" = no query filter
+    
+    # Get all users matching the query
+    users = await db.users.find(query, {"user_id": 1}).to_list(10000)
+    user_ids = [u["user_id"] for u in users]
+    
+    # Get push tokens for these users
+    tokens = await db.push_tokens.find(
+        {"user_id": {"$in": user_ids}},
+        {"user_id": 1, "push_token": 1}
+    ).to_list(10000)
+    
+    # Send notifications
+    sent_count = 0
+    failed_count = 0
+    
+    for token_doc in tokens:
+        push_token = token_doc.get("push_token")
+        if not push_token:
+            continue
+            
+        message = {
+            "to": push_token,
+            "sound": "default",
+            "title": notification.title,
+            "body": notification.body,
+            "data": {"type": "admin_broadcast"},
+        }
+        
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    "https://exp.host/--/api/v2/push/send",
+                    json=message,
+                    headers={"Content-Type": "application/json"}
+                )
+                if response.status_code == 200:
+                    sent_count += 1
+                else:
+                    failed_count += 1
+        except Exception as e:
+            failed_count += 1
+            logging.error(f"Failed to send notification: {e}")
+    
+    # Store notification in history
+    notification_record = {
+        "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
+        "title": notification.title,
+        "body": notification.body,
+        "target": notification.target,
+        "segment_user_ids": notification.segment_user_ids,
+        "sent_by": admin_user.user_id,
+        "sent_by_name": admin_user.name,
+        "target_count": len(user_ids),
+        "sent_count": sent_count,
+        "failed_count": failed_count,
+        "created_at": datetime.now(timezone.utc)
+    }
+    await db.admin_notifications.insert_one(notification_record)
+    
+    # Log admin action
+    await db.admin_logs.insert_one({
+        "log_id": f"log_{uuid.uuid4().hex[:12]}",
+        "admin_id": admin_user.user_id,
+        "admin_name": admin_user.name,
+        "action": "send_notification",
+        "details": {
+            "title": notification.title,
+            "target": notification.target,
+            "sent_count": sent_count
+        },
+        "created_at": datetime.now(timezone.utc)
+    })
+    
+    return {
+        "message": "Notification sent successfully",
+        "target_count": len(user_ids),
+        "sent_count": sent_count,
+        "failed_count": failed_count,
+        "tokens_found": len(tokens)
+    }
+
+@api_router.get("/admin/notifications")
+async def get_admin_notifications(
+    page: int = 1,
+    limit: int = 20,
+    admin_user: User = Depends(get_admin_user)
+):
+    """Get notification history (admin only)"""
+    
+    total = await db.admin_notifications.count_documents({})
+    
+    skip = (page - 1) * limit
+    notifications = await db.admin_notifications.find(
+        {}, {"_id": 0}
+    ).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    
+    return {
+        "notifications": notifications,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": (total + limit - 1) // limit
+    }
+
+@api_router.get("/admin/notifications/stats")
+async def get_notification_stats(
+    admin_user: User = Depends(get_admin_user)
+):
+    """Get notification statistics (admin only)"""
+    
+    # Total notifications sent
+    total_sent = await db.admin_notifications.count_documents({})
+    
+    # Sent in last 7 days
+    week_ago = datetime.now(timezone.utc) - timedelta(days=7)
+    sent_this_week = await db.admin_notifications.count_documents({"created_at": {"$gte": week_ago}})
+    
+    # Users with push tokens
+    total_tokens = await db.push_tokens.count_documents({})
+    
+    # Total successful deliveries
+    pipeline = [
+        {"$group": {"_id": None, "total_sent": {"$sum": "$sent_count"}}}
+    ]
+    result = await db.admin_notifications.aggregate(pipeline).to_list(1)
+    total_delivered = result[0]["total_sent"] if result else 0
+    
+    return {
+        "total_notifications": total_sent,
+        "sent_this_week": sent_this_week,
+        "users_with_tokens": total_tokens,
+        "total_delivered": total_delivered
+    }
+
 # ============= LEADERBOARD ENDPOINTS =============
 
 @api_router.get("/leaderboard")
