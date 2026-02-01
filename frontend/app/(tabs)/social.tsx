@@ -78,6 +78,7 @@ interface LeaderboardEntry {
 export default function SocialHubScreen() {
   const router = useRouter();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [refreshing, setRefreshing] = useState(false);
   
   // Data states
