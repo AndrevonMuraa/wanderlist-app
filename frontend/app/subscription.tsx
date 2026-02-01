@@ -161,17 +161,6 @@ export default function SubscriptionScreen() {
       setUpgrading(false);
     }
   };
-        );
-      } else {
-        const error = await response.json();
-        Alert.alert('Error', error.detail || 'Failed to upgrade');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to process upgrade');
-    } finally {
-      setUpgrading(false);
-    }
-  };
 
   const FeatureRow = ({ icon, text, included, highlight }: { icon: string; text: string; included: boolean; highlight?: boolean }) => (
     <View style={[styles.featureRow, highlight && styles.featureRowHighlight]}>
