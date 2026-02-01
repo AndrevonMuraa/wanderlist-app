@@ -103,6 +103,7 @@ export default function ContinentsScreen() {
   const router = useRouter();
   const { user } = useAuth();
   const { colors, gradientColors, isDark } = useTheme();
+  const { t } = useTranslation();
   const [continents, setContinents] = useState<Continent[]>(CONTINENTS);
   const [loading, setLoading] = useState(true);
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
