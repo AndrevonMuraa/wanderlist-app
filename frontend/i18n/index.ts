@@ -61,13 +61,10 @@ export const setLanguage = async (language: string) => {
   }
 };
 
-// Available languages
+// Available languages - English with both UK and US flags for equality
 export const languages = [
-  { code: 'en', name: 'English', flag: '🇬🇧' },
+  { code: 'en', name: 'English', flag: '🇬🇧🇺🇸' },
   { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'no', name: 'Norsk', flag: '🇳🇴' },
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷' },
 ];
 
 export default i18n;
