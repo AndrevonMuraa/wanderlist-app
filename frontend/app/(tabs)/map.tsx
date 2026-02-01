@@ -248,18 +248,24 @@ export default function MapScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <Ionicons name="globe" size={32} color={theme.colors.primary} />
-          <View style={styles.headerText}>
-            <Text style={styles.headerTitle}>My Travel Map</Text>
-            <Text style={styles.headerSubtitle}>
-              {visitedPlaces.length} places visited
-            </Text>
-          </View>
+      {/* Header with Gradient */}
+      <LinearGradient
+        colors={gradients.oceanToSand}
+        start={gradients.horizontal.start}
+        end={gradients.horizontal.end}
+        style={styles.header}
+      >
+        <TouchableOpacity onPress={() => router.push('/(tabs)/journey')} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+        <View style={styles.headerCenter}>
+          <Text style={styles.headerTitle}>My Travel Map</Text>
+          <Text style={styles.headerSubtitle}>
+            {visitedPlaces.length} places visited
+          </Text>
         </View>
-      </View>
+        <View style={{ width: 40 }} />
+      </LinearGradient>
 
       {/* Filter Chips */}
       <View style={styles.filterContainer}>
