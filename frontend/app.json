@@ -18,7 +18,7 @@
       }
     },
     "android": {
-      "package": "com.wanderlist.app",
+      "package": "com.wandermark.app",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
