@@ -58,8 +58,12 @@ export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const { colors, shadows, gradientColors, isDark } = useTheme();
   const { t } = useTranslation();
+  const { user } = useAuth();
   const [defaultPrivacy, setDefaultPrivacy] = useState<'public' | 'friends' | 'private'>('public');
   const [pushNotifications, setPushNotifications] = useState(true);
+  
+  // Check if user is admin or moderator
+  const isAdmin = user?.role === 'admin' || user?.role === 'moderator';
   
   // Dynamic privacy options with translations
   const privacyOptions: PrivacyOption[] = [
