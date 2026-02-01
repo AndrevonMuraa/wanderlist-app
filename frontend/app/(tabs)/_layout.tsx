@@ -1,10 +1,12 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../contexts/ThemeContext';
 
 export default function TabsLayout() {
   const { colors, shadows } = useTheme();
+  const { t } = useTranslation();
   
   return (
     <Tabs
@@ -35,7 +37,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
+          title: t('tabs.explore'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="compass-outline" size={size} color={color} />
           ),
@@ -44,7 +46,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="journey"
         options={{
-          title: 'My Journey',
+          title: t('tabs.journey'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="map-outline" size={size} color={color} />
           ),
@@ -53,7 +55,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="social"
         options={{
-          title: 'Social',
+          title: t('tabs.social'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="people-outline" size={size} color={color} />
           ),
@@ -62,7 +64,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
+          title: t('tabs.profile'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),
