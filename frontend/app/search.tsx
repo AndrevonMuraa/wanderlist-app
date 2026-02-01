@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, Platform, Modal, Image } from 'react-native';
-import { Text, TextInput, Surface, Chip } from 'react-native-paper';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, TextInput, FlatList, TouchableOpacity, Platform, RefreshControl } from 'react-native';
+import { Text, Surface, Chip, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BACKEND_URL } from '../utils/config';
-import theme from '../styles/theme';
-import { useAuth } from '../contexts/AuthContext';
 import * as SecureStore from 'expo-secure-store';
+import theme, { gradients } from '../styles/theme';
+import { useTheme } from '../contexts/ThemeContext';
+import { BACKEND_URL } from '../utils/config';
+import debounce from 'lodash.debounce';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
     return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
   }
+  return await SecureStore.getItemAsync('auth_token');
 };
 
 interface Landmark {
@@ -23,326 +23,281 @@ interface Landmark {
   name: string;
   country_name: string;
   continent: string;
-  description: string;
-  image_url: string;
   points: number;
-  category: string;
-  is_locked: boolean;
+  difficulty: string;
+  is_visited?: boolean;
 }
 
-interface Filters {
-  visited: 'all' | 'true' | 'false';
-  category: 'all' | 'free' | 'premium';
-  sortBy: 'upvotes_desc' | 'points_desc' | 'points_asc' | 'name_asc' | 'name_desc';
-  continent: string | null;
-}
+type FilterType = 'all' | 'visited' | 'unvisited';
+type SortType = 'name' | 'points' | 'country';
 
 export default function SearchScreen() {
+  const router = useRouter();
+  const { colors, gradientColors } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [landmarks, setLandmarks] = useState<Landmark[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState<Filters>({
-    visited: 'all',
-    category: 'all',
-    sortBy: 'upvotes_desc',
-    continent: null
-  });
-  const router = useRouter();
-  const { user } = useAuth();
+  const [filteredLandmarks, setFilteredLandmarks] = useState<Landmark[]>([]);
+  const [visitedIds, setVisitedIds] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(true);
+  const [searching, setSearching] = useState(false);
+  const [filter, setFilter] = useState<FilterType>('all');
+  const [sortBy, setSortBy] = useState<SortType>('name');
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    searchLandmarks();
-  }, [filters]);
+    fetchData();
+  }, []);
 
-  const searchLandmarks = async () => {
-    setLoading(true);
+  const fetchData = async () => {
     try {
       const token = await getToken();
       
-      // Build query params
-      const params = new URLSearchParams();
-      if (searchQuery) params.append('search', searchQuery);
-      if (filters.visited !== 'all') params.append('visited', filters.visited);
-      if (filters.category !== 'all') params.append('category', filters.category);
-      if (filters.sortBy) params.append('sort_by', filters.sortBy);
-      if (filters.continent) params.append('continent', filters.continent);
-      
-      const response = await fetch(`${BACKEND_URL}/api/landmarks?${params.toString()}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      // Fetch all landmarks and visits in parallel
+      const [landmarksRes, visitsRes] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/landmarks/all`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch(`${BACKEND_URL}/api/visits`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
 
-      if (response.ok) {
-        const data = await response.json();
+      if (landmarksRes.ok) {
+        const data = await landmarksRes.json();
         setLandmarks(data);
+        setFilteredLandmarks(data);
       }
-    } catch (error) {
-      console.error('Error searching landmarks:', error);
+
+      if (visitsRes.ok) {
+        const visits = await visitsRes.json();
+        const visitedSet = new Set<string>(visits.map((v: any) => v.landmark_id));
+        setVisitedIds(visitedSet);
+      }
+    } catch (err) {
+      console.error('Error fetching data:', err);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
-  const handleSearch = () => {
-    searchLandmarks();
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchData();
   };
 
-  const clearFilters = () => {
-    setFilters({
-      visited: 'all',
-      category: 'all',
-      sortBy: 'upvotes_desc',
-      continent: null
+  // Debounced search
+  const debouncedSearch = useCallback(
+    debounce((query: string) => {
+      setSearching(true);
+      applyFilters(query, filter, sortBy);
+      setSearching(false);
+    }, 300),
+    [landmarks, visitedIds, filter, sortBy]
+  );
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    debouncedSearch(query);
+  };
+
+  const applyFilters = (query: string, filterType: FilterType, sort: SortType) => {
+    let results = [...landmarks];
+
+    // Apply search query
+    if (query.trim()) {
+      const lowerQuery = query.toLowerCase();
+      results = results.filter(
+        (l) =>
+          l.name.toLowerCase().includes(lowerQuery) ||
+          l.country_name.toLowerCase().includes(lowerQuery) ||
+          l.continent.toLowerCase().includes(lowerQuery)
+      );
+    }
+
+    // Apply visited filter
+    if (filterType === 'visited') {
+      results = results.filter((l) => visitedIds.has(l.landmark_id));
+    } else if (filterType === 'unvisited') {
+      results = results.filter((l) => !visitedIds.has(l.landmark_id));
+    }
+
+    // Apply sorting
+    results.sort((a, b) => {
+      switch (sort) {
+        case 'points':
+          return b.points - a.points;
+        case 'country':
+          return a.country_name.localeCompare(b.country_name);
+        case 'name':
+        default:
+          return a.name.localeCompare(b.name);
+      }
     });
-    setSearchQuery('');
+
+    setFilteredLandmarks(results);
   };
 
-  const getActiveFilterCount = () => {
-    let count = 0;
-    if (filters.visited !== 'all') count++;
-    if (filters.category !== 'all') count++;
-    if (filters.sortBy !== 'upvotes_desc') count++;
-    if (filters.continent) count++;
-    if (searchQuery) count++;
-    return count;
+  const handleFilterChange = (newFilter: FilterType) => {
+    setFilter(newFilter);
+    applyFilters(searchQuery, newFilter, sortBy);
   };
 
-  const renderLandmarkCard = ({ item }: { item: Landmark }) => (
-    <TouchableOpacity
-      onPress={() => router.push(`/landmark-detail/${item.landmark_id}`)}
-      activeOpacity={0.7}
-    >
-      <Surface style={styles.landmarkCard}>
-        <View style={styles.landmarkImage}>
-          {item.image_url ? (
-            <Image
-              source={{ uri: item.image_url }}
-              style={{ width: '100%', height: '100%', borderRadius: 12 }}
-              resizeMode="cover"
-            />
-          ) : (
-            <View style={styles.placeholderImage}>
-              <Ionicons name="image-outline" size={32} color="#ccc" />
-            </View>
-          )}
-          {item.is_locked && (
-            <View style={styles.lockBadge}>
-              <Ionicons name="lock-closed" size={16} color="#fff" />
-            </View>
-          )}
-        </View>
-        <View style={styles.landmarkInfo}>
-          <Text style={styles.landmarkName} numberOfLines={1}>{item.name}</Text>
-          <Text style={styles.landmarkCountry} numberOfLines={1}>
-            {item.country_name}, {item.continent}
-          </Text>
-          <View style={styles.landmarkMeta}>
-            <View style={styles.pointsBadge}>
-              <Ionicons name="star" size={14} color={theme.colors.accentYellow} />
-              <Text style={styles.pointsText}>{item.points} pts</Text>
-            </View>
-            {item.category === 'premium' && (
-              <View style={styles.premiumBadge}>
-                <Ionicons name="diamond" size={12} color={theme.colors.primary} />
-                <Text style={styles.premiumText}>Premium</Text>
+  const handleSortChange = (newSort: SortType) => {
+    setSortBy(newSort);
+    applyFilters(searchQuery, filter, newSort);
+  };
+
+  const renderLandmarkItem = ({ item }: { item: Landmark }) => {
+    const isVisited = visitedIds.has(item.landmark_id);
+    
+    return (
+      <TouchableOpacity
+        style={[styles.landmarkCard, { backgroundColor: colors.surface }]}
+        onPress={() => router.push(`/landmarks/${item.landmark_id}`)}
+        activeOpacity={0.7}
+      >
+        <View style={styles.landmarkContent}>
+          <View style={styles.landmarkHeader}>
+            <Text style={[styles.landmarkName, { color: colors.text }]} numberOfLines={1}>
+              {item.name}
+            </Text>
+            {isVisited && (
+              <View style={[styles.visitedBadge, { backgroundColor: '#10b981' }]}>
+                <Ionicons name="checkmark" size={12} color="#fff" />
               </View>
             )}
           </View>
+          <View style={styles.landmarkMeta}>
+            <View style={styles.metaItem}>
+              <Ionicons name="location-outline" size={14} color={colors.textSecondary} />
+              <Text style={[styles.metaText, { color: colors.textSecondary }]}>{item.country_name}</Text>
+            </View>
+            <View style={styles.metaItem}>
+              <Ionicons name="globe-outline" size={14} color={colors.textSecondary} />
+              <Text style={[styles.metaText, { color: colors.textSecondary }]}>{item.continent}</Text>
+            </View>
+          </View>
         </View>
-      </Surface>
+        <View style={styles.landmarkRight}>
+          <View style={[styles.pointsBadge, { backgroundColor: colors.primary + '20' }]}>
+            <Ionicons name="star" size={14} color={colors.primary} />
+            <Text style={[styles.pointsText, { color: colors.primary }]}>{item.points}</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const FilterChip = ({ label, value, active }: { label: string; value: FilterType; active: boolean }) => (
+    <TouchableOpacity
+      style={[styles.filterChip, { backgroundColor: active ? colors.primary : colors.surface }]}
+      onPress={() => handleFilterChange(value)}
+    >
+      <Text style={[styles.filterChipText, { color: active ? '#fff' : colors.text }]}>{label}</Text>
+    </TouchableOpacity>
+  );
+
+  const SortChip = ({ label, value, icon }: { label: string; value: SortType; icon: keyof typeof Ionicons.glyphMap }) => (
+    <TouchableOpacity
+      style={[styles.sortChip, { backgroundColor: sortBy === value ? colors.primary + '20' : 'transparent' }]}
+      onPress={() => handleSortChange(value)}
+    >
+      <Ionicons name={icon} size={14} color={sortBy === value ? colors.primary : colors.textSecondary} />
+      <Text style={[styles.sortChipText, { color: sortBy === value ? colors.primary : colors.textSecondary }]}>{label}</Text>
     </TouchableOpacity>
   );
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+      {/* Header */}
       <LinearGradient
-        colors={['#3BB8C3', '#2AA8B3']}
+        colors={gradientColors}
+        start={gradients.horizontal.start}
+        end={gradients.horizontal.end}
         style={styles.header}
       >
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Search Landmarks</Text>
-        <View style={styles.headerSpacer} />
+        <View style={styles.headerRow}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.headerBackButton}>
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Search Landmarks</Text>
+          <View style={{ width: 40 }} />
+        </View>
       </LinearGradient>
 
       {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchBar}>
-          <Ionicons name="search" size={20} color={theme.colors.textSecondary} style={styles.searchIcon} />
+      <View style={[styles.searchContainer, { backgroundColor: colors.surface }]}>
+        <View style={[styles.searchInputContainer, { backgroundColor: colors.background }]}>
+          <Ionicons name="search" size={20} color={colors.textSecondary} />
           <TextInput
-            value={searchQuery}
-            onChangeText={setSearchQuery}
+            style={[styles.searchInput, { color: colors.text }]}
             placeholder="Search landmarks, countries..."
-            style={styles.searchInput}
-            onSubmitEditing={handleSearch}
-            returnKeyType="search"
+            placeholderTextColor={colors.textSecondary}
+            value={searchQuery}
+            onChangeText={handleSearch}
+            autoCapitalize="none"
+            autoCorrect={false}
           />
           {searchQuery.length > 0 && (
-            <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={20} color={theme.colors.textSecondary} />
+            <TouchableOpacity onPress={() => handleSearch('')}>
+              <Ionicons name="close-circle" size={20} color={colors.textSecondary} />
             </TouchableOpacity>
           )}
+          {searching && <ActivityIndicator size="small" color={colors.primary} />}
         </View>
-        <TouchableOpacity 
-          style={styles.filterButton}
-          onPress={() => setShowFilters(true)}
-        >
-          <Ionicons name="options-outline" size={24} color={theme.colors.primary} />
-          {getActiveFilterCount() > 0 && (
-            <View style={styles.filterBadge}>
-              <Text style={styles.filterBadgeText}>{getActiveFilterCount()}</Text>
-            </View>
-          )}
-        </TouchableOpacity>
       </View>
 
-      {/* Active Filters Chips */}
-      {getActiveFilterCount() > 0 && (
-        <View style={styles.activeFilters}>
-          {searchQuery && <Chip style={styles.filterChip} textStyle={styles.chipText}>Search: {searchQuery}</Chip>}
-          {filters.visited !== 'all' && <Chip style={styles.filterChip} textStyle={styles.chipText}>{filters.visited === 'true' ? 'Visited' : 'Not Visited'}</Chip>}
-          {filters.category !== 'all' && <Chip style={styles.filterChip} textStyle={styles.chipText}>{filters.category === 'free' ? 'Free' : 'Premium'}</Chip>}
-          {filters.continent && <Chip style={styles.filterChip} textStyle={styles.chipText}>{filters.continent}</Chip>}
-          <TouchableOpacity onPress={clearFilters}>
-            <Text style={styles.clearFilters}>Clear All</Text>
-          </TouchableOpacity>
+      {/* Filters */}
+      <View style={styles.filtersContainer}>
+        <View style={styles.filterRow}>
+          <FilterChip label="All" value="all" active={filter === 'all'} />
+          <FilterChip label={`Visited (${visitedIds.size})`} value="visited" active={filter === 'visited'} />
+          <FilterChip label="Unvisited" value="unvisited" active={filter === 'unvisited'} />
         </View>
-      )}
+        <View style={[styles.sortRow, { borderTopColor: colors.border }]}>
+          <Text style={[styles.sortLabel, { color: colors.textSecondary }]}>Sort:</Text>
+          <SortChip label="Name" value="name" icon="text-outline" />
+          <SortChip label="Points" value="points" icon="star-outline" />
+          <SortChip label="Country" value="country" icon="flag-outline" />
+        </View>
+      </View>
 
       {/* Results */}
-      <FlatList
-        data={landmarks}
-        renderItem={renderLandmarkCard}
-        keyExtractor={(item) => item.landmark_id}
-        contentContainerStyle={styles.resultsList}
-        ListHeaderComponent={
-          landmarks.length > 0 ? (
-            <Text style={styles.resultsCount}>{landmarks.length} landmark{landmarks.length !== 1 ? 's' : ''} found</Text>
-          ) : null
-        }
-        ListEmptyComponent={
-          !loading ? (
-            <View style={styles.emptyContainer}>
-              <Ionicons name="search-outline" size={64} color="#ccc" />
-              <Text style={styles.emptyText}>
-                {searchQuery || getActiveFilterCount() > 0
-                  ? 'No landmarks found'
-                  : 'Search for landmarks'}
-              </Text>
-              <Text style={styles.emptySubtext}>
-                Try adjusting your filters or search term
-              </Text>
-            </View>
-          ) : null
-        }
-      />
-
-      {/* Filter Modal */}
-      <Modal
-        visible={showFilters}
-        animationType="slide"
-        transparent
-        onRequestClose={() => setShowFilters(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.filterModal}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Filters</Text>
-              <TouchableOpacity onPress={() => setShowFilters(false)}>
-                <Ionicons name="close" size={28} color={theme.colors.text} />
-              </TouchableOpacity>
-            </View>
-
-            {/* Visited Status Filter */}
-            <View style={styles.filterSection}>
-              <Text style={styles.filterLabel}>Visit Status</Text>
-              <View style={styles.filterOptions}>
-                {['all', 'true', 'false'].map((option) => (
-                  <TouchableOpacity
-                    key={option}
-                    style={[
-                      styles.filterOption,
-                      filters.visited === option && styles.filterOptionActive
-                    ]}
-                    onPress={() => setFilters({ ...filters, visited: option as any })}
-                  >
-                    <Text style={[
-                      styles.filterOptionText,
-                      filters.visited === option && styles.filterOptionTextActive
-                    ]}>
-                      {option === 'all' ? 'All' : option === 'true' ? 'Visited' : 'Not Visited'}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-
-            {/* Category Filter */}
-            <View style={styles.filterSection}>
-              <Text style={styles.filterLabel}>Category</Text>
-              <View style={styles.filterOptions}>
-                {['all', 'free', 'premium'].map((option) => (
-                  <TouchableOpacity
-                    key={option}
-                    style={[
-                      styles.filterOption,
-                      filters.category === option && styles.filterOptionActive
-                    ]}
-                    onPress={() => setFilters({ ...filters, category: option as any })}
-                  >
-                    <Text style={[
-                      styles.filterOptionText,
-                      filters.category === option && styles.filterOptionTextActive
-                    ]}>
-                      {option.charAt(0).toUpperCase() + option.slice(1)}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-
-            {/* Sort By */}
-            <View style={styles.filterSection}>
-              <Text style={styles.filterLabel}>Sort By</Text>
-              <View style={styles.filterOptions}>
-                {[
-                  { value: 'points_desc', label: 'Points: High to Low' },
-                  { value: 'points_asc', label: 'Points: Low to High' },
-                  { value: 'name_asc', label: 'Name: A to Z' },
-                  { value: 'name_desc', label: 'Name: Z to A' }
-                ].map((option) => (
-                  <TouchableOpacity
-                    key={option.value}
-                    style={[
-                      styles.filterOption,
-                      filters.sortBy === option.value && styles.filterOptionActive
-                    ]}
-                    onPress={() => setFilters({ ...filters, sortBy: option.value as any })}
-                  >
-                    <Text style={[
-                      styles.filterOptionText,
-                      filters.sortBy === option.value && styles.filterOptionTextActive
-                    ]}>
-                      {option.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-
-            {/* Apply Button */}
-            <TouchableOpacity style={styles.applyButton} onPress={() => setShowFilters(false)}>
-              <LinearGradient
-                colors={[theme.colors.primary, theme.colors.primaryDark]}
-                style={styles.applyButtonGradient}
-              >
-                <Text style={styles.applyButtonText}>Apply Filters</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-          </View>
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={[styles.loadingText, { color: colors.textSecondary }]}>Loading landmarks...</Text>
         </View>
-      </Modal>
+      ) : (
+        <>
+          <View style={styles.resultsHeader}>
+            <Text style={[styles.resultsCount, { color: colors.textSecondary }]}>
+              {filteredLandmarks.length} landmark{filteredLandmarks.length !== 1 ? 's' : ''} found
+            </Text>
+          </View>
+          <FlatList
+            data={filteredLandmarks}
+            keyExtractor={(item) => item.landmark_id}
+            renderItem={renderLandmarkItem}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
+            }
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <Ionicons name="search-outline" size={64} color={colors.textSecondary} />
+                <Text style={[styles.emptyTitle, { color: colors.text }]}>No landmarks found</Text>
+                <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+                  Try a different search term or filter
+                </Text>
+              </View>
+            }
+          />
+        </>
+      )}
     </SafeAreaView>
   );
 }
@@ -350,285 +305,176 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background,
   },
   header: {
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.lg,
   },
-  backButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+  headerBackButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.15)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: theme.spacing.sm,
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
     color: '#fff',
-    flex: 1,
-    textAlign: 'center',
-  },
-  headerSpacer: {
-    width: 40,
   },
   searchContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    gap: theme.spacing.sm,
-    alignItems: 'center',
+    padding: 12,
   },
-  searchBar: {
-    flex: 1,
+  searchInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.lg,
-    paddingHorizontal: theme.spacing.md,
-    height: 48,
-    ...theme.shadows.sm,
-  },
-  searchIcon: {
-    marginRight: theme.spacing.sm,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 12,
+    gap: 10,
   },
   searchInput: {
     flex: 1,
     fontSize: 15,
-    color: theme.colors.text,
-    padding: 0,
-    backgroundColor: 'transparent',
   },
-  filterButton: {
-    width: 48,
-    height: 48,
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.lg,
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...theme.shadows.sm,
-    position: 'relative',
+  filtersContainer: {
+    paddingHorizontal: 12,
   },
-  filterBadge: {
-    position: 'absolute',
-    top: 4,
-    right: 4,
-    backgroundColor: theme.colors.error,
-    borderRadius: 10,
-    width: 18,
-    height: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  filterBadgeText: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: '700',
-  },
-  activeFilters: {
+  filterRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.sm,
-    gap: theme.spacing.xs,
+    gap: 8,
+    marginBottom: 10,
   },
   filterChip: {
-    backgroundColor: theme.colors.primaryLight,
-    height: 32,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
   },
-  chipText: {
-    fontSize: 12,
-  },
-  clearFilters: {
+  filterChipText: {
     fontSize: 13,
-    color: theme.colors.primary,
     fontWeight: '600',
-    paddingVertical: 6,
-    paddingHorizontal: theme.spacing.sm,
   },
-  resultsList: {
-    padding: theme.spacing.md,
+  sortRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 10,
+    borderTopWidth: 1,
+    gap: 8,
+  },
+  sortLabel: {
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  sortChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 12,
+    gap: 4,
+  },
+  sortChipText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 15,
+  },
+  resultsHeader: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
   },
   resultsCount: {
-    fontSize: 14,
-    color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.sm,
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  listContent: {
+    paddingHorizontal: 12,
+    paddingBottom: 100,
   },
   landmarkCard: {
     flexDirection: 'row',
-    marginBottom: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
-    overflow: 'hidden',
-    elevation: 2,
-  },
-  landmarkImage: {
-    width: 100,
-    height: 100,
-    position: 'relative',
-  },
-  placeholderImage: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
     alignItems: 'center',
+    padding: 14,
+    borderRadius: 14,
+    marginBottom: 10,
   },
-  lockBadge: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    borderRadius: 12,
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  landmarkInfo: {
+  landmarkContent: {
     flex: 1,
-    padding: theme.spacing.sm,
-    justifyContent: 'center',
+  },
+  landmarkHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   landmarkName: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: theme.colors.text,
-    marginBottom: 4,
+    fontSize: 16,
+    fontWeight: '600',
+    flex: 1,
   },
-  landmarkCountry: {
-    fontSize: 13,
-    color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.xs,
+  visitedBadge: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   landmarkMeta: {
     flexDirection: 'row',
-    gap: theme.spacing.xs,
+    marginTop: 6,
+    gap: 16,
+  },
+  metaItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  metaText: {
+    fontSize: 12,
+  },
+  landmarkRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
   pointsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.backgroundSecondary,
-    paddingHorizontal: theme.spacing.xs,
-    paddingVertical: 2,
-    borderRadius: theme.borderRadius.sm,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
     gap: 4,
   },
   pointsText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: theme.colors.text,
-  },
-  premiumBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: theme.colors.primaryLight,
-    paddingHorizontal: theme.spacing.xs,
-    paddingVertical: 2,
-    borderRadius: theme.borderRadius.sm,
-    gap: 4,
-  },
-  premiumText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: theme.colors.primary,
+    fontSize: 13,
+    fontWeight: '700',
   },
   emptyContainer: {
-    alignItems: 'center',
+    flex: 1,
     justifyContent: 'center',
-    paddingVertical: 80,
-    paddingHorizontal: theme.spacing.xl,
+    alignItems: 'center',
+    paddingVertical: 60,
   },
-  emptyText: {
+  emptyTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: theme.colors.text,
-    marginTop: theme.spacing.lg,
-    marginBottom: theme.spacing.xs,
+    marginTop: 16,
   },
-  emptySubtext: {
+  emptyText: {
     fontSize: 14,
-    color: theme.colors.textSecondary,
+    marginTop: 8,
     textAlign: 'center',
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
-  },
-  filterModal: {
-    backgroundColor: theme.colors.surface,
-    borderTopLeftRadius: theme.borderRadius.xl,
-    borderTopRightRadius: theme.borderRadius.xl,
-    paddingTop: theme.spacing.lg,
-    paddingBottom: theme.spacing.xl,
-    maxHeight: '80%',
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.lg,
-  },
-  modalTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: theme.colors.text,
-  },
-  filterSection: {
-    paddingHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.lg,
-  },
-  filterLabel: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
-  },
-  filterOptions: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.spacing.sm,
-  },
-  filterOption: {
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    borderRadius: theme.borderRadius.md,
-    backgroundColor: theme.colors.backgroundSecondary,
-    borderWidth: 1,
-    borderColor: 'transparent',
-  },
-  filterOptionActive: {
-    backgroundColor: theme.colors.primaryLight,
-    borderColor: theme.colors.primary,
-  },
-  filterOptionText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: theme.colors.textSecondary,
-  },
-  filterOptionTextActive: {
-    color: theme.colors.primary,
-  },
-  applyButton: {
-    marginHorizontal: theme.spacing.lg,
-    marginTop: theme.spacing.md,
-  },
-  applyButtonGradient: {
-    paddingVertical: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
-    alignItems: 'center',
-  },
-  applyButtonText: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#fff',
   },
 });
