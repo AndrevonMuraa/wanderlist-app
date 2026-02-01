@@ -198,10 +198,11 @@ const styles = StyleSheet.create({
   },
   slide: {
     width,
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 40,
+    paddingTop: 100,
+    paddingBottom: 150,
   },
   iconContainer: {
     width: 160,
