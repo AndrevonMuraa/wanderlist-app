@@ -150,7 +150,7 @@ export default function SettingsScreen() {
             <TouchableOpacity onPress={handleBack} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color={isDark ? colors.text : '#fff'} />
             </TouchableOpacity>
-            <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>Settings</Text>
+            <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>{t('settings.title')}</Text>
           </View>
           <TouchableOpacity 
             style={styles.brandingContainer}
