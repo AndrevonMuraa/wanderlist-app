@@ -50,6 +50,9 @@ export default function EditProfileScreen() {
   const [bio, setBio] = useState('');
   const [location, setLocation] = useState('');
   const [picture, setPicture] = useState<string | undefined>();
+  const [bannerImage, setBannerImage] = useState<string | undefined>();
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [featuredBadges, setFeaturedBadges] = useState<string[]>([]);
 
   // Navigate back to profile tab explicitly
   const handleBack = () => {
