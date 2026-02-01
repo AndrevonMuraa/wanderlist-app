@@ -282,21 +282,21 @@ export default function ProfileScreen() {
                 <Text style={[styles.statValue, { color: colors.text }]}>
                   {stats.countries_visited || 0}
                 </Text>
-                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Countries</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('journey.countries')}</Text>
               </View>
               <View style={styles.statItem}>
                 <Ionicons name="earth" size={16} color="#66BB6A" />
                 <Text style={[styles.statValue, { color: colors.text }]}>
                   {stats.continents_visited || 0}
                 </Text>
-                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Continents</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('profile.continents')}</Text>
               </View>
               <View style={styles.statItem}>
                 <Ionicons name="star" size={16} color="#FFD700" />
                 <Text style={[styles.statValue, { color: colors.accent }]}>
                   {progressStats.totalPoints || 0}
                 </Text>
-                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Points</Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('journey.points')}</Text>
               </View>
             </View>
           )}
@@ -312,8 +312,8 @@ export default function ProfileScreen() {
         {/* Menu - Simplified */}
         <Surface style={[styles.menuCard, { backgroundColor: colors.surface }]}>
           <List.Item
-            title="About WanderMark"
-            description="Learn how to use the app"
+            title={t('profile.aboutWanderMark')}
+            description={t('profile.learnHowToUse')}
             left={props => <List.Icon {...props} icon="information-outline" color={colors.primary} />}
             right={props => <List.Icon {...props} icon="chevron-right" color={colors.textLight} />}
             onPress={() => router.push('/about')}
@@ -322,8 +322,8 @@ export default function ProfileScreen() {
           />
           <Divider style={[styles.divider, { backgroundColor: colors.border }]} />
           <List.Item
-            title="WanderMark Pro"
-            description="Upgrade for premium features"
+            title={t('profile.wanderMarkPro')}
+            description={t('profile.upgradeForPremium')}
             left={props => <List.Icon {...props} icon="diamond" color={colors.accentTeal} />}
             right={props => <List.Icon {...props} icon="chevron-right" color={colors.textLight} />}
             onPress={() => router.push('/subscription')}
