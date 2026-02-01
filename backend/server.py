@@ -50,6 +50,10 @@ class User(BaseModel):
     current_streak: int = 0  # Current consecutive days streak
     longest_streak: int = 0  # Longest streak ever achieved
     last_visit_date: Optional[str] = None  # Last date user made a visit (YYYY-MM-DD)
+    role: str = "user"  # "user", "moderator", "admin"
+    is_banned: bool = False  # Whether user is banned
+    banned_at: Optional[datetime] = None
+    ban_reason: Optional[str] = None
     created_at: datetime
 
 class UserPublic(BaseModel):
@@ -62,6 +66,7 @@ class UserPublic(BaseModel):
     is_premium: bool = False  # Deprecated
     subscription_tier: str = "free"  # "free" or "pro"
     default_privacy: str = "public"  # "public", "friends", "private"
+    role: str = "user"  # Include role in public profile for UI checks
 
 class ProfileUpdate(BaseModel):
     name: Optional[str] = None
