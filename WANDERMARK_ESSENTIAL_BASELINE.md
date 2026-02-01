@@ -359,6 +359,11 @@ python3 seed_data_expansion.py    # Expanded content (48 countries)
 - **Status:** Not fixed - requires user's Google Cloud credentials
 - **Workaround:** Use email/password login or Quick Test Login
 
+### Apple Sign In (NOT IMPLEMENTED)
+- **Status:** Required for App Store if Google OAuth is offered
+- **Priority:** P1 - Next implementation task
+- **Workaround:** Email/password login works perfectly
+
 ---
 
 ## 📂 **Key Files Reference**
