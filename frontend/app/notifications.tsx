@@ -41,6 +41,7 @@ interface Notification {
 
 export default function NotificationsScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
