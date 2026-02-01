@@ -317,7 +317,7 @@ export default function TermsOfServiceScreen() {
 
         {/* Contact */}
         <Surface style={styles.card}>
-          <Section title="13. Contact Us">
+          <Section title="14. Contact Us">
             <Text style={styles.paragraph}>
               If you have questions about these Terms, please contact us:
             </Text>
