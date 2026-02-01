@@ -669,6 +669,83 @@ async def google_callback(session_id: str, response: Response):
         session_token=session_token
     )
 
+class AppleAuthRequest(BaseModel):
+    identity_token: str
+    user_id: str
+    email: Optional[str] = None
+    full_name: Optional[str] = None
+
+@api_router.post("/auth/apple/callback")
+async def apple_callback(auth_data: AppleAuthRequest, response: Response):
+    """
+    Handle Apple Sign-In callback.
+    Apple only provides email/name on first sign-in, so we need to handle both cases.
+    """
+    import jwt
+    
+    try:
+        # Decode the identity token (we don't verify signature in dev, but should in production)
+        # In production, verify against Apple's public keys
+        decoded = jwt.decode(auth_data.identity_token, options={"verify_signature": False})
+        
+        apple_user_id = decoded.get("sub")  # Apple's unique user ID
+        email = auth_data.email or decoded.get("email")
+        
+        if not email:
+            # Try to find existing user by Apple ID
+            existing_user = await db.users.find_one({"apple_user_id": apple_user_id}, {"_id": 0})
+            if existing_user:
+                email = existing_user.get("email")
+            else:
+                raise HTTPException(status_code=400, detail="Email is required for first-time sign-in")
+        
+        # Check if user exists by email or Apple ID
+        existing_user = await db.users.find_one({
+            "$or": [
+                {"email": email},
+                {"apple_user_id": apple_user_id}
+            ]
+        }, {"_id": 0})
+        
+        if existing_user:
+            user_id = existing_user["user_id"]
+            # Update Apple user ID if not set
+            if not existing_user.get("apple_user_id"):
+                await db.users.update_one(
+                    {"user_id": user_id},
+                    {"$set": {"apple_user_id": apple_user_id}}
+                )
+        else:
+            # Create new user
+            user_id = f"user_{uuid.uuid4().hex[:12]}"
+            name = auth_data.full_name or email.split("@")[0]
+            new_user = {
+                "user_id": user_id,
+                "email": email,
+                "name": name,
+                "picture": None,
+                "is_premium": False,
+                "password_hash": None,
+                "apple_user_id": apple_user_id,
+                "created_at": datetime.now(timezone.utc)
+            }
+            await db.users.insert_one(new_user)
+        
+        # Create JWT token
+        access_token = create_access_token({"sub": user_id})
+        
+        # Get updated user data
+        user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0, "password_hash": 0})
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": user_doc
+        }
+        
+    except jwt.PyJWTError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid identity token: {str(e)}")
+
 @api_router.get("/auth/me")
 async def get_me(current_user: User = Depends(get_current_user)):
     return UserPublic(**current_user.dict())
