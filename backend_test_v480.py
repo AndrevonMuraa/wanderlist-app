@@ -21,7 +21,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://world-explorer-109.preview.emergentagent.com/api"
+BASE_URL = "https://tealshift.preview.emergentagent.com/api"
 TEST_EMAIL = "mobile@test.com"
 TEST_PASSWORD = "test123"
 
