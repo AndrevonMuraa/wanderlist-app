@@ -83,12 +83,12 @@ export const darkColors = {
   background: '#121212',     // True dark background
   surface: '#1E1E1E',        // Elevated surface
   surfaceElevated: '#2A2A2A', // More elevated
-  surfaceTinted: '#252220',  // Dark warm tint
+  surfaceTinted: '#2D2D2D',  // Lighter tint for stat boxes
   
   // Text - High contrast for dark mode
-  text: '#F5F5F5',           // Almost white
-  textSecondary: '#B0B0B0',  // Light gray
-  textLight: '#808080',      // Medium gray
+  text: '#FFFFFF',           // Pure white for best contrast
+  textSecondary: '#C0C0C0',  // Lighter gray - improved contrast
+  textLight: '#A0A0A0',      // Medium-light gray - improved visibility
   textInverse: '#1E1E1E',    // Dark text on light elements
   
   // Status Colors (same as light)
