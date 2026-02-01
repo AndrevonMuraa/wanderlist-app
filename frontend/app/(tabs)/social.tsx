@@ -702,13 +702,13 @@ export default function SocialHubScreen() {
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
               <Ionicons name="people" size={24} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Friends</Text>
+              <Text style={styles.sectionTitle}>{t('social.friends')}</Text>
               {pendingCount > 0 && (
                 <Badge size={20} style={styles.pendingBadge}>{pendingCount}</Badge>
               )}
             </View>
             <TouchableOpacity onPress={() => router.push('/friends')}>
-              <Text style={styles.seeAllButton}>Manage →</Text>
+              <Text style={styles.seeAllButton}>{t('common.manage')} →</Text>
             </TouchableOpacity>
           </View>
 
@@ -716,12 +716,12 @@ export default function SocialHubScreen() {
             <View style={styles.friendsStats}>
               <View style={styles.statItem}>
                 <Text style={styles.statNumber}>{friends.length}</Text>
-                <Text style={styles.statLabel}>Friends</Text>
+                <Text style={styles.statLabel}>{t('social.friends')}</Text>
               </View>
               {pendingCount > 0 && (
                 <View style={styles.statItem}>
                   <Text style={[styles.statNumber, styles.pendingNumber]}>{pendingCount}</Text>
-                  <Text style={styles.statLabel}>Pending</Text>
+                  <Text style={styles.statLabel}>{t('social.pending')}</Text>
                 </View>
               )}
             </View>
@@ -739,19 +739,19 @@ export default function SocialHubScreen() {
                   style={styles.viewAllButton}
                   onPress={() => router.push('/friends')}
                 >
-                  <Text style={styles.viewAllText}>View All Friends</Text>
+                  <Text style={styles.viewAllText}>{t('social.viewAllFriends')}</Text>
                   <Ionicons name="arrow-forward" size={16} color={theme.colors.primary} />
                 </TouchableOpacity>
               </>
             ) : (
               <View style={styles.emptyState}>
                 <Ionicons name="people-outline" size={48} color={theme.colors.textLight} />
-                <Text style={styles.emptyText}>No friends yet</Text>
+                <Text style={styles.emptyText}>{t('social.noFriendsYet')}</Text>
                 <TouchableOpacity 
                   style={styles.addFriendButton}
                   onPress={() => router.push('/friends')}
                 >
-                  <Text style={styles.addFriendButtonText}>Add Friends</Text>
+                  <Text style={styles.addFriendButtonText}>{t('social.addFriends')}</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -763,7 +763,7 @@ export default function SocialHubScreen() {
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
               <Ionicons name="chatbubbles" size={24} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Messages</Text>
+              <Text style={styles.sectionTitle}>{t('social.messages')}</Text>
               {unreadMessages > 0 && (
                 <Badge size={20} style={styles.unreadBadge}>{unreadMessages}</Badge>
               )}
