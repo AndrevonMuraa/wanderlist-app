@@ -451,6 +451,18 @@ backend:
         agent: "testing"
         comment: "🎉 MULTI-LANDMARK CUSTOM VISITS TESTING COMPLETE - ALL FEATURES WORKING PERFECTLY! ✅ COMPREHENSIVE TESTING RESULTS (7/7 tests passed - 100% success rate): ✅ AUTHENTICATION: Successfully logged in with mobile@test.com/test123 credentials. ✅ MULTI-LANDMARK VISIT CREATION: Created visit with 3 landmarks (Guaita Tower, Palazzo Pubblico, Basilica di San Marino), 2 total photos (1 landmark + 1 country), returns proper user_created_visit_id, landmarks_count: 3, total_photos: 2 - EXACTLY as specified in review request. ✅ COUNTRY-ONLY VISIT CREATION: Created visit with 0 landmarks, 2 country photos, returns landmarks_count: 0, total_photos: 2. ✅ GET USER CREATED VISITS: Retrieved visits with correct landmark structure (array of objects with name and photo fields). ✅ BACKWARD COMPATIBILITY: API correctly enforces dict format for landmarks due to Pydantic validation - string format ['Valletta', 'Mdina'] properly rejected with 422 error, dict format [{'name': 'Valletta', 'photo': None}] works correctly. ✅ MAX PHOTOS LIMIT VALIDATION: Correctly rejects visits with >20 total photos (tested 21 photos: 10 landmark + 11 country). ✅ RESPONSE FORMAT: Matches review request exactly with user_created_visit_id, landmarks_count, total_photos fields. All Multi-Landmark Custom Visits endpoints are production-ready with full photo support per landmark!"
 
+  - task: "Admin Panel API endpoints"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "🔧 ADMIN PANEL API TESTING COMPLETE - EXCELLENT RESULTS! ✅ COMPREHENSIVE ADMIN TESTING (21/21 tests passed - 100% SUCCESS RATE): ✅ AUTHENTICATION: Admin token obtained for mobile@test.com (admin role), proper 401/403 error handling for unauthorized access. ✅ ADMIN STATS: GET /api/admin/stats returns dashboard statistics (6 users, 0 pro, 3 reports, 560 landmarks). ✅ USER MANAGEMENT: GET /api/admin/users with pagination, search, tier, role, banned filters all working. User detail view and updates (subscription tier, ban/unban) working perfectly. ✅ REPORT MANAGEMENT: GET /api/admin/reports with status filtering, PUT /api/admin/reports/{id} for resolve/dismiss working. ✅ ADMIN LOGS: GET /api/admin/logs accessible to admin users with 5 log entries. ✅ SECURITY: Role-based access control properly implemented, non-admin users blocked with 403 errors. All admin endpoints follow REST conventions and return proper JSON responses. Admin Panel is production-ready!"
+
 frontend:
   - task: "Authentication Context with Google and JWT"
     implemented: true
