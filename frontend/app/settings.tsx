@@ -367,8 +367,8 @@ export default function SettingsScreen() {
               <Ionicons name="document-text" size={22} color={colors.primary} />
             </View>
             <View style={styles.sectionHeaderText}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Legal</Text>
-              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>Privacy and terms information</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('settings.about')}</Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>{t('settings.privacyPolicy')}</Text>
             </View>
           </View>
           
@@ -382,7 +382,7 @@ export default function SettingsScreen() {
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(46, 204, 113, 0.1)' }]}>
                   <Ionicons name="shield-checkmark" size={18} color="#2ecc71" />
                 </View>
-                <Text style={[styles.accountLabel, { color: colors.text }]}>Privacy Policy</Text>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>{t('settings.privacyPolicy')}</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
@@ -398,7 +398,7 @@ export default function SettingsScreen() {
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(52, 152, 219, 0.1)' }]}>
                   <Ionicons name="reader" size={18} color="#3498db" />
                 </View>
-                <Text style={[styles.accountLabel, { color: colors.text }]}>Terms of Service</Text>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>{t('settings.termsOfService')}</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
