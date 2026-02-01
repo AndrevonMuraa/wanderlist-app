@@ -1,4 +1,4 @@
-# WanderMark - Essential Baseline (v1.0.0)
+# WanderMark - Essential Baseline (v1.1.0)
 
 > **Purpose:** Critical information for session continuity
 > **Read this:** At session start if forked, or when encountering issues
@@ -7,10 +7,10 @@
 
 ## 📊 **Current State**
 
-**Version:** 1.0.0 - STABLE ✅  
-**Status:** App Store Ready  
-**Last Build:** January 20, 2026  
-**Next Phase:** App Store Submission
+**Version:** 1.1.0 - STABLE ✅  
+**Status:** Feature Complete - App Store Ready  
+**Last Build:** June 2025  
+**Next Phase:** Social Logins Completion & App Store Submission
 
 **Tech Stack:** Expo (React Native) + FastAPI + MongoDB  
 **Database:** 48 countries, **560 landmarks** (427 official + 133 premium), All duplicates removed  
