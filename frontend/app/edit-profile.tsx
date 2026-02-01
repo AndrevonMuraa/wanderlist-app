@@ -61,6 +61,7 @@ export default function EditProfileScreen() {
 
   useEffect(() => {
     loadProfile();
+    loadAchievements();
   }, []);
 
   const loadProfile = async () => {
@@ -76,11 +77,29 @@ export default function EditProfileScreen() {
         setBio(data.bio || '');
         setLocation(data.location || '');
         setPicture(data.picture);
+        setBannerImage(data.banner_image);
+        setFeaturedBadges(data.featured_badges || []);
       }
     } catch (error) {
       console.error('Error loading profile:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadAchievements = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/achievements`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAchievements(data);
+      }
+    } catch (error) {
+      console.error('Error loading achievements:', error);
     }
   };
 
