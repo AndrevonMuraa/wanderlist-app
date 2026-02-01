@@ -7,10 +7,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { languages, setLanguage } from '../i18n';
 import theme from '../styles/theme';
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function LanguageSettingsScreen() {
   const router = useRouter();
   const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
   const currentLanguage = i18n.language;
 
   const handleLanguageSelect = async (languageCode: string) => {
