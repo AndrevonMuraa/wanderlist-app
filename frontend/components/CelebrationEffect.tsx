@@ -69,7 +69,7 @@ export default function CelebrationEffect({
           origin: { x: width / 2, y: height / 2 },
           explosionSpeed: 400,
           fallSpeed: 3000,
-          colors: ['#1E8A8A', '#E1BEE7', '#CE93D8', '#BA68C8', '#1E8A8A'],
+          colors: ['#1E8A8A', '#4DB8D8', '#7DCBE3', '#C9A961', '#E8DCC8'],
         };
       case 'country':
         return {
