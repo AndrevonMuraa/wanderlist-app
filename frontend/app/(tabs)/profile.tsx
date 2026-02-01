@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BACKEND_URL } from '../../utils/config';
 import * as SecureStore from 'expo-secure-store';
-import { gradients, spacing, borderRadius, typography } from '../../styles/theme';
+import theme, { gradients, spacing, borderRadius, typography } from '../../styles/theme';
 import UpgradeModal from '../../components/UpgradeModal';
 import RankBadge from '../../components/RankBadge';
 import { getUserRank } from '../../utils/rankSystem';
