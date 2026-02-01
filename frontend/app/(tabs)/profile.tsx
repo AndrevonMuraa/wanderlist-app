@@ -16,6 +16,7 @@ import RankBadge from '../../components/RankBadge';
 import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
+import ShareStatsCard from '../../components/ShareStatsCard';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
