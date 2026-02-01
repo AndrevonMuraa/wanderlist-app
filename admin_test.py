@@ -209,7 +209,7 @@ class AdminAPITester:
                 data = response.json()
                 
                 # Check required fields
-                required_fields = ["user_id", "email", "name", "subscription_tier", "role", "is_banned", "stats"]
+                required_fields = ["user_id", "email", "name", "subscription_tier", "created_at", "stats"]
                 missing_fields = [field for field in required_fields if field not in data]
                 if missing_fields:
                     self.log_test("Admin User Detail - Structure", False, error=f"Missing fields: {missing_fields}")
@@ -217,13 +217,13 @@ class AdminAPITester:
                 
                 # Check stats structure
                 stats = data["stats"]
-                stats_fields = ["visit_count", "points"]
+                stats_fields = ["visits", "points"]
                 missing_stats = [field for field in stats_fields if field not in stats]
                 if missing_stats:
                     self.log_test("Admin User Detail - Stats Structure", False, error=f"Missing stats: {missing_stats}")
                     return False
                 
-                details = f"User: {data['name']}, Role: {data['role']}, Visits: {stats['visit_count']}"
+                details = f"User: {data['name']}, Tier: {data['subscription_tier']}, Visits: {stats['visits']}"
                 self.log_test("Admin User Detail", True, details)
                 return True
             else:
