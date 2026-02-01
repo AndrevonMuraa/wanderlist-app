@@ -25,6 +25,7 @@ export const colors = {
   accentYellow: '#FFD700',   // Golden star color
   accentBronze: '#B8956A',   // Bronze
   accentCopper: '#D4A574',   // Copper warmth
+  accentTeal: '#1E8A8A',     // Deep teal - sophisticated ocean accent
   
   // Neutrals - Editorial Sophistication
   background: '#F5F3F0',     // Warm cream background
