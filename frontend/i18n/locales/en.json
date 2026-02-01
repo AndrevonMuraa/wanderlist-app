@@ -113,7 +113,16 @@
     "memberSince": "Member since",
     "totalVisits": "Total Visits",
     "premium": "Premium",
-    "upgradeToPremium": "Upgrade to Premium"
+    "upgradeToPremium": "Upgrade to Premium",
+    "continents": "Continents",
+    "premiumUser": "Premium user",
+    "basicUser": "Basic user",
+    "freemiumUser": "Freemium user",
+    "aboutWanderMark": "About WanderMark",
+    "learnHowToUse": "Learn how to use the app",
+    "wanderMarkPro": "WanderMark Pro",
+    "upgradeForPremium": "Upgrade for premium features",
+    "appPreferences": "App preferences and account"
   },
   "statistics": {
     "title": "My Statistics",
