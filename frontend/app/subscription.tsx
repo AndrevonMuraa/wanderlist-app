@@ -57,6 +57,9 @@ export default function SubscriptionScreen() {
   const [upgrading, setUpgrading] = useState(false);
   const [status, setStatus] = useState<SubscriptionStatus | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('yearly');
+  
+  // Use purchase context
+  const { offerings, isPro, isMockMode, purchase, restore, refresh } = usePurchases();
 
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
@@ -88,18 +91,76 @@ export default function SubscriptionScreen() {
   const handleUpgrade = async () => {
     setUpgrading(true);
     try {
-      const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/subscription/upgrade?plan=${selectedPlan}`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      // Get the selected package from offerings
+      const pkg = selectedPlan === 'yearly' ? offerings?.annual : offerings?.monthly;
       
-      if (response.ok) {
-        const data = await response.json();
+      if (!pkg) {
+        Alert.alert('Error', 'Unable to load subscription packages. Please try again.');
+        setUpgrading(false);
+        return;
+      }
+      
+      const success = await purchase(pkg);
+      
+      if (success) {
+        // Sync with backend
+        const token = await getToken();
+        await fetch(`${BACKEND_URL}/api/subscription/upgrade?plan=${selectedPlan}`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        
         Alert.alert(
           '🎉 Welcome to WanderMark Pro!',
-          data.message,
-          [{ text: 'Awesome!', onPress: () => fetchSubscriptionStatus() }]
+          'Your subscription has been activated. Enjoy all premium features!',
+          [{ text: 'Awesome!', onPress: () => {
+            fetchSubscriptionStatus();
+            refresh();
+          }}]
+        );
+      }
+    } catch (error) {
+      console.error('Error upgrading:', error);
+      Alert.alert('Error', 'Failed to process purchase. Please try again.');
+    } finally {
+      setUpgrading(false);
+    }
+  };
+
+  const handleRestore = async () => {
+    setUpgrading(true);
+    try {
+      const success = await restore();
+      
+      if (success) {
+        // Sync with backend
+        const token = await getToken();
+        await fetch(`${BACKEND_URL}/api/subscription/upgrade?plan=yearly`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        
+        Alert.alert(
+          '✅ Purchase Restored',
+          'Your WanderMark Pro subscription has been restored!',
+          [{ text: 'Great!', onPress: () => {
+            fetchSubscriptionStatus();
+            refresh();
+          }}]
+        );
+      } else {
+        Alert.alert(
+          'No Purchase Found',
+          'We could not find a previous subscription. If you believe this is an error, please contact support.'
+        );
+      }
+    } catch (error) {
+      console.error('Error restoring:', error);
+      Alert.alert('Error', 'Failed to restore purchases. Please try again.');
+    } finally {
+      setUpgrading(false);
+    }
+  };
         );
       } else {
         const error = await response.json();
