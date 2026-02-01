@@ -164,6 +164,43 @@ export default function RegisterScreen() {
                 Sign Up
               </Button>
 
+              <View style={styles.divider}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>OR</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              <Button
+                mode="outlined"
+                onPress={handleGoogleSignUp}
+                disabled={loading}
+                icon="google"
+                style={styles.googleButton}
+                textColor={theme.colors.text}
+                buttonColor={theme.colors.surface}
+              >
+                Sign up with Google
+              </Button>
+
+              {/* Apple Sign-In Button */}
+              {Platform.OS === 'ios' && isAppleSignInAvailable ? (
+                <AppleAuthentication.AppleAuthenticationButton
+                  buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_UP}
+                  buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+                  cornerRadius={8}
+                  style={styles.appleButton}
+                  onPress={handleAppleSignUp}
+                />
+              ) : Platform.OS !== 'ios' ? (
+                <TouchableOpacity
+                  style={styles.appleButton}
+                  onPress={() => setError('Apple Sign-In is only available on iOS devices')}
+                >
+                  <Ionicons name="logo-apple" size={20} color="#fff" />
+                  <Text style={styles.appleButtonText}>Sign up with Apple</Text>
+                </TouchableOpacity>
+              ) : null}
+
               <TouchableOpacity
                 onPress={() => router.back()}
                 style={styles.linkContainer}
