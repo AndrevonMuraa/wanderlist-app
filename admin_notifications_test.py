@@ -69,7 +69,7 @@ class AdminNotificationTester:
                 self.auth_token = data.get("token")
                 user_info = data.get("user", {})
                 
-                print_success(f"Authentication successful for {user_info['name']} ({user_info['email']})")
+                print_success(f"Authentication successful for {user_info['name']} (user_id: {user_info['user_id']})")
                 print_info(f"User role: {user_info.get('role', 'user')}")
                 print_info(f"Subscription tier: {user_info.get('subscription_tier', 'free')}")
                 
@@ -80,7 +80,7 @@ class AdminNotificationTester:
                 
                 # Set authorization header
                 self.session.headers.update({"Authorization": f"Bearer {self.auth_token}"})
-                self.log_result("Authentication", True, f"Admin token obtained for {user_info['email']}")
+                self.log_result("Authentication", True, f"Admin token obtained for {user_info['user_id']}")
                 return True
             else:
                 print_error(f"Failed to get auth token: {response.status_code} - {response.text}")
