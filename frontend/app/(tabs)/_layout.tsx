@@ -40,20 +40,11 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="map"
-        options={{
-          title: 'Map',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="globe-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="journey"
         options={{
-          title: 'Journey',
+          title: 'My Journey',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="footsteps-outline" size={size} color={color} />
+            <Ionicons name="map-outline" size={size} color={color} />
           ),
         }}
       />
@@ -73,6 +64,13 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),
+        }}
+      />
+      {/* Hidden tab - map functionality integrated into Journey */}
+      <Tabs.Screen
+        name="map"
+        options={{
+          href: null, // Hide from tab bar
         }}
       />
     </Tabs>
