@@ -47,6 +47,7 @@ interface Stats {
 export default function StatisticsScreen() {
   const router = useRouter();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<Stats | null>(null);
 
