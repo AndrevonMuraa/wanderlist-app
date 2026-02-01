@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 import theme from '../styles/theme';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface ProgressBarProps {
   percentage: number;
@@ -13,29 +14,31 @@ interface ProgressBarProps {
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   percentage,
-  color = theme.colors.primary,
+  color,
   height = 8,
   label,
   showPercentage = true,
   style,
 }) => {
+  const { colors } = useTheme();
+  const barColor = color || colors.primary;
   const clampedPercentage = Math.max(0, Math.min(100, percentage));
   
   return (
     <View style={[styles.container, style]}>
       {(label || showPercentage) && (
         <View style={styles.header}>
-          {label && <Text style={styles.label}>{label}</Text>}
-          {showPercentage && <Text style={styles.percentage}>{Math.round(clampedPercentage)}%</Text>}
+          {label && <Text style={[styles.label, { color: colors.text }]}>{label}</Text>}
+          {showPercentage && <Text style={[styles.percentage, { color: colors.textSecondary }]}>{Math.round(clampedPercentage)}%</Text>}
         </View>
       )}
-      <View style={[styles.track, { height }]}>
+      <View style={[styles.track, { height, backgroundColor: colors.border }]}>
         <View
           style={[
             styles.fill,
             {
               width: `${clampedPercentage}%`,
-              backgroundColor: color,
+              backgroundColor: barColor,
               height,
             },
           ]}
