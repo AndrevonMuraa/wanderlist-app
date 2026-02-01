@@ -1,4 +1,4 @@
-# WanderList App - Baseline Model & State Preservation System
+# WanderMark App - Baseline Model & State Preservation System
 
 > **NOTE FOR PRO SUBSCRIPTION USERS:** 
 > A streamlined version exists at `/app/WANDERLIST_ESSENTIAL_BASELINE.md` (recommended)
@@ -42,7 +42,7 @@ This baseline model ensures:
 ### 📱 Header Redesign (All Pages)
 - **Compact Single-Row Headers** - All headers reduced to single row with title left, branding right
 - **Removed Profile Buttons** - Profile button removed from all headers
-- **WanderList Branding** - 🌍 WanderList moved to right side with dark text (#2A2A2A) for visibility
+- **WanderMark Branding** - 🌍 WanderMark moved to right side with dark text (#2A2A2A) for visibility
 - **Sticky Headers** - All headers now stick to top while scrolling
 - **Consistent Header Height** - All headers use `minHeight: 32` and same `topPadding` calculation
 - **Removed Subtitle Text** - Removed "Choose your next adventure", "Good morning...", "Connect with your travel community", "Discover amazing landmarks", landmark counters
@@ -1577,7 +1577,7 @@ git commit -m "Session X: [Brief summary of changes]"
   - Expandable mechanics: Points System (with completion bonuses), Badges, Social, Progress
   - Points milestones: 4 visual progress bars (100/500/1000/5000 pts) with trophy icons
   - Subscription tiers: Visual comparison of Free, Basic (most popular), Premium
-  - "Why Use WanderList": 4 benefits with checkmarks
+  - "Why Use WanderMark": 4 benefits with checkmarks
   - "Start Exploring Now" CTA button with gradient
   - Accessible from: Profile → About the App (first menu item)
   - Files: `/app/frontend/app/about.tsx` (new), `/app/frontend/app/(tabs)/profile.tsx` (menu link added)
