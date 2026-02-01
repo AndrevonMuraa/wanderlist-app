@@ -511,6 +511,26 @@ export default function JourneyScreen() {
           </TouchableOpacity>
         </Surface>
 
+        {/* Travel Map Section */}
+        <Surface style={styles.countryVisitsCard}>
+          <TouchableOpacity
+            style={styles.countryVisitsRow}
+            onPress={() => router.push('/(tabs)/map')}
+            activeOpacity={0.7}
+          >
+            <View style={styles.countryVisitsLeft}>
+              <View style={[styles.countryVisitsIcon, { backgroundColor: theme.colors.primary + '20' }]}>
+                <Ionicons name="globe" size={22} color={theme.colors.primary} />
+              </View>
+              <View>
+                <Text style={styles.countryVisitsTitle}>Travel Map</Text>
+                <Text style={styles.countryVisitsSubtitle}>See all your visited places on a map</Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={22} color={theme.colors.textLight} />
+          </TouchableOpacity>
+        </Surface>
+
         {/* Custom Visits Section */}
         <Surface style={styles.customVisitsCard}>
           <View style={styles.customVisitsHeader}>
