@@ -4,8 +4,10 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  FlatList,
+  ScrollView,
   Platform,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
 } from 'react-native';
 import { Text } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
@@ -67,11 +69,11 @@ interface OnboardingFlowProps {
 
 export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const flatListRef = useRef<FlatList>(null);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const handleNext = () => {
     if (currentIndex < slides.length - 1) {
-      flatListRef.current?.scrollToIndex({ index: currentIndex + 1, animated: true });
+      scrollViewRef.current?.scrollTo({ x: (currentIndex + 1) * width, animated: true });
       setCurrentIndex(currentIndex + 1);
     } else {
       handleComplete();
@@ -87,8 +89,15 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
     onComplete();
   };
 
-  const renderSlide = ({ item, index }: { item: OnboardingSlide; index: number }) => (
-    <View style={[styles.slide, { width }]}>
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const index = Math.round(event.nativeEvent.contentOffset.x / width);
+    if (index !== currentIndex && index >= 0 && index < slides.length) {
+      setCurrentIndex(index);
+    }
+  };
+
+  const renderSlide = (item: OnboardingSlide) => (
+    <View key={item.id} style={styles.slide}>
       <LinearGradient
         colors={item.gradient}
         style={styles.iconContainer}
@@ -125,20 +134,17 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
       </TouchableOpacity>
 
       {/* Slides */}
-      <FlatList
-        ref={flatListRef}
-        data={slides}
-        renderItem={renderSlide}
+      <ScrollView
+        ref={scrollViewRef}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
-        onMomentumScrollEnd={(event) => {
-          const index = Math.round(event.nativeEvent.contentOffset.x / width);
-          setCurrentIndex(index);
-        }}
+        onMomentumScrollEnd={handleScroll}
         scrollEventThrottle={16}
-      />
+        contentContainerStyle={styles.scrollContent}
+      >
+        {slides.map(renderSlide)}
+      </ScrollView>
 
       {/* Bottom section */}
       <View style={styles.bottomContainer}>
