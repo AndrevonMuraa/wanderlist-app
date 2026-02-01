@@ -130,6 +130,46 @@ export default function EditProfileScreen() {
     }
   };
 
+  const handlePickBanner = async () => {
+    try {
+      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      
+      if (!permission.granted) {
+        Alert.alert('Permission Required', 'Please allow access to your photo library');
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [3, 1], // Banner aspect ratio
+        quality: 0.6,
+        base64: true,
+      });
+
+      if (!result.canceled && result.assets[0].base64) {
+        const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`;
+        setBannerImage(base64Image);
+      }
+    } catch (error) {
+      console.error('Error picking banner:', error);
+      Alert.alert('Error', 'Failed to pick banner image');
+    }
+  };
+
+  const toggleFeaturedBadge = (achievementId: string) => {
+    setFeaturedBadges(prev => {
+      if (prev.includes(achievementId)) {
+        return prev.filter(id => id !== achievementId);
+      } else if (prev.length < 3) {
+        return [...prev, achievementId];
+      } else {
+        Alert.alert('Maximum Reached', 'You can only feature up to 3 badges');
+        return prev;
+      }
+    });
+  };
+
   const handleSave = async () => {
     if (!name.trim()) {
       Alert.alert('Error', 'Name is required');
