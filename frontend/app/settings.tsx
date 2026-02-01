@@ -60,11 +60,30 @@ export default function SettingsScreen() {
   const { colors, shadows, gradientColors, isDark } = useTheme();
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { clearCache, isOnline, pendingVisitsCount, lastSyncTime } = useOffline();
   const [defaultPrivacy, setDefaultPrivacy] = useState<'public' | 'friends' | 'private'>('public');
   const [pushNotifications, setPushNotifications] = useState(true);
   
   // Check if user is admin or moderator
   const isAdmin = user?.role === 'admin' || user?.role === 'moderator';
+
+  const handleClearCache = () => {
+    Alert.alert(
+      'Clear Offline Cache',
+      'This will remove all cached data. You will need to be online to reload your journey data.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Clear', 
+          style: 'destructive', 
+          onPress: async () => {
+            await clearCache();
+            Alert.alert('Success', 'Offline cache cleared');
+          }
+        },
+      ]
+    );
+  };
   
   // Dynamic privacy options with translations
   const privacyOptions: PrivacyOption[] = [
