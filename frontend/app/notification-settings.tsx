@@ -1,424 +1,324 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Platform, Switch, ActivityIndicator } from 'react-native';
-import { Text, Surface } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Platform, Alert } from 'react-native';
+import { Text, Switch, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../styles/theme';
-import { BACKEND_URL } from '../utils/config';
-
-interface NotificationSettings {
-  likes_enabled: boolean;
-  comments_enabled: boolean;
-  friend_requests_enabled: boolean;
-  achievements_enabled: boolean;
-  streak_reminders_enabled: boolean;
-  weekly_summary_enabled: boolean;
-}
-
-const defaultSettings: NotificationSettings = {
-  likes_enabled: true,
-  comments_enabled: true,
-  friend_requests_enabled: true,
-  achievements_enabled: true,
-  streak_reminders_enabled: true,
-  weekly_summary_enabled: true,
-};
+import { useTheme } from '../contexts/ThemeContext';
+import UniversalHeader from '../components/UniversalHeader';
+import {
+  requestNotificationPermissions,
+  getNotificationSettings,
+  saveNotificationSettings,
+  scheduleStreakReminder,
+} from '../utils/notifications';
 
 export default function NotificationSettingsScreen() {
   const router = useRouter();
-  const [settings, setSettings] = useState<NotificationSettings>(defaultSettings);
+  const { colors } = useTheme();
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [permissionGranted, setPermissionGranted] = useState(false);
+  const [settings, setSettings] = useState({
+    streakReminders: true,
+    dailyReminders: false,
+    weeklyDigest: true,
+    achievements: true,
+    reminderTime: '19:00',
+  });
 
   useEffect(() => {
-    fetchSettings();
+    loadSettings();
   }, []);
 
-  const getToken = async (): Promise<string | null> => {
-    if (Platform.OS === 'web') {
-      return localStorage.getItem('auth_token');
-    } else {
-      const SecureStore = require('expo-secure-store');
-      return await SecureStore.getItemAsync('auth_token');
-    }
-  };
-
-  const fetchSettings = async () => {
+  const loadSettings = async () => {
     try {
-      const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/push-settings`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
+      const currentSettings = await getNotificationSettings();
+      setSettings(currentSettings);
       
-      if (response.ok) {
-        const data = await response.json();
-        setSettings({ ...defaultSettings, ...data });
+      if (Platform.OS !== 'web') {
+        const granted = await requestNotificationPermissions();
+        setPermissionGranted(granted);
       }
     } catch (error) {
-      console.error('Error fetching notification settings:', error);
+      console.error('Error loading settings:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const updateSetting = async (key: keyof NotificationSettings, value: boolean) => {
-    const newSettings = { ...settings, [key]: value };
+  const handleToggle = async (key: keyof typeof settings) => {
+    const newValue = !settings[key];
+    const newSettings = { ...settings, [key]: newValue };
     setSettings(newSettings);
-    setSaving(true);
-
-    try {
-      const token = await getToken();
-      await fetch(`${BACKEND_URL}/api/push-settings`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(newSettings),
-      });
-    } catch (error) {
-      console.error('Error updating notification settings:', error);
-      // Revert on error
-      setSettings(settings);
-    } finally {
-      setSaving(false);
-    }
+    await saveNotificationSettings({ [key]: newValue });
   };
 
-  const settingsConfig = [
-    {
-      category: 'Social',
-      icon: 'heart',
-      color: '#FF6B6B',
-      items: [
-        {
-          key: 'likes_enabled' as const,
-          title: 'Likes',
-          description: 'When someone likes your posts',
-          icon: 'heart',
-        },
-        {
-          key: 'comments_enabled' as const,
-          title: 'Comments',
-          description: 'When someone comments on your posts',
-          icon: 'chatbubble',
-        },
-        {
-          key: 'friend_requests_enabled' as const,
-          title: 'Friend Requests',
-          description: 'When someone sends you a friend request',
-          icon: 'person-add',
-        },
-      ],
-    },
-    {
-      category: 'Progress',
-      icon: 'trophy',
-      color: '#FFD700',
-      items: [
-        {
-          key: 'achievements_enabled' as const,
-          title: 'Achievements',
-          description: 'When you unlock new badges',
-          icon: 'ribbon',
-        },
-        {
-          key: 'streak_reminders_enabled' as const,
-          title: 'Streak Reminders',
-          description: 'Daily reminders to maintain your streak',
-          icon: 'flame',
-        },
-      ],
-    },
-    {
-      category: 'Updates',
-      icon: 'mail',
-      color: theme.colors.primary,
-      items: [
-        {
-          key: 'weekly_summary_enabled' as const,
-          title: 'Weekly Summary',
-          description: 'Weekly travel stats and highlights',
-          icon: 'calendar',
-        },
-      ],
-    },
-  ];
+  const handleTimeChange = () => {
+    Alert.alert(
+      'Reminder Time',
+      'Select when you want to receive your daily streak reminder',
+      [
+        { text: 'Morning (9:00)', onPress: () => updateTime('09:00') },
+        { text: 'Afternoon (14:00)', onPress: () => updateTime('14:00') },
+        { text: 'Evening (19:00)', onPress: () => updateTime('19:00') },
+        { text: 'Night (21:00)', onPress: () => updateTime('21:00') },
+        { text: 'Cancel', style: 'cancel' },
+      ]
+    );
+  };
+
+  const updateTime = async (time: string) => {
+    setSettings(prev => ({ ...prev, reminderTime: time }));
+    await saveNotificationSettings({ reminderTime: time });
+    await scheduleStreakReminder(settings.streakReminders, time);
+  };
+
+  const formatTime = (time: string) => {
+    const [hours, minutes] = time.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour % 12 || 12;
+    return `${hour12}:${minutes} ${ampm}`;
+  };
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <UniversalHeader title="Notifications" onBack={() => router.back()} />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Notifications</Text>
-        {saving && (
-          <ActivityIndicator size="small" color={theme.colors.primary} style={styles.savingIndicator} />
-        )}
-      </View>
-
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-        {/* Info Banner */}
-        {Platform.OS === 'web' && (
-          <Surface style={styles.infoBanner}>
-            <Ionicons name="information-circle" size={24} color={theme.colors.primary} />
-            <Text style={styles.infoBannerText}>
-              Push notifications are only available on mobile devices. Download the app to receive notifications.
-            </Text>
-          </Surface>
-        )}
-
-        {/* Settings Sections */}
-        {settingsConfig.map((section) => (
-          <View key={section.category} style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <View style={[styles.sectionIcon, { backgroundColor: section.color + '20' }]}>
-                <Ionicons name={section.icon as any} size={20} color={section.color} />
-              </View>
-              <Text style={styles.sectionTitle}>{section.category}</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <UniversalHeader title="Notifications" onBack={() => router.back()} />
+      
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {/* Permission Warning */}
+        {Platform.OS !== 'web' && !permissionGranted && (
+          <TouchableOpacity
+            style={styles.permissionWarning}
+            onPress={requestNotificationPermissions}
+          >
+            <Ionicons name="warning" size={24} color="#f59e0b" />
+            <View style={styles.permissionTextContainer}>
+              <Text style={styles.permissionTitle}>Notifications Disabled</Text>
+              <Text style={styles.permissionMessage}>
+                Tap to enable notifications in settings
+              </Text>
             </View>
+            <Ionicons name="chevron-forward" size={20} color="#f59e0b" />
+          </TouchableOpacity>
+        )}
 
-            <Surface style={styles.settingsCard}>
-              {section.items.map((item, index) => (
-                <View
-                  key={item.key}
-                  style={[
-                    styles.settingItem,
-                    index < section.items.length - 1 && styles.settingItemBorder,
-                  ]}
-                >
-                  <View style={styles.settingInfo}>
-                    <View style={styles.settingTitleRow}>
-                      <Ionicons
-                        name={item.icon as any}
-                        size={18}
-                        color={theme.colors.textSecondary}
-                        style={styles.settingItemIcon}
-                      />
-                      <Text style={styles.settingTitle}>{item.title}</Text>
-                    </View>
-                    <Text style={styles.settingDescription}>{item.description}</Text>
-                  </View>
-                  <Switch
-                    value={settings[item.key]}
-                    onValueChange={(value) => updateSetting(item.key, value)}
-                    trackColor={{
-                      false: theme.colors.border,
-                      true: theme.colors.primary + '60',
-                    }}
-                    thumbColor={settings[item.key] ? theme.colors.primary : '#f4f3f4'}
-                    ios_backgroundColor={theme.colors.border}
-                  />
-                </View>
-              ))}
-            </Surface>
+        {/* Streak Reminders */}
+        <View style={[styles.section, { backgroundColor: colors.surface }]}>
+          <View style={styles.sectionHeader}>
+            <View style={[styles.iconContainer, { backgroundColor: '#ff6b3520' }]}>
+              <Ionicons name="flame" size={22} color="#ff6b35" />
+            </View>
+            <View style={styles.sectionHeaderText}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                Streak Reminders
+              </Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
+                Don't break your streak!
+              </Text>
+            </View>
+            <Switch
+              value={settings.streakReminders}
+              onValueChange={() => handleToggle('streakReminders')}
+              color={theme.colors.primary}
+            />
           </View>
-        ))}
-
-        {/* Quick Actions */}
-        <View style={styles.quickActions}>
-          <TouchableOpacity
-            style={styles.quickActionButton}
-            onPress={() => {
-              const allEnabled = Object.fromEntries(
-                Object.keys(settings).map((key) => [key, true])
-              ) as NotificationSettings;
-              setSettings(allEnabled);
-              // Save all enabled
-              getToken().then((token) => {
-                fetch(`${BACKEND_URL}/api/push-settings`, {
-                  method: 'PUT',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                  },
-                  body: JSON.stringify(allEnabled),
-                });
-              });
-            }}
-          >
-            <Ionicons name="notifications" size={20} color={theme.colors.primary} />
-            <Text style={styles.quickActionText}>Enable All</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.quickActionButton}
-            onPress={() => {
-              const allDisabled = Object.fromEntries(
-                Object.keys(settings).map((key) => [key, false])
-              ) as NotificationSettings;
-              setSettings(allDisabled);
-              // Save all disabled
-              getToken().then((token) => {
-                fetch(`${BACKEND_URL}/api/push-settings`, {
-                  method: 'PUT',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                  },
-                  body: JSON.stringify(allDisabled),
-                });
-              });
-            }}
-          >
-            <Ionicons name="notifications-off" size={20} color={theme.colors.error} />
-            <Text style={[styles.quickActionText, { color: theme.colors.error }]}>
-              Disable All
-            </Text>
-          </TouchableOpacity>
+          
+          {settings.streakReminders && (
+            <TouchableOpacity style={styles.timeSelector} onPress={handleTimeChange}>
+              <Text style={[styles.timeLabel, { color: colors.textSecondary }]}>
+                Reminder Time
+              </Text>
+              <View style={styles.timeValue}>
+                <Text style={[styles.timeText, { color: colors.text }]}>
+                  {formatTime(settings.reminderTime)}
+                </Text>
+                <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
+
+        {/* Achievements */}
+        <View style={[styles.section, { backgroundColor: colors.surface }]}>
+          <View style={styles.sectionHeader}>
+            <View style={[styles.iconContainer, { backgroundColor: '#fbbf2420' }]}>
+              <Ionicons name="trophy" size={22} color="#fbbf24" />
+            </View>
+            <View style={styles.sectionHeaderText}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                Achievement Alerts
+              </Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
+                Badge unlocks & milestones
+              </Text>
+            </View>
+            <Switch
+              value={settings.achievements}
+              onValueChange={() => handleToggle('achievements')}
+              color={theme.colors.primary}
+            />
+          </View>
+        </View>
+
+        {/* Weekly Digest */}
+        <View style={[styles.section, { backgroundColor: colors.surface }]}>
+          <View style={styles.sectionHeader}>
+            <View style={[styles.iconContainer, { backgroundColor: '#8b5cf620' }]}>
+              <Ionicons name="calendar" size={22} color="#8b5cf6" />
+            </View>
+            <View style={styles.sectionHeaderText}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                Weekly Digest
+              </Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
+                Summary of your progress
+              </Text>
+            </View>
+            <Switch
+              value={settings.weeklyDigest}
+              onValueChange={() => handleToggle('weeklyDigest')}
+              color={theme.colors.primary}
+            />
+          </View>
+        </View>
+
+        {/* Daily Reminders */}
+        <View style={[styles.section, { backgroundColor: colors.surface }]}>
+          <View style={styles.sectionHeader}>
+            <View style={[styles.iconContainer, { backgroundColor: '#10b98120' }]}>
+              <Ionicons name="notifications" size={22} color="#10b981" />
+            </View>
+            <View style={styles.sectionHeaderText}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                Daily Reminders
+              </Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
+                Explore new landmarks
+              </Text>
+            </View>
+            <Switch
+              value={settings.dailyReminders}
+              onValueChange={() => handleToggle('dailyReminders')}
+              color={theme.colors.primary}
+            />
+          </View>
+        </View>
+
+        <Text style={[styles.footer, { color: colors.textSecondary }]}>
+          You can change these settings at any time. We'll only send notifications you've enabled.
+        </Text>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  header: {
+  content: {
+    flex: 1,
+    padding: 16,
+  },
+  permissionWarning: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.md,
-    backgroundColor: theme.colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
+    backgroundColor: '#fef3c7',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 16,
+    gap: 12,
   },
-  backButton: {
-    padding: theme.spacing.xs,
-    marginRight: theme.spacing.sm,
+  permissionTextContainer: {
+    flex: 1,
   },
-  headerTitle: {
-    fontSize: 20,
+  permissionTitle: {
+    fontSize: 15,
     fontWeight: '600',
-    color: theme.colors.text,
-    flex: 1,
+    color: '#92400e',
   },
-  savingIndicator: {
-    marginLeft: theme.spacing.sm,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: theme.spacing.md,
-    paddingBottom: theme.spacing.xl,
-  },
-  infoBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
-    backgroundColor: theme.colors.primary + '10',
-    marginBottom: theme.spacing.lg,
-  },
-  infoBannerText: {
-    flex: 1,
-    marginLeft: theme.spacing.sm,
-    fontSize: 14,
-    color: theme.colors.textSecondary,
-    lineHeight: 20,
+  permissionMessage: {
+    fontSize: 13,
+    color: '#b45309',
+    marginTop: 2,
   },
   section: {
-    marginBottom: theme.spacing.lg,
+    borderRadius: 16,
+    marginBottom: 12,
+    overflow: 'hidden',
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.xs,
+    padding: 16,
+    gap: 12,
   },
-  sectionIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
+  iconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: theme.spacing.sm,
+  },
+  sectionHeaderText: {
+    flex: 1,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: theme.colors.text,
   },
-  settingsCard: {
-    borderRadius: theme.borderRadius.lg,
-    backgroundColor: theme.colors.surface,
-    overflow: 'hidden',
-    ...theme.shadows.sm,
-  },
-  settingItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: theme.spacing.md,
-    paddingHorizontal: theme.spacing.md,
-  },
-  settingItemBorder: {
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-  },
-  settingInfo: {
-    flex: 1,
-    marginRight: theme.spacing.md,
-  },
-  settingTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  settingItemIcon: {
-    marginRight: theme.spacing.sm,
-  },
-  settingTitle: {
-    fontSize: 15,
-    fontWeight: '500',
-    color: theme.colors.text,
-  },
-  settingDescription: {
+  sectionSubtitle: {
     fontSize: 13,
-    color: theme.colors.textSecondary,
     marginTop: 2,
-    marginLeft: 26,
   },
-  quickActions: {
+  timeSelector: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    gap: theme.spacing.md,
-    marginTop: theme.spacing.md,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.05)',
+    paddingTop: 12,
+    marginLeft: 56,
   },
-  quickActionButton: {
+  timeLabel: {
+    fontSize: 14,
+  },
+  timeValue: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.md,
-    borderRadius: theme.borderRadius.md,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
+    gap: 4,
   },
-  quickActionText: {
-    marginLeft: theme.spacing.sm,
+  timeText: {
     fontSize: 14,
     fontWeight: '500',
-    color: theme.colors.primary,
+  },
+  footer: {
+    fontSize: 13,
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 24,
+    paddingHorizontal: 20,
+    lineHeight: 20,
   },
 });
