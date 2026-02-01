@@ -253,7 +253,7 @@ export default function TermsOfServiceScreen() {
 
         {/* Disclaimers */}
         <Surface style={styles.card}>
-          <Section title="8. Disclaimers">
+          <Section title="9. Disclaimers">
             <Text style={styles.paragraph}>
               THE APP IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND. WE DO NOT WARRANT THAT:
             </Text>
