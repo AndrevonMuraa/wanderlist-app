@@ -42,6 +42,71 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
   const [isAppleSignInAvailable, setIsAppleSignInAvailable] = useState(false);
 
+  // Configure Google OAuth
+  const redirectUri = makeRedirectUri({
+    scheme: 'wandermark',
+    path: 'oauth',
+  });
+
+  const [googleRequest, googleResponse, promptGoogleAsync] = Google.useAuthRequest({
+    webClientId: GOOGLE_CLIENT_ID,
+    // For iOS/Android native apps, you'd also add:
+    // iosClientId: 'YOUR_IOS_CLIENT_ID',
+    // androidClientId: 'YOUR_ANDROID_CLIENT_ID',
+    redirectUri: Platform.OS === 'web' ? undefined : redirectUri,
+  });
+
+  // Handle Google OAuth response
+  useEffect(() => {
+    if (googleResponse?.type === 'success') {
+      const { authentication } = googleResponse;
+      if (authentication?.accessToken) {
+        handleGoogleToken(authentication.accessToken);
+      }
+    }
+  }, [googleResponse]);
+
+  // Process Google access token
+  const handleGoogleToken = async (accessToken: string) => {
+    try {
+      // Get user info from Google
+      const userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      
+      if (!userInfoResponse.ok) {
+        throw new Error('Failed to get Google user info');
+      }
+      
+      const googleUser = await userInfoResponse.json();
+      console.log('Google user info:', googleUser);
+      
+      // Send to our backend
+      const response = await fetch(`${BACKEND_URL}/api/auth/google/token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: googleUser.email,
+          name: googleUser.name,
+          picture: googleUser.picture,
+          google_id: googleUser.id,
+        }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        await setToken(data.access_token);
+        setUser(data.user);
+      } else {
+        const error = await response.json();
+        throw new Error(error.detail || 'Google login failed');
+      }
+    } catch (error) {
+      console.error('Error processing Google token:', error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     // Check if Apple Sign-In is available (iOS only)
     const checkAppleSignIn = async () => {
@@ -51,35 +116,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     };
     checkAppleSignIn();
-    // Check for OAuth callback on page load (web)
-    if (Platform.OS === 'web') {
-      const urlParams = new URLSearchParams(window.location.search);
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      const sessionId = urlParams.get('session_id') || hashParams.get('session_id');
-      
-      if (sessionId) {
-        console.log('Found session_id in URL:', sessionId);
-        handleOAuthCallback(sessionId).finally(() => {
-          setLoading(false);
-        });
-      } else {
-        checkAuth();
-      }
-    } else {
-      checkAuth();
-      
-      // Handle deep links for mobile
-      const subscription = Linking.addEventListener('url', handleDeepLink);
-      
-      // Check initial URL (cold start)
-      Linking.getInitialURL().then(url => {
-        if (url) handleUrl(url);
-      });
-
-      return () => {
-        subscription.remove();
-      };
-    }
+    checkAuth();
   }, []);
 
   const handleOAuthCallback = async (sessionId: string) => {
