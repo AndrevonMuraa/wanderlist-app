@@ -246,20 +246,21 @@ class WanderMarkAPITester:
         """Test reports API (new feature)"""
         print("📋 TESTING REPORTS API")
         
-        response = self.make_request("GET", "/reports")
+        response = self.make_request("GET", "/reports/my-reports")
         if response and response.status_code == 200:
-            reports = response.json()
-            response_text = json.dumps(reports)
+            data = response.json()
+            reports = data.get("reports", [])
+            response_text = json.dumps(data)
             has_wanderlist = "wanderlist" in response_text.lower()
             
             self.log_test(
-                "Reports - /reports", 
+                "Reports - /reports/my-reports", 
                 True, 
                 f"Reports count: {len(reports)} | No WanderList refs: {not has_wanderlist}"
             )
         else:
             self.log_test(
-                "Reports - /reports", 
+                "Reports - /reports/my-reports", 
                 False, 
                 f"Failed with status {response.status_code if response else 'No response'}"
             )
