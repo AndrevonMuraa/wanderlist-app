@@ -119,67 +119,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     checkAuth();
   }, []);
 
-  const handleOAuthCallback = async (sessionId: string) => {
-    try {
-      console.log('Processing OAuth callback with session_id:', sessionId);
-      const response = await fetch(`${BACKEND_URL}/api/auth/google/callback?session_id=${sessionId}`, {
-        method: 'POST',
-        credentials: 'include'  // Include cookies
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log('OAuth callback successful:', data);
-        
-        // Store token
-        if (Platform.OS === 'web') {
-          // For web, use localStorage as fallback
-          localStorage.setItem('auth_token', data.session_token);
-        } else {
-          await SecureStore.setItemAsync('auth_token', data.session_token);
-        }
-        
-        // Clean URL
-        if (Platform.OS === 'web') {
-          window.history.replaceState({}, document.title, '/');
-        }
-        
-        // Refresh user data
-        await refreshUser();
-      } else {
-        console.error('OAuth callback failed:', response.status);
-        const errorData = await response.json().catch(() => ({ detail: 'OAuth callback failed' }));
-        throw new Error(errorData.detail || 'OAuth callback failed');
-      }
-    } catch (error) {
-      console.error('Error processing Google OAuth callback:', error);
-      // Don't throw - just log the error so app doesn't crash
-      // User will stay on login screen
-    }
-  };
-
-  const handleDeepLink = (event: { url: string }) => {
-    console.log('Deep link received:', event.url);
-    handleUrl(event.url);
-  };
-
-  const handleUrl = async (url: string) => {
-    console.log('Processing URL:', url);
-    // Parse session_id from URL (both hash and query)
-    let sessionId = null;
-    
-    if (url.includes('#session_id=')) {
-      sessionId = url.split('#session_id=')[1].split('&')[0];
-    } else if (url.includes('?session_id=')) {
-      sessionId = url.split('?session_id=')[1].split('&')[0];
-    }
-
-    if (sessionId) {
-      console.log('Found session_id in deep link:', sessionId);
-      await handleOAuthCallback(sessionId);
-    }
-  };
-
   const getToken = async (): Promise<string | null> => {
     if (Platform.OS === 'web') {
       return localStorage.getItem('auth_token');
