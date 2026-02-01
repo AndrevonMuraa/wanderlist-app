@@ -266,9 +266,9 @@ class WanderListTester:
         except Exception as e:
             self.log_result("Friends list API", False, f"Exception: {str(e)}")
             
-        # Test GET /api/activity-feed
+        # Test GET /api/feed
         try:
-            response = requests.get(f"{BASE_URL}/activity-feed", headers=headers)
+            response = requests.get(f"{BASE_URL}/feed", headers=headers)
             if response.status_code == 200:
                 activities = response.json()
                 self.log_result("Activity feed API", True, f"Retrieved {len(activities)} activities")
@@ -280,7 +280,7 @@ class WanderListTester:
         # Test activity like functionality (need an activity ID first)
         try:
             # Get activities first
-            response = requests.get(f"{BASE_URL}/activity-feed", headers=headers)
+            response = requests.get(f"{BASE_URL}/feed", headers=headers)
             if response.status_code == 200:
                 activities = response.json()
                 if activities:
