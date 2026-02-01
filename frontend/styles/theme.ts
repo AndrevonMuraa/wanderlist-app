@@ -98,7 +98,7 @@ export const darkColors = {
   info: '#5CC4E4',
   
   // Tier Colors - Luxury
-  free: '#808080',           // Gray
+  free: '#909090',           // Gray - more visible
   basic: '#5CC4E4',          // Ocean blue
   premium: '#D4B872',        // Gold
   
@@ -107,9 +107,9 @@ export const darkColors = {
   overlayLight: 'rgba(0, 0, 0, 0.4)',
   overlayStrong: 'rgba(0, 0, 0, 0.8)',
   
-  // Borders
-  border: '#3A3A3A',
-  borderLight: '#2A2A2A',
+  // Borders - more visible in dark mode
+  border: '#404040',
+  borderLight: '#353535',
 };
 
 // Country-specific accent colors (shared between themes)
