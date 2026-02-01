@@ -13,7 +13,9 @@
     "search": "Search",
     "noResults": "No results found",
     "seeAll": "See all",
-    "settings": "Settings"
+    "settings": "Settings",
+    "viewAll": "View All",
+    "manage": "Manage"
   },
   "auth": {
     "login": "Login",
@@ -46,7 +48,8 @@
     "searchPlaceholder": "Search countries or landmarks...",
     "bucketList": "Bucket List",
     "visitedCount": "{{count}} visited",
-    "totalCountries": "{{count}} countries"
+    "totalCountries": "{{count}} countries",
+    "startExploring": "Start exploring landmarks!"
   },
   "journey": {
     "title": "My Journey",
