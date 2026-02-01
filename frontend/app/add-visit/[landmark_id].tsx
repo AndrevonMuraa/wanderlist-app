@@ -226,8 +226,10 @@ export default function AddVisitScreen() {
         [
           {
             text: 'Awesome!',
-            onPress: () => {
+            onPress: async () => {
               setModalVisible(false);
+              // Maybe prompt for app review after a successful visit
+              await maybePromptForReview();
               router.back();
             },
           },
