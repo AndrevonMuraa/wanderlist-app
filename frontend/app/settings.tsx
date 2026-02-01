@@ -56,8 +56,34 @@ export default function SettingsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { colors, shadows, gradientColors, isDark } = useTheme();
+  const { t } = useTranslation();
   const [defaultPrivacy, setDefaultPrivacy] = useState<'public' | 'friends' | 'private'>('public');
   const [pushNotifications, setPushNotifications] = useState(true);
+  
+  // Dynamic privacy options with translations
+  const privacyOptions: PrivacyOption[] = [
+    {
+      value: 'public',
+      icon: 'globe-outline',
+      label: t('settings.public'),
+      description: t('settings.publicDesc'),
+      color: '#27ae60',
+    },
+    {
+      value: 'friends',
+      icon: 'people-outline',
+      label: t('settings.friendsOnly'),
+      description: t('settings.friendsOnlyDesc'),
+      color: '#3498db',
+    },
+    {
+      value: 'private',
+      icon: 'lock-closed-outline',
+      label: t('settings.private'),
+      description: t('settings.privateDesc'),
+      color: '#e74c3c',
+    },
+  ];
 
   // Navigate back to profile explicitly
   const handleBack = () => {
