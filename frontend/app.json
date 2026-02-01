@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.wanderlist.app",
+      "bundleIdentifier": "com.wandermark.app",
       "infoPlist": {
         "NSCameraUsageDescription": "Take photos of landmarks you visit",
         "NSPhotoLibraryUsageDescription": "Save and share your travel photos",
