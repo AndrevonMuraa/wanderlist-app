@@ -419,27 +419,26 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   header: {
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
-    backgroundColor: theme.colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-  },
-  headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
   },
-  headerText: {
-    marginLeft: theme.spacing.md,
+  backButton: {
+    padding: theme.spacing.xs,
+  },
+  headerCenter: {
+    alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '700',
-    color: theme.colors.text,
+    color: '#fff',
   },
   headerSubtitle: {
-    fontSize: 14,
-    color: theme.colors.textSecondary,
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.9)',
     marginTop: 2,
   },
   filterContainer: {
