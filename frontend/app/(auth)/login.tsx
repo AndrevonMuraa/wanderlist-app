@@ -320,6 +320,22 @@ const styles = StyleSheet.create({
     height: 48,
     marginTop: theme.spacing.md,
   },
+  appleButtonFallback: {
+    width: '100%',
+    height: 48,
+    marginTop: theme.spacing.md,
+    backgroundColor: '#000',
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  appleButtonFallbackText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
   quickLoginButton: {
     flexDirection: 'row',
     alignItems: 'center',
