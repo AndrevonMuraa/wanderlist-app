@@ -13,7 +13,7 @@ interface BrandedGlobeIconProps {
 }
 
 /**
- * WanderList Branded Globe Icon
+ * WanderMark Branded Globe Icon
  * Design: Globe with latitude/longitude lines + "W" letter + Gold location pin
  * Colors: Ocean to Sand gradient (#4DB8D8 → #E8DCC8) + Gold accent (#C9A961)
  */
