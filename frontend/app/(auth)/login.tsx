@@ -197,6 +197,45 @@ export default function LoginScreen() {
         </ScrollView>
       </KeyboardAvoidingView>
 
+      {/* Web Login Info Modal */}
+      <Modal
+        visible={showWebLoginInfo}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowWebLoginInfo(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalIconContainer}>
+              <Ionicons name="phone-portrait-outline" size={48} color={theme.colors.primary} />
+            </View>
+            <Text style={styles.modalTitle}>Use Mobile App</Text>
+            <Text style={styles.modalMessage}>
+              Google Sign-In is available in the mobile app for enhanced security.
+            </Text>
+            <Text style={styles.modalSubMessage}>
+              Download the WanderMark app or use email login to continue on web.
+            </Text>
+            
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={styles.modalPrimaryButton}
+                onPress={() => setShowWebLoginInfo(false)}
+              >
+                <Text style={styles.modalPrimaryButtonText}>Use Email Login</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={styles.modalSecondaryButton}
+                onPress={() => setShowWebLoginInfo(false)}
+              >
+                <Text style={styles.modalSecondaryButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       <Snackbar
         visible={!!error}
         onDismiss={() => setError('')}
