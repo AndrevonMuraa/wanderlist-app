@@ -1,4 +1,4 @@
-# WanderList - App Store Metadata
+# WanderMark - App Store Metadata
 
 > **Purpose:** Ready-to-use content for Apple App Store & Google Play Store submissions
 > **Version:** 1.0.0
@@ -10,9 +10,9 @@
 
 | Field | Value |
 |-------|-------|
-| App Name | WanderList |
-| Bundle ID (iOS) | com.wanderlist.app |
-| Package Name (Android) | com.wanderlist.app |
+| App Name | WanderMark |
+| Bundle ID (iOS) | com.wandermark.app |
+| Package Name (Android) | com.wandermark.app |
 | Version | 1.0.0 |
 | Build Number | 1 |
 | Primary Language | English (US) |
@@ -23,7 +23,7 @@
 
 ### App Name (30 characters max)
 ```
-WanderList
+WanderMark
 ```
 
 ### Subtitle (30 characters max)
@@ -44,7 +44,7 @@ travel,landmarks,bucket list,world tour,explore,adventure,tourism,sightseeing,tr
 
 ### Description (4000 characters max)
 ```
-Discover the world's most iconic landmarks and track your travel adventures with WanderList – your personal travel companion!
+Discover the world's most iconic landmarks and track your travel adventures with WanderMark – your personal travel companion!
 
 🗺️ EXPLORE 560+ LANDMARKS
 Browse through carefully curated landmarks across 48 countries and 5 continents. From the Eiffel Tower to the Great Wall of China, from Machu Picchu to the Sydney Opera House – your next adventure awaits.
@@ -85,19 +85,19 @@ Upgrade to unlock:
 • Americas – 115 landmarks across 10 countries
 • Oceania – 93 landmarks across 8 countries
 
-Whether you're a seasoned globetrotter or planning your first international trip, WanderList helps you discover, track, and celebrate your travel achievements.
+Whether you're a seasoned globetrotter or planning your first international trip, WanderMark helps you discover, track, and celebrate your travel achievements.
 
 Start your journey today – the world is waiting! ✈️
 
-Questions or feedback? Contact us at support@wanderlist.app
+Questions or feedback? Contact us at support@wandermark.app
 ```
 
 ### What's New (4000 characters max)
 *For version 1.0.0 launch*
 ```
-🎉 Welcome to WanderList!
+🎉 Welcome to WanderMark!
 
-We're thrilled to launch WanderList – your ultimate travel companion for exploring the world's most iconic landmarks.
+We're thrilled to launch WanderMark – your ultimate travel companion for exploring the world's most iconic landmarks.
 
 What's included:
 • 560+ landmarks across 48 countries
@@ -107,7 +107,7 @@ What's included:
 • Social features and activity feed
 • Bucket list planning
 • Achievement badges and milestones
-• WanderList Pro subscription for premium features
+• WanderMark Pro subscription for premium features
 
 Start your adventure today! 🌍
 ```
@@ -134,7 +134,7 @@ Start your adventure today! 🌍
 
 ### App Name (30 characters max)
 ```
-WanderList
+WanderMark
 ```
 
 ### Short Description (80 characters max)
@@ -144,7 +144,7 @@ Track your travels across 560+ landmarks in 48 countries. Explore the world! �
 
 ### Full Description (4000 characters max)
 ```
-Discover the world's most iconic landmarks and track your travel adventures with WanderList – your personal travel companion!
+Discover the world's most iconic landmarks and track your travel adventures with WanderMark – your personal travel companion!
 
 🗺️ EXPLORE 560+ LANDMARKS
 Browse through carefully curated landmarks across 48 countries and 5 continents. From the Eiffel Tower to the Great Wall of China, from Machu Picchu to the Sydney Opera House – your next adventure awaits.
@@ -185,13 +185,13 @@ Upgrade to unlock:
 ★ Americas – 115 landmarks across 10 countries
 ★ Oceania – 93 landmarks across 8 countries
 
-Whether you're a seasoned globetrotter or planning your first international trip, WanderList helps you discover, track, and celebrate your travel achievements.
+Whether you're a seasoned globetrotter or planning your first international trip, WanderMark helps you discover, track, and celebrate your travel achievements.
 
 Start your journey today – the world is waiting! ✈️
 
-Questions? Contact: support@wanderlist.app
-Privacy Policy: https://wanderlist.app/privacy
-Terms of Service: https://wanderlist.app/terms
+Questions? Contact: support@wandermark.app
+Privacy Policy: https://wandermark.app/privacy
+Terms of Service: https://wandermark.app/terms
 ```
 
 ### Category
@@ -270,7 +270,7 @@ Terms of Service: https://wanderlist.app/terms
 
 ### Screenshot 1: Hero/Welcome
 - **Scene:** Login page with branded globe icon
-- **Caption:** "Welcome to WanderList"
+- **Caption:** "Welcome to WanderMark"
 - **Overlay Text:** "Track Your World Adventures"
 
 ### Screenshot 2: Explore Continents
@@ -303,7 +303,7 @@ Terms of Service: https://wanderlist.app/terms
 - **Caption:** "Connect with Travelers"
 - **Overlay Text:** "Share & Discover Adventures"
 
-### Screenshot 8: WanderList Pro
+### Screenshot 8: WanderMark Pro
 - **Scene:** Subscription page
 - **Caption:** "Go Pro"
 - **Overlay Text:** "Unlock 133 Premium Landmarks"
@@ -312,20 +312,20 @@ Terms of Service: https://wanderlist.app/terms
 
 ## 💰 **In-App Purchases**
 
-### WanderList Pro - Monthly
+### WanderMark Pro - Monthly
 | Field | Value |
 |-------|-------|
-| Product ID | `wanderlist_pro_monthly` |
-| Reference Name | WanderList Pro Monthly |
+| Product ID | `wandermark_pro_monthly` |
+| Reference Name | WanderMark Pro Monthly |
 | Price | $3.99 USD |
 | Duration | 1 Month (Auto-renewable) |
 | Description | Unlock 133 premium landmarks, unlimited custom visits, 10 photos per visit, unlimited friends, and advanced analytics. |
 
-### WanderList Pro - Annual
+### WanderMark Pro - Annual
 | Field | Value |
 |-------|-------|
-| Product ID | `wanderlist_pro_annual` |
-| Reference Name | WanderList Pro Annual |
+| Product ID | `wandermark_pro_annual` |
+| Reference Name | WanderMark Pro Annual |
 | Price | $29.99 USD |
 | Duration | 1 Year (Auto-renewable) |
 | Description | Best value! Save 37% with annual subscription. Includes all Pro features: premium landmarks, unlimited visits, enhanced photo uploads, and more. |
@@ -337,12 +337,12 @@ Terms of Service: https://wanderlist.app/terms
 ### Demo Account
 | Field | Value |
 |-------|-------|
-| Username | `review@wanderlist.app` |
+| Username | `review@wandermark.app` |
 | Password | `AppReview2026!` |
 
 ### Notes for Review
 ```
-WanderList is a travel tracking app that allows users to:
+WanderMark is a travel tracking app that allows users to:
 1. Browse and explore landmarks across 48 countries
 2. Mark landmarks as visited with optional photo uploads
 3. Track travel progress and earn achievement badges
@@ -362,10 +362,10 @@ All features can be tested with the provided demo account.
 ### Required URLs
 | Document | URL |
 |----------|-----|
-| Privacy Policy | https://wanderlist.app/privacy |
-| Terms of Service | https://wanderlist.app/terms |
-| Support | support@wanderlist.app |
-| Marketing | https://wanderlist.app |
+| Privacy Policy | https://wandermark.app/privacy |
+| Terms of Service | https://wandermark.app/terms |
+| Support | support@wandermark.app |
+| Marketing | https://wandermark.app |
 
 ### Data Safety (Google Play)
 - **Data Collected:** Email, photos, usage data
