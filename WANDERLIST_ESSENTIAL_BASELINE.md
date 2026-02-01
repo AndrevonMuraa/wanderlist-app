@@ -1,4 +1,4 @@
-# WanderList - Essential Baseline (v1.0.0)
+# WanderMark - Essential Baseline (v1.0.0)
 
 > **Purpose:** Critical information for session continuity
 > **Read this:** At session start if forked, or when encountering issues
@@ -70,14 +70,14 @@
   - Ocean to Sand gradient background
 - **New splash screen** (1284×2778) - Decorative style:
   - White container with turquoise globe icon
-  - "WanderList" title + tagline
+  - "WanderMark" title + tagline
   - Decorative background circles
 - **Android adaptive icon** configured with turquoise background
 
 ### Branding Component Created
 - **New component:** `/app/frontend/components/BrandedGlobeIcon.tsx`
   - `BrandedGlobeIcon` - Full icon with gradient, globe lines, W, and pin
-  - `HeaderBranding` - Compact version for headers (globe + "WanderList" text)
+  - `HeaderBranding` - Compact version for headers (globe + "WanderMark" text)
 - **SVG-based** globe with latitude/longitude lines using `react-native-svg`
 
 ### Headers Updated Across All Pages (17+ pages)
@@ -114,7 +114,7 @@ All headers now use the new `HeaderBranding` component at `size={18}`:
 - Replaces old generic earth icon
 
 ### app.json Configuration Updated
-- **App name:** "frontend" → "WanderList"
+- **App name:** "frontend" → "WanderMark"
 - **Slug:** "frontend" → "wanderlist"
 - **Scheme:** "frontend" → "wanderlist"
 - **Splash background:** `#4DB8D8` (turquoise)
@@ -285,7 +285,7 @@ Explore (map) → Journey (compass) → Social (people) → Bucket List (bookmar
 - `/feed` - Full activity feed (sub-page with back button)
 - `/settings` - App settings
 - `/friends` - Friend management
-- `/subscription` - WanderList Pro page
+- `/subscription` - WanderMark Pro page
 - `/continents` - Continent selection with dynamic stats
 - `/about` - About & Help (with branded hero icon)
 
@@ -403,7 +403,7 @@ print(f'Users: {db.users.count_documents({})}')
 | 4.70 | Jan 18, 2026 | Premium expansion attempt, image removal, documentation |
 | 4.60 | Jan 18, 2026 | Profile refactoring, duplicate cleanup, seed data protection |
 | 4.50 | Jan 18, 2026 | Duplicate cleanup, header standardization |
-| 4.40 | Jan 18, 2026 | WanderList Pro subscription, premium landmarks |
+| 4.40 | Jan 18, 2026 | WanderMark Pro subscription, premium landmarks |
 
 ---
 
@@ -429,7 +429,7 @@ print(f'Users: {db.users.count_documents({})}')
 - [x] App icon (1024×1024)
 - [x] Splash screen
 - [x] Android adaptive icon
-- [x] App name configured ("WanderList")
+- [x] App name configured ("WanderMark")
 - [x] iOS permission descriptions (Camera, Photo Library, Photo Library Add)
 - [x] Android permissions (Camera, Storage, Media Images)
 - [x] Bundle Identifier (iOS): `com.wanderlist.app`
