@@ -230,7 +230,7 @@ export default function PrivacyPolicyScreen() {
             </Text>
             <View style={styles.contactBox}>
               <Ionicons name="mail" size={20} color={theme.colors.primary} />
-              <Text style={styles.contactText}>privacy@wanderlist.app</Text>
+              <Text style={styles.contactText}>privacy@wandermark.app</Text>
             </View>
           </Section>
         </Surface>
