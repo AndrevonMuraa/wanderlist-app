@@ -270,7 +270,7 @@ export default function TermsOfServiceScreen() {
 
         {/* Limitation of Liability */}
         <Surface style={styles.card}>
-          <Section title="9. Limitation of Liability">
+          <Section title="10. Limitation of Liability">
             <Text style={styles.paragraph}>
               TO THE MAXIMUM EXTENT PERMITTED BY LAW, WANDERLIST SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING:
             </Text>
