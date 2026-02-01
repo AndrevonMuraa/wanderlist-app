@@ -6,6 +6,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as AppleAuthentication from 'expo-apple-authentication';
 import theme, { gradients } from '../../styles/theme';
 import BrandedGlobeIcon from '../../components/BrandedGlobeIcon';
 
@@ -14,7 +15,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, loginWithApple, isAppleSignInAvailable } = useAuth();
   const router = useRouter();
 
   const handleLogin = async () => {
@@ -42,10 +43,24 @@ export default function LoginScreen() {
 
     try {
       await loginWithGoogle();
-      // Note: On web, this will redirect away, so loading state doesn't matter
-      // On mobile, the loading will be cleared when callback is handled
+      // The OAuth flow will handle navigation after success
     } catch (err: any) {
       setError('Google login failed. Please try again.');
+      setLoading(false);
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      await loginWithApple();
+      router.replace('/(tabs)/explore');
+    } catch (err: any) {
+      if (err.message !== 'Apple Sign-In was cancelled') {
+        setError('Apple login failed. Please try again.');
+      }
       setLoading(false);
     }
   };
