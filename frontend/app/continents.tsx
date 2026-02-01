@@ -180,7 +180,7 @@ export default function ContinentsScreen() {
       >
         {/* Single Row: Title Left, Branding Right */}
         <View style={styles.headerRow}>
-          <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>Explore Continents</Text>
+          <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>{t('explore.title')}</Text>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
