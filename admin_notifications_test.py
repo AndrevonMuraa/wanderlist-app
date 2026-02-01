@@ -315,8 +315,14 @@ class AdminNotificationTester:
                 data = response.json()
                 print_success("Admin logs retrieved successfully")
                 
+                # Check if data is a list or dict
+                if isinstance(data, list):
+                    logs = data
+                else:
+                    logs = data.get('logs', [])
+                
                 # Look for notification send actions
-                notification_logs = [log for log in data if log.get('action') == 'send_notification']
+                notification_logs = [log for log in logs if isinstance(log, dict) and log.get('action') == 'send_notification']
                 
                 if notification_logs:
                     print_success(f"Found {len(notification_logs)} notification send actions in logs")
