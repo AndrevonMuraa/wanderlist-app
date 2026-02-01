@@ -311,8 +311,8 @@ export default function JourneyScreen() {
 
         {/* Overall Progress */}
         {progressStats && (
-          <Surface style={styles.progressCard}>
-            <Text style={styles.sectionTitle}>Overall Progress</Text>
+          <Surface style={[styles.progressCard, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Overall Progress</Text>
             <View style={styles.progressContainer}>
               <CircularProgress
                 percentage={progressStats.overall.percentage}
@@ -321,7 +321,7 @@ export default function JourneyScreen() {
                 label="Complete"
                 sublabel={`${progressStats.overall.visited}/${progressStats.overall.total}`}
               />
-              <Text style={styles.progressDescription}>
+              <Text style={[styles.progressDescription, { color: colors.textSecondary }]}>
                 {progressStats.overall.percentage < 10
                   ? "Just getting started! Keep exploring! 🌟"
                   : progressStats.overall.percentage < 30
@@ -338,13 +338,13 @@ export default function JourneyScreen() {
 
         {/* Next Milestone */}
         {nextMilestone && (
-          <Surface style={styles.milestoneCard}>
+          <Surface style={[styles.milestoneCard, { backgroundColor: colors.surface }]}>
             <View style={styles.milestoneHeader}>
-              <Ionicons name="flag-outline" size={24} color={theme.colors.primary} />
-              <Text style={styles.milestoneTitle}>Next Milestone</Text>
+              <Ionicons name="flag-outline" size={24} color={colors.primary} />
+              <Text style={[styles.milestoneTitle, { color: colors.text }]}>Next Milestone</Text>
             </View>
-            <Text style={styles.milestoneName}>{nextMilestone.name}</Text>
-            <Text style={styles.milestoneProgress}>
+            <Text style={[styles.milestoneName, { color: colors.primary }]}>{nextMilestone.name}</Text>
+            <Text style={[styles.milestoneProgress, { color: colors.textSecondary }]}>
               {nextMilestone.remaining} more visit{nextMilestone.remaining !== 1 ? 's' : ''} to unlock!
             </Text>
             <ProgressBar 
@@ -356,13 +356,13 @@ export default function JourneyScreen() {
 
         {/* Top Continent */}
         {topContinent && (
-          <Surface style={styles.topContinentCard}>
+          <Surface style={[styles.topContinentCard, { backgroundColor: colors.surface }]}>
             <View style={styles.topContinentHeader}>
-              <Ionicons name="earth" size={24} color={theme.colors.accent} />
-              <Text style={styles.topContinentTitle}>Your Top Continent</Text>
+              <Ionicons name="earth" size={24} color={colors.accent} />
+              <Text style={[styles.topContinentTitle, { color: colors.text }]}>Your Top Continent</Text>
             </View>
-            <Text style={styles.topContinentName}>{topContinent.name}</Text>
-            <Text style={styles.topContinentStats}>
+            <Text style={[styles.topContinentName, { color: colors.accent }]}>{topContinent.name}</Text>
+            <Text style={[styles.topContinentStats, { color: colors.textSecondary }]}>
               {topContinent.visited} of {topContinent.total} countries explored
             </Text>
           </Surface>
