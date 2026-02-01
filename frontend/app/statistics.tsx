@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTranslation } from 'react-i18next';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { useAuth } from '../contexts/AuthContext';
