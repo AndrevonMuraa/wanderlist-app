@@ -299,7 +299,7 @@ export default function TermsOfServiceScreen() {
 
         {/* Changes to Terms */}
         <Surface style={styles.card}>
-          <Section title="11. Changes to Terms">
+          <Section title="12. Changes to Terms">
             <Text style={styles.paragraph}>
               We reserve the right to modify these Terms at any time. We will notify you of any changes by updating the "Effective" date. Your continued use of the App after changes constitutes acceptance of the new Terms.
             </Text>
