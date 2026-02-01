@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   proTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(118, 75, 162, 0.1)',
+    backgroundColor: 'rgba(30, 138, 138, 0.1)',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   proTagText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#764ba2',
+    color: '#1E8A8A',
     letterSpacing: 1,
   },
   title: {
