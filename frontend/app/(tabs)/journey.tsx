@@ -226,23 +226,23 @@ export default function JourneyScreen() {
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Sticky Header */}
       <LinearGradient
-        colors={gradients.oceanToSand}
+        colors={gradientColors}
         start={gradients.horizontal.start}
         end={gradients.horizontal.end}
         style={[styles.header, { paddingTop: topPadding }]}
       >
         {/* Single Row: Title Left, Branding Right */}
         <View style={styles.headerRow}>
-          <Text style={styles.greeting}>My Journey</Text>
+          <Text style={[styles.greeting, { color: isDark ? colors.text : '#fff' }]}>My Journey</Text>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <HeaderBranding size={18} textColor="#2A2A2A" />
+            <HeaderBranding size={18} textColor={isDark ? colors.text : "#2A2A2A"} />
           </TouchableOpacity>
         </View>
       </LinearGradient>
