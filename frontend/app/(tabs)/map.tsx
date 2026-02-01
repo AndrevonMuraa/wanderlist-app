@@ -3,9 +3,11 @@ import { View, StyleSheet, TouchableOpacity, ActivityIndicator, Platform, Scroll
 import { Text, Surface, Chip } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../contexts/AuthContext';
 import { BACKEND_URL } from '../../utils/config';
-import theme from '../../styles/theme';
+import theme, { gradients } from '../../styles/theme';
 
 const { width } = Dimensions.get('window');
 
