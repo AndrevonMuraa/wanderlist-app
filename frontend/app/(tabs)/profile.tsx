@@ -308,35 +308,35 @@ export default function ProfileScreen() {
         {/* Badges - Removed, duplicates Journey */}
 
         {/* Menu - Simplified */}
-        <Surface style={styles.menuCard}>
+        <Surface style={[styles.menuCard, { backgroundColor: colors.surface }]}>
           <List.Item
             title="About WanderMark"
             description="Learn how to use the app"
-            left={props => <List.Icon {...props} icon="information-outline" color={theme.colors.primary} />}
-            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
+            left={props => <List.Icon {...props} icon="information-outline" color={colors.primary} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={colors.textLight} />}
             onPress={() => router.push('/about')}
-            titleStyle={styles.listItemTitle}
-            descriptionStyle={styles.listItemDescription}
+            titleStyle={[styles.listItemTitle, { color: colors.text }]}
+            descriptionStyle={[styles.listItemDescription, { color: colors.textSecondary }]}
           />
-          <Divider style={styles.divider} />
+          <Divider style={[styles.divider, { backgroundColor: colors.border }]} />
           <List.Item
             title="WanderMark Pro"
             description="Upgrade for premium features"
-            left={props => <List.Icon {...props} icon="diamond" color="#1E8A8A" />}
-            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
+            left={props => <List.Icon {...props} icon="diamond" color={colors.accentTeal} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={colors.textLight} />}
             onPress={() => router.push('/subscription')}
-            titleStyle={styles.listItemTitle}
-            descriptionStyle={styles.listItemDescription}
+            titleStyle={[styles.listItemTitle, { color: colors.text }]}
+            descriptionStyle={[styles.listItemDescription, { color: colors.textSecondary }]}
           />
-          <Divider style={styles.divider} />
+          <Divider style={[styles.divider, { backgroundColor: colors.border }]} />
           <List.Item
             title="Settings"
             description="App preferences and account"
-            left={props => <List.Icon {...props} icon="cog-outline" color={theme.colors.primary} />}
-            right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
+            left={props => <List.Icon {...props} icon="cog-outline" color={colors.primary} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={colors.textLight} />}
             onPress={() => router.push('/settings')}
-            titleStyle={styles.listItemTitle}
-            descriptionStyle={styles.listItemDescription}
+            titleStyle={[styles.listItemTitle, { color: colors.text }]}
+            descriptionStyle={[styles.listItemDescription, { color: colors.textSecondary }]}
           />
         </Surface>
 
@@ -344,14 +344,14 @@ export default function ProfileScreen() {
           mode="outlined"
           onPress={handleLogout}
           icon="logout"
-          style={styles.logoutButton}
-          textColor={theme.colors.error}
-          buttonColor={theme.colors.surface}
+          style={[styles.logoutButton, { borderColor: colors.error }]}
+          textColor={colors.error}
+          buttonColor={colors.surface}
         >
           Logout
         </Button>
 
-        <Text style={styles.versionText}>WanderMark v1.0.0</Text>
+        <Text style={[styles.versionText, { color: colors.textLight }]}>WanderMark v1.0.0</Text>
       </ScrollView>
 
       <Portal>
