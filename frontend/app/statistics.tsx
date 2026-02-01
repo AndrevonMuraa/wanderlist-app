@@ -174,7 +174,7 @@ export default function StatisticsScreen() {
       <SafeAreaView style={styles.container}>
         <View style={styles.centerContent}>
           <Ionicons name="stats-chart" size={64} color={theme.colors.textLight} />
-          <Text style={styles.emptyText}>Sign in to see your statistics</Text>
+          <Text style={styles.emptyText}>{t('common.loading')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -194,14 +194,14 @@ export default function StatisticsScreen() {
         <TouchableOpacity onPress={() => router.push('/(tabs)/journey')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>My Statistics</Text>
+        <Text style={styles.headerTitle}>{t('statistics.title')}</Text>
         <View style={{ width: 40 }} />
       </LinearGradient>
 
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         {loading ? (
           <View style={styles.loadingContainer}>
-            <Text style={styles.loadingText}>Loading your travel data...</Text>
+            <Text style={styles.loadingText}>{t('common.loading')}</Text>
           </View>
         ) : stats ? (
           <>
