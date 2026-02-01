@@ -234,7 +234,7 @@ export default function LandmarksScreen() {
               <Ionicons 
                 name={isPremium ? "diamond" : "location"} 
                 size={20} 
-                color={isPremium ? "#764ba2" : theme.colors.primary} 
+                color={isPremium ? "#1E8A8A" : theme.colors.primary} 
               />
             </View>
             
@@ -253,7 +253,7 @@ export default function LandmarksScreen() {
                   <Ionicons 
                     name="star" 
                     size={12} 
-                    color={isPremium ? "#764ba2" : "#FFA726"} 
+                    color={isPremium ? "#1E8A8A" : "#FFA726"} 
                   />
                   <Text style={styles.pointsTextList}>
                     {item.points || 10} pts
@@ -588,7 +588,7 @@ const styles = StyleSheet.create({
   },
   premiumBadgeText: {
     ...theme.typography.caption,
-    color: '#764ba2',
+    color: '#1E8A8A',
     fontWeight: '700',
     fontSize: 9,
     letterSpacing: 0.5,

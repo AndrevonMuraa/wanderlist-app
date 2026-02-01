@@ -195,7 +195,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
                     router.push('/subscription');
                   }}
                 >
-                  <Ionicons name="diamond" size={12} color="#764ba2" />
+                  <Ionicons name="diamond" size={12} color="#1E8A8A" />
                   <Text style={styles.upgradePhotoHintText}>Get 10 photos</Text>
                 </TouchableOpacity>
               )}
@@ -225,7 +225,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
                     router.push('/subscription');
                   }}
                 >
-                  <Ionicons name="lock-closed" size={24} color="#764ba2" />
+                  <Ionicons name="lock-closed" size={24} color="#1E8A8A" />
                   <Text style={styles.addPhotoTextLocked}>Upgrade</Text>
                   <Text style={styles.addPhotoSubtext}>for more</Text>
                 </TouchableOpacity>
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
   },
   upgradePhotoHintText: {
     fontSize: 11,
-    color: '#764ba2',
+    color: '#1E8A8A',
     fontWeight: '600',
   },
   photoScroll: {
@@ -413,13 +413,13 @@ const styles = StyleSheet.create({
   },
   addPhotoTextLocked: {
     fontSize: 11,
-    color: '#764ba2',
+    color: '#1E8A8A',
     marginTop: 4,
     fontWeight: '600',
   },
   addPhotoSubtext: {
     fontSize: 9,
-    color: '#764ba2',
+    color: '#1E8A8A',
     opacity: 0.7,
   },
   diaryInput: {

@@ -275,7 +275,7 @@ export default function ContinentsScreen() {
           <Ionicons 
             name={canCreateCustomVisits ? "help-circle-outline" : "lock-closed"} 
             size={20} 
-            color={canCreateCustomVisits ? theme.colors.primary : "#764ba2"} 
+            color={canCreateCustomVisits ? theme.colors.primary : "#1E8A8A"} 
           />
           <Text style={[styles.cantFindText, !canCreateCustomVisits && styles.cantFindTextLocked]}>
             {canCreateCustomVisits ? "Can't find your destination?" : "Custom Visits (Pro)"}
@@ -288,7 +288,7 @@ export default function ContinentsScreen() {
           <Ionicons 
             name="chevron-forward" 
             size={18} 
-            color={canCreateCustomVisits ? theme.colors.primary : "#764ba2"} 
+            color={canCreateCustomVisits ? theme.colors.primary : "#1E8A8A"} 
           />
         </TouchableOpacity>
       </ScrollView>
@@ -529,10 +529,10 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(118, 75, 162, 0.2)',
   },
   cantFindTextLocked: {
-    color: '#764ba2',
+    color: '#1E8A8A',
   },
   proTagSmall: {
-    backgroundColor: '#764ba2',
+    backgroundColor: '#1E8A8A',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
