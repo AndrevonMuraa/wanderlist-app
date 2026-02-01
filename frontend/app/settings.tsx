@@ -174,13 +174,13 @@ export default function SettingsScreen() {
               <Ionicons name="shield-checkmark" size={22} color={colors.primary} />
             </View>
             <View style={styles.sectionHeaderText}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Privacy</Text>
-              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>Who can see your visits and activity</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('settings.privacy')}</Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>{t('settings.whoCanSee')}</Text>
             </View>
           </View>
           
           <View style={styles.privacyOptions}>
-            {PRIVACY_OPTIONS.map((option) => {
+            {privacyOptions.map((option) => {
               const isSelected = defaultPrivacy === option.value;
               return (
                 <TouchableOpacity
