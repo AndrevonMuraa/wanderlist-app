@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
+import { useTranslation } from 'react-i18next';
 import theme, { gradients } from '../../styles/theme';
 import { useAuth } from '../../contexts/AuthContext';
 import RankBadge from '../../components/RankBadge';
