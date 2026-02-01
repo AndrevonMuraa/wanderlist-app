@@ -169,7 +169,9 @@
     "weeklySummaryDesc": "Estadísticas y momentos destacados semanales",
     "enableAll": "Activar todo",
     "disableAll": "Desactivar todo",
-    "mobileOnly": "Las notificaciones push solo están disponibles en dispositivos móviles."
+    "mobileOnly": "Las notificaciones push solo están disponibles en dispositivos móviles.",
+    "noNotifications": "Sin Notificaciones",
+    "emptyMessage": "Verás notificaciones aquí cuando alguien interactúe con tu contenido"
   },
   "settings": {
     "title": "Configuración",
