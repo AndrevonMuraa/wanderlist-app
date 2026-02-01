@@ -249,10 +249,10 @@ class AdminAPITester:
             
             if response.status_code == 200:
                 data = response.json()
-                if data.get("subscription_tier") == "pro":
+                if "changes" in data and data["changes"].get("subscription_tier") == "pro":
                     self.log_test("Admin User Update - Tier to Pro", True, "Successfully upgraded to pro")
                 else:
-                    self.log_test("Admin User Update - Tier to Pro", False, error="Tier not updated in response")
+                    self.log_test("Admin User Update - Tier to Pro", False, error=f"Unexpected response structure: {data}")
             else:
                 self.log_test("Admin User Update - Tier to Pro", False, error=f"Status: {response.status_code}, Response: {response.text}")
         except Exception as e:
@@ -266,10 +266,10 @@ class AdminAPITester:
             
             if response.status_code == 200:
                 data = response.json()
-                if data.get("subscription_tier") == "free":
+                if "changes" in data and data["changes"].get("subscription_tier") == "free":
                     self.log_test("Admin User Update - Tier to Free", True, "Successfully downgraded to free")
                 else:
-                    self.log_test("Admin User Update - Tier to Free", False, error="Tier not updated in response")
+                    self.log_test("Admin User Update - Tier to Free", False, error=f"Unexpected response structure: {data}")
             else:
                 self.log_test("Admin User Update - Tier to Free", False, error=f"Status: {response.status_code}, Response: {response.text}")
         except Exception as e:
@@ -283,10 +283,10 @@ class AdminAPITester:
             
             if response.status_code == 200:
                 data = response.json()
-                if data.get("is_banned") == True:
+                if "changes" in data and data["changes"].get("is_banned") == True:
                     self.log_test("Admin User Update - Ban User", True, "Successfully banned user")
                 else:
-                    self.log_test("Admin User Update - Ban User", False, error="Ban status not updated")
+                    self.log_test("Admin User Update - Ban User", False, error=f"Unexpected response structure: {data}")
             else:
                 self.log_test("Admin User Update - Ban User", False, error=f"Status: {response.status_code}, Response: {response.text}")
         except Exception as e:
@@ -300,10 +300,10 @@ class AdminAPITester:
             
             if response.status_code == 200:
                 data = response.json()
-                if data.get("is_banned") == False:
+                if "changes" in data and data["changes"].get("is_banned") == False:
                     self.log_test("Admin User Update - Unban User", True, "Successfully unbanned user")
                 else:
-                    self.log_test("Admin User Update - Unban User", False, error="Ban status not updated")
+                    self.log_test("Admin User Update - Unban User", False, error=f"Unexpected response structure: {data}")
             else:
                 self.log_test("Admin User Update - Unban User", False, error=f"Status: {response.status_code}, Response: {response.text}")
         except Exception as e:
