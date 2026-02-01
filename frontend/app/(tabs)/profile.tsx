@@ -320,7 +320,7 @@ export default function ProfileScreen() {
           <List.Item
             title="WanderMark Pro"
             description="Upgrade for premium features"
-            left={props => <List.Icon {...props} icon="diamond" color="#764ba2" />}
+            left={props => <List.Icon {...props} icon="diamond" color="#1E8A8A" />}
             right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
             onPress={() => router.push('/subscription')}
             titleStyle={styles.listItemTitle}
