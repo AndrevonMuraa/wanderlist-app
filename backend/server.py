@@ -575,6 +575,22 @@ async def get_current_user(request: Request, session_token: Optional[str] = Cook
     
     raise HTTPException(status_code=401, detail="Not authenticated")
 
+async def get_admin_user(current_user: User = Depends(get_current_user)) -> User:
+    """Dependency that requires admin role"""
+    if current_user.role not in ["admin", "moderator"]:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    if current_user.is_banned:
+        raise HTTPException(status_code=403, detail="Account is banned")
+    return current_user
+
+async def get_super_admin_user(current_user: User = Depends(get_current_user)) -> User:
+    """Dependency that requires super admin role (admin only, not moderator)"""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Super admin access required")
+    if current_user.is_banned:
+        raise HTTPException(status_code=403, detail="Account is banned")
+    return current_user
+
 # ============= AUTH ENDPOINTS =============
 
 @api_router.post("/auth/register")
