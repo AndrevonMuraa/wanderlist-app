@@ -60,12 +60,8 @@ class AdminNotificationTester:
             # Get temp token for admin user
             response = self.session.get(f"{BASE_URL}/auth/temp-token", params={"email": TEST_EMAIL})
             
-            print(f"Response status: {response.status_code}")
-            print(f"Response text: {response.text}")
-            
             if response.status_code == 200:
                 data = response.json()
-                print(f"Response data: {data}")
                 self.auth_token = data.get("token")
                 user_info = data.get("user", {})
                 
