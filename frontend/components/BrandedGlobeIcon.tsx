@@ -228,7 +228,7 @@ export function HeaderBranding({
       </View>
       {showText && (
         <Text style={[styles.brandText, { color: textColor, fontSize: size * 0.8 }]}>
-          WanderList
+          WanderMark
         </Text>
       )}
     </View>
