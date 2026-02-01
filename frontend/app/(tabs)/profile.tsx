@@ -597,6 +597,22 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
 
+  // ============ SHARE STATS BUTTON ============
+  shareStatsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    marginTop: 16,
+  },
+  shareStatsText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+
   // ============ MENU CARD ============
   menuCard: {
     margin: theme.spacing.md,
