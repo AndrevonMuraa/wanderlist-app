@@ -39,6 +39,12 @@ export default function LoginScreen() {
   };
 
   const handleGoogleLogin = async () => {
+    // On web, show info modal instead of attempting OAuth (which will fail)
+    if (Platform.OS === 'web') {
+      setShowWebLoginInfo(true);
+      return;
+    }
+    
     setLoading(true);
     setError('');
 
