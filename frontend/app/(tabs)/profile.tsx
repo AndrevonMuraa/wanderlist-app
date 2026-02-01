@@ -312,6 +312,16 @@ export default function ProfileScreen() {
         {/* Menu - Simplified */}
         <Surface style={[styles.menuCard, { backgroundColor: colors.surface }]}>
           <List.Item
+            title={t('profile.achievements')}
+            description="View your badges and progress"
+            left={props => <List.Icon {...props} icon="trophy" color="#FFD700" />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={colors.textLight} />}
+            onPress={() => router.push('/achievements')}
+            titleStyle={[styles.listItemTitle, { color: colors.text }]}
+            descriptionStyle={[styles.listItemDescription, { color: colors.textSecondary }]}
+          />
+          <Divider style={[styles.divider, { backgroundColor: colors.border }]} />
+          <List.Item
             title={t('profile.aboutWanderMark')}
             description={t('profile.learnHowToUse')}
             left={props => <List.Icon {...props} icon="information-outline" color={colors.primary} />}
