@@ -102,6 +102,7 @@ export default function AchievementsScreen() {
         key={badge.badge_type}
         style={[
           styles.badgeCard,
+          { backgroundColor: colors.surface },
           isEarned ? styles.badgeCardEarned : styles.badgeCardLocked,
         ]}
         elevation={isEarned ? 2 : 1}
@@ -112,7 +113,7 @@ export default function AchievementsScreen() {
           </View>
         )}
 
-        <View style={styles.badgeIconContainer}>
+        <View style={[styles.badgeIconContainer, { backgroundColor: isEarned ? colors.primary + '20' : colors.border }]}>
           <Text style={[
             styles.badgeIcon,
             !isEarned && styles.badgeIconLocked,
@@ -123,14 +124,14 @@ export default function AchievementsScreen() {
 
         <Text style={[
           styles.badgeName,
-          !isEarned && styles.textLocked,
+          { color: isEarned ? colors.text : colors.textSecondary },
         ]}>
           {badge.badge_name}
         </Text>
 
         <Text style={[
           styles.badgeDescription,
-          !isEarned && styles.textLocked,
+          { color: isEarned ? colors.textSecondary : colors.textLight },
         ]}>
           {badge.badge_description}
         </Text>
@@ -138,21 +139,21 @@ export default function AchievementsScreen() {
         {!isEarned && badge.target_value > 0 && (
           <View style={styles.progressContainer}>
             <View style={styles.progressHeader}>
-              <Text style={styles.progressText}>{badge.progress_text}</Text>
-              <Text style={styles.progressPercent}>{badge.progress}%</Text>
+              <Text style={[styles.progressText, { color: colors.textSecondary }]}>{badge.progress_text}</Text>
+              <Text style={[styles.progressPercent, { color: colors.primary }]}>{badge.progress}%</Text>
             </View>
             <PaperProgressBar
               progress={badge.progress / 100}
-              color={theme.colors.primary}
-              style={styles.progressBar}
+              color={colors.primary}
+              style={[styles.progressBar, { backgroundColor: colors.border }]}
             />
           </View>
         )}
 
         {isEarned && badge.earned_at && (
           <View style={styles.earnedDateContainer}>
-            <Ionicons name="calendar-outline" size={12} color="#666" />
-            <Text style={styles.earnedDate}>
+            <Ionicons name="calendar-outline" size={12} color={colors.textSecondary} />
+            <Text style={[styles.earnedDate, { color: colors.textSecondary }]}>
               {formatDate(badge.earned_at)}
             </Text>
           </View>
