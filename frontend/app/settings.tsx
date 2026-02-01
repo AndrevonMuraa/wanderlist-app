@@ -6,7 +6,8 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as SecureStore from 'expo-secure-store';
-import theme, { gradients } from '../styles/theme';
+import { gradients, spacing, borderRadius, typography } from '../styles/theme';
+import { useTheme } from '../contexts/ThemeContext';
 import { BACKEND_URL } from '../utils/config';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 
