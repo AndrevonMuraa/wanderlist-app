@@ -4098,6 +4098,192 @@ async def get_my_reports(current_user: User = Depends(get_current_user)):
 
 # ============= END REPORT/MODERATION ENDPOINTS =============
 
+# ============= PUSH NOTIFICATION ENDPOINTS =============
+
+@api_router.post("/push-token")
+async def save_push_token(token_data: PushTokenCreate, current_user: User = Depends(get_current_user)):
+    """Save or update push token for the current user."""
+    await db.push_tokens.update_one(
+        {"user_id": current_user.user_id},
+        {
+            "$set": {
+                "user_id": current_user.user_id,
+                "push_token": token_data.push_token,
+                "updated_at": datetime.now(timezone.utc)
+            },
+            "$setOnInsert": {
+                "created_at": datetime.now(timezone.utc)
+            }
+        },
+        upsert=True
+    )
+    return {"message": "Push token saved successfully"}
+
+@api_router.delete("/push-token")
+async def delete_push_token(current_user: User = Depends(get_current_user)):
+    """Delete push token for the current user (logout/disable notifications)."""
+    await db.push_tokens.delete_one({"user_id": current_user.user_id})
+    return {"message": "Push token deleted successfully"}
+
+@api_router.get("/push-settings")
+async def get_push_settings(current_user: User = Depends(get_current_user)):
+    """Get push notification settings for the current user."""
+    settings = await db.push_settings.find_one(
+        {"user_id": current_user.user_id},
+        {"_id": 0}
+    )
+    
+    if not settings:
+        # Return default settings
+        settings = {
+            "user_id": current_user.user_id,
+            "likes_enabled": True,
+            "comments_enabled": True,
+            "friend_requests_enabled": True,
+            "achievements_enabled": True,
+            "streak_reminders_enabled": True,
+            "weekly_summary_enabled": True
+        }
+    
+    return settings
+
+@api_router.put("/push-settings")
+async def update_push_settings(
+    settings: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Update push notification settings for the current user."""
+    allowed_keys = [
+        "likes_enabled", "comments_enabled", "friend_requests_enabled",
+        "achievements_enabled", "streak_reminders_enabled", "weekly_summary_enabled"
+    ]
+    
+    # Filter only allowed settings
+    filtered_settings = {k: v for k, v in settings.items() if k in allowed_keys}
+    filtered_settings["user_id"] = current_user.user_id
+    filtered_settings["updated_at"] = datetime.now(timezone.utc)
+    
+    await db.push_settings.update_one(
+        {"user_id": current_user.user_id},
+        {"$set": filtered_settings},
+        upsert=True
+    )
+    
+    return {"message": "Settings updated successfully"}
+
+async def send_push_notification(user_id: str, title: str, body: str, data: dict = None):
+    """
+    Send a push notification to a user via Expo Push Service.
+    This is a helper function called by other endpoints.
+    """
+    # Get user's push token
+    token_doc = await db.push_tokens.find_one({"user_id": user_id})
+    if not token_doc:
+        return False
+    
+    push_token = token_doc.get("push_token")
+    if not push_token:
+        return False
+    
+    # Check user's notification settings
+    settings = await db.push_settings.find_one({"user_id": user_id})
+    
+    # Build the message
+    message = {
+        "to": push_token,
+        "sound": "default",
+        "title": title,
+        "body": body,
+        "data": data or {},
+    }
+    
+    try:
+        # Send via Expo Push Service
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "https://exp.host/--/api/v2/push/send",
+                json=message,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 200:
+                logging.info(f"Push notification sent to user {user_id}")
+                return True
+            else:
+                logging.error(f"Failed to send push notification: {response.text}")
+                return False
+    except Exception as e:
+        logging.error(f"Error sending push notification: {e}")
+        return False
+
+# Helper function to send notifications for specific events
+async def notify_new_like(liker_name: str, target_user_id: str, visit_id: str):
+    """Send notification when someone likes a visit."""
+    settings = await db.push_settings.find_one({"user_id": target_user_id})
+    if settings and not settings.get("likes_enabled", True):
+        return
+    
+    await send_push_notification(
+        user_id=target_user_id,
+        title="New Like! ❤️",
+        body=f"{liker_name} liked your visit",
+        data={"type": "like", "visit_id": visit_id}
+    )
+
+async def notify_new_comment(commenter_name: str, target_user_id: str, activity_id: str):
+    """Send notification when someone comments on a visit."""
+    settings = await db.push_settings.find_one({"user_id": target_user_id})
+    if settings and not settings.get("comments_enabled", True):
+        return
+    
+    await send_push_notification(
+        user_id=target_user_id,
+        title="New Comment! 💬",
+        body=f"{commenter_name} commented on your post",
+        data={"type": "comment", "activity_id": activity_id}
+    )
+
+async def notify_friend_request(requester_name: str, target_user_id: str):
+    """Send notification for new friend request."""
+    settings = await db.push_settings.find_one({"user_id": target_user_id})
+    if settings and not settings.get("friend_requests_enabled", True):
+        return
+    
+    await send_push_notification(
+        user_id=target_user_id,
+        title="Friend Request! 👋",
+        body=f"{requester_name} wants to be your friend",
+        data={"type": "friend_request"}
+    )
+
+async def notify_achievement(user_id: str, badge_name: str, badge_icon: str):
+    """Send notification for new achievement."""
+    settings = await db.push_settings.find_one({"user_id": user_id})
+    if settings and not settings.get("achievements_enabled", True):
+        return
+    
+    await send_push_notification(
+        user_id=user_id,
+        title=f"Achievement Unlocked! {badge_icon}",
+        body=f"You earned: {badge_name}",
+        data={"type": "achievement"}
+    )
+
+async def notify_streak_reminder(user_id: str, current_streak: int):
+    """Send streak reminder notification."""
+    settings = await db.push_settings.find_one({"user_id": user_id})
+    if settings and not settings.get("streak_reminders_enabled", True):
+        return
+    
+    await send_push_notification(
+        user_id=user_id,
+        title="Keep Your Streak! 🔥",
+        body=f"You have a {current_streak} day streak. Don't lose it!",
+        data={"type": "streak_reminder"}
+    )
+
+# ============= END PUSH NOTIFICATION ENDPOINTS =============
+
 # Include the router in the main app (MUST be after all routes are defined)
 app.include_router(api_router)
 
