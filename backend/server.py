@@ -752,6 +752,72 @@ async def apple_callback(auth_data: AppleAuthRequest, response: Response):
     except jwt.PyJWTError as e:
         raise HTTPException(status_code=400, detail=f"Invalid identity token: {str(e)}")
 
+@api_router.post("/auth/google/token")
+async def google_token_login(auth_data: GoogleTokenRequest, response: Response):
+    """
+    Handle Google Sign-In with access token.
+    Receives user info that was fetched from Google's API using the access token.
+    """
+    try:
+        email = auth_data.email
+        google_id = auth_data.google_id
+        
+        if not email:
+            raise HTTPException(status_code=400, detail="Email is required")
+        
+        # Check if user exists by email or Google ID
+        existing_user = await db.users.find_one({
+            "$or": [
+                {"email": email},
+                {"google_id": google_id}
+            ]
+        }, {"_id": 0})
+        
+        if existing_user:
+            user_id = existing_user["user_id"]
+            # Update Google ID and picture if not set
+            update_fields = {}
+            if not existing_user.get("google_id"):
+                update_fields["google_id"] = google_id
+            if auth_data.picture and not existing_user.get("picture"):
+                update_fields["picture"] = auth_data.picture
+            if update_fields:
+                await db.users.update_one(
+                    {"user_id": user_id},
+                    {"$set": update_fields}
+                )
+        else:
+            # Create new user
+            user_id = f"user_{uuid.uuid4().hex[:12]}"
+            name = auth_data.name or email.split("@")[0]
+            new_user = {
+                "user_id": user_id,
+                "email": email,
+                "name": name,
+                "picture": auth_data.picture,
+                "is_premium": False,
+                "password_hash": None,
+                "google_id": google_id,
+                "created_at": datetime.now(timezone.utc)
+            }
+            await db.users.insert_one(new_user)
+        
+        # Create JWT token
+        access_token = create_access_token({"sub": user_id})
+        
+        # Get updated user data
+        user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0, "password_hash": 0})
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": user_doc
+        }
+        
+    except Exception as e:
+        logging.error(f"Google token login error: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Google login failed: {str(e)}")
+
 @api_router.get("/auth/me")
 async def get_me(current_user: User = Depends(get_current_user)):
     return UserPublic(**current_user.dict())
