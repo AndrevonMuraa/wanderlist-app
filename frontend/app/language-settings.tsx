@@ -21,38 +21,38 @@ export default function LanguageSettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('settings.selectLanguage')}</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>{t('settings.selectLanguage')}</Text>
         <View style={{ width: 40 }} />
       </View>
 
       {/* Language Options */}
       <View style={styles.content}>
-        <Surface style={styles.languageCard}>
+        <Surface style={[styles.languageCard, { backgroundColor: colors.surface }]}>
           {languages.map((language, index) => (
             <TouchableOpacity
               key={language.code}
               style={[
                 styles.languageItem,
-                index < languages.length - 1 && styles.languageItemBorder,
+                index < languages.length - 1 && [styles.languageItemBorder, { borderBottomColor: colors.border }],
               ]}
               onPress={() => handleLanguageSelect(language.code)}
             >
               <Text style={styles.languageFlag}>{language.flag}</Text>
-              <Text style={styles.languageName}>{language.name}</Text>
+              <Text style={[styles.languageName, { color: colors.text }]}>{language.name}</Text>
               {currentLanguage === language.code && (
-                <Ionicons name="checkmark-circle" size={24} color={theme.colors.primary} />
+                <Ionicons name="checkmark-circle" size={24} color={colors.primary} />
               )}
             </TouchableOpacity>
           ))}
         </Surface>
 
-        <Text style={styles.hint}>
+        <Text style={[styles.hint, { color: colors.textSecondary }]}>
           {currentLanguage === 'es' 
             ? 'La app usará automáticamente el idioma de tu teléfono al iniciar.'
             : 'The app will automatically use your phone\'s language on startup.'}
