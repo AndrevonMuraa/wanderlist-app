@@ -230,7 +230,7 @@ export default function CountryVisitDetailScreen() {
     if (!visit) return;
     
     try {
-      const message = `🌍 My trip to ${visit.country_name}!\n\n${visit.diary ? `"${visit.diary.substring(0, 100)}${visit.diary.length > 100 ? '...' : ''}"` : 'Amazing memories!'}\n\n📸 ${visit.photos.length} photo${visit.photos.length !== 1 ? 's' : ''} | ⭐ ${visit.points_earned} points\n\n#WanderList #Travel #${visit.country_name.replace(/\s/g, '')}`;
+      const message = `🌍 My trip to ${visit.country_name}!\n\n${visit.diary ? `"${visit.diary.substring(0, 100)}${visit.diary.length > 100 ? '...' : ''}"` : 'Amazing memories!'}\n\n📸 ${visit.photos.length} photo${visit.photos.length !== 1 ? 's' : ''} | ⭐ ${visit.points_earned} points\n\n#WanderMark #Travel #${visit.country_name.replace(/\s/g, '')}`;
       
       await Share.share({
         message,

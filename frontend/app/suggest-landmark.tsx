@@ -104,7 +104,7 @@ export default function SuggestLandmarkScreen() {
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <Surface style={styles.formCard}>
             <Text style={styles.infoText}>
-              Suggest a landmark that you think should be added to WanderList!
+              Suggest a landmark that you think should be added to WanderMark!
             </Text>
 
             <TextInput
