@@ -237,7 +237,7 @@ export default function TermsOfServiceScreen() {
 
         {/* Privacy */}
         <Surface style={styles.card}>
-          <Section title="7. Privacy">
+          <Section title="8. Privacy">
             <Text style={styles.paragraph}>
               Your privacy is important to us. Our Privacy Policy describes how we collect, use, and share your information. By using WanderList, you consent to our collection and use of information as described in our Privacy Policy.
             </Text>
