@@ -250,9 +250,9 @@ export default function NotificationsScreen() {
         ) : (
           <View style={styles.emptyState}>
             <Ionicons name="notifications-outline" size={64} color={theme.colors.textLight} />
-            <Text style={styles.emptyTitle}>No Notifications</Text>
+            <Text style={styles.emptyTitle}>{t('notifications.noNotifications')}</Text>
             <Text style={styles.emptyText}>
-              You'll see notifications here when someone interacts with your content
+              {t('notifications.emptyMessage')}
             </Text>
           </View>
         )}
