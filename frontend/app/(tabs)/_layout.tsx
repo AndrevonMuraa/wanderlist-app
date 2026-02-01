@@ -40,11 +40,20 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="map"
+        options={{
+          title: 'Map',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="globe-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="journey"
         options={{
-          title: 'My Journey',
+          title: 'Journey',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="map-outline" size={size} color={color} />
+            <Ionicons name="footsteps-outline" size={size} color={color} />
           ),
         }}
       />
