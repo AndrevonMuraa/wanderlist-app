@@ -81,7 +81,7 @@ export default function PrivacyPolicyScreen() {
           </View>
           
           <Text style={styles.introText}>
-            WanderList ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.
+            WanderMark ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.
           </Text>
         </Surface>
 
@@ -118,7 +118,7 @@ export default function PrivacyPolicyScreen() {
         <Surface style={styles.card}>
           <Section title="2. How We Use Your Information">
             <Text style={styles.paragraph}>We use the information we collect to:</Text>
-            <BulletPoint text="Provide and maintain the WanderList service" />
+            <BulletPoint text="Provide and maintain the WanderMark service" />
             <BulletPoint text="Track your travel progress and achievements" />
             <BulletPoint text="Display leaderboards and social features" />
             <BulletPoint text="Enable friend connections and messaging" />
@@ -174,7 +174,7 @@ export default function PrivacyPolicyScreen() {
         <Surface style={styles.card}>
           <Section title="6. Photos & Camera Access">
             <Text style={styles.paragraph}>
-              WanderList requests camera and photo library access to:
+              WanderMark requests camera and photo library access to:
             </Text>
             <BulletPoint text="Take photos of landmarks you visit" />
             <BulletPoint text="Select existing photos from your gallery" />
@@ -190,7 +190,7 @@ export default function PrivacyPolicyScreen() {
         <Surface style={styles.card}>
           <Section title="7. Children's Privacy">
             <Text style={styles.paragraph}>
-              WanderList is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.
+              WanderMark is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.
             </Text>
           </Section>
         </Surface>

@@ -81,7 +81,7 @@ export default function TermsOfServiceScreen() {
           </View>
           
           <Text style={styles.introText}>
-            Please read these Terms of Service ("Terms") carefully before using the WanderList mobile application ("App") operated by WanderList ("we", "us", or "our").
+            Please read these Terms of Service ("Terms") carefully before using the WanderMark mobile application ("App") operated by WanderMark ("we", "us", or "our").
           </Text>
           
           <View style={styles.highlightBox}>
@@ -96,7 +96,7 @@ export default function TermsOfServiceScreen() {
         <Surface style={styles.card}>
           <Section title="1. Account Registration">
             <Text style={styles.paragraph}>
-              To use certain features of WanderList, you must register for an account. When you register, you agree to:
+              To use certain features of WanderMark, you must register for an account. When you register, you agree to:
             </Text>
             <BulletPoint text="Provide accurate, current, and complete information" />
             <BulletPoint text="Maintain and update your information to keep it accurate" />
@@ -114,7 +114,7 @@ export default function TermsOfServiceScreen() {
         <Surface style={styles.card}>
           <Section title="2. Acceptable Use">
             <Text style={styles.paragraph}>
-              You agree to use WanderList only for lawful purposes. You agree NOT to:
+              You agree to use WanderMark only for lawful purposes. You agree NOT to:
             </Text>
             <BulletPoint text="Upload false or misleading information" />
             <BulletPoint text="Upload content that infringes on intellectual property rights" />
@@ -149,7 +149,7 @@ export default function TermsOfServiceScreen() {
           <Section title="4. Content Moderation & Reporting">
             <Text style={styles.subTitle}>Community Guidelines</Text>
             <Text style={styles.paragraph}>
-              WanderList is committed to maintaining a safe and respectful community. All user-generated content, including photos, diary entries, and tips, must comply with our guidelines.
+              WanderMark is committed to maintaining a safe and respectful community. All user-generated content, including photos, diary entries, and tips, must comply with our guidelines.
             </Text>
             
             <Text style={[styles.subTitle, { marginTop: 16 }]}>Prohibited Content</Text>
@@ -175,9 +175,9 @@ export default function TermsOfServiceScreen() {
         {/* Subscription & Payments */}
         <Surface style={styles.card}>
           <Section title="5. Subscriptions & Payments">
-            <Text style={styles.subTitle}>WanderList Pro</Text>
+            <Text style={styles.subTitle}>WanderMark Pro</Text>
             <Text style={styles.paragraph}>
-              WanderList Pro is a premium subscription that unlocks additional features including premium landmarks, custom visits, and extended photo limits.
+              WanderMark Pro is a premium subscription that unlocks additional features including premium landmarks, custom visits, and extended photo limits.
             </Text>
             
             <Text style={[styles.subTitle, { marginTop: 16 }]}>Pricing</Text>
@@ -200,7 +200,7 @@ export default function TermsOfServiceScreen() {
         <Surface style={styles.card}>
           <Section title="6. Points, Rewards & Fair Play">
             <Text style={styles.paragraph}>
-              WanderList awards points for visiting landmarks. Points are:
+              WanderMark awards points for visiting landmarks. Points are:
             </Text>
             <BulletPoint text="For entertainment and gamification purposes only" />
             <BulletPoint text="Not redeemable for cash or prizes" />
@@ -227,10 +227,10 @@ export default function TermsOfServiceScreen() {
         <Surface style={styles.card}>
           <Section title="7. Intellectual Property">
             <Text style={styles.paragraph}>
-              The WanderList App, including its original content, features, and functionality, is owned by WanderList and protected by international copyright, trademark, and other intellectual property laws.
+              The WanderMark App, including its original content, features, and functionality, is owned by WanderMark and protected by international copyright, trademark, and other intellectual property laws.
             </Text>
             <Text style={[styles.paragraph, { marginTop: 12 }]}>
-              The WanderList name, logo, and all related names, logos, and slogans are trademarks of WanderList. You may not use these marks without our prior written permission.
+              The WanderMark name, logo, and all related names, logos, and slogans are trademarks of WanderMark. You may not use these marks without our prior written permission.
             </Text>
           </Section>
         </Surface>
@@ -239,7 +239,7 @@ export default function TermsOfServiceScreen() {
         <Surface style={styles.card}>
           <Section title="8. Privacy">
             <Text style={styles.paragraph}>
-              Your privacy is important to us. Our Privacy Policy describes how we collect, use, and share your information. By using WanderList, you consent to our collection and use of information as described in our Privacy Policy.
+              Your privacy is important to us. Our Privacy Policy describes how we collect, use, and share your information. By using WanderMark, you consent to our collection and use of information as described in our Privacy Policy.
             </Text>
             <TouchableOpacity 
               style={styles.inlineLink}
@@ -310,7 +310,7 @@ export default function TermsOfServiceScreen() {
         <Surface style={styles.card}>
           <Section title="13. Governing Law">
             <Text style={styles.paragraph}>
-              These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which WanderList operates, without regard to conflict of law provisions.
+              These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which WanderMark operates, without regard to conflict of law provisions.
             </Text>
           </Section>
         </Surface>

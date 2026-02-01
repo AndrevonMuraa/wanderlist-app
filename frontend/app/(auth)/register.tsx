@@ -69,7 +69,7 @@ export default function RegisterScreen() {
                 <Ionicons name="person-add-outline" size={64} color={theme.colors.primary} />
               </View>
               <Title style={styles.title}>Create Account</Title>
-              <Text style={styles.subtitle}>Join WanderList and start your journey</Text>
+              <Text style={styles.subtitle}>Join WanderMark and start your journey</Text>
             </View>
 
             <Surface style={styles.surface}>

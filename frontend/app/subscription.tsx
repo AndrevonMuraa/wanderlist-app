@@ -93,7 +93,7 @@ export default function SubscriptionScreen() {
       if (response.ok) {
         const data = await response.json();
         Alert.alert(
-          '🎉 Welcome to WanderList Pro!',
+          '🎉 Welcome to WanderMark Pro!',
           data.message,
           [{ text: 'Awesome!', onPress: () => fetchSubscriptionStatus() }]
         );
@@ -137,7 +137,7 @@ export default function SubscriptionScreen() {
             <TouchableOpacity onPress={handleBack} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color="#fff" />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>WanderList Pro</Text>
+            <Text style={styles.headerTitle}>WanderMark Pro</Text>
             <View style={styles.brandingContainer}>
             <HeaderBranding size={18} textColor="#2A2A2A" />
           </View>
@@ -165,7 +165,7 @@ export default function SubscriptionScreen() {
           <TouchableOpacity onPress={handleBack} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>WanderList Pro</Text>
+          <Text style={styles.headerTitle}>WanderMark Pro</Text>
           <View style={styles.brandingContainer}>
             <HeaderBranding size={18} textColor="#2A2A2A" />
           </View>
@@ -182,7 +182,7 @@ export default function SubscriptionScreen() {
             style={styles.heroGradient}
           >
             <Ionicons name="diamond" size={48} color="#fff" />
-            <Text style={styles.heroTitle}>WanderList Pro</Text>
+            <Text style={styles.heroTitle}>WanderMark Pro</Text>
             <Text style={styles.heroSubtitle}>
               Unlock the full travel experience
             </Text>
@@ -201,7 +201,7 @@ export default function SubscriptionScreen() {
             <View style={styles.statusRow}>
               <View>
                 <Text style={styles.statusLabel}>Your Plan</Text>
-                <Text style={styles.statusValue}>WanderList Pro</Text>
+                <Text style={styles.statusValue}>WanderMark Pro</Text>
               </View>
               <View>
                 <Text style={styles.statusLabel}>Valid Until</Text>

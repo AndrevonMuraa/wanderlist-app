@@ -61,7 +61,7 @@ export default function LoginScreen() {
             <View style={styles.iconCircle}>
               <BrandedGlobeIcon size={90} showPin={true} showW={true} />
             </View>
-            <Text style={styles.title}>Welcome to WanderList</Text>
+            <Text style={styles.title}>Welcome to WanderMark</Text>
             <Text style={styles.subtitle}>Explore iconic landmarks across the world</Text>
           </View>
 

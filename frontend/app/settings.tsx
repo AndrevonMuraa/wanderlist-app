@@ -345,8 +345,8 @@ export default function SettingsScreen() {
 
         {/* App Version */}
         <View style={styles.versionContainer}>
-          <Text style={styles.versionText}>WanderList v1.0.0</Text>
-          <Text style={styles.copyrightText}>© 2026 WanderList. All rights reserved.</Text>
+          <Text style={styles.versionText}>WanderMark v1.0.0</Text>
+          <Text style={styles.copyrightText}>© 2026 WanderMark. All rights reserved.</Text>
         </View>
 
         <View style={styles.bottomSpacer} />

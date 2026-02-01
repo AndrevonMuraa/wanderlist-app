@@ -48,7 +48,7 @@ export default function WelcomeScreen() {
           style={styles.hero}
         >
           <Text style={styles.heroEmoji}>🌍✈️🗺️</Text>
-          <Text style={styles.heroTitle}>Welcome to WanderList!</Text>
+          <Text style={styles.heroTitle}>Welcome to WanderMark!</Text>
           <Text style={styles.heroSubtitle}>
             Your personal travel companion to explore the world's most amazing landmarks
           </Text>

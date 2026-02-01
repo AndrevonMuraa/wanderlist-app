@@ -308,7 +308,7 @@ export default function ProfileScreen() {
         {/* Menu - Simplified */}
         <Surface style={styles.menuCard}>
           <List.Item
-            title="About WanderList"
+            title="About WanderMark"
             description="Learn how to use the app"
             left={props => <List.Icon {...props} icon="information-outline" color={theme.colors.primary} />}
             right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
@@ -318,7 +318,7 @@ export default function ProfileScreen() {
           />
           <Divider style={styles.divider} />
           <List.Item
-            title="WanderList Pro"
+            title="WanderMark Pro"
             description="Upgrade for premium features"
             left={props => <List.Icon {...props} icon="diamond" color="#764ba2" />}
             right={props => <List.Icon {...props} icon="chevron-right" color={theme.colors.textLight} />}
@@ -349,7 +349,7 @@ export default function ProfileScreen() {
           Logout
         </Button>
 
-        <Text style={styles.versionText}>WanderList v1.0.0</Text>
+        <Text style={styles.versionText}>WanderMark v1.0.0</Text>
       </ScrollView>
 
       <Portal>
