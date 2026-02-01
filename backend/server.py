@@ -248,6 +248,26 @@ class CommentCreate(BaseModel):
     content: str
     parent_comment_id: Optional[str] = None  # For replies
 
+# ============= REPORT/MODERATION MODELS =============
+
+class Report(BaseModel):
+    report_id: str
+    reporter_id: str  # User who submitted the report
+    report_type: str  # "user", "activity", "photo", "comment"
+    target_id: str  # ID of the reported item
+    target_name: Optional[str] = None  # Name/description of reported item
+    reason: str  # Report reason code
+    status: str = "pending"  # "pending", "reviewed", "resolved", "dismissed"
+    admin_notes: Optional[str] = None
+    created_at: datetime
+    reviewed_at: Optional[datetime] = None
+
+class ReportCreate(BaseModel):
+    report_type: str
+    target_id: str
+    reason: str
+    target_name: Optional[str] = None
+
 # ============= END ACTIVITY FEED MODELS =============
 
 # ============= BUCKET LIST MODELS =============
