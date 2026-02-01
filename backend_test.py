@@ -82,9 +82,11 @@ class WanderListTester:
         
         # Test 1: Create valid report
         try:
+            # Use unique target_id to avoid duplicate issues
+            unique_id = f"test_activity_{uuid.uuid4().hex[:8]}"
             report_data = {
                 "report_type": "activity",
-                "target_id": "test_activity_123",
+                "target_id": unique_id,
                 "reason": "spam"
             }
             response = requests.post(f"{BASE_URL}/reports", json=report_data, headers=headers)
