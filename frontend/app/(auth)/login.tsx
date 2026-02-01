@@ -143,8 +143,8 @@ export default function LoginScreen() {
               Continue with Google
             </Button>
 
-            {/* Apple Sign-In Button - Only show on iOS */}
-            {Platform.OS === 'ios' && isAppleSignInAvailable && (
+            {/* Apple Sign-In Button */}
+            {Platform.OS === 'ios' && isAppleSignInAvailable ? (
               <AppleAuthentication.AppleAuthenticationButton
                 buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
                 buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
@@ -152,7 +152,15 @@ export default function LoginScreen() {
                 style={styles.appleButton}
                 onPress={handleAppleLogin}
               />
-            )}
+            ) : Platform.OS !== 'ios' ? (
+              <TouchableOpacity
+                style={styles.appleButtonFallback}
+                onPress={() => setError('Apple Sign-In is only available on iOS devices')}
+              >
+                <Ionicons name="logo-apple" size={20} color="#fff" />
+                <Text style={styles.appleButtonFallbackText}>Sign in with Apple</Text>
+              </TouchableOpacity>
+            ) : null}
 
             {/* Quick Test Login Button */}
             <TouchableOpacity
