@@ -1109,7 +1109,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     if landmark.get("category") == "premium" and not is_user_pro(current_user):
         raise HTTPException(
             status_code=403, 
-            detail="WanderList Pro required to visit premium landmarks. Upgrade to unlock 92 premium landmarks!"
+            detail="WanderMark Pro required to visit premium landmarks. Upgrade to unlock 92 premium landmarks!"
         )
     
     # Get user limits based on subscription
@@ -1122,7 +1122,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         if max_photos == 1:
             raise HTTPException(
                 status_code=403, 
-                detail="Free users can add 1 photo per visit. Upgrade to WanderList Pro for up to 10 photos!"
+                detail="Free users can add 1 photo per visit. Upgrade to WanderMark Pro for up to 10 photos!"
             )
         else:
             raise HTTPException(status_code=400, detail=f"Maximum {max_photos} photos allowed per visit")
@@ -1706,7 +1706,7 @@ async def send_friend_request(data: FriendRequest, current_user: User = Depends(
     if friend_count >= max_friends:
         raise HTTPException(
             status_code=403,
-            detail=f"Friend limit reached ({max_friends} friends). Upgrade to WanderList Pro for unlimited friends!"
+            detail=f"Friend limit reached ({max_friends} friends). Upgrade to WanderMark Pro for unlimited friends!"
         )
     
     # Find friend by email or username
@@ -2664,7 +2664,7 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
         if max_photos == 1:
             raise HTTPException(
                 status_code=403, 
-                detail="Free users can add 1 photo per country visit. Upgrade to WanderList Pro for up to 10 photos!"
+                detail="Free users can add 1 photo per country visit. Upgrade to WanderMark Pro for up to 10 photos!"
             )
         else:
             raise HTTPException(status_code=400, detail=f"Maximum {max_photos} photos allowed")
@@ -2992,7 +2992,7 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
     Create a user-created visit for countries/landmarks not in the app database.
     No points are awarded for user-created visits.
     
-    REQUIRES: WanderList Pro subscription
+    REQUIRES: WanderMark Pro subscription
     
     Landmarks can now have individual photos:
     - landmarks: List of {name: str, photo: Optional[str]} (max 10 landmarks)
@@ -3004,7 +3004,7 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
     if not is_user_pro(current_user):
         raise HTTPException(
             status_code=403,
-            detail="Custom visits require WanderList Pro. Upgrade to record visits to places not in our database!"
+            detail="Custom visits require WanderMark Pro. Upgrade to record visits to places not in our database!"
         )
     
     # Validate country name
@@ -3800,7 +3800,7 @@ async def upgrade_subscription(
         "user_name": current_user.name,
         "user_picture": current_user.picture,
         "activity_type": "subscription_upgrade",
-        "description": f"upgraded to WanderList Pro! 🌟",
+        "description": f"upgraded to WanderMark Pro! 🌟",
         "visibility": "public",
         "created_at": datetime.now(timezone.utc),
         "likes_count": 0,
@@ -3810,7 +3810,7 @@ async def upgrade_subscription(
     
     return {
         "success": True,
-        "message": f"Welcome to WanderList Pro! Your {plan} subscription is now active.",
+        "message": f"Welcome to WanderMark Pro! Your {plan} subscription is now active.",
         "subscription_tier": "pro",
         "expires_at": expires_at.isoformat(),
         "features_unlocked": [
