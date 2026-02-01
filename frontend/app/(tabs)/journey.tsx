@@ -534,20 +534,24 @@ export default function JourneyScreen() {
         </Surface>
 
         {/* Custom Visits Section */}
-        <Surface style={styles.customVisitsCard}>
+        <Surface style={[styles.customVisitsCard, { backgroundColor: colors.surface }]}>
           <View style={styles.customVisitsHeader}>
             <View style={styles.customVisitsHeaderLeft}>
-              <Ionicons name="globe-outline" size={24} color={theme.colors.accent} />
-              <Text style={styles.sectionTitle}>Custom Visits</Text>
+              <Ionicons name="globe-outline" size={24} color={colors.accent} />
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Custom Visits</Text>
               {!canCreateCustomVisits && (
-                <View style={styles.proBadge}>
-                  <Ionicons name="diamond" size={12} color="#1E8A8A" />
-                  <Text style={styles.proBadgeText}>PRO</Text>
+                <View style={[styles.proBadge, { backgroundColor: colors.accentTeal + '15' }]}>
+                  <Ionicons name="diamond" size={12} color={colors.accentTeal} />
+                  <Text style={[styles.proBadgeText, { color: colors.accentTeal }]}>PRO</Text>
                 </View>
               )}
             </View>
             <TouchableOpacity
-              style={[styles.addCustomButton, !canCreateCustomVisits && styles.addCustomButtonLocked]}
+              style={[
+                styles.addCustomButton, 
+                { backgroundColor: colors.primaryLight + '20' },
+                !canCreateCustomVisits && { backgroundColor: colors.accentTeal + '15' }
+              ]}
               onPress={() => {
                 if (canCreateCustomVisits) {
                   setShowCustomVisitModal(true);
@@ -560,15 +564,18 @@ export default function JourneyScreen() {
               <Ionicons 
                 name={canCreateCustomVisits ? "add-circle" : "lock-closed"} 
                 size={20} 
-                color={canCreateCustomVisits ? theme.colors.primary : "#1E8A8A"} 
+                color={canCreateCustomVisits ? colors.primary : colors.accentTeal} 
               />
-              <Text style={[styles.addCustomButtonText, !canCreateCustomVisits && styles.addCustomButtonTextLocked]}>
+              <Text style={[
+                styles.addCustomButtonText, 
+                { color: canCreateCustomVisits ? colors.primary : colors.accentTeal }
+              ]}>
                 {canCreateCustomVisits ? "Add Visit" : "Unlock"}
               </Text>
             </TouchableOpacity>
           </View>
           
-          <Text style={styles.customVisitsDescription}>
+          <Text style={[styles.customVisitsDescription, { color: colors.textLight }]}>
             {canCreateCustomVisits 
               ? "Record visits to places not in our database" 
               : "Upgrade to Pro to record visits to any destination worldwide"}
@@ -576,25 +583,25 @@ export default function JourneyScreen() {
 
           {!canCreateCustomVisits ? (
             <TouchableOpacity 
-              style={styles.emptyCustomVisitsLocked}
+              style={[styles.emptyCustomVisitsLocked, { borderColor: colors.accentTeal + '40', backgroundColor: colors.accentTeal + '08' }]}
               onPress={() => setShowProLock(true)}
               activeOpacity={0.8}
             >
-              <View style={styles.lockIconContainer}>
-                <Ionicons name="lock-closed" size={36} color="#1E8A8A" />
+              <View style={[styles.lockIconContainer, { backgroundColor: colors.accentTeal + '15' }]}>
+                <Ionicons name="lock-closed" size={36} color={colors.accentTeal} />
               </View>
-              <Text style={styles.emptyCustomTextLocked}>Pro Feature</Text>
-              <Text style={styles.emptyCustomSubtextLocked}>Tap to learn more about Custom Visits</Text>
+              <Text style={[styles.emptyCustomTextLocked, { color: colors.accentTeal }]}>Pro Feature</Text>
+              <Text style={[styles.emptyCustomSubtextLocked, { color: colors.textLight }]}>Tap to learn more about Custom Visits</Text>
             </TouchableOpacity>
           ) : userCreatedVisits.length === 0 ? (
             <TouchableOpacity 
-              style={styles.emptyCustomVisits}
+              style={[styles.emptyCustomVisits, { borderColor: colors.border }]}
               onPress={() => setShowCustomVisitModal(true)}
               activeOpacity={0.8}
             >
-              <Ionicons name="airplane-outline" size={40} color={theme.colors.textLight} />
-              <Text style={styles.emptyCustomText}>No custom visits yet</Text>
-              <Text style={styles.emptyCustomSubtext}>Tap to add your first custom visit!</Text>
+              <Ionicons name="airplane-outline" size={40} color={colors.textLight} />
+              <Text style={[styles.emptyCustomText, { color: colors.textLight }]}>No custom visits yet</Text>
+              <Text style={[styles.emptyCustomSubtext, { color: colors.textLight }]}>Tap to add your first custom visit!</Text>
             </TouchableOpacity>
           ) : (
             <>
@@ -624,19 +631,19 @@ export default function JourneyScreen() {
                 }
                 
                 return (
-                  <View key={visit.user_created_visit_id} style={styles.customVisitItem}>
-                    <View style={styles.customVisitIcon}>
+                  <View key={visit.user_created_visit_id} style={[styles.customVisitItem, { borderBottomColor: colors.border }]}>
+                    <View style={[styles.customVisitIcon, { backgroundColor: colors.accent + '20' }]}>
                       <Ionicons 
                         name={hasLandmarks ? "location" : "flag"} 
                         size={20} 
-                        color={theme.colors.accent} 
+                        color={colors.accent} 
                       />
                     </View>
                     <View style={styles.customVisitInfo}>
-                      <Text style={styles.customVisitName} numberOfLines={1}>
+                      <Text style={[styles.customVisitName, { color: colors.text }]} numberOfLines={1}>
                         {displayName}
                       </Text>
-                      <Text style={styles.customVisitCountry} numberOfLines={1}>
+                      <Text style={[styles.customVisitCountry, { color: colors.textLight }]} numberOfLines={1}>
                         {displaySubtext ? `${displaySubtext} • ` : ''}
                         {new Date(visit.visited_at).toLocaleDateString('en-US', {
                           month: 'short',
@@ -647,9 +654,9 @@ export default function JourneyScreen() {
                     </View>
                     <View style={styles.customVisitMeta}>
                       {totalPhotos > 0 && (
-                        <View style={styles.photoCountBadge}>
-                          <Ionicons name="images-outline" size={14} color={theme.colors.textLight} />
-                          <Text style={styles.photoCountText}>{totalPhotos}</Text>
+                        <View style={[styles.photoCountBadge, { backgroundColor: colors.surfaceTinted }]}>
+                          <Ionicons name="images-outline" size={14} color={colors.textLight} />
+                          <Text style={[styles.photoCountText, { color: colors.textLight }]}>{totalPhotos}</Text>
                         </View>
                       )}
                       <Ionicons 
@@ -659,14 +666,14 @@ export default function JourneyScreen() {
                           'lock-closed-outline'
                         } 
                         size={16} 
-                        color={theme.colors.textLight} 
+                        color={colors.textLight} 
                       />
                     </View>
                   </View>
                 );
               })}
               {userCreatedVisits.length > 5 && (
-                <Text style={styles.viewMoreText}>
+                <Text style={[styles.viewMoreText, { color: colors.primary }]}>
                   +{userCreatedVisits.length - 5} more custom visits
                 </Text>
               )}
