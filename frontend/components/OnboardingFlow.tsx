@@ -88,7 +88,7 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   };
 
   const renderSlide = ({ item, index }: { item: OnboardingSlide; index: number }) => (
-    <View style={styles.slide}>
+    <View style={[styles.slide, { width }]}>
       <LinearGradient
         colors={item.gradient}
         style={styles.iconContainer}
