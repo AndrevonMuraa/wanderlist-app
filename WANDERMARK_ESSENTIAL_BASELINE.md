@@ -363,6 +363,13 @@ python3 seed_data_expansion.py    # Expanded content (48 countries)
 
 ## 📂 **Key Files Reference**
 
+### Frontend - New Features (v1.1.0)
+| File | Purpose |
+|------|---------|
+| `/app/frontend/app/search.tsx` | Landmark search with filters & sorting |
+| `/app/frontend/app/admin/analytics.tsx` | Admin analytics dashboard |
+| `/app/frontend/components/ShareStatsCard.tsx` | Shareable journey stats card |
+
 ### Frontend - Branding
 | File | Purpose |
 |------|---------|
@@ -374,7 +381,8 @@ python3 seed_data_expansion.py    # Expanded content (48 countries)
 ### Frontend - Pages
 | File | Purpose |
 |------|---------|
-| `/app/frontend/app/(tabs)/profile.tsx` | User profile (refactored) |
+| `/app/frontend/app/(tabs)/profile.tsx` | User profile (with Share My Journey) |
+| `/app/frontend/app/edit-profile.tsx` | Edit profile (banner + featured badges) |
 | `/app/frontend/app/(tabs)/social.tsx` | Social hub (points display fixed) |
 | `/app/frontend/app/(tabs)/journey.tsx` | Journey stats (rank display fixed) |
 | `/app/frontend/app/feed.tsx` | Activity feed sub-page |
@@ -393,7 +401,7 @@ python3 seed_data_expansion.py    # Expanded content (48 countries)
 ### Backend
 | File | Purpose |
 |------|---------|
-| `/app/backend/server.py` | Main API (Country model has `total_points`) |
+| `/app/backend/server.py` | Main API (includes profile customization) |
 | `/app/backend/premium_landmarks.py` | Premium definitions (133 unique, no duplicates) |
 | `/app/backend/seed_data.py` | Database seeding (auto-skips duplicates) |
 
