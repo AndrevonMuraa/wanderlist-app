@@ -66,11 +66,9 @@ interface OnboardingFlowProps {
 
 export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const scrollViewRef = useRef<ScrollView>(null);
 
   const handleNext = () => {
     if (currentIndex < slides.length - 1) {
-      scrollViewRef.current?.scrollTo({ x: (currentIndex + 1) * width, animated: true });
       setCurrentIndex(currentIndex + 1);
     } else {
       handleComplete();
