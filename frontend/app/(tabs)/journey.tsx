@@ -444,7 +444,7 @@ export default function JourneyScreen() {
         {/* Recent Visits */}
         {recentVisits.length > 0 && (
           <Surface style={[styles.recentVisitsCard, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Recent Visits</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('journey.recentVisits')}</Text>
             {recentVisits.map((visit) => (
               <TouchableOpacity
                 key={visit.visit_id}
@@ -487,8 +487,8 @@ export default function JourneyScreen() {
                 <Ionicons name="flag" size={22} color={colors.primary} />
               </View>
               <View>
-                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>My Country Visits</Text>
-                <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>Photo collages and travel diaries</Text>
+                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>{t('journey.myCountryVisits')}</Text>
+                <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>{t('journey.photoCollages')}</Text>
               </View>
             </View>
             <Ionicons name="chevron-forward" size={22} color={colors.textLight} />
@@ -507,8 +507,8 @@ export default function JourneyScreen() {
                 <Ionicons name="images" size={22} color={colors.accent} />
               </View>
               <View>
-                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>My Photos</Text>
-                <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>All your travel memories in one place</Text>
+                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>{t('journey.myPhotos')}</Text>
+                <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>{t('journey.travelMemories')}</Text>
               </View>
             </View>
             <Ionicons name="chevron-forward" size={22} color={colors.textLight} />
@@ -527,8 +527,8 @@ export default function JourneyScreen() {
                 <Ionicons name="stats-chart" size={22} color={colors.accentTeal} />
               </View>
               <View>
-                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>Detailed Statistics</Text>
-                <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>Charts, rankings & travel insights</Text>
+                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>{t('journey.detailedStatistics')}</Text>
+                <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>{t('journey.chartsAndRankings')}</Text>
               </View>
             </View>
             <Ionicons name="chevron-forward" size={22} color={colors.textLight} />
