@@ -94,6 +94,12 @@ class LoginRequest(BaseModel):
     email: str
     password: str
 
+class GoogleTokenRequest(BaseModel):
+    email: str
+    name: str
+    picture: Optional[str] = None
+    google_id: str
+
 class SessionDataResponse(BaseModel):
     user_id: str
     email: str
