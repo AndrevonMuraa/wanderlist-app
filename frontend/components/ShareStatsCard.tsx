@@ -89,7 +89,7 @@ export default function ShareStatsCard({ visible, onDismiss, stats, userName }: 
             {/* App branding */}
             <View style={styles.brandRow}>
               <Ionicons name="globe-outline" size={20} color="#3BB8C3" />
-              <Text style={styles.brandText}>WanderList</Text>
+              <Text style={styles.brandText}>WanderMark</Text>
             </View>
 
             {/* User name */}
@@ -137,7 +137,7 @@ export default function ShareStatsCard({ visible, onDismiss, stats, userName }: 
 
             {/* Call to action */}
             <View style={styles.ctaRow}>
-              <Text style={styles.ctaText}>Join me on WanderList! 🌍</Text>
+              <Text style={styles.ctaText}>Join me on WanderMark! 🌍</Text>
             </View>
           </LinearGradient>
         </View>

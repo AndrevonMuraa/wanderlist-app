@@ -5,7 +5,7 @@ export const shareVisit = async (landmarkName: string, countryName: string, poin
   try {
     await successHaptic();
     
-    const message = `🎉 Just visited ${landmarkName} in ${countryName}! +${points} points on WanderList! 🌍✈️`;
+    const message = `🎉 Just visited ${landmarkName} in ${countryName}! +${points} points on WanderMark! 🌍✈️`;
     
     const result = await Share.share({
       message,
@@ -25,7 +25,7 @@ export const shareAchievement = async (badgeName: string, badgeDescription: stri
   try {
     await successHaptic();
     
-    const message = `🏆 Achievement Unlocked: ${badgeName}! ${badgeDescription} #WanderList 🌍`;
+    const message = `🏆 Achievement Unlocked: ${badgeName}! ${badgeDescription} #WanderMark 🌍`;
     
     await Share.share({
       message,
@@ -42,7 +42,7 @@ export const shareProgress = async (visits: number, countries: number, points: n
   try {
     await successHaptic();
     
-    const message = `📊 My WanderList Progress:\n${visits} landmarks visited\n${countries} countries explored\n${points} points earned!\n\nJoin me on this amazing journey! 🌍✈️`;
+    const message = `📊 My WanderMark Progress:\n${visits} landmarks visited\n${countries} countries explored\n${points} points earned!\n\nJoin me on this amazing journey! 🌍✈️`;
     
     await Share.share({
       message,
@@ -59,7 +59,7 @@ export const shareCollection = async (collectionName: string, landmarkCount: num
   try {
     await successHaptic();
     
-    const message = `📚 Check out my "${collectionName}" collection on WanderList! ${landmarkCount} amazing landmarks to explore! 🗺️`;
+    const message = `📚 Check out my "${collectionName}" collection on WanderMark! ${landmarkCount} amazing landmarks to explore! 🗺️`;
     
     await Share.share({
       message,
