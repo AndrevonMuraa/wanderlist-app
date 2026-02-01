@@ -176,7 +176,7 @@ export default function SubscriptionScreen() {
         {/* Hero Section */}
         <View style={styles.heroSection}>
           <LinearGradient
-            colors={['#667eea', '#764ba2']}
+            colors={['#4DB8D8', '#1E8A8A']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.heroGradient}
@@ -296,7 +296,7 @@ export default function SubscriptionScreen() {
               activeOpacity={0.9}
             >
               <LinearGradient
-                colors={['#667eea', '#764ba2']}
+                colors={['#4DB8D8', '#1E8A8A']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.upgradeGradient}
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.sm,
   },
   tierLabelPro: {
-    color: '#764ba2',
+    color: '#1E8A8A',
     marginTop: theme.spacing.sm,
   },
   featureRow: {
@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textLight,
   },
   proBadge: {
-    backgroundColor: '#764ba2',
+    backgroundColor: '#1E8A8A',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
@@ -531,7 +531,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pricingCardBest: {
-    borderColor: '#764ba2',
+    borderColor: '#1E8A8A',
   },
   pricingCardSelected: {
     borderColor: theme.colors.primary,
@@ -540,7 +540,7 @@ const styles = StyleSheet.create({
   bestValueBadge: {
     position: 'absolute',
     top: -10,
-    backgroundColor: '#764ba2',
+    backgroundColor: '#1E8A8A',
     paddingHorizontal: 10,
     paddingVertical: 3,
     borderRadius: 10,
