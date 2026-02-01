@@ -55,8 +55,8 @@
       "typedRoutes": true
     },
     "extra": {
-      "privacyPolicyUrl": "https://wanderlist.app/privacy",
-      "termsOfServiceUrl": "https://wanderlist.app/terms"
+      "privacyPolicyUrl": "https://wandermark.app/privacy",
+      "termsOfServiceUrl": "https://wandermark.app/terms"
     }
   }
 }
