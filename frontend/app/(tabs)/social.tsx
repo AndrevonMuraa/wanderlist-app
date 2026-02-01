@@ -88,6 +88,19 @@ export default function SocialHubScreen() {
   const [expandedVisits, setExpandedVisits] = useState<Set<string>>(new Set());
   const [visitDetails, setVisitDetails] = useState<{[key: string]: any}>({});
 
+  // Report modal state
+  const [reportModalVisible, setReportModalVisible] = useState(false);
+  const [reportTarget, setReportTarget] = useState<{
+    type: 'user' | 'activity';
+    id: string;
+    name: string;
+  } | null>(null);
+
+  const openReportModal = (type: 'user' | 'activity', id: string, name: string) => {
+    setReportTarget({ type, id, name });
+    setReportModalVisible(true);
+  };
+
   useEffect(() => {
     loadAllData();
   }, []);
