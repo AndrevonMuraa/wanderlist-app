@@ -4,7 +4,7 @@ import * as Localization from 'expo-localization';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import en from './locales/en.json';
-import no from './locales/no.json';
+import es from './locales/es.json';
 
 const LANGUAGE_KEY = 'user_language';
 
@@ -15,11 +15,11 @@ const getInitialLanguage = async () => {
     if (savedLanguage) {
       return savedLanguage;
     }
-    // Get device language (e.g., 'en-US', 'nb-NO')
+    // Get device language (e.g., 'en-US', 'es-ES')
     const deviceLanguage = Localization.getLocales()[0]?.languageCode || 'en';
-    // Map Norwegian variants to 'no'
-    if (deviceLanguage === 'nb' || deviceLanguage === 'nn' || deviceLanguage === 'no') {
-      return 'no';
+    // Map Spanish variants to 'es'
+    if (deviceLanguage === 'es') {
+      return 'es';
     }
     return 'en';
   } catch {
@@ -33,7 +33,7 @@ i18n
   .init({
     resources: {
       en: { translation: en },
-      no: { translation: no },
+      es: { translation: es },
     },
     lng: 'en', // Default, will be overridden
     fallbackLng: 'en',
@@ -63,7 +63,7 @@ export const setLanguage = async (language: string) => {
 // Available languages
 export const languages = [
   { code: 'en', name: 'English', flag: '🇬🇧' },
-  { code: 'no', name: 'Norsk', flag: '🇳🇴' },
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
 ];
 
 export default i18n;
