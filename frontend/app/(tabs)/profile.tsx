@@ -180,7 +180,7 @@ export default function ProfileScreen() {
         {/* Single Row: Title + Actions Left, Branding Right */}
         <View style={styles.headerRow}>
           <View style={styles.titleWithActions}>
-            <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>Profile</Text>
+            <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>{t('profile.title')}</Text>
             <View style={styles.headerButtons}>
               <TouchableOpacity
                 style={styles.headerIconButton}
