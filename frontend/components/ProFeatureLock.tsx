@@ -110,7 +110,7 @@ export default function ProFeatureLock({ visible, onClose, feature, featureName 
           {/* CTA Button */}
           <TouchableOpacity onPress={handleUpgrade} activeOpacity={0.9}>
             <LinearGradient
-              colors={['#667eea', '#764ba2']}
+              colors={['#4DB8D8', '#1E8A8A']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.upgradeButton}
