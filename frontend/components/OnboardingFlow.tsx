@@ -86,13 +86,6 @@ export default function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
     onComplete();
   };
 
-  const handleScroll = (event: any) => {
-    const index = Math.round(event.nativeEvent.contentOffset.x / width);
-    if (index !== currentIndex && index >= 0 && index < slides.length) {
-      setCurrentIndex(index);
-    }
-  };
-
   const renderDots = () => (
     <View style={styles.dotsContainer}>
       {slides.map((_, index) => (
