@@ -280,6 +280,42 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
     borderRadius: theme.borderRadius.md,
   },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: theme.spacing.lg,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: theme.colors.border,
+  },
+  dividerText: {
+    marginHorizontal: theme.spacing.md,
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+  },
+  googleButton: {
+    borderColor: theme.colors.border,
+    borderWidth: 1.5,
+    borderRadius: theme.borderRadius.md,
+  },
+  appleButton: {
+    width: '100%',
+    height: 48,
+    marginTop: theme.spacing.md,
+    backgroundColor: '#000',
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  appleButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
   linkContainer: {
     marginTop: theme.spacing.md,
     alignItems: 'center',
