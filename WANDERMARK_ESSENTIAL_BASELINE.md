@@ -24,7 +24,56 @@
 
 ---
 
-## 🆕 **v1.0.0 Changes (Latest Session)**
+## 🆕 **v1.1.0 Changes (Latest Session - June 2025)**
+
+### 🔍 1. Landmark Search & Filters (NEW)
+- **Search Screen** (`/search.tsx`) - Full-featured search with:
+  - Real-time search with debounce (300ms) using `lodash.debounce`
+  - Filter by: All / Visited / Unvisited landmarks
+  - Sort by: Name / Points / Country
+  - Visual indicators for visited landmarks
+  - Pull-to-refresh support
+  - Links from Explore page
+
+### 📊 2. Admin Analytics Dashboard (NEW)
+- **Analytics Screen** (`/admin/analytics.tsx`) - Comprehensive admin metrics:
+  - User statistics: Total, Pro, Free, New this week/month
+  - Visit statistics: Total, Weekly, Monthly breakdown
+  - Engagement metrics: Avg visits per user, Conversion rate
+  - Top landmarks and countries by visits
+  - Accessible from Admin Panel (`/admin/index.tsx`)
+
+### 📤 3. Social Sharing Feature (NEW)
+- **ShareStatsCard Component** (`/components/ShareStatsCard.tsx`):
+  - Beautiful shareable stats card with dark gradient design
+  - Shows: Landmarks visited, Countries, Continents, Points
+  - Achievement and rank badges displayed
+  - Uses `expo-sharing` for native share sheet
+  - Uses `react-native-view-shot` for image capture
+  - Compatible with Instagram, Facebook, WhatsApp, etc.
+- **"Share My Journey" button** added to Profile page
+- Opens modal with preview and share button
+
+### 🎨 4. Profile Customization (NEW)
+- **Enhanced Edit Profile** (`/edit-profile.tsx`):
+  - **Banner Image**: Upload custom banner (3:1 aspect ratio)
+  - **Featured Badges**: Select up to 3 achievements to showcase
+  - Achievement selection UI with toggle functionality
+  - Backend updated with `banner_image` and `featured_badges` fields
+- Backend: `PUT /api/auth/profile` enhanced with new fields
+
+### 🔧 Technical Updates
+- **New Dependencies Added:**
+  - `lodash.debounce` - Search optimization
+  - `expo-sharing` - Native share UI
+  - `react-native-view-shot` - Component to image capture
+- **Backend Schema Updates:**
+  - User model: Added `banner_image: Optional[str]`, `featured_badges: Optional[List[str]]`
+  - Profile update endpoint enhanced
+
+---
+
+## 🆕 **v1.0.0 Changes (Previous Session)**
 
 ### App Store Readiness Complete
 - **Privacy Policy page** (`/privacy-policy`) - 10 comprehensive sections
@@ -37,26 +86,12 @@
 
 ### UI/UX Fixes
 - **Profile Edit Button**: Fixed touch target (was 2px, now 28x28px with hitSlop)
-  - Solid turquoise background with white pencil icon
-  - No longer overlaps with rank badge
 - **Username Text**: Reduced from 24px to 18px for better fit
 - **Version Numbers**: Unified to v1.0.0 across About and Settings pages
 - **Continent Icons**: Updated to use Ionicons matching My Journey page
-  - Europe: `business-outline` (🏛️)
-  - Asia: `earth-outline` (🌏)
-  - Africa: `sunny-outline` (☀️)
-  - Americas: `leaf-outline` (🌿)
-  - Oceania: `water-outline` (🌊)
-- **Bucket List Header**: Fixed vertical alignment to match Explore page
-- **Bucket List Tabs**: Fixed styling to match Explore page (padding, font size)
-- **Tab Navigation**: Fixed bottom tab bar disappearing when switching Explore/Bucket List
-  - Changed `router.push` to `router.replace` for proper navigation
 
 ### Backend Fix
 - **Continent Progress Bars**: Fixed incorrect values (was showing landmarks, now shows countries)
-  - Backend now returns `visited_countries` count
-  - Progress calculated as countries visited / total countries
-  - Example: "3/10 visited" means 3 countries with landmarks visited
 
 ---
 
