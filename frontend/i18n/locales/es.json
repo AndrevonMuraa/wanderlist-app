@@ -96,7 +96,7 @@
   },
   "social": {
     "title": "Social",
-    "feed": "Feed",
+    "feed": "Actividad",
     "friends": "Amigos",
     "noActivity": "Sin actividad todavía",
     "visitedLandmark": "visitó",
@@ -104,7 +104,15 @@
     "like": "Me gusta",
     "comment": "Comentar",
     "share": "Compartir",
-    "report": "Reportar"
+    "report": "Reportar",
+    "pending": "Pendientes",
+    "viewAllFriends": "Ver Todos los Amigos",
+    "noFriendsYet": "Aún no tienes amigos",
+    "addFriends": "Agregar Amigos",
+    "messages": "Mensajes",
+    "leaderboard": "Clasificación",
+    "topExplorers": "Mejores Exploradores",
+    "viewFullLeaderboard": "Ver Clasificación Completa"
   },
   "profile": {
     "title": "Perfil",
