@@ -5,9 +5,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import en from './locales/en.json';
 import es from './locales/es.json';
-import no from './locales/no.json';
-import de from './locales/de.json';
-import fr from './locales/fr.json';
 
 const LANGUAGE_KEY = 'user_language';
 
@@ -20,11 +17,8 @@ const getInitialLanguage = async () => {
     }
     // Get device language (e.g., 'en-US', 'es-ES')
     const deviceLanguage = Localization.getLocales()[0]?.languageCode || 'en';
-    // Map language variants
-    const supportedLanguages = ['en', 'es', 'no', 'nb', 'nn', 'de', 'fr'];
-    if (deviceLanguage === 'nb' || deviceLanguage === 'nn') {
-      return 'no'; // Map Norwegian variants to 'no'
-    }
+    // Map language variants - only English and Spanish supported
+    const supportedLanguages = ['en', 'es'];
     if (supportedLanguages.includes(deviceLanguage)) {
       return deviceLanguage;
     }
