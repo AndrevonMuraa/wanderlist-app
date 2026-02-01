@@ -1656,28 +1656,382 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
 
 # ============= ADMIN ENDPOINTS =============
 
-@api_router.put("/admin/users/{user_id}/tier")
-async def update_user_tier(
-    user_id: str,
-    request: dict,  # {"tier": "free|basic|premium"}
-    current_user: User = Depends(get_current_user)
-):
-    """Admin endpoint to upgrade/downgrade user subscription tier"""
-    # In production, add proper admin authorization here
+# Admin Models
+class AdminUserUpdate(BaseModel):
+    subscription_tier: Optional[str] = None  # "free" or "pro"
+    role: Optional[str] = None  # "user", "moderator", "admin"
+    is_banned: Optional[bool] = None
+    ban_reason: Optional[str] = None
+
+class AdminReportUpdate(BaseModel):
+    status: str  # "pending", "reviewed", "resolved", "dismissed"
+    admin_notes: Optional[str] = None
+
+@api_router.get("/admin/stats")
+async def get_admin_stats(admin_user: User = Depends(get_admin_user)):
+    """Get dashboard statistics for admin panel"""
+    # User stats
+    total_users = await db.users.count_documents({})
+    pro_users = await db.users.count_documents({"subscription_tier": "pro"})
+    banned_users = await db.users.count_documents({"is_banned": True})
     
-    tier = request.get("tier")
-    if not tier or tier not in ["free", "basic", "premium"]:
-        raise HTTPException(status_code=400, detail="Invalid tier. Must be 'free', 'basic', or 'premium'")
+    # Get users registered in last 7 days
+    week_ago = datetime.now(timezone.utc) - timedelta(days=7)
+    new_users_week = await db.users.count_documents({"created_at": {"$gte": week_ago}})
+    
+    # Get users registered in last 30 days
+    month_ago = datetime.now(timezone.utc) - timedelta(days=30)
+    new_users_month = await db.users.count_documents({"created_at": {"$gte": month_ago}})
+    
+    # Visit stats
+    total_visits = await db.visits.count_documents({})
+    visits_week = await db.visits.count_documents({"created_at": {"$gte": week_ago}})
+    visits_month = await db.visits.count_documents({"created_at": {"$gte": month_ago}})
+    
+    # Report stats
+    total_reports = await db.reports.count_documents({})
+    pending_reports = await db.reports.count_documents({"status": "pending"})
+    
+    # Content stats
+    total_landmarks = await db.landmarks.count_documents({})
+    total_countries = await db.countries.count_documents({})
+    
+    return {
+        "users": {
+            "total": total_users,
+            "pro": pro_users,
+            "free": total_users - pro_users,
+            "banned": banned_users,
+            "new_this_week": new_users_week,
+            "new_this_month": new_users_month
+        },
+        "visits": {
+            "total": total_visits,
+            "this_week": visits_week,
+            "this_month": visits_month
+        },
+        "reports": {
+            "total": total_reports,
+            "pending": pending_reports
+        },
+        "content": {
+            "landmarks": total_landmarks,
+            "countries": total_countries
+        }
+    }
+
+@api_router.get("/admin/users")
+async def get_admin_users(
+    search: Optional[str] = None,
+    role: Optional[str] = None,
+    tier: Optional[str] = None,
+    is_banned: Optional[bool] = None,
+    sort_by: str = "created_at",
+    sort_order: str = "desc",
+    page: int = 1,
+    limit: int = 20,
+    admin_user: User = Depends(get_admin_user)
+):
+    """Get list of users with filtering and pagination"""
+    query = {}
+    
+    if search:
+        query["$or"] = [
+            {"email": {"$regex": search, "$options": "i"}},
+            {"name": {"$regex": search, "$options": "i"}},
+            {"username": {"$regex": search, "$options": "i"}}
+        ]
+    
+    if role:
+        query["role"] = role
+    
+    if tier:
+        query["subscription_tier"] = tier
+    
+    if is_banned is not None:
+        query["is_banned"] = is_banned
+    
+    # Get total count
+    total = await db.users.count_documents(query)
+    
+    # Sort direction
+    sort_dir = -1 if sort_order == "desc" else 1
+    
+    # Fetch users
+    skip = (page - 1) * limit
+    users = await db.users.find(
+        query, 
+        {"_id": 0, "password_hash": 0}
+    ).sort(sort_by, sort_dir).skip(skip).limit(limit).to_list(limit)
+    
+    # Add visit counts for each user
+    for user in users:
+        user["visit_count"] = await db.visits.count_documents({"user_id": user["user_id"]})
+        user["points"] = user.get("points", 0)
+    
+    return {
+        "users": users,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": (total + limit - 1) // limit
+    }
+
+@api_router.get("/admin/users/{user_id}")
+async def get_admin_user_detail(user_id: str, admin_user: User = Depends(get_admin_user)):
+    """Get detailed user information for admin"""
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0, "password_hash": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Get user statistics
+    visit_count = await db.visits.count_documents({"user_id": user_id})
+    friend_count = await db.friends.count_documents({
+        "$or": [
+            {"user_id": user_id, "status": "accepted"},
+            {"friend_id": user_id, "status": "accepted"}
+        ]
+    })
+    
+    # Get countries visited
+    visits = await db.visits.find({"user_id": user_id}, {"landmark_id": 1}).to_list(10000)
+    landmark_ids = [v["landmark_id"] for v in visits]
+    if landmark_ids:
+        countries = await db.landmarks.distinct("country_name", {"landmark_id": {"$in": landmark_ids}})
+        countries_count = len(countries)
+    else:
+        countries_count = 0
+    
+    # Get recent activity
+    recent_visits = await db.visits.find(
+        {"user_id": user_id}, 
+        {"_id": 0}
+    ).sort("created_at", -1).limit(5).to_list(5)
+    
+    # Get reports involving this user
+    reports_about = await db.reports.find(
+        {"target_id": user_id, "report_type": "user"},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(10).to_list(10)
+    
+    reports_by = await db.reports.find(
+        {"reporter_id": user_id},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(10).to_list(10)
+    
+    return {
+        **user,
+        "stats": {
+            "visits": visit_count,
+            "friends": friend_count,
+            "countries": countries_count,
+            "points": user.get("points", 0),
+            "leaderboard_points": user.get("leaderboard_points", 0)
+        },
+        "recent_visits": recent_visits,
+        "reports_about": reports_about,
+        "reports_by": reports_by
+    }
+
+@api_router.put("/admin/users/{user_id}")
+async def update_admin_user(
+    user_id: str, 
+    update_data: AdminUserUpdate,
+    admin_user: User = Depends(get_admin_user)
+):
+    """Update user details (tier, role, ban status)"""
+    update_fields = {}
+    
+    if update_data.subscription_tier is not None:
+        if update_data.subscription_tier not in ["free", "pro"]:
+            raise HTTPException(status_code=400, detail="Invalid tier. Must be 'free' or 'pro'")
+        update_fields["subscription_tier"] = update_data.subscription_tier
+        # Set expiration for pro (1 year from now)
+        if update_data.subscription_tier == "pro":
+            update_fields["subscription_expires_at"] = datetime.now(timezone.utc) + timedelta(days=365)
+    
+    if update_data.role is not None:
+        # Only super admins can change roles
+        if admin_user.role != "admin":
+            raise HTTPException(status_code=403, detail="Only admins can change user roles")
+        if update_data.role not in ["user", "moderator", "admin"]:
+            raise HTTPException(status_code=400, detail="Invalid role")
+        update_fields["role"] = update_data.role
+    
+    if update_data.is_banned is not None:
+        update_fields["is_banned"] = update_data.is_banned
+        if update_data.is_banned:
+            update_fields["banned_at"] = datetime.now(timezone.utc)
+            update_fields["ban_reason"] = update_data.ban_reason or "Violation of terms of service"
+        else:
+            update_fields["banned_at"] = None
+            update_fields["ban_reason"] = None
+    
+    if not update_fields:
+        raise HTTPException(status_code=400, detail="No valid fields to update")
     
     result = await db.users.update_one(
         {"user_id": user_id},
-        {"$set": {"subscription_tier": tier}}
+        {"$set": update_fields}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Log admin action
+    await db.admin_logs.insert_one({
+        "log_id": f"log_{uuid.uuid4().hex[:12]}",
+        "admin_id": admin_user.user_id,
+        "admin_name": admin_user.name,
+        "action": "user_update",
+        "target_id": user_id,
+        "changes": update_fields,
+        "created_at": datetime.now(timezone.utc)
+    })
+    
+    return {"message": "User updated successfully", "changes": update_fields}
+
+@api_router.put("/admin/users/{user_id}/tier")
+async def update_user_tier(
+    user_id: str,
+    request: dict,
+    admin_user: User = Depends(get_admin_user)
+):
+    """Admin endpoint to upgrade/downgrade user subscription tier"""
+    tier = request.get("tier")
+    if not tier or tier not in ["free", "pro"]:
+        raise HTTPException(status_code=400, detail="Invalid tier. Must be 'free' or 'pro'")
+    
+    update_fields = {"subscription_tier": tier}
+    if tier == "pro":
+        update_fields["subscription_expires_at"] = datetime.now(timezone.utc) + timedelta(days=365)
+    
+    result = await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": update_fields}
     )
     
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="User not found")
     
     return {"message": f"User {user_id} upgraded to {tier} tier", "tier": tier}
+
+@api_router.get("/admin/reports")
+async def get_admin_reports(
+    status: Optional[str] = None,
+    report_type: Optional[str] = None,
+    page: int = 1,
+    limit: int = 20,
+    admin_user: User = Depends(get_admin_user)
+):
+    """Get list of reports with filtering"""
+    query = {}
+    
+    if status:
+        query["status"] = status
+    
+    if report_type:
+        query["report_type"] = report_type
+    
+    total = await db.reports.count_documents(query)
+    
+    skip = (page - 1) * limit
+    reports = await db.reports.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    
+    # Enrich with reporter info
+    for report in reports:
+        reporter = await db.users.find_one(
+            {"user_id": report["reporter_id"]},
+            {"_id": 0, "name": 1, "email": 1, "picture": 1}
+        )
+        report["reporter"] = reporter
+        
+        # Get target info based on type
+        if report["report_type"] == "user":
+            target = await db.users.find_one(
+                {"user_id": report["target_id"]},
+                {"_id": 0, "name": 1, "email": 1, "picture": 1}
+            )
+            report["target"] = target
+    
+    return {
+        "reports": reports,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": (total + limit - 1) // limit
+    }
+
+@api_router.put("/admin/reports/{report_id}")
+async def update_admin_report(
+    report_id: str,
+    update_data: AdminReportUpdate,
+    admin_user: User = Depends(get_admin_user)
+):
+    """Update report status"""
+    if update_data.status not in ["pending", "reviewed", "resolved", "dismissed"]:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    
+    update_fields = {
+        "status": update_data.status,
+        "reviewed_at": datetime.now(timezone.utc)
+    }
+    
+    if update_data.admin_notes:
+        update_fields["admin_notes"] = update_data.admin_notes
+    
+    result = await db.reports.update_one(
+        {"report_id": report_id},
+        {"$set": update_fields}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Report not found")
+    
+    return {"message": "Report updated successfully", "status": update_data.status}
+
+@api_router.get("/admin/logs")
+async def get_admin_logs(
+    page: int = 1,
+    limit: int = 50,
+    admin_user: User = Depends(get_super_admin_user)
+):
+    """Get admin action logs (super admin only)"""
+    total = await db.admin_logs.count_documents({})
+    
+    skip = (page - 1) * limit
+    logs = await db.admin_logs.find({}, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    
+    return {
+        "logs": logs,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": (total + limit - 1) // limit
+    }
+
+@api_router.post("/admin/make-admin/{user_id}")
+async def make_user_admin(user_id: str, admin_user: User = Depends(get_super_admin_user)):
+    """Promote a user to admin (super admin only)"""
+    result = await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": {"role": "admin"}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Log the action
+    await db.admin_logs.insert_one({
+        "log_id": f"log_{uuid.uuid4().hex[:12]}",
+        "admin_id": admin_user.user_id,
+        "admin_name": admin_user.name,
+        "action": "promote_to_admin",
+        "target_id": user_id,
+        "created_at": datetime.now(timezone.utc)
+    })
+    
+    return {"message": f"User {user_id} promoted to admin"}
 
 # ============= LEADERBOARD ENDPOINTS =============
 
