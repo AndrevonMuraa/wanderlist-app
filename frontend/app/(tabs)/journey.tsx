@@ -255,55 +255,55 @@ export default function JourneyScreen() {
       >
         {/* Travel Statistics Dashboard - Compressed */}
         {stats && progressStats && (
-          <Surface style={styles.statsCard}>
+          <Surface style={[styles.statsCard, { backgroundColor: colors.surface }]}>
             <View style={styles.statsHeader}>
-              <Text style={styles.sectionTitle}>Your Stats</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Your Stats</Text>
               <TouchableOpacity>
-                <Ionicons name="share-social-outline" size={20} color={theme.colors.primary} />
+                <Ionicons name="share-social-outline" size={20} color={colors.primary} />
               </TouchableOpacity>
             </View>
 
             <View style={styles.statsGridCompact}>
-              <View style={styles.statBoxCompact}>
-                <Ionicons name="flag" size={20} color={theme.colors.primary} />
-                <Text style={styles.statValueCompact}>
+              <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
+                <Ionicons name="flag" size={20} color={colors.primary} />
+                <Text style={[styles.statValueCompact, { color: colors.text }]}>
                   {Object.keys(progressStats.countries).filter(
                     countryId => progressStats.countries[countryId].visited > 0
                   ).length}
                 </Text>
-                <Text style={styles.statLabelCompact}>Countries</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Countries</Text>
               </View>
 
-              <View style={styles.statBoxCompact}>
-                <Ionicons name="location" size={20} color={theme.colors.accent} />
-                <Text style={styles.statValueCompact}>{progressStats.overall.visited}</Text>
-                <Text style={styles.statLabelCompact}>Landmarks</Text>
+              <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
+                <Ionicons name="location" size={20} color={colors.accent} />
+                <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.overall.visited}</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Landmarks</Text>
               </View>
 
-              <View style={styles.statBoxCompact}>
-                <Ionicons name="star" size={20} color={theme.colors.accentYellow} />
-                <Text style={styles.statValueCompact}>{progressStats.totalPoints || 0}</Text>
-                <Text style={styles.statLabelCompact}>Points</Text>
+              <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
+                <Ionicons name="star" size={20} color={colors.accentYellow} />
+                <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.totalPoints || 0}</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Points</Text>
               </View>
 
-              <View style={styles.statBoxCompact}>
-                <Ionicons name="flame" size={20} color={theme.colors.error} />
-                <Text style={styles.statValueCompact}>{stats.current_streak || 0}</Text>
-                <Text style={styles.statLabelCompact}>Streak</Text>
+              <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
+                <Ionicons name="flame" size={20} color={colors.error} />
+                <Text style={[styles.statValueCompact, { color: colors.text }]}>{stats.current_streak || 0}</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Streak</Text>
               </View>
 
-              <View style={styles.statBoxCompact}>
-                <Ionicons name="trophy" size={20} color={theme.colors.accentBronze} />
-                <Text style={styles.statValueCompact}>
+              <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
+                <Ionicons name="trophy" size={20} color={colors.accentBronze} />
+                <Text style={[styles.statValueCompact, { color: colors.text }]}>
                   {stats.rank && stats.rank > 0 ? `#${stats.rank}` : 'N/A'}
                 </Text>
-                <Text style={styles.statLabelCompact}>Rank</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Rank</Text>
               </View>
 
-              <View style={styles.statBoxCompact}>
-                <Ionicons name="ribbon" size={20} color={theme.colors.primary} />
-                <Text style={styles.statValueCompact}>{badges.length}</Text>
-                <Text style={styles.statLabelCompact}>Badges</Text>
+              <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
+                <Ionicons name="ribbon" size={20} color={colors.primary} />
+                <Text style={[styles.statValueCompact, { color: colors.text }]}>{badges.length}</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Badges</Text>
               </View>
             </View>
           </Surface>
