@@ -776,24 +776,41 @@ export default function SocialHubScreen() {
           <Surface style={styles.card}>
             <TouchableOpacity 
               style={styles.messagesButton}
-              onPress={() => router.push('/messages')}
+              onPress={() => {
+                if (user?.subscription_tier === 'free') {
+                  Alert.alert(
+                    '🔒 Pro Feature',
+                    'Messaging is available for Pro members. Upgrade to Pro to chat with your travel buddies!',
+                    [
+                      { text: 'Maybe Later', style: 'cancel' },
+                      { text: 'Upgrade to Pro', onPress: () => router.push('/subscription') }
+                    ]
+                  );
+                } else {
+                  router.push('/messages');
+                }
+              }}
             >
               <LinearGradient
-                colors={[theme.colors.primary, theme.colors.secondary]}
+                colors={user?.subscription_tier === 'free' 
+                  ? ['#6b7280', '#4b5563'] 
+                  : [theme.colors.primary, theme.colors.secondary]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.messagesGradient}
               >
-                <Ionicons name="chatbubble-ellipses" size={24} color="#fff" />
-                <Text style={styles.messagesButtonText}>Open Messages</Text>
-                {unreadMessages > 0 && (
+                <Ionicons name={user?.subscription_tier === 'free' ? 'lock-closed' : 'chatbubble-ellipses'} size={24} color="#fff" />
+                <Text style={styles.messagesButtonText}>
+                  {user?.subscription_tier === 'free' ? 'Unlock Messages' : 'Open Messages'}
+                </Text>
+                {user?.subscription_tier !== 'free' && unreadMessages > 0 && (
                   <Badge size={20} style={styles.messageBadge}>{unreadMessages}</Badge>
                 )}
               </LinearGradient>
             </TouchableOpacity>
-            <Text style={styles.messagesHint}>
+            <Text style={[styles.messagesHint, { color: user?.subscription_tier === 'free' ? theme.colors.textSecondary : theme.colors.textSecondary }]}>
               {user?.subscription_tier === 'free' 
-                ? '🔒 Upgrade to Basic to message friends'
+                ? '🔒 Upgrade to Pro to message friends'
                 : 'Stay in touch with your travel buddies'}
             </Text>
           </Surface>
