@@ -450,7 +450,7 @@ const styles = StyleSheet.create({
   // Card Bottom Section (Stats + Arrow)
   cardBottomSection: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   statsOverlay: {
@@ -459,6 +459,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
     marginRight: theme.spacing.md,
+    backgroundColor: 'rgba(0, 0, 0, 0.15)',
   },
   statsText: {
     fontSize: 13,
