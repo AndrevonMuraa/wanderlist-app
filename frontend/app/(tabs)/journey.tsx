@@ -103,12 +103,14 @@ export default function JourneyScreen() {
   const [showProLock, setShowProLock] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isOfflineData, setIsOfflineData] = useState(false);
   
   // All hooks must be called in consistent order
   const router = useRouter();
   const { user } = useAuth();
   const { colors, shadows, gradientColors, isDark } = useTheme();
   const { t } = useTranslation();
+  const { isOnline, cacheProgress, cacheVisits, getCachedProgress, getCachedVisits, syncPendingVisits } = useOffline();
   const subscriptionData = useSubscription();
   const canCreateCustomVisits = subscriptionData.canCreateCustomVisits;
   const isPro = subscriptionData.isPro;
