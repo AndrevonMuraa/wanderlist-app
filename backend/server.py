@@ -3928,7 +3928,8 @@ async def create_report(report_data: ReportCreate, current_user: User = Depends(
 async def get_my_reports(current_user: User = Depends(get_current_user)):
     """Get reports submitted by the current user."""
     reports = await db.reports.find(
-        {"reporter_id": current_user.user_id}
+        {"reporter_id": current_user.user_id},
+        {"_id": 0}
     ).sort("created_at", -1).to_list(50)
     
     return {"reports": reports}
