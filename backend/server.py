@@ -370,6 +370,19 @@ class NotificationCreate(BaseModel):
 
 # ============= END NOTIFICATION MODELS =============
 
+# ============= PUSH NOTIFICATION MODELS =============
+
+class PushTokenCreate(BaseModel):
+    push_token: str
+
+class PushNotificationSend(BaseModel):
+    user_id: str
+    title: str
+    body: str
+    data: Optional[dict] = None
+
+# ============= END PUSH NOTIFICATION MODELS =============
+
 class LeaderboardEntry(BaseModel):
     user_id: str
     name: str
