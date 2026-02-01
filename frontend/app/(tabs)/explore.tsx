@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import theme from '../../styles/theme';
+import { useTheme } from '../../contexts/ThemeContext';
 import ContinentsScreen from '../continents';
 
 /**
@@ -8,8 +8,10 @@ import ContinentsScreen from '../continents';
  * The ContinentsScreen has its own internal navigation (Explore/Bucket List tabs)
  */
 export default function ExploreTab() {
+  const { colors } = useTheme();
+  
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ContinentsScreen />
     </View>
   );
@@ -18,6 +20,5 @@ export default function ExploreTab() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background,
   },
 });
