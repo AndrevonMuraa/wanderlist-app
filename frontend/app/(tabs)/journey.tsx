@@ -373,7 +373,7 @@ export default function JourneyScreen() {
         {/* Continental Progress */}
         {progressStats && (
           <Surface style={[styles.continentalCard, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Continental Progress</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('journey.continentalProgress')}</Text>
             {Object.entries(progressStats.continents)
               .sort((a, b) => b[1].percentage - a[1].percentage)
               .map(([continent, data]) => (
@@ -409,7 +409,7 @@ export default function JourneyScreen() {
         {/* Recent Milestones */}
         {badges.length > 0 && (
           <Surface style={[styles.recentBadgesCard, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Recent Achievements</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('journey.recentAchievements')}</Text>
             <View style={styles.timelineContainer}>
               {badges
                 .sort((a, b) => new Date(b.earned_at).getTime() - new Date(a.earned_at).getTime())
@@ -435,7 +435,7 @@ export default function JourneyScreen() {
               style={styles.viewAllButton}
               onPress={() => router.push('/profile')}
             >
-              <Text style={[styles.viewAllText, { color: colors.primary }]}>View All Badges</Text>
+              <Text style={[styles.viewAllText, { color: colors.primary }]}>{t('journey.viewAllBadges')}</Text>
               <Ionicons name="chevron-forward" size={16} color={colors.primary} />
             </TouchableOpacity>
           </Surface>
