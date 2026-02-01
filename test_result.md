@@ -751,6 +751,7 @@ metadata:
 
 test_plan:
   current_focus:
+    - "Admin Panel UI Testing"
     - "End-to-End Testing: Full user flow verification"
     - "Points System: Visit landmarks → earn points → check progress"
     - "Badges & Ranks: Achievement unlocking verification"
