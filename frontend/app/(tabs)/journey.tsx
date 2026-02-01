@@ -123,6 +123,40 @@ export default function JourneyScreen() {
     try {
       const token = await getToken();
       
+      // If offline, try to load from cache
+      if (!isOnline) {
+        const cachedProgress = await getCachedProgress();
+        const cachedVisits = await getCachedVisits();
+        
+        if (cachedProgress) {
+          setProgressStats(cachedProgress);
+          setStats({
+            total_visits: cachedProgress.overall?.visited || 0,
+            countries_visited: Object.keys(cachedProgress.countries || {}).filter(
+              k => cachedProgress.countries[k].visited > 0
+            ).length,
+            continents_visited: Object.keys(cachedProgress.continents || {}).filter(
+              k => cachedProgress.continents[k].visited > 0
+            ).length,
+            total_points: cachedProgress.totalPoints || 0,
+            rank: 0,
+            current_streak: 0,
+          });
+          setIsOfflineData(true);
+        }
+        
+        if (cachedVisits) {
+          setRecentVisits(cachedVisits.slice(0, 5));
+        }
+        
+        setLoading(false);
+        setRefreshing(false);
+        return;
+      }
+      
+      // Online - fetch fresh data
+      setIsOfflineData(false);
+      
       const [statsRes, progressRes, badgesRes, visitsRes, customVisitsRes] = await Promise.all([
         fetch(`${BACKEND_URL}/api/stats`, {
           headers: { 'Authorization': `Bearer ${token}` }
@@ -149,6 +183,8 @@ export default function JourneyScreen() {
       if (progressRes.ok) {
         const data = await progressRes.json();
         setProgressStats(data);
+        // Cache progress data for offline use
+        await cacheProgress(data);
       }
 
       if (badgesRes.ok) {
@@ -159,6 +195,8 @@ export default function JourneyScreen() {
       if (visitsRes.ok) {
         const data = await visitsRes.json();
         setRecentVisits(data.slice(0, 5)); // Show 5 most recent
+        // Cache visits for offline use
+        await cacheVisits(data);
       }
       
       if (customVisitsRes.ok) {
