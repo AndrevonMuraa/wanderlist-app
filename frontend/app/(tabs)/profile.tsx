@@ -237,20 +237,15 @@ export default function ProfileScreen() {
                   </TouchableOpacity>
                 </View>
                 <View style={styles.tierBadge}>
-                  {user?.subscription_tier === 'premium' ? (
+                  {user?.subscription_tier === 'pro' || user?.subscription_tier === 'premium' ? (
                     <>
                       <Ionicons name="diamond" size={12} color={colors.accent} />
-                      <Text style={[styles.tierText, { color: colors.accent }]}>{t('profile.premiumUser')}</Text>
-                    </>
-                  ) : user?.subscription_tier === 'basic' ? (
-                    <>
-                      <Ionicons name="ribbon" size={12} color={colors.primary} />
-                      <Text style={[styles.tierText, { color: colors.primary }]}>{t('profile.basicUser')}</Text>
+                      <Text style={[styles.tierText, { color: colors.accent }]}>{t('profile.proUser')}</Text>
                     </>
                   ) : (
                     <>
                       <Ionicons name="person-outline" size={12} color={colors.textSecondary} />
-                      <Text style={[styles.tierText, { color: colors.textSecondary }]}>Freemium user</Text>
+                      <Text style={[styles.tierText, { color: colors.textSecondary }]}>{t('profile.freeUser')}</Text>
                     </>
                   )}
                 </View>
