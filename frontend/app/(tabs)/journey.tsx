@@ -370,8 +370,8 @@ export default function JourneyScreen() {
 
         {/* Continental Progress */}
         {progressStats && (
-          <Surface style={styles.continentalCard}>
-            <Text style={styles.sectionTitle}>Continental Progress</Text>
+          <Surface style={[styles.continentalCard, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Continental Progress</Text>
             {Object.entries(progressStats.continents)
               .sort((a, b) => b[1].percentage - a[1].percentage)
               .map(([continent, data]) => (
@@ -387,11 +387,11 @@ export default function JourneyScreen() {
                           'water-outline'
                         }
                         size={20}
-                        color={theme.colors.primary}
+                        color={colors.primary}
                       />
-                      <Text style={styles.continentName}>{continent}</Text>
+                      <Text style={[styles.continentName, { color: colors.text }]}>{continent}</Text>
                     </View>
-                    <Text style={styles.continentCount}>
+                    <Text style={[styles.continentCount, { color: colors.textSecondary }]}>
                       {data.visited}/{data.total}
                     </Text>
                   </View>
@@ -406,20 +406,20 @@ export default function JourneyScreen() {
 
         {/* Recent Milestones */}
         {badges.length > 0 && (
-          <Surface style={styles.recentBadgesCard}>
-            <Text style={styles.sectionTitle}>Recent Achievements</Text>
+          <Surface style={[styles.recentBadgesCard, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Recent Achievements</Text>
             <View style={styles.timelineContainer}>
               {badges
                 .sort((a, b) => new Date(b.earned_at).getTime() - new Date(a.earned_at).getTime())
                 .slice(0, 3)
                 .map((badge) => (
                   <View key={badge.achievement_id} style={styles.timelineItem}>
-                    <View style={styles.timelineDot}>
+                    <View style={[styles.timelineDot, { backgroundColor: colors.surfaceTinted }]}>
                       <Text style={styles.timelineEmoji}>{badge.badge_icon}</Text>
                     </View>
                     <View style={styles.timelineContent}>
-                      <Text style={styles.badgeName}>{badge.badge_name}</Text>
-                      <Text style={styles.badgeDate}>
+                      <Text style={[styles.badgeName, { color: colors.text }]}>{badge.badge_name}</Text>
+                      <Text style={[styles.badgeDate, { color: colors.textSecondary }]}>
                         {new Date(badge.earned_at).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric'
@@ -433,8 +433,8 @@ export default function JourneyScreen() {
               style={styles.viewAllButton}
               onPress={() => router.push('/profile')}
             >
-              <Text style={styles.viewAllText}>View All Badges</Text>
-              <Ionicons name="chevron-forward" size={16} color={theme.colors.primary} />
+              <Text style={[styles.viewAllText, { color: colors.primary }]}>View All Badges</Text>
+              <Ionicons name="chevron-forward" size={16} color={colors.primary} />
             </TouchableOpacity>
           </Surface>
         )}
