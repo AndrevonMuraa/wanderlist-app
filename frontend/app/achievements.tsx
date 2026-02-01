@@ -51,6 +51,7 @@ interface AchievementsData {
 
 export default function AchievementsScreen() {
   const router = useRouter();
+  const { colors, gradientColors } = useTheme();
   const [refreshing, setRefreshing] = useState(false);
   const [data, setData] = useState<AchievementsData | null>(null);
   const [loading, setLoading] = useState(true);
