@@ -285,12 +285,12 @@ export default function SettingsScreen() {
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(241, 196, 15, 0.1)' }]}>
                   <Ionicons name="key-outline" size={18} color="#f1c40f" />
                 </View>
-                <Text style={styles.accountLabel}>Change Password</Text>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>Change Password</Text>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
             
-            <View style={styles.settingDivider} />
+            <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
             
             <TouchableOpacity 
               style={styles.accountItem}
@@ -318,18 +318,18 @@ export default function SettingsScreen() {
         </View>
 
         {/* Legal Section */}
-        <View style={styles.section}>
+        <View style={[styles.section, { backgroundColor: colors.surface }]}>
           <View style={styles.sectionHeader}>
-            <View style={[styles.sectionIconCircle, { backgroundColor: 'rgba(77, 184, 216, 0.1)' }]}>
-              <Ionicons name="document-text" size={22} color={theme.colors.primary} />
+            <View style={[styles.sectionIconCircle, { backgroundColor: colors.primary + '15' }]}>
+              <Ionicons name="document-text" size={22} color={colors.primary} />
             </View>
             <View style={styles.sectionHeaderText}>
-              <Text style={styles.sectionTitle}>Legal</Text>
-              <Text style={styles.sectionSubtitle}>Privacy and terms information</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Legal</Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>Privacy and terms information</Text>
             </View>
           </View>
           
-          <View style={styles.accountList}>
+          <View style={[styles.accountList, { backgroundColor: colors.background }]}>
             <TouchableOpacity 
               style={styles.accountItem}
               onPress={() => router.push('/privacy-policy')}
@@ -339,12 +339,12 @@ export default function SettingsScreen() {
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(46, 204, 113, 0.1)' }]}>
                   <Ionicons name="shield-checkmark" size={18} color="#2ecc71" />
                 </View>
-                <Text style={styles.accountLabel}>Privacy Policy</Text>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>Privacy Policy</Text>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
             
-            <View style={styles.settingDivider} />
+            <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
             
             <TouchableOpacity 
               style={styles.accountItem}
@@ -355,17 +355,17 @@ export default function SettingsScreen() {
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(52, 152, 219, 0.1)' }]}>
                   <Ionicons name="reader" size={18} color="#3498db" />
                 </View>
-                <Text style={styles.accountLabel}>Terms of Service</Text>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>Terms of Service</Text>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
           </View>
         </View>
 
         {/* App Version */}
         <View style={styles.versionContainer}>
-          <Text style={styles.versionText}>WanderMark v1.0.0</Text>
-          <Text style={styles.copyrightText}>© 2026 WanderMark. All rights reserved.</Text>
+          <Text style={[styles.versionText, { color: colors.textLight }]}>WanderMark v1.0.0</Text>
+          <Text style={[styles.copyrightText, { color: colors.textLight }]}>© 2026 WanderMark. All rights reserved.</Text>
         </View>
 
         <View style={styles.bottomSpacer} />
