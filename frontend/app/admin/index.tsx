@@ -230,6 +230,13 @@ export default function AdminDashboard() {
         <Text style={[styles.sectionTitle, { color: colors.text }]}>Management</Text>
         <View style={styles.menuList}>
           <MenuCard
+            title="Analytics Dashboard"
+            description="User growth, engagement & insights"
+            icon="analytics-outline"
+            color="#10b981"
+            onPress={() => router.push('/admin/analytics')}
+          />
+          <MenuCard
             title="User Management"
             description="View, search, and manage all users"
             icon="people-outline"
