@@ -398,6 +398,20 @@ export default function ProfileScreen() {
           }
         }}
       />
+
+      {/* Share Stats Modal */}
+      <ShareStatsCard
+        visible={showShareModal}
+        onDismiss={() => setShowShareModal(false)}
+        stats={{
+          totalVisits: progressStats?.overall?.visited || stats?.total_visits || 0,
+          countriesVisited: stats?.countries_visited || 0,
+          continentsVisited: stats?.continents_visited || 0,
+          points: progressStats?.totalPoints || 0,
+          achievements: badges?.length || 0,
+        }}
+        userName={user?.name || 'Traveler'}
+      />
     </View>
   );
 }
