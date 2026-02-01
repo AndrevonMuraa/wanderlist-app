@@ -1,13 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  ScrollView,
   Platform,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
 } from 'react-native';
 import { Text } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
