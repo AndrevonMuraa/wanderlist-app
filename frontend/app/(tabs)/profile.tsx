@@ -332,8 +332,8 @@ export default function ProfileScreen() {
           />
           <Divider style={[styles.divider, { backgroundColor: colors.border }]} />
           <List.Item
-            title="Settings"
-            description="App preferences and account"
+            title={t('settings.title')}
+            description={t('profile.appPreferences')}
             left={props => <List.Icon {...props} icon="cog-outline" color={colors.primary} />}
             right={props => <List.Icon {...props} icon="chevron-right" color={colors.textLight} />}
             onPress={() => router.push('/settings')}
@@ -350,7 +350,7 @@ export default function ProfileScreen() {
           textColor={colors.error}
           buttonColor={colors.surface}
         >
-          Logout
+          {t('auth.logout')}
         </Button>
 
         <Text style={[styles.versionText, { color: colors.textLight }]}>WanderMark v1.0.0</Text>
