@@ -5,6 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import en from './locales/en.json';
 import es from './locales/es.json';
+import no from './locales/no.json';
+import de from './locales/de.json';
+import fr from './locales/fr.json';
 
 const LANGUAGE_KEY = 'user_language';
 
@@ -17,9 +20,13 @@ const getInitialLanguage = async () => {
     }
     // Get device language (e.g., 'en-US', 'es-ES')
     const deviceLanguage = Localization.getLocales()[0]?.languageCode || 'en';
-    // Map Spanish variants to 'es'
-    if (deviceLanguage === 'es') {
-      return 'es';
+    // Map language variants
+    const supportedLanguages = ['en', 'es', 'no', 'nb', 'nn', 'de', 'fr'];
+    if (deviceLanguage === 'nb' || deviceLanguage === 'nn') {
+      return 'no'; // Map Norwegian variants to 'no'
+    }
+    if (supportedLanguages.includes(deviceLanguage)) {
+      return deviceLanguage;
     }
     return 'en';
   } catch {
@@ -34,6 +41,9 @@ i18n
     resources: {
       en: { translation: en },
       es: { translation: es },
+      no: { translation: no },
+      de: { translation: de },
+      fr: { translation: fr },
     },
     lng: 'en', // Default, will be overridden
     fallbackLng: 'en',
@@ -64,6 +74,9 @@ export const setLanguage = async (language: string) => {
 export const languages = [
   { code: 'en', name: 'English', flag: '🇬🇧' },
   { code: 'es', name: 'Español', flag: '🇪🇸' },
+  { code: 'no', name: 'Norsk', flag: '🇳🇴' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
 ];
 
 export default i18n;
