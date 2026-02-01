@@ -778,6 +778,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minHeight: 32,
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  offlineBadge: {
+    backgroundColor: '#ef4444',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
   brandingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
