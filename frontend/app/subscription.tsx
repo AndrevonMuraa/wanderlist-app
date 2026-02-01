@@ -204,7 +204,8 @@ export default function SubscriptionScreen() {
     );
   }
 
-  const isPro = status?.is_pro;
+  // Use isPro from context (line 57), check status for backend sync
+  const isProFromBackend = status?.is_pro;
 
   return (
     <View style={styles.container}>
