@@ -816,7 +816,7 @@ async def google_token_login(auth_data: GoogleTokenRequest, response: Response):
             await db.users.insert_one(new_user)
         
         # Create JWT token
-        access_token = create_access_token({"sub": user_id})
+        access_token, expires_at = create_access_token({"sub": user_id})
         
         # Get updated user data
         user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0, "password_hash": 0})
