@@ -225,7 +225,7 @@ export default function TermsOfServiceScreen() {
 
         {/* Intellectual Property */}
         <Surface style={styles.card}>
-          <Section title="6. Intellectual Property">
+          <Section title="7. Intellectual Property">
             <Text style={styles.paragraph}>
               The WanderList App, including its original content, features, and functionality, is owned by WanderList and protected by international copyright, trademark, and other intellectual property laws.
             </Text>
