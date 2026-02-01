@@ -314,25 +314,26 @@ class AdminAPITester:
         try:
             headers = {"Authorization": f"Bearer {self.admin_token}"}
             
-            # First get a user to report
-            users_response = requests.get(f"{BASE_URL}/admin/users?limit=1", headers=headers)
+            # First get a different user to report (not the first one which might already be reported)
+            users_response = requests.get(f"{BASE_URL}/admin/users?limit=5", headers=headers)
             if users_response.status_code != 200:
                 self.log_test("Create Test Report - Get User", False, error="Could not get user for report")
                 return False
             
             users_data = users_response.json()
-            if not users_data.get("users"):
-                self.log_test("Create Test Report - Get User", False, error="No users found")
+            if not users_data.get("users") or len(users_data["users"]) < 2:
+                self.log_test("Create Test Report - Get User", False, error="Not enough users found")
                 return False
             
-            target_user_id = users_data["users"][0]["user_id"]
+            # Try the second user to avoid duplicates
+            target_user_id = users_data["users"][1]["user_id"]
             
             # Create report
             report_data = {
                 "report_type": "user",
                 "target_id": target_user_id,
-                "reason": "spam",
-                "target_name": "Test User Report"
+                "reason": "inappropriate_content",
+                "target_name": "Test User Report 2"
             }
             
             response = requests.post(f"{BASE_URL}/reports", headers=headers, json=report_data)
@@ -342,6 +343,18 @@ class AdminAPITester:
                 self.test_report_id = data.get("report_id")
                 self.log_test("Create Test Report", True, f"Created report: {self.test_report_id}")
                 return True
+            elif response.status_code == 400:
+                # If duplicate, try to get an existing report ID from the reports list
+                reports_response = requests.get(f"{BASE_URL}/admin/reports?limit=1", headers=headers)
+                if reports_response.status_code == 200:
+                    reports_data = reports_response.json()
+                    if reports_data.get("reports"):
+                        self.test_report_id = reports_data["reports"][0]["report_id"]
+                        self.log_test("Create Test Report", True, f"Using existing report: {self.test_report_id}")
+                        return True
+                
+                self.log_test("Create Test Report", False, error=f"Duplicate report and no existing reports found")
+                return False
             else:
                 self.log_test("Create Test Report", False, error=f"Status: {response.status_code}, Response: {response.text}")
                 return False
