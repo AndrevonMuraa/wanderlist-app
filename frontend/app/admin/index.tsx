@@ -237,6 +237,13 @@ export default function AdminDashboard() {
             onPress={() => router.push('/admin/users')}
           />
           <MenuCard
+            title="Push Notifications"
+            description="Send announcements to users"
+            icon="notifications-outline"
+            color="#8b5cf6"
+            onPress={() => router.push('/admin/notifications')}
+          />
+          <MenuCard
             title="Reports & Moderation"
             description="Review user reports and take action"
             icon="flag-outline"
