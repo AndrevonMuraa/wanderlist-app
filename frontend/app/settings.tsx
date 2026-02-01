@@ -248,7 +248,7 @@ export default function SettingsScreen() {
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(155, 89, 182, 0.1)' }]}>
                   <Ionicons name="language" size={18} color="#9b59b6" />
                 </View>
-                <Text style={styles.accountLabel}>Language / Språk</Text>
+                <Text style={styles.accountLabel}>Language / Idioma</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
             </TouchableOpacity>
