@@ -222,43 +222,43 @@ export default function SettingsScreen() {
                   <Ionicons name="phone-portrait-outline" size={18} color="#3498db" />
                 </View>
                 <View style={styles.settingTexts}>
-                  <Text style={styles.settingLabel}>Push Notifications</Text>
-                  <Text style={styles.settingDescription}>Likes, comments, achievements & more</Text>
+                  <Text style={[styles.settingLabel, { color: colors.text }]}>Push Notifications</Text>
+                  <Text style={[styles.settingDescription, { color: colors.textSecondary }]}>Likes, comments, achievements & more</Text>
                 </View>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Account Settings */}
-        <View style={styles.section}>
+        <View style={[styles.section, { backgroundColor: colors.surface }]}>
           <View style={styles.sectionHeader}>
-            <View style={[styles.sectionIconCircle, { backgroundColor: 'rgba(149, 165, 166, 0.1)' }]}>
+            <View style={[styles.sectionIconCircle, { backgroundColor: 'rgba(149, 165, 166, 0.15)' }]}>
               <Ionicons name="person" size={22} color="#7f8c8d" />
             </View>
             <View style={styles.sectionHeaderText}>
-              <Text style={styles.sectionTitle}>Account</Text>
-              <Text style={styles.sectionSubtitle}>Manage your account details</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Account</Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>Manage your account details</Text>
             </View>
           </View>
           
-          <View style={styles.accountList}>
+          <View style={[styles.accountList, { backgroundColor: colors.background }]}>
             <TouchableOpacity 
               style={styles.accountItem}
               onPress={() => router.push('/language-settings')}
               activeOpacity={0.7}
             >
               <View style={styles.settingItemLeft}>
-                <View style={[styles.settingIcon, { backgroundColor: 'rgba(155, 89, 182, 0.1)' }]}>
-                  <Ionicons name="language" size={18} color="#1E8A8A" />
+                <View style={[styles.settingIcon, { backgroundColor: colors.accentTeal + '15' }]}>
+                  <Ionicons name="language" size={18} color={colors.accentTeal} />
                 </View>
-                <Text style={styles.accountLabel}>Language / Idioma</Text>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>Language / Idioma</Text>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
             
-            <View style={styles.settingDivider} />
+            <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
             
             <TouchableOpacity 
               style={styles.accountItem}
@@ -269,12 +269,12 @@ export default function SettingsScreen() {
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(52, 152, 219, 0.1)' }]}>
                   <Ionicons name="at" size={18} color="#3498db" />
                 </View>
-                <Text style={styles.accountLabel}>Change Email</Text>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>Change Email</Text>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
             
-            <View style={styles.settingDivider} />
+            <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
             
             <TouchableOpacity 
               style={styles.accountItem}
