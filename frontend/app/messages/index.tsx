@@ -199,9 +199,9 @@ export default function MessagesScreen() {
       {user?.subscription_tier === 'free' ? (
         <View style={styles.lockedContainer}>
           <Ionicons name="lock-closed" size={64} color={theme.colors.textSecondary} />
-          <Text style={styles.lockedTitle}>Messaging is Premium</Text>
+          <Text style={styles.lockedTitle}>Messaging is Pro Only</Text>
           <Text style={styles.lockedText}>
-            Upgrade to Basic or Premium to chat with your friends!
+            Upgrade to Pro to chat with your travel buddies!
           </Text>
           <TouchableOpacity 
             style={styles.upgradeButtonLarge}
@@ -212,7 +212,7 @@ export default function MessagesScreen() {
               style={styles.upgradeGradient}
             >
               <Ionicons name="rocket-outline" size={20} color="#fff" />
-              <Text style={styles.upgradeButtonText}>View Plans</Text>
+              <Text style={styles.upgradeButtonText}>Upgrade to Pro</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
