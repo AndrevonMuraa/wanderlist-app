@@ -34,8 +34,17 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAppleSignInAvailable, setIsAppleSignInAvailable] = useState(false);
 
   useEffect(() => {
+    // Check if Apple Sign-In is available (iOS only)
+    const checkAppleSignIn = async () => {
+      if (Platform.OS === 'ios') {
+        const isAvailable = await AppleAuthentication.isAvailableAsync();
+        setIsAppleSignInAvailable(isAvailable);
+      }
+    };
+    checkAppleSignIn();
     // Check for OAuth callback on page load (web)
     if (Platform.OS === 'web') {
       const urlParams = new URLSearchParams(window.location.search);
