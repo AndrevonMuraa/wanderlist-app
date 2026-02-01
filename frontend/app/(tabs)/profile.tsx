@@ -3,12 +3,13 @@ import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform, Alert,
 import { Text, Surface, Button, Divider, List, Dialog, Portal } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BACKEND_URL } from '../../utils/config';
 import * as SecureStore from 'expo-secure-store';
-import theme, { gradients } from '../../styles/theme';
+import { gradients, spacing, borderRadius, typography } from '../../styles/theme';
 import UpgradeModal from '../../components/UpgradeModal';
 import RankBadge from '../../components/RankBadge';
 import { getUserRank } from '../../utils/rankSystem';
