@@ -231,7 +231,7 @@ export default function RanksScreen() {
             </Text>
           </View>
           <View style={styles.infoItem}>
-            <Ionicons name="earth" size={20} color="#9C27B0" />
+            <Ionicons name="earth" size={20} color="#1E8A8A" />
             <Text style={styles.infoText}>
               <Text style={styles.infoBold}>Complete a Continent:</Text> +200 bonus points
             </Text>

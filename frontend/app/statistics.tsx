@@ -26,7 +26,7 @@ const LANDMARK_CATEGORIES = [
   { id: 'historical', name: 'Historical', icon: 'time', color: '#8D6E63' },
   { id: 'natural', name: 'Natural', icon: 'leaf', color: '#66BB6A' },
   { id: 'architectural', name: 'Architectural', icon: 'business', color: '#42A5F5' },
-  { id: 'cultural', name: 'Cultural', icon: 'color-palette', color: '#AB47BC' },
+  { id: 'cultural', name: 'Cultural', icon: 'color-palette', color: '#1E8A8A' },
   { id: 'religious', name: 'Religious', icon: 'star', color: '#FFA726' },
 ];
 
@@ -332,7 +332,7 @@ export default function StatisticsScreen() {
             {/* Category Breakdown */}
             <Surface style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Ionicons name="pie-chart" size={22} color="#AB47BC" />
+                <Ionicons name="pie-chart" size={22} color="#1E8A8A" />
                 <Text style={styles.sectionTitle}>Landmark Categories</Text>
               </View>
               <View style={styles.categoryGrid}>

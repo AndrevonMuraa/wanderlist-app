@@ -52,9 +52,9 @@ export const RANKS: Rank[] = [
     name: 'Legend',
     minPoints: 5000,
     maxPoints: Infinity,
-    color: '#9C27B0',
+    color: '#1E8A8A',
     icon: 'trophy',
-    gradient: ['#9C27B0', '#E1BEE7'],
+    gradient: ['#1E8A8A', '#E1BEE7'],
     description: 'Elite travel master',
   },
 ];

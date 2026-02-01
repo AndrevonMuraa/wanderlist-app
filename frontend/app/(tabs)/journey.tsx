@@ -519,8 +519,8 @@ export default function JourneyScreen() {
             activeOpacity={0.7}
           >
             <View style={styles.countryVisitsLeft}>
-              <View style={[styles.countryVisitsIcon, { backgroundColor: '#AB47BC20' }]}>
-                <Ionicons name="stats-chart" size={22} color="#AB47BC" />
+              <View style={[styles.countryVisitsIcon, { backgroundColor: '#1E8A8A20' }]}>
+                <Ionicons name="stats-chart" size={22} color="#1E8A8A" />
               </View>
               <View>
                 <Text style={styles.countryVisitsTitle}>Detailed Statistics</Text>

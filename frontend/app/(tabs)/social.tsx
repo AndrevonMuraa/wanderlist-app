@@ -461,18 +461,18 @@ export default function SocialHubScreen() {
               style={styles.completionBanner}
             >
               <View style={styles.completionHeader}>
-                <Ionicons name="earth" size={28} color="#9C27B0" />
-                <Text style={[styles.completionTitle, { color: '#9C27B0' }]}>Continent Mastered! 🌍</Text>
+                <Ionicons name="earth" size={28} color="#1E8A8A" />
+                <Text style={[styles.completionTitle, { color: '#1E8A8A' }]}>Continent Mastered! 🌍</Text>
               </View>
               <Text style={styles.completionText}>
                 Amazing! Completed all <Text style={styles.completionHighlight}>{activity.countries_count} countries</Text> in{' '}
-                <Text style={[styles.completionHighlight, { color: '#9C27B0' }]}>
+                <Text style={[styles.completionHighlight, { color: '#1E8A8A' }]}>
                   {activity.continent?.charAt(0).toUpperCase() + activity.continent?.slice(1)}
                 </Text>!
               </Text>
               <View style={styles.completionPoints}>
-                <Ionicons name="trophy" size={16} color="#9C27B0" />
-                <Text style={[styles.completionPointsText, { color: '#9C27B0' }]}>+{activity.points_earned} bonus points</Text>
+                <Ionicons name="trophy" size={16} color="#1E8A8A" />
+                <Text style={[styles.completionPointsText, { color: '#1E8A8A' }]}>+{activity.points_earned} bonus points</Text>
               </View>
             </LinearGradient>
           </View>

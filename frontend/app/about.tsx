@@ -367,7 +367,7 @@ export default function AboutScreen() {
             icon="airplane"
             title="Custom Visits"
             description="Record trips to places not in our database"
-            color="#9C27B0"
+            color="#1E8A8A"
             onPress={() => router.push('/(tabs)/journey')}
             isNew
           />

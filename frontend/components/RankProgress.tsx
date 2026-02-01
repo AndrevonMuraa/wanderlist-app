@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   maxRankText: {
     ...theme.typography.body,
     fontWeight: '700',
-    color: '#9C27B0',
+    color: '#1E8A8A',
   },
   progressBarContainer: {
     height: 12,

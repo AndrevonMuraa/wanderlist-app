@@ -246,7 +246,7 @@ export default function SettingsScreen() {
             >
               <View style={styles.settingItemLeft}>
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(155, 89, 182, 0.1)' }]}>
-                  <Ionicons name="language" size={18} color="#9b59b6" />
+                  <Ionicons name="language" size={18} color="#1E8A8A" />
                 </View>
                 <Text style={styles.accountLabel}>Language / Idioma</Text>
               </View>
