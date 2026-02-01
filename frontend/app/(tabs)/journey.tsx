@@ -259,7 +259,7 @@ export default function JourneyScreen() {
         {stats && progressStats && (
           <Surface style={[styles.statsCard, { backgroundColor: colors.surface }]}>
             <View style={styles.statsHeader}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Your Stats</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('journey.yourStats')}</Text>
               <TouchableOpacity>
                 <Ionicons name="share-social-outline" size={20} color={colors.primary} />
               </TouchableOpacity>
@@ -273,25 +273,25 @@ export default function JourneyScreen() {
                     countryId => progressStats.countries[countryId].visited > 0
                   ).length}
                 </Text>
-                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Countries</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.countries')}</Text>
               </View>
 
               <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
                 <Ionicons name="location" size={20} color={colors.accent} />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.overall.visited}</Text>
-                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Landmarks</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.landmarks')}</Text>
               </View>
 
               <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
                 <Ionicons name="star" size={20} color={colors.accentYellow} />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.totalPoints || 0}</Text>
-                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Points</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.points')}</Text>
               </View>
 
               <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
                 <Ionicons name="flame" size={20} color={colors.error} />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{stats.current_streak || 0}</Text>
-                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Streak</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.streak')}</Text>
               </View>
 
               <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
@@ -299,13 +299,13 @@ export default function JourneyScreen() {
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
                   {stats.rank && stats.rank > 0 ? `#${stats.rank}` : 'N/A'}
                 </Text>
-                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Rank</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.rank')}</Text>
               </View>
 
               <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
                 <Ionicons name="ribbon" size={20} color={colors.primary} />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{badges.length}</Text>
-                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Badges</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.badges')}</Text>
               </View>
             </View>
           </Surface>
