@@ -206,6 +206,19 @@ export default function AddVisitScreen() {
         setShowCelebration(true);
       }
 
+      // Track visit for app review prompt
+      await trackVisitForReview();
+      
+      // Send notifications for achievements
+      if (result.newly_awarded_badges && result.newly_awarded_badges.length > 0) {
+        const badge = result.newly_awarded_badges[0];
+        await sendAchievementNotification(badge.name, badge.icon || '🏆');
+      }
+      
+      if (result.streak_milestone_reached) {
+        await sendStreakMilestoneNotification(result.new_milestone);
+      }
+
       // Show success message
       Alert.alert(
         shouldCelebrate ? '🎉 AMAZING ACHIEVEMENT!' : '🎉 Visit Recorded!',
