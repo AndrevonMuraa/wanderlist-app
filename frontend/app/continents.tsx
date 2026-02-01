@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import theme, { gradients } from '../styles/theme';
 import { useTheme } from '../contexts/ThemeContext';
 import { BACKEND_URL } from '../utils/config';
