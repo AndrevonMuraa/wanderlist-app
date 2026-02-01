@@ -66,13 +66,6 @@ export default function TabsLayout() {
           ),
         }}
       />
-      {/* Hidden tab - map functionality integrated into Journey */}
-      <Tabs.Screen
-        name="map"
-        options={{
-          href: null, // Hide from tab bar
-        }}
-      />
     </Tabs>
   );
 }
