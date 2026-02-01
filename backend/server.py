@@ -876,6 +876,13 @@ async def update_profile(profile_data: ProfileUpdate, current_user: User = Depen
     if profile_data.location is not None:
         update_fields["location"] = profile_data.location
     
+    if profile_data.banner_image is not None:
+        update_fields["banner_image"] = profile_data.banner_image
+    
+    if profile_data.featured_badges is not None:
+        # Limit to 3 featured badges max
+        update_fields["featured_badges"] = profile_data.featured_badges[:3]
+    
     if update_fields:
         await db.users.update_one(
             {"user_id": current_user.user_id},
