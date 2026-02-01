@@ -3,11 +3,17 @@ import * as SecureStore from 'expo-secure-store';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import * as Google from 'expo-auth-session/providers/google';
+import { makeRedirectUri } from 'expo-auth-session';
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import { BACKEND_URL } from '../utils/config';
 
-const AUTH_URL = 'https://auth.emergentagent.com';
+// Google OAuth Client ID
+const GOOGLE_CLIENT_ID = '424966953383-ie7ale5215uuqf0c6nepjecuuq0bn9p6.apps.googleusercontent.com';
+
+// Warm up browser for faster OAuth
+WebBrowser.maybeCompleteAuthSession();
 
 interface User {
   user_id: string;
