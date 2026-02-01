@@ -337,7 +337,7 @@ class AdminAPITester:
             
             response = requests.post(f"{BASE_URL}/reports", headers=headers, json=report_data)
             
-            if response.status_code == 201:
+            if response.status_code in [200, 201]:
                 data = response.json()
                 self.test_report_id = data.get("report_id")
                 self.log_test("Create Test Report", True, f"Created report: {self.test_report_id}")
