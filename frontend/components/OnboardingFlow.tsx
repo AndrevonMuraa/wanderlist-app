@@ -204,16 +204,11 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     fontWeight: '500',
   },
-  scrollContent: {
-    alignItems: 'center',
-  },
-  slide: {
-    width,
+  slideContainer: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 40,
-    paddingTop: Platform.OS === 'web' ? 120 : 100,
-    paddingBottom: 80,
   },
   iconContainer: {
     width: 160,
