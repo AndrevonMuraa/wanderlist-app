@@ -240,12 +240,12 @@ export default function ProfileScreen() {
                   {user?.subscription_tier === 'premium' ? (
                     <>
                       <Ionicons name="diamond" size={12} color={colors.accent} />
-                      <Text style={[styles.tierText, { color: colors.accent }]}>Premium user</Text>
+                      <Text style={[styles.tierText, { color: colors.accent }]}>{t('profile.premiumUser')}</Text>
                     </>
                   ) : user?.subscription_tier === 'basic' ? (
                     <>
                       <Ionicons name="ribbon" size={12} color={colors.primary} />
-                      <Text style={[styles.tierText, { color: colors.primary }]}>Basic user</Text>
+                      <Text style={[styles.tierText, { color: colors.primary }]}>{t('profile.basicUser')}</Text>
                     </>
                   ) : (
                     <>
