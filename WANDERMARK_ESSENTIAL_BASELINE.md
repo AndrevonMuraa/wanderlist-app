@@ -354,15 +354,16 @@ python3 seed_data_expansion.py    # Expanded content (48 countries)
 
 ## 🐛 **Known Issues**
 
-### Google OAuth (NOT WORKING)
-- **Error:** `403: disallowed_useragent`
-- **Status:** Not fixed - requires user's Google Cloud credentials
-- **Workaround:** Use email/password login or Quick Test Login
+### Google OAuth (CONFIGURED)
+- **Status:** Credentials configured from recent session
+- **Note:** Use on mobile app for best experience
 
-### Apple Sign In (NOT IMPLEMENTED)
-- **Status:** Required for App Store if Google OAuth is offered
-- **Priority:** P1 - Next implementation task
-- **Workaround:** Email/password login works perfectly
+### Apple Sign-In (IMPLEMENTED ✅)
+- **Status:** Fully implemented and working
+- **Backend:** `/api/auth/apple/callback` tested and working
+- **Frontend:** Login & Register pages both support Apple Sign-In
+- **Availability:** iOS devices only (Apple requirement)
+- **Fallback:** On Web/Android, shows informational message
 
 ---
 
