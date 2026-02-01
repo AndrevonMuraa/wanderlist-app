@@ -241,6 +241,22 @@ export default function SettingsScreen() {
           <View style={styles.accountList}>
             <TouchableOpacity 
               style={styles.accountItem}
+              onPress={() => router.push('/language-settings')}
+              activeOpacity={0.7}
+            >
+              <View style={styles.settingItemLeft}>
+                <View style={[styles.settingIcon, { backgroundColor: 'rgba(155, 89, 182, 0.1)' }]}>
+                  <Ionicons name="language" size={18} color="#9b59b6" />
+                </View>
+                <Text style={styles.accountLabel}>Language / Språk</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
+            </TouchableOpacity>
+            
+            <View style={styles.settingDivider} />
+            
+            <TouchableOpacity 
+              style={styles.accountItem}
               onPress={() => Alert.alert('Coming Soon', 'Email change feature coming soon')}
               activeOpacity={0.7}
             >
