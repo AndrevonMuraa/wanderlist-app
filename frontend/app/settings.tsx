@@ -710,4 +710,15 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
   },
+  cacheBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+    marginRight: 8,
+  },
+  cacheBadgeText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '600',
+  },
 });
