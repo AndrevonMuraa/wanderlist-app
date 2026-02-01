@@ -1,4 +1,4 @@
-// WanderList Design System - Luxury Travel Magazine Aesthetic
+// WanderMark Design System - Luxury Travel Magazine Aesthetic
 // Inspired by editorial travel magazines with Maldivean ocean vibes
 //
 // CORE DESIGN PHILOSOPHY: "Ocean to Sand" Gradient

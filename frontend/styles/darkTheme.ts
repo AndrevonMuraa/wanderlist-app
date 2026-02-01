@@ -1,4 +1,4 @@
-// Dark theme variant for WanderList - Luxury Travel Magazine at Night
+// Dark theme variant for WanderMark - Luxury Travel Magazine at Night
 // Maintains Maldivean ocean blues + warm gold accents
 
 export const darkColors = {

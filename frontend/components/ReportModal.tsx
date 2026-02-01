@@ -119,7 +119,7 @@ export default function ReportModal({
       if (response.ok) {
         Alert.alert(
           'Report Submitted',
-          'Thank you for helping keep WanderList safe. Our team will review your report.',
+          'Thank you for helping keep WanderMark safe. Our team will review your report.',
           [{ text: 'OK', onPress: onClose }]
         );
         setSelectedReason(null);

@@ -229,7 +229,7 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
             </View>
             <View style={styles.brandingContainer}>
               <Ionicons name="earth" size={16} color="#2A2A2A" />
-              <Text style={styles.brandingText}>WanderList</Text>
+              <Text style={styles.brandingText}>WanderMark</Text>
             </View>
           </View>
         </LinearGradient>
