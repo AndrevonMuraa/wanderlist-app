@@ -190,6 +190,8 @@ export default function EditProfileScreen() {
           bio: bio.trim() || null,
           location: location.trim() || null,
           picture: picture || null,
+          banner_image: bannerImage || null,
+          featured_badges: featuredBadges.length > 0 ? featuredBadges : null,
         }),
       });
 
