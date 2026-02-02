@@ -1338,6 +1338,8 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         "visit_id": visit_id,
         "user_id": current_user.user_id,
         "landmark_id": data.landmark_id,
+        "landmark_name": landmark.get("name"),  # Store landmark name for quick access
+        "country_name": landmark.get("country_name"),  # Store country name
         "photo_base64": data.photo_base64,
         "photos": photos,
         "points_earned": landmark.get("points", 10),
