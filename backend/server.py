@@ -4424,7 +4424,7 @@ async def check_and_award_badges(user_id: str):
                         "badge_type": badge_type,
                         "badge_name": f"{country_name} Master",
                         "badge_description": f"Completed all landmarks in {country_name}",
-                        "badge_icon": "🏁",
+                        "badge_icon": "🏆",
                         "earned_at": datetime.now(timezone.utc),
                         "is_featured": True
                     }
