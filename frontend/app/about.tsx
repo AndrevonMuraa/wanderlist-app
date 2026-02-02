@@ -234,32 +234,64 @@ export default function AboutScreen() {
             
             <FAQItem
               id="points"
-              question="How does the points system work?"
-              answer="You earn points for visiting landmarks: 10 points for official landmarks, 25 points for premium landmarks. There are two types of points:\n\n• Personal Points: Earned for all visits (with or without photos)\n• Leaderboard Points: Only earned when you upload photos with your visit\n\nThis encourages sharing your travel memories while still rewarding all visits!"
+              question="How do I earn points?"
+              answer={`You earn points for visiting landmarks: 10 points for official landmarks, 25 points for premium landmarks. There are two types of points:
+
+• Personal Points: Earned for all visits (with or without photos)
+• Leaderboard Points: Only earned when you upload photos with your visit
+
+This encourages sharing your travel memories while still rewarding all visits!`}
             />
             
             <FAQItem
               id="custom"
-              question="How do I add places not in the app?"
-              answer="Use 'Custom Visits' to record trips to places not in our database! You can:\n\n• Add any country name\n• Add up to 10 landmarks with individual photos\n• Add up to 10 general country photos\n• Write diary notes\n\nFind it on the Journey page under 'Custom Visits' or on the Explore page at the bottom."
+              question="What are Custom Visits?"
+              answer={`Use 'Custom Visits' to record trips to places not in our database! You can:
+
+• Add any country name
+• Add up to 10 landmarks with individual photos
+• Add up to 10 general country photos
+• Write diary notes
+
+Find it on the Journey page under 'Custom Visits' or on the Explore page at the bottom.`}
             />
             
             <FAQItem
               id="privacy"
-              question="Who can see my visits?"
-              answer="You control your privacy! Each visit can be set to:\n\n🌐 Public - Everyone can see\n👥 Friends - Only your friends\n🔒 Private - Only you\n\nChange this when creating a visit or edit it later."
+              question="Can I control who sees my visits?"
+              answer={`You control your privacy! Each visit can be set to:
+
+🌐 Public - Everyone can see
+👥 Friends - Only your friends
+🔒 Private - Only you
+
+Change this when creating a visit or edit it later.`}
             />
             
             <FAQItem
               id="photos"
-              question="Where can I see all my photos?"
-              answer="Visit the 'My Photos' section on your Journey page! It shows all photos from:\n\n• Landmark visits\n• Country visits\n• Custom visits\n\nYou can filter by country, year, or type."
+              question="Where are all my photos?"
+              answer={`Visit the 'My Photos' section on your Journey page! It shows all photos from:
+
+• Landmark visits
+• Country visits
+• Custom visits
+
+You can filter by country, year, or type.`}
             />
             
             <FAQItem
-              id="milestones"
-              question="What are the milestone badges?"
-              answer="Earn badges as you explore:\n\n🗺️ Explorer - 10 landmarks\n🧗 Adventurer - 25 landmarks\n🌍 Globetrotter - 50 landmarks\n✈️ World Traveler - 100 landmarks\n🧭 Seasoned Traveler - 200 landmarks\n🏆 Legend - 350 landmarks\n👑 Ultimate Explorer - 500 landmarks"
+              id="badges"
+              question="How do badges work?"
+              answer={`Earn badges as you explore:
+
+🗺️ Explorer - 10 landmarks
+🧗 Adventurer - 25 landmarks
+🌍 Globetrotter - 50 landmarks
+✈️ World Traveler - 100 landmarks
+🧭 Seasoned Traveler - 200 landmarks
+🏆 Legend - 350 landmarks
+👑 Ultimate Explorer - 500 landmarks`}
             />
             
             <FAQItem
