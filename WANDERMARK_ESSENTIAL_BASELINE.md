@@ -565,11 +565,10 @@ See `/app/APP_STORE_METADATA.md` for complete submission content including:
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.1.0 | June 2025 | Landmark Search & Filters, Admin Analytics Dashboard, Social Sharing, Profile Customization (banner + badges), **Apple Sign-In Implementation** |
-| 1.0.0 | Jan 20, 2026 | App Store ready: Legal pages, metadata docs, feature graphic, UI fixes (edit button, icons, tabs, navigation, progress bars) |
-| 4.86 | Jan 20, 2026 | Privacy Policy page, Terms of Service page, Legal links on login, Legal section in Settings, Bundle ID & Package Name, enhanced permissions |
-| 4.85 | Jan 20, 2026 | App icon & splash, branding component, headers updated (17+ pages), app.json config |
+| 1.2.0 | Feb 2026 | **RevenueCat Payment Integration**, Push Notifications, Onboarding Flow, App Review Prompt, Error Handling, Badge/Visit fixes, Apple Sign-In complete |
+| 1.1.0 | June 2025 | Landmark Search & Filters, Admin Analytics Dashboard, Social Sharing, Profile Customization (banner + badges) |
+| 1.0.0 | Jan 2026 | App Store ready: Legal pages, metadata docs, feature graphic, UI fixes |
 
 ---
 
-*Last Updated: June 2025 - v1.1.0*
+*Last Updated: February 2026 - v1.2.0*
