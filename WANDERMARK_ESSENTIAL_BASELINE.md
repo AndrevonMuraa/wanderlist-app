@@ -1,4 +1,4 @@
-# WanderMark - Essential Baseline (v1.1.0)
+# WanderMark - Essential Baseline (v1.2.0)
 
 > **Purpose:** Critical information for session continuity
 > **Read this:** At session start if forked, or when encountering issues
@@ -7,47 +7,78 @@
 
 ## 📊 **Current State**
 
-**Version:** 1.1.0 - STABLE ✅  
-**Status:** Feature Complete - App Store Ready  
-**Last Build:** June 2025  
-**Next Phase:** Social Logins Completion & App Store Submission
+**Version:** 1.2.0 - STABLE ✅  
+**Status:** Feature Complete - Payment Integration Done - Ready for Testing  
+**Last Build:** February 2026  
+**Next Phase:** Device Testing & App Store Submission
 
-**Tech Stack:** Expo (React Native) + FastAPI + MongoDB  
+**Tech Stack:** Expo (React Native) + FastAPI + MongoDB + RevenueCat  
 **Database:** 48 countries, **560 landmarks** (427 official + 133 premium), All duplicates removed  
 
 **Test Accounts:**
 | Email | Password | Role |
 |-------|----------|------|
-| `mobile@test.com` | `test123` | Main user (Free tier, can toggle to Pro) |
+| `mobile@test.com` | `test123` | Main user (Admin, can toggle Pro) |
 | `friend@test.com` | `test123` | Friend user |
 | `stranger@test.com` | `test123` | Test user |
 
 ---
 
-## 🆕 **v1.1.0 Changes (Latest Session - June 2025)**
+## 🆕 **v1.2.0 Changes (Latest Session - February 2026)**
 
-### 🔍 1. Landmark Search & Filters (NEW)
+### 💳 1. RevenueCat Payment Integration (NEW - COMPLETE)
+- **SDK:** `react-native-purchases` v9.7.5 installed
+- **API Key:** `test_CtFYyqeJsPDwTZgaeoKPUoKJAny` (test mode)
+- **Entitlement:** `WanderMark Pro`
+- **Products configured:**
+  - `wandermark_pro_monthly` - $3.99/month
+  - `wandermark_pro_yearly` - $29.99/year
+- **Files:**
+  - `/utils/purchases.ts` - RevenueCat SDK wrapper
+  - `/contexts/PurchaseContext.tsx` - Global purchase state
+- **App Store Connect:**
+  - App created: "WanderMark - Landmark Explorer"
+  - Bundle ID: `com.wandermark.app`
+  - Subscriptions configured in App Store Connect
+
+### 🔔 2. Push Notifications (NEW)
+- **File:** `/utils/notifications.ts`
+- Features: Streak reminders, Achievement alerts, Weekly digest
+- Settings page: `/notification-settings.tsx`
+
+### 🎬 3. Onboarding Flow (NEW)
+- **Component:** `/components/OnboardingFlow.tsx`
+- 4 slides: Discover, Capture, Earn, Connect
+- Shows only for first-time users
+- Skip button available
+
+### ⭐ 4. App Review Prompt (NEW)
+- **File:** `/utils/appReview.ts`
+- Prompts after 5+ landmark visits
+- Uses `expo-store-review`
+- Max 3 prompts, 14 days between
+
+### ⚠️ 5. Error Handling (NEW)
+- **File:** `/utils/errorMessages.ts`
+- User-friendly messages for network, auth, server errors
+- Automatic error classification
+
+### 🐛 6. Bug Fixes
+- **Badge icons:** Changed Country Master from 🏁 to 🏆 (was showing as checkered flag)
+- **Visit storage:** Now stores `landmark_name` and `country_name` for proper display
+- **FAQ formatting:** Fixed `\n` showing as literal text instead of line breaks
+
+### 🍎 7. Apple Sign-In (COMPLETE)
+- Backend endpoint working
+- Frontend integrated on login & register pages
+- Works on iOS devices only (Apple requirement)
+
+---
+
+## 🆕 **v1.1.0 Changes (Previous Session)**
+
+### 🔍 1. Landmark Search & Filters
 - **Search Screen** (`/search.tsx`) - Full-featured search with:
-  - Real-time search with debounce (300ms) using `lodash.debounce`
-  - Filter by: All / Visited / Unvisited landmarks
-  - Sort by: Name / Points / Country
-  - Visual indicators for visited landmarks
-  - Pull-to-refresh support
-  - Links from Explore page
-
-### 📊 2. Admin Analytics Dashboard (NEW)
-- **Analytics Screen** (`/admin/analytics.tsx`) - Comprehensive admin metrics:
-  - User statistics: Total, Pro, Free, New this week/month
-  - Visit statistics: Total, Weekly, Monthly breakdown
-  - Engagement metrics: Avg visits per user, Conversion rate
-  - Top landmarks and countries by visits
-  - Accessible from Admin Panel (`/admin/index.tsx`)
-
-### 📤 3. Social Sharing Feature (NEW)
-- **ShareStatsCard Component** (`/components/ShareStatsCard.tsx`):
-  - Beautiful shareable stats card with dark gradient design
-  - Shows: Landmarks visited, Countries, Continents, Points
-  - Achievement and rank badges displayed
   - Uses `expo-sharing` for native share sheet
   - Uses `react-native-view-shot` for image capture
   - Compatible with Instagram, Facebook, WhatsApp, etc.
