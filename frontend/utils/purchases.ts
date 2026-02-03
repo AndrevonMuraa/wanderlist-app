@@ -2,17 +2,16 @@
  * RevenueCat Integration for WanderMark
  * 
  * This module handles in-app purchases using RevenueCat.
- * Set MOCK_PURCHASES to false when you have real RevenueCat keys.
+ * Set MOCK_PURCHASES to false to use real RevenueCat SDK.
  */
 
 import { Platform, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// ⚠️ SET TO FALSE WHEN YOU HAVE REAL REVENUECAT KEYS
-export const MOCK_PURCHASES = true;
+// ⚠️ SET TO FALSE TO USE REAL REVENUECAT
+export const MOCK_PURCHASES = false;
 
 // RevenueCat API Keys
-// Test key provided - switch to production keys before App Store release
 const REVENUECAT_IOS_KEY = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || 'test_CtFYyqeJsPDwTZgaeoKPUoKJAny';
 const REVENUECAT_ANDROID_KEY = process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY || '';
 
@@ -22,8 +21,8 @@ export const PRODUCT_IDS = {
   YEARLY: 'wandermark_pro_yearly',
 };
 
-// Entitlement identifier
-export const ENTITLEMENT_ID = 'pro';
+// Entitlement identifier (must match RevenueCat dashboard)
+export const ENTITLEMENT_ID = 'WanderMark Pro';
 
 // Storage key for mock purchases
 const MOCK_PURCHASE_KEY = 'mock_pro_purchase';
