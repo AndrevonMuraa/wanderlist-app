@@ -59,14 +59,6 @@
           "color": "#4DB8D8",
           "sounds": []
         }
-      ],
-      [
-        "react-native-purchases",
-        {
-          "ios": {
-            "usesStoreKit2IfAvailable": true
-          }
-        }
       ]
     ],
     "experiments": {
