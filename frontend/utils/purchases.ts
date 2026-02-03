@@ -11,8 +11,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // ⚠️ SET TO FALSE WHEN YOU HAVE REAL REVENUECAT KEYS
 export const MOCK_PURCHASES = true;
 
-// RevenueCat API Keys (add your keys to .env)
-const REVENUECAT_IOS_KEY = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || '';
+// RevenueCat API Keys
+// Test key provided - switch to production keys before App Store release
+const REVENUECAT_IOS_KEY = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || 'test_CtFYyqeJsPDwTZgaeoKPUoKJAny';
 const REVENUECAT_ANDROID_KEY = process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY || '';
 
 // Product identifiers (must match App Store Connect / Play Console)
