@@ -386,15 +386,20 @@ python3 seed_data_expansion.py    # Expanded content (48 countries)
 ## 🐛 **Known Issues**
 
 ### Google OAuth (CONFIGURED)
-- **Status:** Credentials configured from recent session
+- **Status:** Credentials configured from previous session
 - **Note:** Use on mobile app for best experience
 
-### Apple Sign-In (IMPLEMENTED ✅)
+### Apple Sign-In (COMPLETE ✅)
 - **Status:** Fully implemented and working
 - **Backend:** `/api/auth/apple/callback` tested and working
-- **Frontend:** Login & Register pages both support Apple Sign-In
+- **Frontend:** Login & Register pages support Apple Sign-In
 - **Availability:** iOS devices only (Apple requirement)
-- **Fallback:** On Web/Android, shows informational message
+
+### RevenueCat (CONFIGURED ✅)
+- **Status:** SDK installed, API key configured
+- **Mode:** Currently using TEST key
+- **Production:** Switch to production key before App Store release
+- **App Store Connect:** Subscriptions created and configured
 
 ---
 
