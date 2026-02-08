@@ -99,7 +99,7 @@ export const BACKEND_URL = getBackendURL();
    - Should use relative URLs (proxied to backend)
 
 2. **Remote URL** (preview/production):
-   - Open https://wandermark-pay.preview.emergentagent.com
+   - Open https://apple-signin-test.preview.emergentagent.com
    - Should use full backend URL
    - Test on iPhone Safari specifically
 
