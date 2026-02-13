@@ -1,19 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import * as WebBrowser from 'expo-web-browser';
-import * as Linking from 'expo-linking';
 import * as AppleAuthentication from 'expo-apple-authentication';
-import * as Google from 'expo-auth-session/providers/google';
-import { makeRedirectUri } from 'expo-auth-session';
-import { Platform } from 'react-native';
-import Constants from 'expo-constants';
+import { Platform, Alert } from 'react-native';
 import { BACKEND_URL } from '../utils/config';
-
-// Google OAuth Client ID
-const GOOGLE_CLIENT_ID = '424966953383-ie7ale5215uuqf0c6nepjecuuq0bn9p6.apps.googleusercontent.com';
-
-// Warm up browser for faster OAuth
-WebBrowser.maybeCompleteAuthSession();
 
 interface User {
   user_id: string;
@@ -41,71 +30,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAppleSignInAvailable, setIsAppleSignInAvailable] = useState(false);
-
-  // Configure Google OAuth
-  const redirectUri = makeRedirectUri({
-    scheme: 'wandermark',
-    path: 'oauth',
-  });
-
-  const [googleRequest, googleResponse, promptGoogleAsync] = Google.useAuthRequest({
-    webClientId: GOOGLE_CLIENT_ID,
-    // For iOS/Android native apps, you'd also add:
-    // iosClientId: 'YOUR_IOS_CLIENT_ID',
-    // androidClientId: 'YOUR_ANDROID_CLIENT_ID',
-    redirectUri: Platform.OS === 'web' ? undefined : redirectUri,
-  });
-
-  // Handle Google OAuth response
-  useEffect(() => {
-    if (googleResponse?.type === 'success') {
-      const { authentication } = googleResponse;
-      if (authentication?.accessToken) {
-        handleGoogleToken(authentication.accessToken);
-      }
-    }
-  }, [googleResponse]);
-
-  // Process Google access token
-  const handleGoogleToken = async (accessToken: string) => {
-    try {
-      // Get user info from Google
-      const userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      
-      if (!userInfoResponse.ok) {
-        throw new Error('Failed to get Google user info');
-      }
-      
-      const googleUser = await userInfoResponse.json();
-      console.log('Google user info:', googleUser);
-      
-      // Send to our backend
-      const response = await fetch(`${BACKEND_URL}/api/auth/google/token`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: googleUser.email,
-          name: googleUser.name,
-          picture: googleUser.picture,
-          google_id: googleUser.id,
-        }),
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        await setToken(data.access_token);
-        setUser(data.user);
-      } else {
-        const error = await response.json();
-        throw new Error(error.detail || 'Google login failed');
-      }
-    } catch (error) {
-      console.error('Error processing Google token:', error);
-      throw error;
-    }
-  };
 
   useEffect(() => {
     // Check if Apple Sign-In is available (iOS only)
