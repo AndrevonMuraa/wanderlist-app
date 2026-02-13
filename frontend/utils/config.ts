@@ -1,5 +1,8 @@
 import { Platform } from 'react-native';
 
+// Production backend URL - hardcoded as fallback to ensure it's always available
+const PRODUCTION_BACKEND_URL = 'https://sign-in-bridge.preview.emergentagent.com';
+
 // Determine the correct backend URL based on environment
 const getBackendURL = () => {
   // For web, check if we're accessing via localhost or remote URL
@@ -12,8 +15,11 @@ const getBackendURL = () => {
     }
   }
   
-  // For all other cases, use the environment variable
-  return process.env.EXPO_PUBLIC_BACKEND_URL || '';
+  // Use environment variable if available, otherwise use hardcoded production URL
+  const envUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
+  const finalUrl = envUrl || PRODUCTION_BACKEND_URL;
+  console.log('[Config] BACKEND_URL resolved to:', finalUrl, '(from env:', !!envUrl, ')');
+  return finalUrl;
 };
 
 export const BACKEND_URL = getBackendURL();

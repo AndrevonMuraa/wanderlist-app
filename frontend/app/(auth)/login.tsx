@@ -86,7 +86,9 @@ export default function LoginScreen() {
       router.replace('/(tabs)/explore');
     } catch (err: any) {
       if (err.message !== 'Apple Sign-In was cancelled') {
-        setError('Apple login failed. Please try again.');
+        // Show detailed error for debugging
+        const errorMsg = err.message || 'Unknown error';
+        setError(`Apple login: ${errorMsg}`);
       }
       setLoading(false);
     }
