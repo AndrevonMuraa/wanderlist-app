@@ -66,7 +66,12 @@
     },
     "extra": {
       "privacyPolicyUrl": "https://wandermark.app/privacy",
-      "termsOfServiceUrl": "https://wandermark.app/terms"
-    }
+      "termsOfServiceUrl": "https://wandermark.app/terms",
+      "router": {},
+      "eas": {
+        "projectId": "036fc505-c923-44f1-8759-f3737fb5749c"
+      }
+    },
+    "owner": "aarum"
   }
 }
