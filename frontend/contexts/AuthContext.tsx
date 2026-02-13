@@ -160,6 +160,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error('Apple Sign-In is only available on iOS');
       }
 
+      console.log('[Apple Auth] Starting Apple Sign-In...');
+      console.log('[Apple Auth] BACKEND_URL:', BACKEND_URL);
+
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
@@ -167,37 +170,61 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ],
       });
 
-      // Send the credential to our backend
-      const response = await fetch(`${BACKEND_URL}/api/auth/apple/callback`, {
+      console.log('[Apple Auth] Got credential from Apple');
+      console.log('[Apple Auth] Has identityToken:', !!credential.identityToken);
+      console.log('[Apple Auth] Has user:', !!credential.user);
+      console.log('[Apple Auth] Has email:', !!credential.email);
+      console.log('[Apple Auth] Has fullName:', !!credential.fullName);
+
+      const fullName = credential.fullName
+        ? `${credential.fullName.givenName || ''} ${credential.fullName.familyName || ''}`.trim()
+        : null;
+
+      const payload = {
+        identity_token: credential.identityToken,
+        user_id: credential.user,
+        email: credential.email || null,
+        full_name: fullName || null,
+      };
+
+      const apiUrl = `${BACKEND_URL}/api/auth/apple/callback`;
+      console.log('[Apple Auth] Sending to backend:', apiUrl);
+      console.log('[Apple Auth] Payload keys:', Object.keys(payload));
+      console.log('[Apple Auth] identity_token length:', credential.identityToken?.length || 0);
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          identity_token: credential.identityToken,
-          user_id: credential.user,
-          email: credential.email,
-          full_name: credential.fullName ? 
-            `${credential.fullName.givenName || ''} ${credential.fullName.familyName || ''}`.trim() : 
-            null,
-        }),
+        body: JSON.stringify(payload),
       });
+
+      console.log('[Apple Auth] Response status:', response.status);
 
       if (response.ok) {
         const data = await response.json();
+        console.log('[Apple Auth] Login successful, user:', data.user?.email);
         await setToken(data.access_token);
         setUser(data.user);
       } else {
-        const error = await response.json();
-        throw new Error(error.detail || 'Apple Sign-In failed');
+        let errorDetail = `HTTP ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorDetail = errorData.detail || errorDetail;
+        } catch (e) {
+          const errorText = await response.text();
+          errorDetail = errorText || errorDetail;
+        }
+        console.error('[Apple Auth] Backend error:', errorDetail);
+        throw new Error(`Apple Sign-In failed: ${errorDetail}`);
       }
     } catch (error: any) {
       if (error.code === 'ERR_REQUEST_CANCELED') {
-        // User cancelled the sign-in
-        console.log('Apple Sign-In was cancelled');
+        console.log('[Apple Auth] User cancelled sign-in');
         return;
       }
-      console.error('Error with Apple login:', error);
+      console.error('[Apple Auth] Error:', error.message || error);
       throw error;
     }
   };
