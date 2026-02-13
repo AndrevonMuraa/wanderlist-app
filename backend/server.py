@@ -728,9 +728,15 @@ async def apple_callback(auth_data: AppleAuthRequest, response: Response):
     import jwt
     
     try:
+        logging.info(f"[Apple Auth] Received callback - has identity_token: {bool(auth_data.identity_token)}, "
+                     f"user_id: {auth_data.user_id[:20] if auth_data.user_id else 'None'}..., "
+                     f"email: {auth_data.email}, full_name: {auth_data.full_name}")
+        logging.info(f"[Apple Auth] identity_token length: {len(auth_data.identity_token) if auth_data.identity_token else 0}")
+        
         # Decode the identity token (we don't verify signature in dev, but should in production)
         # In production, verify against Apple's public keys
         decoded = jwt.decode(auth_data.identity_token, options={"verify_signature": False})
+        logging.info(f"[Apple Auth] Token decoded successfully - sub: {decoded.get('sub', 'N/A')[:20]}..., email: {decoded.get('email', 'N/A')}")
         
         apple_user_id = decoded.get("sub")  # Apple's unique user ID
         email = auth_data.email or decoded.get("email")
@@ -740,7 +746,9 @@ async def apple_callback(auth_data: AppleAuthRequest, response: Response):
             existing_user = await db.users.find_one({"apple_user_id": apple_user_id}, {"_id": 0})
             if existing_user:
                 email = existing_user.get("email")
+                logging.info(f"[Apple Auth] Found existing user by Apple ID, email: {email}")
             else:
+                logging.warning(f"[Apple Auth] No email available and no existing user found")
                 raise HTTPException(status_code=400, detail="Email is required for first-time sign-in")
         
         # Check if user exists by email or Apple ID
@@ -753,6 +761,7 @@ async def apple_callback(auth_data: AppleAuthRequest, response: Response):
         
         if existing_user:
             user_id = existing_user["user_id"]
+            logging.info(f"[Apple Auth] Found existing user: {user_id}")
             # Update Apple user ID if not set
             if not existing_user.get("apple_user_id"):
                 await db.users.update_one(
@@ -774,6 +783,7 @@ async def apple_callback(auth_data: AppleAuthRequest, response: Response):
                 "created_at": datetime.now(timezone.utc)
             }
             await db.users.insert_one(new_user)
+            logging.info(f"[Apple Auth] Created new user: {user_id}")
         
         # Create JWT token
         access_token, expires_at = create_access_token({"sub": user_id})
@@ -781,6 +791,7 @@ async def apple_callback(auth_data: AppleAuthRequest, response: Response):
         # Get updated user data
         user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0, "password_hash": 0})
         
+        logging.info(f"[Apple Auth] Login successful for user: {user_id}")
         return {
             "access_token": access_token,
             "token_type": "bearer",
@@ -788,7 +799,13 @@ async def apple_callback(auth_data: AppleAuthRequest, response: Response):
         }
         
     except jwt.PyJWTError as e:
+        logging.error(f"[Apple Auth] JWT decode error: {str(e)}")
         raise HTTPException(status_code=400, detail=f"Invalid identity token: {str(e)}")
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"[Apple Auth] Unexpected error: {type(e).__name__}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Apple login error: {str(e)}")
 
 @api_router.post("/auth/google/token")
 async def google_token_login(auth_data: GoogleTokenRequest, response: Response):
