@@ -150,16 +150,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const loginWithGoogle = async () => {
-    try {
-      if (promptGoogleAsync) {
-        await promptGoogleAsync();
-      } else {
-        throw new Error('Google Sign-In is not ready');
-      }
-    } catch (error) {
-      console.error('Error with Google login:', error);
-      throw error;
-    }
+    // Google Sign-In temporarily disabled - will be re-enabled in a future update
+    throw new Error('Google Sign-In is temporarily unavailable. Please use Apple Sign-In or email login.');
   };
 
   const loginWithApple = async () => {
