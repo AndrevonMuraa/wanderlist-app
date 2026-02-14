@@ -202,22 +202,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       console.log('[Apple Auth] Response status:', response.status);
 
+      const responseText = await response.text();
+      console.log('[Apple Auth] Response body:', responseText.substring(0, 500));
+
       if (response.ok) {
-        const data = await response.json();
-        console.log('[Apple Auth] Login successful, user:', data.user?.email);
-        await setToken(data.access_token);
-        setUser(data.user);
+        try {
+          const data = JSON.parse(responseText);
+          console.log('[Apple Auth] Login successful, user:', data.user?.email);
+          await setToken(data.access_token);
+          setUser(data.user);
+        } catch (parseErr) {
+          console.error('[Apple Auth] Failed to parse success response:', responseText.substring(0, 200));
+          throw new Error(`Server returned invalid JSON (HTTP ${response.status})`);
+        }
       } else {
         let errorDetail = `HTTP ${response.status}`;
         try {
-          const errorData = await response.json();
-          errorDetail = errorData.detail || errorDetail;
+          const errorData = JSON.parse(responseText);
+          errorDetail = errorData.detail || `HTTP ${response.status}: ${responseText.substring(0, 100)}`;
         } catch (e) {
-          const errorText = await response.text();
-          errorDetail = errorText || errorDetail;
+          errorDetail = `HTTP ${response.status}: ${responseText.substring(0, 200) || 'empty response'}`;
         }
         console.error('[Apple Auth] Backend error:', errorDetail);
-        throw new Error(`Apple Sign-In failed: ${errorDetail}`);
+        throw new Error(errorDetail);
       }
     } catch (error: any) {
       if (error.code === 'ERR_REQUEST_CANCELED') {
