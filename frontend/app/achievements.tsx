@@ -165,7 +165,7 @@ export default function AchievementsScreen() {
   if (loading) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <UniversalHeader title="Achievements" />
+        <UniversalHeader title="Achievements" onBack={() => router.push('/(tabs)/profile')} />
         <View style={styles.loadingContainer}>
           <Text style={{ color: colors.textSecondary }}>Loading achievements...</Text>
         </View>
@@ -176,7 +176,7 @@ export default function AchievementsScreen() {
   if (!data) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <UniversalHeader title="Achievements" />
+        <UniversalHeader title="Achievements" onBack={() => router.push('/(tabs)/profile')} />
         <View style={styles.errorContainer}>
           <Text style={{ color: colors.textSecondary }}>Failed to load achievements</Text>
         </View>
@@ -188,7 +188,7 @@ export default function AchievementsScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <UniversalHeader title="Achievements" />
+      <UniversalHeader title="Achievements" onBack={() => router.push('/(tabs)/profile')} />
 
       <ScrollView
         style={styles.content}
