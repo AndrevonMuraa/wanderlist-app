@@ -58,25 +58,6 @@ export default function LoginScreen() {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    // On web, show info modal instead of attempting OAuth (which will fail)
-    if (Platform.OS === 'web') {
-      setShowWebLoginInfo(true);
-      return;
-    }
-    
-    setLoading(true);
-    setError('');
-
-    try {
-      await loginWithGoogle();
-      // The OAuth flow will handle navigation after success
-    } catch (err: any) {
-      setError('Google login failed. Please try again.');
-      setLoading(false);
-    }
-  };
-
   const handleAppleLogin = async () => {
     setLoading(true);
     setError('');
