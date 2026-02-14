@@ -16,7 +16,6 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [showWebLoginInfo, setShowWebLoginInfo] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const { login, loginWithApple, isAppleSignInAvailable } = useAuth();
   const router = useRouter();
