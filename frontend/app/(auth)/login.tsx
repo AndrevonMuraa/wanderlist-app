@@ -18,7 +18,7 @@ export default function LoginScreen() {
   const [error, setError] = useState('');
   const [showWebLoginInfo, setShowWebLoginInfo] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const { login, loginWithGoogle, loginWithApple, isAppleSignInAvailable } = useAuth();
+  const { login, loginWithApple, isAppleSignInAvailable } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -152,18 +152,6 @@ export default function LoginScreen() {
               <Text style={styles.dividerText}>OR</Text>
               <View style={styles.dividerLine} />
             </View>
-
-            <Button
-              mode="outlined"
-              onPress={handleGoogleLogin}
-              disabled={loading}
-              icon="google"
-              style={styles.googleButton}
-              textColor={theme.colors.text}
-              buttonColor={theme.colors.surface}
-            >
-              Continue with Google
-            </Button>
 
             {/* Apple Sign-In Button */}
             {Platform.OS === 'ios' && isAppleSignInAvailable ? (
