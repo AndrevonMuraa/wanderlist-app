@@ -155,6 +155,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const loginWithApple = async () => {
+    const apiUrl = `${BACKEND_URL}/api/auth/apple/callback`;
+    
     try {
       if (Platform.OS !== 'ios') {
         throw new Error('Apple Sign-In is only available on iOS');
@@ -174,7 +176,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log('[Apple Auth] Has identityToken:', !!credential.identityToken);
       console.log('[Apple Auth] Has user:', !!credential.user);
       console.log('[Apple Auth] Has email:', !!credential.email);
-      console.log('[Apple Auth] Has fullName:', !!credential.fullName);
 
       const fullName = credential.fullName
         ? `${credential.fullName.givenName || ''} ${credential.fullName.familyName || ''}`.trim()
@@ -187,44 +188,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         full_name: fullName || null,
       };
 
-      const apiUrl = `${BACKEND_URL}/api/auth/apple/callback`;
-      console.log('[Apple Auth] Sending to backend:', apiUrl);
-      console.log('[Apple Auth] Payload keys:', Object.keys(payload));
-      console.log('[Apple Auth] identity_token length:', credential.identityToken?.length || 0);
+      console.log('[Apple Auth] Sending to:', apiUrl);
+      console.log('[Apple Auth] Token length:', credential.identityToken?.length || 0);
 
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      let response: Response;
+      try {
+        response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+      } catch (networkErr: any) {
+        console.error('[Apple Auth] Network error:', networkErr.message);
+        throw new Error(`Network error: ${networkErr.message} [${apiUrl}]`);
+      }
 
       console.log('[Apple Auth] Response status:', response.status);
 
       const responseText = await response.text();
-      console.log('[Apple Auth] Response body:', responseText.substring(0, 500));
+      console.log('[Apple Auth] Response body:', responseText.substring(0, 300));
 
       if (response.ok) {
-        try {
-          const data = JSON.parse(responseText);
-          console.log('[Apple Auth] Login successful, user:', data.user?.email);
-          await setToken(data.access_token);
-          setUser(data.user);
-        } catch (parseErr) {
-          console.error('[Apple Auth] Failed to parse success response:', responseText.substring(0, 200));
-          throw new Error(`Server returned invalid JSON (HTTP ${response.status})`);
-        }
+        const data = JSON.parse(responseText);
+        console.log('[Apple Auth] Login successful');
+        await setToken(data.access_token);
+        setUser(data.user);
       } else {
-        let errorDetail = `HTTP ${response.status}`;
+        let errorDetail = '';
         try {
           const errorData = JSON.parse(responseText);
-          errorDetail = errorData.detail || `HTTP ${response.status}: ${responseText.substring(0, 100)}`;
+          errorDetail = errorData.detail || responseText.substring(0, 100);
         } catch (e) {
-          errorDetail = `HTTP ${response.status}: ${responseText.substring(0, 200) || 'empty response'}`;
+          errorDetail = responseText.substring(0, 150) || 'empty';
         }
-        console.error('[Apple Auth] Backend error:', errorDetail);
-        throw new Error(errorDetail);
+        throw new Error(`HTTP ${response.status}: ${errorDetail}`);
       }
     } catch (error: any) {
       if (error.code === 'ERR_REQUEST_CANCELED') {
