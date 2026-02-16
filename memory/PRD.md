@@ -29,11 +29,21 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
 3. **Apple Sign-In**: Available on iOS devices
 4. **Registration**: Available via "Don't have an account? Sign up" link
 
+### What's Removed
+- **Google Sign-In**: Completely removed
+- **Dark Mode**: Completely removed
+- **RevenueCat**: Set to MOCK mode (`MOCK_PURCHASES = true`)
+
+### Previously "Disabled" Features — Now Verified Active
+- **Statistics Sharing** (`ShareStatsCard`): Active in profile, uses `react-native-view-shot` + `expo-sharing`
+- **Country Picker** (`@react-native-picker/picker`): Active in `suggest-landmark` and `add-country-visit`
+- Both packages verified compatible with Expo SDK 54 + New Architecture via `expo-doctor`
+
 ### Key Configuration
 - `newArchEnabled: true` in app.json
 - `EXPO_PUBLIC_BACKEND_URL` in frontend/.env
 - Hardcoded fallback URL in utils/config.ts
-- `react-native-worklets@0.6.1` installed
+- `react-native-worklets@0.5.1` installed
 - `RESEND_API_KEY` in backend/.env
 - EAS project: @aarum/wandermark (ID: 036fc505-c923-44f1-8759-f3737fb5749c)
 
