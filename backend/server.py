@@ -602,6 +602,31 @@ async def get_super_admin_user(current_user: User = Depends(get_current_user)) -
         raise HTTPException(status_code=403, detail="Account is banned")
     return current_user
 
+# ============= ADMIN SETUP =============
+
+@api_router.post("/admin/setup")
+async def admin_setup(current_user: User = Depends(get_current_user)):
+    """One-time setup: promote current user to admin if no admins exist"""
+    existing_admin = await db.users.find_one({"role": "admin"}, {"_id": 0})
+    if existing_admin:
+        raise HTTPException(status_code=403, detail="Admin already exists. Contact an existing admin for role changes.")
+    
+    await db.users.update_one(
+        {"user_id": current_user.user_id},
+        {"$set": {"role": "admin"}}
+    )
+    
+    await db.admin_logs.insert_one({
+        "log_id": f"log_{uuid.uuid4().hex[:12]}",
+        "admin_id": current_user.user_id,
+        "admin_name": current_user.name,
+        "action": "initial_admin_setup",
+        "target_id": current_user.user_id,
+        "created_at": datetime.now(timezone.utc)
+    })
+    
+    return {"message": "You are now the admin", "role": "admin"}
+
 # ============= AUTH ENDPOINTS =============
 
 @api_router.post("/auth/register")
