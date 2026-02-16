@@ -31,7 +31,7 @@ const slides: OnboardingSlide[] = [
     icon: 'globe-outline',
     iconColor: '#4DB8D8',
     title: 'Discover the World',
-    description: 'Explore 560+ iconic landmarks across 48 countries on 5 continents.',
+    description: 'Explore 530+ iconic landmarks across 48 countries on 5 continents.',
     gradient: ['#4DB8D8', '#7DCBE3'],
   },
   {
