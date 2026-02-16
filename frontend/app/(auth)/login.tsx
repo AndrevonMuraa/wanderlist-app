@@ -443,23 +443,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  quickLoginButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: theme.spacing.sm,
-    backgroundColor: theme.colors.accent + '15',
-    borderRadius: theme.borderRadius.md,
-    paddingVertical: theme.spacing.md,
-    marginTop: theme.spacing.md,
-    borderWidth: 1.5,
-    borderColor: theme.colors.accent + '40',
-  },
-  quickLoginText: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: theme.colors.accent,
-  },
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
