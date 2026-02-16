@@ -397,6 +397,31 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.md,
     paddingVertical: theme.spacing.xs,
   },
+  magicHeader: {
+    alignItems: 'center',
+    marginBottom: theme.spacing.lg,
+  },
+  magicTitle: {
+    ...theme.typography.h2,
+    color: theme.colors.text,
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.xs,
+  },
+  magicSubtitle: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  magicLoadingContainer: {
+    alignItems: 'center',
+    paddingVertical: theme.spacing.xl,
+  },
+  codeInput: {
+    fontSize: 24,
+    textAlign: 'center',
+    letterSpacing: 8,
+  },
   appleButton: {
     width: '100%',
     height: 48,
