@@ -102,7 +102,7 @@ const getToken = async (): Promise<string | null> => {
 export default function ContinentsScreen() {
   const router = useRouter();
   const { user } = useAuth();
-  const { colors, gradientColors, isDark } = useTheme();
+  const { colors, gradientColors } = useTheme();
   const { t } = useTranslation();
   const [continents, setContinents] = useState<Continent[]>(CONTINENTS);
   const [loading, setLoading] = useState(true);
@@ -180,14 +180,14 @@ export default function ContinentsScreen() {
       >
         {/* Single Row: Title Left, Search + Branding Right */}
         <View style={styles.headerRow}>
-          <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>{t('explore.title')}</Text>
+          <Text style={[styles.headerTitle, { color: '#fff' }]}>{t('explore.title')}</Text>
           <View style={styles.headerRightRow}>
             <TouchableOpacity 
               style={styles.searchButton}
               onPress={() => router.push('/search')}
               activeOpacity={0.7}
             >
-              <Ionicons name="search" size={22} color={isDark ? colors.text : '#fff'} />
+              <Ionicons name="search" size={22} color={'#fff'} />
             </TouchableOpacity>
             <TouchableOpacity 
               style={styles.brandingContainer}

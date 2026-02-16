@@ -44,7 +44,7 @@ interface AdminStats {
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const { colors, gradientColors, isDark } = useTheme();
+  const { colors, gradientColors } = useTheme();
   const { user } = useAuth();
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);

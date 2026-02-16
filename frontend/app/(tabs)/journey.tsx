@@ -108,7 +108,7 @@ export default function JourneyScreen() {
   // All hooks must be called in consistent order
   const router = useRouter();
   const { user } = useAuth();
-  const { colors, shadows, gradientColors, isDark } = useTheme();
+  const { colors, shadows, gradientColors } = useTheme();
   const { t } = useTranslation();
   const { isOnline, cacheProgress, cacheVisits, getCachedProgress, getCachedVisits, syncPendingVisits } = useOffline();
   const subscriptionData = useSubscription();
