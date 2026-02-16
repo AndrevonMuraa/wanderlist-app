@@ -16,19 +16,8 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { register, loginWithGoogle, loginWithApple, isAppleSignInAvailable } = useAuth();
+  const { register, loginWithApple, isAppleSignInAvailable } = useAuth();
   const router = useRouter();
-
-  const handleGoogleSignUp = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      await loginWithGoogle();
-    } catch (err: any) {
-      setError('Google sign-up failed. Please try again.');
-      setLoading(false);
-    }
-  };
 
   const handleAppleSignUp = async () => {
     if (Platform.OS !== 'ios') {
@@ -170,18 +159,6 @@ export default function RegisterScreen() {
                 <View style={styles.dividerLine} />
               </View>
 
-              <Button
-                mode="outlined"
-                onPress={handleGoogleSignUp}
-                disabled={loading}
-                icon="google"
-                style={styles.googleButton}
-                textColor={theme.colors.text}
-                buttonColor={theme.colors.surface}
-              >
-                Sign up with Google
-              </Button>
-
               {/* Apple Sign-In Button */}
               {Platform.OS === 'ios' && isAppleSignInAvailable ? (
                 <AppleAuthentication.AppleAuthenticationButton
@@ -294,11 +271,6 @@ const styles = StyleSheet.create({
     marginHorizontal: theme.spacing.md,
     ...theme.typography.caption,
     color: theme.colors.textSecondary,
-  },
-  googleButton: {
-    borderColor: theme.colors.border,
-    borderWidth: 1.5,
-    borderRadius: theme.borderRadius.md,
   },
   appleButton: {
     width: '100%',

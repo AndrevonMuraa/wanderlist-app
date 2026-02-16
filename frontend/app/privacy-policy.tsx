@@ -204,7 +204,7 @@ export default function PrivacyPolicyScreen() {
             <Text style={[styles.paragraph, { marginTop: 12 }]}>
               We may use the following third-party services:
             </Text>
-            <BulletPoint text="Google OAuth for sign-in authentication" />
+            <BulletPoint text="Apple Sign-In and email-based authentication" />
             <BulletPoint text="Analytics services to improve our app" />
             <BulletPoint text="Cloud storage for data and photos" />
           </Section>
