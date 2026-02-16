@@ -85,7 +85,11 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
     - Confirmed `react-native-view-shot` and `@react-native-picker/picker` are active and compatible
 15. **Login Redesign (Feb 16, 2026)**: Password login as primary, magic link moved to "Forgot password?"
 
-16. **react-native-maps installed (Feb 16, 2026)**: Installed v1.20.1, resolving the last TS error. **0 TypeScript errors remaining.**
+17. **Landmark Duplicate Cleanup (Feb 16, 2026)**:
+    - Removed 27 duplicate landmarks across 17 countries (560 → 533)
+    - Migrated 7 visits and 7 activities to correct landmark IDs before deletion
+    - Key duplicates: Pompeii/Pompeii Ruins, Karnak Temple/Complex, Meteora/Monasteries, etc.
+    - Verified: 0 duplicate IDs, 0 substring duplicates remaining (except intentional different places)
 
 ## Backlog / Future Tasks
 - **P0**: Create EAS build for regression testing on device (covers all session changes)
