@@ -33,8 +33,8 @@ export default function AutoLoginScreen() {
       setStatus('Success! Redirecting...');
 
       // Refresh auth context
-      if (refreshAuth) {
-        await refreshAuth();
+      if (refreshUser) {
+        await refreshUser();
       }
 
       // Redirect to main app
