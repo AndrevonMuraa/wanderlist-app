@@ -9,6 +9,7 @@ interface UpgradeModalProps {
   visible: boolean;
   onClose: () => void;
   onUpgrade?: (tier: 'basic' | 'premium') => void;
+  reason?: string;
 }
 
 export default function UpgradeModal({ visible, onClose, onUpgrade }: UpgradeModalProps) {
