@@ -24,8 +24,8 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
 - Light-only theme (dark mode fully removed)
 
 ### Authentication Flow
-1. **Main screen**: Email input + "Send Login Code" (magic link) as primary
-2. **Password login**: Available via "Use password instead" link
+1. **Main screen**: Email + Password login as primary method
+2. **Forgot password**: Magic link code sent to email (accessed via "Forgot password?" link)
 3. **Apple Sign-In**: Available on iOS devices
 4. **Registration**: Available via "Don't have an account? Sign up" link
 
@@ -79,9 +79,7 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
 - **P1**: Set up verified domain in Resend (currently limited to ricky.aarum@gmail.com)
 - **P1**: Re-enable RevenueCat with production API key
 - **P1**: Restore disabled features (statistics sharing, country/language pickers)
-- **P2**: Install @types/react-native-maps for the last TS error
-- **P3**: Clean up unused packages from package.json
-- **P3**: Clean up app_backup directory
+- **P3**: Fix remaining TS error (react-native-maps type declarations)
 
 ## Key Files
 - `frontend/contexts/AuthContext.tsx` - Auth logic (Apple + Magic Link)
