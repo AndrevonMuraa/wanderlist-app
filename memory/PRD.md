@@ -78,12 +78,18 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
     - Fixed OfflineContext, performance.ts, landmarks Set typing
     - Fixed leaderboard RankBadge usage (wrong props)
     - Only remaining: react-native-maps missing type declarations (native-only module)
+14. **Package & Compatibility Cleanup (Feb 16, 2026)**:
+    - Removed 5 unused packages: `expo-auth-session`, `react-native-dotenv`, `zustand`, `expo-camera`, `expo-symbols`
+    - Removed stale `package-lock.json` (project uses yarn)
+    - Downgraded `react-native-worklets` from 0.6.1 to 0.5.1 (Expo SDK 54 recommended)
+    - `expo-doctor` 17/17 checks passed — all packages compatible
+    - Confirmed `react-native-view-shot` and `@react-native-picker/picker` are active and compatible
+15. **Login Redesign (Feb 16, 2026)**: Password login as primary, magic link moved to "Forgot password?"
 
 ## Backlog / Future Tasks
-- **P0**: Create EAS build after cleanup for regression testing on device
-- **P1**: Set up verified domain in Resend (currently limited to ricky.aarum@gmail.com)
+- **P0**: Create EAS build for regression testing on device (covers all session changes)
+- **P1**: Set up verified domain in Resend
 - **P1**: Re-enable RevenueCat with production API key
-- **P1**: Restore disabled features (statistics sharing, country/language pickers)
 - **P3**: Fix remaining TS error (react-native-maps type declarations)
 
 ## Key Files
