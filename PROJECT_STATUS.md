@@ -288,7 +288,7 @@ WanderList is a **gamified social travel tracking application** that transforms 
 
 **Auto-Login URL:**
 ```
-https://expo-refactor-1.preview.emergentagent.com/auto-login?token=[GENERATE_NEW]
+https://travel-app-preview.preview.emergentagent.com/auto-login?token=[GENERATE_NEW]
 ```
 
 **Generate New Token:**

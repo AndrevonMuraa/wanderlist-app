@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://expo-refactor-1.preview.emergentagent.com/api"
+BASE_URL = "https://travel-app-preview.preview.emergentagent.com/api"
 TEST_EMAIL = "mobile@test.com"
 
 class Colors:
