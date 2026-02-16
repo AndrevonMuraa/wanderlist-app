@@ -164,6 +164,21 @@ export const COUNTRY_FUN_FACTS: { [key: string]: string[] } = {
     "The island was named after the bearded fig trees found by explorers.",
     "Barbados was the first Caribbean island to have piped water and electricity.",
   ],
+  finland: [
+    "Finland has over 3 million saunas for a population of 5.5 million people!",
+    "Finland was the first country in the world to make broadband a legal right.",
+    "Finns consume more coffee per capita than any other nation on Earth.",
+  ],
+  maldives: [
+    "The Maldives is the flattest country on Earth, averaging just 1.5 meters above sea level!",
+    "It consists of 1,192 coral islands grouped into 26 atolls.",
+    "The Maldives was the first country to hold a cabinet meeting underwater, in 2009.",
+  ],
+  panama: [
+    "The Panama Canal uses 52 million gallons of fresh water for each ship that passes through!",
+    "Panama is the only place in the world where you can see the sun rise over the Pacific and set over the Atlantic.",
+    "Panama City is the only capital city with a tropical rainforest within its city limits.",
+  ],
 }; = (countryId: string): string | null => {
   const facts = COUNTRY_FUN_FACTS[countryId];
   if (!facts || facts.length === 0) return null;
