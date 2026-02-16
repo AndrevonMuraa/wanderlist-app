@@ -281,7 +281,7 @@ export default function SubscriptionScreen() {
             <FeatureRow icon="ribbon" text="Basic Badges (up to 100 visits)" included />
             <View style={styles.divider} />
             <Text style={[styles.tierLabel, styles.tierLabelPro]}>+ Pro Features</Text>
-            <FeatureRow icon="star" text="92 Premium Landmarks" included={isPro || false} highlight />
+            <FeatureRow icon="star" text="150+ Premium Landmarks" included={isPro || false} highlight />
             <FeatureRow icon="images" text="10 Photos per Visit" included={isPro || false} highlight />
             <FeatureRow icon="people" text="Unlimited Friends" included={isPro || false} highlight />
             <FeatureRow icon="airplane" text="Custom Visits Feature" included={isPro || false} highlight />
