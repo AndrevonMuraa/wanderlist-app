@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="3" failures="5" skipped="0" tests="21" time="18.211" timestamp="2026-02-16T21:04:27.370766+00:00" hostname="agent-env-9a86dd77-3d8d-45ed-815d-6c11e3ce72ac"><testcase classname="tests.test_travel_api.TestAuthAndSetup" name="test_auth_token_obtained" time="0.577" /><testcase classname="tests.test_travel_api.TestCountries" name="test_countries_endpoint_returns_200" time="0.559" /><testcase classname="tests.test_travel_api.TestCountries" name="test_exactly_66_countries" time="0.308" /><testcase classname="tests.test_travel_api.TestCountries" name="test_continent_distribution" time="0.000" /><testcase classname="tests.test_travel_api.TestCountries" name="test_all_continents_have_even_country_count" time="0.000" /><testcase classname="tests.test_travel_api.TestCountries" name="test_new_country_finland_exists" time="0.000" /><testcase classname="tests.test_travel_api.TestCountries" name="test_new_country_maldives_exists" time="0.000" /><testcase classname="tests.test_travel_api.TestCountries" name="test_new_country_panama_exists" time="0.000" /><testcase classname="tests.test_travel_api.TestLandmarks" name="test_finland_landmarks_count_and_premium" time="0.529" /><testcase classname="tests.test_travel_api.TestLandmarks" name="test_maldives_landmarks_count_and_premium" time="0.129" /><testcase classname="tests.test_travel_api.TestLandmarks" name="test_panama_landmarks_count_and_premium" time="0.275" /><testcase classname="tests.test_travel_api.TestLandmarks" name="test_premium_landmarks_locked_for_free_users" time="0.232" /><testcase classname="tests.test_travel_api.TestLandmarks" name="test_official_landmarks_have_10_points" time="0.155"><failure message="assert 520 == 200&#10; +  where 520 = &lt;Response [520]&gt;.status_code">tests/test_travel_api.py:285: in test_official_landmarks_have_10_points
+    assert response.status_code == 200
+E   assert 520 == 200
+E    +  where 520 = &lt;Response [520]&gt;.status_code</failure></testcase><testcase classname="tests.test_travel_api.TestLandmarks" name="test_premium_landmarks_have_25_points" time="0.186"><failure message="assert 520 == 200&#10; +  where 520 = &lt;Response [520]&gt;.status_code">tests/test_travel_api.py:307: in test_premium_landmarks_have_25_points
+    assert response.status_code == 200
+E   assert 520 == 200
+E    +  where 520 = &lt;Response [520]&gt;.status_code</failure></testcase><testcase classname="tests.test_travel_api.TestDataIntegrity" name="test_no_duplicate_landmark_names" time="0.538"><error message="failed on setup with &quot;assert 520 == 200&#10; +  where 520 = &lt;Response [520]&gt;.status_code&quot;">tests/test_travel_api.py:359: in all_landmarks
+    assert response.status_code == 200
+E   assert 520 == 200
+E    +  where 520 = &lt;Response [520]&gt;.status_code</error></testcase><testcase classname="tests.test_travel_api.TestDataIntegrity" name="test_no_orphan_landmarks_null_country" time="0.000"><error message="failed on setup with &quot;assert 520 == 200&#10; +  where 520 = &lt;Response [520]&gt;.status_code&quot;">tests/test_travel_api.py:359: in all_landmarks
+    assert response.status_code == 200
+E   assert 520 == 200
+E    +  where 520 = &lt;Response [520]&gt;.status_code</error></testcase><testcase classname="tests.test_travel_api.TestDataIntegrity" name="test_all_countries_have_at_least_one_premium_landmark" time="13.567" /><testcase classname="tests.test_travel_api.TestDataIntegrity" name="test_no_landmarks_with_null_country_id" time="0.000"><error message="failed on setup with &quot;assert 520 == 200&#10; +  where 520 = &lt;Response [520]&gt;.status_code&quot;">tests/test_travel_api.py:359: in all_landmarks
+    assert response.status_code == 200
+E   assert 520 == 200
+E    +  where 520 = &lt;Response [520]&gt;.status_code</error></testcase><testcase classname="tests.test_travel_api.TestLandmarkTotals" name="test_total_landmarks_count" time="0.558"><failure message="assert 520 == 200&#10; +  where 520 = &lt;Response [520]&gt;.status_code">tests/test_travel_api.py:469: in test_total_landmarks_count
+    assert response.status_code == 200
+E   assert 520 == 200
+E    +  where 520 = &lt;Response [520]&gt;.status_code</failure></testcase><testcase classname="tests.test_travel_api.TestLandmarkTotals" name="test_premium_landmarks_count" time="0.280"><failure message="assert 520 == 200&#10; +  where 520 = &lt;Response [520]&gt;.status_code">tests/test_travel_api.py:482: in test_premium_landmarks_count
+    assert response.status_code == 200
+E   assert 520 == 200
+E    +  where 520 = &lt;Response [520]&gt;.status_code</failure></testcase><testcase classname="tests.test_travel_api.TestLandmarkTotals" name="test_landmark_category_distribution" time="0.122"><failure message="assert 520 == 200&#10; +  where 520 = &lt;Response [520]&gt;.status_code">tests/test_travel_api.py:495: in test_landmark_category_distribution
+    assert response.status_code == 200
+E   assert 520 == 200
+E    +  where 520 = &lt;Response [520]&gt;.status_code</failure></testcase></testsuite></testsuites>
