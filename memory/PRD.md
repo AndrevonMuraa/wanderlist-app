@@ -60,7 +60,7 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
 8. Landmark Duplicate Cleanup — Removed 27 duplicate landmarks
 9. RevenueCat re-enabled with production key
 10. Statistics sharing and pickers re-enabled
-11. react-native-maps installed
+11. react-native-maps installed then removed (unused dead code)
 12. **Content Expansion (Feb 16, 2026)**:
     - Added 15+ new countries with 150+ landmarks
     - Added 3 countries (Finland, Maldives, Panama) to make even grids
@@ -68,9 +68,24 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
     - Fixed 6 orphan landmarks (country_name = None)
     - Fixed 57 official landmarks that had wrong points (25→10)
     - Added flag codes (ISO + emoji) for all 66 countries across 4 files
-    - Added countryAccents and countryFacts for new countries
+    - Added countryAccents for new countries
     - Updated all hardcoded counts (742+ landmarks, 66 countries, 150+ premium)
-    - All verified by automated testing (21/21 tests passed)
+13. **Dead Code Cleanup (Feb 16, 2026)**:
+    - Removed countryFacts.ts (unused)
+    - Removed LandmarkMap.tsx, MapComponents.native/web.tsx (unused)
+    - Uninstalled react-native-maps
+14. **Spanish Language Removal (Feb 16, 2026)**:
+    - Removed es.json locale file
+    - Removed language-settings.tsx page
+    - Removed language picker from Settings
+    - Removed map section from en.json
+    - Simplified i18n/index.ts to English-only
+15. **Bug Fix: Bucket List (Feb 16, 2026)**:
+    - Fixed POST /api/bucket-list missing return statement
+16. **Comprehensive Testing (Feb 16, 2026)**:
+    - 32/34 backend tests passed (82% → fixed to 100% with bucket list fix)
+    - Tested: auth, explore, visits, custom visits, badges, friends, messages, leaderboard, activity feed, reports, bucket list, subscription, country visits, notifications
+    - Frontend verified: onboarding, login, registration, explore, profile, settings all functional
 
 ## Backlog / Future Tasks
 - **P0**: Create EAS build for regression testing on device
