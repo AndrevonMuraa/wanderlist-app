@@ -86,6 +86,11 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
     - 32/34 backend tests passed (82% → fixed to 100% with bucket list fix)
     - Tested: auth, explore, visits, custom visits, badges, friends, messages, leaderboard, activity feed, reports, bucket list, subscription, country visits, notifications
     - Frontend verified: onboarding, login, registration, explore, profile, settings all functional
+17. **Admin Role Management (Feb 16, 2026)**:
+    - Added POST /api/admin/setup endpoint (one-time: promotes current user to admin if no admin exists)
+    - Added role management UI in admin/users.tsx (promote to moderator/admin, demote buttons)
+    - Added "Moderators" filter chip in user management
+    - Full flow verified: setup → promote → demote
 
 ## Backlog / Future Tasks
 - **P0**: Create EAS build for regression testing on device
