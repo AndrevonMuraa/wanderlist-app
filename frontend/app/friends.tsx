@@ -727,4 +727,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     lineHeight: 20,
   },
+  headerRight: {
+    width: 36,
+  },
 });

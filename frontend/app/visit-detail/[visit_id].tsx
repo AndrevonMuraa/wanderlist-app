@@ -421,4 +421,29 @@ const styles = StyleSheet.create({
   bottomSpacer: {
     height: theme.spacing.xl * 2,
   },
+  shareButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  photoCountBadge: {
+    position: 'absolute',
+    bottom: theme.spacing.sm,
+    right: theme.spacing.sm,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderRadius: theme.borderRadius.round,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  photoCountText: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '600',
+  },
 });
