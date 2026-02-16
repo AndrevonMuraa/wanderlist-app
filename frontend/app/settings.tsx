@@ -57,7 +57,7 @@ const PRIVACY_OPTIONS: PrivacyOption[] = [
 export default function SettingsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { colors, shadows, gradientColors, isDark } = useTheme();
+  const { colors, shadows, gradientColors } = useTheme();
   const { t } = useTranslation();
   const { user } = useAuth();
   const { clearCache, isOnline, pendingVisitsCount, lastSyncTime } = useOffline();
