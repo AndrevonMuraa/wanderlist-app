@@ -199,7 +199,7 @@ export default function AboutScreen() {
           <Surface style={styles.statsCard}>
             <View style={styles.statsGrid}>
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>530+</Text>
+                <Text style={styles.statNumber}>680+</Text>
                 <Text style={styles.statLabel}>Landmarks</Text>
               </View>
               <View style={styles.statDivider} />
