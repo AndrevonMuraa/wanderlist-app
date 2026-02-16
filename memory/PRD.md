@@ -29,11 +29,6 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
 3. **Apple Sign-In**: Available on iOS devices
 4. **Registration**: Available via "Don't have an account? Sign up" link
 
-### What's Been Removed/Disabled
-- **Google Sign-In**: Completely removed (user decision)
-- **Dark Mode**: Completely removed
-- **RevenueCat**: Set to MOCK mode (`MOCK_PURCHASES = true`)
-
 ### Key Configuration
 - `newArchEnabled: true` in app.json
 - `EXPO_PUBLIC_BACKEND_URL` in frontend/.env
