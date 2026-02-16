@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, ReactNode } from 'react';
 import { lightColors, shadows, gradients, countryAccents } from '../styles/theme';
 
 interface ThemeColors {
@@ -37,21 +36,14 @@ interface ThemeColors {
 }
 
 interface ThemeContextType {
-  isDark: boolean;
-  themeMode: string;
   colors: ThemeColors;
   shadows: typeof shadows;
   gradientColors: readonly [string, string];
-  setThemeMode: (mode: string) => Promise<void>;
-  toggleTheme: () => Promise<void>;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  // Always use light mode
-  const isDark = false;
-
   const colors: ThemeColors = {
     ...lightColors,
     countryAccents,
@@ -60,20 +52,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const themeShadows = shadows;
   const gradientColors = gradients.oceanToSand;
 
-  // No-op functions for backwards compatibility
-  const setThemeMode = async (_mode: string) => {};
-  const toggleTheme = async () => {};
-
   return (
     <ThemeContext.Provider
       value={{
-        isDark,
-        themeMode: 'light',
         colors,
         shadows: themeShadows,
         gradientColors,
-        setThemeMode,
-        toggleTheme,
       }}
     >
       {children}
@@ -92,8 +76,4 @@ export function useTheme() {
 export function useColors() {
   const { colors } = useTheme();
   return colors;
-}
-
-export function useIsDark() {
-  return false;
 }
