@@ -513,7 +513,7 @@ export default function SocialHubScreen() {
                   ))}
                   {activity.photos!.length > 4 && (
                     <View style={styles.photoCollageOverlay}>
-                      <Text style={styles.photoCollageOverlayText}>+{activity.photos.length - 4}</Text>
+                      <Text style={styles.photoCollageOverlayText}>+{activity.photos!.length - 4}</Text>
                     </View>
                   )}
                 </View>
