@@ -35,7 +35,7 @@ export const useDebounce = (callback: Function, delay: number = 300) => {
       }
       timeoutRef.current = setTimeout(() => {
         callback(...args);
-      }, delay);
+      }, delay) as unknown as NodeJS.Timeout;
     },
     [callback, delay]
   );

@@ -79,7 +79,7 @@ export function OfflineProvider({ children }: { children: ReactNode }) {
 
     // Initial check
     NetInfo.fetch().then((state) => {
-      setIsOnline(state.isConnected && state.isInternetReachable !== false);
+      setIsOnline(Boolean(state.isConnected && state.isInternetReachable !== false));
       setIsInitialized(true);
     });
 
