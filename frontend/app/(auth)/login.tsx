@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
     padding: theme.spacing.xl,
     borderRadius: theme.borderRadius.xxl,
     backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
+    ...theme.shadows.md,
   },
   title: {
     ...theme.typography.h2,
