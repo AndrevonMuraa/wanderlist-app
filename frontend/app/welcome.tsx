@@ -16,7 +16,7 @@ export default function WelcomeScreen() {
     {
       icon: 'earth',
       title: 'Explore 580 Landmarks',
-      description: '48 countries across 5 continents waiting for you',
+      description: '63 countries across 5 continents waiting for you',
       color: theme.colors.primary,
     },
     {

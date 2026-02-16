@@ -204,7 +204,7 @@ export default function AboutScreen() {
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>48</Text>
+                <Text style={styles.statNumber}>63</Text>
                 <Text style={styles.statLabel}>Countries</Text>
               </View>
               <View style={styles.statDivider} />
