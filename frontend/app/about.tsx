@@ -356,7 +356,7 @@ You can filter by country, year, or type.`}
               number={1}
               icon="compass"
               title="Explore Landmarks"
-              description="Browse 530+ landmarks across 48 countries and 5 continents."
+              description="Browse 680+ landmarks across 63 countries and 5 continents."
             />
             <HowItWorksStep
               number={2}
@@ -549,7 +549,7 @@ You can filter by country, year, or type.`}
             <View style={styles.infoDivider} />
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Database</Text>
-              <Text style={styles.infoValue}>530+ landmarks, 48 countries</Text>
+              <Text style={styles.infoValue}>680+ landmarks, 63 countries</Text>
             </View>
           </Surface>
         </View>

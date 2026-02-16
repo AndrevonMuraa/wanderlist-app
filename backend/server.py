@@ -4473,7 +4473,7 @@ async def check_and_award_badges(user_id: str):
         ]
     })
     
-    # Check milestone badges (539 total landmarks)
+    # Check milestone badges (689 total landmarks)
     milestones = [1, 10, 25, 50, 100, 200, 350, 500]
     for milestone in milestones:
         badge_type = f"milestone_{milestone}" if milestone > 1 else "first_visit"
