@@ -132,7 +132,7 @@ export default function LandmarksScreen() {
       
       if (visitsResponse.ok) {
         const visitsData = await visitsResponse.json();
-        const visitedIds = new Set(visitsData.map((v: any) => v.landmark_id));
+        const visitedIds = new Set<string>(visitsData.map((v: any) => v.landmark_id));
         setVisitedLandmarkIds(visitedIds);
       }
     } catch (error) {
