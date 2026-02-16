@@ -105,6 +105,9 @@ export const countryAccents = {
   dominican_republic: '#1C5BA4', // Dominican blue
   bahamas: '#00BCD4',     // Bahama aqua
   barbados: '#00529B',    // Bajan blue
+  finland: '#003580',     // Finnish blue
+  maldives: '#1E8C45',    // Tropical teal
+  panama: '#D42E2E',      // Panama red
 };
 
 // For backward compatibility - default to light theme
