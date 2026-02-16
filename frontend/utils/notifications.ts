@@ -27,7 +27,7 @@ Notifications.setNotificationHandler({
     shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: true,
-  }),
+  } as any),
 });
 
 export async function requestNotificationPermissions(): Promise<boolean> {
@@ -90,7 +90,7 @@ export async function scheduleStreakReminder(enabled: boolean, time: string): Pr
       hour: hours,
       minute: minutes,
       repeats: true,
-    },
+    } as any,
   });
 }
 
