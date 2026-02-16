@@ -1,9 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useColorScheme } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { lightColors, darkColors, shadows, darkShadows, gradients, countryAccents } from '../styles/theme';
-
-type ThemeMode = 'light' | 'dark' | 'system';
+import { lightColors, shadows, gradients, countryAccents } from '../styles/theme';
 
 interface ThemeColors {
   primary: string;
@@ -41,82 +38,37 @@ interface ThemeColors {
 
 interface ThemeContextType {
   isDark: boolean;
-  themeMode: ThemeMode;
+  themeMode: string;
   colors: ThemeColors;
   shadows: typeof shadows;
   gradientColors: readonly [string, string];
-  setThemeMode: (mode: ThemeMode) => Promise<void>;
+  setThemeMode: (mode: string) => Promise<void>;
   toggleTheme: () => Promise<void>;
 }
-
-const THEME_STORAGE_KEY = 'theme_mode';
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const systemColorScheme = useColorScheme();
-  const [themeMode, setThemeModeState] = useState<ThemeMode>('system');
-  const [isLoaded, setIsLoaded] = useState(false);
+  // Always use light mode
+  const isDark = false;
 
-  // Calculate if dark mode should be active
-  const isDark = themeMode === 'system' 
-    ? systemColorScheme === 'dark' 
-    : themeMode === 'dark';
-
-  // Get colors based on current theme
   const colors: ThemeColors = {
-    ...(isDark ? darkColors : lightColors),
+    ...lightColors,
     countryAccents,
   };
 
-  // Get shadows based on current theme
-  const themeShadows = isDark ? darkShadows : shadows;
+  const themeShadows = shadows;
+  const gradientColors = gradients.oceanToSand;
 
-  // Get gradient colors
-  const gradientColors = isDark ? gradients.oceanToSandDark : gradients.oceanToSand;
-
-  // Load saved theme preference
-  useEffect(() => {
-    loadThemePreference();
-  }, []);
-
-  const loadThemePreference = async () => {
-    try {
-      const savedMode = await AsyncStorage.getItem(THEME_STORAGE_KEY);
-      if (savedMode && ['light', 'dark', 'system'].includes(savedMode)) {
-        setThemeModeState(savedMode as ThemeMode);
-      }
-    } catch (error) {
-      console.error('Error loading theme preference:', error);
-    } finally {
-      setIsLoaded(true);
-    }
-  };
-
-  const setThemeMode = async (mode: ThemeMode) => {
-    try {
-      await AsyncStorage.setItem(THEME_STORAGE_KEY, mode);
-      setThemeModeState(mode);
-    } catch (error) {
-      console.error('Error saving theme preference:', error);
-    }
-  };
-
-  const toggleTheme = async () => {
-    const newMode = isDark ? 'light' : 'dark';
-    await setThemeMode(newMode);
-  };
-
-  // Don't render until theme is loaded to prevent flash
-  if (!isLoaded) {
-    return null;
-  }
+  // No-op functions for backwards compatibility
+  const setThemeMode = async (_mode: string) => {};
+  const toggleTheme = async () => {};
 
   return (
     <ThemeContext.Provider
       value={{
         isDark,
-        themeMode,
+        themeMode: 'light',
         colors,
         shadows: themeShadows,
         gradientColors,
@@ -137,14 +89,11 @@ export function useTheme() {
   return context;
 }
 
-// Helper hook for getting just the colors
 export function useColors() {
   const { colors } = useTheme();
   return colors;
 }
 
-// Helper hook for checking dark mode
 export function useIsDark() {
-  const { isDark } = useTheme();
-  return isDark;
+  return false;
 }
