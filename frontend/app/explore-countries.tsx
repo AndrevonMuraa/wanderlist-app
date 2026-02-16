@@ -542,7 +542,7 @@ export default function ExploreCountriesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create<any>({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
