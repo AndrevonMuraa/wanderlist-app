@@ -32,7 +32,6 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
 ### What's Removed
 - **Google Sign-In**: Completely removed
 - **Dark Mode**: Completely removed
-- **RevenueCat**: Set to MOCK mode (`MOCK_PURCHASES = true`)
 
 ### Previously "Disabled" Features — Now Verified Active
 - **Statistics Sharing** (`ShareStatsCard`): Active in profile, uses `react-native-view-shot` + `expo-sharing`
