@@ -109,6 +109,13 @@ class GoogleTokenRequest(BaseModel):
     picture: Optional[str] = None
     google_id: str
 
+class MagicLinkRequest(BaseModel):
+    email: str
+
+class MagicLinkVerifyRequest(BaseModel):
+    email: str
+    code: str
+
 class SessionDataResponse(BaseModel):
     user_id: str
     email: str
