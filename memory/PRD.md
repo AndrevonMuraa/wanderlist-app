@@ -30,10 +30,9 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
 4. **Registration**: Available via "Don't have an account? Sign up" link
 
 ### What's Been Removed/Disabled
-- **Google Sign-In**: Completely removed (user decision) — all code, UI, and styles cleaned
-- **Dark Mode**: Completely removed — all isDark logic, darkColors, darkTheme.ts, darkShadows, helper functions cleaned
+- **Google Sign-In**: Completely removed (user decision)
+- **Dark Mode**: Completely removed
 - **RevenueCat**: Set to MOCK mode (`MOCK_PURCHASES = true`)
-- **Quick Test Login button**: Removed
 
 ### Key Configuration
 - `newArchEnabled: true` in app.json
@@ -56,25 +55,33 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
 10. Dark mode removal — disabled app-wide, locked to light theme
 11. Fixed settings page crash (ReferenceError from isDark removal)
 12. **Code Cleanup (Feb 16, 2026)** — Comprehensive dead code removal:
-    - Removed Google Login code, handler, button, and styles from register.tsx
-    - Removed unused googleButton style from login.tsx
-    - Removed unused Modal and gradients imports from login.tsx
-    - Fixed shadows.card → shadows.md in login.tsx
-    - Updated privacy-policy.tsx text (Google OAuth → Apple Sign-In)
-    - Deleted styles/darkTheme.ts entirely
-    - Removed darkColors, darkShadows, oceanToSandDark, getThemeColors, getThemeShadows, getGradientColors from theme.ts
-    - Cleaned ThemeContext.tsx: removed isDark, themeMode, toggleTheme, setThemeMode, useIsDark, unused imports
+    - Removed all Google Login code, handlers, buttons, and styles
+    - Removed all dark mode code (darkTheme.ts, darkColors, darkShadows, helper functions, isDark, etc.)
+    - Cleaned ThemeContext.tsx to light-only provider
+    - Updated privacy-policy.tsx text
+    - Fixed dead references in auto-login.tsx (refreshAuth → refreshUser)
+13. **TypeScript Error Fix (Feb 16, 2026)** — Reduced TS errors from ~80+ to 1:
+    - Added missing theme properties (backgroundSecondary, accentLight, accentDark, ocean, surfaceVariant)
+    - Added missing shadow `card` and borderRadius `full` to theme.ts
+    - Added missing styles (shareButton, photoCountBadge, photoCountText, headerRight)
+    - Fixed User interface (subscription_tier, role) and register function type in AuthContext
+    - Fixed Comment type conflict between CommentsSection and CommentItem
+    - Fixed UpgradeModal props (added reason)
+    - Fixed Expo Notifications API type changes
+    - Fixed LinearGradient overload issues
+    - Fixed Expo Router dynamic route typing
+    - Fixed OfflineContext, performance.ts, landmarks Set typing
+    - Fixed leaderboard RankBadge usage (wrong props)
+    - Only remaining: react-native-maps missing type declarations (native-only module)
 
 ## Backlog / Future Tasks
 - **P0**: Create EAS build after cleanup for regression testing on device
 - **P1**: Set up verified domain in Resend (currently limited to ricky.aarum@gmail.com)
 - **P1**: Re-enable RevenueCat with production API key
 - **P1**: Restore disabled features (statistics sharing, country/language pickers)
-- **P2**: Verify react-native-view-shot sharing works on device
-- **P2**: Verify @react-native-picker/picker works on device
+- **P2**: Install @types/react-native-maps for the last TS error
 - **P3**: Clean up unused packages from package.json
 - **P3**: Clean up app_backup directory
-- **P3**: Fix pre-existing TypeScript errors (shadows.card, backgroundSecondary in journey.tsx/profile.tsx)
 
 ## Key Files
 - `frontend/contexts/AuthContext.tsx` - Auth logic (Apple + Magic Link)
@@ -95,6 +102,6 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
 - `POST /api/auth/register` - User registration
 
 ## 3rd Party Integrations
-- **Resend** - Email sending for magic link codes (free plan)
-- **Expo SDK 54** - App framework
-- **expo-apple-authentication** - Apple Sign-In
+- **Expo SDK 54**: Core framework
+- **Apple Authentication** (`expo-apple-authentication`): For Apple Sign-In
+- **Resend**: For delivering magic link emails (free plan)
