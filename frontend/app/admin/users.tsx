@@ -91,9 +91,9 @@ export default function AdminUsersScreen() {
     fetchUsers(searchQuery);
   };
 
-  const handleUserAction = async (userId: string, action: 'ban' | 'unban' | 'upgrade' | 'downgrade') => {
+  const handleUserAction = async (userId: string, action: 'ban' | 'unban' | 'upgrade' | 'downgrade' | 'make_mod' | 'make_admin' | 'demote') => {
     const token = await getToken();
-    let body = {};
+    let body: Record<string, any> = {};
     let message = '';
 
     switch (action) {
@@ -112,6 +112,18 @@ export default function AdminUsersScreen() {
       case 'downgrade':
         body = { subscription_tier: 'free' };
         message = 'User downgraded to Free';
+        break;
+      case 'make_mod':
+        body = { role: 'moderator' };
+        message = 'User promoted to Moderator';
+        break;
+      case 'make_admin':
+        body = { role: 'admin' };
+        message = 'User promoted to Admin';
+        break;
+      case 'demote':
+        body = { role: 'user' };
+        message = 'User demoted to regular user';
         break;
     }
 
