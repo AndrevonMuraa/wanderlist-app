@@ -21,6 +21,7 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
 - All core app features (explore, journey, profile, social tabs)
 - Backend API fully operational
 - Navigation: back buttons in Achievements and About correctly return to Profile
+- Light-only theme (dark mode fully removed)
 
 ### Authentication Flow
 1. **Main screen**: Email input + "Send Login Code" (magic link) as primary
@@ -29,7 +30,8 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
 4. **Registration**: Available via "Don't have an account? Sign up" link
 
 ### What's Been Removed/Disabled
-- **Google Sign-In**: Completely removed (user decision)
+- **Google Sign-In**: Completely removed (user decision) — all code, UI, and styles cleaned
+- **Dark Mode**: Completely removed — all isDark logic, darkColors, darkTheme.ts, darkShadows, helper functions cleaned
 - **RevenueCat**: Set to MOCK mode (`MOCK_PURCHASES = true`)
 - **Quick Test Login button**: Removed
 
@@ -51,18 +53,35 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
 7. Fixed EAS build (react-native-worklets, new arch)
 8. Detailed logging for Apple auth (frontend + backend)
 9. Hardcoded fallback backend URL
+10. Dark mode removal — disabled app-wide, locked to light theme
+11. Fixed settings page crash (ReferenceError from isDark removal)
+12. **Code Cleanup (Feb 16, 2026)** — Comprehensive dead code removal:
+    - Removed Google Login code, handler, button, and styles from register.tsx
+    - Removed unused googleButton style from login.tsx
+    - Removed unused Modal and gradients imports from login.tsx
+    - Fixed shadows.card → shadows.md in login.tsx
+    - Updated privacy-policy.tsx text (Google OAuth → Apple Sign-In)
+    - Deleted styles/darkTheme.ts entirely
+    - Removed darkColors, darkShadows, oceanToSandDark, getThemeColors, getThemeShadows, getGradientColors from theme.ts
+    - Cleaned ThemeContext.tsx: removed isDark, themeMode, toggleTheme, setThemeMode, useIsDark, unused imports
 
 ## Backlog / Future Tasks
+- **P0**: Create EAS build after cleanup for regression testing on device
 - **P1**: Set up verified domain in Resend (currently limited to ricky.aarum@gmail.com)
 - **P1**: Re-enable RevenueCat with production API key
+- **P1**: Restore disabled features (statistics sharing, country/language pickers)
 - **P2**: Verify react-native-view-shot sharing works on device
 - **P2**: Verify @react-native-picker/picker works on device
 - **P3**: Clean up unused packages from package.json
 - **P3**: Clean up app_backup directory
+- **P3**: Fix pre-existing TypeScript errors (shadows.card, backgroundSecondary in journey.tsx/profile.tsx)
 
 ## Key Files
 - `frontend/contexts/AuthContext.tsx` - Auth logic (Apple + Magic Link)
+- `frontend/contexts/ThemeContext.tsx` - Theme provider (light-only)
 - `frontend/app/(auth)/login.tsx` - Login screen with magic link UI
+- `frontend/app/(auth)/register.tsx` - Registration screen
+- `frontend/styles/theme.ts` - Design system (light theme only)
 - `frontend/utils/config.ts` - Backend URL configuration
 - `frontend/utils/purchases.ts` - RevenueCat (mocked)
 - `backend/server.py` - All API endpoints including magic link
