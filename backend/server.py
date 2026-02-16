@@ -885,7 +885,11 @@ async def verify_magic_link(data: MagicLinkVerifyRequest):
     if not record:
         raise HTTPException(status_code=400, detail="Invalid code")
     
-    if datetime.now(timezone.utc) > record["expires_at"]:
+    expires_at = record["expires_at"]
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    
+    if datetime.now(timezone.utc) > expires_at:
         await db.magic_codes.delete_many({"email": email})
         raise HTTPException(status_code=400, detail="Code expired. Please request a new one.")
     
