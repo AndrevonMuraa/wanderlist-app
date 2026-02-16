@@ -472,7 +472,7 @@ export default function SocialHubScreen() {
               <Text style={styles.completionText}>
                 Amazing! Completed all <Text style={styles.completionHighlight}>{activity.countries_count} countries</Text> in{' '}
                 <Text style={[styles.completionHighlight, { color: '#1E8A8A' }]}>
-                  {activity.continent?.charAt(0).toUpperCase() + activity.continent?.slice(1)}
+                  {(activity.continent ?? '').charAt(0).toUpperCase() + (activity.continent ?? '').slice(1)}
                 </Text>!
               </Text>
               <View style={styles.completionPoints}>
@@ -499,19 +499,19 @@ export default function SocialHubScreen() {
               {/* Photo Preview Grid */}
               {activity.photos && activity.photos.length > 0 && (
                 <View style={styles.photoCollagePreview}>
-                  {activity.photos.slice(0, 4).map((photo, index) => (
+                  {activity.photos.slice(0, 4).map((photo: string, index: number) => (
                     <Image
                       key={index}
                       source={{ uri: photo }}
                       style={[
                         styles.photoCollageItem,
-                        activity.photos.length === 1 && styles.photoCollageSingle,
-                        activity.photos.length === 2 && styles.photoCollageHalf,
+                        activity.photos!.length === 1 && styles.photoCollageSingle,
+                        activity.photos!.length === 2 && styles.photoCollageHalf,
                       ]}
                       resizeMode="cover"
                     />
                   ))}
-                  {activity.photos.length > 4 && (
+                  {activity.photos!.length > 4 && (
                     <View style={styles.photoCollageOverlay}>
                       <Text style={styles.photoCollageOverlayText}>+{activity.photos.length - 4}</Text>
                     </View>
