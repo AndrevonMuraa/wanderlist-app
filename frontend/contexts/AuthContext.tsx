@@ -10,13 +10,15 @@ interface User {
   name: string;
   picture?: string;
   is_premium: boolean;
+  subscription_tier?: string;
+  role?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, name: string) => Promise<void>;
+  register: (email: string, password: string, name: string, username?: string) => Promise<void>;
   sendMagicCode: (email: string) => Promise<void>;
   verifyMagicCode: (email: string, code: string) => Promise<void>;
   loginWithApple: () => Promise<void>;

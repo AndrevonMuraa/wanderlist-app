@@ -32,6 +32,11 @@ interface ThemeColors {
   overlayStrong: string;
   border: string;
   borderLight: string;
+  backgroundSecondary: string;
+  accentLight: string;
+  accentDark: string;
+  ocean: string;
+  surfaceVariant: string;
   countryAccents: typeof countryAccents;
 }
 
