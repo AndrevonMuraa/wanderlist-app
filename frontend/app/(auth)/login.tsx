@@ -269,7 +269,7 @@ export default function LoginScreen() {
                   onPress={() => { setLoginMode('main'); setMagicCodeSent(false); setMagicCode(''); setError(''); }}
                   style={styles.linkContainer}
                 >
-                  <Text style={styles.linkText}>Back to login options</Text>
+                  <Text style={styles.linkText}>Back to login</Text>
                 </TouchableOpacity>
               </>
             )}
@@ -422,6 +422,11 @@ const styles = StyleSheet.create({
     ...theme.typography.body,
     color: theme.colors.primary,
     fontWeight: '600',
+  },
+  forgotPasswordText: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    fontWeight: '500',
   },
   legalLinks: {
     flexDirection: 'row',
