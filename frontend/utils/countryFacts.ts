@@ -83,9 +83,88 @@ export const COUNTRY_FUN_FACTS: { [key: string]: string[] } = {
     "Mexicans consume more Coca-Cola per capita than any country.",
     "Chocolate, corn, and chili peppers all originated in Mexico!",
   ],
-};
 
-export const getCountryFunFact = (countryId: string): string | null => {
+  // European additions
+  sweden: [
+    "Sweden has the most islands in the world with over 267,570!",
+    "IKEA's founder started his business at the age of 5, selling matches.",
+    "Sweden was the first country to open a hotel made entirely of ice.",
+  ],
+  denmark: [
+    "Denmark has the oldest monarchy in Europe, dating back over 1,000 years!",
+    "LEGO was invented in Denmark - the name means 'play well' in Danish.",
+    "Copenhagen's Tivoli Gardens inspired Walt Disney to create Disneyland.",
+  ],
+  iceland: [
+    "Iceland has no army, navy, or air force - one of the most peaceful countries!",
+    "Over 60% of Icelanders believe in elves and 'hidden people'.",
+    "Iceland produces so much geothermal energy that they heat sidewalks to melt snow.",
+  ],
+  croatia: [
+    "The necktie was invented in Croatia - the word 'cravat' comes from 'Croat'!",
+    "Dubrovnik was the filming location for King's Landing in Game of Thrones.",
+    "Croatia has one of the world's smallest towns, Hum, with only 30 residents.",
+  ],
+  austria: [
+    "The world's oldest zoo is in Vienna - Schönbrunn Zoo, founded in 1752.",
+    "Austria has more opera houses per capita than any other country.",
+    "The croissant was actually invented in Vienna, not France!",
+  ],
+
+  // Asian additions
+  cambodia: [
+    "Angkor Wat is the largest religious monument in the world, over 400 acres!",
+    "Cambodia's flag is one of only two featuring a building.",
+    "The Tonle Sap river reverses its flow direction twice a year!",
+  ],
+  nepal: [
+    "Nepal is home to 8 of the world's 14 highest mountains!",
+    "Nepal's flag is the only non-rectangular national flag in the world.",
+    "The Nepali calendar is about 57 years ahead of the Western calendar.",
+  ],
+  sri_lanka: [
+    "Sri Lanka was the first country to have a female prime minister - in 1960!",
+    "The island is called the 'Pearl of the Indian Ocean'.",
+    "Sri Lanka has the highest biodiversity density in Asia.",
+  ],
+  philippines: [
+    "The Philippines is made up of 7,641 islands!",
+    "Filipinos send the most text messages per day of any country.",
+    "The Philippines has the longest Christmas season - starting in September!",
+  ],
+  taiwan: [
+    "Taiwan has more convenience stores per capita than anywhere else!",
+    "Bubble tea (boba) was invented in Taiwan in the 1980s.",
+    "Taiwan's Taipei 101 was the world's tallest building from 2004 to 2010.",
+  ],
+
+  // Caribbean additions
+  jamaica: [
+    "Jamaica was the first Caribbean country to gain independence, in 1962!",
+    "Usain Bolt, the fastest human ever, is Jamaican.",
+    "Jamaica has the most churches per square mile of any country.",
+  ],
+  cuba: [
+    "Cuba has one of the highest literacy rates in the world at 99.8%!",
+    "Classic American cars from the 1950s still drive through Havana daily.",
+    "Cuba has free healthcare and education for all its citizens.",
+  ],
+  dominican_republic: [
+    "Santo Domingo is the oldest European city in the Americas, founded 1496!",
+    "Dominican Republic produces 70% of the world's organic cocoa.",
+    "Merengue music originated in the Dominican Republic.",
+  ],
+  bahamas: [
+    "The Bahamas has over 700 islands, but only about 30 are inhabited!",
+    "The famous swimming pigs of Exuma attract visitors worldwide.",
+    "Dean's Blue Hole is the world's deepest saltwater blue hole at 663 feet.",
+  ],
+  barbados: [
+    "Barbados is the birthplace of rum - Mount Gay has been producing since 1703!",
+    "The island was named after the bearded fig trees found by explorers.",
+    "Barbados was the first Caribbean island to have piped water and electricity.",
+  ],
+}; = (countryId: string): string | null => {
   const facts = COUNTRY_FUN_FACTS[countryId];
   if (!facts || facts.length === 0) return null;
   
