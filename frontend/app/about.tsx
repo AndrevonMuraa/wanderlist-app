@@ -199,12 +199,12 @@ export default function AboutScreen() {
           <Surface style={styles.statsCard}>
             <View style={styles.statsGrid}>
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>680+</Text>
+                <Text style={styles.statNumber}>740+</Text>
                 <Text style={styles.statLabel}>Landmarks</Text>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>63</Text>
+                <Text style={styles.statNumber}>66</Text>
                 <Text style={styles.statLabel}>Countries</Text>
               </View>
               <View style={styles.statDivider} />
@@ -356,7 +356,7 @@ You can filter by country, year, or type.`}
               number={1}
               icon="compass"
               title="Explore Landmarks"
-              description="Browse 680+ landmarks across 63 countries and 5 continents."
+              description="Browse 740+ landmarks across 66 countries and 5 continents."
             />
             <HowItWorksStep
               number={2}
