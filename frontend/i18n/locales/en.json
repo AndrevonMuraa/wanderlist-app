@@ -153,15 +153,6 @@
     "landmarksPerCountry": "Average: {{count}} landmarks per country",
     "pointsPerLandmark": "{{count}} points per landmark on average"
   },
-  "map": {
-    "title": "My Travel Map",
-    "placesVisited": "{{count}} places visited",
-    "all": "All",
-    "loadingTravels": "Loading your travels...",
-    "noPlacesYet": "No places yet",
-    "startExploring": "Start exploring and your visited places will appear here!",
-    "openMobileApp": "Open in the mobile app for an interactive map experience!"
-  },
   "notifications": {
     "title": "Notifications",
     "pushNotifications": "Push Notifications",
