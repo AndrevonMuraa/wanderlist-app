@@ -3208,9 +3208,8 @@ async def add_to_bucket_list(data: BucketListCreate, current_user: User = Depend
     
     await db.bucket_list.insert_one(bucket_item)
     
-
-
-# ============= COUNTRY VISITS ENDPOINTS =============
+    bucket_item.pop("_id", None)
+    return bucket_item
 
 @api_router.delete("/bucket-list/{bucket_list_id}")
 async def remove_from_bucket_list(bucket_list_id: str, current_user: User = Depends(get_current_user)):
