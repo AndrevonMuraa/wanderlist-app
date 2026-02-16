@@ -207,6 +207,51 @@ export default function AdminUsersScreen() {
       </View>
 
       <View style={styles.userActions}>
+        {/* Role management */}
+        {user.role === 'user' && (
+          <TouchableOpacity 
+            style={[styles.actionButton, { backgroundColor: '#3b82f6' + '20' }]}
+            onPress={() => {
+              Alert.alert('Promote to Moderator', `Make ${user.name} a moderator?`, [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Promote', onPress: () => handleUserAction(user.user_id, 'make_mod') }
+              ]);
+            }}
+            data-testid={`promote-mod-${user.user_id}`}
+          >
+            <Ionicons name="shield-outline" size={16} color="#3b82f6" />
+          </TouchableOpacity>
+        )}
+        {user.role === 'moderator' && (
+          <>
+            <TouchableOpacity 
+              style={[styles.actionButton, { backgroundColor: '#8b5cf6' + '20' }]}
+              onPress={() => {
+                Alert.alert('Promote to Admin', `Make ${user.name} an admin?`, [
+                  { text: 'Cancel', style: 'cancel' },
+                  { text: 'Promote', onPress: () => handleUserAction(user.user_id, 'make_admin') }
+                ]);
+              }}
+              data-testid={`promote-admin-${user.user_id}`}
+            >
+              <Ionicons name="shield-checkmark-outline" size={16} color="#8b5cf6" />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.actionButton, { backgroundColor: colors.textSecondary + '20' }]}
+              onPress={() => {
+                Alert.alert('Demote User', `Remove ${user.name}'s moderator role?`, [
+                  { text: 'Cancel', style: 'cancel' },
+                  { text: 'Demote', style: 'destructive', onPress: () => handleUserAction(user.user_id, 'demote') }
+                ]);
+              }}
+              data-testid={`demote-${user.user_id}`}
+            >
+              <Ionicons name="person-remove-outline" size={16} color={colors.textSecondary} />
+            </TouchableOpacity>
+          </>
+        )}
+
+        {/* Ban/Unban */}
         {!user.is_banned ? (
           <TouchableOpacity 
             style={[styles.actionButton, { backgroundColor: colors.error + '20' }]}
