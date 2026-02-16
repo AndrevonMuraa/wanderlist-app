@@ -18,7 +18,7 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [loginMode, setLoginMode] = useState<'main' | 'password' | 'magic'>('main');
+  const [loginMode, setLoginMode] = useState<'main' | 'magic'>('main');
   const [magicCodeSent, setMagicCodeSent] = useState(false);
   const { login, sendMagicCode, verifyMagicCode, loginWithApple, isAppleSignInAvailable } = useAuth();
   const router = useRouter();
@@ -121,7 +121,7 @@ export default function LoginScreen() {
           </View>
 
           <Surface style={styles.surface}>
-            {/* Main login screen */}
+            {/* Main login screen — password is primary */}
             {loginMode === 'main' && (
               <>
                 <TextInput
@@ -138,34 +138,45 @@ export default function LoginScreen() {
                   data-testid="login-email-input"
                 />
 
-                {/* Magic Link Button - Primary action */}
+                <TextInput
+                  label="Password"
+                  value={password}
+                  onChangeText={setPassword}
+                  mode="outlined"
+                  secureTextEntry
+                  style={styles.input}
+                  outlineColor={theme.colors.border}
+                  activeOutlineColor={theme.colors.primary}
+                  textColor={theme.colors.text}
+                  data-testid="login-password-input"
+                />
+
                 <Button
                   mode="contained"
-                  onPress={() => {
-                    if (!email) {
-                      setError('Please enter your email');
-                      return;
-                    }
-                    setLoginMode('magic');
-                    handleSendMagicCode();
-                  }}
+                  onPress={handleLogin}
                   loading={loading}
                   disabled={loading}
                   style={styles.button}
                   buttonColor={theme.colors.primary}
                   textColor="#fff"
-                  icon="email-fast-outline"
-                  data-testid="magic-link-button"
+                  data-testid="login-button"
                 >
-                  Send Login Code
+                  Login
                 </Button>
 
                 <TouchableOpacity
-                  onPress={() => setLoginMode('password')}
+                  onPress={() => {
+                    if (!email) {
+                      setError('Please enter your email first');
+                      return;
+                    }
+                    setLoginMode('magic');
+                    handleSendMagicCode();
+                  }}
                   style={styles.linkContainer}
-                  data-testid="use-password-link"
+                  data-testid="forgot-password-link"
                 >
-                  <Text style={styles.linkText}>Use password instead</Text>
+                  <Text style={styles.forgotPasswordText}>Forgot password?</Text>
                 </TouchableOpacity>
 
                 <View style={styles.divider}>
@@ -202,56 +213,7 @@ export default function LoginScreen() {
               </>
             )}
 
-            {/* Password login */}
-            {loginMode === 'password' && (
-              <>
-                <TextInput
-                  label="Email"
-                  value={email}
-                  onChangeText={setEmail}
-                  mode="outlined"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  style={styles.input}
-                  outlineColor={theme.colors.border}
-                  activeOutlineColor={theme.colors.primary}
-                  textColor={theme.colors.text}
-                />
-
-                <TextInput
-                  label="Password"
-                  value={password}
-                  onChangeText={setPassword}
-                  mode="outlined"
-                  secureTextEntry
-                  style={styles.input}
-                  outlineColor={theme.colors.border}
-                  activeOutlineColor={theme.colors.primary}
-                  textColor={theme.colors.text}
-                />
-
-                <Button
-                  mode="contained"
-                  onPress={handleLogin}
-                  loading={loading}
-                  disabled={loading}
-                  style={styles.button}
-                  buttonColor={theme.colors.primary}
-                  textColor="#fff"
-                >
-                  Login
-                </Button>
-
-                <TouchableOpacity
-                  onPress={() => { setLoginMode('main'); setError(''); }}
-                  style={styles.linkContainer}
-                >
-                  <Text style={styles.linkText}>Back to login options</Text>
-                </TouchableOpacity>
-              </>
-            )}
-
-            {/* Magic code verification */}
+            {/* Magic code verification — accessed via "Forgot password?" */}
             {loginMode === 'magic' && (
               <>
                 {!magicCodeSent ? (
