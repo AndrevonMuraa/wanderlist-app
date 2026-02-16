@@ -78,6 +78,19 @@ const countryFlags: Record<string, string> = {
   belgium: '🇧🇪',
   sweden: '🇸🇪',
   norway: '🇳🇴',
+  denmark: '🇩🇰',
+  iceland: '🇮🇸',
+  croatia: '🇭🇷',
+  cambodia: '🇰🇭',
+  nepal: '🇳🇵',
+  'sri lanka': '🇱🇰',
+  philippines: '🇵🇭',
+  taiwan: '🇹🇼',
+  jamaica: '🇯🇲',
+  cuba: '🇨🇺',
+  'dominican republic': '🇩🇴',
+  bahamas: '🇧🇸',
+  barbados: '🇧🇧',
 };
 
 const getCountryFlag = (countryName: string): string => {
