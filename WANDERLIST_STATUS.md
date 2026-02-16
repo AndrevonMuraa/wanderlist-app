@@ -30,7 +30,7 @@
 
 **Version:** 2.0.0 (Session 2 Complete)
 **Status:** Production Ready with Full Feature Set
-**Preview URL:** https://sign-in-bridge.preview.emergentagent.com
+**Preview URL:** https://expo-refactor-1.preview.emergentagent.com
 **Test Credentials:** mobile@test.com / test123 (Free tier)
 
 ### ✅ NEW IN SESSION 2:

@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 
 // Production backend URL - hardcoded as fallback to ensure it's always available
-const PRODUCTION_BACKEND_URL = 'https://sign-in-bridge.preview.emergentagent.com';
+const PRODUCTION_BACKEND_URL = 'https://expo-refactor-1.preview.emergentagent.com';
 
 // Determine the correct backend URL based on environment
 const getBackendURL = () => {
