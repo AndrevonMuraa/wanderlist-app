@@ -14,10 +14,13 @@ import OnboardingFlow, { shouldShowOnboarding } from '../../components/Onboardin
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [magicCode, setMagicCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const { login, loginWithApple, isAppleSignInAvailable } = useAuth();
+  const [loginMode, setLoginMode] = useState<'main' | 'password' | 'magic'>('main');
+  const [magicCodeSent, setMagicCodeSent] = useState(false);
+  const { login, sendMagicCode, verifyMagicCode, loginWithApple, isAppleSignInAvailable } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -33,7 +36,6 @@ export default function LoginScreen() {
     setShowOnboarding(false);
   };
 
-  // Show onboarding for first-time users
   if (showOnboarding) {
     return <OnboardingFlow onComplete={handleOnboardingComplete} />;
   }
@@ -43,10 +45,8 @@ export default function LoginScreen() {
       setError('Please fill in all fields');
       return;
     }
-
     setLoading(true);
     setError('');
-
     try {
       await login(email, password);
       router.replace('/(tabs)/explore');
@@ -57,18 +57,49 @@ export default function LoginScreen() {
     }
   };
 
+  const handleSendMagicCode = async () => {
+    if (!email) {
+      setError('Please enter your email');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    try {
+      await sendMagicCode(email);
+      setMagicCodeSent(true);
+    } catch (err: any) {
+      setError(err.message || 'Failed to send code');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyMagicCode = async () => {
+    if (!magicCode || magicCode.length !== 6) {
+      setError('Please enter the 6-digit code');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    try {
+      await verifyMagicCode(email, magicCode);
+      router.replace('/(tabs)/explore');
+    } catch (err: any) {
+      setError(err.message || 'Invalid code');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleAppleLogin = async () => {
     setLoading(true);
     setError('');
-
     try {
       await loginWithApple();
       router.replace('/(tabs)/explore');
     } catch (err: any) {
       if (err.message !== 'Apple Sign-In was cancelled') {
-        // Show detailed error for debugging
-        const errorMsg = err.message || 'Unknown error';
-        setError(`Apple login: ${errorMsg}`);
+        setError(`Apple login: ${err.message || 'Unknown error'}`);
       }
       setLoading(false);
     }
