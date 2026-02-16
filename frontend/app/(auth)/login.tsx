@@ -121,74 +121,196 @@ export default function LoginScreen() {
           </View>
 
           <Surface style={styles.surface}>
-            <TextInput
-              label="Email"
-              value={email}
-              onChangeText={setEmail}
-              mode="outlined"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              style={styles.input}
-              outlineColor={theme.colors.border}
-              activeOutlineColor={theme.colors.primary}
-              textColor={theme.colors.text}
-            />
+            {/* Main login screen */}
+            {loginMode === 'main' && (
+              <>
+                <TextInput
+                  label="Email"
+                  value={email}
+                  onChangeText={setEmail}
+                  mode="outlined"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  style={styles.input}
+                  outlineColor={theme.colors.border}
+                  activeOutlineColor={theme.colors.primary}
+                  textColor={theme.colors.text}
+                  data-testid="login-email-input"
+                />
 
-            <TextInput
-              label="Password"
-              value={password}
-              onChangeText={setPassword}
-              mode="outlined"
-              secureTextEntry
-              style={styles.input}
-              outlineColor={theme.colors.border}
-              activeOutlineColor={theme.colors.primary}
-              textColor={theme.colors.text}
-            />
+                {/* Magic Link Button - Primary action */}
+                <Button
+                  mode="contained"
+                  onPress={() => {
+                    if (!email) {
+                      setError('Please enter your email');
+                      return;
+                    }
+                    setLoginMode('magic');
+                    handleSendMagicCode();
+                  }}
+                  loading={loading}
+                  disabled={loading}
+                  style={styles.button}
+                  buttonColor={theme.colors.primary}
+                  textColor="#fff"
+                  icon="email-fast-outline"
+                  data-testid="magic-link-button"
+                >
+                  Send Login Code
+                </Button>
 
-            <Button
-              mode="contained"
-              onPress={handleLogin}
-              loading={loading}
-              disabled={loading}
-              style={styles.button}
-              buttonColor={theme.colors.primary}
-              textColor="#fff"
-            >
-              Login
-            </Button>
+                <TouchableOpacity
+                  onPress={() => setLoginMode('password')}
+                  style={styles.linkContainer}
+                  data-testid="use-password-link"
+                >
+                  <Text style={styles.linkText}>Use password instead</Text>
+                </TouchableOpacity>
 
-            <View style={styles.divider}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>OR</Text>
-              <View style={styles.dividerLine} />
-            </View>
+                <View style={styles.divider}>
+                  <View style={styles.dividerLine} />
+                  <Text style={styles.dividerText}>OR</Text>
+                  <View style={styles.dividerLine} />
+                </View>
 
-            {/* Apple Sign-In Button */}
-            {Platform.OS === 'ios' && isAppleSignInAvailable ? (
-              <AppleAuthentication.AppleAuthenticationButton
-                buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-                buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-                cornerRadius={8}
-                style={styles.appleButton}
-                onPress={handleAppleLogin}
-              />
-            ) : Platform.OS !== 'ios' ? (
-              <TouchableOpacity
-                style={styles.appleButtonFallback}
-                onPress={() => setError('Apple Sign-In is only available on iOS devices')}
-              >
-                <Ionicons name="logo-apple" size={20} color="#fff" />
-                <Text style={styles.appleButtonFallbackText}>Sign in with Apple</Text>
-              </TouchableOpacity>
-            ) : null}
+                {/* Apple Sign-In Button */}
+                {Platform.OS === 'ios' && isAppleSignInAvailable ? (
+                  <AppleAuthentication.AppleAuthenticationButton
+                    buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+                    buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+                    cornerRadius={8}
+                    style={styles.appleButton}
+                    onPress={handleAppleLogin}
+                  />
+                ) : Platform.OS !== 'ios' ? (
+                  <TouchableOpacity
+                    style={styles.appleButtonFallback}
+                    onPress={() => setError('Apple Sign-In is only available on iOS devices')}
+                  >
+                    <Ionicons name="logo-apple" size={20} color="#fff" />
+                    <Text style={styles.appleButtonFallbackText}>Sign in with Apple</Text>
+                  </TouchableOpacity>
+                ) : null}
 
-            <TouchableOpacity
-              onPress={() => router.push('/(auth)/register')}
-              style={styles.linkContainer}
-            >
-              <Text style={styles.linkText}>Don't have an account? Sign up</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => router.push('/(auth)/register')}
+                  style={styles.linkContainer}
+                >
+                  <Text style={styles.linkText}>Don't have an account? Sign up</Text>
+                </TouchableOpacity>
+              </>
+            )}
+
+            {/* Password login */}
+            {loginMode === 'password' && (
+              <>
+                <TextInput
+                  label="Email"
+                  value={email}
+                  onChangeText={setEmail}
+                  mode="outlined"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  style={styles.input}
+                  outlineColor={theme.colors.border}
+                  activeOutlineColor={theme.colors.primary}
+                  textColor={theme.colors.text}
+                />
+
+                <TextInput
+                  label="Password"
+                  value={password}
+                  onChangeText={setPassword}
+                  mode="outlined"
+                  secureTextEntry
+                  style={styles.input}
+                  outlineColor={theme.colors.border}
+                  activeOutlineColor={theme.colors.primary}
+                  textColor={theme.colors.text}
+                />
+
+                <Button
+                  mode="contained"
+                  onPress={handleLogin}
+                  loading={loading}
+                  disabled={loading}
+                  style={styles.button}
+                  buttonColor={theme.colors.primary}
+                  textColor="#fff"
+                >
+                  Login
+                </Button>
+
+                <TouchableOpacity
+                  onPress={() => { setLoginMode('main'); setError(''); }}
+                  style={styles.linkContainer}
+                >
+                  <Text style={styles.linkText}>Back to login options</Text>
+                </TouchableOpacity>
+              </>
+            )}
+
+            {/* Magic code verification */}
+            {loginMode === 'magic' && (
+              <>
+                {!magicCodeSent ? (
+                  <View style={styles.magicLoadingContainer}>
+                    <Text style={styles.magicSubtitle}>Sending code to {email}...</Text>
+                  </View>
+                ) : (
+                  <>
+                    <View style={styles.magicHeader}>
+                      <Ionicons name="mail-outline" size={40} color={theme.colors.primary} />
+                      <Text style={styles.magicTitle}>Check your email</Text>
+                      <Text style={styles.magicSubtitle}>We sent a 6-digit code to{'\n'}{email}</Text>
+                    </View>
+
+                    <TextInput
+                      label="Enter 6-digit code"
+                      value={magicCode}
+                      onChangeText={(text) => setMagicCode(text.replace(/[^0-9]/g, '').slice(0, 6))}
+                      mode="outlined"
+                      keyboardType="number-pad"
+                      style={[styles.input, styles.codeInput]}
+                      outlineColor={theme.colors.border}
+                      activeOutlineColor={theme.colors.primary}
+                      textColor={theme.colors.text}
+                      maxLength={6}
+                      data-testid="magic-code-input"
+                    />
+
+                    <Button
+                      mode="contained"
+                      onPress={handleVerifyMagicCode}
+                      loading={loading}
+                      disabled={loading || magicCode.length !== 6}
+                      style={styles.button}
+                      buttonColor={theme.colors.primary}
+                      textColor="#fff"
+                      data-testid="verify-code-button"
+                    >
+                      Verify & Login
+                    </Button>
+
+                    <TouchableOpacity
+                      onPress={handleSendMagicCode}
+                      style={styles.linkContainer}
+                      disabled={loading}
+                    >
+                      <Text style={styles.linkText}>Resend code</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
+
+                <TouchableOpacity
+                  onPress={() => { setLoginMode('main'); setMagicCodeSent(false); setMagicCode(''); setError(''); }}
+                  style={styles.linkContainer}
+                >
+                  <Text style={styles.linkText}>Back to login options</Text>
+                </TouchableOpacity>
+              </>
+            )}
 
             {/* Legal Links */}
             <View style={styles.legalLinks}>
