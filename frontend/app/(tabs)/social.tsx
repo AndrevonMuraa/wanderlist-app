@@ -43,6 +43,7 @@ interface Activity {
   landmark_name?: string;
   country_name?: string;
   country_id?: string;
+  country_visit_id?: string;
   continent?: string;
   countries_count?: number;
   landmarks_count?: number;
@@ -57,6 +58,8 @@ interface Activity {
   has_tips?: boolean;
   has_photos?: boolean;
   photo_count?: number;
+  photos?: string[];
+  diary?: string;
   visibility?: 'public' | 'friends' | 'private';
 }
 
