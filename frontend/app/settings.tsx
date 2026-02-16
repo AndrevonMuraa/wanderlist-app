@@ -296,20 +296,6 @@ export default function SettingsScreen() {
           </View>
           
           <View style={[styles.accountList, { backgroundColor: colors.background }]}>
-            <TouchableOpacity 
-              style={styles.accountItem}
-              onPress={() => router.push('/language-settings')}
-              activeOpacity={0.7}
-            >
-              <View style={styles.settingItemLeft}>
-                <View style={[styles.settingIcon, { backgroundColor: colors.accentTeal + '15' }]}>
-                  <Ionicons name="language" size={18} color={colors.accentTeal} />
-                </View>
-                <Text style={[styles.accountLabel, { color: colors.text }]}>{t('settings.language')}</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
-            </TouchableOpacity>
-            
             {/* Admin Panel - Only visible to admins/moderators */}
             {isAdmin && (
               <>
