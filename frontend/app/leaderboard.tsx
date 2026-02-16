@@ -160,7 +160,7 @@ export default function LeaderboardScreen() {
           <View style={styles.userInfo}>
             <View style={styles.nameRow}>
               <Text style={styles.userName} numberOfLines={1}>{entry.name}</Text>
-              <RankBadge rank={rankInfo.name} size={18} />
+              <RankBadge rank={rankInfo} size="small" />
             </View>
             {entry.username && (
               <Text style={styles.username}>@{entry.username}</Text>
