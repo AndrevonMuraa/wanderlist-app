@@ -59,6 +59,13 @@ export const lightColors = {
   // Borders - Subtle
   border: '#E8E4DF',
   borderLight: '#F0EDE8',
+
+  // Additional properties used across the app
+  backgroundSecondary: '#EDE9E3',  // Slightly darker cream for secondary backgrounds
+  accentLight: '#E5D5A0',         // Lighter gold accent
+  accentDark: '#A88850',          // Deeper gold accent
+  ocean: '#4DB8D8',               // Ocean blue alias
+  surfaceVariant: '#F0EDE8',      // Surface variant for maps/cards
 };
 
 // Country-specific accent colors
@@ -107,6 +114,7 @@ export const borderRadius = {
   lg: 16,
   xl: 20,
   xxl: 24,  // Large rounded cards like in the design
+  full: 999,
   round: 999,
 };
 
@@ -209,6 +217,13 @@ export const shadows = {
     shadowOpacity: 0.12,
     shadowRadius: 24,
     elevation: 12,
+  },
+  card: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
   },
 };
 
