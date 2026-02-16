@@ -352,6 +352,7 @@ export default function AdminUsersScreen() {
           <FilterChip label="All" value={null} active={filter === null} />
           <FilterChip label="Banned" value="banned" active={filter === 'banned'} />
           <FilterChip label="Pro Users" value="pro" active={filter === 'pro'} />
+          <FilterChip label="Moderators" value="moderator" active={filter === 'moderator'} />
           <FilterChip label="Admins" value="admin" active={filter === 'admin'} />
         </View>
       </ScrollView>
