@@ -8,7 +8,7 @@ import { useAuth } from '../contexts/AuthContext';
 export default function AutoLoginScreen() {
   const router = useRouter();
   const { token } = useLocalSearchParams();
-  const { refreshAuth } = useAuth();
+  const { refreshUser } = useAuth();
   const [status, setStatus] = useState('Logging you in...');
 
   useEffect(() => {
