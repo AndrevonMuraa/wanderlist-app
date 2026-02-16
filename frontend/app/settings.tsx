@@ -173,16 +173,16 @@ export default function SettingsScreen() {
         <View style={styles.headerRow}>
           <View style={styles.headerLeft}>
             <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={24} color={isDark ? colors.text : '#fff'} />
+              <Ionicons name="arrow-back" size={24} color={'#fff'} />
             </TouchableOpacity>
-            <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>{t('settings.title')}</Text>
+            <Text style={[styles.headerTitle, { color: '#fff' }]}>{t('settings.title')}</Text>
           </View>
           <TouchableOpacity 
             style={styles.brandingContainer}
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <HeaderBranding size={18} textColor={isDark ? colors.text : "#2A2A2A"} />
+            <HeaderBranding size={18} textColor={"#2A2A2A"} />
           </TouchableOpacity>
         </View>
       </LinearGradient>
