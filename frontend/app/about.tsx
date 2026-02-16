@@ -549,7 +549,7 @@ You can filter by country, year, or type.`}
             <View style={styles.infoDivider} />
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Database</Text>
-              <Text style={styles.infoValue}>680+ landmarks, 63 countries</Text>
+              <Text style={styles.infoValue}>740+ landmarks, 66 countries</Text>
             </View>
           </Surface>
         </View>
