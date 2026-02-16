@@ -15,7 +15,7 @@ interface ProFeatureLockProps {
 const FEATURE_INFO = {
   premium_landmarks: {
     title: 'Premium Landmarks',
-    description: 'Unlock 92 premium landmarks including Blue Lagoon, Zhangjiajie, and more exclusive destinations.',
+    description: 'Unlock 150+ premium landmarks including Blue Lagoon, Zhangjiajie, and more exclusive destinations.',
     icon: 'diamond' as const,
     benefits: [
       '92 Premium Landmarks',

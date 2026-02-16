@@ -1442,7 +1442,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     if landmark.get("category") == "premium" and not is_user_pro(current_user):
         raise HTTPException(
             status_code=403, 
-            detail="WanderMark Pro required to visit premium landmarks. Upgrade to unlock 92 premium landmarks!"
+            detail="WanderMark Pro required to visit premium landmarks. Upgrade to unlock 150+ premium landmarks!"
         )
     
     # Get user limits based on subscription
@@ -4661,7 +4661,7 @@ async def upgrade_subscription(
         "subscription_tier": "pro",
         "expires_at": expires_at.isoformat(),
         "features_unlocked": [
-            "Access to 92 premium landmarks",
+            "Access to 150+ premium landmarks",
             "Unlimited friends",
             "Up to 10 photos per visit",
             "Custom visits feature",
