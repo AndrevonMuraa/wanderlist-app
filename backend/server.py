@@ -814,6 +814,117 @@ async def apple_callback(auth_data: AppleAuthRequest, response: Response):
         logging.error(f"[Apple Auth] Unexpected error: {type(e).__name__}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Apple login error: {str(e)}")
 
+# ============= MAGIC LINK AUTH =============
+
+@api_router.post("/auth/magic-link/send")
+async def send_magic_link(data: MagicLinkRequest):
+    """Send a 6-digit login code to the user's email."""
+    import asyncio
+    import resend
+    import random
+    
+    resend.api_key = os.environ.get("RESEND_API_KEY")
+    sender_email = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
+    
+    if not resend.api_key:
+        raise HTTPException(status_code=500, detail="Email service not configured")
+    
+    email = data.email.strip().lower()
+    if not email:
+        raise HTTPException(status_code=400, detail="Email is required")
+    
+    # Generate 6-digit code
+    code = str(random.randint(100000, 999999))
+    expires_at = datetime.now(timezone.utc) + timedelta(minutes=10)
+    
+    # Store code in database
+    await db.magic_codes.delete_many({"email": email})
+    await db.magic_codes.insert_one({
+        "email": email,
+        "code": code,
+        "expires_at": expires_at,
+        "created_at": datetime.now(timezone.utc)
+    })
+    
+    # Send email
+    html_content = f"""
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 400px; margin: 0 auto; padding: 40px 20px;">
+        <h2 style="color: #1a1a2e; margin-bottom: 8px;">WanderMark Login</h2>
+        <p style="color: #666; font-size: 15px; margin-bottom: 24px;">Enter this code to log in:</p>
+        <div style="background: #f0f4ff; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px;">
+            <span style="font-size: 36px; font-weight: 700; letter-spacing: 8px; color: #1a1a2e;">{code}</span>
+        </div>
+        <p style="color: #999; font-size: 13px;">This code expires in 10 minutes. If you didn't request this, you can safely ignore this email.</p>
+    </div>
+    """
+    
+    try:
+        params = {
+            "from": sender_email,
+            "to": [email],
+            "subject": f"WanderMark login code: {code}",
+            "html": html_content,
+        }
+        await asyncio.to_thread(resend.Emails.send, params)
+        logging.info(f"[Magic Link] Code sent to {email}")
+        return {"status": "sent", "message": "Login code sent to your email"}
+    except Exception as e:
+        logging.error(f"[Magic Link] Failed to send email: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
+
+
+@api_router.post("/auth/magic-link/verify")
+async def verify_magic_link(data: MagicLinkVerifyRequest):
+    """Verify the 6-digit code and log the user in."""
+    email = data.email.strip().lower()
+    code = data.code.strip()
+    
+    # Find and validate code
+    record = await db.magic_codes.find_one({"email": email, "code": code}, {"_id": 0})
+    
+    if not record:
+        raise HTTPException(status_code=400, detail="Invalid code")
+    
+    if datetime.now(timezone.utc) > record["expires_at"]:
+        await db.magic_codes.delete_many({"email": email})
+        raise HTTPException(status_code=400, detail="Code expired. Please request a new one.")
+    
+    # Delete used code
+    await db.magic_codes.delete_many({"email": email})
+    
+    # Find or create user
+    existing_user = await db.users.find_one({"email": email}, {"_id": 0})
+    
+    if existing_user:
+        user_id = existing_user["user_id"]
+        logging.info(f"[Magic Link] Existing user logged in: {user_id}")
+    else:
+        user_id = f"user_{uuid.uuid4().hex[:12]}"
+        name = email.split("@")[0]
+        new_user = {
+            "user_id": user_id,
+            "email": email,
+            "name": name,
+            "picture": None,
+            "is_premium": False,
+            "password_hash": None,
+            "created_at": datetime.now(timezone.utc)
+        }
+        await db.users.insert_one(new_user)
+        logging.info(f"[Magic Link] Created new user: {user_id}")
+    
+    # Create JWT token
+    access_token, expires_at = create_access_token({"sub": user_id})
+    user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0, "password_hash": 0})
+    
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": user_doc
+    }
+
+# ============= END MAGIC LINK AUTH =============
+
 @api_router.post("/auth/google/token")
 async def google_token_login(auth_data: GoogleTokenRequest, response: Response):
     """
