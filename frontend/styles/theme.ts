@@ -61,58 +61,7 @@ export const lightColors = {
   borderLight: '#F0EDE8',
 };
 
-// Dark Theme Colors
-export const darkColors = {
-  // Primary Colors - Maldivean Ocean Blues (slightly adjusted for dark)
-  primary: '#5CC4E4',        // Brighter ocean for dark mode
-  primaryDark: '#4DB8D8',    // Ocean blue
-  primaryLight: '#7DCBE3',   // Light tropical water
-  
-  // Secondary Colors - Warm Beach Tones (muted for dark)
-  secondary: '#3D3A35',      // Dark sand tone
-  secondaryLight: '#4A4640', // Slightly lighter
-  
-  // Luxury Accent Colors
-  accent: '#D4B872',         // Brighter gold for dark mode
-  accentYellow: '#FFD700',   // Golden star color
-  accentBronze: '#C9A061',   // Bronze
-  accentCopper: '#E5B685',   // Copper warmth
-  accentTeal: '#2AA5A5',     // Brighter teal for dark mode
-  
-  // Neutrals - Dark Mode
-  background: '#121212',     // True dark background
-  surface: '#1E1E1E',        // Elevated surface
-  surfaceElevated: '#2A2A2A', // More elevated
-  surfaceTinted: '#2D2D2D',  // Lighter tint for stat boxes
-  
-  // Text - High contrast for dark mode
-  text: '#FFFFFF',           // Pure white for best contrast
-  textSecondary: '#C0C0C0',  // Lighter gray - improved contrast
-  textLight: '#A0A0A0',      // Medium-light gray - improved visibility
-  textInverse: '#1E1E1E',    // Dark text on light elements
-  
-  // Status Colors (same as light)
-  success: '#5CC4E4',
-  warning: '#D4B872',
-  error: '#E57373',
-  info: '#5CC4E4',
-  
-  // Tier Colors - Luxury
-  free: '#909090',           // Gray - more visible
-  basic: '#5CC4E4',          // Ocean blue
-  premium: '#D4B872',        // Gold
-  
-  // Overlays - For text on images
-  overlay: 'rgba(0, 0, 0, 0.7)',
-  overlayLight: 'rgba(0, 0, 0, 0.4)',
-  overlayStrong: 'rgba(0, 0, 0, 0.8)',
-  
-  // Borders - more visible in dark mode
-  border: '#404040',
-  borderLight: '#353535',
-};
-
-// Country-specific accent colors (shared between themes)
+// Country-specific accent colors
 export const countryAccents = {
   norway: '#4A90A4',      // Nordic fjord blue
   france: '#9B7EBE',      // Provence lavender
@@ -263,45 +212,10 @@ export const shadows = {
   },
 };
 
-// Dark mode shadows (more subtle)
-export const darkShadows = {
-  sm: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  md: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  lg: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.5,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  xl: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.6,
-    shadowRadius: 24,
-    elevation: 12,
-  },
-};
-
 // Gradients - Ocean to Sand (our signature look)
 export const gradients = {
   // Horizontal ocean to sand - primary brand gradient
   oceanToSand: ['#4DB8D8', '#E8DCC8'] as const,
-  
-  // Dark mode gradient
-  oceanToSandDark: ['#4DB8D8', '#3D3A35'] as const,
   
   // Vertical variations
   oceanDepth: ['#4DB8D8', '#2E9AB5'] as const,
@@ -331,22 +245,7 @@ export const gradients = {
   },
 };
 
-// Helper function to get theme colors
-export const getThemeColors = (isDark: boolean) => {
-  return isDark ? { ...darkColors, countryAccents } : { ...lightColors, countryAccents };
-};
-
-// Helper function to get theme shadows
-export const getThemeShadows = (isDark: boolean) => {
-  return isDark ? darkShadows : shadows;
-};
-
-// Helper function to get gradient colors
-export const getGradientColors = (isDark: boolean) => {
-  return isDark ? gradients.oceanToSandDark : gradients.oceanToSand;
-};
-
-// Default theme export (light mode for backward compatibility)
+// Default theme export
 const theme = {
   colors,
   spacing,
