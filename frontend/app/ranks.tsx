@@ -90,7 +90,7 @@ export default function RanksScreen() {
         {isCurrent && (
           <View style={styles.currentBadge}>
             <LinearGradient
-              colors={rank.gradient}
+              colors={rank.gradient as any}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.currentBadgeGradient}
