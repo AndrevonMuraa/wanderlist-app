@@ -229,7 +229,7 @@ export default function AdminReportsScreen() {
           {report.report_type === 'user' && report.target && (
             <TouchableOpacity 
               style={[styles.actionBtn, { backgroundColor: colors.error + '20' }]}
-              onPress={() => router.push(`/admin/user-detail?id=${report.target_id}`)}
+              onPress={() => router.push(`/admin/user-detail?id=${report.target_id}` as any)}
             >
               <Ionicons name="person" size={18} color={colors.error} />
               <Text style={[styles.actionBtnText, { color: colors.error }]}>View User</Text>

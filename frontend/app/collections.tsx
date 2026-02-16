@@ -199,7 +199,7 @@ export default function CollectionsScreen() {
               <TouchableOpacity
                 onPress={async () => {
                   await lightHaptic();
-                  router.push(`/collection-detail/${collection.collection_id}`);
+                  router.push(`/collection-detail/${collection.collection_id}` as any);
                 }}
                 activeOpacity={0.9}
               >

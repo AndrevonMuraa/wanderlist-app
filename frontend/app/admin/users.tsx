@@ -139,7 +139,7 @@ export default function AdminUsersScreen() {
   const UserCard = ({ user }: { user: UserItem }) => (
     <TouchableOpacity 
       style={[styles.userCard, { backgroundColor: colors.surface }]}
-      onPress={() => router.push(`/admin/user-detail?id=${user.user_id}`)}
+      onPress={() => router.push(`/admin/user-detail?id=${user.user_id}` as any)}
       activeOpacity={0.7}
     >
       <View style={styles.userHeader}>
