@@ -281,7 +281,7 @@ export default function JourneyScreen() {
         {/* Single Row: Title Left, Branding Right */}
         <View style={styles.headerRow}>
           <View style={styles.titleRow}>
-            <Text style={[styles.greeting, { color: isDark ? colors.text : '#fff' }]}>{t('journey.title')}</Text>
+            <Text style={[styles.greeting, { color: '#fff' }]}>{t('journey.title')}</Text>
             {isOfflineData && (
               <View style={styles.offlineBadge}>
                 <Ionicons name="cloud-offline" size={12} color="#fff" />
@@ -293,7 +293,7 @@ export default function JourneyScreen() {
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <HeaderBranding size={18} textColor={isDark ? colors.text : "#2A2A2A"} />
+            <HeaderBranding size={18} textColor={"#2A2A2A"} />
           </TouchableOpacity>
         </View>
       </LinearGradient>

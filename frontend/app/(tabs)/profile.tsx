@@ -182,13 +182,13 @@ export default function ProfileScreen() {
         {/* Single Row: Title + Actions Left, Branding Right */}
         <View style={styles.headerRow}>
           <View style={styles.titleWithActions}>
-            <Text style={[styles.headerTitle, { color: isDark ? colors.text : '#fff' }]}>{t('profile.title')}</Text>
+            <Text style={[styles.headerTitle, { color: '#fff' }]}>{t('profile.title')}</Text>
             <View style={styles.headerButtons}>
               <TouchableOpacity
                 style={styles.headerIconButton}
                 onPress={() => router.push('/notifications')}
               >
-                <Ionicons name="notifications-outline" size={20} color={isDark ? colors.text : '#fff'} />
+                <Ionicons name="notifications-outline" size={20} color={'#fff'} />
                 {unreadCount > 0 && (
                   <View style={styles.notificationBadge}>
                     <Text style={styles.notificationBadgeText}>
@@ -204,7 +204,7 @@ export default function ProfileScreen() {
             onPress={() => router.push('/about')}
             activeOpacity={0.7}
           >
-            <HeaderBranding size={18} textColor={isDark ? colors.text : "#2A2A2A"} />
+            <HeaderBranding size={18} textColor={"#2A2A2A"} />
           </TouchableOpacity>
         </View>
       </LinearGradient>
