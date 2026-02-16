@@ -218,7 +218,7 @@ export default function JourneyScreen() {
 
   const getNextMilestone = () => {
     const visited = progressStats?.overall.visited || 0;
-    // Milestones adjusted for 533 total landmarks
+    // Milestones adjusted for 539 total landmarks
     const milestones = [10, 25, 50, 100, 200, 350, 500];
     const next = milestones.find(m => m > visited);
     if (next) {
