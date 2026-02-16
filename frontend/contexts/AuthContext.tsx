@@ -150,9 +150,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(data.user);
   };
 
-  const loginWithGoogle = async () => {
-    // Google Sign-In temporarily disabled - will be re-enabled in a future update
-    throw new Error('Google Sign-In is temporarily unavailable. Please use Apple Sign-In or email login.');
+  const sendMagicCode = async (email: string) => {
+    const response = await fetch(`${BACKEND_URL}/api/auth/magic-link/send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    if (!response.ok) {
+      const text = await response.text();
+      let msg = `HTTP ${response.status}`;
+      try { msg = JSON.parse(text).detail || msg; } catch (e) { msg = text || msg; }
+      throw new Error(msg);
+    }
+  };
+
+  const verifyMagicCode = async (email: string, code: string) => {
+    const response = await fetch(`${BACKEND_URL}/api/auth/magic-link/verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, code }),
+    });
+    const text = await response.text();
+    if (response.ok) {
+      const data = JSON.parse(text);
+      await setToken(data.access_token);
+      setUser(data.user);
+    } else {
+      let msg = `HTTP ${response.status}`;
+      try { msg = JSON.parse(text).detail || msg; } catch (e) { msg = text || msg; }
+      throw new Error(msg);
+    }
   };
 
   const loginWithApple = async () => {
