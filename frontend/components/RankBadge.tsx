@@ -34,7 +34,7 @@ export default function RankBadge({
   return (
     <View style={[styles.container, style]}>
       <LinearGradient
-        colors={rank.gradient}
+        colors={rank.gradient as any}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={[

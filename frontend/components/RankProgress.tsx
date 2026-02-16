@@ -23,10 +23,10 @@ export default function RankProgress({ points }: RankProgressProps) {
         </View>
         <View style={styles.progressBarContainer}>
           <LinearGradient
-            colors={currentRank.gradient}
+            colors={currentRank.gradient as any}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={[styles.progressBar, { width: '100%' }]}
+            style={[styles.progressBar, { width: '100%' as any }]}
           />
         </View>
         <Text style={styles.maxRankDescription}>
@@ -49,10 +49,10 @@ export default function RankProgress({ points }: RankProgressProps) {
       
       <View style={styles.progressBarContainer}>
         <LinearGradient
-          colors={currentRank.gradient}
+          colors={currentRank.gradient as any}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          style={[styles.progressBar, { width: `${progressPercentage}%` }]}
+          style={[styles.progressBar, { width: `${progressPercentage}%` as any }]}
         />
       </View>
       

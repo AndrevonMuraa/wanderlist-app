@@ -38,7 +38,7 @@ export default function StreakDisplay({
     <View style={styles.container}>
       <View style={styles.streakSection}>
         <LinearGradient
-          colors={flameGradient}
+          colors={flameGradient as any}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={[styles.flameContainer, { 
