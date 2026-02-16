@@ -90,6 +90,21 @@ export const countryAccents = {
   germany: '#6B8E99',     // Rhine blue
   canada: '#D46B6B',      // Maple
   south_africa: '#C8854D', // Safari sunset
+  sweden: '#3B7DD8',      // Swedish blue
+  denmark: '#C8463E',     // Danish red
+  iceland: '#5AAFB4',     // Glacial teal
+  croatia: '#1F5F8B',     // Adriatic blue
+  austria: '#B52D3A',     // Austrian red
+  cambodia: '#C9956A',    // Angkor sandstone
+  nepal: '#6B4E9B',       // Himalayan purple
+  sri_lanka: '#D4A05C',   // Ceylon gold
+  philippines: '#2B9E5C',  // Tropical green
+  taiwan: '#D45B5B',      // Red lantern
+  jamaica: '#1A8B42',     // Jamaican green
+  cuba: '#4682B4',        // Caribbean blue
+  dominican_republic: '#1C5BA4', // Dominican blue
+  bahamas: '#00BCD4',     // Bahama aqua
+  barbados: '#00529B',    // Bajan blue
 };
 
 // For backward compatibility - default to light theme
