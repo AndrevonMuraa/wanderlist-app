@@ -9,10 +9,10 @@ import { Platform, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ⚠️ SET TO FALSE TO USE REAL REVENUECAT
-export const MOCK_PURCHASES = true;
+export const MOCK_PURCHASES = false;
 
 // RevenueCat API Keys
-const REVENUECAT_IOS_KEY = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || 'test_CtFYyqeJsPDwTZgaeoKPUoKJAny';
+const REVENUECAT_IOS_KEY = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || 'appac9346b09b';
 const REVENUECAT_ANDROID_KEY = process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY || '';
 
 // Product identifiers (must match App Store Connect / Play Console)
