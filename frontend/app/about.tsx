@@ -214,7 +214,7 @@ export default function AboutScreen() {
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>6,580</Text>
+                <Text style={styles.statNumber}>9,650</Text>
                 <Text style={styles.statLabel}>Total Points</Text>
               </View>
             </View>
