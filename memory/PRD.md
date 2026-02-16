@@ -86,11 +86,12 @@ WanderMark is a React Native (Expo) travel landmark app. The project went throug
     - Confirmed `react-native-view-shot` and `@react-native-picker/picker` are active and compatible
 15. **Login Redesign (Feb 16, 2026)**: Password login as primary, magic link moved to "Forgot password?"
 
+16. **react-native-maps installed (Feb 16, 2026)**: Installed v1.20.1, resolving the last TS error. **0 TypeScript errors remaining.**
+
 ## Backlog / Future Tasks
 - **P0**: Create EAS build for regression testing on device (covers all session changes)
 - **P1**: Set up verified domain in Resend
 - **P1**: Re-enable RevenueCat with production API key
-- **P3**: Fix remaining TS error (react-native-maps type declarations)
 
 ## Key Files
 - `frontend/contexts/AuthContext.tsx` - Auth logic (Apple + Magic Link)
