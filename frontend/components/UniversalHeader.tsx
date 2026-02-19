@@ -1,0 +1,109 @@
+import React from 'react';
+import { View, StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native';
+import { Text } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
+import theme, { gradients } from '../styles/theme';
+import { HeaderBranding } from './BrandedGlobeIcon';
+
+interface UniversalHeaderProps {
+  title: string;
+  showBack?: boolean;
+  rightElement?: React.ReactNode;
+  onBack?: () => void;  // Custom back handler
+}
+
+export const UniversalHeader: React.FC<UniversalHeaderProps> = ({
+  title,
+  showBack = true,
+  rightElement,
+  onBack,
+}) => {
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      router.back();
+    }
+  };
+
+  return (
+    <LinearGradient
+      colors={gradients.oceanToSand}
+      start={gradients.horizontal.start}
+      end={gradients.horizontal.end}
+      style={[styles.header, { paddingTop: topPadding }]}
+    >
+      <View style={styles.headerRow}>
+        <View style={styles.titleWithBack}>
+          {showBack && (
+            <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+              <Ionicons name="arrow-back" size={22} color="#fff" />
+            </TouchableOpacity>
+          )}
+          <Text style={styles.headerTitle} numberOfLines={1}>{title}</Text>
+        </View>
+        {rightElement && (
+          <View style={styles.rightElementContainer}>
+            {rightElement}
+          </View>
+        )}
+        <TouchableOpacity 
+          style={styles.brandingContainer}
+          onPress={() => router.push('/about')}
+          activeOpacity={0.7}
+        >
+          <HeaderBranding size={18} textColor="#2A2A2A" />
+        </TouchableOpacity>
+      </View>
+    </LinearGradient>
+  );
+};
+
+const styles = StyleSheet.create({
+  header: {
+    paddingHorizontal: theme.spacing.md,
+    paddingBottom: theme.spacing.sm,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 32,
+  },
+  titleWithBack: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  backButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: theme.spacing.sm,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#fff',
+    flex: 1,
+  },
+  rightElementContainer: {
+    marginRight: theme.spacing.sm,
+  },
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+});
+
+export default UniversalHeader;

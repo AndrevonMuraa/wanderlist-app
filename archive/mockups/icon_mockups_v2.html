@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderList Icon - Correct Ocean to Sand Colors</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            padding: 40px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        .color-info {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 15px;
+            background: #252540;
+            border-radius: 10px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .color-info .swatch {
+            display: inline-block;
+            width: 100px;
+            height: 30px;
+            border-radius: 5px;
+            vertical-align: middle;
+            margin: 0 10px;
+        }
+        .color-info .gradient-swatch {
+            background: linear-gradient(90deg, #4DB8D8 0%, #E8DCC8 100%);
+            width: 200px;
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .option {
+            background: #252540;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+        .option h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #4DB8D8;
+        }
+        .option .desc {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+        .icon-container {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* CORRECT Ocean to Sand gradient: #4DB8D8 → #E8DCC8 */
+        .ocean-to-sand {
+            background: linear-gradient(135deg, #4DB8D8 0%, #7DCBE3 30%, #C9CAAE 70%, #E8DCC8 100%);
+        }
+        
+        /* Combined A: W inside Globe Circle + Pin - MAIN DESIGN */
+        .icon-combined-a {
+            background: linear-gradient(135deg, #4DB8D8 0%, #7DCBE3 30%, #C9CAAE 70%, #E8DCC8 100%);
+        }
+        .globe-w-container {
+            position: relative;
+        }
+        .globe-w {
+            width: 120px;
+            height: 120px;
+            border: 5px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .globe-w .w-inside {
+            font-size: 70px;
+            font-weight: 800;
+            color: white;
+            font-family: Georgia, serif;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .mini-pin {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 35px;
+            height: 35px;
+            background: #C9A961;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        /* Gold pin variant */
+        .mini-pin-gold {
+            background: #C9A961;
+        }
+        /* Coral/red pin variant */
+        .mini-pin-coral {
+            background: #D4747E;
+        }
+        /* Turquoise pin variant */
+        .mini-pin-turquoise {
+            background: #2E9AB5;
+        }
+
+        /* Icon variant: Solid turquoise background */
+        .icon-solid-turquoise {
+            background: #4DB8D8;
+        }
+
+        /* Icon variant: Warm sand to turquoise (reversed) */
+        .icon-reversed {
+            background: linear-gradient(135deg, #E8DCC8 0%, #C9CAAE 30%, #7DCBE3 70%, #4DB8D8 100%);
+        }
+
+        .sizes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .size-preview {
+            text-align: center;
+        }
+        .size-preview span {
+            display: block;
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .mini-icon {
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mini-gradient {
+            background: linear-gradient(135deg, #4DB8D8 0%, #E8DCC8 100%);
+        }
+        .mini-solid {
+            background: #4DB8D8;
+        }
+        .size-60 { width: 60px; height: 60px; }
+        .size-40 { width: 40px; height: 40px; border-radius: 9px; }
+        .size-29 { width: 29px; height: 29px; border-radius: 6px; }
+
+        .recommendation {
+            grid-column: span 3;
+            background: linear-gradient(135deg, #1a3a3a, #252540);
+            border: 2px solid #4DB8D8;
+            text-align: center;
+            padding: 30px;
+        }
+        .recommendation h2 {
+            color: #4DB8D8 !important;
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 WanderList Icon - Updated Colors</h1>
+    <p class="subtitle">Using the CORRECT "Ocean to Sand" gradient from theme.ts</p>
+    
+    <div class="color-info">
+        <strong>Ocean to Sand Gradient:</strong><br>
+        <span style="color: #4DB8D8;">#4DB8D8</span> (Maldivean Turquoise) → 
+        <span style="color: #E8DCC8;">#E8DCC8</span> (Warm Sand)<br>
+        <div class="swatch gradient-swatch" style="margin-top: 10px;"></div>
+    </div>
+    
+    <div class="options-grid">
+        <!-- Main Design: Combined A with Gold Pin -->
+        <div class="option">
+            <h2>Design A: Gold Pin</h2>
+            <p class="desc">Ocean to Sand + Luxury Gold accent</p>
+            <div class="icon-container icon-combined-a">
+                <div class="globe-w-container">
+                    <div class="globe-w">
+                        <span class="w-inside">W</span>
+                    </div>
+                    <div class="mini-pin mini-pin-gold"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon mini-gradient size-60" style="position:relative;">
+                        <div style="width:40px;height:40px;border:3px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:22px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                        <div style="position:absolute;top:5px;right:5px;width:14px;height:14px;background:#C9A961;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;"></div>
+                    </div>
+                    <span>60px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon mini-gradient size-40" style="position:relative;">
+                        <div style="width:28px;height:28px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:14px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>40px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design B: Coral/Rose Pin -->
+        <div class="option">
+            <h2>Design B: Coral Pin</h2>
+            <p class="desc">Ocean to Sand + Coral accent</p>
+            <div class="icon-container icon-combined-a">
+                <div class="globe-w-container">
+                    <div class="globe-w">
+                        <span class="w-inside">W</span>
+                    </div>
+                    <div class="mini-pin mini-pin-coral"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon mini-gradient size-60" style="position:relative;">
+                        <div style="width:40px;height:40px;border:3px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:22px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                        <div style="position:absolute;top:5px;right:5px;width:14px;height:14px;background:#D4747E;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;"></div>
+                    </div>
+                    <span>60px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon mini-gradient size-40" style="position:relative;">
+                        <div style="width:28px;height:28px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:14px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>40px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design C: Deep Turquoise Pin -->
+        <div class="option">
+            <h2>Design C: Turquoise Pin</h2>
+            <p class="desc">Ocean to Sand + Deep ocean accent</p>
+            <div class="icon-container icon-combined-a">
+                <div class="globe-w-container">
+                    <div class="globe-w">
+                        <span class="w-inside">W</span>
+                    </div>
+                    <div class="mini-pin mini-pin-turquoise"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon mini-gradient size-60" style="position:relative;">
+                        <div style="width:40px;height:40px;border:3px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:22px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                        <div style="position:absolute;top:5px;right:5px;width:14px;height:14px;background:#2E9AB5;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;"></div>
+                    </div>
+                    <span>60px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon mini-gradient size-40" style="position:relative;">
+                        <div style="width:28px;height:28px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:14px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>40px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design D: Solid Turquoise Background -->
+        <div class="option">
+            <h2>Design D: Solid Turquoise</h2>
+            <p class="desc">Solid #4DB8D8 + Gold pin</p>
+            <div class="icon-container icon-solid-turquoise">
+                <div class="globe-w-container">
+                    <div class="globe-w">
+                        <span class="w-inside">W</span>
+                    </div>
+                    <div class="mini-pin mini-pin-gold"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon mini-solid size-60" style="position:relative;">
+                        <div style="width:40px;height:40px;border:3px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:22px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                        <div style="position:absolute;top:5px;right:5px;width:14px;height:14px;background:#C9A961;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;"></div>
+                    </div>
+                    <span>60px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon mini-solid size-40" style="position:relative;">
+                        <div style="width:28px;height:28px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:14px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>40px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design E: Reversed Gradient -->
+        <div class="option">
+            <h2>Design E: Reversed</h2>
+            <p class="desc">Sand to Ocean + Gold pin</p>
+            <div class="icon-container icon-reversed">
+                <div class="globe-w-container">
+                    <div class="globe-w">
+                        <span class="w-inside">W</span>
+                    </div>
+                    <div class="mini-pin mini-pin-gold"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-60" style="position:relative;background: linear-gradient(135deg, #E8DCC8 0%, #4DB8D8 100%);">
+                        <div style="width:40px;height:40px;border:3px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:22px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                        <div style="position:absolute;top:5px;right:5px;width:14px;height:14px;background:#C9A961;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;"></div>
+                    </div>
+                    <span>60px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-40" style="position:relative;background: linear-gradient(135deg, #E8DCC8 0%, #4DB8D8 100%);">
+                        <div style="width:28px;height:28px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:14px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>40px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Recommendation -->
+        <div class="option recommendation">
+            <h2>⭐ My Pick: Design A (Gold Pin)</h2>
+            <p class="desc">Best match with app's luxury travel theme</p>
+            <div class="icon-container icon-combined-a" style="box-shadow: 0 0 40px rgba(77,184,216,0.5);">
+                <div class="globe-w-container">
+                    <div class="globe-w">
+                        <span class="w-inside">W</span>
+                    </div>
+                    <div class="mini-pin mini-pin-gold"></div>
+                </div>
+            </div>
+            <p style="font-size: 12px; color: #4DB8D8; margin-top: 15px;">
+                ✓ Uses exact Ocean to Sand gradient (#4DB8D8 → #E8DCC8)<br>
+                ✓ Gold pin matches app's luxury accent color (#C9A961)<br>
+                ✓ Cohesive with header and brand identity
+            </p>
+        </div>
+    </div>
+</body>
+</html>

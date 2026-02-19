@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderList Splash Screen Mockups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            padding: 40px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+        }
+        .splash-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .splash-option {
+            text-align: center;
+        }
+        .splash-option h3 {
+            color: #26C6DA;
+            margin-bottom: 15px;
+        }
+        .phone-frame {
+            width: 280px;
+            height: 560px;
+            background: #000;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Splash 1: Clean Centered */
+        .splash-1 {
+            background: linear-gradient(180deg, #26C6DA 0%, #00BFA5 50%, #FFE082 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .splash-1 .icon {
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        .splash-1 .icon .globe-w {
+            width: 80px;
+            height: 80px;
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .splash-1 .icon .w-letter {
+            font-size: 45px;
+            font-weight: 800;
+            color: white;
+            font-family: Georgia, serif;
+        }
+        .splash-1 .icon .pin {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            background: #FF5252;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+        }
+        .splash-1 .app-name {
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .splash-1 .tagline {
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            margin-top: 10px;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Splash 2: With decorative elements */
+        .splash-2 {
+            background: linear-gradient(160deg, #26C6DA 0%, #00BFA5 40%, #FFE082 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .splash-2::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border: 3px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+        }
+        .splash-2::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 250px;
+            height: 250px;
+            border: 3px solid rgba(255,255,255,0.15);
+            border-radius: 50%;
+        }
+        .splash-2 .icon {
+            width: 140px;
+            height: 140px;
+            background: white;
+            border-radius: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .splash-2 .icon .globe-w {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #26C6DA, #00BFA5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .splash-2 .icon .w-letter {
+            font-size: 50px;
+            font-weight: 800;
+            color: white;
+            font-family: Georgia, serif;
+        }
+        .splash-2 .icon .pin {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 28px;
+            height: 28px;
+            background: #FF5252;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .splash-2 .app-name {
+            font-size: 38px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 3px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .splash-2 .tagline {
+            font-size: 13px;
+            color: rgba(255,255,255,0.95);
+            margin-top: 12px;
+            z-index: 1;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Splash 3: Minimal */
+        .splash-3 {
+            background: linear-gradient(180deg, #26C6DA 0%, #00BFA5 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .splash-3 .icon {
+            margin-bottom: 25px;
+        }
+        .splash-3 .icon .w-large {
+            font-size: 120px;
+            font-weight: 800;
+            color: white;
+            font-family: Georgia, serif;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .splash-3 .icon .pin {
+            position: absolute;
+            top: 15px;
+            right: -15px;
+            width: 30px;
+            height: 30px;
+            background: #FF5252;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+        }
+        .splash-3 .app-name {
+            font-size: 32px;
+            font-weight: 600;
+            color: white;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+        }
+
+        /* Splash 4: Dark variant */
+        .splash-4 {
+            background: linear-gradient(180deg, #1a3a4a 0%, #0d2633 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .splash-4 .icon {
+            width: 130px;
+            height: 130px;
+            background: linear-gradient(135deg, #26C6DA 0%, #00BFA5 50%, #FFE082 100%);
+            border-radius: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(38,198,218,0.4);
+        }
+        .splash-4 .icon .globe-w {
+            width: 85px;
+            height: 85px;
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .splash-4 .icon .w-letter {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            font-family: Georgia, serif;
+        }
+        .splash-4 .icon .pin {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 26px;
+            height: 26px;
+            background: #FF5252;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+        }
+        .splash-4 .app-name {
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 2px;
+        }
+        .splash-4 .tagline {
+            font-size: 14px;
+            color: #26C6DA;
+            margin-top: 10px;
+        }
+
+        .recommendation {
+            background: linear-gradient(135deg, #1a3a1a, #252540);
+            border: 2px solid #4CAF50;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        .recommendation h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        .recommendation p {
+            color: #aaa;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <h1>📱 WanderList Splash Screen Options</h1>
+    <p class="subtitle">Matching the "Combined A" icon design</p>
+    
+    <div class="splash-grid">
+        <!-- Splash 1: Clean -->
+        <div class="splash-option">
+            <h3>Splash 1: Clean</h3>
+            <div class="phone-frame">
+                <div class="phone-screen splash-1">
+                    <div class="icon">
+                        <div class="globe-w">
+                            <span class="w-letter">W</span>
+                            <div class="pin"></div>
+                        </div>
+                    </div>
+                    <div class="app-name">WanderList</div>
+                    <div class="tagline">Explore iconic landmarks</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Splash 2: Decorative -->
+        <div class="splash-option">
+            <h3>Splash 2: Decorative ⭐</h3>
+            <div class="phone-frame">
+                <div class="phone-screen splash-2">
+                    <div class="icon">
+                        <div class="globe-w">
+                            <span class="w-letter">W</span>
+                            <div class="pin"></div>
+                        </div>
+                    </div>
+                    <div class="app-name">WanderList</div>
+                    <div class="tagline">Explore iconic landmarks</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Splash 3: Minimal -->
+        <div class="splash-option">
+            <h3>Splash 3: Minimal</h3>
+            <div class="phone-frame">
+                <div class="phone-screen splash-3">
+                    <div class="icon">
+                        <div class="w-large">
+                            W
+                            <div class="pin"></div>
+                        </div>
+                    </div>
+                    <div class="app-name">WanderList</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Splash 4: Dark -->
+        <div class="splash-option">
+            <h3>Splash 4: Dark Mode</h3>
+            <div class="phone-frame">
+                <div class="phone-screen splash-4">
+                    <div class="icon">
+                        <div class="globe-w">
+                            <span class="w-letter">W</span>
+                            <div class="pin"></div>
+                        </div>
+                    </div>
+                    <div class="app-name">WanderList</div>
+                    <div class="tagline">Explore iconic landmarks</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="recommendation">
+        <h3>⭐ My Recommendation: Splash 2 (Decorative)</h3>
+        <p>
+            The decorative circles in the background add visual interest while keeping focus on the brand.<br>
+            The white icon container provides great contrast and makes the icon pop.<br>
+            Perfect balance of modern design and brand recognition.
+        </p>
+    </div>
+</body>
+</html>

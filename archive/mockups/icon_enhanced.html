@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderList Icon - Enhanced Globe Designs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            padding: 30px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 26px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .option {
+            background: #252540;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+        }
+        .option h2 {
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: #4DB8D8;
+        }
+        .option .desc {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 15px;
+            min-height: 30px;
+        }
+        .icon-container {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 15px;
+            border-radius: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Base gradient */
+        .ocean-sand {
+            background: linear-gradient(135deg, #4DB8D8 0%, #7DCBE3 30%, #C9CAAE 70%, #E8DCC8 100%);
+        }
+
+        .sizes {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .size-preview {
+            text-align: center;
+        }
+        .size-preview span {
+            display: block;
+            font-size: 9px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* ============================================ */
+        /* ORIGINAL - For Comparison */
+        /* ============================================ */
+        .original .globe {
+            width: 100px;
+            height: 100px;
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .original .w-letter {
+            font-size: 58px;
+            font-weight: 800;
+            color: white;
+            font-family: Georgia, serif;
+        }
+        .original .pin {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 30px;
+            height: 30px;
+            background: #C9A961;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+        }
+
+        /* ============================================ */
+        /* DESIGN 1: Globe with Latitude Lines */
+        /* ============================================ */
+        .design1 .globe-container {
+            position: relative;
+            width: 105px;
+            height: 105px;
+        }
+        .design1 .globe {
+            width: 100%;
+            height: 100%;
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Equator line */
+        .design1 .equator {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.5);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        /* Meridian (vertical ellipse) */
+        .design1 .meridian {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            left: 25%;
+        }
+        /* Latitude lines */
+        .design1 .lat-line {
+            position: absolute;
+            width: 80%;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+            left: 10%;
+        }
+        .design1 .lat-top { top: 30%; }
+        .design1 .lat-bottom { top: 70%; }
+        .design1 .w-letter {
+            font-size: 52px;
+            font-weight: 800;
+            color: white;
+            font-family: Georgia, serif;
+            z-index: 2;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .design1 .pin {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 28px;
+            height: 28px;
+            background: #C9A961;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+            z-index: 3;
+        }
+
+        /* ============================================ */
+        /* DESIGN 2: Globe with Curved Flight Path */
+        /* ============================================ */
+        .design2 .globe-container {
+            position: relative;
+            width: 110px;
+            height: 110px;
+        }
+        .design2 .globe {
+            width: 100%;
+            height: 100%;
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: visible;
+        }
+        /* Flight path arc */
+        .design2 .flight-path {
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            border: 3px dashed rgba(255,255,255,0.6);
+            border-bottom: none;
+            border-radius: 50px 50px 0 0;
+            top: 15px;
+            left: 15px;
+            transform: rotate(-15deg);
+        }
+        /* Small plane */
+        .design2 .plane {
+            position: absolute;
+            top: 8px;
+            right: 25px;
+            font-size: 18px;
+            transform: rotate(45deg);
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+        }
+        .design2 .w-letter {
+            font-size: 50px;
+            font-weight: 800;
+            color: white;
+            font-family: Georgia, serif;
+            z-index: 2;
+        }
+        .design2 .pin {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            width: 22px;
+            height: 22px;
+            background: #C9A961;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 2px solid white;
+            z-index: 3;
+        }
+        .design2 .pin2 {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 26px;
+            height: 26px;
+            background: #D4747E;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 2px solid white;
+            z-index: 3;
+        }
+
+        /* ============================================ */
+        /* DESIGN 3: Globe with Continent Silhouette */
+        /* ============================================ */
+        .design3 .globe-container {
+            position: relative;
+            width: 105px;
+            height: 105px;
+        }
+        .design3 .globe {
+            width: 100%;
+            height: 100%;
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: rgba(255,255,255,0.1);
+        }
+        /* Abstract continent shapes */
+        .design3 .continent1 {
+            position: absolute;
+            width: 35px;
+            height: 45px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 40% 60% 50% 40%;
+            top: 15px;
+            left: 20px;
+        }
+        .design3 .continent2 {
+            position: absolute;
+            width: 25px;
+            height: 30px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50% 40% 60% 50%;
+            bottom: 20px;
+            right: 20px;
+        }
+        .design3 .w-letter {
+            font-size: 52px;
+            font-weight: 800;
+            color: white;
+            font-family: Georgia, serif;
+            z-index: 2;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .design3 .pin {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 28px;
+            height: 28px;
+            background: #C9A961;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+            z-index: 3;
+        }
+
+        /* ============================================ */
+        /* DESIGN 4: Globe with Orbit Ring */
+        /* ============================================ */
+        .design4 .globe-container {
+            position: relative;
+            width: 115px;
+            height: 115px;
+        }
+        .design4 .orbit {
+            position: absolute;
+            width: 130%;
+            height: 45%;
+            border: 3px solid rgba(255,255,255,0.5);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateX(70deg);
+        }
+        .design4 .globe {
+            width: 90px;
+            height: 90px;
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+        }
+        .design4 .equator {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.4);
+            top: 50%;
+        }
+        .design4 .w-letter {
+            font-size: 46px;
+            font-weight: 800;
+            color: white;
+            font-family: Georgia, serif;
+            z-index: 2;
+        }
+        .design4 .pin {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 26px;
+            height: 26px;
+            background: #C9A961;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+            z-index: 3;
+        }
+        /* Small dot on orbit */
+        .design4 .orbit-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            top: 12px;
+            left: 5px;
+            box-shadow: 0 0 8px rgba(255,255,255,0.8);
+        }
+
+        /* ============================================ */
+        /* DESIGN 5: Compass Rose Globe */
+        /* ============================================ */
+        .design5 .globe-container {
+            position: relative;
+            width: 108px;
+            height: 108px;
+        }
+        .design5 .globe {
+            width: 100%;
+            height: 100%;
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Compass lines */
+        .design5 .compass-v {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .design5 .compass-h {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        /* North indicator */
+        .design5 .north {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.7);
+        }
+        .design5 .w-letter {
+            font-size: 50px;
+            font-weight: 800;
+            color: white;
+            font-family: Georgia, serif;
+            z-index: 2;
+        }
+        .design5 .pin {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 28px;
+            height: 28px;
+            background: #C9A961;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+            z-index: 3;
+        }
+        /* Small compass arrow at bottom */
+        .design5 .compass-arrow {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 10px solid rgba(255,255,255,0.5);
+        }
+
+        /* ============================================ */
+        /* DESIGN 6: Gradient Globe with Path Dots */
+        /* ============================================ */
+        .design6 .globe-container {
+            position: relative;
+            width: 108px;
+            height: 108px;
+        }
+        .design6 .globe {
+            width: 100%;
+            height: 100%;
+            border: 4px solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: visible;
+            background: linear-gradient(135deg, rgba(77,184,216,0.3) 0%, rgba(232,220,200,0.3) 100%);
+        }
+        /* Travel path dots */
+        .design6 .dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(255,255,255,0.8);
+        }
+        .design6 .dot1 { top: 20px; left: 25px; }
+        .design6 .dot2 { top: 35px; right: 15px; width: 6px; height: 6px; opacity: 0.7; }
+        .design6 .dot3 { bottom: 25px; left: 35px; width: 6px; height: 6px; opacity: 0.7; }
+        /* Curved connecting line */
+        .design6 .path-line {
+            position: absolute;
+            width: 60px;
+            height: 30px;
+            border: 2px dashed rgba(255,255,255,0.4);
+            border-bottom: none;
+            border-radius: 30px 30px 0 0;
+            top: 25px;
+            left: 22px;
+            transform: rotate(-20deg);
+        }
+        .design6 .w-letter {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            font-family: Georgia, serif;
+            z-index: 2;
+        }
+        .design6 .pin {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 28px;
+            height: 28px;
+            background: #C9A961;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+            z-index: 3;
+        }
+
+        /* Mini icons for size preview */
+        .mini-icon {
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4DB8D8 0%, #E8DCC8 100%);
+        }
+        .size-50 { width: 50px; height: 50px; }
+        .size-35 { width: 35px; height: 35px; border-radius: 8px; }
+
+        .highlight {
+            border: 2px solid #4DB8D8;
+            box-shadow: 0 0 20px rgba(77,184,216,0.3);
+        }
+    </style>
+</head>
+<body>
+    <h1>🌍 WanderList Icon - Enhanced Globe Designs</h1>
+    <p class="subtitle">5 variations with travel/globe visual elements + original for comparison</p>
+    
+    <div class="grid">
+        <!-- Original Design for Comparison -->
+        <div class="option">
+            <h2>Original (Current)</h2>
+            <p class="desc">Simple circle - could be a ball</p>
+            <div class="icon-container ocean-sand original">
+                <div class="globe">
+                    <span class="w-letter">W</span>
+                    <div class="pin"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-50" style="position:relative;">
+                        <div style="width:32px;height:32px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:18px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>50px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-35" style="position:relative;">
+                        <div style="width:24px;height:24px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:12px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>35px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design 1: Globe Lines -->
+        <div class="option highlight">
+            <h2>Design 1: Globe Lines</h2>
+            <p class="desc">Equator + meridian + latitude lines</p>
+            <div class="icon-container ocean-sand design1">
+                <div class="globe-container">
+                    <div class="globe">
+                        <div class="equator"></div>
+                        <div class="meridian"></div>
+                        <div class="lat-line lat-top"></div>
+                        <div class="lat-line lat-bottom"></div>
+                        <span class="w-letter">W</span>
+                    </div>
+                    <div class="pin"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-50" style="position:relative;">
+                        <div style="width:34px;height:34px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+                            <div style="position:absolute;width:100%;height:1px;background:rgba(255,255,255,0.5);top:50%;"></div>
+                            <div style="position:absolute;width:50%;height:100%;border:1px solid rgba(255,255,255,0.4);border-radius:50%;"></div>
+                            <span style="font-size:18px;color:white;font-weight:800;font-family:Georgia;z-index:1;">W</span>
+                        </div>
+                    </div>
+                    <span>50px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-35">
+                        <div style="width:24px;height:24px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:12px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>35px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design 2: Flight Path -->
+        <div class="option highlight">
+            <h2>Design 2: Flight Path</h2>
+            <p class="desc">Curved travel route + plane + dual pins</p>
+            <div class="icon-container ocean-sand design2">
+                <div class="globe-container">
+                    <div class="globe">
+                        <div class="flight-path"></div>
+                        <span class="plane">✈</span>
+                        <span class="w-letter">W</span>
+                        <div class="pin"></div>
+                        <div class="pin2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-50" style="position:relative;">
+                        <div style="width:34px;height:34px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;">
+                            <span style="font-size:18px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                            <span style="position:absolute;top:2px;right:5px;font-size:8px;transform:rotate(45deg);">✈</span>
+                        </div>
+                    </div>
+                    <span>50px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-35">
+                        <div style="width:24px;height:24px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:12px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>35px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design 3: Continent Shapes -->
+        <div class="option highlight">
+            <h2>Design 3: Continents</h2>
+            <p class="desc">Abstract landmass silhouettes</p>
+            <div class="icon-container ocean-sand design3">
+                <div class="globe-container">
+                    <div class="globe">
+                        <div class="continent1"></div>
+                        <div class="continent2"></div>
+                        <span class="w-letter">W</span>
+                    </div>
+                    <div class="pin"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-50" style="position:relative;">
+                        <div style="width:34px;height:34px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.1);overflow:hidden;">
+                            <div style="position:absolute;width:12px;height:15px;background:rgba(255,255,255,0.25);border-radius:40%;top:5px;left:8px;"></div>
+                            <span style="font-size:18px;color:white;font-weight:800;font-family:Georgia;z-index:1;">W</span>
+                        </div>
+                    </div>
+                    <span>50px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-35">
+                        <div style="width:24px;height:24px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:12px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>35px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design 4: Orbit Ring -->
+        <div class="option highlight">
+            <h2>Design 4: Orbit Ring</h2>
+            <p class="desc">Saturn-style ring around globe</p>
+            <div class="icon-container ocean-sand design4">
+                <div class="globe-container">
+                    <div class="orbit"></div>
+                    <div class="globe">
+                        <div class="equator"></div>
+                        <span class="w-letter">W</span>
+                    </div>
+                    <div class="pin"></div>
+                    <div class="orbit-dot"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-50" style="position:relative;">
+                        <div style="position:relative;width:34px;height:34px;">
+                            <div style="position:absolute;width:44px;height:14px;border:2px solid rgba(255,255,255,0.5);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%) rotateX(70deg);"></div>
+                            <div style="width:28px;height:28px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;position:absolute;top:3px;left:3px;">
+                                <span style="font-size:14px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span>50px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-35">
+                        <div style="width:24px;height:24px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:12px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>35px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design 5: Compass -->
+        <div class="option highlight">
+            <h2>Design 5: Compass</h2>
+            <p class="desc">Navigation crosshairs + N indicator</p>
+            <div class="icon-container ocean-sand design5">
+                <div class="globe-container">
+                    <div class="globe">
+                        <div class="compass-v"></div>
+                        <div class="compass-h"></div>
+                        <span class="north">N</span>
+                        <div class="compass-arrow"></div>
+                        <span class="w-letter">W</span>
+                    </div>
+                    <div class="pin"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-50" style="position:relative;">
+                        <div style="width:34px;height:34px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;">
+                            <div style="position:absolute;width:1px;height:100%;background:rgba(255,255,255,0.3);left:50%;"></div>
+                            <div style="position:absolute;width:100%;height:1px;background:rgba(255,255,255,0.3);top:50%;"></div>
+                            <span style="font-size:18px;color:white;font-weight:800;font-family:Georgia;z-index:1;">W</span>
+                        </div>
+                    </div>
+                    <span>50px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-35">
+                        <div style="width:24px;height:24px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:12px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>35px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design 6: Path Dots -->
+        <div class="option highlight">
+            <h2>Design 6: Journey Dots</h2>
+            <p class="desc">Travel waypoints + connecting path</p>
+            <div class="icon-container ocean-sand design6">
+                <div class="globe-container">
+                    <div class="globe">
+                        <div class="path-line"></div>
+                        <div class="dot dot1"></div>
+                        <div class="dot dot2"></div>
+                        <div class="dot dot3"></div>
+                        <span class="w-letter">W</span>
+                    </div>
+                    <div class="pin"></div>
+                </div>
+            </div>
+            <div class="sizes">
+                <div class="size-preview">
+                    <div class="mini-icon size-50" style="position:relative;">
+                        <div style="width:34px;height:34px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;">
+                            <div style="position:absolute;width:4px;height:4px;background:white;border-radius:50%;top:8px;left:10px;"></div>
+                            <div style="position:absolute;width:4px;height:4px;background:white;border-radius:50%;top:12px;right:8px;opacity:0.7;"></div>
+                            <span style="font-size:18px;color:white;font-weight:800;font-family:Georgia;z-index:1;">W</span>
+                        </div>
+                    </div>
+                    <span>50px</span>
+                </div>
+                <div class="size-preview">
+                    <div class="mini-icon size-35">
+                        <div style="width:24px;height:24px;border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                            <span style="font-size:12px;color:white;font-weight:800;font-family:Georgia;">W</span>
+                        </div>
+                    </div>
+                    <span>35px</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

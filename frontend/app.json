@@ -1,0 +1,77 @@
+{
+  "expo": {
+    "name": "WanderMark",
+    "slug": "wandermark",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "wandermark",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.wandermark.app",
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Take photos of landmarks you visit",
+        "NSPhotoLibraryUsageDescription": "Save and share your travel photos",
+        "NSPhotoLibraryAddUsageDescription": "Save your travel memories to your gallery"
+      }
+    },
+    "android": {
+      "package": "com.wandermark.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#4DB8D8"
+      },
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-image.png",
+          "imageWidth": 400,
+          "resizeMode": "contain",
+          "backgroundColor": "#4DB8D8"
+        }
+      ],
+      "expo-font",
+      "expo-web-browser",
+      "expo-apple-authentication",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#4DB8D8",
+          "sounds": []
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "privacyPolicyUrl": "https://wandermark.app/privacy",
+      "termsOfServiceUrl": "https://wandermark.app/terms",
+      "router": {},
+      "eas": {
+        "projectId": "036fc505-c923-44f1-8759-f3737fb5749c"
+      }
+    },
+    "owner": "aarum"
+  }
+}
