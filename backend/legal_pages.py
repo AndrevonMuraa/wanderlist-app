@@ -159,7 +159,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 <p>If you have questions or concerns about this Privacy Policy or our data practices, please contact us:</p>
 <div class="contact">
 <span>&#9993;</span>
-<span>privacy@wandermark.app</span>
+<span>support@wandermark.app</span>
 </div>
 </div>
 
@@ -381,7 +381,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 <p>If you have questions about these Terms, please contact us:</p>
 <div class="contact">
 <span>&#9993;</span>
-<span>legal@wandermark.app</span>
+<span>support@wandermark.app</span>
 </div>
 </div>
 
