@@ -616,7 +616,7 @@ LANDMARKS_DATA = {
             "description": "Tokyo's oldest temple, founded in 628 AD.", 
             "image_url": "https://images.unsplash.com/photo-1545931113-7bf0728c7541?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1545931113-7bf0728c7541?w=800"
+                "https://images.unsplash.com/photo-1624253321743-c94f0dacb471?w=800",
                 "https://images.unsplash.com/photo-1586829505799-8b93f6c89b7f?w=800"
             
                 "https://images.unsplash.com/photo-1585121345976-2ec5e09b84e4?w=800",
@@ -822,7 +822,7 @@ LANDMARKS_DATA = {
             "description": "Peru's portion of the world's largest tropical rainforest.", 
             "image_url": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800"
+                "https://images.unsplash.com/photo-1589802829985-817e51171b93?w=800",
             ],
             "latitude": -3.4653, "longitude": -62.2159
         },
@@ -1048,7 +1048,7 @@ LANDMARKS_DATA = {
             "description": "Prehistoric monument consisting of ring of standing stones.", 
             "image_url": "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1599833975787-5d613332275c?w=800"
+                "https://images.unsplash.com/photo-1567213502106-37e04c56a107?w=800",
             ],
             "latitude": 51.1789, "longitude": -1.8262
         },
@@ -1229,7 +1229,7 @@ LANDMARKS_DATA = {
             "description": "Moorish palace and fortress complex in Granada.", 
             "image_url": "https://images.unsplash.com/photo-1592839147723-e51ba61b77c7?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1592839147723-e51ba61b77c7?w=800"
+                "https://images.unsplash.com/photo-1562883676-8c7feb83f09a?w=800",
             ],
             "latitude": 37.1773, "longitude": -3.5886
         },
@@ -1314,7 +1314,7 @@ LANDMARKS_DATA = {
             "description": "Ancient citadel and temple overlooking Athens.", 
             "image_url": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800"
+                "https://images.unsplash.com/photo-1555993539-1732b0258236?w=800",
             ],
             "latitude": 37.9715, "longitude": 23.7257
         },
@@ -1777,7 +1777,7 @@ LANDMARKS_DATA = {
             "description": "Main square in Mexico City, one of world's largest plazas.", 
             "image_url": "https://images.unsplash.com/photo-1602002418082-a4443e081dd1?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1602002418082-a4443e081dd1?w=800"
+                "https://images.unsplash.com/photo-1602002418082-a4443e081dd2?w=800",
                 "https://images.unsplash.com/photo-1635178977722-30fd3e9f9d53?w=800",
                 "https://images.unsplash.com/photo-1512813498716-34c4f0c9da3b?w=800"
             ],
@@ -1894,7 +1894,7 @@ LANDMARKS_DATA = {
             "description": "Fairytale castle that inspired Disney's Sleeping Beauty Castle.", 
             "image_url": "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
             "images": [
-                "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800"
+                "https://images.unsplash.com/photo-1467269204594-9661b134dd2c?w=800",
             ],
             "latitude": 47.5576, "longitude": 10.7498
         },
