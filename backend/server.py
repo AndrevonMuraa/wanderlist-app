@@ -183,12 +183,6 @@ async def google_callback(session_id: str, response: Response):
         session_token=session_token
     )
 
-class AppleAuthRequest(BaseModel):
-    identity_token: str
-    user_id: str
-    email: Optional[str] = None
-    full_name: Optional[str] = None
-
 @api_router.post("/auth/apple/callback")
 async def apple_callback(auth_data: AppleAuthRequest, response: Response):
     """
@@ -1892,17 +1886,6 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
 
 # ============= ADMIN ENDPOINTS =============
 
-# Admin Models
-class AdminUserUpdate(BaseModel):
-    subscription_tier: Optional[str] = None  # "free" or "pro"
-    role: Optional[str] = None  # "user", "moderator", "admin"
-    is_banned: Optional[bool] = None
-    ban_reason: Optional[str] = None
-
-class AdminReportUpdate(BaseModel):
-    status: str  # "pending", "reviewed", "resolved", "dismissed"
-    admin_notes: Optional[str] = None
-
 @api_router.get("/admin/stats")
 async def get_admin_stats(admin_user: User = Depends(get_admin_user)):
     """Get dashboard statistics for admin panel"""
@@ -2270,12 +2253,6 @@ async def make_user_admin(user_id: str, admin_user: User = Depends(get_super_adm
     return {"message": f"User {user_id} promoted to admin"}
 
 # ============= ADMIN PUSH NOTIFICATIONS =============
-
-class AdminNotificationRequest(BaseModel):
-    title: str
-    body: str
-    target: str = "all"  # "all", "pro", "free", "segment"
-    segment_user_ids: Optional[List[str]] = None
 
 @api_router.post("/admin/notifications/send")
 async def send_admin_notification(
@@ -3315,23 +3292,6 @@ async def check_in_bucket_list(landmark_id: str, current_user: User = Depends(ge
 # ============= END BUCKET LIST ENDPOINTS =============
 
 # ============= CUSTOM COLLECTIONS ENDPOINTS (PREMIUM FEATURE) =============
-
-class Collection(BaseModel):
-    collection_id: str
-    user_id: str
-    name: str
-    description: Optional[str] = None
-    icon: str = "star"  # Icon name for the collection
-    color: str = "#20B2AA"  # Collection color theme
-    landmark_count: int = 0
-    created_at: datetime
-    updated_at: datetime
-
-class CollectionCreate(BaseModel):
-    name: str
-    description: Optional[str] = None
-    icon: Optional[str] = "star"
-    color: Optional[str] = "#20B2AA"
 
 @api_router.get("/collections")
 async def get_user_collections(current_user: User = Depends(get_current_user)):
