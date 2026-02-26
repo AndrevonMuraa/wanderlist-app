@@ -46,6 +46,13 @@ Build a travel engagement app (WanderMark) with content management, admin featur
 ### UI Layout ✅
 - "Photo of the Week" moved to bottom of Explore page
 
+### Navigation Crash Fix — Safe Back Navigation (Feb 26, 2026)
+- Created `utils/navigation.ts` with `safeGoBack()` — checks `canGoBack()` before navigating
+- Falls back to explore tab if no history exists (prevents crash)
+- Fixed `UniversalHeader` component (used by 15+ screens)
+- Fixed all 23 files with direct `router.back()` calls (32 total replacements)
+- This fixes the reported crash when pressing back on "Photo of the Week" and prevents similar crashes app-wide
+
 ### Landing Page Redesign — Compete Section (Feb 26, 2026)
 - Replaced "Earn Achievements" with "Compete & Climb" in feature cards
 - Added new "Compete with Travelers Worldwide" showcase section with dark gradient
