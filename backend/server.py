@@ -1395,34 +1395,311 @@ async def create_landmark(data: LandmarkCreate, current_user: User = Depends(get
     await db.landmarks.insert_one(landmark)
     return Landmark(**landmark)
 
-@api_router.post("/landmarks/{landmark_id}/upvote")
-async def upvote_landmark(landmark_id: str, current_user: User = Depends(get_current_user)):
-    # Check if already upvoted
-    existing = await db.landmark_upvotes.find_one({
-        "landmark_id": landmark_id,
+# ============= COMMUNITY PHOTO ENDPOINTS =============
+
+@api_router.get("/landmarks/{landmark_id}/community-photos")
+async def get_landmark_community_photos(
+    landmark_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Get community photos for a specific landmark. 
+    Free users: top 3 photos + total count. Premium: all photos + upvoting."""
+    
+    is_premium = current_user.subscription_tier == "pro"
+    
+    # Get all public visits with photos for this landmark
+    pipeline = [
+        {"$match": {
+            "landmark_id": landmark_id,
+            "visibility": "public",
+            "$or": [
+                {"photos": {"$exists": True, "$ne": []}},
+                {"photo_base64": {"$exists": True, "$ne": None}}
+            ]
+        }},
+        {"$lookup": {
+            "from": "users",
+            "localField": "user_id",
+            "foreignField": "user_id",
+            "as": "user_info"
+        }},
+        {"$unwind": {"path": "$user_info", "preserveNullAndEmptyDocuments": True}},
+        {"$project": {
+            "_id": 0,
+            "visit_id": 1,
+            "user_id": 1,
+            "photos": 1,
+            "photo_base64": 1,
+            "visited_at": 1,
+            "comments": 1,
+            "user_name": {"$ifNull": ["$user_info.name", "Anonymous"]},
+            "user_picture": "$user_info.picture",
+            "username": "$user_info.username"
+        }}
+    ]
+    
+    visits = await db.visits.aggregate(pipeline).to_list(500)
+    
+    # Build photo list from visits
+    photos = []
+    for visit in visits:
+        visit_photos = visit.get("photos", [])
+        photo_base64 = visit.get("photo_base64")
+        
+        all_visit_photos = []
+        if visit_photos:
+            all_visit_photos.extend(visit_photos)
+        if photo_base64 and photo_base64 not in all_visit_photos:
+            all_visit_photos.append(photo_base64)
+        
+        for idx, photo in enumerate(all_visit_photos):
+            photo_id = f"{visit['visit_id']}_{idx}"
+            
+            # Get upvote count for this photo
+            upvote_count = await db.photo_upvotes.count_documents({"photo_id": photo_id})
+            
+            # Check if current user has upvoted
+            user_upvoted = False
+            if is_premium:
+                existing_upvote = await db.photo_upvotes.find_one({
+                    "photo_id": photo_id,
+                    "user_id": current_user.user_id
+                })
+                user_upvoted = existing_upvote is not None
+            
+            photos.append({
+                "photo_id": photo_id,
+                "photo_url": photo,
+                "visit_id": visit["visit_id"],
+                "user_id": visit["user_id"],
+                "user_name": visit.get("user_name", "Anonymous"),
+                "user_picture": visit.get("user_picture"),
+                "username": visit.get("username"),
+                "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
+                "comments": visit.get("comments"),
+                "upvotes": upvote_count,
+                "user_upvoted": user_upvoted
+            })
+    
+    # Sort by upvotes (most upvoted first), then by date
+    photos.sort(key=lambda x: (-x["upvotes"], x.get("visited_at", "") or ""), reverse=False)
+    
+    total_count = len(photos)
+    
+    if not is_premium:
+        # Free users only see top 3
+        return {
+            "photos": photos[:3],
+            "total_count": total_count,
+            "is_preview": True,
+            "landmark_id": landmark_id
+        }
+    
+    return {
+        "photos": photos,
+        "total_count": total_count,
+        "is_preview": False,
+        "landmark_id": landmark_id
+    }
+
+
+@api_router.get("/countries/{country_id}/community-photos")
+async def get_country_community_photos(
+    country_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Get community photos for all landmarks in a country.
+    Free users: top 3 photos + total count. Premium: all photos."""
+    
+    is_premium = current_user.subscription_tier == "pro"
+    
+    # Get all landmark IDs for this country
+    landmarks = await db.landmarks.find(
+        {"country_id": country_id},
+        {"_id": 0, "landmark_id": 1, "name": 1}
+    ).to_list(200)
+    
+    landmark_ids = [l["landmark_id"] for l in landmarks]
+    landmark_names = {l["landmark_id"]: l["name"] for l in landmarks}
+    
+    # Get country name
+    country = await db.countries.find_one({"country_id": country_id}, {"_id": 0, "name": 1})
+    country_name = country["name"] if country else country_id
+    
+    # Get all public visits with photos for landmarks in this country
+    pipeline = [
+        {"$match": {
+            "landmark_id": {"$in": landmark_ids},
+            "visibility": "public",
+            "$or": [
+                {"photos": {"$exists": True, "$ne": []}},
+                {"photo_base64": {"$exists": True, "$ne": None}}
+            ]
+        }},
+        {"$lookup": {
+            "from": "users",
+            "localField": "user_id",
+            "foreignField": "user_id",
+            "as": "user_info"
+        }},
+        {"$unwind": {"path": "$user_info", "preserveNullAndEmptyDocuments": True}},
+        {"$project": {
+            "_id": 0,
+            "visit_id": 1,
+            "user_id": 1,
+            "landmark_id": 1,
+            "photos": 1,
+            "photo_base64": 1,
+            "visited_at": 1,
+            "comments": 1,
+            "user_name": {"$ifNull": ["$user_info.name", "Anonymous"]},
+            "user_picture": "$user_info.picture",
+            "username": "$user_info.username"
+        }}
+    ]
+    
+    visits = await db.visits.aggregate(pipeline).to_list(1000)
+    
+    # Also get country visit photos
+    country_visits_pipeline = [
+        {"$match": {
+            "country_name": country_name,
+            "photos": {"$exists": True, "$ne": []},
+        }},
+        {"$lookup": {
+            "from": "users",
+            "localField": "user_id",
+            "foreignField": "user_id",
+            "as": "user_info"
+        }},
+        {"$unwind": {"path": "$user_info", "preserveNullAndEmptyDocuments": True}},
+        {"$project": {
+            "_id": 0,
+            "country_visit_id": 1,
+            "user_id": 1,
+            "photos": 1,
+            "visited_at": 1,
+            "user_name": {"$ifNull": ["$user_info.name", "Anonymous"]},
+            "user_picture": "$user_info.picture",
+            "username": "$user_info.username"
+        }}
+    ]
+    country_visits = await db.country_visits.aggregate(country_visits_pipeline).to_list(500)
+    
+    # Build photo list
+    photos = []
+    
+    for visit in visits:
+        visit_photos = visit.get("photos", [])
+        photo_base64 = visit.get("photo_base64")
+        
+        all_visit_photos = []
+        if visit_photos:
+            all_visit_photos.extend(visit_photos)
+        if photo_base64 and photo_base64 not in all_visit_photos:
+            all_visit_photos.append(photo_base64)
+        
+        lm_name = landmark_names.get(visit.get("landmark_id"), "Unknown")
+        
+        for idx, photo in enumerate(all_visit_photos):
+            photo_id = f"{visit['visit_id']}_{idx}"
+            upvote_count = await db.photo_upvotes.count_documents({"photo_id": photo_id})
+            
+            user_upvoted = False
+            if is_premium:
+                existing = await db.photo_upvotes.find_one({
+                    "photo_id": photo_id,
+                    "user_id": current_user.user_id
+                })
+                user_upvoted = existing is not None
+            
+            photos.append({
+                "photo_id": photo_id,
+                "photo_url": photo,
+                "landmark_name": lm_name,
+                "landmark_id": visit.get("landmark_id"),
+                "user_id": visit["user_id"],
+                "user_name": visit.get("user_name", "Anonymous"),
+                "user_picture": visit.get("user_picture"),
+                "username": visit.get("username"),
+                "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
+                "upvotes": upvote_count,
+                "user_upvoted": user_upvoted
+            })
+    
+    # Add country visit photos
+    for cv in country_visits:
+        for idx, photo in enumerate(cv.get("photos", [])):
+            photo_id = f"cv_{cv['country_visit_id']}_{idx}"
+            upvote_count = await db.photo_upvotes.count_documents({"photo_id": photo_id})
+            
+            user_upvoted = False
+            if is_premium:
+                existing = await db.photo_upvotes.find_one({
+                    "photo_id": photo_id,
+                    "user_id": current_user.user_id
+                })
+                user_upvoted = existing is not None
+            
+            photos.append({
+                "photo_id": photo_id,
+                "photo_url": photo,
+                "landmark_name": "Country Visit",
+                "landmark_id": None,
+                "user_id": cv["user_id"],
+                "user_name": cv.get("user_name", "Anonymous"),
+                "user_picture": cv.get("user_picture"),
+                "username": cv.get("username"),
+                "visited_at": cv.get("visited_at").isoformat() if cv.get("visited_at") else None,
+                "upvotes": upvote_count,
+                "user_upvoted": user_upvoted
+            })
+    
+    photos.sort(key=lambda x: (-x["upvotes"], x.get("visited_at", "") or ""))
+    
+    total_count = len(photos)
+    
+    if not is_premium:
+        return {
+            "photos": photos[:3],
+            "total_count": total_count,
+            "is_preview": True,
+            "country_id": country_id,
+            "country_name": country_name
+        }
+    
+    return {
+        "photos": photos,
+        "total_count": total_count,
+        "is_preview": False,
+        "country_id": country_id,
+        "country_name": country_name
+    }
+
+
+@api_router.post("/community-photos/{photo_id}/upvote")
+async def upvote_community_photo(photo_id: str, current_user: User = Depends(get_current_user)):
+    """Toggle upvote on a community photo. Premium only."""
+    if current_user.subscription_tier != "pro":
+        raise HTTPException(status_code=403, detail="Premium subscription required to upvote photos")
+    
+    existing = await db.photo_upvotes.find_one({
+        "photo_id": photo_id,
         "user_id": current_user.user_id
     })
     
     if existing:
-        # Remove upvote
-        await db.landmark_upvotes.delete_one({"_id": existing["_id"]})
-        await db.landmarks.update_one(
-            {"landmark_id": landmark_id},
-            {"$inc": {"upvotes": -1}}
-        )
-        return {"upvoted": False}
+        await db.photo_upvotes.delete_one({"_id": existing["_id"]})
+        count = await db.photo_upvotes.count_documents({"photo_id": photo_id})
+        return {"upvoted": False, "upvotes": count}
     else:
-        # Add upvote
-        await db.landmark_upvotes.insert_one({
-            "landmark_id": landmark_id,
+        await db.photo_upvotes.insert_one({
+            "photo_id": photo_id,
             "user_id": current_user.user_id,
             "created_at": datetime.now(timezone.utc)
         })
-        await db.landmarks.update_one(
-            {"landmark_id": landmark_id},
-            {"$inc": {"upvotes": 1}}
-        )
-        return {"upvoted": True}
+        count = await db.photo_upvotes.count_documents({"photo_id": photo_id})
+        return {"upvoted": True, "upvotes": count}
 
 # ============= VISIT ENDPOINTS =============
 
