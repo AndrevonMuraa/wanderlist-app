@@ -108,6 +108,7 @@ export default function ContinentsScreen() {
   const [loading, setLoading] = useState(true);
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
+  const [photoOfTheWeek, setPhotoOfTheWeek] = useState<any>(null);
   
   // All hooks must be called in consistent order
   const subscriptionData = useSubscription();
