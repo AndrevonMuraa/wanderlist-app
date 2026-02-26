@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, Im
 import { Text, TextInput, Button, Surface } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { safeGoBack } from '../utils/navigation';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
@@ -74,7 +75,7 @@ export default function SuggestLandmarkScreen() {
 
       if (response.ok) {
         Alert.alert('Success', 'Landmark suggestion submitted!', [
-          { text: 'OK', onPress: () => router.back() }
+          { text: 'OK', onPress: () => safeGoBack(router) }
         ]);
       } else {
         const error = await response.json();
@@ -91,7 +92,7 @@ export default function SuggestLandmarkScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+        <TouchableOpacity onPress={() => safeGoBack(router)} style={styles.backButton}>
           <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Suggest Landmark</Text>

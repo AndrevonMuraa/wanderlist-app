@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { safeGoBack } from '../../utils/navigation';
 import { BACKEND_URL } from '../../utils/config';
 import theme from '../../styles/theme';
 import AddVisitModal from '../../components/AddVisitModal';
@@ -59,12 +60,12 @@ export default function AddVisitScreen() {
         setModalVisible(true);
       } else {
         Alert.alert('Error', 'Failed to load landmark details');
-        router.back();
+        safeGoBack(router);
       }
     } catch (error) {
       console.error('Error fetching landmark:', error);
       Alert.alert('Error', 'Failed to load landmark details');
-      router.back();
+      safeGoBack(router);
     } finally {
       setLoading(false);
     }
@@ -232,7 +233,7 @@ export default function AddVisitScreen() {
               setModalVisible(false);
               // Maybe prompt for app review after a successful visit
               await maybePromptForReview();
-              router.back();
+              safeGoBack(router);
             },
           },
         ]
@@ -246,7 +247,7 @@ export default function AddVisitScreen() {
 
   const handleClose = () => {
     setModalVisible(false);
-    router.back();
+    safeGoBack(router);
   };
 
   if (loading) {

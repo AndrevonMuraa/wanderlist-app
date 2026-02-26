@@ -20,6 +20,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { safeGoBack } from '../../utils/navigation';
 import { Surface, Portal, Dialog, Button } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
@@ -143,7 +144,7 @@ export default function CountryVisitDetailScreen() {
         } else {
           Alert.alert('Success', 'Visit deleted successfully');
         }
-        router.back();
+        safeGoBack(router);
       } else {
         throw new Error('Failed to delete');
       }

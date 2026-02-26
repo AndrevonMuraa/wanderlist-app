@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, TextInput, Button, Surface, Title, Snackbar } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { safeGoBack } from '../../utils/navigation';
 import { useAuth } from '../../contexts/AuthContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -179,7 +180,7 @@ export default function RegisterScreen() {
               ) : null}
 
               <TouchableOpacity
-                onPress={() => router.back()}
+                onPress={() => safeGoBack(router)}
                 style={styles.linkContainer}
               >
                 <Text style={styles.linkText}>Already have an account? Login</Text>

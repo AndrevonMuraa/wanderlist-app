@@ -3,6 +3,7 @@ import { View, StyleSheet, FlatList, Image, RefreshControl, TouchableOpacity, Pl
 import { Text, ActivityIndicator, Surface, FAB, Searchbar } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { safeGoBack } from '../../utils/navigation';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -319,7 +320,7 @@ export default function LandmarksScreen() {
           <View style={styles.headerRow}>
             <View style={styles.titleWithBack}>
               <TouchableOpacity 
-                onPress={() => router.back()} 
+                onPress={() => safeGoBack(router)} 
                 style={styles.backButton}
                 activeOpacity={0.7}
               >
@@ -352,7 +353,7 @@ export default function LandmarksScreen() {
         <View style={styles.headerRow}>
           <View style={styles.titleWithBack}>
             <TouchableOpacity 
-              onPress={() => router.back()} 
+              onPress={() => safeGoBack(router)} 
               style={styles.backButton}
               activeOpacity={0.7}
             >

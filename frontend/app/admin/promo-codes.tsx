@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import { safeGoBack } from '../../utils/navigation';
 import * as SecureStore from 'expo-secure-store';
 import theme, { gradients } from '../../styles/theme';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -481,7 +482,7 @@ export default function AdminPromoCodes() {
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <LinearGradient colors={['#1a1a2e', '#16213e']} style={styles.header}>
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.headerBack}>
+          <TouchableOpacity onPress={() => safeGoBack(router)} style={styles.headerBack}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
           <View style={styles.headerCenter}>

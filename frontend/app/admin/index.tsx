@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, Platfor
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { safeGoBack } from '../../utils/navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
@@ -110,7 +111,7 @@ export default function AdminDashboard() {
         <Text style={[styles.errorText, { color: colors.textSecondary }]}>{error}</Text>
         <TouchableOpacity 
           style={[styles.backButton, { backgroundColor: colors.primary }]}
-          onPress={() => router.back()}
+          onPress={() => safeGoBack(router)}
         >
           <Text style={styles.backButtonText}>Go Back</Text>
         </TouchableOpacity>
@@ -176,7 +177,7 @@ export default function AdminDashboard() {
         style={styles.header}
       >
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.headerBackButton}>
+          <TouchableOpacity onPress={() => safeGoBack(router)} style={styles.headerBackButton}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
           <View style={styles.headerTitleContainer}>

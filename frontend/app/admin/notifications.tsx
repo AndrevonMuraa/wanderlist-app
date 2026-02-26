@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView, TouchableOpacity, TextInput, RefreshContr
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { safeGoBack } from '../../utils/navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
@@ -201,7 +202,7 @@ export default function AdminNotificationsScreen() {
         style={styles.header}
       >
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.headerBackButton}>
+          <TouchableOpacity onPress={() => safeGoBack(router)} style={styles.headerBackButton}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Push Notifications</Text>

@@ -15,6 +15,7 @@ import { Text, Surface } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { safeGoBack } from '../utils/navigation';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
@@ -133,7 +134,7 @@ export default function AddCountryVisitScreen() {
 
       if (response.ok) {
         Alert.alert('Success', 'Country visit shared! +15 points', [
-          { text: 'OK', onPress: () => router.back() },
+          { text: 'OK', onPress: () => safeGoBack(router) },
         ]);
       } else {
         Alert.alert('Error', 'Failed to share country visit');
@@ -159,7 +160,7 @@ export default function AddCountryVisitScreen() {
           end={{ x: 1, y: 0 }}
           style={styles.header}
         >
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <TouchableOpacity onPress={() => safeGoBack(router)} style={styles.backButton}>
             <Ionicons name="close" size={24} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Share Country Visit</Text>

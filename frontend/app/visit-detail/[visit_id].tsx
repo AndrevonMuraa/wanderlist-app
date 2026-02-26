@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView, Image, Dimensions, Platform, TouchableOpa
 import { Text, Surface } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { safeGoBack } from '../../utils/navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
@@ -112,7 +113,7 @@ export default function VisitDetailScreen() {
             style={styles.backButton}
             onPress={async () => {
               await lightHaptic();
-              router.back();
+              safeGoBack(router);
             }}
           >
             <Ionicons name="arrow-back" size={22} color="#fff" />

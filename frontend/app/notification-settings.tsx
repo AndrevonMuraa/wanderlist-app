@@ -4,6 +4,7 @@ import { Text, Switch, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { safeGoBack } from '../utils/navigation';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../styles/theme';
 import { useTheme } from '../contexts/ThemeContext';
@@ -86,7 +87,7 @@ export default function NotificationSettingsScreen() {
   if (loading) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <UniversalHeader title="Notifications" onBack={() => router.back()} />
+        <UniversalHeader title="Notifications" onBack={() => safeGoBack(router)} />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
@@ -96,7 +97,7 @@ export default function NotificationSettingsScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <UniversalHeader title="Notifications" onBack={() => router.back()} />
+      <UniversalHeader title="Notifications" onBack={() => safeGoBack(router)} />
       
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Permission Warning */}

@@ -3,6 +3,7 @@ import { View, StyleSheet, SectionList, TouchableOpacity, RefreshControl, Image,
 import { Text, ActivityIndicator, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { safeGoBack } from '../utils/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import { BACKEND_URL } from '../utils/config';
 import * as SecureStore from 'expo-secure-store';
@@ -506,7 +507,7 @@ export default function ExploreCountriesScreen() {
           <View style={styles.titleWithBack}>
             {continent && (
               <TouchableOpacity 
-                onPress={() => router.back()}
+                onPress={() => safeGoBack(router)}
                 activeOpacity={0.7}
               >
                 <View style={{

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Text, ActivityIndicator, Surface } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { safeGoBack } from '../../utils/navigation';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -208,7 +209,7 @@ export default function LandmarkDetailScreen() {
 
   const handleGoBack = () => {
     if (router.canGoBack()) {
-      router.back();
+      safeGoBack(router);
     } else {
       // Fallback to explore page if no history
       router.replace('/continents');

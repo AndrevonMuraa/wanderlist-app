@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { safeGoBack } from '../utils/navigation';
 import theme from '../styles/theme';
 
 const { width } = Dimensions.get('window');
@@ -187,7 +188,7 @@ export default function WelcomeScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity 
-            onPress={() => router.back()}
+            onPress={() => safeGoBack(router)}
             style={styles.skipButton}
           >
             <Text style={styles.skipButtonText}>Skip Tutorial</Text>
