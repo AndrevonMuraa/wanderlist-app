@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, StyleSheet, ScrollView, TouchableOpacity, Platform,
-  StatusBar, Alert, TextInput, RefreshControl,
+  StatusBar, Alert, TextInput, RefreshControl, Modal,
 } from 'react-native';
 import { Text, ActivityIndicator, Switch } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
