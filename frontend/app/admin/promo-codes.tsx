@@ -1472,6 +1472,9 @@ const styles = StyleSheet.create({
   templateAddStepText: { fontSize: 14, fontWeight: '600' },
   createBtnContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
   previewBtn: { marginTop: 10, borderRadius: 12, overflow: 'hidden' },
+  resetBtn: { marginTop: 16, alignItems: 'center' },
+  resetBtnInner: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 8, borderWidth: 1, borderColor: '#ef444440' },
+  resetBtnText: { fontSize: 14, fontWeight: '500', color: '#ef4444' },
 
   // Preview modal
   previewModalContent: {
