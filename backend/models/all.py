@@ -512,3 +512,37 @@ class CollectionCreate(BaseModel):
     description: Optional[str] = None
     icon: Optional[str] = "star"
     color: Optional[str] = "#20B2AA"
+
+
+
+class PromoCode(BaseModel):
+    code_id: str
+    code: str
+    description: Optional[str] = None
+    type: str = "lifetime_premium"  # "lifetime_premium" or "timed_premium"
+    duration_days: Optional[int] = None  # None = lifetime, else number of days
+    max_uses: int = 1
+    current_uses: int = 0
+    is_active: bool = True
+    created_by: str
+    created_at: datetime
+    expires_at: Optional[datetime] = None
+
+
+class PromoCodeCreate(BaseModel):
+    code: str
+    description: Optional[str] = None
+    type: str = "lifetime_premium"
+    duration_days: Optional[int] = None
+    max_uses: int = 1
+    expires_at: Optional[str] = None
+
+
+class PromoCodeUpdate(BaseModel):
+    is_active: Optional[bool] = None
+    description: Optional[str] = None
+    max_uses: Optional[int] = None
+
+
+class PromoRedeemRequest(BaseModel):
+    code: str
