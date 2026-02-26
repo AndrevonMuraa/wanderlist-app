@@ -245,13 +245,13 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginBottom: 8,
   },
-  upvoteRow: {
+  categoryRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  upvoteText: {
+  categoryText: {
     fontSize: 14,
-    color: '#d32f2f',
+    color: '#666',
     marginLeft: 4,
     fontWeight: '600',
   },
