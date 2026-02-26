@@ -132,7 +132,7 @@ export default function AdminPromoCodes() {
 
   const handleCreate = async () => {
     if (!newCode.trim()) {
-      Alert.alert('Feil', 'Kode er paakrevd');
+      Alert.alert('Error', 'Code is required');
       return;
     }
     setCreating(true);
@@ -160,13 +160,13 @@ export default function AdminPromoCodes() {
         setNewDuration('');
         setNewMaxUses('1');
         fetchCodes();
-        Alert.alert('Opprettet', 'Kampanjekode opprettet');
+        Alert.alert('Created', 'Promo code created');
       } else {
         const err = await res.json();
-        Alert.alert('Feil', err.detail || 'Kunne ikke opprette kode');
+        Alert.alert('Error', err.detail || 'Could not create code');
       }
     } catch (e) {
-      Alert.alert('Feil', 'Noe gikk galt');
+      Alert.alert('Error', 'Something went wrong');
     } finally {
       setCreating(false);
     }
@@ -174,7 +174,7 @@ export default function AdminPromoCodes() {
 
   const handleBatchCreate = async () => {
     if (!batchPrefix.trim()) {
-      Alert.alert('Feil', 'Prefiks er paakrevd');
+      Alert.alert('Error', 'Prefix is required');
       return;
     }
     setBatchCreating(true);
@@ -202,10 +202,10 @@ export default function AdminPromoCodes() {
         fetchCodes();
       } else {
         const err = await res.json();
-        Alert.alert('Feil', err.detail || 'Kunne ikke opprette koder');
+        Alert.alert('Error', err.detail || 'Could not create codes');
       }
     } catch (e) {
-      Alert.alert('Feil', 'Noe gikk galt');
+      Alert.alert('Error', 'Something went wrong');
     } finally {
       setBatchCreating(false);
     }
@@ -228,11 +228,11 @@ export default function AdminPromoCodes() {
           a.click();
           URL.revokeObjectURL(url);
         } else {
-          Alert.alert('Eksport', `CSV med ${codes.length} koder er klar`);
+          Alert.alert('Export', `CSV with ${codes.length} codes is ready`);
         }
       }
     } catch (e) {
-      Alert.alert('Feil', 'Kunne ikke eksportere');
+      Alert.alert('Error', 'Could not export');
     }
   };
 
@@ -260,15 +260,15 @@ export default function AdminPromoCodes() {
         });
         fetchCodes();
       } catch (e) {
-        Alert.alert('Feil', 'Kunne ikke slette kode');
+        Alert.alert('Error', 'Could not delete code');
       }
     };
     if (Platform.OS === 'web') {
-      if (confirm(`Slett koden "${codeName}"?`)) doDelete();
+      if (confirm(`Delete code "${codeName}"?`)) doDelete();
     } else {
-      Alert.alert('Slett kode', `Slett "${codeName}"?`, [
-        { text: 'Avbryt', style: 'cancel' },
-        { text: 'Slett', style: 'destructive', onPress: doDelete },
+      Alert.alert('Delete code', `Delete "${codeName}"?`, [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: doDelete },
       ]);
     }
   };
@@ -285,7 +285,7 @@ export default function AdminPromoCodes() {
   const handleSendEmails = async () => {
     const emailList = emailRecipients.split(/[\n,;]+/).map(e => e.trim()).filter(e => e.includes('@'));
     if (emailList.length === 0) {
-      Alert.alert('Feil', 'Legg til minst en gyldig e-postadresse');
+      Alert.alert('Error', 'Add at least one valid email address');
       return;
     }
     setEmailSending(true);
@@ -308,10 +308,10 @@ export default function AdminPromoCodes() {
         setEmailResult({ sent: data.sent, failed: data.failed });
       } else {
         const err = await res.json();
-        Alert.alert('Feil', err.detail || 'Kunne ikke sende e-post');
+        Alert.alert('Error', err.detail || 'Could not send email');
       }
     } catch {
-      Alert.alert('Feil', 'Noe gikk galt');
+      Alert.alert('Error', 'Something went wrong');
     } finally {
       setEmailSending(false);
     }
