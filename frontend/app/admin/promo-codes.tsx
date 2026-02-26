@@ -219,6 +219,34 @@ export default function AdminPromoCodes() {
     setTemplateDirty(true);
   };
 
+  const resetTemplate = async () => {
+    const doReset = async () => {
+      try {
+        const token = await getToken();
+        const res = await fetch(`${BACKEND_URL}/api/admin/email-template`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          setTemplate(await res.json());
+          setTemplateDirty(false);
+          Alert.alert('Reset', 'Template restored to default');
+        }
+      } catch (e) {
+        Alert.alert('Error', 'Could not reset template');
+      }
+    };
+
+    if (Platform.OS === 'web') {
+      if (confirm('Reset template to default? All customizations will be lost.')) doReset();
+    } else {
+      Alert.alert('Reset template', 'Reset to default? All customizations will be lost.', [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Reset', style: 'destructive', onPress: doReset },
+      ]);
+    }
+  };
+
   const buildPreviewHtml = (): string => {
     if (!template) return '';
     const bodyText = template.body_text.replace('{access_desc}', '<strong>lifetime Premium access</strong>');
