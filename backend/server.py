@@ -1857,6 +1857,61 @@ async def get_country_travel_diaries(
     }
 
 
+@api_router.get("/countries/{country_id}/community-highlights")
+async def get_country_community_highlights(
+    country_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Get top 3 most photographed landmarks in a country."""
+    # Get all landmark IDs for this country
+    landmarks = await db.landmarks.find(
+        {"country_id": country_id},
+        {"_id": 0, "landmark_id": 1, "name": 1}
+    ).to_list(200)
+    landmark_ids = [l["landmark_id"] for l in landmarks]
+    landmark_names = {l["landmark_id"]: l["name"] for l in landmarks}
+    
+    if not landmark_ids:
+        return {"highlights": []}
+    
+    # Aggregate: count photos per landmark from public visits
+    pipeline = [
+        {"$match": {
+            "landmark_id": {"$in": landmark_ids},
+            "visibility": "public",
+            "photos": {"$exists": True, "$ne": []}
+        }},
+        {"$project": {
+            "landmark_id": 1,
+            "photo_count": {"$size": "$photos"},
+            "photos": {"$slice": ["$photos", 1]}
+        }},
+        {"$group": {
+            "_id": "$landmark_id",
+            "total_photos": {"$sum": "$photo_count"},
+            "visitor_count": {"$sum": 1},
+            "sample_photo": {"$first": {"$arrayElemAt": ["$photos", 0]}}
+        }},
+        {"$sort": {"total_photos": -1}},
+        {"$limit": 3}
+    ]
+    
+    results = await db.visits.aggregate(pipeline).to_list(3)
+    
+    highlights = []
+    for r in results:
+        lm_id = r["_id"]
+        highlights.append({
+            "landmark_id": lm_id,
+            "landmark_name": landmark_names.get(lm_id, "Unknown"),
+            "total_photos": r["total_photos"],
+            "visitor_count": r["visitor_count"],
+            "sample_photo": r.get("sample_photo"),
+        })
+    
+    return {"highlights": highlights}
+
+
 @api_router.post("/community-photos/{photo_id}/upvote")
 async def upvote_community_photo(photo_id: str, current_user: User = Depends(get_current_user)):
     """Toggle upvote on a community photo. Premium only."""
