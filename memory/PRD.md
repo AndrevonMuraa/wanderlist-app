@@ -110,6 +110,15 @@ WanderMark is a React Native (Expo SDK 54) mobile travel app where users discove
   - Upgrade CTA shows correct count ("+X more photos")
   - Upvote toggle works for premium, blocked (403) for free users
   - Both landmark and country galleries functional
+- **Photo of the Week**: VERIFIED (Feb 26, 2026) - Shows on explore page with trophy badge, photo, landmark name, user info, upvotes
+- **Travel Diary Integration**: VERIFIED (Feb 26, 2026) - Book icon appears for photos with shared diary, opens modal with diary text
+- **Share Diary Toggle**: VERIFIED (Feb 26, 2026) - Toggle in AddVisitModal shows when diary text entered, defaults ON, can be toggled OFF
+
+## What's Been Implemented (Session Feb 26, 2026 - Part 2)
+1. **Photo of the Week** - New backend endpoint + explore page section with trophy badge, showing most upvoted community photo
+2. **Travel Diary in Community Gallery** - Book icon (diary symbol) on photos with shared diary notes, clicking opens a modal with the full diary text
+3. **Share Diary Toggle** - New `share_diary` field on visits, toggle UI in AddVisitModal that appears when diary text is entered
+4. Backend correctly filters diary_notes based on share_diary flag (null when share_diary=false)
 
 ## Upcoming Tasks
 - P0: Create EAS preview build for device testing
