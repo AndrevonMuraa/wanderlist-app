@@ -43,6 +43,7 @@ export default function AddVisitModal({
 }: AddVisitModalProps) {
   const [photos, setPhotos] = useState<string[]>([]);
   const [diaryText, setDiaryText] = useState('');
+  const [shareDiary, setShareDiary] = useState(true);
   const [tipsText, setTipsText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const insets = useSafeAreaInsets();
