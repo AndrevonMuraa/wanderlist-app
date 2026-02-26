@@ -365,33 +365,55 @@ export default function LandmarksScreen() {
           />
         }
         ListHeaderComponent={
-          countryProgress ? (
-            <Surface style={styles.progressHeader}>
-              <View style={styles.progressHeaderContent}>
-                <View style={styles.progressHeaderTextRow}>
-                  <Text style={styles.progressHeaderTitle}>Your Progress</Text>
-                  <View style={styles.progressStatsRow}>
-                    <Text style={styles.progressStatsText}>
-                      {countryProgress.visited}/{countryProgress.total} landmarks
-                    </Text>
-                    {countryProgress.percentage === 100 && (
-                      <Ionicons name="checkmark-circle" size={20} color="#4CAF50" style={{ marginLeft: 6 }} />
-                    )}
+          <>
+            {countryProgress ? (
+              <Surface style={styles.progressHeader}>
+                <View style={styles.progressHeaderContent}>
+                  <View style={styles.progressHeaderTextRow}>
+                    <Text style={styles.progressHeaderTitle}>Your Progress</Text>
+                    <View style={styles.progressStatsRow}>
+                      <Text style={styles.progressStatsText}>
+                        {countryProgress.visited}/{countryProgress.total} landmarks
+                      </Text>
+                      {countryProgress.percentage === 100 && (
+                        <Ionicons name="checkmark-circle" size={20} color="#4CAF50" style={{ marginLeft: 6 }} />
+                      )}
+                    </View>
                   </View>
+                  <ProgressBar
+                    percentage={countryProgress.percentage}
+                    height={8}
+                    showPercentage={false}
+                    color={countryProgress.percentage === 100 ? '#4CAF50' : theme.colors.primary}
+                    style={{ marginTop: theme.spacing.sm }}
+                  />
+                  {countryProgress.percentage === 100 && (
+                    <Text style={styles.congratsText}>All landmarks visited!</Text>
+                  )}
                 </View>
-                <ProgressBar
-                  percentage={countryProgress.percentage}
-                  height={8}
-                  showPercentage={false}
-                  color={countryProgress.percentage === 100 ? '#4CAF50' : theme.colors.primary}
-                  style={{ marginTop: theme.spacing.sm }}
-                />
-                {countryProgress.percentage === 100 && (
-                  <Text style={styles.congratsText}>🎉 All landmarks visited!</Text>
-                )}
-              </View>
-            </Surface>
-          ) : null
+              </Surface>
+            ) : null}
+            <TouchableOpacity
+              style={styles.communityPhotosLink}
+              onPress={() => router.push(`/country-community-photos/${country_id}?name=${encodeURIComponent(String(name || ''))}`)}
+              activeOpacity={0.7}
+              data-testid="country-community-photos-btn"
+            >
+              <LinearGradient
+                colors={[theme.colors.primary, theme.colors.primaryDark]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.communityPhotosGradient}
+              >
+                <Ionicons name="images" size={20} color="#fff" />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.communityPhotosTitle}>Community Photos</Text>
+                  <Text style={styles.communityPhotosSub}>Photos from travelers in {name}</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={18} color="rgba(255,255,255,0.7)" />
+              </LinearGradient>
+            </TouchableOpacity>
+          </>
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
