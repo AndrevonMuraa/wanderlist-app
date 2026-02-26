@@ -88,6 +88,23 @@ export default function AdminPromoCodes() {
   const [emailSending, setEmailSending] = useState(false);
   const [emailResult, setEmailResult] = useState<{ sent: number; failed: number } | null>(null);
 
+  // Email template state
+  interface EmailTemplate {
+    subject: string;
+    heading: string;
+    subheading: string;
+    body_text: string;
+    code_label: string;
+    steps_title: string;
+    steps: string[];
+    footer_text: string;
+    support_text: string;
+  }
+  const [template, setTemplate] = useState<EmailTemplate | null>(null);
+  const [templateLoading, setTemplateLoading] = useState(false);
+  const [templateSaving, setTemplateSaving] = useState(false);
+  const [templateDirty, setTemplateDirty] = useState(false);
+
   useEffect(() => {
     if (user && user.role !== 'admin' && user.role !== 'moderator') {
       router.replace('/(tabs)/profile');
