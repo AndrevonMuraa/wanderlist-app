@@ -876,4 +876,27 @@ const styles = StyleSheet.create({
     fontSize: 13, fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     color: '#10b981', paddingVertical: 2, letterSpacing: 0.5,
   },
+
+  // Email modal
+  modalOverlay: {
+    flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20,
+  },
+  modalContent: {
+    borderRadius: 20, maxHeight: '85%', overflow: 'hidden',
+  },
+  modalHeader: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    padding: 20, paddingBottom: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#e5e7eb',
+  },
+  modalHeaderLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  modalTitle: { fontSize: 18, fontWeight: '700' },
+  modalScroll: { padding: 20 },
+  emailTextArea: { minHeight: 80, textAlignVertical: 'top', paddingTop: 12 },
+  emailResultBox: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    marginTop: 12, paddingVertical: 10, paddingHorizontal: 14, borderRadius: 10,
+  },
+  emailResultSuccess: { backgroundColor: '#10b98115' },
+  emailResultMixed: { backgroundColor: '#f59e0b15' },
+  emailResultText: { fontSize: 14, fontWeight: '600' },
 });
