@@ -1,0 +1,97 @@
+{
+  "summary": "Custom Visits Feature Improvements Testing - All PASSED. P1: Community feed includes custom visits with source='custom', P2: PATCH visibility returns proper 404/400 errors, P3: Dedicated browsing endpoint with pagination works correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "POST /api/user-created-visits",
+        "issue": "Returns 200 instead of 201 for successful creation (minor REST convention)",
+        "note": "Not a bug, just a convention preference. Endpoint works correctly."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_custom_visits_feature.py",
+    "/app/test_reports/pytest/pytest_custom_visits.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "community.py: community-feed correctly merges visits and user_created_visits collections with proper source field",
+    "country_visits.py: PATCH visibility validates input correctly - returns 400 for invalid values, 404 for non-existent visits",
+    "country_visits.py: GET /community/custom-visits returns proper pagination structure with items, total, offset, limit"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_custom_visits_feature.py"
+  ],
+  "success_rate": {
+    "backend": "100% (19/19 passed, 2 skipped due to no test data)"
+  },
+  "test_credentials": {
+    "email": "test@wandermark.app",
+    "password": "Test1234!",
+    "subscription": "pro"
+  },
+  "seed_data_creation": "Created test custom visit: ucv_fe3deac2f590 in 'Test Country Regression'",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All three custom visit improvements (P1, P2, P3) verified working. Test user has Pro subscription. Custom visits appear in community feed with source='custom'. Visibility PATCH validates properly. Pagination on /community/custom-visits works.",
+  "features_tested": {
+    "P1_community_feed_custom_visits": {
+      "GET /api/community-feed includes custom visits": "PASS",
+      "Custom visits have source='custom'": "PASS",
+      "Custom visits have type='custom_visit'": "PASS",
+      "Landmark visits have source='landmark'": "PASS",
+      "Items sorted by visited_at descending": "PASS"
+    },
+    "P2_visibility_patch_endpoint": {
+      "PATCH /user-created-visits/{id}/visibility 404 for non-existent": "PASS",
+      "PATCH /user-created-visits/{id}/visibility 400 for invalid value": "PASS",
+      "PATCH /user-created-visits/{id}/visibility accepts public/friends/private": "PASS",
+      "PATCH requires authentication (401)": "PASS"
+    },
+    "P3_community_custom_visits_browsing": {
+      "GET /api/community/custom-visits returns paginated response": "PASS",
+      "Response has items, total, offset, limit fields": "PASS",
+      "Respects limit parameter": "PASS",
+      "Default offset=0, limit=20": "PASS",
+      "Requires authentication (401)": "PASS"
+    },
+    "regression_tests": {
+      "Community feed still returns landmark visits": "PASS",
+      "GET /user-created-visits returns user's custom visits": "PASS",
+      "POST /user-created-visits requires Pro subscription": "PASS",
+      "DELETE non-existent visit returns 404": "PASS"
+    }
+  },
+  "verified_api_responses": {
+    "community_feed_custom_visit": {
+      "visit_id": "ucv_xxx",
+      "type": "custom_visit",
+      "source": "custom",
+      "photo_url": "optional",
+      "user_name": "string",
+      "landmark_name": "comma-separated landmarks or country_name",
+      "country_name": "string",
+      "diary_snippet": "optional"
+    },
+    "visibility_patch_success": {
+      "message": "Visibility updated",
+      "visibility": "public|friends|private"
+    },
+    "community_custom_visits": {
+      "items": "array of custom visits",
+      "total": "integer",
+      "offset": "integer",
+      "limit": "integer"
+    }
+  },
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "note": "All APIs are real - No mocking"
+  }
+}
