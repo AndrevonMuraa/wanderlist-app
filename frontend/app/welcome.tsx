@@ -161,9 +161,9 @@ export default function WelcomeScreen() {
               <Text style={styles.stepNumberText}>3</Text>
             </View>
             <View style={styles.stepContent}>
-              <Text style={styles.stepTitle}>Rank Up & Connect</Text>
+              <Text style={styles.stepTitle}>Compete & Rise</Text>
               <Text style={styles.stepText}>
-                Earn badges, climb ranks, and share your journey with friends
+                Earn points for every visit, climb the ranks, and compete on the global leaderboard
               </Text>
             </View>
           </View>
