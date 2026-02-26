@@ -46,6 +46,13 @@ Build a travel engagement app (WanderMark) with content management, admin featur
 ### UI Layout ✅
 - "Photo of the Week" moved to bottom of Explore page
 
+### Landing Page Redesign — Compete Section (Feb 26, 2026)
+- Replaced "Earn Achievements" with "Compete & Climb" in feature cards
+- Added new "Compete with Travelers Worldwide" showcase section with dark gradient
+- Shows rank tiers (Explorer, Adventurer, Legend) with medal icons
+- Points breakdown: Visit +100pts, Photo +50pts, Diary +75pts, Streak +25pts
+- Updated Quick Start step 3 to "Compete & Rise"
+
 ### Custom Visits Community Improvements (Feb 26, 2026)
 - P1: Community feed now includes custom visits (source='custom') merged with landmark visits
 - P2: PATCH /api/user-created-visits/{id}/visibility — change visibility after creation (public/friends/private)
