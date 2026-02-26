@@ -155,3 +155,75 @@ async def delete_promo_code(code_id: str, admin_user: User = Depends(get_admin_u
     await db.promo_codes.delete_one({"code_id": code_id})
     await db.promo_redemptions.delete_many({"code_id": code_id})
     return {"success": True, "message": "Kode slettet"}
+
+
+@router.post("/admin/promo-codes/batch")
+async def batch_create_promo_codes(request: PromoBatchCreate, admin_user: User = Depends(get_admin_user)):
+    prefix = request.prefix.strip().upper()
+    count = min(request.count, 500)
+
+    if count < 1:
+        raise HTTPException(status_code=400, detail="Antall maa vaere minst 1")
+
+    created_codes = []
+    skipped = 0
+    for i in range(1, count + 1):
+        code_str = f"{prefix}-{i:03d}"
+
+        existing = await db.promo_codes.find_one({"code": code_str})
+        if existing:
+            skipped += 1
+            continue
+
+        promo = {
+            "code_id": f"promo_{uuid.uuid4().hex[:12]}",
+            "code": code_str,
+            "description": request.description,
+            "type": request.type,
+            "duration_days": request.duration_days if request.type == "timed_premium" else None,
+            "max_uses": request.max_uses,
+            "current_uses": 0,
+            "is_active": True,
+            "created_by": admin_user.user_id,
+            "created_at": datetime.now(timezone.utc),
+            "expires_at": None,
+        }
+        await db.promo_codes.insert_one(promo)
+        del promo["_id"]
+        created_codes.append(promo)
+
+    return {
+        "success": True,
+        "created": len(created_codes),
+        "skipped": skipped,
+        "codes": [c["code"] for c in created_codes],
+    }
+
+
+@router.get("/admin/promo-codes/export-csv")
+async def export_promo_codes_csv(admin_user: User = Depends(get_admin_user)):
+    codes = await db.promo_codes.find({}, {"_id": 0}).sort("created_at", -1).to_list(5000)
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Kode", "Type", "Varighet (dager)", "Beskrivelse", "Maks bruk", "Brukt", "Aktiv", "Opprettet"])
+
+    for code in codes:
+        writer.writerow([
+            code["code"],
+            "Evig Premium" if code.get("type") == "lifetime_premium" else f"Tidsbegrenset ({code.get('duration_days', '?')}d)",
+            code.get("duration_days", ""),
+            code.get("description", ""),
+            code.get("max_uses", 1),
+            code.get("current_uses", 0),
+            "Ja" if code.get("is_active") else "Nei",
+            code.get("created_at", "").isoformat() if hasattr(code.get("created_at", ""), "isoformat") else str(code.get("created_at", "")),
+        ])
+
+    output.seek(0)
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=wandermark_promo_codes.csv"},
+    )
+
