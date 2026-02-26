@@ -1398,6 +1398,79 @@ async def create_landmark(data: LandmarkCreate, current_user: User = Depends(get
 
 # ============= COMMUNITY PHOTO ENDPOINTS =============
 
+@api_router.get("/community-photos/photo-of-the-week")
+async def get_photo_of_the_week(current_user: User = Depends(get_current_user)):
+    """Get the most upvoted community photo from the last 7 days."""
+    seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+    
+    # Get all photo_upvotes from last 7 days, grouped by photo_id
+    pipeline = [
+        {"$match": {"created_at": {"$gte": seven_days_ago}}},
+        {"$group": {"_id": "$photo_id", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 1}
+    ]
+    top_photos = await db.photo_upvotes.aggregate(pipeline).to_list(1)
+    
+    if not top_photos:
+        # Fallback: get most upvoted photo overall
+        pipeline_all = [
+            {"$group": {"_id": "$photo_id", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 1}
+        ]
+        top_photos = await db.photo_upvotes.aggregate(pipeline_all).to_list(1)
+    
+    if not top_photos:
+        return {"photo": None}
+    
+    photo_id = top_photos[0]["_id"]
+    upvote_count = top_photos[0]["count"]
+    
+    # Parse visit_id from photo_id (format: "visit_xxx_idx" or "cv_xxx_idx")
+    parts = photo_id.rsplit("_", 1)
+    if len(parts) != 2:
+        return {"photo": None}
+    
+    visit_id_part = parts[0]
+    photo_idx = int(parts[1]) if parts[1].isdigit() else 0
+    
+    # Find the visit
+    visit = await db.visits.find_one({"visit_id": visit_id_part}, {"_id": 0})
+    if not visit:
+        return {"photo": None}
+    
+    photos = visit.get("photos", [])
+    if photo_idx >= len(photos):
+        return {"photo": None}
+    
+    # Get user info
+    user_info = await db.users.find_one(
+        {"user_id": visit["user_id"]},
+        {"_id": 0, "name": 1, "username": 1, "picture": 1}
+    )
+    
+    # Get landmark info
+    landmark = await db.landmarks.find_one(
+        {"landmark_id": visit.get("landmark_id")},
+        {"_id": 0, "name": 1, "country_name": 1, "country_id": 1}
+    )
+    
+    return {
+        "photo": {
+            "photo_id": photo_id,
+            "photo_url": photos[photo_idx],
+            "upvotes": upvote_count,
+            "user_name": user_info.get("name", "Anonymous") if user_info else "Anonymous",
+            "username": user_info.get("username") if user_info else None,
+            "user_picture": user_info.get("picture") if user_info else None,
+            "landmark_name": landmark.get("name", "Unknown") if landmark else "Unknown",
+            "landmark_id": visit.get("landmark_id"),
+            "country_name": landmark.get("country_name") if landmark else None,
+            "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
+        }
+    }
+
 @api_router.get("/landmarks/{landmark_id}/community-photos")
 async def get_landmark_community_photos(
     landmark_id: str,
