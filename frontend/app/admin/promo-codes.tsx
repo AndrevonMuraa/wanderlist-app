@@ -867,7 +867,7 @@ export default function AdminPromoCodes() {
 
         <View style={{ height: 40 }} />
       </ScrollView>
-      ) : (
+      ) : activeTab === 'history' ? (
       /* History Tab */
       <ScrollView
         style={styles.scrollView}
