@@ -455,6 +455,41 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     marginTop: theme.spacing.xs,
   },
+  shareDiaryToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: theme.spacing.sm,
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    backgroundColor: 'rgba(77, 184, 216, 0.06)',
+    borderRadius: theme.borderRadius.md,
+  },
+  shareDiaryText: {
+    flex: 1,
+    fontSize: 13,
+    color: theme.colors.textSecondary,
+  },
+  toggleTrack: {
+    width: 40,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: theme.colors.border,
+    justifyContent: 'center',
+    paddingHorizontal: 2,
+  },
+  toggleTrackActive: {
+    backgroundColor: theme.colors.primary,
+  },
+  toggleThumb: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: '#fff',
+  },
+  toggleThumbActive: {
+    alignSelf: 'flex-end',
+  },
   tipsInput: {
     backgroundColor: theme.colors.backgroundSecondary,
     borderRadius: theme.borderRadius.lg,
