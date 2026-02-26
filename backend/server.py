@@ -6,7 +6,7 @@ from utils.db import db, client
 from routes import (
     auth, content, community, visits, admin, social,
     collections, notifications, country_visits, photos,
-    achievements, subscription, reports, push, legal,
+    achievements, subscription, reports, push, legal, promo,
 )
 
 # Configure logging
@@ -43,6 +43,7 @@ api_router.include_router(subscription.router)
 api_router.include_router(reports.router)
 api_router.include_router(push.router)
 api_router.include_router(legal.router)
+api_router.include_router(promo.router)
 
 app.include_router(api_router)
 
