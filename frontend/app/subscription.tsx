@@ -57,6 +57,9 @@ export default function SubscriptionScreen() {
   const [upgrading, setUpgrading] = useState(false);
   const [status, setStatus] = useState<SubscriptionStatus | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('yearly');
+  const [promoCode, setPromoCode] = useState('');
+  const [promoLoading, setPromoLoading] = useState(false);
+  const [promoResult, setPromoResult] = useState<{ success: boolean; message: string } | null>(null);
   
   // Use purchase context
   const { offerings, isPro, isMockMode, purchase, restore, refresh } = usePurchases();
