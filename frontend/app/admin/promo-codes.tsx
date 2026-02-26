@@ -1121,7 +1121,17 @@ export default function AdminPromoCodes() {
               </TouchableOpacity>
             </View>
           </View>
-        ) : null}
+        ) : (
+          <View style={styles.emptyWrap}>
+            <Ionicons name="document-text-outline" size={48} color={colors.textLight} />
+            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+              Could not load template. Please try again.
+            </Text>
+            <TouchableOpacity onPress={fetchTemplate} style={{ marginTop: 12, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 8, backgroundColor: '#f59e0b' }}>
+              <Text style={{ color: '#fff', fontWeight: '600', fontSize: 14 }}>Retry</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <View style={{ height: 40 }} />
       </ScrollView>
       )}
