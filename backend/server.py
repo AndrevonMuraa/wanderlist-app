@@ -193,6 +193,7 @@ class VisitCreate(BaseModel):
     travel_tips: Optional[List[str]] = []
     visibility: Optional[str] = "public"  # Privacy setting
     visited_at: Optional[datetime] = None
+    share_diary: Optional[bool] = True  # Whether to share diary in community gallery
 
 class Friend(BaseModel):
     friendship_id: str
