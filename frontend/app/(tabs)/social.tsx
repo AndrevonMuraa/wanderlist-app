@@ -86,6 +86,7 @@ export default function SocialHubScreen() {
   
   // Data states
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [communityFeed, setCommunityFeed] = useState<any[]>([]);
   const [friends, setFriends] = useState<Friend[]>([]);
   const [pendingCount, setPendingCount] = useState(0);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
