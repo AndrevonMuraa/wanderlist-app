@@ -13,6 +13,7 @@ import theme, { gradients } from '../../styles/theme';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { BACKEND_URL } from '../../utils/config';
+import { WebView } from 'react-native-webview';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') return localStorage.getItem('auth_token');
@@ -104,6 +105,7 @@ export default function AdminPromoCodes() {
   const [templateLoading, setTemplateLoading] = useState(false);
   const [templateSaving, setTemplateSaving] = useState(false);
   const [templateDirty, setTemplateDirty] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     if (user && user.role !== 'admin' && user.role !== 'moderator') {
