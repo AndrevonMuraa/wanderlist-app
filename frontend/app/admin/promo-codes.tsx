@@ -60,6 +60,17 @@ export default function AdminPromoCodes() {
   const [newMaxUses, setNewMaxUses] = useState('1');
   const [creating, setCreating] = useState(false);
 
+  // Batch create state
+  const [showBatch, setShowBatch] = useState(false);
+  const [batchPrefix, setBatchPrefix] = useState('');
+  const [batchCount, setBatchCount] = useState('10');
+  const [batchDesc, setBatchDesc] = useState('');
+  const [batchType, setBatchType] = useState<'lifetime_premium' | 'timed_premium'>('lifetime_premium');
+  const [batchDuration, setBatchDuration] = useState('');
+  const [batchMaxUses, setBatchMaxUses] = useState('1');
+  const [batchCreating, setBatchCreating] = useState(false);
+  const [batchResult, setBatchResult] = useState<{ created: number; codes: string[] } | null>(null);
+
   useEffect(() => {
     if (user && user.role !== 'admin' && user.role !== 'moderator') {
       router.replace('/(tabs)/profile');
