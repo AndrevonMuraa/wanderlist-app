@@ -114,6 +114,7 @@ export default function SocialHubScreen() {
   const loadAllData = async () => {
     await Promise.all([
       loadFeed(),
+      loadCommunityFeed(),
       loadFriends(),
       loadLeaderboard(),
       loadPendingRequests(),
