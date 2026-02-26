@@ -720,7 +720,7 @@ export default function AdminPromoCodes() {
                         <Text style={[styles.redemptionEmail, { color: colors.textSecondary }]}>{r.user_email}</Text>
                       </View>
                       <Text style={[styles.redemptionDate, { color: colors.textLight }]}>
-                        {new Date(r.redeemed_at).toLocaleDateString('nb-NO')}
+                        {new Date(r.redeemed_at).toLocaleDateString('en-US')}
                       </Text>
                     </View>
                   ))}
@@ -752,7 +752,7 @@ export default function AdminPromoCodes() {
           <View style={styles.emptyWrap}>
             <Ionicons name="mail-outline" size={48} color={colors.textLight} />
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-              Ingen e-poster sendt enna
+              No emails sent yet
             </Text>
           </View>
         ) : (
@@ -769,21 +769,21 @@ export default function AdminPromoCodes() {
                   <View style={styles.historyStatusRow}>
                     <View style={[styles.historyStatusDot, log.failed > 0 ? styles.historyStatusMixed : styles.historyStatusSuccess]} />
                     <Text style={[styles.historyDate, { color: colors.text }]}>
-                      {new Date(log.created_at).toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                      {new Date(log.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </Text>
                   </View>
                   <Text style={[styles.historySubject, { color: colors.textSecondary }]} numberOfLines={1}>
-                    {log.subject || 'Standard emne'}
+                    {log.subject || 'Default subject'}
                   </Text>
                   <View style={styles.historyStatsRow}>
                     <View style={styles.historyStatChip}>
                       <Ionicons name="checkmark-circle" size={13} color="#10b981" />
-                      <Text style={styles.historyStatSent}>{log.sent} sendt</Text>
+                      <Text style={styles.historyStatSent}>{log.sent} sent</Text>
                     </View>
                     {log.failed > 0 && (
                       <View style={styles.historyStatChip}>
                         <Ionicons name="close-circle" size={13} color="#ef4444" />
-                        <Text style={styles.historyStatFailed}>{log.failed} feilet</Text>
+                        <Text style={styles.historyStatFailed}>{log.failed} failed</Text>
                       </View>
                     )}
                     <View style={styles.historyStatChip}>
@@ -805,17 +805,17 @@ export default function AdminPromoCodes() {
                 <View style={[styles.historyDetails, { borderTopColor: colors.border }]}>
                   {log.sender_name && (
                     <View style={styles.historyDetailRow}>
-                      <Text style={[styles.historyDetailLabel, { color: colors.textLight }]}>Sendt av</Text>
+                      <Text style={[styles.historyDetailLabel, { color: colors.textLight }]}>Sent by</Text>
                       <Text style={[styles.historyDetailValue, { color: colors.text }]}>{log.sender_name}</Text>
                     </View>
                   )}
                   {log.personal_message ? (
                     <View style={styles.historyDetailRow}>
-                      <Text style={[styles.historyDetailLabel, { color: colors.textLight }]}>Melding</Text>
+                      <Text style={[styles.historyDetailLabel, { color: colors.textLight }]}>Message</Text>
                       <Text style={[styles.historyDetailValue, { color: colors.text }]} numberOfLines={2}>{log.personal_message}</Text>
                     </View>
                   ) : null}
-                  <Text style={[styles.historyDetailLabel, { color: colors.textLight, marginTop: 10 }]}>Mottakere</Text>
+                  <Text style={[styles.historyDetailLabel, { color: colors.textLight, marginTop: 10 }]}>Recipients</Text>
                   {log.results?.map((r: any, i: number) => (
                     <View key={i} style={styles.historyRecipient}>
                       <Ionicons
@@ -843,7 +843,7 @@ export default function AdminPromoCodes() {
             <View style={styles.modalHeader}>
               <View style={styles.modalHeaderLeft}>
                 <Ionicons name="mail" size={22} color="#f59e0b" />
-                <Text style={[styles.modalTitle, { color: colors.text }]}>Send kampanjekode</Text>
+                <Text style={[styles.modalTitle, { color: colors.text }]}>Send promo code</Text>
               </View>
               <TouchableOpacity onPress={() => setShowEmailModal(false)} data-testid="close-email-modal">
                 <Ionicons name="close" size={24} color={colors.textSecondary} />
@@ -851,7 +851,7 @@ export default function AdminPromoCodes() {
             </View>
 
             <ScrollView style={styles.modalScroll}>
-              <Text style={[styles.label, { color: colors.textSecondary }]}>E-postadresser (en per linje, eller kommaseparert)</Text>
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Email addresses (one per line, or comma separated)</Text>
               <TextInput
                 style={[styles.input, styles.emailTextArea, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
                 value={emailRecipients}
@@ -863,22 +863,22 @@ export default function AdminPromoCodes() {
                 data-testid="email-recipients-input"
               />
 
-              <Text style={[styles.label, { color: colors.textSecondary }]}>Emne (valgfritt)</Text>
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Subject (optional)</Text>
               <TextInput
                 style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
                 value={emailSubject}
                 onChangeText={setEmailSubject}
-                placeholder="Du har faatt en eksklusiv WanderMark Premium-tilgang!"
+                placeholder="You've received exclusive WanderMark Premium access!"
                 placeholderTextColor={colors.textLight}
                 data-testid="email-subject-input"
               />
 
-              <Text style={[styles.label, { color: colors.textSecondary }]}>Personlig melding (valgfritt)</Text>
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Personal message (optional)</Text>
               <TextInput
                 style={[styles.input, styles.emailTextArea, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
                 value={emailMessage}
                 onChangeText={setEmailMessage}
-                placeholder="Hei! Vi elsker innholdet ditt og vil gjerne at du tester WanderMark..."
+                placeholder="Hi! We love your content and would like you to try WanderMark..."
                 placeholderTextColor={colors.textLight}
                 multiline
                 numberOfLines={3}
@@ -893,7 +893,7 @@ export default function AdminPromoCodes() {
                     color={emailResult.failed > 0 ? '#f59e0b' : '#10b981'}
                   />
                   <Text style={[styles.emailResultText, { color: emailResult.failed > 0 ? '#f59e0b' : '#10b981' }]}>
-                    {emailResult.sent} sendt{emailResult.failed > 0 ? `, ${emailResult.failed} feilet` : ''}
+                    {emailResult.sent} sent{emailResult.failed > 0 ? `, ${emailResult.failed} failed` : ''}
                   </Text>
                 </View>
               )}
@@ -910,7 +910,7 @@ export default function AdminPromoCodes() {
                   ) : (
                     <>
                       <Ionicons name="send" size={18} color="#fff" />
-                      <Text style={styles.createBtnText}>Send e-post</Text>
+                      <Text style={styles.createBtnText}>Send email</Text>
                     </>
                   )}
                 </LinearGradient>
