@@ -213,6 +213,24 @@ export default function LandmarkCommunityPhotosScreen() {
             <Text style={styles.photoCount}>
               {totalCount} {totalCount === 1 ? 'photo' : 'photos'} from the community
             </Text>
+            <View style={styles.sortRow} data-testid="sort-toggle">
+              <TouchableOpacity
+                style={[styles.sortBtn, sortBy === 'popular' && styles.sortBtnActive]}
+                onPress={() => setSortBy('popular')}
+                data-testid="sort-popular"
+              >
+                <Ionicons name="flame" size={14} color={sortBy === 'popular' ? '#fff' : theme.colors.textSecondary} />
+                <Text style={[styles.sortBtnText, sortBy === 'popular' && styles.sortBtnTextActive]}>Most liked</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.sortBtn, sortBy === 'newest' && styles.sortBtnActive]}
+                onPress={() => setSortBy('newest')}
+                data-testid="sort-newest"
+              >
+                <Ionicons name="time" size={14} color={sortBy === 'newest' ? '#fff' : theme.colors.textSecondary} />
+                <Text style={[styles.sortBtnText, sortBy === 'newest' && styles.sortBtnTextActive]}>Newest</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         }
         ListFooterComponent={
