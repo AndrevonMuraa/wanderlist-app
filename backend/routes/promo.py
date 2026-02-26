@@ -289,12 +289,12 @@ def build_email_html(template, code_str, access_desc, personal_html):
     """
 
 
-@router.get("/admin/promo-codes/email-template")
+@router.get("/admin/email-template")
 async def get_email_template(admin_user: User = Depends(get_admin_user)):
     return await get_email_template_data()
 
 
-@router.put("/admin/promo-codes/email-template")
+@router.put("/admin/email-template")
 async def update_email_template(request: EmailTemplateUpdate, admin_user: User = Depends(get_admin_user)):
     update_fields = {k: v for k, v in request.dict().items() if v is not None}
     if not update_fields:
