@@ -101,7 +101,7 @@ async def create_promo_code(request: PromoCodeCreate, admin_user: User = Depends
 
     existing = await db.promo_codes.find_one({"code": code_str})
     if existing:
-        raise HTTPException(status_code=400, detail="Denne koden eksisterer allerede")
+        raise HTTPException(status_code=400, detail="This code already exists")
 
     expires_at = None
     if request.expires_at:
@@ -163,7 +163,7 @@ async def batch_create_promo_codes(request: PromoBatchCreate, admin_user: User =
     count = min(request.count, 500)
 
     if count < 1:
-        raise HTTPException(status_code=400, detail="Antall maa vaere minst 1")
+        raise HTTPException(status_code=400, detail="Count must be at least 1")
 
     created_codes = []
     skipped = 0
@@ -206,17 +206,17 @@ async def export_promo_codes_csv(admin_user: User = Depends(get_admin_user)):
 
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(["Kode", "Type", "Varighet (dager)", "Beskrivelse", "Maks bruk", "Brukt", "Aktiv", "Opprettet"])
+    writer.writerow(["Code", "Type", "Duration (days)", "Description", "Max Uses", "Used", "Active", "Created"])
 
     for code in codes:
         writer.writerow([
             code["code"],
-            "Evig Premium" if code.get("type") == "lifetime_premium" else f"Tidsbegrenset ({code.get('duration_days', '?')}d)",
+            "Lifetime Premium" if code.get("type") == "lifetime_premium" else f"Timed ({code.get('duration_days', '?')}d)",
             code.get("duration_days", ""),
             code.get("description", ""),
             code.get("max_uses", 1),
             code.get("current_uses", 0),
-            "Ja" if code.get("is_active") else "Nei",
+            "Yes" if code.get("is_active") else "No",
             code.get("created_at", "").isoformat() if hasattr(code.get("created_at", ""), "isoformat") else str(code.get("created_at", "")),
         ])
 
@@ -245,9 +245,9 @@ async def send_promo_emails(request: PromoEmailSend, admin_user: User = Depends(
     code_ids = request.code_ids
 
     if not emails:
-        raise HTTPException(status_code=400, detail="Minst en e-postadresse er paakrevd")
+        raise HTTPException(status_code=400, detail="At least one email address is required")
     if not code_ids:
-        raise HTTPException(status_code=400, detail="Minst en kampanjekode er paakrevd")
+        raise HTTPException(status_code=400, detail="At least one promo code is required")
 
     codes = []
     for cid in code_ids:
@@ -256,7 +256,7 @@ async def send_promo_emails(request: PromoEmailSend, admin_user: User = Depends(
             codes.append(code_doc)
 
     if not codes:
-        raise HTTPException(status_code=400, detail="Ingen aktive koder funnet")
+        raise HTTPException(status_code=400, detail="No active codes found")
 
     personal_msg = request.personal_message or ""
     personal_html = f'<p style="color: #374151; font-size: 15px; line-height: 1.6; margin-bottom: 20px;">{personal_msg}</p>' if personal_msg else ""
