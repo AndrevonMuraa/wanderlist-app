@@ -223,6 +223,52 @@ export default function CountryCommunityPhotosScreen() {
     </Surface>
   );
 
+  const renderDiaryCard = ({ item }: { item: DiaryEntry }) => (
+    <Surface style={styles.diaryCard} data-testid={`diary-card-${item.visit_id}`}>
+      <View style={styles.diaryCardHeader}>
+        {item.photo_url && (
+          <Image source={{ uri: item.photo_url }} style={styles.diaryThumb} resizeMode="cover" />
+        )}
+        <View style={styles.diaryCardMeta}>
+          <Text style={styles.diaryCardUser} numberOfLines={1}>{item.user_name}</Text>
+          {item.username && <Text style={styles.diaryCardHandle}>@{item.username}</Text>}
+          <View style={styles.diaryCardLandmark}>
+            <Ionicons name="location" size={11} color={theme.colors.primary} />
+            <Text style={styles.diaryCardLandmarkText} numberOfLines={1}>{item.landmark_name}</Text>
+          </View>
+        </View>
+      </View>
+      <Text style={styles.diaryCardText}>{item.diary_notes}</Text>
+      {item.visited_at && (
+        <Text style={styles.diaryCardDate}>{new Date(item.visited_at).toLocaleDateString()}</Text>
+      )}
+    </Surface>
+  );
+
+  const renderDiaryUpgradePrompt = () => (
+    <Surface style={styles.upgradeCard} data-testid="diary-upgrade-prompt">
+      <LinearGradient
+        colors={[theme.colors.accent, '#D4A574']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.upgradeGradient}
+      >
+        <Ionicons name="book" size={32} color="#fff" />
+        <Text style={styles.upgradeTitle}>
+          {diaryTotalCount > 2
+            ? `+${diaryTotalCount - 2} more travel diaries`
+            : 'Unlock All Diaries'}
+        </Text>
+        <Text style={styles.upgradeSubtitle}>
+          Upgrade to Premium for the full community travel guide
+        </Text>
+        <TouchableOpacity style={styles.upgradeButton} data-testid="diary-upgrade-button">
+          <Text style={styles.upgradeButtonText}>Upgrade to Pro</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+    </Surface>
+  );
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -236,38 +282,101 @@ export default function CountryCommunityPhotosScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="Country Photos" />
+      <UniversalHeader title={countryName as string} />
 
-      <FlatList
-        data={photos}
-        renderItem={renderPhoto}
-        keyExtractor={item => item.photo_id}
-        numColumns={2}
-        contentContainerStyle={styles.listContent}
-        columnWrapperStyle={styles.row}
-        ListHeaderComponent={
-          <View style={styles.headerSection}>
-            <Text style={styles.countryTitle} data-testid="country-name">
-              {countryName}
+      {/* Tab Bar */}
+      <View style={styles.tabBar} data-testid="country-tabs">
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'photos' && styles.tabActive]}
+          onPress={() => setActiveTab('photos')}
+          data-testid="tab-photos"
+        >
+          <Ionicons name="images" size={16} color={activeTab === 'photos' ? theme.colors.primary : theme.colors.textSecondary} />
+          <Text style={[styles.tabText, activeTab === 'photos' && styles.tabTextActive]}>Photos</Text>
+          {totalCount > 0 && <View style={styles.tabBadge}><Text style={styles.tabBadgeText}>{totalCount}</Text></View>}
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'diaries' && styles.tabActive]}
+          onPress={() => setActiveTab('diaries')}
+          data-testid="tab-diaries"
+        >
+          <Ionicons name="book" size={16} color={activeTab === 'diaries' ? theme.colors.primary : theme.colors.textSecondary} />
+          <Text style={[styles.tabText, activeTab === 'diaries' && styles.tabTextActive]}>Travel Diaries</Text>
+          {diaryTotalCount > 0 && <View style={styles.tabBadge}><Text style={styles.tabBadgeText}>{diaryTotalCount}</Text></View>}
+        </TouchableOpacity>
+      </View>
+
+      {activeTab === 'photos' ? (
+        <FlatList
+          data={photos}
+          renderItem={renderPhoto}
+          keyExtractor={item => item.photo_id}
+          numColumns={2}
+          contentContainerStyle={styles.listContent}
+          columnWrapperStyle={styles.row}
+          ListHeaderComponent={
+            <View style={styles.headerSection}>
+              <Text style={styles.photoCount}>
+                {totalCount} {totalCount === 1 ? 'photo' : 'photos'} from the community
+              </Text>
+              <View style={styles.sortRow} data-testid="sort-toggle">
+                <TouchableOpacity
+                  style={[styles.sortBtn, sortBy === 'popular' && styles.sortBtnActive]}
+                  onPress={() => setSortBy('popular')}
+                  data-testid="sort-popular"
+                >
+                  <Ionicons name="flame" size={14} color={sortBy === 'popular' ? '#fff' : theme.colors.textSecondary} />
+                  <Text style={[styles.sortBtnText, sortBy === 'popular' && styles.sortBtnTextActive]}>Most liked</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.sortBtn, sortBy === 'newest' && styles.sortBtnActive]}
+                  onPress={() => setSortBy('newest')}
+                  data-testid="sort-newest"
+                >
+                  <Ionicons name="time" size={14} color={sortBy === 'newest' ? '#fff' : theme.colors.textSecondary} />
+                  <Text style={[styles.sortBtnText, sortBy === 'newest' && styles.sortBtnTextActive]}>Newest</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          }
+          ListFooterComponent={
+            isPreview && totalCount > 3 ? renderUpgradePrompt() : null
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyContainer} data-testid="empty-state">
+              <Ionicons name="camera-outline" size={64} color={theme.colors.textSecondary} />
+              <Text style={styles.emptyTitle}>No community photos yet</Text>
+              <Text style={styles.emptySubtitle}>
+                Visit landmarks in {countryName} and share your photos!
+              </Text>
+            </View>
+          }
+        />
+      ) : (
+        <FlatList
+          data={diaries}
+          renderItem={renderDiaryCard}
+          keyExtractor={item => item.visit_id}
+          contentContainerStyle={styles.diaryListContent}
+          ListHeaderComponent={
+            <Text style={styles.diaryHeaderText}>
+              {diaryTotalCount} {diaryTotalCount === 1 ? 'diary' : 'diaries'} shared by the community
             </Text>
-            <Text style={styles.photoCount}>
-              {totalCount} {totalCount === 1 ? 'photo' : 'photos'} from the community
-            </Text>
-          </View>
-        }
-        ListFooterComponent={
-          isPreview && totalCount > 3 ? renderUpgradePrompt() : null
-        }
-        ListEmptyComponent={
-          <View style={styles.emptyContainer} data-testid="empty-state">
-            <Ionicons name="camera-outline" size={64} color={theme.colors.textSecondary} />
-            <Text style={styles.emptyTitle}>No community photos yet</Text>
-            <Text style={styles.emptySubtitle}>
-              Visit landmarks in {countryName} and share your photos!
-            </Text>
-          </View>
-        }
-      />
+          }
+          ListFooterComponent={
+            isDiaryPreview && diaryTotalCount > 2 ? renderDiaryUpgradePrompt() : null
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyContainer} data-testid="diary-empty-state">
+              <Ionicons name="book-outline" size={64} color={theme.colors.textSecondary} />
+              <Text style={styles.emptyTitle}>No travel diaries yet</Text>
+              <Text style={styles.emptySubtitle}>
+                Be the first to share your travel experiences from {countryName}!
+              </Text>
+            </View>
+          }
+        />
+      )}
 
       {/* Diary Modal */}
       <Modal
