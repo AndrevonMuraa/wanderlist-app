@@ -46,6 +46,11 @@ Build a travel engagement app (WanderMark) with content management, admin featur
 ### UI Layout ✅
 - "Photo of the Week" moved to bottom of Explore page
 
+### Custom Visits Community Improvements (Feb 26, 2026)
+- P1: Community feed now includes custom visits (source='custom') merged with landmark visits
+- P2: PATCH /api/user-created-visits/{id}/visibility — change visibility after creation (public/friends/private)
+- P3: GET /api/community/custom-visits — dedicated paginated endpoint for browsing all public custom visits
+
 ### Email Preview & Reset Feature (Feb 26, 2026)
 - "Preview email" button in template editor opens full-screen modal
 - Renders the email HTML template with sample data (EXAMPLE-CODE, lifetime Premium)
@@ -64,6 +69,8 @@ Build a travel engagement app (WanderMark) with content management, admin featur
 - POST /api/admin/promo-codes/send-email
 - GET /api/admin/promo-codes/email-history
 - GET/PUT/DELETE /api/admin/email-template
+- PATCH /api/user-created-visits/{id}/visibility
+- GET /api/community/custom-visits
 - POST /api/promo-codes/redeem
 
 ## DB Collections
