@@ -1,32 +1,36 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, Response, Cookie, Body
 from fastapi.responses import HTMLResponse
-from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
+from typing import List, Optional
 import os
 import logging
-from pathlib import Path
-from pydantic import BaseModel, Field
-from typing import List, Optional
 import uuid
 from datetime import datetime, timezone, timedelta
 import httpx
-from passlib.context import CryptContext
-from jose import JWTError, jwt
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
-
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
-
-# Security
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "your-secret-key-change-in-production")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_DAYS = 7
+# Import from refactored modules
+from utils.db import db, client
+from utils.auth import (
+    hash_password, verify_password, create_access_token,
+    is_user_pro, get_user_limits, LIMITS,
+    get_current_user, get_admin_user, get_super_admin_user,
+    SECRET_KEY, ALGORITHM, pwd_context,
+)
+from models.all import (
+    User, UserPublic, ProfileUpdate, RegisterRequest, LoginRequest,
+    GoogleTokenRequest, MagicLinkRequest, MagicLinkVerifyRequest, SessionDataResponse,
+    Country, Landmark, LandmarkFact, LandmarkCreate,
+    Visit, VisitCreate, Friend, FriendRequest, Message, MessageCreate,
+    Activity, Like, Comment, CommentCreate,
+    Report, ReportCreate,
+    BucketListItem, BucketListCreate,
+    LandmarkEntry, UserCreatedVisit, UserCreatedVisitCreate,
+    CountryVisit, CountryVisitCreate,
+    Notification, NotificationCreate, PushTokenCreate, PushNotificationSend,
+    LeaderboardEntry, Achievement, Badge, UserBadge,
+    UserStreak, UserLevel, Challenge, UserChallenge,
+    ActivityFeed, ActivityLike, ActivityComment,
+)
 
 # Create the main app without a prefix
 app = FastAPI()
