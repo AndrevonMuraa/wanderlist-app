@@ -463,6 +463,75 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: theme.colors.primary,
   },
+  // Photo of the Week
+  potwContainer: {
+    marginHorizontal: theme.spacing.md,
+    marginTop: theme.spacing.md,
+    borderRadius: theme.borderRadius.xl,
+    overflow: 'hidden',
+    height: 180,
+    ...theme.shadows.card,
+  },
+  potwBadge: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    zIndex: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  potwBadgeText: {
+    color: '#FFD700',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  potwImage: {
+    width: '100%',
+    height: '100%',
+  },
+  potwOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingTop: 40,
+    paddingBottom: 12,
+    paddingHorizontal: 14,
+  },
+  potwInfo: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+  },
+  potwTextWrap: {
+    flex: 1,
+    marginRight: 10,
+  },
+  potwLandmark: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  potwUser: {
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: 12,
+    marginTop: 2,
+  },
+  potwHeart: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  potwHeartCount: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '600',
+  },
   // Cards
   cardsContainer: {
     padding: theme.spacing.md,
