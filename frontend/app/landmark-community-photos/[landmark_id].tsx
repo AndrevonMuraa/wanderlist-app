@@ -42,6 +42,7 @@ export default function LandmarkCommunityPhotosScreen() {
   const [totalCount, setTotalCount] = useState(0);
   const [isPreview, setIsPreview] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState<'popular' | 'newest'>('popular');
   const [diaryModal, setDiaryModal] = useState<{ visible: boolean; text: string; userName: string }>({ visible: false, text: '', userName: '' });
   const router = useRouter();
   const { subscription_tier } = useSubscription();
@@ -49,7 +50,7 @@ export default function LandmarkCommunityPhotosScreen() {
 
   useEffect(() => {
     fetchPhotos();
-  }, []);
+  }, [sortBy]);
 
   const fetchPhotos = async () => {
     try {
