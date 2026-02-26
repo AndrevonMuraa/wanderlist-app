@@ -1744,7 +1744,10 @@ async def get_country_community_photos(
                 "user_upvoted": user_upvoted
             })
     
-    photos.sort(key=lambda x: (-x["upvotes"], x.get("visited_at", "") or ""))
+    if sort == "newest":
+        photos.sort(key=lambda x: x.get("visited_at", "") or "", reverse=True)
+    else:
+        photos.sort(key=lambda x: (-x["upvotes"], x.get("visited_at", "") or ""))
     
     total_count = len(photos)
     
@@ -1762,6 +1765,94 @@ async def get_country_community_photos(
         "total_count": total_count,
         "is_preview": False,
         "country_id": country_id,
+        "country_name": country_name
+    }
+
+
+@api_router.get("/countries/{country_id}/travel-diaries")
+async def get_country_travel_diaries(
+    country_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Get all shared travel diaries for a country. Premium feature."""
+    is_premium = current_user.subscription_tier == "pro"
+    
+    # Get all landmark IDs for this country
+    landmarks = await db.landmarks.find(
+        {"country_id": country_id},
+        {"_id": 0, "landmark_id": 1, "name": 1}
+    ).to_list(200)
+    landmark_ids = [l["landmark_id"] for l in landmarks]
+    landmark_names = {l["landmark_id"]: l["name"] for l in landmarks}
+    
+    country = await db.countries.find_one({"country_id": country_id}, {"_id": 0, "name": 1})
+    country_name = country["name"] if country else country_id
+    
+    # Get visits with shared diary notes
+    pipeline = [
+        {"$match": {
+            "landmark_id": {"$in": landmark_ids},
+            "visibility": "public",
+            "share_diary": True,
+            "diary_notes": {"$exists": True, "$ne": None, "$ne": ""}
+        }},
+        {"$lookup": {
+            "from": "users",
+            "localField": "user_id",
+            "foreignField": "user_id",
+            "as": "user_info"
+        }},
+        {"$unwind": {"path": "$user_info"}},
+        {"$project": {
+            "_id": 0,
+            "visit_id": 1,
+            "user_id": 1,
+            "landmark_id": 1,
+            "diary_notes": 1,
+            "photos": 1,
+            "visited_at": 1,
+            "user_name": {"$ifNull": ["$user_info.name", "Anonymous"]},
+            "user_picture": "$user_info.picture",
+            "username": "$user_info.username"
+        }},
+        {"$sort": {"visited_at": -1}}
+    ]
+    
+    visits = await db.visits.aggregate(pipeline).to_list(200)
+    
+    diaries = []
+    for visit in visits:
+        photo_url = None
+        photos = visit.get("photos", [])
+        if photos:
+            photo_url = photos[0]
+        
+        diaries.append({
+            "visit_id": visit["visit_id"],
+            "diary_notes": visit["diary_notes"],
+            "photo_url": photo_url,
+            "landmark_name": landmark_names.get(visit.get("landmark_id"), "Unknown"),
+            "landmark_id": visit.get("landmark_id"),
+            "user_name": visit.get("user_name", "Anonymous"),
+            "user_picture": visit.get("user_picture"),
+            "username": visit.get("username"),
+            "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
+        })
+    
+    total_count = len(diaries)
+    
+    if not is_premium:
+        return {
+            "diaries": diaries[:2],
+            "total_count": total_count,
+            "is_preview": True,
+            "country_name": country_name
+        }
+    
+    return {
+        "diaries": diaries,
+        "total_count": total_count,
+        "is_preview": False,
         "country_name": country_name
     }
 
