@@ -1422,4 +1422,17 @@ const styles = StyleSheet.create({
   templateAddStep: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 8 },
   templateAddStepText: { fontSize: 14, fontWeight: '600' },
   createBtnContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
+  previewBtn: { marginTop: 10, borderRadius: 12, overflow: 'hidden' },
+
+  // Preview modal
+  previewModalContent: {
+    borderRadius: 20, flex: 1, marginVertical: 40, overflow: 'hidden',
+  },
+  previewSubjectBar: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    paddingHorizontal: 20, paddingVertical: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#e5e7eb',
+  },
+  previewSubjectText: { fontSize: 13, flex: 1 },
+  previewWebView: { flex: 1 },
 });
