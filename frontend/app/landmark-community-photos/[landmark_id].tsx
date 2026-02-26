@@ -312,6 +312,34 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginTop: theme.spacing.sm,
   },
+  sortRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: theme.spacing.md,
+  },
+  sortBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 20,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  sortBtnActive: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
+  },
+  sortBtnText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  sortBtnTextActive: {
+    color: '#fff',
+  },
   photoCard: {
     flex: 1,
     maxWidth: PHOTO_SIZE,
