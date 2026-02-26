@@ -382,23 +382,29 @@ export default function LandmarkDetailScreen() {
           </View>
         )}
 
-        {/* Community Section */}
-        {landmark.category === 'user_suggested' && (
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Ionicons name="people" size={24} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Community</Text>
-            </View>
-            <Surface style={styles.card}>
-              <View style={styles.upvotesRow}>
-                <Ionicons name="arrow-up-circle" size={24} color={theme.colors.primary} />
-                <Text style={styles.upvotesText}>
-                  {landmark.upvotes} {landmark.upvotes === 1 ? 'upvote' : 'upvotes'}
-                </Text>
+        {/* Community Photos Section */}
+        <View style={styles.section}>
+          <TouchableOpacity
+            style={styles.communityPhotosButton}
+            onPress={() => router.push(`/landmark-community-photos/${landmark.landmark_id}?name=${encodeURIComponent(landmark.name)}&country=${encodeURIComponent(landmark.country_name)}`)}
+            activeOpacity={0.7}
+            data-testid="community-photos-button"
+          >
+            <LinearGradient
+              colors={[theme.colors.primary, theme.colors.primaryDark]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.communityPhotosGradient}
+            >
+              <Ionicons name="images" size={22} color="#fff" />
+              <View style={{ flex: 1 }}>
+                <Text style={styles.communityPhotosTitle}>Community Photos</Text>
+                <Text style={styles.communityPhotosSubtitle}>See photos from other travelers</Text>
               </View>
-            </Surface>
-          </View>
-        )}
+              <Ionicons name="chevron-forward" size={20} color="rgba(255,255,255,0.7)" />
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
 
         <View style={{ height: 120 }} />
       </ScrollView>
