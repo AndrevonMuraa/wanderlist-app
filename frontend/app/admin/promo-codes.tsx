@@ -219,6 +219,39 @@ export default function AdminPromoCodes() {
     setTemplateDirty(true);
   };
 
+  const buildPreviewHtml = (): string => {
+    if (!template) return '';
+    const bodyText = template.body_text.replace('{access_desc}', '<strong>lifetime Premium access</strong>');
+    const stepsHtml = template.steps.map(s => `<li>${s}</li>`).join('');
+    return `<!DOCTYPE html>
+<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>body{margin:0;padding:0;background:#e5e7eb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}</style>
+</head><body>
+<div style="max-width:520px;margin:20px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.12);">
+  <div style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);padding:40px 30px;text-align:center;border-radius:0 0 24px 24px;">
+    <h1 style="color:#fff;font-size:28px;margin:0 0 8px 0;font-weight:800;">WanderMark</h1>
+    <p style="color:#94a3b8;font-size:14px;margin:0;">${template.subheading}</p>
+  </div>
+  <div style="padding:32px 30px;">
+    <h2 style="color:#1a1a2e;font-size:22px;margin:0 0 16px 0;">${template.heading}</h2>
+    <p style="color:#374151;font-size:15px;line-height:1.6;">${bodyText}</p>
+    <div style="background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(217,119,6,0.12));border:2px dashed #f59e0b;border-radius:16px;padding:24px;text-align:center;margin:28px 0;">
+      <p style="color:#92400e;font-size:12px;text-transform:uppercase;letter-spacing:2px;margin:0 0 8px 0;font-weight:600;">${template.code_label}</p>
+      <p style="font-size:28px;font-weight:800;color:#1a1a2e;letter-spacing:3px;margin:0;font-family:'SF Mono','Menlo','Courier New',monospace;">EXAMPLE-CODE</p>
+    </div>
+    <div style="background:#f8fafc;border-radius:12px;padding:20px;margin-bottom:24px;">
+      <p style="color:#374151;font-size:14px;margin:0 0 12px 0;font-weight:600;">${template.steps_title}</p>
+      <ol style="color:#6b7280;font-size:14px;padding-left:20px;margin:0;line-height:1.8;">${stepsHtml}</ol>
+    </div>
+    <p style="color:#9ca3af;font-size:13px;text-align:center;">${template.support_text}</p>
+  </div>
+  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-top:1px solid #e5e7eb;">
+    <p style="color:#9ca3af;font-size:12px;margin:0;">${template.footer_text}</p>
+  </div>
+</div>
+</body></html>`;
+  };
+
   const handleCreate = async () => {
     if (!newCode.trim()) {
       Alert.alert('Error', 'Code is required');
