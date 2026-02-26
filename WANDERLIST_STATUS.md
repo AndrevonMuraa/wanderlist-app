@@ -30,7 +30,7 @@
 
 **Version:** 2.0.0 (Session 2 Complete)
 **Status:** Production Ready with Full Feature Set
-**Preview URL:** https://gallery-freemium-dev.preview.emergentagent.com
+**Preview URL:** https://backend-refactor-68.preview.emergentagent.com
 **Test Credentials:** mobile@test.com / test123 (Free tier)
 
 ### ✅ NEW IN SESSION 2:

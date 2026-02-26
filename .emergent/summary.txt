@@ -1,162 +1,183 @@
-<analysis>**original_problem_statement**: The user initially reported issues with a recent content update: missing flags, an uneven country grid layout, and missing premium landmarks in new countries. This led to a series of subsequent requests, including:
-- A comprehensive, multi-perspective test of the entire application.
-- The complete removal of a partial Spanish translation feature to simplify the codebase.
-- The removal of unused map functionality and other dead code.
-- Implementation of an admin feature to allow the promotion of users to 'admin' or 'moderator' roles and a secure way to create the first admin.
-- A request to set up a custom domain () for sending Forgot Password emails via Resend.
-- A request to host the app's Privacy Policy and Terms of Service directly on the new domain.
-- A request to harden user privacy by removing the ability to search for friends by email and fixing an issue where users signing up with Apple were not assigned a username.
-- A request to set up email forwarding for contact addresses listed on the new website.
+<analysis>**original_problem_statement**: The user's initial problem statement focused on content fixes, codebase cleanup, an admin panel, and custom domain setup.
 
-**User's preferred language**: Norwegian. The user provides all instructions in Norwegian. The next agent **MUST** respond in Norwegian.
+During the course of development, the user requested a series of new features to enhance community engagement:
+1.  **Community Photo Gallery**: A freemium feature to display user-submitted photos for landmarks and countries.
+2.  **Photo of the Week**: A special section on the Explore page to highlight the most upvoted photo.
+3.  **Travel Diary Integration**: The ability for users to share their travel diary notes alongside their photos, accessible via an icon in the gallery. This includes a privacy toggle for users to control sharing.
+4.  **Advanced Gallery Features**:
+    *   Sorting options for photos (Most Liked / Newest).
+    *   A dedicated Travel Diaries tab in the country-specific galleries.
+5.  **Community Highlights**: A section on the landmark detail page showing the most popular landmarks within the same continent.
+6.  **Community Feed**: A new section on the Social tab displaying the latest photos and diary entries from all users across the platform.
+7.  **Backend Refactoring**: After implementing all the new features, the user requested a major refactoring of the monolithic  file to improve organization and maintainability.
+
+**User's preferred language**: Norwegian. The next agent **MUST** respond in Norwegian.
 
 **what currently exists?**
-The project is a stable React Native (Expo SDK 54) mobile app with a FastAPI backend and MongoDB database.
+The application has a fully-featured frontend with several new community engagement features, including a Photo of the Week section, Community Highlights, a Community Feed, and advanced photo/diary galleries with sorting and tabbing. The backend was fully functional, supporting all these features.
 
-- **Content & Data:** The app now features 66 countries and 740+ landmarks. All content issues (flags, premium landmarks, data integrity) from the last update have been resolved.
-- **Admin Panel:** A basic admin system is in place.
-    - An endpoint  allows the creation of the first admin user via a secret key.
-    - The frontend admin panel () allows existing admins/moderators to change other users' roles (user, moderator, admin).
-- **Custom Domain & Email:**
-    - The user has purchased .
-    - The domain is configured to send emails (e.g., for password resets) from  via Resend. This is fully functional after resolving a Queued status issue related to new domain warm-up.
-- **Legal Pages:**
-    - A static website is hosted for free on GitHub Pages at .
-    - It serves a landing page (), a Privacy Policy (), and Terms of Service ().
-- **Code Health:** The codebase has been significantly cleaned up. All Spanish language (i18n) functionality and unused map components () have been removed.
-- **Privacy:** User privacy has been enhanced:
-    - Friend search is now only possible via username; email search has been removed from both the frontend and backend.
-    - New users signing up via Apple Sign-In are now automatically assigned a unique, auto-generated username, making them discoverable in social features.
+However, the backend is **currently broken**. The agent started a major refactoring of the monolithic  into a modular structure but did not complete it. It created new directories (, , ) and some initial module files but failed to properly integrate them, resulting in a non-functional backend with import errors and duplicate code definitions.
 
 **Last working item**:
-    - Last item agent was working: Finalizing the setup of the static legal pages on . The user wanted all contact email addresses on the site (, , ) to be consolidated into a single address: . The agent instructed the user on how to manually edit the  and  files directly in their  GitHub repository to make this change. The agent also updated the backend-hosted versions of these files to match.
-    - Status: USER VERIFICATION PENDING
-    - Agent Testing Done: N/A (User was performing a manual action)
-    - Which testing method agent to use? Manual verification by user.
+    - Last item agent was working: The agent was in the middle of a large-scale refactoring of the backend. The goal was to break down the massive  (over 5600 lines) into a modular structure with separate directories for models, routes, and utilities. The agent created the directory structure and some initial files (, , ) but failed when trying to update  to use these new modules.
+    - Status: IN PROGRESS
+    - Agent Testing Done: N
+    - Which testing method agent to use? backend testing agent. Once the refactoring is complete and the server starts without errors, a full regression test of all API endpoints is critical.
     - User Testing Done: N
 
 **All Pending/In progress Issue list**:
-  There are no pending or in-progress issues.
+  - **Issue 1: Backend is broken due to incomplete refactoring (P0 - BLOCKER)**
+     - Attempted fixes: The agent created new directories and files (, , ). It then attempted to modify  to import from these new modules and remove the old code. This failed because Pydantic models were still defined in  after being imported, and utility functions () were not correctly exported/imported, causing the server to fail.
+     - Next debug checklist:
+         1.  **Fix  Immediately**: Revert the last few changes to  to get the server running again with the monolithic structure. This will unblock any urgent testing if needed. A better approach is to continue the refactoring methodically.
+         2.  **Systematic Refactoring Plan**:
+             - **Step 1 (Models)**: Move *all* Pydantic models from  to . Ensure no  classes remain in . Update  to import all models from .
+             - **Step 2 (Utilities)**: Move all helper functions (database connection, password hashing, token creation) into their respective files in . Ensure they are correctly exported and imported in .
+             - **Step 3 (Routes)**: This is the largest step. Create new files in  for each logical group of endpoints (e.g., , , ). Move the corresponding endpoint functions from  into these new files, creating an  in each.
+             - **Step 4 (Main App)**: Create a new  that initializes the FastAPI app, adds middleware, and uses  to include all the routers from the  directory.
+             - **Step 5 (Cleanup)**: Once  is fully functional and tested, delete the now-redundant  and rename  to  to align with the supervisor configuration.
+     - Why fix this issue and what will be achieved with the fix? The entire application is currently down. Fixing this will restore functionality and result in a clean, maintainable, and scalable backend architecture as requested by the user.
+     - Status: IN PROGRESS
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix? Backend (extensively).
+     - Blocked on other issue: No, this is the main blocker.
 
 **In progress Task List**:
-  - **Task 1: Confirm Legal Page Email Update** (Priority: P0)
-     - Where to resume: Ask the user to confirm they have successfully edited the  and  files in their  GitHub repository to use  as the sole contact email.
-     - What will be achieved with this? This finalizes the professional setup of the legal pages hosted on the user's custom domain.
+  - **Task 1: Complete Backend Refactoring (P0)**
+     - Where to resume: The agent has created the basic directory structure. The next step is to methodically execute the Next debug checklist above, starting with moving all Pydantic models out of .
+     - What will be achieved with this? A stable, organized, and production-ready backend codebase.
      - Status: IN PROGRESS
-     - Should Test frontend/backend/both after fix? Frontend (manual check of the live website)
-     - Blocked on something: User action.
+     - Should Test frontend/backend/both after fix? Backend.
+     - Blocked on something: This is the primary task.
 
 **Upcoming and Future Tasks**
 - **Upcoming Tasks:**
-    - **P0: Create and Provide New EAS Build:** This is the most critical next step. The user has been waiting for a new build to test all the significant changes made across multiple sessions, including the content fixes, code cleanup, new admin panel, privacy hardening, and custom domain email sending.
+    - **P0: Create and Provide New EAS Build:** This is the most critical user-facing task but is **blocked** by the broken backend. Once the refactoring is complete and the backend is stable, this becomes the highest priority.
 - **Future Tasks:**
-    - **P1: Implement Email Forwarding for :** The user wants to receive emails sent to . The current setup with Namecheap DNS and Resend blocks simple forwarding. A new plan is needed, such as migrating DNS management to Cloudflare to use their free Email Routing feature.
-    - **P2: Verify Re-enabled Features (on Device):** Once the new EAS build is delivered, the user needs to perform end-to-end testing on a physical device to confirm the full functionality of RevenueCat (payments), statistics sharing, and pickers.
+    - **P1: Verify Re-enabled Features (on Device):** After the new EAS build is delivered, the user needs to perform end-to-end testing of RevenueCat, statistics sharing, and other native mobile functions.
 
 **Completed work in this session**
-- **Content & Data Integrity:**
-  - Added 3 new countries (Chile, New Zealand, Egypt) to create even UI grids, bringing the total to 66.
-  - Added missing flags (ISO codes and emojis) for 18 countries.
-  - Added premium landmarks to 17 countries that were missing them.
-  - Fixed an issue where some landmarks had incorrect point values (25 instead of 10).
-  - Cleaned up 6 orphan/duplicate landmarks in the database.
-  - Updated all hardcoded frontend counts in .
-- **Code Cleanup & Refactoring:**
-  - **Removed Spanish i18n:** Deleted , , and all related logic for a simplified, English-only app.
-  - **Removed Dead Code:** Deleted unused map components (, etc.), , and uninstalled the  package.
-- **Feature Implementation & Bug Fixes:**
-  - **Admin Panel:** Implemented a secure  endpoint to create the first admin and updated the frontend to allow role changes (admin, moderator, user).
-  - **Comprehensive Testing:** Ran a full application test which identified and led to the fixing of a bug where the user's bucket list was returned as a list instead of an object.
-- **Privacy Hardening:**
-  - **Friend Search:** Removed the ability to find friends via email, enforcing username-only searches.
-  - **Apple Sign-In:** Fixed a critical bug where Apple users were not assigned a username. They are now given a unique, auto-generated username upon registration.
-- **Custom Domain & Email Setup:**
-  - Guided the user to purchase .
-  - Configured the domain with Resend to send transactional emails from .
-  - Debugged and resolved email delivery issues related to new domain warm-up (Queued status).
-- **Static Website for Legal Pages:**
-  - Created HTML files for a landing page, Privacy Policy, and Terms of Service.
-  - Guided the user to host these files on GitHub Pages, accessible directly at , , etc.
-  - Unified all contact emails on the website to .
+- **Feature Verification**: Successfully verified the Community Photo Gallery feature (implemented in a previous session) with the user by providing detailed screenshots of both freemium and premium views.
+- **Implemented Photo of the Week**: Added a backend endpoint () and a new UI section on the Explore tab to display the winning photo.
+- **Implemented Travel Diary Sharing**:
+    - Added a  boolean toggle to the Add Visit modal.
+    - Updated backend endpoints to only include  if  is true.
+    - Added a diary icon to photos in the community gallery, which opens a modal to display the diary text.
+- **Implemented Advanced Gallery Features**:
+    - Added a Most Liked / Newest sort toggle to the landmark photo gallery.
+    - Created a tabbed view in the country gallery to switch between Photos and a new Travel Diaries list.
+- **Implemented Community Highlights**: Added a backend endpoint () and a UI section on the landmark detail page to showcase popular landmarks on the same continent.
+- **Implemented Community Feed**: Added a backend endpoint () and a new horizontally-scrolling UI section on the Social tab to show the latest activity from all users.
+- **Bug Fixes & Housekeeping**:
+    - Fixed a React Native Web bug where changing  on a  caused a crash by replacing it with a  and flexbox layout.
+    - Resolved a  warning from the testing agent by removing a duplicate entry in the landmark data.
+    - Consistently used the  to validate each new feature, achieving 100% pass rates on backend tests.
+
+**Earlier issues found/mentioned but not fixed**
+   - None.
+
+**Known issue recurrence from previous fork**
+  - None.
 
 **Code Architecture**
-- **Framework:** React Native with Expo SDK 54.
-- **Architecture:** Expo Router (file-based routing).
-- **Backend:** A single  file using FastAPI.
-- **Database:** MongoDB.
-- **Static Site:** A separate static site for legal pages is hosted on GitHub Pages and linked to the  domain.
+- **Backend (In Transition)**:
+    - **Current state**: Monolithic  (broken).
+    - **Target state**: Modular structure being built.
+        -  (or refactored ): FastAPI app instantiation, middleware.
+        - : Directory containing  modules for different resources (e.g., , , , ).
+        - : Directory for Pydantic models.
+        - : Directory for shared utilities like database connection () and authentication helpers ().
+- **Frontend**: React Native with Expo SDK 54 and Expo Router for file-based routing.
 
 **Key Technical Concepts**
-- **DNS Management:** Configuration of A, CNAME, MX, and TXT records via Namecheap to integrate with GitHub Pages and Resend.
-- **Static Site Hosting:** Using GitHub Pages to serve , , and  on a custom domain.
-- **Email Service Integration:** Integrating Resend for transactional emails, including debugging domain warm-up periods.
-- **Privacy by Design:** Refactoring API endpoints and frontend components to prevent email exposure and ensure all users have a username.
+- **Backend Refactoring**: Transitioning from a single-file application to a modular, larger application structure as recommended by FastAPI documentation.
+- **MongoDB Aggregation**: Extensive use of complex pipelines (, , , ) to power the new community feed, highlights, and gallery features.
+- **React Native Web Bug Resolution**: Diagnosed and fixed a web-specific  rendering issue by replacing the component with a more flexible  and  styling.
+- **Conditional Data Projection**: Backend logic to selectively include sensitive or optional data (like ) based on user preferences ( flag).
+
+**key DB schema**
+- **visits**:  (boolean) field was added to the root of visit documents.
+
+**changes in tech stack**
+- None.
 
 **All files of reference**
-- **Created/Updated (Backend):**
-  - : Updated  and .
-  - :
-    - Added  and updated  for role management.
-    - Added  and  to serve HTML pages.
-    - Removed email search from friend request logic.
-    - Added username auto-generation for Apple Sign-In.
-    - Fixed bucket list return type.
-- **Created/Updated (Static Site):**
+- **Created (Backend - Refactoring):**
   - 
   - 
   - 
   - 
+  - 
+  - 
+- **Updated (Backend):**
+  - : Heavily modified to add numerous endpoints, and then broken during the refactoring attempt.
 - **Updated (Frontend):**
-  - : Added UI for role filtering.
-  - : Added buttons to change user roles.
-  - : Changed friend search input from email to username.
-  - : Updated hardcoded landmark/country counts.
-  - : Added missing country flag ISO codes.
-  - : Added missing country flag emojis.
-- **Deleted (Frontend):**
-  - 
-  - 
-  -  and related map component files.
-  - 
+  - : Added sort toggle.
+  - : Completely refactored to use a tabbed view for Photos/Diaries, a sort toggle, and replaced  with .
+  - : Added Photo of the Week section.
+  - : Added Community Highlights section.
+  - : Added Community Feed section.
+  - : Added Share Travel Diary toggle.
+
+**Areas that need refactoring**:
+- The main task is to complete the refactoring of .
 
 **key api endpoints**
-- : Creates the first admin user using a secret key.
-- : Updates a user's role.
-- : Serves the Privacy Policy HTML page.
-- : Serves the Terms of Service HTML page.
-- : Now accepts  only.
-- : Now auto-generates a username for new users.
+- ****: Gets the top-voted photo.
+- ****: Gets the latest photos/diaries from all users.
+- ****: Gets popular landmarks for a continent.
+- ****: Gets all shared diaries for a country.
+-  and  were updated to accept a  query parameter.
 
 **Critical Info for New Agent**
-- **Your immediate priority is to create an EAS build.** First, confirm with the user that they have finished editing the HTML files on GitHub. Once confirmed, propose and execute the plan to create a new EAS  build so the user can finally test all the accumulated changes.
 - **Communicate in Norwegian.**
-- Be prepared to discuss the next steps for email forwarding for . The recommended solution is to suggest migrating DNS to Cloudflare to use their free Email Routing service, as Namecheap's forwarding conflicts with Resend's MX records.
+- **The backend is broken.** Your absolute first priority is to fix the application by completing the refactoring of . Do not attempt any other task until the backend is stable and all APIs are verified.
+- Follow the step-by-step plan outlined in the All Pending/In progress Issue list to complete the refactoring without losing work.
+- After the backend is fixed, the user's highest priority is getting a **new EAS Build** to test all the new features on a real device.
+
+**documents and test reports created in this job**
+- 
+- 
+- 
+- 
+- 
+-  (updated multiple times)
 
 **Last 10 User Messages and any pending HUMAN messages**
-- **User (4):** Agrees to use  as the single contact address.
-- **Agent (4):** Instructs the user on how to edit the  and  files in their GitHub repo to make the change.
-- **User (3):** Asks if their Hotmail address used for Namecheap registration affects the process (it doesn't).
-- **Agent (3):** Explains it doesn't and reiterates the choice of which contact email to use.
-- **User (2):** Chooses option 1: use .
-- **Agent (2):** Explains that Namecheap's email forwarding is blocked by Resend's MX records and recommends consolidating to a single email address on the webpages.
-- **User (1):** Reports that Namecheap email forwarding is blocked.
-- **Agent (1):** Instructs user to set up forwarding in Namecheap, but warns of a potential conflict.
+- **User (10)**: Perfekt, kjør på! (Perfect, go for it!) - Approving the backend refactoring plan.
+- **User (9)**: Asks for clarification between Feed and Community Feed.
+- **User (8)**: Asks the agent to switch focus to the refactoring task to better organize the codebase and check for logical errors or redundant data.
+- **User (7)**: Kjør foreslått forbedring! 🤩 (Run the suggested improvement!) - Approving the Community Feed feature.
+- **User (6)**: Perfekt, kjør foreslått forbedring (Perfect, run the suggested improvement) - Approving the Community Highlights feature.
+- **User (5)**: Perfekt, implementer forbedring! (Perfect, implement improvement!) - Approving the advanced gallery features (sorting/tabs).
+- **User (4)**: Supert! Ja legg til forbedring Photo of the week. Kan du også knytte travel diary funksjonen... (Super! Yes, add the 'Photo of the week' improvement. Can you also connect the travel diary function...) - Approving the Photo of the Week feature and requesting the travel diary integration.
+- **User (3)**: God plan! Men ønsker en justering... (Good plan! But I want an adjustment...) - Refining the travel diary plan to use a clickable icon instead of showing text directly.
+- **User (2)**: Ja. Test også at de nye funksjonene fungerer... (Yes. Also test that the new features work...) - Initial confirmation to verify the Community Gallery feature.
+- **User (1)**: Provides the content of the Settings page in Cloudflare (from previous session).
 
 **Project Health Check:**
-- **Working**: All core app features, admin panel, custom domain email sending (Resend), and static legal site (GitHub pages).
-- **Broken**: No features are known to be broken.
-- **Mocked/Disabled**: Nothing is mocked or disabled.
+- **Working**: Frontend UI code is complete for all new features.
+- **Broken**: **Backend is non-functional.** The  file is in a broken state due to an incomplete refactoring attempt. The entire application will not work until this is fixed.
+- **Mocked/Disabled**: None.
 
 **3rd Party Integrations**
 - **Expo SDK 54**: Core framework.
 - **Apple Authentication**: For Apple Sign-In.
-- **Resend**: For sending transactional emails from .
-- **RevenueCat**: For in-app purchases (re-enabled, needs device testing).
-- **Namecheap**: User's domain registrar.
-- **GitHub Pages**: Hosting the static legal website for .
+- **Resend**: For sending transactional emails.
+- **RevenueCat**: For in-app purchases.
+- **Namecheap**: User's domain registrar (DNS now managed by Cloudflare).
+- **GitHub Pages**: Hosting the static legal website.
+- **Cloudflare**: Manages DNS and provides the Email Routing service.
 
 **Testing status**
-- Testing agent used after significant changes: YES. A comprehensive test suite was run, which found one backend bug (fixed) and one non-critical web-only UI bug (deferred).
-- Troubleshoot agent used after agent stuck in loop: NO
-- Test files created: []
-- Known regressions: None known. A full device test by the user via a new EAS build is required to confirm.</analysis>
+  - Testing agent used after significant changes: YES. The agent used  after every single feature was added, ensuring each was stable before moving to the next.
+  - Troubleshoot agent used after agent stuck in loop: NO
+  - Test files created: None persisted.
+  - Known regressions: The entire backend is currently a regression due to the failed refactoring.
+
+**Credentials to test flow:**
+- **E-post:** 
+- **Passord:** 
+
+**What agent forgot to execute**
+The agent failed to complete the backend refactoring task it started, underestimating its complexity. It left the application in a completely broken state by attempting to modify  without a robust, step-by-step plan, leading to import errors and code conflicts.</analysis>

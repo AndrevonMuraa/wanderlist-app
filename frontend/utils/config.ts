@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 
 // Production backend URL - hardcoded as fallback to ensure it's always available
-const PRODUCTION_BACKEND_URL = 'https://gallery-freemium-dev.preview.emergentagent.com';
+const PRODUCTION_BACKEND_URL = 'https://backend-refactor-68.preview.emergentagent.com';
 
 // Determine the correct backend URL based on environment
 const getBackendURL = () => {

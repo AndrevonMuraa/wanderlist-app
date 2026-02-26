@@ -11,7 +11,7 @@ from datetime import datetime
 import base64
 
 # Test Configuration
-BASE_URL = "https://gallery-freemium-dev.preview.emergentagent.com/api"
+BASE_URL = "https://backend-refactor-68.preview.emergentagent.com/api"
 TEST_EMAIL = "mobile@test.com"
 TEST_PASSWORD = "test123"
 
