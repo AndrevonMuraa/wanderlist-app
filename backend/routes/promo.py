@@ -129,7 +129,7 @@ async def create_promo_code(request: PromoCodeCreate, admin_user: User = Depends
 async def update_promo_code(code_id: str, request: PromoCodeUpdate, admin_user: User = Depends(get_admin_user)):
     promo = await db.promo_codes.find_one({"code_id": code_id})
     if not promo:
-        raise HTTPException(status_code=404, detail="Kode ikke funnet")
+        raise HTTPException(status_code=404, detail="Code not found")
 
     update_fields = {}
     if request.is_active is not None:
@@ -150,11 +150,11 @@ async def update_promo_code(code_id: str, request: PromoCodeUpdate, admin_user: 
 async def delete_promo_code(code_id: str, admin_user: User = Depends(get_admin_user)):
     promo = await db.promo_codes.find_one({"code_id": code_id})
     if not promo:
-        raise HTTPException(status_code=404, detail="Kode ikke funnet")
+        raise HTTPException(status_code=404, detail="Code not found")
 
     await db.promo_codes.delete_one({"code_id": code_id})
     await db.promo_redemptions.delete_many({"code_id": code_id})
-    return {"success": True, "message": "Kode slettet"}
+    return {"success": True, "message": "Code deleted"}
 
 
 @router.post("/admin/promo-codes/batch")
@@ -239,7 +239,7 @@ async def send_promo_emails(request: PromoEmailSend, admin_user: User = Depends(
     sender_email = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
 
     if not resend.api_key:
-        raise HTTPException(status_code=500, detail="E-posttjeneste er ikke konfigurert")
+        raise HTTPException(status_code=500, detail="Email service is not configured")
 
     emails = [e.strip().lower() for e in request.emails if e.strip()]
     code_ids = request.code_ids
@@ -261,7 +261,7 @@ async def send_promo_emails(request: PromoEmailSend, admin_user: User = Depends(
     personal_msg = request.personal_message or ""
     personal_html = f'<p style="color: #374151; font-size: 15px; line-height: 1.6; margin-bottom: 20px;">{personal_msg}</p>' if personal_msg else ""
 
-    subject = request.subject or "Du har faatt en eksklusiv WanderMark Premium-tilgang!"
+    subject = request.subject or "You've received exclusive WanderMark Premium access!"
 
     sent = 0
     failed = 0
@@ -274,49 +274,49 @@ async def send_promo_emails(request: PromoEmailSend, admin_user: User = Depends(
         duration = code.get("duration_days")
 
         if code_type == "lifetime_premium":
-            access_desc = "evig Premium-tilgang"
+            access_desc = "lifetime Premium access"
         else:
-            access_desc = f"{duration} dagers gratis Premium-tilgang"
+            access_desc = f"{duration} days of free Premium access"
 
         html_content = f"""
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 520px; margin: 0 auto; padding: 0; background: #ffffff;">
             <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 40px 30px; text-align: center; border-radius: 0 0 24px 24px;">
                 <h1 style="color: #ffffff; font-size: 28px; margin: 0 0 8px 0; font-weight: 800;">WanderMark</h1>
-                <p style="color: #94a3b8; font-size: 14px; margin: 0;">Utforsk verden. Samle minner.</p>
+                <p style="color: #94a3b8; font-size: 14px; margin: 0;">Explore the world. Collect memories.</p>
             </div>
 
             <div style="padding: 32px 30px;">
-                <h2 style="color: #1a1a2e; font-size: 22px; margin: 0 0 16px 0;">Du er invitert!</h2>
+                <h2 style="color: #1a1a2e; font-size: 22px; margin: 0 0 16px 0;">You're invited!</h2>
 
                 {personal_html}
 
                 <p style="color: #374151; font-size: 15px; line-height: 1.6;">
-                    Vi gir deg <strong>{access_desc}</strong> til WanderMark Premium.
-                    Laaas opp alle premium-landemerker, ubegrenset bilder, avanserte reisedagboker og mye mer.
+                    We're giving you <strong>{access_desc}</strong> to WanderMark Premium.
+                    Unlock all premium landmarks, unlimited photos, advanced travel diaries and much more.
                 </p>
 
                 <div style="background: linear-gradient(135deg, #f59e0b20, #d9770620); border: 2px dashed #f59e0b; border-radius: 16px; padding: 24px; text-align: center; margin: 28px 0;">
-                    <p style="color: #92400e; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 8px 0; font-weight: 600;">Din kampanjekode</p>
+                    <p style="color: #92400e; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 8px 0; font-weight: 600;">Your promo code</p>
                     <p style="font-size: 28px; font-weight: 800; color: #1a1a2e; letter-spacing: 3px; margin: 0; font-family: 'SF Mono', 'Menlo', 'Courier New', monospace;">{code_str}</p>
                 </div>
 
                 <div style="background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-                    <p style="color: #374151; font-size: 14px; margin: 0 0 12px 0; font-weight: 600;">Slik bruker du koden:</p>
+                    <p style="color: #374151; font-size: 14px; margin: 0 0 12px 0; font-weight: 600;">How to use your code:</p>
                     <ol style="color: #6b7280; font-size: 14px; padding-left: 20px; margin: 0; line-height: 1.8;">
-                        <li>Last ned WanderMark fra App Store</li>
-                        <li>Opprett en konto eller logg inn</li>
-                        <li>Gaa til Profil &rarr; Oppgrader til Premium</li>
-                        <li>Skriv inn koden ovenfor</li>
+                        <li>Download WanderMark from the App Store</li>
+                        <li>Create an account or log in</li>
+                        <li>Go to Profile &rarr; Upgrade to Premium</li>
+                        <li>Enter the code above</li>
                     </ol>
                 </div>
 
                 <p style="color: #9ca3af; font-size: 13px; text-align: center;">
-                    Har du spoersmaal? Kontakt oss paa <a href="mailto:support@wandermark.app" style="color: #f59e0b;">support@wandermark.app</a>
+                    Have questions? Contact us at <a href="mailto:support@wandermark.app" style="color: #f59e0b;">support@wandermark.app</a>
                 </p>
             </div>
 
             <div style="background: #f8fafc; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
-                <p style="color: #9ca3af; font-size: 12px; margin: 0;">WanderMark &copy; 2026 &mdash; Utforsk. Opplev. Del.</p>
+                <p style="color: #9ca3af; font-size: 12px; margin: 0;">WanderMark &copy; 2026 &mdash; Explore. Experience. Share.</p>
             </div>
         </div>
         """
@@ -362,7 +362,7 @@ async def get_email_history(admin_user: User = Depends(get_admin_user)):
 
     for log in logs:
         sender = await db.users.find_one({"user_id": log.get("sent_by")}, {"_id": 0, "name": 1, "email": 1})
-        log["sender_name"] = sender.get("name", "Ukjent") if sender else "Ukjent"
+        log["sender_name"] = sender.get("name", "Unknown") if sender else "Unknown"
         log["sender_email"] = sender.get("email", "") if sender else ""
 
         code_names = []
