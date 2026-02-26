@@ -553,4 +553,27 @@ async def delete_user_created_visit(visit_id: str, current_user: User = Depends(
     
     return {"message": "Custom visit deleted successfully"}
 
+
+@router.patch("/user-created-visits/{visit_id}/visibility")
+async def update_custom_visit_visibility(visit_id: str, current_user: User = Depends(get_current_user), body: dict = Body(...)):
+    """Update the visibility of a user-created visit"""
+    new_visibility = body.get("visibility")
+    if new_visibility not in ("public", "friends", "private"):
+        raise HTTPException(status_code=400, detail="Visibility must be 'public', 'friends', or 'private'")
+
+    result = await db.user_created_visits.update_one(
+        {"user_created_visit_id": visit_id, "user_id": current_user.user_id},
+        {"$set": {"visibility": new_visibility}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Visit not found or not authorized")
+
+    # Also update the associated activity
+    await db.activities.update_one(
+        {"user_created_visit_id": visit_id},
+        {"$set": {"visibility": new_visibility}}
+    )
+
+    return {"message": "Visibility updated", "visibility": new_visibility}
+
 # ============= END USER CREATED VISIT ENDPOINTS =============
