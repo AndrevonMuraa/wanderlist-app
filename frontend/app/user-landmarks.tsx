@@ -79,9 +79,9 @@ export default function UserLandmarksScreen() {
           <Text style={styles.landmarkDescription} numberOfLines={2}>
             {item.description}
           </Text>
-          <View style={styles.upvoteRow}>
-            <Ionicons name="heart" size={16} color="#d32f2f" />
-            <Text style={styles.upvoteText}>{item.upvotes} upvotes</Text>
+          <View style={styles.categoryRow}>
+            <Ionicons name={item.category === 'premium' ? 'diamond' : 'location'} size={14} color={item.category === 'premium' ? '#C9A961' : '#4DB8D8'} />
+            <Text style={styles.categoryText}>{item.category === 'premium' ? 'Premium' : 'Official'}</Text>
           </View>
         </View>
       </Surface>
