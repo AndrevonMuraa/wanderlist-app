@@ -354,3 +354,22 @@ async def send_promo_emails(request: PromoEmailSend, admin_user: User = Depends(
         "failed": failed,
         "results": results,
     }
+
+
+@router.get("/admin/promo-codes/email-history")
+async def get_email_history(admin_user: User = Depends(get_admin_user)):
+    logs = await db.promo_email_logs.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+
+    for log in logs:
+        sender = await db.users.find_one({"user_id": log.get("sent_by")}, {"_id": 0, "name": 1, "email": 1})
+        log["sender_name"] = sender.get("name", "Ukjent") if sender else "Ukjent"
+        log["sender_email"] = sender.get("email", "") if sender else ""
+
+        code_names = []
+        for cid in log.get("code_ids", []):
+            code_doc = await db.promo_codes.find_one({"code_id": cid}, {"_id": 0, "code": 1})
+            if code_doc:
+                code_names.append(code_doc["code"])
+        log["code_names"] = code_names
+
+    return logs
