@@ -5,13 +5,17 @@ WanderMark is a React Native (Expo SDK 54) mobile travel app where users discove
 
 ## Architecture
 - **Frontend:** React Native with Expo SDK 54, Expo Router (file-based routing)
-- **Backend:** FastAPI (single server.py)
+- **Backend:** FastAPI (modular structure - refactored Feb 26, 2026)
+  - `server.py` - Main app entry point (52 lines)
+  - `routes/` - 15 route modules (auth, content, community, visits, admin, social, collections, notifications, country_visits, photos, achievements, subscription, reports, push, legal)
+  - `utils/` - Shared utilities (auth.py, db.py, helpers.py)
+  - `models/` - Pydantic models (all.py)
 - **Database:** MongoDB
 - **Email:** Resend (transactional emails from noreply@wandermark.app)
 - **DNS:** Cloudflare (migrated from Namecheap BasicDNS)
 - **Static Site:** GitHub Pages (wandermark.app - landing, privacy, terms)
 - **Payments:** RevenueCat (in-app purchases)
-- **Auth:** Apple Sign-In + email/password
+- **Auth:** Apple Sign-In + email/password + Google Sign-In + Magic Link
 
 ## Content Stats
 - **66 countries** across 5 continents
@@ -34,120 +38,66 @@ WanderMark is a React Native (Expo SDK 54) mobile travel app where users discove
 - PUT /api/admin/users/{user_id} - Change user roles
 - Frontend admin panel with role filtering and management
 
-### Privacy & Security
-- Friend search: username-only (email search removed)
-- Apple Sign-In: auto-generated usernames for new users
-- Bucket list bug fix (list to object)
+### Community Features
+- **Community Photo Gallery** - Freemium model (3 photos free, all for premium)
+- **Photo of the Week** - Most upvoted photo on explore page
+- **Travel Diary Sharing** - Share diary notes with photos, privacy toggle
+- **Advanced Gallery** - Sort by Most Liked/Newest, tabbed Photos/Diaries view
+- **Community Highlights** - Top 3 most photographed landmarks per country
+- **Community Feed** - Latest photos/diaries from all users on Social tab
 
-### Custom Domain & Email
-- Domain: wandermark.app (registered via Namecheap)
-- DNS: Migrated to Cloudflare (Feb 25, 2026)
-- Transactional email: Resend (noreply@wandermark.app)
-- Email forwarding: Cloudflare Email Routing (support@wandermark.app -> ricky.aarum@gmail.com) - ACTIVE
-
-### Static Website (GitHub Pages)
-- Landing page (index.html)
-- Privacy Policy (privacy.html) - contact: support@wandermark.app
-- Terms of Service (terms.html) - contact: support@wandermark.app
-
-### Community Photo Gallery (NEW - Feb 26, 2026)
-- **Landmark Community Photos:** Subpage from each landmark showing public photos from all users
-- **Country Community Photos:** Subpage from each country showing all public photos across landmarks
-- **Freemium Model:**
-  - Free users: See top 3 photos + total count + upgrade CTA
-  - Premium users: Full gallery access + upvoting capability
-- **Photo Upvoting:** Premium-only feature, toggle-based (heart icon)
-- **Removed:** Old landmark upvoting system (was redundant)
-
-### Code Cleanup
-- Removed Spanish i18n (es.json, language-settings.tsx)
-- Removed unused map components (react-native-maps)
-- Removed dead code (countryFacts.ts)
-- Removed landmark upvoting (replaced by community photo system)
+### Backend Refactoring (COMPLETED - Feb 26, 2026)
+- Refactored monolithic 5025-line server.py into modular structure
+- 15 route files, 3 utility modules, 1 models module
+- 33/33 API endpoint tests passed (100% regression test)
 
 ## Key API Endpoints
 
-### Community Photos (NEW)
-- GET /api/landmarks/{landmark_id}/community-photos - Get community photos for a landmark
-- GET /api/countries/{country_id}/community-photos - Get community photos for a country
-- POST /api/community-photos/{photo_id}/upvote - Toggle upvote (premium only)
+### Auth (routes/auth.py)
+- POST /api/auth/register, /api/auth/login
+- POST /api/auth/apple/callback, /api/auth/google/callback, /api/auth/google/token
+- POST /api/auth/magic-link/send, /api/auth/magic-link/verify
+- GET /api/auth/me, PUT /api/auth/profile, PUT /api/auth/privacy
+- POST /api/auth/logout, GET /api/auth/temp-token
 
-### Auth & Users
-- POST /api/auth/register
-- POST /api/auth/login
-- POST /api/auth/apple/callback
-- GET /api/users/me
+### Content (routes/content.py)
+- GET /api/continent-stats, /api/countries, /api/landmarks
+- GET /api/landmarks/{id}, /api/landmarks/search/query
+- POST /api/landmarks
 
-### Admin
-- POST /api/admin/setup
-- PUT /api/admin/users/{user_id}
+### Community (routes/community.py)
+- GET /api/community-feed, /api/community-photos/photo-of-the-week
+- GET /api/landmarks/{id}/community-photos, /api/countries/{id}/community-photos
+- GET /api/countries/{id}/travel-diaries, /api/countries/{id}/community-highlights
+- POST /api/community-photos/{id}/upvote
 
-### Content
-- GET /api/continent-stats
-- GET /api/countries
-- GET /api/landmarks/{landmark_id}
-- GET /api/legal/privacy
-- GET /api/legal/terms
+### Visits (routes/visits.py)
+- GET /api/visits, /api/visits/stats, /api/visits/{id}
+- POST /api/visits
 
-### Social
-- POST /api/users/friend-request (username only)
-- GET /api/feed
+### Admin (routes/admin.py)
+- GET /api/admin/stats, /api/admin/users, /api/admin/reports, /api/admin/logs
+- PUT /api/admin/users/{id}, /api/admin/reports/{id}
+- POST /api/admin/notifications/send
 
-## Key Files
-- Backend: /app/backend/server.py
-- Seed data: /app/backend/seed_data.py, seed_data_expansion.py, fix_and_expand.py, fix_missing_landmarks.py
-- Legal pages: /app/backend/legal_pages.py
-- Static site: /app/wandermark-site/
-- Frontend admin: /app/frontend/app/(tabs)/admin/
-- Landmark community photos: /app/frontend/app/landmark-community-photos/[landmark_id].tsx
-- Country community photos: /app/frontend/app/country-community-photos/[country_id].tsx
-- Landmark detail: /app/frontend/app/landmark-detail/[landmark_id].tsx
-- Country landmarks: /app/frontend/app/landmarks/[country_id].tsx
+### Social (routes/social.py)
+- GET /api/leaderboard, /api/friends, /api/stats, /api/progress, /api/feed
+- POST /api/friends/request, /api/activities/{id}/like, /api/activities/{id}/comment
 
-## Verification Status
-- Community Photo Gallery: VERIFIED (Feb 26, 2026) - Backend APIs + Frontend UI tested with simulated data
-  - Freemium model confirmed: 3 photos for free users, all photos for premium
-  - Upgrade CTA shows correct count ("+X more photos")
-  - Upvote toggle works for premium, blocked (403) for free users
-  - Both landmark and country galleries functional
-- **Photo of the Week**: VERIFIED (Feb 26, 2026) - Shows on explore page with trophy badge, photo, landmark name, user info, upvotes
-- **Travel Diary Integration**: VERIFIED (Feb 26, 2026) - Book icon appears for photos with shared diary, opens modal with diary text
-- **Share Diary Toggle**: VERIFIED (Feb 26, 2026) - Toggle in AddVisitModal shows when diary text entered, defaults ON, can be toggled OFF
-
-- **Sort/Filter Gallery**: VERIFIED (Feb 26, 2026) - "Most liked" and "Newest" sort toggles in landmark and country galleries
-- **Country Gallery Tabs**: VERIFIED (Feb 26, 2026) - Photos/Travel Diaries tab bar with badge counts, seamless switching
-- **Travel Diaries Tab**: VERIFIED (Feb 26, 2026) - Shows shared diary entries as community travel guide, freemium model (2 preview for free, all for premium)
-
-- **Community Highlights**: VERIFIED (Feb 26, 2026) - Top 3 most photographed landmarks per country, shown on landmarks page with photos, photo/visitor counts, and flame badge
-
-- **Community Feed**: VERIFIED (Feb 26, 2026) - Horizontal scrollable feed on Social tab with latest community photos/diaries, 11/11 backend tests passed
-
-## What's Been Implemented (Session Feb 26, 2026 - Part 5)
-1. **Community Feed** - New section on Social tab showing latest community photos and diary entries from all countries
-2. Backend endpoint `GET /api/community-feed` with MongoDB aggregation (visits + users + landmarks), sorted by most recent
-3. Horizontal scrollable cards with photo, landmark name, country, user name, upvote count
-4. Diary snippet badge overlay for items with shared diary
-5. Cards navigate to landmark community photos page on click
-1. **Community Highlights** - New section on each country's landmarks page showing top 3 most photographed landmarks
-2. Backend endpoint `GET /api/countries/{id}/community-highlights` with MongoDB aggregation
-3. Each highlight card shows sample photo, landmark name, photo count, visitor count
-4. Most popular landmark gets a flame badge
-5. Click navigates to landmark detail
-6. Fixed duplicate landmark entry in database (france_provence_lavender_fields)
-1. **Sort/Filter** - "Most liked" (popular) and "Newest" sort buttons in both landmark and country community photo galleries
-2. **Tab Navigation** - Country gallery now has Photos and Travel Diaries tabs with badge counts
-3. **Travel Diaries Tab** - Dedicated tab showing shared diary entries with user profiles, landmark info, diary text, and thumbnails
-4. **Backend endpoints** - `GET /api/countries/{id}/travel-diaries` with freemium logic, sort parameter added to community photos endpoints
-5. **FlatList fix** - Replaced FlatList with ScrollView+flexWrap for country gallery to avoid numColumns switching bug on React Native Web
-1. **Photo of the Week** - New backend endpoint + explore page section with trophy badge, showing most upvoted community photo
-2. **Travel Diary in Community Gallery** - Book icon (diary symbol) on photos with shared diary notes, clicking opens a modal with the full diary text
-3. **Share Diary Toggle** - New `share_diary` field on visits, toggle UI in AddVisitModal that appears when diary text is entered
-4. Backend correctly filters diary_notes based on share_diary flag (null when share_diary=false)
+### Other Routes
+- collections.py: bucket-list, collections CRUD
+- notifications.py: notification CRUD
+- country_visits.py: country visits + user-created visits
+- photos.py: photo collection
+- achievements.py: achievements + badge checks
+- subscription.py: subscription status/upgrade/cancel
+- reports.py: report creation
+- push.py: push token + settings management
+- legal.py: privacy + terms pages
 
 ## Upcoming Tasks
 - P0: Create EAS preview build for device testing
 - P1: Verify RevenueCat, statistics sharing, and pickers on device
-- P2: Refactor server.py into modular structure (routes, models, services)
 
 ## 3rd Party Integrations
 - Expo SDK 54
