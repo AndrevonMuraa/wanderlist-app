@@ -19,6 +19,7 @@ WanderMark is a React Native (Expo SDK 54) mobile travel app where users discove
 - Every country has at least 10 official + 1-5 premium landmarks
 
 ## What's Been Implemented
+
 ### Core App
 - Full landmark browsing, visiting, and tracking system
 - Points, achievements, and leaderboard system
@@ -36,41 +37,61 @@ WanderMark is a React Native (Expo SDK 54) mobile travel app where users discove
 ### Privacy & Security
 - Friend search: username-only (email search removed)
 - Apple Sign-In: auto-generated usernames for new users
-- Bucket list bug fix (list → object)
+- Bucket list bug fix (list to object)
 
 ### Custom Domain & Email
 - Domain: wandermark.app (registered via Namecheap)
 - DNS: Migrated to Cloudflare (Feb 25, 2026)
 - Transactional email: Resend (noreply@wandermark.app)
-- Email forwarding: Cloudflare Email Routing (support@wandermark.app → Gmail) — PENDING PROPAGATION
+- Email forwarding: Cloudflare Email Routing (support@wandermark.app -> ricky.aarum@gmail.com) - ACTIVE
 
 ### Static Website (GitHub Pages)
 - Landing page (index.html)
 - Privacy Policy (privacy.html) - contact: support@wandermark.app
 - Terms of Service (terms.html) - contact: support@wandermark.app
 
+### Community Photo Gallery (NEW - Feb 26, 2026)
+- **Landmark Community Photos:** Subpage from each landmark showing public photos from all users
+- **Country Community Photos:** Subpage from each country showing all public photos across landmarks
+- **Freemium Model:**
+  - Free users: See top 3 photos + total count + upgrade CTA
+  - Premium users: Full gallery access + upvoting capability
+- **Photo Upvoting:** Premium-only feature, toggle-based (heart icon)
+- **Removed:** Old landmark upvoting system (was redundant)
+
 ### Code Cleanup
 - Removed Spanish i18n (es.json, language-settings.tsx)
 - Removed unused map components (react-native-maps)
 - Removed dead code (countryFacts.ts)
+- Removed landmark upvoting (replaced by community photo system)
 
-## Completed This Session (Feb 25, 2026)
-1. ✅ Guided user through updating legal pages on GitHub (privacy.html, terms.html → support@wandermark.app)
-2. ✅ Seeded preview database with full content (66 countries, 797 landmarks)
-3. ✅ Fixed 15 countries missing official landmarks (Austria, Bahamas, Barbados, Cambodia, Croatia, Cuba, Denmark, Dominican Republic, Iceland, Jamaica, Nepal, Philippines, Sri Lanka, Sweden, Taiwan)
-4. ✅ Added premium landmarks to 3 countries missing them (Brazil, Greece, South Africa)
-5. ✅ Guided user through Cloudflare setup (account creation, domain connection, nameserver migration)
-6. ✅ Set up Cloudflare Email Routing for support@wandermark.app → Ricky.aarum@gmail.com
-7. ✅ All DNS records configured and verified (MX, SPF, DKIM)
+## Key API Endpoints
 
-## Pending / In Progress
-- **P0: Cloudflare Email Routing propagation** — All config is correct but Cloudflare internal propagation pending. User will test tomorrow.
-- **P0: New EAS build** — User needs a fresh build to test all accumulated changes on device
-- **P1: Verify email forwarding works** — Send test email after propagation
+### Community Photos (NEW)
+- GET /api/landmarks/{landmark_id}/community-photos - Get community photos for a landmark
+- GET /api/countries/{country_id}/community-photos - Get community photos for a country
+- POST /api/community-photos/{photo_id}/upvote - Toggle upvote (premium only)
 
-## Upcoming Tasks
-- **P1: Create EAS preview build** for device testing
-- **P2: Verify RevenueCat, statistics sharing, and pickers on device**
+### Auth & Users
+- POST /api/auth/register
+- POST /api/auth/login
+- POST /api/auth/apple/callback
+- GET /api/users/me
+
+### Admin
+- POST /api/admin/setup
+- PUT /api/admin/users/{user_id}
+
+### Content
+- GET /api/continent-stats
+- GET /api/countries
+- GET /api/landmarks/{landmark_id}
+- GET /api/legal/privacy
+- GET /api/legal/terms
+
+### Social
+- POST /api/users/friend-request (username only)
+- GET /api/feed
 
 ## Key Files
 - Backend: /app/backend/server.py
@@ -78,6 +99,15 @@ WanderMark is a React Native (Expo SDK 54) mobile travel app where users discove
 - Legal pages: /app/backend/legal_pages.py
 - Static site: /app/wandermark-site/
 - Frontend admin: /app/frontend/app/(tabs)/admin/
+- Landmark community photos: /app/frontend/app/landmark-community-photos/[landmark_id].tsx
+- Country community photos: /app/frontend/app/country-community-photos/[country_id].tsx
+- Landmark detail: /app/frontend/app/landmark-detail/[landmark_id].tsx
+- Country landmarks: /app/frontend/app/landmarks/[country_id].tsx
+
+## Upcoming Tasks
+- P0: Create EAS preview build for device testing
+- P1: Verify email forwarding works (Cloudflare Email Routing)
+- P2: Verify RevenueCat, statistics sharing, and pickers on device
 
 ## 3rd Party Integrations
 - Expo SDK 54
