@@ -312,6 +312,12 @@ async def update_email_template(request: EmailTemplateUpdate, admin_user: User =
     return await get_email_template_data()
 
 
+@router.delete("/admin/email-template")
+async def reset_email_template(admin_user: User = Depends(get_admin_user)):
+    await db.email_templates.delete_one({"template_id": "promo_email"})
+    return dict(DEFAULT_EMAIL_TEMPLATE)
+
+
 @router.post("/admin/promo-codes/send-email")
 async def send_promo_emails(request: PromoEmailSend, admin_user: User = Depends(get_admin_user)):
     import asyncio
