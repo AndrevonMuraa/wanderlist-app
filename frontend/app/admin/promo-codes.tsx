@@ -1324,4 +1324,16 @@ const styles = StyleSheet.create({
   historyRecipientCode: {
     fontSize: 12, fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
   },
+
+  // Template
+  templateWrap: {},
+  formCard: { borderRadius: 16, padding: 20, marginBottom: 16 },
+  formHint: { fontSize: 12, marginBottom: 6, fontStyle: 'italic' },
+  templateStepRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 },
+  templateStepNum: { fontSize: 14, fontWeight: '700', width: 20 },
+  templateStepInput: { flex: 1, marginTop: 0 },
+  templateStepRemove: { padding: 4 },
+  templateAddStep: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 8 },
+  templateAddStepText: { fontSize: 14, fontWeight: '600' },
+  createBtnContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
 });
