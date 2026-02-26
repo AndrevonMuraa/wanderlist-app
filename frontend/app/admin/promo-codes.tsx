@@ -453,6 +453,14 @@ export default function AdminPromoCodes() {
           <Ionicons name="time-outline" size={16} color={activeTab === 'history' ? '#f59e0b' : colors.textSecondary} />
           <Text style={[styles.tabText, activeTab === 'history' && styles.tabTextActive]}>Dispatch History</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'template' && styles.tabActive]}
+          onPress={() => { setActiveTab('template'); fetchTemplate(); }}
+          data-testid="tab-template"
+        >
+          <Ionicons name="mail-outline" size={16} color={activeTab === 'template' ? '#f59e0b' : colors.textSecondary} />
+          <Text style={[styles.tabText, activeTab === 'template' && styles.tabTextActive]}>Email Template</Text>
+        </TouchableOpacity>
       </View>
 
       {activeTab === 'codes' ? (
