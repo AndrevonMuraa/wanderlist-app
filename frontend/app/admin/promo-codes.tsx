@@ -520,12 +520,12 @@ export default function AdminPromoCodes() {
               data-testid="batch-count-input"
             />
 
-            <Text style={[styles.label, { color: colors.textSecondary }]}>Beskrivelse (valgfritt)</Text>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Description (optional)</Text>
             <TextInput
               style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
               value={batchDesc}
               onChangeText={setBatchDesc}
-              placeholder="F.eks. Influencer-kampanje Q1 2026"
+              placeholder="e.g. Influencer campaign Q1 2026"
               placeholderTextColor={colors.textLight}
             />
 
@@ -537,7 +537,7 @@ export default function AdminPromoCodes() {
               >
                 <Ionicons name="infinite" size={16} color={batchType === 'lifetime_premium' ? '#fff' : colors.text} />
                 <Text style={[styles.typeBtnText, batchType === 'lifetime_premium' && styles.typeBtnTextActive]}>
-                  Evig Premium
+                  Lifetime Premium
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -546,14 +546,14 @@ export default function AdminPromoCodes() {
               >
                 <Ionicons name="time" size={16} color={batchType === 'timed_premium' ? '#fff' : colors.text} />
                 <Text style={[styles.typeBtnText, batchType === 'timed_premium' && styles.typeBtnTextActive]}>
-                  Tidsbegrenset
+                  Time-limited
                 </Text>
               </TouchableOpacity>
             </View>
 
             {batchType === 'timed_premium' && (
               <>
-                <Text style={[styles.label, { color: colors.textSecondary }]}>Varighet (dager)</Text>
+                <Text style={[styles.label, { color: colors.textSecondary }]}>Duration (days)</Text>
                 <TextInput
                   style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
                   value={batchDuration}
@@ -565,7 +565,7 @@ export default function AdminPromoCodes() {
               </>
             )}
 
-            <Text style={[styles.label, { color: colors.textSecondary }]}>Maks bruk per kode</Text>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Max uses per code</Text>
             <TextInput
               style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
               value={batchMaxUses}
@@ -587,7 +587,7 @@ export default function AdminPromoCodes() {
                 ) : (
                   <>
                     <Ionicons name="layers" size={20} color="#fff" />
-                    <Text style={styles.createBtnText}>Generer {batchCount || '0'} koder</Text>
+                    <Text style={styles.createBtnText}>Generate {batchCount || '0'} codes</Text>
                   </>
                 )}
               </LinearGradient>
@@ -597,7 +597,7 @@ export default function AdminPromoCodes() {
               <View style={styles.batchResultBox}>
                 <View style={styles.batchResultHeader}>
                   <Ionicons name="checkmark-circle" size={20} color="#10b981" />
-                  <Text style={styles.batchResultTitle}>{batchResult.created} koder opprettet!</Text>
+                  <Text style={styles.batchResultTitle}>{batchResult.created} codes created!</Text>
                 </View>
                 <ScrollView style={styles.batchResultScroll} nestedScrollEnabled>
                   {batchResult.codes.map((code, i) => (
@@ -613,17 +613,17 @@ export default function AdminPromoCodes() {
         <View style={styles.statsRow}>
           <View style={[styles.statBox, { backgroundColor: colors.surface }]}>
             <Text style={[styles.statNum, { color: '#f59e0b' }]}>{codes.length}</Text>
-            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Totalt</Text>
+            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Total</Text>
           </View>
           <View style={[styles.statBox, { backgroundColor: colors.surface }]}>
             <Text style={[styles.statNum, { color: '#10b981' }]}>{codes.filter(c => c.is_active).length}</Text>
-            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Aktive</Text>
+            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Active</Text>
           </View>
           <View style={[styles.statBox, { backgroundColor: colors.surface }]}>
             <Text style={[styles.statNum, { color: '#3b82f6' }]}>
               {codes.reduce((sum, c) => sum + c.current_uses, 0)}
             </Text>
-            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Innlost</Text>
+            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Redeemed</Text>
           </View>
         </View>
 
@@ -632,7 +632,7 @@ export default function AdminPromoCodes() {
           <View style={styles.emptyWrap}>
             <Ionicons name="ticket-outline" size={48} color={colors.textLight} />
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-              Ingen kampanjekoder enna. Trykk + for aa opprette en.
+              No promo codes yet. Tap + to create one.
             </Text>
           </View>
         ) : (
@@ -647,7 +647,7 @@ export default function AdminPromoCodes() {
                     {code.type === 'lifetime_premium' ? (
                       <View style={styles.typeTag}>
                         <Ionicons name="infinite" size={12} color="#f59e0b" />
-                        <Text style={styles.typeTagText}>Evig</Text>
+                        <Text style={styles.typeTagText}>Lifetime</Text>
                       </View>
                     ) : (
                       <View style={[styles.typeTag, { backgroundColor: '#3b82f620' }]}>
@@ -660,8 +660,8 @@ export default function AdminPromoCodes() {
                     <Text style={[styles.codeDesc, { color: colors.textSecondary }]}>{code.description}</Text>
                   )}
                   <Text style={[styles.codeStats, { color: colors.textLight }]}>
-                    Brukt {code.current_uses}/{code.max_uses === 0 ? '\u221E' : code.max_uses}
-                    {' \u00B7 '}Opprettet {new Date(code.created_at).toLocaleDateString('nb-NO')}
+                    Used {code.current_uses}/{code.max_uses === 0 ? '\u221E' : code.max_uses}
+                    {' \u00B7 '}Created {new Date(code.created_at).toLocaleDateString('en-US')}
                   </Text>
                 </View>
 
@@ -682,7 +682,7 @@ export default function AdminPromoCodes() {
                 >
                   <Ionicons name="people-outline" size={16} color="#3b82f6" />
                   <Text style={[styles.actionBtnText, { color: '#3b82f6' }]}>
-                    Innlosninger ({code.redemptions?.length || 0})
+                    Redemptions ({code.redemptions?.length || 0})
                   </Text>
                   <Ionicons
                     name={expandedCode === code.code_id ? 'chevron-up' : 'chevron-down'}
@@ -696,7 +696,7 @@ export default function AdminPromoCodes() {
                   data-testid={`delete-promo-${code.code_id}`}
                 >
                   <Ionicons name="trash-outline" size={16} color="#ef4444" />
-                  <Text style={[styles.actionBtnText, { color: '#ef4444' }]}>Slett</Text>
+                  <Text style={[styles.actionBtnText, { color: '#ef4444' }]}>Delete</Text>
                 </TouchableOpacity>
                 {code.is_active && (
                   <TouchableOpacity
@@ -705,7 +705,7 @@ export default function AdminPromoCodes() {
                     data-testid={`send-email-${code.code_id}`}
                   >
                     <Ionicons name="mail-outline" size={16} color="#f59e0b" />
-                    <Text style={[styles.actionBtnText, { color: '#f59e0b' }]}>Send e-post</Text>
+                    <Text style={[styles.actionBtnText, { color: '#f59e0b' }]}>Send email</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -728,7 +728,7 @@ export default function AdminPromoCodes() {
               )}
               {expandedCode === code.code_id && (!code.redemptions || code.redemptions.length === 0) && (
                 <View style={[styles.redemptionsList, { borderTopColor: colors.border }]}>
-                  <Text style={[styles.noRedemptions, { color: colors.textLight }]}>Ingen har innlost denne koden enna</Text>
+                  <Text style={[styles.noRedemptions, { color: colors.textLight }]}>No one has redeemed this code yet</Text>
                 </View>
               )}
             </View>
