@@ -467,3 +467,48 @@ class ActivityComment(BaseModel):
     user_picture: Optional[str] = None
     comment_text: str
     created_at: datetime
+
+
+class AppleAuthRequest(BaseModel):
+    identity_token: str
+    user_id: str
+    email: Optional[str] = None
+    full_name: Optional[str] = None
+
+
+class AdminUserUpdate(BaseModel):
+    subscription_tier: Optional[str] = None
+    role: Optional[str] = None
+    is_banned: Optional[bool] = None
+    ban_reason: Optional[str] = None
+
+
+class AdminReportUpdate(BaseModel):
+    status: str
+    admin_notes: Optional[str] = None
+
+
+class AdminNotificationRequest(BaseModel):
+    title: str
+    body: str
+    target: str = "all"
+    segment_user_ids: Optional[List[str]] = None
+
+
+class Collection(BaseModel):
+    collection_id: str
+    user_id: str
+    name: str
+    description: Optional[str] = None
+    icon: str = "star"
+    color: str = "#20B2AA"
+    landmark_count: int = 0
+    created_at: datetime
+    updated_at: datetime
+
+
+class CollectionCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    icon: Optional[str] = "star"
+    color: Optional[str] = "#20B2AA"
