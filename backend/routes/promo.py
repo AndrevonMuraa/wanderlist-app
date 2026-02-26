@@ -229,6 +229,89 @@ async def export_promo_codes_csv(admin_user: User = Depends(get_admin_user)):
 
 
 
+DEFAULT_EMAIL_TEMPLATE = {
+    "subject": "You've received exclusive WanderMark Premium access!",
+    "heading": "You're invited!",
+    "subheading": "Explore the world. Collect memories.",
+    "body_text": "We're giving you <strong>{access_desc}</strong> to WanderMark Premium. Unlock all premium landmarks, unlimited photos, advanced travel diaries and much more.",
+    "code_label": "Your promo code",
+    "steps_title": "How to use your code:",
+    "steps": [
+        "Download WanderMark from the App Store",
+        "Create an account or log in",
+        "Go to Profile → Upgrade to Premium",
+        "Enter the code above",
+    ],
+    "footer_text": "WanderMark © 2026 — Explore. Experience. Share.",
+    "support_text": "Have questions? Contact us at <a href=\"mailto:support@wandermark.app\" style=\"color: #f59e0b;\">support@wandermark.app</a>",
+}
+
+
+async def get_email_template_data():
+    template = await db.email_templates.find_one({"template_id": "promo_email"}, {"_id": 0})
+    if not template:
+        return dict(DEFAULT_EMAIL_TEMPLATE)
+    merged = dict(DEFAULT_EMAIL_TEMPLATE)
+    for key in merged:
+        if key in template and template[key] is not None:
+            merged[key] = template[key]
+    return merged
+
+
+def build_email_html(template, code_str, access_desc, personal_html):
+    body_text = template["body_text"].replace("{access_desc}", access_desc)
+    steps_html = "".join(f"<li>{s}</li>" for s in template["steps"])
+
+    return f"""
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 520px; margin: 0 auto; padding: 0; background: #ffffff;">
+        <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 40px 30px; text-align: center; border-radius: 0 0 24px 24px;">
+            <h1 style="color: #ffffff; font-size: 28px; margin: 0 0 8px 0; font-weight: 800;">WanderMark</h1>
+            <p style="color: #94a3b8; font-size: 14px; margin: 0;">{template["subheading"]}</p>
+        </div>
+        <div style="padding: 32px 30px;">
+            <h2 style="color: #1a1a2e; font-size: 22px; margin: 0 0 16px 0;">{template["heading"]}</h2>
+            {personal_html}
+            <p style="color: #374151; font-size: 15px; line-height: 1.6;">{body_text}</p>
+            <div style="background: linear-gradient(135deg, #f59e0b20, #d9770620); border: 2px dashed #f59e0b; border-radius: 16px; padding: 24px; text-align: center; margin: 28px 0;">
+                <p style="color: #92400e; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 8px 0; font-weight: 600;">{template["code_label"]}</p>
+                <p style="font-size: 28px; font-weight: 800; color: #1a1a2e; letter-spacing: 3px; margin: 0; font-family: 'SF Mono', 'Menlo', 'Courier New', monospace;">{code_str}</p>
+            </div>
+            <div style="background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                <p style="color: #374151; font-size: 14px; margin: 0 0 12px 0; font-weight: 600;">{template["steps_title"]}</p>
+                <ol style="color: #6b7280; font-size: 14px; padding-left: 20px; margin: 0; line-height: 1.8;">{steps_html}</ol>
+            </div>
+            <p style="color: #9ca3af; font-size: 13px; text-align: center;">{template["support_text"]}</p>
+        </div>
+        <div style="background: #f8fafc; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
+            <p style="color: #9ca3af; font-size: 12px; margin: 0;">{template["footer_text"]}</p>
+        </div>
+    </div>
+    """
+
+
+@router.get("/admin/promo-codes/email-template")
+async def get_email_template(admin_user: User = Depends(get_admin_user)):
+    return await get_email_template_data()
+
+
+@router.put("/admin/promo-codes/email-template")
+async def update_email_template(request: EmailTemplateUpdate, admin_user: User = Depends(get_admin_user)):
+    update_fields = {k: v for k, v in request.dict().items() if v is not None}
+    if not update_fields:
+        raise HTTPException(status_code=400, detail="No fields to update")
+
+    update_fields["updated_at"] = datetime.now(timezone.utc)
+    update_fields["updated_by"] = admin_user.user_id
+
+    await db.email_templates.update_one(
+        {"template_id": "promo_email"},
+        {"$set": update_fields},
+        upsert=True,
+    )
+
+    return await get_email_template_data()
+
+
 @router.post("/admin/promo-codes/send-email")
 async def send_promo_emails(request: PromoEmailSend, admin_user: User = Depends(get_admin_user)):
     import asyncio
@@ -258,10 +341,11 @@ async def send_promo_emails(request: PromoEmailSend, admin_user: User = Depends(
     if not codes:
         raise HTTPException(status_code=400, detail="No active codes found")
 
+    template = await get_email_template_data()
     personal_msg = request.personal_message or ""
     personal_html = f'<p style="color: #374151; font-size: 15px; line-height: 1.6; margin-bottom: 20px;">{personal_msg}</p>' if personal_msg else ""
 
-    subject = request.subject or "You've received exclusive WanderMark Premium access!"
+    subject = request.subject or template["subject"]
 
     sent = 0
     failed = 0
@@ -278,48 +362,7 @@ async def send_promo_emails(request: PromoEmailSend, admin_user: User = Depends(
         else:
             access_desc = f"{duration} days of free Premium access"
 
-        html_content = f"""
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 520px; margin: 0 auto; padding: 0; background: #ffffff;">
-            <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 40px 30px; text-align: center; border-radius: 0 0 24px 24px;">
-                <h1 style="color: #ffffff; font-size: 28px; margin: 0 0 8px 0; font-weight: 800;">WanderMark</h1>
-                <p style="color: #94a3b8; font-size: 14px; margin: 0;">Explore the world. Collect memories.</p>
-            </div>
-
-            <div style="padding: 32px 30px;">
-                <h2 style="color: #1a1a2e; font-size: 22px; margin: 0 0 16px 0;">You're invited!</h2>
-
-                {personal_html}
-
-                <p style="color: #374151; font-size: 15px; line-height: 1.6;">
-                    We're giving you <strong>{access_desc}</strong> to WanderMark Premium.
-                    Unlock all premium landmarks, unlimited photos, advanced travel diaries and much more.
-                </p>
-
-                <div style="background: linear-gradient(135deg, #f59e0b20, #d9770620); border: 2px dashed #f59e0b; border-radius: 16px; padding: 24px; text-align: center; margin: 28px 0;">
-                    <p style="color: #92400e; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 8px 0; font-weight: 600;">Your promo code</p>
-                    <p style="font-size: 28px; font-weight: 800; color: #1a1a2e; letter-spacing: 3px; margin: 0; font-family: 'SF Mono', 'Menlo', 'Courier New', monospace;">{code_str}</p>
-                </div>
-
-                <div style="background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-                    <p style="color: #374151; font-size: 14px; margin: 0 0 12px 0; font-weight: 600;">How to use your code:</p>
-                    <ol style="color: #6b7280; font-size: 14px; padding-left: 20px; margin: 0; line-height: 1.8;">
-                        <li>Download WanderMark from the App Store</li>
-                        <li>Create an account or log in</li>
-                        <li>Go to Profile &rarr; Upgrade to Premium</li>
-                        <li>Enter the code above</li>
-                    </ol>
-                </div>
-
-                <p style="color: #9ca3af; font-size: 13px; text-align: center;">
-                    Have questions? Contact us at <a href="mailto:support@wandermark.app" style="color: #f59e0b;">support@wandermark.app</a>
-                </p>
-            </div>
-
-            <div style="background: #f8fafc; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
-                <p style="color: #9ca3af; font-size: 12px; margin: 0;">WanderMark &copy; 2026 &mdash; Explore. Experience. Share.</p>
-            </div>
-        </div>
-        """
+        html_content = build_email_html(template, code_str, access_desc, personal_html)
 
         try:
             params = {
