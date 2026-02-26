@@ -52,6 +52,14 @@ export default function AdminPromoCodes() {
   const [showCreate, setShowCreate] = useState(false);
   const [expandedCode, setExpandedCode] = useState<string | null>(null);
 
+  // Tab state
+  const [activeTab, setActiveTab] = useState<'codes' | 'history'>('codes');
+
+  // Email history state
+  const [emailHistory, setEmailHistory] = useState<any[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [expandedLog, setExpandedLog] = useState<string | null>(null);
+
   // Create form state
   const [newCode, setNewCode] = useState('');
   const [newDescription, setNewDescription] = useState('');
