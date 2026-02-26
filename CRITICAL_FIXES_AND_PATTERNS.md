@@ -99,7 +99,7 @@ export const BACKEND_URL = getBackendURL();
    - Should use relative URLs (proxied to backend)
 
 2. **Remote URL** (preview/production):
-   - Open https://travel-engage.preview.emergentagent.com
+   - Open https://wandermark-v1.preview.emergentagent.com
    - Should use full backend URL
    - Test on iPhone Safari specifically
 

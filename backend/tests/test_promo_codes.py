@@ -8,7 +8,7 @@ import requests
 import uuid
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://travel-engage.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://wandermark-v1.preview.emergentagent.com').rstrip('/')
 
 # Test credentials (admin user)
 TEST_EMAIL = "test@wandermark.app"

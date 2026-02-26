@@ -11,7 +11,7 @@ from datetime import datetime
 import uuid
 
 # Configuration
-BASE_URL = "https://travel-engage.preview.emergentagent.com/api"
+BASE_URL = "https://wandermark-v1.preview.emergentagent.com/api"
 ADMIN_EMAIL = "mobile@test.com"
 
 class AdminAPITester:
