@@ -123,20 +123,31 @@ export default function CountryCommunityPhotosScreen() {
           <Text style={styles.landmarkTagText} numberOfLines={1}>{item.landmark_name}</Text>
         </View>
         <View style={styles.actionRow}>
-          <TouchableOpacity
-            onPress={() => handleUpvote(item.photo_id)}
-            style={styles.upvoteButton}
-            data-testid={`upvote-btn-${item.photo_id}`}
-          >
-            <Ionicons
-              name={item.user_upvoted ? 'heart' : 'heart-outline'}
-              size={18}
-              color={item.user_upvoted ? '#FF6B6B' : theme.colors.textSecondary}
-            />
-            <Text style={[styles.upvoteCount, item.user_upvoted && { color: '#FF6B6B' }]}>
-              {item.upvotes}
-            </Text>
-          </TouchableOpacity>
+          <View style={styles.actionLeft}>
+            <TouchableOpacity
+              onPress={() => handleUpvote(item.photo_id)}
+              style={styles.upvoteButton}
+              data-testid={`upvote-btn-${item.photo_id}`}
+            >
+              <Ionicons
+                name={item.user_upvoted ? 'heart' : 'heart-outline'}
+                size={18}
+                color={item.user_upvoted ? '#FF6B6B' : theme.colors.textSecondary}
+              />
+              <Text style={[styles.upvoteCount, item.user_upvoted && { color: '#FF6B6B' }]}>
+                {item.upvotes}
+              </Text>
+            </TouchableOpacity>
+            {item.has_diary && (
+              <TouchableOpacity
+                onPress={() => setDiaryModal({ visible: true, text: item.diary_notes || '', userName: item.user_name })}
+                style={styles.diaryButton}
+                data-testid={`diary-btn-${item.photo_id}`}
+              >
+                <Ionicons name="book-outline" size={16} color={theme.colors.primary} />
+              </TouchableOpacity>
+            )}
+          </View>
           {item.visited_at && (
             <Text style={styles.dateText}>
               {new Date(item.visited_at).toLocaleDateString()}
