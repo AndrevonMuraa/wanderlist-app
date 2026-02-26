@@ -691,6 +691,90 @@ export default function AdminPromoCodes() {
 
         <View style={{ height: 40 }} />
       </ScrollView>
+
+      {/* Email Send Modal */}
+      <Modal visible={showEmailModal} animationType="slide" transparent>
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.surface }]} data-testid="email-modal">
+            <View style={styles.modalHeader}>
+              <View style={styles.modalHeaderLeft}>
+                <Ionicons name="mail" size={22} color="#f59e0b" />
+                <Text style={[styles.modalTitle, { color: colors.text }]}>Send kampanjekode</Text>
+              </View>
+              <TouchableOpacity onPress={() => setShowEmailModal(false)} data-testid="close-email-modal">
+                <Ionicons name="close" size={24} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={styles.modalScroll}>
+              <Text style={[styles.label, { color: colors.textSecondary }]}>E-postadresser (en per linje, eller kommaseparert)</Text>
+              <TextInput
+                style={[styles.input, styles.emailTextArea, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                value={emailRecipients}
+                onChangeText={setEmailRecipients}
+                placeholder={"blogger@example.com\ninfluencer@example.com"}
+                placeholderTextColor={colors.textLight}
+                multiline
+                numberOfLines={4}
+                data-testid="email-recipients-input"
+              />
+
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Emne (valgfritt)</Text>
+              <TextInput
+                style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                value={emailSubject}
+                onChangeText={setEmailSubject}
+                placeholder="Du har faatt en eksklusiv WanderMark Premium-tilgang!"
+                placeholderTextColor={colors.textLight}
+                data-testid="email-subject-input"
+              />
+
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Personlig melding (valgfritt)</Text>
+              <TextInput
+                style={[styles.input, styles.emailTextArea, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                value={emailMessage}
+                onChangeText={setEmailMessage}
+                placeholder="Hei! Vi elsker innholdet ditt og vil gjerne at du tester WanderMark..."
+                placeholderTextColor={colors.textLight}
+                multiline
+                numberOfLines={3}
+                data-testid="email-message-input"
+              />
+
+              {emailResult && (
+                <View style={[styles.emailResultBox, emailResult.failed > 0 ? styles.emailResultMixed : styles.emailResultSuccess]}>
+                  <Ionicons
+                    name={emailResult.failed > 0 ? 'alert-circle' : 'checkmark-circle'}
+                    size={20}
+                    color={emailResult.failed > 0 ? '#f59e0b' : '#10b981'}
+                  />
+                  <Text style={[styles.emailResultText, { color: emailResult.failed > 0 ? '#f59e0b' : '#10b981' }]}>
+                    {emailResult.sent} sendt{emailResult.failed > 0 ? `, ${emailResult.failed} feilet` : ''}
+                  </Text>
+                </View>
+              )}
+
+              <TouchableOpacity
+                style={[styles.createBtn, emailSending && styles.createBtnDisabled]}
+                onPress={handleSendEmails}
+                disabled={emailSending}
+                data-testid="submit-email-btn"
+              >
+                <LinearGradient colors={['#f59e0b', '#d97706']} style={styles.createBtnGradient}>
+                  {emailSending ? (
+                    <ActivityIndicator color="#fff" size="small" />
+                  ) : (
+                    <>
+                      <Ionicons name="send" size={18} color="#fff" />
+                      <Text style={styles.createBtnText}>Send e-post</Text>
+                    </>
+                  )}
+                </LinearGradient>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
