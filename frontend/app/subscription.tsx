@@ -423,6 +423,49 @@ export default function SubscriptionScreen() {
           </View>
         )}
 
+        {/* Promo Code Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Har du en kampanjekode?</Text>
+          <Surface style={styles.promoCard}>
+            <View style={styles.promoInputRow}>
+              <TextInput
+                style={styles.promoInput}
+                value={promoCode}
+                onChangeText={setPromoCode}
+                placeholder="Skriv inn kode"
+                placeholderTextColor="#999"
+                autoCapitalize="characters"
+                editable={!promoLoading}
+                data-testid="redeem-promo-input"
+              />
+              <TouchableOpacity
+                style={[styles.promoButton, (!promoCode.trim() || promoLoading) && styles.promoButtonDisabled]}
+                onPress={handleRedeemPromo}
+                disabled={!promoCode.trim() || promoLoading}
+                data-testid="redeem-promo-btn"
+              >
+                {promoLoading ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <Text style={styles.promoButtonText}>Aktiver</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+            {promoResult && (
+              <View style={[styles.promoResult, promoResult.success ? styles.promoResultSuccess : styles.promoResultError]}>
+                <Ionicons
+                  name={promoResult.success ? 'checkmark-circle' : 'alert-circle'}
+                  size={18}
+                  color={promoResult.success ? '#10b981' : '#ef4444'}
+                />
+                <Text style={[styles.promoResultText, { color: promoResult.success ? '#10b981' : '#ef4444' }]}>
+                  {promoResult.message}
+                </Text>
+              </View>
+            )}
+          </Surface>
+        </View>
+
         {/* Premium Landmarks Preview */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Premium Landmarks Include</Text>
