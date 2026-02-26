@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme, { gradients } from '../styles/theme';
 import { HeaderBranding } from './BrandedGlobeIcon';
+import { safeGoBack } from '../utils/navigation';
 
 interface UniversalHeaderProps {
   title: string;
@@ -29,7 +30,7 @@ export const UniversalHeader: React.FC<UniversalHeaderProps> = ({
     if (onBack) {
       onBack();
     } else {
-      router.back();
+      safeGoBack(router);
     }
   };
 
