@@ -14,28 +14,6 @@ from utils.helpers import create_notification
 
 router = APIRouter()
 
-# ============= NOTIFICATION HELPER FUNCTIONS =============
-
-async def create_notification(user_id: str, notif_type: str, title: str, message: str, 
-                              related_id: Optional[str] = None, related_user_id: Optional[str] = None,
-                              related_user_name: Optional[str] = None):
-    """Helper function to create a notification"""
-    notification_id = f"notif_{uuid.uuid4().hex[:12]}"
-    notification = {
-        "notification_id": notification_id,
-        "user_id": user_id,
-        "type": notif_type,
-        "title": title,
-        "message": message,
-        "related_id": related_id,
-        "related_user_id": related_user_id,
-        "related_user_name": related_user_name,
-        "is_read": False,
-        "created_at": datetime.now(timezone.utc)
-    }
-    await db.notifications.insert_one(notification)
-    return notification_id
-
 # ============= NOTIFICATION ENDPOINTS =============
 
 @router.get("/notifications")
