@@ -118,7 +118,15 @@ WanderMark is a React Native (Expo SDK 54) mobile travel app where users discove
 - **Country Gallery Tabs**: VERIFIED (Feb 26, 2026) - Photos/Travel Diaries tab bar with badge counts, seamless switching
 - **Travel Diaries Tab**: VERIFIED (Feb 26, 2026) - Shows shared diary entries as community travel guide, freemium model (2 preview for free, all for premium)
 
-## What's Been Implemented (Session Feb 26, 2026 - Part 3)
+- **Community Highlights**: VERIFIED (Feb 26, 2026) - Top 3 most photographed landmarks per country, shown on landmarks page with photos, photo/visitor counts, and flame badge
+
+## What's Been Implemented (Session Feb 26, 2026 - Part 4)
+1. **Community Highlights** - New section on each country's landmarks page showing top 3 most photographed landmarks
+2. Backend endpoint `GET /api/countries/{id}/community-highlights` with MongoDB aggregation
+3. Each highlight card shows sample photo, landmark name, photo count, visitor count
+4. Most popular landmark gets a flame badge
+5. Click navigates to landmark detail
+6. Fixed duplicate landmark entry in database (france_provence_lavender_fields)
 1. **Sort/Filter** - "Most liked" (popular) and "Newest" sort buttons in both landmark and country community photo galleries
 2. **Tab Navigation** - Country gallery now has Photos and Travel Diaries tabs with badge counts
 3. **Travel Diaries Tab** - Dedicated tab showing shared diary entries with user profiles, landmark info, diary text, and thumbnails
