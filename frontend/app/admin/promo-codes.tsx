@@ -931,6 +931,153 @@ export default function AdminPromoCodes() {
       </ScrollView>
       )}
 
+      {/* Template Tab */}
+      {activeTab === 'template' && (
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {templateLoading && !template ? (
+          <View style={styles.loadingWrap}>
+            <ActivityIndicator size="large" color={colors.primary} />
+          </View>
+        ) : template ? (
+          <View style={styles.templateWrap}>
+            <View style={[styles.formCard, { backgroundColor: colors.surface }]}>
+              <Text style={[styles.formTitle, { color: colors.text }]}>Email Template</Text>
+              <Text style={[styles.formSubtitle, { color: colors.textSecondary }]}>
+                Customize the email sent with promo codes. Use {'{{access_desc}}'} in the body text as a placeholder for the access description.
+              </Text>
+
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Subject</Text>
+              <TextInput
+                style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                value={template.subject}
+                onChangeText={(v) => updateTemplateField('subject', v)}
+                placeholder="Email subject line"
+                placeholderTextColor={colors.textLight}
+                data-testid="template-subject-input"
+              />
+
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Heading</Text>
+              <TextInput
+                style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                value={template.heading}
+                onChangeText={(v) => updateTemplateField('heading', v)}
+                placeholder="e.g. You're invited!"
+                placeholderTextColor={colors.textLight}
+                data-testid="template-heading-input"
+              />
+
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Subheading</Text>
+              <TextInput
+                style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                value={template.subheading}
+                onChangeText={(v) => updateTemplateField('subheading', v)}
+                placeholder="e.g. Explore the world. Collect memories."
+                placeholderTextColor={colors.textLight}
+                data-testid="template-subheading-input"
+              />
+
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Body text</Text>
+              <Text style={[styles.formHint, { color: colors.textLight }]}>Use {'{{access_desc}}'} where you want the access description (e.g. "lifetime Premium access")</Text>
+              <TextInput
+                style={[styles.input, styles.emailTextArea, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                value={template.body_text}
+                onChangeText={(v) => updateTemplateField('body_text', v)}
+                placeholder="Email body text..."
+                placeholderTextColor={colors.textLight}
+                multiline
+                numberOfLines={4}
+                data-testid="template-body-input"
+              />
+
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Code label</Text>
+              <TextInput
+                style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                value={template.code_label}
+                onChangeText={(v) => updateTemplateField('code_label', v)}
+                placeholder="e.g. Your promo code"
+                placeholderTextColor={colors.textLight}
+                data-testid="template-code-label-input"
+              />
+
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Steps title</Text>
+              <TextInput
+                style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                value={template.steps_title}
+                onChangeText={(v) => updateTemplateField('steps_title', v)}
+                placeholder="e.g. How to use your code:"
+                placeholderTextColor={colors.textLight}
+                data-testid="template-steps-title-input"
+              />
+
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Steps</Text>
+              {template.steps.map((step, i) => (
+                <View key={i} style={styles.templateStepRow}>
+                  <Text style={[styles.templateStepNum, { color: colors.textLight }]}>{i + 1}.</Text>
+                  <TextInput
+                    style={[styles.input, styles.templateStepInput, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                    value={step}
+                    onChangeText={(v) => updateTemplateStep(i, v)}
+                    placeholder={`Step ${i + 1}`}
+                    placeholderTextColor={colors.textLight}
+                    data-testid={`template-step-${i}-input`}
+                  />
+                  {template.steps.length > 1 && (
+                    <TouchableOpacity onPress={() => removeTemplateStep(i)} style={styles.templateStepRemove}>
+                      <Ionicons name="close-circle" size={20} color="#ef4444" />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              ))}
+              <TouchableOpacity onPress={addTemplateStep} style={styles.templateAddStep} data-testid="template-add-step-btn">
+                <Ionicons name="add-circle-outline" size={18} color="#f59e0b" />
+                <Text style={[styles.templateAddStepText, { color: '#f59e0b' }]}>Add step</Text>
+              </TouchableOpacity>
+
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Footer text</Text>
+              <TextInput
+                style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                value={template.footer_text}
+                onChangeText={(v) => updateTemplateField('footer_text', v)}
+                placeholder="Footer text"
+                placeholderTextColor={colors.textLight}
+                data-testid="template-footer-input"
+              />
+
+              <Text style={[styles.label, { color: colors.textSecondary }]}>Support text (HTML allowed)</Text>
+              <TextInput
+                style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                value={template.support_text}
+                onChangeText={(v) => updateTemplateField('support_text', v)}
+                placeholder="Contact support text"
+                placeholderTextColor={colors.textLight}
+                data-testid="template-support-input"
+              />
+
+              <TouchableOpacity
+                style={[styles.createBtn, !templateDirty && styles.createBtnDisabled]}
+                onPress={saveTemplate}
+                disabled={!templateDirty || templateSaving}
+                data-testid="save-template-btn"
+              >
+                {templateSaving ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <View style={styles.createBtnContent}>
+                    <Ionicons name="save-outline" size={18} color="#fff" />
+                    <Text style={styles.createBtnText}>Save template</Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : null}
+        <View style={{ height: 40 }} />
+      </ScrollView>
+      )}
+
       {/* Email Send Modal */}
       <Modal visible={showEmailModal} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
