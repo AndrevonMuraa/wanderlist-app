@@ -21,7 +21,7 @@ import sys
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://discover-preview-2.preview.emergentagent.com/api"
+BASE_URL = "https://gallery-freemium-dev.preview.emergentagent.com/api"
 TEST_EMAIL = "mobile@test.com"
 TEST_PASSWORD = "test123"
 
