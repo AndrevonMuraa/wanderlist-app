@@ -307,22 +307,25 @@ class TestRegressions:
             f"{BASE_URL}/api/user-created-visits",
             headers=auth_headers,
             json={
-                "country_name": "Test Country",
-                "landmarks": [{"name": "Test Landmark"}],
+                "country_name": "Test Country Regression",
+                "landmarks": [{"name": "Test Landmark Regression"}],
                 "photos": [],
-                "diary_notes": "Test diary",
+                "diary_notes": "Test diary for regression",
                 "visibility": "public"
             }
         )
-        # Expect either 201 (if user is Pro) or 403 (if not Pro)
-        assert response.status_code in [201, 403], f"Expected 201 or 403, got {response.status_code}: {response.text}"
+        # Expect either 200/201 (if user is Pro) or 403 (if not Pro)
+        # API returns 200 for successful creation
+        assert response.status_code in [200, 201, 403], f"Expected 200, 201 or 403, got {response.status_code}: {response.text}"
         
         if response.status_code == 403:
             data = response.json()
             assert "Pro" in data.get("detail", ""), "403 error should mention Pro subscription"
             print("Test user is not Pro - correctly returns 403")
         else:
-            print("Test user is Pro - visit created successfully")
+            data = response.json()
+            assert "user_created_visit_id" in data, "Successful creation should return visit ID"
+            print(f"Test user is Pro - visit created successfully: {data.get('user_created_visit_id')}")
     
     def test_delete_nonexistent_custom_visit_returns_404(self, api_session, auth_headers):
         """Regression: DELETE /api/user-created-visits/{visit_id} returns 404 for non-existent visit"""
