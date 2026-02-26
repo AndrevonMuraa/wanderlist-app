@@ -130,6 +130,33 @@ export default function SubscriptionScreen() {
     }
   };
 
+  const handleRedeemPromo = async () => {
+    if (!promoCode.trim()) return;
+    setPromoLoading(true);
+    setPromoResult(null);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/promo/redeem`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: promoCode.trim() }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setPromoResult({ success: true, message: data.message });
+        setPromoCode('');
+        fetchSubscriptionStatus();
+        refresh();
+      } else {
+        setPromoResult({ success: false, message: data.detail || 'Ugyldig kode' });
+      }
+    } catch {
+      setPromoResult({ success: false, message: 'Noe gikk galt. Prøv igjen.' });
+    } finally {
+      setPromoLoading(false);
+    }
+  };
+
   const handleRestore = async () => {
     setUpgrading(true);
     try {
