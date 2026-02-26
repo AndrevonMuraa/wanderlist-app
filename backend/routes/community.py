@@ -20,7 +20,8 @@ async def get_community_feed(
     limit: int = 10,
     current_user: User = Depends(get_current_user)
 ):
-    """Get a unified community feed of recent photos and diary entries from all countries."""
+    """Get a unified community feed of recent photos and diary entries from all countries, including custom visits."""
+    # Standard landmark visits
     pipeline = [
         {"$match": {
             "visibility": "public",
@@ -78,6 +79,7 @@ async def get_community_feed(
         items.append({
             "visit_id": visit["visit_id"],
             "type": "diary" if has_diary else "photo",
+            "source": "landmark",
             "photo_url": photo_url,
             "user_name": visit.get("user_name", "Anonymous"),
             "user_picture": visit.get("user_picture"),
@@ -91,6 +93,76 @@ async def get_community_feed(
             "upvotes": upvote_count,
             "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
         })
+
+    # Custom visits (user-created)
+    custom_pipeline = [
+        {"$match": {"visibility": "public"}},
+        {"$sort": {"visited_at": -1}},
+        {"$limit": limit},
+        {"$lookup": {
+            "from": "users",
+            "localField": "user_id",
+            "foreignField": "user_id",
+            "as": "user_info"
+        }},
+        {"$unwind": {"path": "$user_info", "preserveNullAndEmptyArrays": True}},
+        {"$project": {
+            "_id": 0,
+            "user_created_visit_id": 1,
+            "user_id": 1,
+            "country_name": 1,
+            "landmarks": 1,
+            "photos": {"$slice": ["$photos", 1]},
+            "diary": 1,
+            "visited_at": 1,
+            "user_name": {"$ifNull": ["$user_info.name", "Anonymous"]},
+            "user_picture": "$user_info.picture",
+            "username": "$user_info.username",
+        }}
+    ]
+    custom_visits = await db.user_created_visits.aggregate(custom_pipeline).to_list(limit)
+
+    for cv in custom_visits:
+        photo_url = cv.get("photos", [None])[0] if cv.get("photos") else None
+        # If no general photo, check landmark photos
+        if not photo_url and cv.get("landmarks"):
+            for lm in cv["landmarks"]:
+                if lm.get("photo"):
+                    photo_url = lm["photo"]
+                    break
+
+        landmark_names = [lm["name"] for lm in (cv.get("landmarks") or []) if lm.get("name")]
+        landmark_label = ", ".join(landmark_names[:2])
+        if len(landmark_names) > 2:
+            landmark_label += f" +{len(landmark_names) - 2} more"
+
+        has_diary = bool(cv.get("diary"))
+        diary_snippet = None
+        if has_diary:
+            text = cv["diary"]
+            diary_snippet = text[:100] + "..." if len(text) > 100 else text
+
+        items.append({
+            "visit_id": cv.get("user_created_visit_id"),
+            "type": "custom_visit",
+            "source": "custom",
+            "photo_url": photo_url,
+            "user_name": cv.get("user_name", "Anonymous"),
+            "user_picture": cv.get("user_picture"),
+            "username": cv.get("username"),
+            "landmark_name": landmark_label or cv.get("country_name", "Unknown"),
+            "landmark_id": None,
+            "country_name": cv.get("country_name"),
+            "country_id": None,
+            "diary_snippet": diary_snippet,
+            "has_diary": has_diary,
+            "upvotes": 0,
+            "visited_at": cv.get("visited_at").isoformat() if cv.get("visited_at") else None,
+        })
+
+    # Sort combined items by visited_at descending
+    items.sort(key=lambda x: x.get("visited_at") or "", reverse=True)
+    items = items[:limit]
     
     return {"items": items, "count": len(items)}
 
