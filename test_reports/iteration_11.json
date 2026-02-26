@@ -1,0 +1,76 @@
+{
+  "summary": "Promo Code Email Sending Feature - Backend: 13/13 tests PASSED (100%). Frontend: UI code review confirms all components present with correct data-testid attributes. Email modal, send button on active codes, and subscription promo redeem input all verified.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_promo_email.py",
+    "/app/test_reports/pytest/pytest_promo_email.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "POST /api/admin/promo-codes/send-email properly validates empty emails (400), empty code_ids (400), and non-existent codes (400)",
+    "Email endpoint distributes codes round-robin to multiple recipients as designed",
+    "Custom subject and personal_message fields work correctly and appear in HTML email template",
+    "Resend API integration is real (not mocked) - emails are actually sent",
+    "Email logs are stored in db.promo_email_logs with full audit trail (sent_by, results, timestamps)",
+    "Frontend admin/promo-codes.tsx has 'Send e-post' button on active code cards (line 656-664) with data-testid='send-email-{code_id}'",
+    "Email modal (line 695-777) includes: recipients textarea, subject input, personal message textarea, submit button - all with data-testid attributes",
+    "Frontend subscription.tsx has promo code redeem section with input (data-testid='redeem-promo-input') and button (data-testid='redeem-promo-btn')",
+    "Batch create POST /api/admin/promo-codes/batch still works (regression passed)",
+    "CSV export GET /api/admin/promo-codes/export-csv still works (regression passed)"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_promo_email.py"
+  ],
+  "success_rate": {
+    "backend": "100% (13/13 tests passed)",
+    "frontend": "100% - All UI components verified in code review"
+  },
+  "test_credentials": {
+    "email": "test@wandermark.app",
+    "password": "Test1234!",
+    "role": "admin"
+  },
+  "seed_data_creation": "Test created promo codes: EMAILTEST-SINGLE, EMAILTEST-MULTI0/1/2, EMAILTEST-EMPTY, EMAILTEST-SUBJECT, EMAILTEST-PERSONAL, EMAILTEST-ALLOPTS, EMAILTEST-WHITESPACE + REGTEST* batch codes",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Email sending feature fully tested. Backend test file at /app/backend/tests/test_promo_email.py covers all email scenarios and regression for batch/CSV. Frontend components confirmed in admin/promo-codes.tsx (email modal with data-testid attributes) and subscription.tsx (promo redeem).",
+  "features_tested": {
+    "backend_apis": {
+      "POST /api/admin/promo-codes/send-email - Single recipient": "PASS",
+      "POST /api/admin/promo-codes/send-email - Multiple recipients (round-robin)": "PASS",
+      "POST /api/admin/promo-codes/send-email - Empty emails validation (400)": "PASS",
+      "POST /api/admin/promo-codes/send-email - Empty code_ids validation (400)": "PASS",
+      "POST /api/admin/promo-codes/send-email - Custom subject": "PASS",
+      "POST /api/admin/promo-codes/send-email - Personal message": "PASS",
+      "POST /api/admin/promo-codes/send-email - All options combined": "PASS",
+      "POST /api/admin/promo-codes/send-email - Unauthorized (401)": "PASS",
+      "POST /api/admin/promo-codes/send-email - Invalid code_ids (400)": "PASS",
+      "POST /api/admin/promo-codes/send-email - Whitespace emails filtered": "PASS",
+      "POST /api/admin/promo-codes/batch - Regression (still works)": "PASS",
+      "GET /api/admin/promo-codes/export-csv - Regression (still works)": "PASS",
+      "GET /api/admin/promo-codes - Regression (list works)": "PASS"
+    },
+    "frontend_ui": {
+      "Admin promo page - 'Send e-post' button on active cards": "PASS (code verified line 656-664)",
+      "Admin promo page - Email modal with recipient input": "PASS (code verified line 711-720)",
+      "Admin promo page - Email modal with subject input": "PASS (code verified line 722-730)",
+      "Admin promo page - Email modal with personal message": "PASS (code verified line 732-742)",
+      "Admin promo page - Email modal submit button": "PASS (code verified line 757-773)",
+      "Admin promo page - Email result display (sent/failed)": "PASS (code verified line 744-755)",
+      "Subscription page - Promo code redeem input": "PASS (code verified line 431-439)",
+      "Subscription page - 'Aktiver' button": "PASS (code verified line 441-452)"
+    }
+  },
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "note": "Resend email API is real - actual emails are sent"
+  }
+}
