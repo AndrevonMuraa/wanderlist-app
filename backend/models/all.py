@@ -563,3 +563,15 @@ class PromoEmailSend(BaseModel):
     emails: List[str]
     subject: Optional[str] = None
     personal_message: Optional[str] = None
+
+
+class EmailTemplateUpdate(BaseModel):
+    subject: Optional[str] = None
+    heading: Optional[str] = None
+    subheading: Optional[str] = None
+    body_text: Optional[str] = None
+    code_label: Optional[str] = None
+    steps_title: Optional[str] = None
+    steps: Optional[List[str]] = None
+    footer_text: Optional[str] = None
+    support_text: Optional[str] = None
