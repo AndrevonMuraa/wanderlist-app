@@ -348,6 +348,27 @@ export default function AdminPromoCodes() {
         </View>
       </LinearGradient>
 
+      {/* Tab Bar */}
+      <View style={[styles.tabBar, { backgroundColor: colors.surface }]}>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'codes' && styles.tabActive]}
+          onPress={() => setActiveTab('codes')}
+          data-testid="tab-codes"
+        >
+          <Ionicons name="ticket-outline" size={16} color={activeTab === 'codes' ? '#f59e0b' : colors.textSecondary} />
+          <Text style={[styles.tabText, activeTab === 'codes' && styles.tabTextActive]}>Koder</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'history' && styles.tabActive]}
+          onPress={() => { setActiveTab('history'); fetchEmailHistory(); }}
+          data-testid="tab-history"
+        >
+          <Ionicons name="time-outline" size={16} color={activeTab === 'history' ? '#f59e0b' : colors.textSecondary} />
+          <Text style={[styles.tabText, activeTab === 'history' && styles.tabTextActive]}>Utsendelseshistorikk</Text>
+        </TouchableOpacity>
+      </View>
+
+      {activeTab === 'codes' ? (
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
