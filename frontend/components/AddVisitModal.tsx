@@ -232,6 +232,26 @@ export default function AddVisitModal({
               maxLength={2000}
             />
             <Text style={styles.charCounter}>{diaryText.length}/2000</Text>
+            {diaryText.trim().length > 0 && (
+              <TouchableOpacity
+                style={styles.shareDiaryToggle}
+                onPress={() => setShareDiary(!shareDiary)}
+                data-testid="share-diary-toggle"
+                activeOpacity={0.7}
+              >
+                <Ionicons
+                  name={shareDiary ? 'eye' : 'eye-off'}
+                  size={18}
+                  color={shareDiary ? theme.colors.primary : theme.colors.textSecondary}
+                />
+                <Text style={[styles.shareDiaryText, shareDiary && { color: theme.colors.primary }]}>
+                  {shareDiary ? 'Diary visible in community gallery' : 'Diary hidden from community gallery'}
+                </Text>
+                <View style={[styles.toggleTrack, shareDiary && styles.toggleTrackActive]}>
+                  <View style={[styles.toggleThumb, shareDiary && styles.toggleThumbActive]} />
+                </View>
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Travel Tips Section (Premium only) */}
