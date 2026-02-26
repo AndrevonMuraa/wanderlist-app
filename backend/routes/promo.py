@@ -19,23 +19,23 @@ async def redeem_promo_code(request: PromoRedeemRequest, current_user: User = De
 
     promo = await db.promo_codes.find_one({"code": code_str}, {"_id": 0})
     if not promo:
-        raise HTTPException(status_code=404, detail="Ugyldig kampanjekode")
+        raise HTTPException(status_code=404, detail="Invalid promo code")
 
     if not promo.get("is_active", False):
-        raise HTTPException(status_code=400, detail="Denne koden er deaktivert")
+        raise HTTPException(status_code=400, detail="This code has been deactivated")
 
     if promo.get("expires_at") and promo["expires_at"] < datetime.now(timezone.utc):
-        raise HTTPException(status_code=400, detail="Denne koden har utlopt")
+        raise HTTPException(status_code=400, detail="This code has expired")
 
     if promo.get("max_uses", 1) > 0 and promo.get("current_uses", 0) >= promo["max_uses"]:
-        raise HTTPException(status_code=400, detail="Denne koden er allerede brukt opp")
+        raise HTTPException(status_code=400, detail="This code has reached its usage limit")
 
     existing_redemption = await db.promo_redemptions.find_one({
         "user_id": current_user.user_id,
         "code_id": promo["code_id"]
     })
     if existing_redemption:
-        raise HTTPException(status_code=400, detail="Du har allerede brukt denne koden")
+        raise HTTPException(status_code=400, detail="You have already redeemed this code")
 
     promo_type = promo.get("type", "lifetime_premium")
     duration_days = promo.get("duration_days")
@@ -43,14 +43,14 @@ async def redeem_promo_code(request: PromoRedeemRequest, current_user: User = De
     update_fields = {"subscription_tier": "pro"}
     if promo_type == "lifetime_premium" or not duration_days:
         update_fields["subscription_expires_at"] = None
-        expires_description = "evig"
+        expires_description = "lifetime"
     else:
         new_expiry = datetime.now(timezone.utc) + timedelta(days=duration_days)
         current_expiry = current_user.subscription_expires_at
         if current_expiry and current_expiry > datetime.now(timezone.utc):
             new_expiry = current_expiry + timedelta(days=duration_days)
         update_fields["subscription_expires_at"] = new_expiry
-        expires_description = f"{duration_days} dager"
+        expires_description = f"{duration_days} days"
 
     await db.users.update_one(
         {"user_id": current_user.user_id},
@@ -76,7 +76,7 @@ async def redeem_promo_code(request: PromoRedeemRequest, current_user: User = De
 
     return {
         "success": True,
-        "message": f"Koden er aktivert! Du har naa Pro-tilgang ({expires_description})",
+        "message": f"Code activated! You now have Pro access ({expires_description})",
         "type": promo_type,
         "duration_days": duration_days,
     }
