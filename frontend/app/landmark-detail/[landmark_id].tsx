@@ -687,16 +687,28 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     lineHeight: 20,
   },
-  // Upvotes
-  upvotesRow: {
+  // Community Photos Button
+  communityPhotosButton: {
+    borderRadius: theme.borderRadius.lg,
+    overflow: 'hidden',
+    ...theme.shadows.sm,
+  },
+  communityPhotosGradient: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md + 4,
+    gap: theme.spacing.md,
   },
-  upvotesText: {
+  communityPhotosTitle: {
     ...theme.typography.body,
-    color: theme.colors.text,
-    fontWeight: '600',
+    color: '#fff',
+    fontWeight: '700',
+  },
+  communityPhotosSubtitle: {
+    ...theme.typography.caption,
+    color: 'rgba(255,255,255,0.75)',
+    marginTop: 1,
   },
   // Floating Action Button
   fabContainer: {
