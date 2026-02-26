@@ -1108,6 +1108,17 @@ export default function AdminPromoCodes() {
                   )}
                 </LinearGradient>
               </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.previewBtn}
+                onPress={() => setShowPreview(true)}
+                data-testid="preview-template-btn"
+              >
+                <LinearGradient colors={['#3b82f6', '#2563eb']} style={styles.createBtnGradient}>
+                  <Ionicons name="eye-outline" size={18} color="#fff" />
+                  <Text style={styles.createBtnText}>Preview email</Text>
+                </LinearGradient>
+              </TouchableOpacity>
             </View>
           </View>
         ) : null}
