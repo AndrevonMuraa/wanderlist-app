@@ -1062,14 +1062,16 @@ export default function AdminPromoCodes() {
                 disabled={!templateDirty || templateSaving}
                 data-testid="save-template-btn"
               >
-                {templateSaving ? (
-                  <ActivityIndicator color="#fff" size="small" />
-                ) : (
-                  <View style={styles.createBtnContent}>
-                    <Ionicons name="save-outline" size={18} color="#fff" />
-                    <Text style={styles.createBtnText}>Save template</Text>
-                  </View>
-                )}
+                <LinearGradient colors={['#f59e0b', '#d97706']} style={styles.createBtnGradient}>
+                  {templateSaving ? (
+                    <ActivityIndicator color="#fff" size="small" />
+                  ) : (
+                    <>
+                      <Ionicons name="save-outline" size={18} color="#fff" />
+                      <Text style={styles.createBtnText}>Save template</Text>
+                    </>
+                  )}
+                </LinearGradient>
               </TouchableOpacity>
             </View>
           </View>
