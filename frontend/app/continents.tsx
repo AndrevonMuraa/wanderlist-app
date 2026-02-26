@@ -120,7 +120,25 @@ export default function ContinentsScreen() {
 
   useEffect(() => {
     fetchContinentStats();
+    fetchPhotoOfTheWeek();
   }, []);
+
+  const fetchPhotoOfTheWeek = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/community-photos/photo-of-the-week`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.photo) {
+          setPhotoOfTheWeek(data.photo);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching photo of the week:', error);
+    }
+  };
 
   const fetchContinentStats = async () => {
     try {
