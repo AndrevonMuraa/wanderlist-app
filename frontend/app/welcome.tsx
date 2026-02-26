@@ -271,6 +271,91 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     lineHeight: 20,
   },
+  // Compete Section
+  competeSection: {
+    marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    overflow: 'hidden',
+  },
+  competeGradient: {
+    padding: theme.spacing.xl,
+  },
+  competeHeader: {
+    alignItems: 'center',
+    marginBottom: theme.spacing.lg,
+  },
+  competeTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#fff',
+    textAlign: 'center',
+    marginTop: theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
+  },
+  competeSubtitle: {
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.7)',
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  rankShowcase: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing.xl,
+    gap: theme.spacing.sm,
+  },
+  rankCard: {
+    flex: 1,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderRadius: 16,
+    padding: theme.spacing.md,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+  },
+  rankCardHighlight: {
+    backgroundColor: 'rgba(255,215,0,0.12)',
+    borderColor: 'rgba(255,215,0,0.3)',
+    transform: [{ scale: 1.05 }],
+  },
+  rankIcon: {
+    fontSize: 28,
+    marginBottom: 6,
+  },
+  rankName: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#fff',
+    marginBottom: 2,
+  },
+  rankPoints: {
+    fontSize: 11,
+    color: 'rgba(255,255,255,0.5)',
+  },
+  pointsExamples: {
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    borderRadius: 12,
+    padding: theme.spacing.md,
+  },
+  pointRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: 'rgba(255,255,255,0.08)',
+  },
+  pointText: {
+    flex: 1,
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.8)',
+    marginLeft: 10,
+  },
+  pointValue: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: theme.colors.accentYellow,
+  },
   quickStart: {
     padding: theme.spacing.lg,
     paddingTop: 0,
