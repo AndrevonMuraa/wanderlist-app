@@ -29,6 +29,7 @@ interface AddVisitModalProps {
     photos: string[];
     diary_notes: string;
     travel_tips: string[];
+    share_diary: boolean;
   }) => void;
   isPremium: boolean;
 }
