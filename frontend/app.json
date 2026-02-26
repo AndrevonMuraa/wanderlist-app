@@ -11,6 +11,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.wandermark.app",
+      "buildNumber": "49",
       "usesAppleSignIn": true,
       "infoPlist": {
         "NSCameraUsageDescription": "Take photos of landmarks you visit",
