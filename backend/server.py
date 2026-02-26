@@ -1630,6 +1630,8 @@ async def get_country_community_photos(
             "photo_base64": 1,
             "visited_at": 1,
             "comments": 1,
+            "diary_notes": 1,
+            "share_diary": 1,
             "user_name": {"$ifNull": ["$user_info.name", "Anonymous"]},
             "user_picture": "$user_info.picture",
             "username": "$user_info.username"
