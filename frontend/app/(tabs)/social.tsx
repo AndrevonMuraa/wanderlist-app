@@ -717,6 +717,63 @@ export default function SocialHubScreen() {
           </Surface>
         </View>
 
+        {/* Community Feed Section */}
+        {communityFeed.length > 0 && (
+          <View style={styles.section} data-testid="community-feed-section">
+            <View style={styles.sectionHeader}>
+              <View style={styles.sectionTitleRow}>
+                <Ionicons name="earth" size={24} color={theme.colors.primary} />
+                <Text style={styles.sectionTitle}>Community Feed</Text>
+              </View>
+            </View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.cfScroll}
+            >
+              {communityFeed.map((item) => (
+                <TouchableOpacity
+                  key={item.visit_id}
+                  style={styles.cfCard}
+                  onPress={() => router.push(`/landmark-community-photos/${item.landmark_id}?name=${encodeURIComponent(item.landmark_name)}&country=${encodeURIComponent(item.country_name || '')}`)}
+                  activeOpacity={0.85}
+                  data-testid={`cf-card-${item.visit_id}`}
+                >
+                  {item.photo_url ? (
+                    <Image source={{ uri: item.photo_url }} style={styles.cfImage} resizeMode="cover" />
+                  ) : (
+                    <View style={[styles.cfImage, { backgroundColor: theme.colors.surface, alignItems: 'center', justifyContent: 'center' }]}>
+                      <Ionicons name="image-outline" size={30} color={theme.colors.textLight} />
+                    </View>
+                  )}
+                  <LinearGradient
+                    colors={['transparent', 'rgba(0,0,0,0.8)']}
+                    style={styles.cfOverlay}
+                  >
+                    <Text style={styles.cfLandmark} numberOfLines={1}>{item.landmark_name}</Text>
+                    <Text style={styles.cfCountry} numberOfLines={1}>{item.country_name}</Text>
+                    <View style={styles.cfBottom}>
+                      <Text style={styles.cfUser} numberOfLines={1}>{item.user_name}</Text>
+                      <View style={styles.cfMeta}>
+                        {item.has_diary && (
+                          <Ionicons name="book" size={11} color="rgba(255,255,255,0.7)" style={{ marginRight: 4 }} />
+                        )}
+                        <Ionicons name="heart" size={11} color="#FF6B6B" />
+                        <Text style={styles.cfUpvotes}>{item.upvotes}</Text>
+                      </View>
+                    </View>
+                  </LinearGradient>
+                  {item.has_diary && item.diary_snippet && (
+                    <View style={styles.cfDiaryBadge}>
+                      <Text style={styles.cfDiarySnippet} numberOfLines={2}>{item.diary_snippet}</Text>
+                    </View>
+                  )}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        )}
+
         {/* Friends Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
