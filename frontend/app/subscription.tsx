@@ -798,4 +798,61 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontWeight: '500',
   },
+  promoCard: {
+    borderRadius: 14,
+    padding: 16,
+    backgroundColor: '#1a1a2e',
+  },
+  promoInputRow: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+  },
+  promoInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#333',
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 15,
+    color: '#fff',
+    backgroundColor: '#16213e',
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    letterSpacing: 1,
+  },
+  promoButton: {
+    backgroundColor: '#f59e0b',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 10,
+  },
+  promoButtonDisabled: {
+    opacity: 0.5,
+  },
+  promoButtonText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 15,
+  },
+  promoResult: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+  },
+  promoResultSuccess: {
+    backgroundColor: '#10b98115',
+  },
+  promoResultError: {
+    backgroundColor: '#ef444415',
+  },
+  promoResultText: {
+    fontSize: 14,
+    fontWeight: '500',
+    flex: 1,
+  },
 });
