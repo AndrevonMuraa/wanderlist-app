@@ -51,6 +51,7 @@ export default function LandmarksScreen() {
   const [visitedLandmarkIds, setVisitedLandmarkIds] = useState<Set<string>>(new Set());
   const [isCountryVisited, setIsCountryVisited] = useState(false);
   const [countryVisitId, setCountryVisitId] = useState<string | null>(null);
+  const [highlights, setHighlights] = useState<any[]>([]);
   
   // All hooks must be called in consistent order
   const router = useRouter();
