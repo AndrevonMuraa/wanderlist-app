@@ -120,7 +120,14 @@ WanderMark is a React Native (Expo SDK 54) mobile travel app where users discove
 
 - **Community Highlights**: VERIFIED (Feb 26, 2026) - Top 3 most photographed landmarks per country, shown on landmarks page with photos, photo/visitor counts, and flame badge
 
-## What's Been Implemented (Session Feb 26, 2026 - Part 4)
+- **Community Feed**: VERIFIED (Feb 26, 2026) - Horizontal scrollable feed on Social tab with latest community photos/diaries, 11/11 backend tests passed
+
+## What's Been Implemented (Session Feb 26, 2026 - Part 5)
+1. **Community Feed** - New section on Social tab showing latest community photos and diary entries from all countries
+2. Backend endpoint `GET /api/community-feed` with MongoDB aggregation (visits + users + landmarks), sorted by most recent
+3. Horizontal scrollable cards with photo, landmark name, country, user name, upvote count
+4. Diary snippet badge overlay for items with shared diary
+5. Cards navigate to landmark community photos page on click
 1. **Community Highlights** - New section on each country's landmarks page showing top 3 most photographed landmarks
 2. Backend endpoint `GET /api/countries/{id}/community-highlights` with MongoDB aggregation
 3. Each highlight card shows sample photo, landmark name, photo count, visitor count
