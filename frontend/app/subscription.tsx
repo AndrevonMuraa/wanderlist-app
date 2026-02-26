@@ -7,6 +7,7 @@ import {
   Platform,
   StatusBar,
   Alert,
+  TextInput,
 } from 'react-native';
 import { Text, Surface, ActivityIndicator } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
