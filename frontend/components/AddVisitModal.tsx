@@ -121,10 +121,12 @@ export default function AddVisitModal({
         photos,
         diary_notes: diaryText,
         travel_tips: isPremium ? parseTips() : [],
+        share_diary: shareDiary,
       });
       // Reset form
       setPhotos([]);
       setDiaryText('');
+      setShareDiary(true);
       setTipsText('');
     } catch (error) {
       console.error('Error submitting visit:', error);
