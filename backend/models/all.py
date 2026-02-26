@@ -556,3 +556,10 @@ class PromoBatchCreate(BaseModel):
     type: str = "lifetime_premium"
     duration_days: Optional[int] = None
     max_uses: int = 1
+
+
+class PromoEmailSend(BaseModel):
+    code_ids: List[str]
+    emails: List[str]
+    subject: Optional[str] = None
+    personal_message: Optional[str] = None
