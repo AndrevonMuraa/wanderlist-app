@@ -438,6 +438,141 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginTop: theme.spacing.sm,
   },
+  // Tab bar
+  tabBar: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+    backgroundColor: theme.colors.card,
+  },
+  tab: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 12,
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent',
+  },
+  tabActive: {
+    borderBottomColor: theme.colors.primary,
+  },
+  tabText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  tabTextActive: {
+    color: theme.colors.primary,
+  },
+  tabBadge: {
+    backgroundColor: theme.colors.primary,
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 10,
+    minWidth: 20,
+    alignItems: 'center',
+  },
+  tabBadgeText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  // Sort
+  sortRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: theme.spacing.md,
+  },
+  sortBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 20,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  sortBtnActive: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
+  },
+  sortBtnText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  sortBtnTextActive: {
+    color: '#fff',
+  },
+  // Diary tab
+  diaryListContent: {
+    padding: theme.spacing.lg,
+    paddingBottom: 100,
+  },
+  diaryHeaderText: {
+    ...theme.typography.caption,
+    color: theme.colors.primary,
+    fontWeight: '600',
+    marginBottom: theme.spacing.lg,
+  },
+  diaryCard: {
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.surface,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+    ...theme.shadows.sm,
+  },
+  diaryCardHeader: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 10,
+  },
+  diaryThumb: {
+    width: 56,
+    height: 56,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.background,
+  },
+  diaryCardMeta: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  diaryCardUser: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  diaryCardHandle: {
+    fontSize: 11,
+    color: theme.colors.textSecondary,
+    marginTop: 1,
+  },
+  diaryCardLandmark: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    marginTop: 3,
+  },
+  diaryCardLandmarkText: {
+    fontSize: 11,
+    color: theme.colors.primary,
+    fontWeight: '600',
+  },
+  diaryCardText: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: theme.colors.text,
+  },
+  diaryCardDate: {
+    fontSize: 11,
+    color: theme.colors.textLight,
+    marginTop: 8,
+    textAlign: 'right',
+  },
   photoCard: {
     flex: 1,
     maxWidth: PHOTO_SIZE,
