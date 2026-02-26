@@ -68,6 +68,22 @@ export default function LandmarksScreen() {
     fetchHighlights();
   }, []);
 
+  const fetchHighlights = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(
+        `${BACKEND_URL}/api/countries/${country_id}/community-highlights`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setHighlights(data.highlights || []);
+      }
+    } catch (error) {
+      console.error('Error fetching highlights:', error);
+    }
+  };
+
   const checkCountryVisitStatus = async () => {
     try {
       const token = await getToken();
