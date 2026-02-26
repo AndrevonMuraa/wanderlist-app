@@ -30,6 +30,8 @@ from models.all import (
     LeaderboardEntry, Achievement, Badge, UserBadge,
     UserStreak, UserLevel, Challenge, UserChallenge,
     ActivityFeed, ActivityLike, ActivityComment,
+    AppleAuthRequest, AdminUserUpdate, AdminReportUpdate,
+    AdminNotificationRequest, Collection, CollectionCreate,
 )
 
 # Create the main app without a prefix
