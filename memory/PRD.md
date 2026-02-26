@@ -104,10 +104,17 @@ WanderMark is a React Native (Expo SDK 54) mobile travel app where users discove
 - Landmark detail: /app/frontend/app/landmark-detail/[landmark_id].tsx
 - Country landmarks: /app/frontend/app/landmarks/[country_id].tsx
 
+## Verification Status
+- Community Photo Gallery: VERIFIED (Feb 26, 2026) - Backend APIs + Frontend UI tested with simulated data
+  - Freemium model confirmed: 3 photos for free users, all photos for premium
+  - Upgrade CTA shows correct count ("+X more photos")
+  - Upvote toggle works for premium, blocked (403) for free users
+  - Both landmark and country galleries functional
+
 ## Upcoming Tasks
 - P0: Create EAS preview build for device testing
-- P1: Verify email forwarding works (Cloudflare Email Routing)
-- P2: Verify RevenueCat, statistics sharing, and pickers on device
+- P1: Verify RevenueCat, statistics sharing, and pickers on device
+- P2: Refactor server.py into modular structure (routes, models, services)
 
 ## 3rd Party Integrations
 - Expo SDK 54
