@@ -306,78 +306,83 @@ export default function CountryCommunityPhotosScreen() {
         </TouchableOpacity>
       </View>
 
-      {activeTab === 'photos' ? (
-        <FlatList
-          key="photos-grid"
-          data={photos}
-          renderItem={renderPhoto}
-          keyExtractor={item => item.photo_id}
-          numColumns={2}
-          contentContainerStyle={styles.listContent}
-          columnWrapperStyle={styles.row}
-          ListHeaderComponent={
-            <View style={styles.headerSection}>
-              <Text style={styles.photoCount}>
-                {totalCount} {totalCount === 1 ? 'photo' : 'photos'} from the community
-              </Text>
-              <View style={styles.sortRow} data-testid="sort-toggle">
-                <TouchableOpacity
-                  style={[styles.sortBtn, sortBy === 'popular' && styles.sortBtnActive]}
-                  onPress={() => setSortBy('popular')}
-                  data-testid="sort-popular"
-                >
-                  <Ionicons name="flame" size={14} color={sortBy === 'popular' ? '#fff' : theme.colors.textSecondary} />
-                  <Text style={[styles.sortBtnText, sortBy === 'popular' && styles.sortBtnTextActive]}>Most liked</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.sortBtn, sortBy === 'newest' && styles.sortBtnActive]}
-                  onPress={() => setSortBy('newest')}
-                  data-testid="sort-newest"
-                >
-                  <Ionicons name="time" size={14} color={sortBy === 'newest' ? '#fff' : theme.colors.textSecondary} />
-                  <Text style={[styles.sortBtnText, sortBy === 'newest' && styles.sortBtnTextActive]}>Newest</Text>
-                </TouchableOpacity>
+      {activeTab === 'photos' && (
+        <View key="photos-container" style={{flex: 1}}>
+          <FlatList
+            key="photos-grid"
+            data={photos}
+            renderItem={renderPhoto}
+            keyExtractor={item => item.photo_id}
+            numColumns={2}
+            contentContainerStyle={styles.listContent}
+            columnWrapperStyle={styles.row}
+            ListHeaderComponent={
+              <View style={styles.headerSection}>
+                <Text style={styles.photoCount}>
+                  {totalCount} {totalCount === 1 ? 'photo' : 'photos'} from the community
+                </Text>
+                <View style={styles.sortRow} data-testid="sort-toggle">
+                  <TouchableOpacity
+                    style={[styles.sortBtn, sortBy === 'popular' && styles.sortBtnActive]}
+                    onPress={() => setSortBy('popular')}
+                    data-testid="sort-popular"
+                  >
+                    <Ionicons name="flame" size={14} color={sortBy === 'popular' ? '#fff' : theme.colors.textSecondary} />
+                    <Text style={[styles.sortBtnText, sortBy === 'popular' && styles.sortBtnTextActive]}>Most liked</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.sortBtn, sortBy === 'newest' && styles.sortBtnActive]}
+                    onPress={() => setSortBy('newest')}
+                    data-testid="sort-newest"
+                  >
+                    <Ionicons name="time" size={14} color={sortBy === 'newest' ? '#fff' : theme.colors.textSecondary} />
+                    <Text style={[styles.sortBtnText, sortBy === 'newest' && styles.sortBtnTextActive]}>Newest</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          }
-          ListFooterComponent={
-            isPreview && totalCount > 3 ? renderUpgradePrompt() : null
-          }
-          ListEmptyComponent={
-            <View style={styles.emptyContainer} data-testid="empty-state">
-              <Ionicons name="camera-outline" size={64} color={theme.colors.textSecondary} />
-              <Text style={styles.emptyTitle}>No community photos yet</Text>
-              <Text style={styles.emptySubtitle}>
-                Visit landmarks in {countryName} and share your photos!
+            }
+            ListFooterComponent={
+              isPreview && totalCount > 3 ? renderUpgradePrompt() : null
+            }
+            ListEmptyComponent={
+              <View style={styles.emptyContainer} data-testid="empty-state">
+                <Ionicons name="camera-outline" size={64} color={theme.colors.textSecondary} />
+                <Text style={styles.emptyTitle}>No community photos yet</Text>
+                <Text style={styles.emptySubtitle}>
+                  Visit landmarks in {countryName} and share your photos!
+                </Text>
+              </View>
+            }
+          />
+        </View>
+      )}
+      {activeTab === 'diaries' && (
+        <View key="diaries-container" style={{flex: 1}}>
+          <FlatList
+            key="diaries-list"
+            data={diaries}
+            renderItem={renderDiaryCard}
+            keyExtractor={item => item.visit_id}
+            contentContainerStyle={styles.diaryListContent}
+            ListHeaderComponent={
+              <Text style={styles.diaryHeaderText}>
+                {diaryTotalCount} {diaryTotalCount === 1 ? 'diary' : 'diaries'} shared by the community
               </Text>
-            </View>
-          }
-        />
-      ) : (
-        <FlatList
-          key="diaries-list"
-          data={diaries}
-          renderItem={renderDiaryCard}
-          keyExtractor={item => item.visit_id}
-          contentContainerStyle={styles.diaryListContent}
-          ListHeaderComponent={
-            <Text style={styles.diaryHeaderText}>
-              {diaryTotalCount} {diaryTotalCount === 1 ? 'diary' : 'diaries'} shared by the community
-            </Text>
-          }
-          ListFooterComponent={
-            isDiaryPreview && diaryTotalCount > 2 ? renderDiaryUpgradePrompt() : null
-          }
-          ListEmptyComponent={
-            <View style={styles.emptyContainer} data-testid="diary-empty-state">
-              <Ionicons name="book-outline" size={64} color={theme.colors.textSecondary} />
-              <Text style={styles.emptyTitle}>No travel diaries yet</Text>
-              <Text style={styles.emptySubtitle}>
-                Be the first to share your travel experiences from {countryName}!
-              </Text>
-            </View>
-          }
-        />
+            }
+            ListFooterComponent={
+              isDiaryPreview && diaryTotalCount > 2 ? renderDiaryUpgradePrompt() : null
+            }
+            ListEmptyComponent={
+              <View style={styles.emptyContainer} data-testid="diary-empty-state">
+                <Ionicons name="book-outline" size={64} color={theme.colors.textSecondary} />
+                <Text style={styles.emptyTitle}>No travel diaries yet</Text>
+                <Text style={styles.emptySubtitle}>
+                  Be the first to share your travel experiences from {countryName}!
+                </Text>
+              </View>
+            }
+          />
+        </View>
       )}
 
       {/* Diary Modal */}
