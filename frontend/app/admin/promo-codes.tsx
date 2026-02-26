@@ -707,4 +707,26 @@ const styles = StyleSheet.create({
   // Empty
   emptyWrap: { alignItems: 'center', paddingTop: 60, gap: 12 },
   emptyText: { fontSize: 15, textAlign: 'center', maxWidth: 280 },
+
+  // Action buttons row
+  actionButtonsRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
+  batchBtn: {
+    flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    gap: 8, paddingVertical: 12, borderRadius: 12,
+  },
+  batchBtnText: { fontSize: 14, fontWeight: '600' },
+  formSubtitle: { fontSize: 13, marginBottom: 8, lineHeight: 18 },
+
+  // Batch result
+  batchResultBox: {
+    marginTop: 16, backgroundColor: '#10b98110', borderRadius: 12,
+    padding: 14, borderWidth: 1, borderColor: '#10b98130',
+  },
+  batchResultHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 },
+  batchResultTitle: { fontSize: 15, fontWeight: '700', color: '#10b981' },
+  batchResultScroll: { maxHeight: 150 },
+  batchResultCode: {
+    fontSize: 13, fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    color: '#10b981', paddingVertical: 2, letterSpacing: 0.5,
+  },
 });
