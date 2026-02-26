@@ -93,6 +93,7 @@ export default function AddVisitScreen() {
     photos: string[];
     diary_notes: string;
     travel_tips: string[];
+    share_diary: boolean;
   }) => {
     try {
       const token = await getToken();
@@ -110,6 +111,7 @@ export default function AddVisitScreen() {
           photo_base64: visitData.photos.length > 0 ? visitData.photos[0] : null, // First photo as main
           diary_notes: visitData.diary_notes,
           travel_tips: visitData.travel_tips,
+          share_diary: visitData.share_diary,
           comments: '', // Legacy field
         }),
       });
