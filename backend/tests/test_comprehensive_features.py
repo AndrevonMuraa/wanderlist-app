@@ -9,7 +9,7 @@ import uuid
 from datetime import datetime
 
 # Get BASE_URL from environment
-BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://backend-refactor-68.preview.emergentagent.com')
+BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://travel-engage.preview.emergentagent.com')
 
 # Test credentials with unique identifiers
 TEST_RUN_ID = uuid.uuid4().hex[:8]
