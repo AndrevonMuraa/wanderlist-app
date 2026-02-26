@@ -142,6 +142,21 @@ export default function SocialHubScreen() {
     }
   };
 
+  const loadCommunityFeed = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/community-feed?limit=8`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setCommunityFeed(data.items || []);
+      }
+    } catch (error) {
+      console.error('Error loading community feed:', error);
+    }
+  };
+
   const loadFriends = async () => {
     try {
       const token = await getToken();
