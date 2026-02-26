@@ -336,7 +336,7 @@ export default function AdminPromoCodes() {
           </TouchableOpacity>
           <View style={styles.headerCenter}>
             <Ionicons name="ticket-outline" size={22} color="#f59e0b" />
-            <Text style={styles.headerTitle}>Kampanjekoder</Text>
+            <Text style={styles.headerTitle}>Promo Codes</Text>
           </View>
           <TouchableOpacity
             onPress={() => setShowCreate(!showCreate)}
@@ -356,7 +356,7 @@ export default function AdminPromoCodes() {
           data-testid="tab-codes"
         >
           <Ionicons name="ticket-outline" size={16} color={activeTab === 'codes' ? '#f59e0b' : colors.textSecondary} />
-          <Text style={[styles.tabText, activeTab === 'codes' && styles.tabTextActive]}>Koder</Text>
+          <Text style={[styles.tabText, activeTab === 'codes' && styles.tabTextActive]}>Codes</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tab, activeTab === 'history' && styles.tabActive]}
@@ -364,7 +364,7 @@ export default function AdminPromoCodes() {
           data-testid="tab-history"
         >
           <Ionicons name="time-outline" size={16} color={activeTab === 'history' ? '#f59e0b' : colors.textSecondary} />
-          <Text style={[styles.tabText, activeTab === 'history' && styles.tabTextActive]}>Utsendelseshistorikk</Text>
+          <Text style={[styles.tabText, activeTab === 'history' && styles.tabTextActive]}>Dispatch History</Text>
         </TouchableOpacity>
       </View>
 
@@ -377,25 +377,25 @@ export default function AdminPromoCodes() {
         {/* Create Form */}
         {showCreate && (
           <View style={[styles.createForm, { backgroundColor: colors.surface }]} data-testid="create-promo-form">
-            <Text style={[styles.formTitle, { color: colors.text }]}>Opprett ny kampanjekode</Text>
+            <Text style={[styles.formTitle, { color: colors.text }]}>Create new promo code</Text>
 
-            <Text style={[styles.label, { color: colors.textSecondary }]}>Kode</Text>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Code</Text>
             <TextInput
               style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
               value={newCode}
               onChangeText={setNewCode}
-              placeholder="F.eks. WANDERMARK-VIP-2026"
+              placeholder="e.g. WANDERMARK-VIP-2026"
               placeholderTextColor={colors.textLight}
               autoCapitalize="characters"
               data-testid="promo-code-input"
             />
 
-            <Text style={[styles.label, { color: colors.textSecondary }]}>Beskrivelse</Text>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Description</Text>
             <TextInput
               style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
               value={newDescription}
               onChangeText={setNewDescription}
-              placeholder="F.eks. For reiseblogger @username"
+              placeholder="e.g. For travel blogger @username"
               placeholderTextColor={colors.textLight}
               data-testid="promo-desc-input"
             />
@@ -409,7 +409,7 @@ export default function AdminPromoCodes() {
               >
                 <Ionicons name="infinite" size={16} color={newType === 'lifetime_premium' ? '#fff' : colors.text} />
                 <Text style={[styles.typeBtnText, newType === 'lifetime_premium' && styles.typeBtnTextActive]}>
-                  Evig Premium
+                  Lifetime Premium
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -419,19 +419,19 @@ export default function AdminPromoCodes() {
               >
                 <Ionicons name="time" size={16} color={newType === 'timed_premium' ? '#fff' : colors.text} />
                 <Text style={[styles.typeBtnText, newType === 'timed_premium' && styles.typeBtnTextActive]}>
-                  Tidsbegrenset
+                  Time-limited
                 </Text>
               </TouchableOpacity>
             </View>
 
             {newType === 'timed_premium' && (
               <>
-                <Text style={[styles.label, { color: colors.textSecondary }]}>Varighet (dager)</Text>
+                <Text style={[styles.label, { color: colors.textSecondary }]}>Duration (days)</Text>
                 <TextInput
                   style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
                   value={newDuration}
                   onChangeText={setNewDuration}
-                  placeholder="F.eks. 30, 90, 365"
+                  placeholder="e.g. 30, 90, 365"
                   placeholderTextColor={colors.textLight}
                   keyboardType="numeric"
                   data-testid="promo-duration-input"
@@ -439,12 +439,12 @@ export default function AdminPromoCodes() {
               </>
             )}
 
-            <Text style={[styles.label, { color: colors.textSecondary }]}>Maks antall bruk</Text>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Max uses</Text>
             <TextInput
               style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
               value={newMaxUses}
               onChangeText={setNewMaxUses}
-              placeholder="1 = engangskode, 0 = ubegrenset"
+              placeholder="1 = single use, 0 = unlimited"
               placeholderTextColor={colors.textLight}
               keyboardType="numeric"
               data-testid="promo-maxuses-input"
@@ -462,7 +462,7 @@ export default function AdminPromoCodes() {
                 ) : (
                   <>
                     <Ionicons name="add-circle" size={20} color="#fff" />
-                    <Text style={styles.createBtnText}>Opprett kode</Text>
+                    <Text style={styles.createBtnText}>Create code</Text>
                   </>
                 )}
               </LinearGradient>
@@ -478,7 +478,7 @@ export default function AdminPromoCodes() {
             data-testid="batch-create-btn"
           >
             <Ionicons name="layers-outline" size={18} color="#8b5cf6" />
-            <Text style={[styles.batchBtnText, { color: colors.text }]}>Batch-opprett</Text>
+            <Text style={[styles.batchBtnText, { color: colors.text }]}>Batch create</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.batchBtn, { backgroundColor: colors.surface }]}
@@ -486,30 +486,30 @@ export default function AdminPromoCodes() {
             data-testid="export-csv-btn"
           >
             <Ionicons name="download-outline" size={18} color="#10b981" />
-            <Text style={[styles.batchBtnText, { color: colors.text }]}>Eksporter CSV</Text>
+            <Text style={[styles.batchBtnText, { color: colors.text }]}>Export CSV</Text>
           </TouchableOpacity>
         </View>
 
         {/* Batch Create Form */}
         {showBatch && (
           <View style={[styles.createForm, { backgroundColor: colors.surface }]} data-testid="batch-create-form">
-            <Text style={[styles.formTitle, { color: colors.text }]}>Batch-opprett kampanjekoder</Text>
+            <Text style={[styles.formTitle, { color: colors.text }]}>Batch create promo codes</Text>
             <Text style={[styles.formSubtitle, { color: colors.textSecondary }]}>
-              Generer flere unike koder med prefiks. Format: PREFIKS-001, PREFIKS-002, osv.
+              Generate multiple unique codes with a prefix. Format: PREFIX-001, PREFIX-002, etc.
             </Text>
 
-            <Text style={[styles.label, { color: colors.textSecondary }]}>Prefiks</Text>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Prefix</Text>
             <TextInput
               style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
               value={batchPrefix}
               onChangeText={setBatchPrefix}
-              placeholder="F.eks. INFLUENCER, BLOGGER"
+              placeholder="e.g. INFLUENCER, BLOGGER"
               placeholderTextColor={colors.textLight}
               autoCapitalize="characters"
               data-testid="batch-prefix-input"
             />
 
-            <Text style={[styles.label, { color: colors.textSecondary }]}>Antall koder</Text>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Number of codes</Text>
             <TextInput
               style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
               value={batchCount}
