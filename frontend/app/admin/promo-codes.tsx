@@ -248,6 +248,50 @@ export default function AdminPromoCodes() {
     }
   };
 
+  const openEmailModal = (codeId: string) => {
+    setEmailCodeIds([codeId]);
+    setEmailRecipients('');
+    setEmailSubject('');
+    setEmailMessage('');
+    setEmailResult(null);
+    setShowEmailModal(true);
+  };
+
+  const handleSendEmails = async () => {
+    const emailList = emailRecipients.split(/[\n,;]+/).map(e => e.trim()).filter(e => e.includes('@'));
+    if (emailList.length === 0) {
+      Alert.alert('Feil', 'Legg til minst en gyldig e-postadresse');
+      return;
+    }
+    setEmailSending(true);
+    setEmailResult(null);
+    try {
+      const token = await getToken();
+      const body: any = {
+        code_ids: emailCodeIds,
+        emails: emailList,
+      };
+      if (emailSubject.trim()) body.subject = emailSubject.trim();
+      if (emailMessage.trim()) body.personal_message = emailMessage.trim();
+      const res = await fetch(`${BACKEND_URL}/api/admin/promo-codes/send-email`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setEmailResult({ sent: data.sent, failed: data.failed });
+      } else {
+        const err = await res.json();
+        Alert.alert('Feil', err.detail || 'Kunne ikke sende e-post');
+      }
+    } catch {
+      Alert.alert('Feil', 'Noe gikk galt');
+    } finally {
+      setEmailSending(false);
+    }
+  };
+
   if (loading) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
