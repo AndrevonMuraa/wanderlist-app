@@ -1,0 +1,381 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, FlatList, Image, TouchableOpacity, Platform, Dimensions, Alert } from 'react-native';
+import { Text, ActivityIndicator, Surface } from 'react-native-paper';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import theme from '../../styles/theme';
+import { useSubscription } from '../../hooks/useSubscription';
+import { BACKEND_URL } from '../../utils/config';
+import UniversalHeader from '../../components/UniversalHeader';
+
+const { width } = Dimensions.get('window');
+const PHOTO_SIZE = (width - theme.spacing.lg * 3) / 2;
+
+const getToken = async (): Promise<string | null> => {
+  if (Platform.OS === 'web') {
+    return localStorage.getItem('auth_token');
+  }
+  return await SecureStore.getItemAsync('auth_token');
+};
+
+interface CommunityPhoto {
+  photo_id: string;
+  photo_url: string;
+  landmark_name: string;
+  landmark_id?: string;
+  user_id: string;
+  user_name: string;
+  user_picture?: string;
+  username?: string;
+  visited_at?: string;
+  upvotes: number;
+  user_upvoted: boolean;
+}
+
+export default function CountryCommunityPhotosScreen() {
+  const { country_id, name } = useLocalSearchParams();
+  const [photos, setPhotos] = useState<CommunityPhoto[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [isPreview, setIsPreview] = useState(true);
+  const [countryName, setCountryName] = useState(name || '');
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const { subscription_tier } = useSubscription();
+  const isPremium = subscription_tier === 'pro';
+
+  useEffect(() => {
+    fetchPhotos();
+  }, []);
+
+  const fetchPhotos = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(
+        `${BACKEND_URL}/api/countries/${country_id}/community-photos`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setPhotos(data.photos);
+        setTotalCount(data.total_count);
+        setIsPreview(data.is_preview);
+        if (data.country_name) setCountryName(data.country_name);
+      }
+    } catch (error) {
+      console.error('Error fetching country community photos:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpvote = async (photoId: string) => {
+    if (!isPremium) {
+      Alert.alert('Premium Feature', 'Upgrade to WanderMark Pro to upvote community photos!');
+      return;
+    }
+    try {
+      const token = await getToken();
+      const response = await fetch(
+        `${BACKEND_URL}/api/community-photos/${encodeURIComponent(photoId)}/upvote`,
+        { method: 'POST', headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.ok) {
+        const result = await response.json();
+        setPhotos(prev =>
+          prev.map(p =>
+            p.photo_id === photoId
+              ? { ...p, upvotes: result.upvotes, user_upvoted: result.upvoted }
+              : p
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error upvoting:', error);
+    }
+  };
+
+  const renderPhoto = useCallback(({ item }: { item: CommunityPhoto }) => (
+    <Surface style={styles.photoCard} data-testid={`country-photo-${item.photo_id}`}>
+      <Image source={{ uri: item.photo_url }} style={styles.photoImage} resizeMode="cover" />
+      <View style={styles.photoInfo}>
+        <View style={styles.userRow}>
+          {item.user_picture ? (
+            <Image source={{ uri: item.user_picture }} style={styles.userAvatar} />
+          ) : (
+            <View style={[styles.userAvatar, styles.userAvatarPlaceholder]}>
+              <Ionicons name="person" size={12} color={theme.colors.textSecondary} />
+            </View>
+          )}
+          <View style={{ flex: 1 }}>
+            <Text style={styles.userName} numberOfLines={1}>{item.user_name}</Text>
+            {item.username && (
+              <Text style={styles.userHandle} numberOfLines={1}>@{item.username}</Text>
+            )}
+          </View>
+        </View>
+        <View style={styles.landmarkTag}>
+          <Ionicons name="location" size={10} color={theme.colors.primary} />
+          <Text style={styles.landmarkTagText} numberOfLines={1}>{item.landmark_name}</Text>
+        </View>
+        <View style={styles.actionRow}>
+          <TouchableOpacity
+            onPress={() => handleUpvote(item.photo_id)}
+            style={styles.upvoteButton}
+            data-testid={`upvote-btn-${item.photo_id}`}
+          >
+            <Ionicons
+              name={item.user_upvoted ? 'heart' : 'heart-outline'}
+              size={18}
+              color={item.user_upvoted ? '#FF6B6B' : theme.colors.textSecondary}
+            />
+            <Text style={[styles.upvoteCount, item.user_upvoted && { color: '#FF6B6B' }]}>
+              {item.upvotes}
+            </Text>
+          </TouchableOpacity>
+          {item.visited_at && (
+            <Text style={styles.dateText}>
+              {new Date(item.visited_at).toLocaleDateString()}
+            </Text>
+          )}
+        </View>
+      </View>
+    </Surface>
+  ), [isPremium]);
+
+  const renderUpgradePrompt = () => (
+    <Surface style={styles.upgradeCard} data-testid="upgrade-prompt">
+      <LinearGradient
+        colors={[theme.colors.accent, '#D4A574']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.upgradeGradient}
+      >
+        <Ionicons name="diamond" size={32} color="#fff" />
+        <Text style={styles.upgradeTitle}>
+          {totalCount > 3
+            ? `+${totalCount - 3} more photos from ${countryName}`
+            : `Unlock Full ${countryName} Gallery`}
+        </Text>
+        <Text style={styles.upgradeSubtitle}>
+          Upgrade to Premium to see all community photos and upvote your favorites
+        </Text>
+        <TouchableOpacity style={styles.upgradeButton} data-testid="upgrade-button">
+          <Text style={styles.upgradeButtonText}>Upgrade to Pro</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+    </Surface>
+  );
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <UniversalHeader title="Country Photos" />
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <UniversalHeader title="Country Photos" />
+
+      <FlatList
+        data={photos}
+        renderItem={renderPhoto}
+        keyExtractor={item => item.photo_id}
+        numColumns={2}
+        contentContainerStyle={styles.listContent}
+        columnWrapperStyle={styles.row}
+        ListHeaderComponent={
+          <View style={styles.headerSection}>
+            <Text style={styles.countryTitle} data-testid="country-name">
+              {countryName}
+            </Text>
+            <Text style={styles.photoCount}>
+              {totalCount} {totalCount === 1 ? 'photo' : 'photos'} from the community
+            </Text>
+          </View>
+        }
+        ListFooterComponent={
+          isPreview && totalCount > 3 ? renderUpgradePrompt() : null
+        }
+        ListEmptyComponent={
+          <View style={styles.emptyContainer} data-testid="empty-state">
+            <Ionicons name="camera-outline" size={64} color={theme.colors.textSecondary} />
+            <Text style={styles.emptyTitle}>No community photos yet</Text>
+            <Text style={styles.emptySubtitle}>
+              Visit landmarks in {countryName} and share your photos!
+            </Text>
+          </View>
+        }
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  listContent: {
+    padding: theme.spacing.lg,
+    paddingBottom: 100,
+  },
+  row: {
+    gap: theme.spacing.md,
+  },
+  headerSection: {
+    marginBottom: theme.spacing.lg,
+  },
+  countryTitle: {
+    ...theme.typography.h2,
+    color: theme.colors.text,
+    fontWeight: '700',
+  },
+  photoCount: {
+    ...theme.typography.caption,
+    color: theme.colors.primary,
+    fontWeight: '600',
+    marginTop: theme.spacing.sm,
+  },
+  photoCard: {
+    flex: 1,
+    maxWidth: PHOTO_SIZE,
+    borderRadius: theme.borderRadius.lg,
+    backgroundColor: theme.colors.surface,
+    overflow: 'hidden',
+    marginBottom: theme.spacing.md,
+    ...theme.shadows.sm,
+  },
+  photoImage: {
+    width: '100%',
+    height: PHOTO_SIZE,
+    backgroundColor: theme.colors.background,
+  },
+  photoInfo: {
+    padding: theme.spacing.sm,
+  },
+  userRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 4,
+  },
+  userAvatar: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+  },
+  userAvatarPlaceholder: {
+    backgroundColor: theme.colors.background,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  userName: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+  userHandle: {
+    fontSize: 10,
+    color: theme.colors.textSecondary,
+  },
+  landmarkTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: 'rgba(77, 184, 216, 0.08)',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    marginBottom: 4,
+    alignSelf: 'flex-start',
+  },
+  landmarkTagText: {
+    fontSize: 10,
+    color: theme.colors.primary,
+    fontWeight: '600',
+  },
+  actionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  upvoteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: 2,
+  },
+  upvoteCount: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  dateText: {
+    fontSize: 10,
+    color: theme.colors.textLight,
+  },
+  upgradeCard: {
+    borderRadius: theme.borderRadius.xl,
+    overflow: 'hidden',
+    marginTop: theme.spacing.md,
+    ...theme.shadows.md,
+  },
+  upgradeGradient: {
+    padding: theme.spacing.xl,
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+  },
+  upgradeTitle: {
+    ...theme.typography.h3,
+    color: '#fff',
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  upgradeSubtitle: {
+    ...theme.typography.body,
+    color: 'rgba(255,255,255,0.85)',
+    textAlign: 'center',
+    fontSize: 13,
+  },
+  upgradeButton: {
+    backgroundColor: '#fff',
+    paddingHorizontal: theme.spacing.xl,
+    paddingVertical: theme.spacing.sm + 2,
+    borderRadius: theme.borderRadius.lg,
+    marginTop: theme.spacing.sm,
+  },
+  upgradeButtonText: {
+    color: theme.colors.accent,
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    paddingVertical: theme.spacing.xl * 2,
+    gap: theme.spacing.sm,
+  },
+  emptyTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.text,
+    fontWeight: '600',
+  },
+  emptySubtitle: {
+    ...theme.typography.body,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+    fontSize: 13,
+  },
+});
