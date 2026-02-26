@@ -308,6 +308,7 @@ export default function CountryCommunityPhotosScreen() {
 
       {activeTab === 'photos' ? (
         <FlatList
+          key="photos-grid"
           data={photos}
           renderItem={renderPhoto}
           keyExtractor={item => item.photo_id}
