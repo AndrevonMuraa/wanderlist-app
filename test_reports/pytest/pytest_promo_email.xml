@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="12" skipped="0" tests="13" time="7.524" timestamp="2026-02-26T20:14:59.892513+00:00" hostname="agent-env-302328ac-e24a-43ff-b2f0-2dcb0750222f"><testcase classname="backend.tests.test_promo_email.TestPromoEmailFeature" name="test_send_email_single_recipient" time="0.573"><failure message="AssertionError: Failed to create test promo code&#10;assert None is not None">backend/tests/test_promo_email.py:68: in test_send_email_single_recipient
+    assert code_id is not None, "Failed to create test promo code"
+E   AssertionError: Failed to create test promo code
+E   assert None is not None</failure></testcase><testcase classname="backend.tests.test_promo_email.TestPromoEmailFeature" name="test_send_email_multiple_recipients" time="0.516"><failure message="AssertionError: Failed to create test promo codes&#10;assert 0 &gt;= 2&#10; +  where 0 = len([])">backend/tests/test_promo_email.py:94: in test_send_email_multiple_recipients
+    assert len(code_ids) &gt;= 2, "Failed to create test promo codes"
+E   AssertionError: Failed to create test promo codes
+E   assert 0 &gt;= 2
+E    +  where 0 = len([])</failure></testcase><testcase classname="backend.tests.test_promo_email.TestPromoEmailFeature" name="test_send_email_empty_emails_fails" time="0.538"><failure message="assert None is not None">backend/tests/test_promo_email.py:118: in test_send_email_empty_emails_fails
+    assert code_id is not None
+E   assert None is not None</failure></testcase><testcase classname="backend.tests.test_promo_email.TestPromoEmailFeature" name="test_send_email_empty_code_ids_fails" time="1.255"><failure message="AssertionError: Expected 400, got 401&#10;assert 401 == 400&#10; +  where 401 = &lt;Response [401]&gt;.status_code">backend/tests/test_promo_email.py:142: in test_send_email_empty_code_ids_fails
+    assert response.status_code == 400, f"Expected 400, got {response.status_code}"
+E   AssertionError: Expected 400, got 401
+E   assert 401 == 400
+E    +  where 401 = &lt;Response [401]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_promo_email.TestPromoEmailFeature" name="test_send_email_with_custom_subject" time="0.555"><failure message="assert None is not None">backend/tests/test_promo_email.py:149: in test_send_email_with_custom_subject
+    assert code_id is not None
+E   assert None is not None</failure></testcase><testcase classname="backend.tests.test_promo_email.TestPromoEmailFeature" name="test_send_email_with_personal_message" time="0.456"><failure message="assert None is not None">backend/tests/test_promo_email.py:170: in test_send_email_with_personal_message
+    assert code_id is not None
+E   assert None is not None</failure></testcase><testcase classname="backend.tests.test_promo_email.TestPromoEmailFeature" name="test_send_email_with_all_options" time="0.467"><failure message="assert None is not None">backend/tests/test_promo_email.py:191: in test_send_email_with_all_options
+    assert code_id is not None
+E   assert None is not None</failure></testcase><testcase classname="backend.tests.test_promo_email.TestPromoEmailFeature" name="test_send_email_unauthorized_fails" time="0.687" /><testcase classname="backend.tests.test_promo_email.TestPromoEmailFeature" name="test_send_email_invalid_code_ids_handled" time="0.501"><failure message="AssertionError: Expected 400, got 401&#10;assert 401 == 400&#10; +  where 401 = &lt;Response [401]&gt;.status_code">backend/tests/test_promo_email.py:234: in test_send_email_invalid_code_ids_handled
+    assert response.status_code == 400, f"Expected 400, got {response.status_code}"
+E   AssertionError: Expected 400, got 401
+E   assert 401 == 400
+E    +  where 401 = &lt;Response [401]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_promo_email.TestPromoEmailFeature" name="test_send_email_whitespace_emails_filtered" time="0.460"><failure message="assert None is not None">backend/tests/test_promo_email.py:241: in test_send_email_whitespace_emails_filtered
+    assert code_id is not None
+E   assert None is not None</failure></testcase><testcase classname="backend.tests.test_promo_email.TestRegressionBatchAndCSV" name="test_batch_create_still_works" time="0.402"><failure message="AssertionError: Batch create failed: 401&#10;assert 401 == 200&#10; +  where 401 = &lt;Response [401]&gt;.status_code">backend/tests/test_promo_email.py:297: in test_batch_create_still_works
+    assert response.status_code == 200, f"Batch create failed: {response.status_code}"
+E   AssertionError: Batch create failed: 401
+E   assert 401 == 200
+E    +  where 401 = &lt;Response [401]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_promo_email.TestRegressionBatchAndCSV" name="test_csv_export_still_works" time="0.503"><failure message="AssertionError: CSV export failed: 401&#10;assert 401 == 200&#10; +  where 401 = &lt;Response [401]&gt;.status_code">backend/tests/test_promo_email.py:310: in test_csv_export_still_works
+    assert response.status_code == 200, f"CSV export failed: {response.status_code}"
+E   AssertionError: CSV export failed: 401
+E   assert 401 == 200
+E    +  where 401 = &lt;Response [401]&gt;.status_code</failure></testcase><testcase classname="backend.tests.test_promo_email.TestRegressionBatchAndCSV" name="test_list_promo_codes_still_works" time="0.478"><failure message="AssertionError: List failed: 401&#10;assert 401 == 200&#10; +  where 401 = &lt;Response [401]&gt;.status_code">backend/tests/test_promo_email.py:330: in test_list_promo_codes_still_works
+    assert response.status_code == 200, f"List failed: {response.status_code}"
+E   AssertionError: List failed: 401
+E   assert 401 == 200
+E    +  where 401 = &lt;Response [401]&gt;.status_code</failure></testcase></testsuite></testsuites>
