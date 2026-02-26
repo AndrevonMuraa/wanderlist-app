@@ -8,7 +8,7 @@ from datetime import datetime, timezone, timedelta
 
 from utils.db import db
 from utils.auth import get_current_user, get_admin_user
-from models.all import User, PromoCodeCreate, PromoCodeUpdate, PromoRedeemRequest, PromoBatchCreate, PromoEmailSend
+from models.all import User, PromoCodeCreate, PromoCodeUpdate, PromoRedeemRequest, PromoBatchCreate, PromoEmailSend, EmailTemplateUpdate
 
 router = APIRouter()
 
