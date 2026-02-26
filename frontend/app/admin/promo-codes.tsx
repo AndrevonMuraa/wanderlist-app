@@ -1147,6 +1147,17 @@ export default function AdminPromoCodes() {
                   <Text style={styles.createBtnText}>Preview email</Text>
                 </LinearGradient>
               </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.resetBtn}
+                onPress={resetTemplate}
+                data-testid="reset-template-btn"
+              >
+                <View style={styles.resetBtnInner}>
+                  <Ionicons name="refresh-outline" size={16} color="#ef4444" />
+                  <Text style={styles.resetBtnText}>Reset to default</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
         ) : (
