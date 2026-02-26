@@ -576,4 +576,69 @@ async def update_custom_visit_visibility(visit_id: str, current_user: User = Dep
 
     return {"message": "Visibility updated", "visibility": new_visibility}
 
+
+@router.get("/community/custom-visits")
+async def get_community_custom_visits(
+    limit: int = 20,
+    offset: int = 0,
+    current_user: User = Depends(get_current_user)
+):
+    """Browse all public custom visits from the community"""
+    pipeline = [
+        {"$match": {"visibility": "public"}},
+        {"$sort": {"visited_at": -1}},
+        {"$skip": offset},
+        {"$limit": limit},
+        {"$lookup": {
+            "from": "users",
+            "localField": "user_id",
+            "foreignField": "user_id",
+            "as": "user_info"
+        }},
+        {"$unwind": {"path": "$user_info", "preserveNullAndEmptyArrays": True}},
+        {"$project": {
+            "_id": 0,
+            "user_created_visit_id": 1,
+            "user_id": 1,
+            "country_name": 1,
+            "landmarks": 1,
+            "photos": 1,
+            "diary": 1,
+            "visited_at": 1,
+            "created_at": 1,
+            "user_name": {"$ifNull": ["$user_info.name", "Anonymous"]},
+            "user_picture": "$user_info.picture",
+            "username": "$user_info.username",
+        }}
+    ]
+
+    visits = await db.user_created_visits.aggregate(pipeline).to_list(limit)
+    total = await db.user_created_visits.count_documents({"visibility": "public"})
+
+    items = []
+    for cv in visits:
+        landmark_names = [lm["name"] for lm in (cv.get("landmarks") or []) if lm.get("name")]
+        all_photos = list(cv.get("photos") or [])
+        for lm in (cv.get("landmarks") or []):
+            if lm.get("photo"):
+                all_photos.append(lm["photo"])
+
+        items.append({
+            "user_created_visit_id": cv.get("user_created_visit_id"),
+            "user_id": cv.get("user_id"),
+            "country_name": cv.get("country_name"),
+            "landmarks": landmark_names,
+            "landmarks_count": len(landmark_names),
+            "photo_url": all_photos[0] if all_photos else None,
+            "photo_count": len(all_photos),
+            "has_diary": bool(cv.get("diary")),
+            "diary_snippet": (cv["diary"][:100] + "...") if cv.get("diary") and len(cv["diary"]) > 100 else cv.get("diary"),
+            "user_name": cv.get("user_name", "Anonymous"),
+            "user_picture": cv.get("user_picture"),
+            "username": cv.get("username"),
+            "visited_at": cv.get("visited_at").isoformat() if cv.get("visited_at") else None,
+        })
+
+    return {"items": items, "total": total, "offset": offset, "limit": limit}
+
 # ============= END USER CREATED VISIT ENDPOINTS =============
