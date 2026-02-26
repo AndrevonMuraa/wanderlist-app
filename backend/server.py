@@ -1589,10 +1589,12 @@ async def get_landmark_community_photos(
 @api_router.get("/countries/{country_id}/community-photos")
 async def get_country_community_photos(
     country_id: str,
+    sort: str = "popular",
     current_user: User = Depends(get_current_user)
 ):
     """Get community photos for all landmarks in a country.
-    Free users: top 3 photos + total count. Premium: all photos."""
+    Free users: top 3 photos + total count. Premium: all photos.
+    sort: 'popular' (default) or 'newest'"""
     
     is_premium = current_user.subscription_tier == "pro"
     
