@@ -43,6 +43,7 @@ WanderMark is a React Native (Expo SDK 54) mobile travel app where users discove
 - Supports both lifetime premium and time-limited premium (N days)
 - **Batch-opprett**: Generer opptil 500 unike koder med prefiks (INFLUENCER-001, INFLUENCER-002, osv.)
 - **CSV-eksport**: Last ned alle koder som CSV-fil for utsendelse
+- **E-postutsendelse**: Send kampanjekoder direkte til bloggere/influencere med pen HTML e-postmal via Resend
 - Users redeem codes on subscription page
 - Admin views who redeemed each code (full tracking)
 - Backend: routes/promo.py | Frontend: subscription.tsx + admin/promo-codes.tsx
