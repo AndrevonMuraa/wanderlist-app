@@ -1423,7 +1423,7 @@ async def get_landmark_community_photos(
             "foreignField": "user_id",
             "as": "user_info"
         }},
-        {"$unwind": {"path": "$user_info", "preserveNullAndEmptyDocuments": True}},
+        {"$unwind": {"path": "$user_info"}},
         {"$project": {
             "_id": 0,
             "visit_id": 1,
@@ -1542,7 +1542,7 @@ async def get_country_community_photos(
             "foreignField": "user_id",
             "as": "user_info"
         }},
-        {"$unwind": {"path": "$user_info", "preserveNullAndEmptyDocuments": True}},
+        {"$unwind": {"path": "$user_info"}},
         {"$project": {
             "_id": 0,
             "visit_id": 1,
@@ -1572,7 +1572,7 @@ async def get_country_community_photos(
             "foreignField": "user_id",
             "as": "user_info"
         }},
-        {"$unwind": {"path": "$user_info", "preserveNullAndEmptyDocuments": True}},
+        {"$unwind": {"path": "$user_info"}},
         {"$project": {
             "_id": 0,
             "country_visit_id": 1,
