@@ -1126,6 +1126,44 @@ export default function AdminPromoCodes() {
       </ScrollView>
       )}
 
+      {/* Email Preview Modal */}
+      <Modal visible={showPreview} animationType="slide" transparent>
+        <View style={styles.modalOverlay}>
+          <View style={[styles.previewModalContent, { backgroundColor: colors.surface }]} data-testid="preview-modal">
+            <View style={styles.modalHeader}>
+              <View style={styles.modalHeaderLeft}>
+                <Ionicons name="eye" size={22} color="#3b82f6" />
+                <Text style={[styles.modalTitle, { color: colors.text }]}>Email Preview</Text>
+              </View>
+              <TouchableOpacity onPress={() => setShowPreview(false)} data-testid="close-preview-modal">
+                <Ionicons name="close" size={24} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.previewSubjectBar}>
+              <Ionicons name="mail-outline" size={14} color={colors.textLight} />
+              <Text style={[styles.previewSubjectText, { color: colors.textSecondary }]} numberOfLines={1}>
+                Subject: {template?.subject || ''}
+              </Text>
+            </View>
+            {Platform.OS === 'web' ? (
+              <iframe
+                srcDoc={buildPreviewHtml()}
+                style={{ flex: 1, border: 'none', width: '100%', minHeight: 500 } as any}
+                title="Email Preview"
+              />
+            ) : (
+              <WebView
+                originWhitelist={['*']}
+                source={{ html: buildPreviewHtml() }}
+                style={styles.previewWebView}
+                scrollEnabled={true}
+                scalesPageToFit={true}
+              />
+            )}
+          </View>
+        </View>
+      </Modal>
+
       {/* Email Send Modal */}
       <Modal visible={showEmailModal} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
