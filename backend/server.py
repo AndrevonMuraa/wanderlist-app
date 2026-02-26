@@ -1474,10 +1474,12 @@ async def get_photo_of_the_week(current_user: User = Depends(get_current_user)):
 @api_router.get("/landmarks/{landmark_id}/community-photos")
 async def get_landmark_community_photos(
     landmark_id: str,
+    sort: str = "popular",
     current_user: User = Depends(get_current_user)
 ):
     """Get community photos for a specific landmark. 
-    Free users: top 3 photos + total count. Premium: all photos + upvoting."""
+    Free users: top 3 photos + total count. Premium: all photos + upvoting.
+    sort: 'popular' (default) or 'newest'"""
     
     is_premium = current_user.subscription_tier == "pro"
     
@@ -1560,7 +1562,10 @@ async def get_landmark_community_photos(
             })
     
     # Sort by upvotes (most upvoted first), then by date
-    photos.sort(key=lambda x: (-x["upvotes"], x.get("visited_at", "") or ""), reverse=False)
+    if sort == "newest":
+        photos.sort(key=lambda x: x.get("visited_at", "") or "", reverse=True)
+    else:
+        photos.sort(key=lambda x: (-x["upvotes"], x.get("visited_at", "") or ""), reverse=False)
     
     total_count = len(photos)
     
