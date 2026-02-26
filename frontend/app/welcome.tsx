@@ -27,8 +27,8 @@ export default function WelcomeScreen() {
     },
     {
       icon: 'trophy',
-      title: 'Earn Rewards',
-      description: 'Ranks, badges, streaks - gamification makes travel fun!',
+      title: 'Compete & Climb',
+      description: 'Earn points, climb the leaderboard, and compete with travelers worldwide',
       color: theme.colors.accentYellow,
     },
     {
