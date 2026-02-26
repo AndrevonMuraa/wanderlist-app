@@ -147,6 +147,76 @@ export default function AdminPromoCodes() {
     }
   };
 
+  const fetchTemplate = async () => {
+    setTemplateLoading(true);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/admin/email-template`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        setTemplate(await res.json());
+        setTemplateDirty(false);
+      }
+    } catch (e) {
+      console.error('Error fetching template:', e);
+    } finally {
+      setTemplateLoading(false);
+    }
+  };
+
+  const saveTemplate = async () => {
+    if (!template) return;
+    setTemplateSaving(true);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/admin/email-template`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(template),
+      });
+      if (res.ok) {
+        setTemplate(await res.json());
+        setTemplateDirty(false);
+        Alert.alert('Saved', 'Email template updated successfully');
+      } else {
+        const err = await res.json();
+        Alert.alert('Error', err.detail || 'Could not save template');
+      }
+    } catch (e) {
+      Alert.alert('Error', 'Something went wrong');
+    } finally {
+      setTemplateSaving(false);
+    }
+  };
+
+  const updateTemplateField = (field: string, value: string) => {
+    if (!template) return;
+    setTemplate({ ...template, [field]: value });
+    setTemplateDirty(true);
+  };
+
+  const updateTemplateStep = (index: number, value: string) => {
+    if (!template) return;
+    const newSteps = [...template.steps];
+    newSteps[index] = value;
+    setTemplate({ ...template, steps: newSteps });
+    setTemplateDirty(true);
+  };
+
+  const addTemplateStep = () => {
+    if (!template) return;
+    setTemplate({ ...template, steps: [...template.steps, ''] });
+    setTemplateDirty(true);
+  };
+
+  const removeTemplateStep = (index: number) => {
+    if (!template || template.steps.length <= 1) return;
+    const newSteps = template.steps.filter((_, i) => i !== index);
+    setTemplate({ ...template, steps: newSteps });
+    setTemplateDirty(true);
+  };
+
   const handleCreate = async () => {
     if (!newCode.trim()) {
       Alert.alert('Error', 'Code is required');
