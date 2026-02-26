@@ -208,8 +208,14 @@ class TestTravelDiariesEndpoint:
             for field in optional_fields:
                 assert field in diary, f"Missing optional field: {field}"
     
-    def test_free_user_gets_preview_limit(self, auth_headers):
-        """Free users should only get 2 diary entries (preview)"""
+    def test_freemium_model_for_diaries(self, auth_headers):
+        """Test freemium model: free=2 max with preview, pro=all"""
+        # First check current user's subscription
+        user_response = requests.get(f"{BASE_URL}/api/auth/me", headers=auth_headers)
+        assert user_response.status_code == 200
+        user = user_response.json()
+        is_pro = user.get("subscription_tier") == "pro"
+        
         response = requests.get(
             f"{BASE_URL}/api/countries/{COUNTRY_ID}/travel-diaries",
             headers=auth_headers
@@ -217,13 +223,18 @@ class TestTravelDiariesEndpoint:
         assert response.status_code == 200
         data = response.json()
         
-        # Test user is free tier, so should be preview mode
-        if data["total_count"] > 2:
-            assert data["is_preview"] == True, "Free user should get is_preview=True"
-            assert len(data["diaries"]) == 2, f"Free user should get max 2 diaries, got {len(data['diaries'])}"
+        if is_pro:
+            # Pro user gets all diaries
+            assert data["is_preview"] == False, "Pro user should get is_preview=False"
+            assert len(data["diaries"]) == data["total_count"], "Pro user should get all diaries"
         else:
-            # If total is 2 or less, all diaries are shown
-            assert len(data["diaries"]) <= 2
+            # Free user gets max 2 diaries in preview mode
+            if data["total_count"] > 2:
+                assert data["is_preview"] == True, "Free user should get is_preview=True"
+                assert len(data["diaries"]) == 2, f"Free user should get max 2 diaries, got {len(data['diaries'])}"
+            else:
+                # If total is 2 or less, all diaries are shown
+                assert len(data["diaries"]) <= 2
     
     def test_travel_diaries_only_shared_diaries(self, auth_headers):
         """Should only return diaries where share_diary=true"""
