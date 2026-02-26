@@ -30,6 +30,8 @@ interface CommunityPhoto {
   user_picture?: string;
   username?: string;
   visited_at?: string;
+  diary_notes?: string;
+  has_diary?: boolean;
   upvotes: number;
   user_upvoted: boolean;
 }
@@ -41,6 +43,7 @@ export default function CountryCommunityPhotosScreen() {
   const [isPreview, setIsPreview] = useState(true);
   const [countryName, setCountryName] = useState(name || '');
   const [loading, setLoading] = useState(true);
+  const [diaryModal, setDiaryModal] = useState<{ visible: boolean; text: string; userName: string }>({ visible: false, text: '', userName: '' });
   const router = useRouter();
   const { subscription_tier } = useSubscription();
   const isPremium = subscription_tier === 'pro';
