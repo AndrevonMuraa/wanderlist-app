@@ -78,7 +78,7 @@ export default function CountryCommunityPhotosScreen() {
     try {
       const token = await getToken();
       const response = await fetch(
-        `${BACKEND_URL}/api/countries/${country_id}/community-photos`,
+        `${BACKEND_URL}/api/countries/${country_id}/community-photos?sort=${sortBy}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.ok) {
@@ -92,6 +92,25 @@ export default function CountryCommunityPhotosScreen() {
       console.error('Error fetching country community photos:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchDiaries = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(
+        `${BACKEND_URL}/api/countries/${country_id}/travel-diaries`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setDiaries(data.diaries);
+        setDiaryTotalCount(data.total_count);
+        setIsDiaryPreview(data.is_preview);
+        if (data.country_name) setCountryName(data.country_name);
+      }
+    } catch (error) {
+      console.error('Error fetching travel diaries:', error);
     }
   };
 
