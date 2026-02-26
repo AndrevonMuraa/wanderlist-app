@@ -38,6 +38,13 @@ WanderMark is a React Native (Expo SDK 54) mobile travel app where users discove
 - PUT /api/admin/users/{user_id} - Change user roles
 - Frontend admin panel with role filtering and management
 
+### Promo Code System (NEW - Feb 26, 2026)
+- Admin can create, manage, activate/deactivate promo codes
+- Supports both lifetime premium and time-limited premium (N days)
+- Users redeem codes on subscription page
+- Admin views who redeemed each code (full tracking)
+- Backend: routes/promo.py | Frontend: subscription.tsx + admin/promo-codes.tsx
+
 ### Community Features
 - **Community Photo Gallery** - Freemium model (3 photos free, all for premium)
 - **Photo of the Week** - Most upvoted photo on explore page
