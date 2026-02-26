@@ -371,6 +371,145 @@ export default function AdminPromoCodes() {
           </View>
         )}
 
+        {/* Action Buttons: Batch Create & Export CSV */}
+        <View style={styles.actionButtonsRow}>
+          <TouchableOpacity
+            style={[styles.batchBtn, { backgroundColor: colors.surface }]}
+            onPress={() => { setShowBatch(!showBatch); setShowCreate(false); }}
+            data-testid="batch-create-btn"
+          >
+            <Ionicons name="layers-outline" size={18} color="#8b5cf6" />
+            <Text style={[styles.batchBtnText, { color: colors.text }]}>Batch-opprett</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.batchBtn, { backgroundColor: colors.surface }]}
+            onPress={handleExportCSV}
+            data-testid="export-csv-btn"
+          >
+            <Ionicons name="download-outline" size={18} color="#10b981" />
+            <Text style={[styles.batchBtnText, { color: colors.text }]}>Eksporter CSV</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Batch Create Form */}
+        {showBatch && (
+          <View style={[styles.createForm, { backgroundColor: colors.surface }]} data-testid="batch-create-form">
+            <Text style={[styles.formTitle, { color: colors.text }]}>Batch-opprett kampanjekoder</Text>
+            <Text style={[styles.formSubtitle, { color: colors.textSecondary }]}>
+              Generer flere unike koder med prefiks. Format: PREFIKS-001, PREFIKS-002, osv.
+            </Text>
+
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Prefiks</Text>
+            <TextInput
+              style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+              value={batchPrefix}
+              onChangeText={setBatchPrefix}
+              placeholder="F.eks. INFLUENCER, BLOGGER"
+              placeholderTextColor={colors.textLight}
+              autoCapitalize="characters"
+              data-testid="batch-prefix-input"
+            />
+
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Antall koder</Text>
+            <TextInput
+              style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+              value={batchCount}
+              onChangeText={setBatchCount}
+              placeholder="10"
+              placeholderTextColor={colors.textLight}
+              keyboardType="numeric"
+              data-testid="batch-count-input"
+            />
+
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Beskrivelse (valgfritt)</Text>
+            <TextInput
+              style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+              value={batchDesc}
+              onChangeText={setBatchDesc}
+              placeholder="F.eks. Influencer-kampanje Q1 2026"
+              placeholderTextColor={colors.textLight}
+            />
+
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Type</Text>
+            <View style={styles.typeRow}>
+              <TouchableOpacity
+                style={[styles.typeBtn, batchType === 'lifetime_premium' && styles.typeBtnActive]}
+                onPress={() => setBatchType('lifetime_premium')}
+              >
+                <Ionicons name="infinite" size={16} color={batchType === 'lifetime_premium' ? '#fff' : colors.text} />
+                <Text style={[styles.typeBtnText, batchType === 'lifetime_premium' && styles.typeBtnTextActive]}>
+                  Evig Premium
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.typeBtn, batchType === 'timed_premium' && styles.typeBtnActive]}
+                onPress={() => setBatchType('timed_premium')}
+              >
+                <Ionicons name="time" size={16} color={batchType === 'timed_premium' ? '#fff' : colors.text} />
+                <Text style={[styles.typeBtnText, batchType === 'timed_premium' && styles.typeBtnTextActive]}>
+                  Tidsbegrenset
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {batchType === 'timed_premium' && (
+              <>
+                <Text style={[styles.label, { color: colors.textSecondary }]}>Varighet (dager)</Text>
+                <TextInput
+                  style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+                  value={batchDuration}
+                  onChangeText={setBatchDuration}
+                  placeholder="30"
+                  placeholderTextColor={colors.textLight}
+                  keyboardType="numeric"
+                />
+              </>
+            )}
+
+            <Text style={[styles.label, { color: colors.textSecondary }]}>Maks bruk per kode</Text>
+            <TextInput
+              style={[styles.input, { backgroundColor: colors.background, color: colors.text, borderColor: colors.border }]}
+              value={batchMaxUses}
+              onChangeText={setBatchMaxUses}
+              placeholder="1"
+              placeholderTextColor={colors.textLight}
+              keyboardType="numeric"
+            />
+
+            <TouchableOpacity
+              style={[styles.createBtn, batchCreating && styles.createBtnDisabled]}
+              onPress={handleBatchCreate}
+              disabled={batchCreating}
+              data-testid="submit-batch-btn"
+            >
+              <LinearGradient colors={['#8b5cf6', '#7c3aed']} style={styles.createBtnGradient}>
+                {batchCreating ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <>
+                    <Ionicons name="layers" size={20} color="#fff" />
+                    <Text style={styles.createBtnText}>Generer {batchCount || '0'} koder</Text>
+                  </>
+                )}
+              </LinearGradient>
+            </TouchableOpacity>
+
+            {batchResult && (
+              <View style={styles.batchResultBox}>
+                <View style={styles.batchResultHeader}>
+                  <Ionicons name="checkmark-circle" size={20} color="#10b981" />
+                  <Text style={styles.batchResultTitle}>{batchResult.created} koder opprettet!</Text>
+                </View>
+                <ScrollView style={styles.batchResultScroll} nestedScrollEnabled>
+                  {batchResult.codes.map((code, i) => (
+                    <Text key={i} style={styles.batchResultCode}>{code}</Text>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
+          </View>
+        )}
+
         {/* Stats Summary */}
         <View style={styles.statsRow}>
           <View style={[styles.statBox, { backgroundColor: colors.surface }]}>
