@@ -113,6 +113,23 @@ export default function AdminPromoCodes() {
     }
   };
 
+  const fetchEmailHistory = async () => {
+    setHistoryLoading(true);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/admin/promo-codes/email-history`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        setEmailHistory(await res.json());
+      }
+    } catch (e) {
+      console.error('Error fetching email history:', e);
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
   const handleCreate = async () => {
     if (!newCode.trim()) {
       Alert.alert('Feil', 'Kode er paakrevd');
