@@ -1043,4 +1043,43 @@ const styles = StyleSheet.create({
   emailResultSuccess: { backgroundColor: '#10b98115' },
   emailResultMixed: { backgroundColor: '#f59e0b15' },
   emailResultText: { fontSize: 14, fontWeight: '600' },
+
+  // Tab bar
+  tabBar: {
+    flexDirection: 'row', borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#e5e7eb',
+  },
+  tab: {
+    flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    gap: 6, paddingVertical: 14, borderBottomWidth: 2, borderBottomColor: 'transparent',
+  },
+  tabActive: { borderBottomColor: '#f59e0b' },
+  tabText: { fontSize: 14, fontWeight: '600', color: '#9ca3af' },
+  tabTextActive: { color: '#f59e0b' },
+
+  // History cards
+  historyCard: { borderRadius: 14, padding: 16, marginBottom: 12, overflow: 'hidden' },
+  historyCardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  historyCardLeft: { flex: 1, marginRight: 10 },
+  historyStatusRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  historyStatusDot: { width: 8, height: 8, borderRadius: 4 },
+  historyStatusSuccess: { backgroundColor: '#10b981' },
+  historyStatusMixed: { backgroundColor: '#f59e0b' },
+  historyDate: { fontSize: 15, fontWeight: '700' },
+  historySubject: { fontSize: 13, marginTop: 4 },
+  historyStatsRow: { flexDirection: 'row', gap: 10, marginTop: 8, flexWrap: 'wrap' },
+  historyStatChip: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  historyStatSent: { fontSize: 12, fontWeight: '600', color: '#10b981' },
+  historyStatFailed: { fontSize: 12, fontWeight: '600', color: '#ef4444' },
+  historyStatCode: { fontSize: 12, fontWeight: '600' },
+  historyDetails: { marginTop: 14, paddingTop: 14, borderTopWidth: StyleSheet.hairlineWidth },
+  historyDetailRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
+  historyDetailLabel: { fontSize: 12, fontWeight: '600' },
+  historyDetailValue: { fontSize: 13, flex: 1, textAlign: 'right' },
+  historyRecipient: {
+    flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 6,
+  },
+  historyRecipientEmail: { fontSize: 13, flex: 1 },
+  historyRecipientCode: {
+    fontSize: 12, fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+  },
 });
