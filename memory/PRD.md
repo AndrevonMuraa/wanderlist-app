@@ -114,7 +114,16 @@ WanderMark is a React Native (Expo SDK 54) mobile travel app where users discove
 - **Travel Diary Integration**: VERIFIED (Feb 26, 2026) - Book icon appears for photos with shared diary, opens modal with diary text
 - **Share Diary Toggle**: VERIFIED (Feb 26, 2026) - Toggle in AddVisitModal shows when diary text entered, defaults ON, can be toggled OFF
 
-## What's Been Implemented (Session Feb 26, 2026 - Part 2)
+- **Sort/Filter Gallery**: VERIFIED (Feb 26, 2026) - "Most liked" and "Newest" sort toggles in landmark and country galleries
+- **Country Gallery Tabs**: VERIFIED (Feb 26, 2026) - Photos/Travel Diaries tab bar with badge counts, seamless switching
+- **Travel Diaries Tab**: VERIFIED (Feb 26, 2026) - Shows shared diary entries as community travel guide, freemium model (2 preview for free, all for premium)
+
+## What's Been Implemented (Session Feb 26, 2026 - Part 3)
+1. **Sort/Filter** - "Most liked" (popular) and "Newest" sort buttons in both landmark and country community photo galleries
+2. **Tab Navigation** - Country gallery now has Photos and Travel Diaries tabs with badge counts
+3. **Travel Diaries Tab** - Dedicated tab showing shared diary entries with user profiles, landmark info, diary text, and thumbnails
+4. **Backend endpoints** - `GET /api/countries/{id}/travel-diaries` with freemium logic, sort parameter added to community photos endpoints
+5. **FlatList fix** - Replaced FlatList with ScrollView+flexWrap for country gallery to avoid numColumns switching bug on React Native Web
 1. **Photo of the Week** - New backend endpoint + explore page section with trophy badge, showing most upvoted community photo
 2. **Travel Diary in Community Gallery** - Book icon (diary symbol) on photos with shared diary notes, clicking opens a modal with the full diary text
 3. **Share Diary Toggle** - New `share_diary` field on visits, toggle UI in AddVisitModal that appears when diary text is entered
