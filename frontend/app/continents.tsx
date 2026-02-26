@@ -240,37 +240,6 @@ export default function ContinentsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Photo of the Week */}
-        {photoOfTheWeek && (
-          <TouchableOpacity
-            style={styles.potwContainer}
-            data-testid="photo-of-the-week"
-            onPress={() => router.push(`/landmark-community-photos/${photoOfTheWeek.landmark_id}?name=${encodeURIComponent(photoOfTheWeek.landmark_name)}&country=${encodeURIComponent(photoOfTheWeek.country_name || '')}`)}
-            activeOpacity={0.9}
-          >
-            <View style={styles.potwBadge}>
-              <Ionicons name="trophy" size={14} color="#FFD700" />
-              <Text style={styles.potwBadgeText}>Photo of the Week</Text>
-            </View>
-            <Image source={{ uri: photoOfTheWeek.photo_url }} style={styles.potwImage} resizeMode="cover" />
-            <LinearGradient
-              colors={['transparent', 'rgba(0,0,0,0.75)']}
-              style={styles.potwOverlay}
-            >
-              <View style={styles.potwInfo}>
-                <View style={styles.potwTextWrap}>
-                  <Text style={styles.potwLandmark} numberOfLines={1}>{photoOfTheWeek.landmark_name}</Text>
-                  <Text style={styles.potwUser} numberOfLines={1}>by {photoOfTheWeek.user_name}</Text>
-                </View>
-                <View style={styles.potwHeart}>
-                  <Ionicons name="heart" size={16} color="#FF6B6B" />
-                  <Text style={styles.potwHeartCount}>{photoOfTheWeek.upvotes}</Text>
-                </View>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-        )}
-
         {/* Continent Cards */}
         <View style={styles.cardsContainer}>
           {continents.map((continent, index) => (
