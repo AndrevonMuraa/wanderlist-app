@@ -1819,6 +1819,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         "visit_location": data.visit_location,
         "diary_notes": data.diary_notes,
         "travel_tips": travel_tips,
+        "share_diary": data.share_diary if data.share_diary is not None else True,
         "status": "accepted",
         "verified": is_verified,
         "visibility": visibility,  # Privacy setting
