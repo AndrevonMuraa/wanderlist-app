@@ -65,6 +65,7 @@ export default function LandmarksScreen() {
   useEffect(() => {
     fetchData();
     checkCountryVisitStatus();
+    fetchHighlights();
   }, []);
 
   const checkCountryVisitStatus = async () => {
