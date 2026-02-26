@@ -53,7 +53,7 @@ export default function AdminPromoCodes() {
   const [expandedCode, setExpandedCode] = useState<string | null>(null);
 
   // Tab state
-  const [activeTab, setActiveTab] = useState<'codes' | 'history'>('codes');
+  const [activeTab, setActiveTab] = useState<'codes' | 'history' | 'template'>('codes');
 
   // Email history state
   const [emailHistory, setEmailHistory] = useState<any[]>([]);
