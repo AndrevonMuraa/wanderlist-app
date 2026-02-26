@@ -46,6 +46,14 @@ Build a travel engagement app (WanderMark) with content management, admin featur
 ### UI Layout ✅
 - "Photo of the Week" moved to bottom of Explore page
 
+### Email Preview Feature (Feb 26, 2026)
+- "Preview email" button in template editor opens full-screen modal
+- Renders the email HTML template with sample data (EXAMPLE-CODE, lifetime Premium)
+- Shows subject line in a preview bar
+- Uses iframe on web, WebView on native
+- Fixed tab rendering bug: template tab no longer shows history content
+- Added error/retry state when template fetch fails
+
 ## Key API Endpoints
 - POST /api/auth/login → {access_token}
 - GET/POST /api/admin/promo-codes
