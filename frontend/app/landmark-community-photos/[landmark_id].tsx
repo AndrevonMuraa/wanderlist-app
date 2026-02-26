@@ -347,6 +347,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 2,
   },
+  actionLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
   upvoteButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -358,9 +363,55 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.textSecondary,
   },
+  diaryButton: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: 'rgba(77, 184, 216, 0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   dateText: {
     fontSize: 10,
     color: theme.colors.textLight,
+  },
+  diaryModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  diaryModalContent: {
+    backgroundColor: theme.colors.card,
+    borderRadius: 16,
+    padding: 20,
+    width: '100%',
+    maxWidth: 400,
+    maxHeight: '70%',
+  },
+  diaryModalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 4,
+  },
+  diaryModalTitle: {
+    flex: 1,
+    fontSize: 17,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  diaryModalAuthor: {
+    fontSize: 13,
+    color: theme.colors.textSecondary,
+    marginBottom: 12,
+    fontStyle: 'italic',
+  },
+  diaryModalText: {
+    fontSize: 15,
+    lineHeight: 22,
+    color: theme.colors.text,
   },
   upgradeCard: {
     borderRadius: theme.borderRadius.xl,
