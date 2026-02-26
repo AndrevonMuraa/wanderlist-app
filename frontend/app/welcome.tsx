@@ -71,6 +71,63 @@ export default function WelcomeScreen() {
           ))}
         </View>
 
+        {/* Compete Section - Points Showcase */}
+        <View style={styles.competeSection}>
+          <LinearGradient
+            colors={['#1a1a2e', '#16213e']}
+            style={styles.competeGradient}
+          >
+            <View style={styles.competeHeader}>
+              <Ionicons name="podium" size={36} color={theme.colors.accentYellow} />
+              <Text style={styles.competeTitle}>Compete with Travelers Worldwide</Text>
+              <Text style={styles.competeSubtitle}>
+                Every landmark you visit earns you points. Rise through the ranks and claim your spot on the global leaderboard.
+              </Text>
+            </View>
+
+            <View style={styles.rankShowcase}>
+              <View style={styles.rankCard}>
+                <Text style={styles.rankIcon}>🥉</Text>
+                <Text style={styles.rankName}>Explorer</Text>
+                <Text style={styles.rankPoints}>0 - 500 pts</Text>
+              </View>
+              <View style={[styles.rankCard, styles.rankCardHighlight]}>
+                <Text style={styles.rankIcon}>🥈</Text>
+                <Text style={styles.rankName}>Adventurer</Text>
+                <Text style={styles.rankPoints}>500 - 2000 pts</Text>
+              </View>
+              <View style={styles.rankCard}>
+                <Text style={styles.rankIcon}>🥇</Text>
+                <Text style={styles.rankName}>Legend</Text>
+                <Text style={styles.rankPoints}>5000+ pts</Text>
+              </View>
+            </View>
+
+            <View style={styles.pointsExamples}>
+              <View style={styles.pointRow}>
+                <Ionicons name="location" size={16} color={theme.colors.primaryLight} />
+                <Text style={styles.pointText}>Visit a landmark</Text>
+                <Text style={styles.pointValue}>+100 pts</Text>
+              </View>
+              <View style={styles.pointRow}>
+                <Ionicons name="camera" size={16} color={theme.colors.accent} />
+                <Text style={styles.pointText}>Add a photo</Text>
+                <Text style={styles.pointValue}>+50 pts</Text>
+              </View>
+              <View style={styles.pointRow}>
+                <Ionicons name="book" size={16} color="#10b981" />
+                <Text style={styles.pointText}>Write a diary</Text>
+                <Text style={styles.pointValue}>+75 pts</Text>
+              </View>
+              <View style={styles.pointRow}>
+                <Ionicons name="flame" size={16} color="#ef4444" />
+                <Text style={styles.pointText}>Daily streak bonus</Text>
+                <Text style={styles.pointValue}>+25 pts</Text>
+              </View>
+            </View>
+          </LinearGradient>
+        </View>
+
         {/* Quick Start */}
         <View style={styles.quickStart}>
           <Text style={styles.sectionTitle}>Quick Start Guide</Text>
