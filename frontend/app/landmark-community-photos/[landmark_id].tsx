@@ -56,7 +56,7 @@ export default function LandmarkCommunityPhotosScreen() {
     try {
       const token = await getToken();
       const response = await fetch(
-        `${BACKEND_URL}/api/landmarks/${landmark_id}/community-photos`,
+        `${BACKEND_URL}/api/landmarks/${landmark_id}/community-photos?sort=${sortBy}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.ok) {
