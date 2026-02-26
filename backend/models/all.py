@@ -546,3 +546,13 @@ class PromoCodeUpdate(BaseModel):
 
 class PromoRedeemRequest(BaseModel):
     code: str
+
+
+
+class PromoBatchCreate(BaseModel):
+    prefix: str
+    count: int
+    description: Optional[str] = None
+    type: str = "lifetime_premium"
+    duration_days: Optional[int] = None
+    max_uses: int = 1
