@@ -30,6 +30,8 @@ interface CommunityPhoto {
   username?: string;
   visited_at?: string;
   comments?: string;
+  diary_notes?: string;
+  has_diary?: boolean;
   upvotes: number;
   user_upvoted: boolean;
 }
@@ -40,6 +42,7 @@ export default function LandmarkCommunityPhotosScreen() {
   const [totalCount, setTotalCount] = useState(0);
   const [isPreview, setIsPreview] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [diaryModal, setDiaryModal] = useState<{ visible: boolean; text: string; userName: string }>({ visible: false, text: '', userName: '' });
   const router = useRouter();
   const { subscription_tier } = useSubscription();
   const isPremium = subscription_tier === 'pro';
