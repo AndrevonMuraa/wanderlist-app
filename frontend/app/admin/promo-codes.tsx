@@ -138,6 +138,70 @@ export default function AdminPromoCodes() {
     }
   };
 
+  const handleBatchCreate = async () => {
+    if (!batchPrefix.trim()) {
+      Alert.alert('Feil', 'Prefiks er paakrevd');
+      return;
+    }
+    setBatchCreating(true);
+    setBatchResult(null);
+    try {
+      const token = await getToken();
+      const body: any = {
+        prefix: batchPrefix.trim(),
+        count: parseInt(batchCount) || 10,
+        description: batchDesc.trim() || null,
+        type: batchType,
+        max_uses: parseInt(batchMaxUses) || 1,
+      };
+      if (batchType === 'timed_premium' && batchDuration) {
+        body.duration_days = parseInt(batchDuration);
+      }
+      const res = await fetch(`${BACKEND_URL}/api/admin/promo-codes/batch`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setBatchResult({ created: data.created, codes: data.codes });
+        fetchCodes();
+      } else {
+        const err = await res.json();
+        Alert.alert('Feil', err.detail || 'Kunne ikke opprette koder');
+      }
+    } catch (e) {
+      Alert.alert('Feil', 'Noe gikk galt');
+    } finally {
+      setBatchCreating(false);
+    }
+  };
+
+  const handleExportCSV = async () => {
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/admin/promo-codes/export-csv`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const csvText = await res.text();
+        if (Platform.OS === 'web') {
+          const blob = new Blob([csvText], { type: 'text/csv' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'wandermark_promo_codes.csv';
+          a.click();
+          URL.revokeObjectURL(url);
+        } else {
+          Alert.alert('Eksport', `CSV med ${codes.length} koder er klar`);
+        }
+      }
+    } catch (e) {
+      Alert.alert('Feil', 'Kunne ikke eksportere');
+    }
+  };
+
   const toggleActive = async (codeId: string, isActive: boolean) => {
     try {
       const token = await getToken();
