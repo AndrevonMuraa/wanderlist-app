@@ -355,6 +355,7 @@ export default function CountryCommunityPhotosScreen() {
         />
       ) : (
         <FlatList
+          key="diaries-list"
           data={diaries}
           renderItem={renderDiaryCard}
           keyExtractor={item => item.visit_id}
