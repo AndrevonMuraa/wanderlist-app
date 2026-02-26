@@ -1703,6 +1703,8 @@ async def get_country_community_photos(
                 "user_picture": visit.get("user_picture"),
                 "username": visit.get("username"),
                 "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
+                "diary_notes": visit.get("diary_notes") if visit.get("share_diary", True) else None,
+                "has_diary": bool(visit.get("diary_notes")) and visit.get("share_diary", True),
                 "upvotes": upvote_count,
                 "user_upvoted": user_upvoted
             })
