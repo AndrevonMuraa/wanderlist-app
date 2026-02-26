@@ -964,7 +964,7 @@ export default function AdminPromoCodes() {
         )}
         <View style={{ height: 40 }} />
       </ScrollView>
-      )}
+      ) : null}
 
       {/* Template Tab */}
       {activeTab === 'template' && (
