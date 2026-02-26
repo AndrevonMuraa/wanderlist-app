@@ -411,6 +411,53 @@ export default function LandmarksScreen() {
                 </View>
               </Surface>
             ) : null}
+
+            {/* Community Highlights */}
+            {highlights.length > 0 && (
+              <View style={styles.highlightsSection} data-testid="community-highlights">
+                <View style={styles.highlightsHeader}>
+                  <Ionicons name="trending-up" size={18} color={theme.colors.primary} />
+                  <Text style={styles.highlightsTitle}>Community Highlights</Text>
+                </View>
+                <View style={styles.highlightsRow}>
+                  {highlights.map((h, idx) => (
+                    <TouchableOpacity
+                      key={h.landmark_id}
+                      style={styles.highlightCard}
+                      onPress={() => router.push(`/landmark-detail/${h.landmark_id}`)}
+                      activeOpacity={0.8}
+                      data-testid={`highlight-${idx}`}
+                    >
+                      {h.sample_photo ? (
+                        <Image source={{ uri: h.sample_photo }} style={styles.highlightImage} resizeMode="cover" />
+                      ) : (
+                        <View style={[styles.highlightImage, { backgroundColor: theme.colors.surface, alignItems: 'center', justifyContent: 'center' }]}>
+                          <Ionicons name="image-outline" size={24} color={theme.colors.textLight} />
+                        </View>
+                      )}
+                      <LinearGradient
+                        colors={['transparent', 'rgba(0,0,0,0.7)']}
+                        style={styles.highlightOverlay}
+                      >
+                        <Text style={styles.highlightName} numberOfLines={2}>{h.landmark_name}</Text>
+                        <View style={styles.highlightStats}>
+                          <Ionicons name="camera" size={10} color="rgba(255,255,255,0.8)" />
+                          <Text style={styles.highlightStat}>{h.total_photos}</Text>
+                          <Ionicons name="people" size={10} color="rgba(255,255,255,0.8)" style={{ marginLeft: 6 }} />
+                          <Text style={styles.highlightStat}>{h.visitor_count}</Text>
+                        </View>
+                      </LinearGradient>
+                      {idx === 0 && (
+                        <View style={styles.highlightBadge}>
+                          <Ionicons name="flame" size={10} color="#FF6B00" />
+                        </View>
+                      )}
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            )}
+
             <TouchableOpacity
               style={styles.communityPhotosLink}
               onPress={() => router.push(`/country-community-photos/${country_id}?name=${encodeURIComponent(String(name || ''))}`)}
