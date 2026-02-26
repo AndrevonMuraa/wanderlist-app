@@ -737,6 +737,104 @@ export default function AdminPromoCodes() {
 
         <View style={{ height: 40 }} />
       </ScrollView>
+      ) : (
+      /* History Tab */
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        refreshControl={<RefreshControl refreshing={historyLoading} onRefresh={fetchEmailHistory} />}
+      >
+        {historyLoading && emailHistory.length === 0 ? (
+          <View style={styles.loadingWrap}>
+            <ActivityIndicator size="large" color={colors.primary} />
+          </View>
+        ) : emailHistory.length === 0 ? (
+          <View style={styles.emptyWrap}>
+            <Ionicons name="mail-outline" size={48} color={colors.textLight} />
+            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+              Ingen e-poster sendt enna
+            </Text>
+          </View>
+        ) : (
+          emailHistory.map(log => (
+            <TouchableOpacity
+              key={log.log_id}
+              style={[styles.historyCard, { backgroundColor: colors.surface }]}
+              onPress={() => setExpandedLog(expandedLog === log.log_id ? null : log.log_id)}
+              activeOpacity={0.7}
+              data-testid={`history-card-${log.log_id}`}
+            >
+              <View style={styles.historyCardHeader}>
+                <View style={styles.historyCardLeft}>
+                  <View style={styles.historyStatusRow}>
+                    <View style={[styles.historyStatusDot, log.failed > 0 ? styles.historyStatusMixed : styles.historyStatusSuccess]} />
+                    <Text style={[styles.historyDate, { color: colors.text }]}>
+                      {new Date(log.created_at).toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    </Text>
+                  </View>
+                  <Text style={[styles.historySubject, { color: colors.textSecondary }]} numberOfLines={1}>
+                    {log.subject || 'Standard emne'}
+                  </Text>
+                  <View style={styles.historyStatsRow}>
+                    <View style={styles.historyStatChip}>
+                      <Ionicons name="checkmark-circle" size={13} color="#10b981" />
+                      <Text style={styles.historyStatSent}>{log.sent} sendt</Text>
+                    </View>
+                    {log.failed > 0 && (
+                      <View style={styles.historyStatChip}>
+                        <Ionicons name="close-circle" size={13} color="#ef4444" />
+                        <Text style={styles.historyStatFailed}>{log.failed} feilet</Text>
+                      </View>
+                    )}
+                    <View style={styles.historyStatChip}>
+                      <Ionicons name="ticket-outline" size={13} color="#8b5cf6" />
+                      <Text style={[styles.historyStatCode, { color: '#8b5cf6' }]}>
+                        {log.code_names?.join(', ') || '?'}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+                <Ionicons
+                  name={expandedLog === log.log_id ? 'chevron-up' : 'chevron-down'}
+                  size={18}
+                  color={colors.textLight}
+                />
+              </View>
+
+              {expandedLog === log.log_id && (
+                <View style={[styles.historyDetails, { borderTopColor: colors.border }]}>
+                  {log.sender_name && (
+                    <View style={styles.historyDetailRow}>
+                      <Text style={[styles.historyDetailLabel, { color: colors.textLight }]}>Sendt av</Text>
+                      <Text style={[styles.historyDetailValue, { color: colors.text }]}>{log.sender_name}</Text>
+                    </View>
+                  )}
+                  {log.personal_message ? (
+                    <View style={styles.historyDetailRow}>
+                      <Text style={[styles.historyDetailLabel, { color: colors.textLight }]}>Melding</Text>
+                      <Text style={[styles.historyDetailValue, { color: colors.text }]} numberOfLines={2}>{log.personal_message}</Text>
+                    </View>
+                  ) : null}
+                  <Text style={[styles.historyDetailLabel, { color: colors.textLight, marginTop: 10 }]}>Mottakere</Text>
+                  {log.results?.map((r: any, i: number) => (
+                    <View key={i} style={styles.historyRecipient}>
+                      <Ionicons
+                        name={r.status === 'sent' ? 'checkmark-circle' : 'close-circle'}
+                        size={14}
+                        color={r.status === 'sent' ? '#10b981' : '#ef4444'}
+                      />
+                      <Text style={[styles.historyRecipientEmail, { color: colors.text }]}>{r.email}</Text>
+                      <Text style={[styles.historyRecipientCode, { color: colors.textLight }]}>{r.code}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </TouchableOpacity>
+          ))
+        )}
+        <View style={{ height: 40 }} />
+      </ScrollView>
+      )}
 
       {/* Email Send Modal */}
       <Modal visible={showEmailModal} animationType="slide" transparent>
