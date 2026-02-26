@@ -1,0 +1,77 @@
+{
+  "summary": "Email History Feature Testing Complete - Backend: 10/10 tests PASSED (100%). Frontend: All UI components verified with Playwright. The tab bar was initially not rendering due to stale frontend cache - resolved after expo restart.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Admin promo codes page",
+        "issues": ["Initial page load showed stale cached version without tabs - required expo restart to resolve. This may indicate metro cache issues in CI mode."]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_promo_email_history.py",
+    "/app/test_reports/pytest/pytest_email_history.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "GET /api/admin/promo-codes/email-history returns properly structured email logs",
+    "Each log includes: log_id, sent_by, sender_name, sender_email, total_emails, sent, failed, subject, personal_message, code_names, results array, created_at",
+    "Sender info is dynamically populated from user lookup (displays 'Ukjent' if user not found)",
+    "Code names array is populated by looking up actual code strings from code_ids",
+    "Results sorted by created_at descending (newest first)",
+    "Admin authentication required (401 for unauthorized requests)",
+    "Frontend tab bar renders correctly with 'Koder' (default) and 'Utsendelseshistorikk' tabs",
+    "History cards show: date/time, subject, status dots (green=success, amber=mixed), sent/failed counts, code names",
+    "Expandable details show: sender name, personal message (if any), recipient list with status and codes",
+    "Send e-post button visible on active code cards in Koder tab"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_promo_email_history.py"
+  ],
+  "success_rate": {
+    "backend": "100% (10/10 tests passed)",
+    "frontend": "100% - All UI components verified"
+  },
+  "test_credentials": {
+    "email": "test@wandermark.app",
+    "password": "Test1234!",
+    "role": "admin"
+  },
+  "seed_data_creation": "Test created promo codes: HISTTEST*, HISTBATCH* for email history testing",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Email history feature fully tested. Backend test file at /app/backend/tests/test_promo_email_history.py covers all GET /api/admin/promo-codes/email-history scenarios. Frontend tabs and history view verified working. Note: If frontend shows stale content, restart expo with 'sudo supervisorctl restart expo'.",
+  "features_tested": {
+    "backend_apis": {
+      "GET /api/admin/promo-codes/email-history - Returns list": "PASS",
+      "GET /api/admin/promo-codes/email-history - Has required fields": "PASS",
+      "GET /api/admin/promo-codes/email-history - Sender info populated": "PASS",
+      "GET /api/admin/promo-codes/email-history - Code names populated": "PASS",
+      "GET /api/admin/promo-codes/email-history - Results array structure": "PASS",
+      "GET /api/admin/promo-codes/email-history - Sorted by date desc": "PASS",
+      "GET /api/admin/promo-codes/email-history - Requires admin auth (401)": "PASS",
+      "POST /api/admin/promo-codes/send-email - Regression": "PASS",
+      "GET /api/admin/promo-codes - Regression": "PASS",
+      "POST /api/admin/promo-codes/batch - Regression": "PASS"
+    },
+    "frontend_ui": {
+      "Admin promo page - Tab bar present": "PASS",
+      "Admin promo page - Koder tab (default)": "PASS",
+      "Admin promo page - Utsendelseshistorikk tab clickable": "PASS",
+      "Admin promo page - History shows email logs": "PASS",
+      "Admin promo page - History cards expandable": "PASS",
+      "Admin promo page - Expanded shows sender/recipients": "PASS",
+      "Admin promo page - Send e-post button on active codes": "PASS"
+    }
+  },
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "note": "All APIs are real - Resend emails are sent to actual recipients"
+  }
+}
