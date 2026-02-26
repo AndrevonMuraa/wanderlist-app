@@ -36,13 +36,30 @@ interface CommunityPhoto {
   user_upvoted: boolean;
 }
 
+interface DiaryEntry {
+  visit_id: string;
+  diary_notes: string;
+  photo_url?: string;
+  landmark_name: string;
+  landmark_id?: string;
+  user_name: string;
+  user_picture?: string;
+  username?: string;
+  visited_at?: string;
+}
+
 export default function CountryCommunityPhotosScreen() {
   const { country_id, name } = useLocalSearchParams();
   const [photos, setPhotos] = useState<CommunityPhoto[]>([]);
+  const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [diaryTotalCount, setDiaryTotalCount] = useState(0);
   const [isPreview, setIsPreview] = useState(true);
+  const [isDiaryPreview, setIsDiaryPreview] = useState(true);
   const [countryName, setCountryName] = useState(name || '');
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'photos' | 'diaries'>('photos');
+  const [sortBy, setSortBy] = useState<'popular' | 'newest'>('popular');
   const [diaryModal, setDiaryModal] = useState<{ visible: boolean; text: string; userName: string }>({ visible: false, text: '', userName: '' });
   const router = useRouter();
   const { subscription_tier } = useSubscription();
@@ -50,7 +67,12 @@ export default function CountryCommunityPhotosScreen() {
 
   useEffect(() => {
     fetchPhotos();
+    fetchDiaries();
   }, []);
+
+  useEffect(() => {
+    fetchPhotos();
+  }, [sortBy]);
 
   const fetchPhotos = async () => {
     try {
