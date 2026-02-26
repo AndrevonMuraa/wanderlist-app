@@ -419,6 +419,11 @@ const styles = StyleSheet.create({
   row: {
     gap: theme.spacing.md,
   },
+  photoGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.spacing.md,
+  },
   headerSection: {
     marginBottom: theme.spacing.lg,
   },
