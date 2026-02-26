@@ -1398,6 +1398,86 @@ async def create_landmark(data: LandmarkCreate, current_user: User = Depends(get
 
 # ============= COMMUNITY PHOTO ENDPOINTS =============
 
+@api_router.get("/community-feed")
+async def get_community_feed(
+    limit: int = 10,
+    current_user: User = Depends(get_current_user)
+):
+    """Get a unified community feed of recent photos and diary entries from all countries."""
+    pipeline = [
+        {"$match": {
+            "visibility": "public",
+            "photos": {"$exists": True, "$ne": []}
+        }},
+        {"$sort": {"visited_at": -1}},
+        {"$limit": limit},
+        {"$lookup": {
+            "from": "users",
+            "localField": "user_id",
+            "foreignField": "user_id",
+            "as": "user_info"
+        }},
+        {"$unwind": {"path": "$user_info", "preserveNullAndEmptyArrays": True}},
+        {"$lookup": {
+            "from": "landmarks",
+            "localField": "landmark_id",
+            "foreignField": "landmark_id",
+            "as": "landmark_info"
+        }},
+        {"$unwind": {"path": "$landmark_info", "preserveNullAndEmptyArrays": True}},
+        {"$project": {
+            "_id": 0,
+            "visit_id": 1,
+            "user_id": 1,
+            "landmark_id": 1,
+            "photos": {"$slice": ["$photos", 1]},
+            "diary_notes": 1,
+            "share_diary": 1,
+            "visited_at": 1,
+            "user_name": {"$ifNull": ["$user_info.name", "Anonymous"]},
+            "user_picture": "$user_info.picture",
+            "username": "$user_info.username",
+            "landmark_name": {"$ifNull": ["$landmark_info.name", "Unknown"]},
+            "country_name": "$landmark_info.country_name",
+            "country_id": "$landmark_info.country_id",
+        }}
+    ]
+    
+    visits = await db.visits.aggregate(pipeline).to_list(limit)
+    
+    items = []
+    for visit in visits:
+        photo_url = visit.get("photos", [None])[0] if visit.get("photos") else None
+        has_diary = bool(visit.get("diary_notes")) and visit.get("share_diary", True)
+        diary_snippet = None
+        if has_diary and visit.get("diary_notes"):
+            text = visit["diary_notes"]
+            diary_snippet = text[:100] + "..." if len(text) > 100 else text
+        
+        # Count upvotes for the first photo
+        photo_id = f"{visit['visit_id']}_0"
+        upvote_count = await db.photo_upvotes.count_documents({"photo_id": photo_id})
+        
+        items.append({
+            "visit_id": visit["visit_id"],
+            "type": "diary" if has_diary else "photo",
+            "photo_url": photo_url,
+            "user_name": visit.get("user_name", "Anonymous"),
+            "user_picture": visit.get("user_picture"),
+            "username": visit.get("username"),
+            "landmark_name": visit.get("landmark_name", "Unknown"),
+            "landmark_id": visit.get("landmark_id"),
+            "country_name": visit.get("country_name"),
+            "country_id": visit.get("country_id"),
+            "diary_snippet": diary_snippet,
+            "has_diary": has_diary,
+            "upvotes": upvote_count,
+            "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
+        })
+    
+    return {"items": items, "count": len(items)}
+
+
 @api_router.get("/community-photos/photo-of-the-week")
 async def get_photo_of_the_week(current_user: User = Depends(get_current_user)):
     """Get the most upvoted community photo from the last 7 days."""
