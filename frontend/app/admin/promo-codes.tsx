@@ -652,6 +652,16 @@ export default function AdminPromoCodes() {
                   <Ionicons name="trash-outline" size={16} color="#ef4444" />
                   <Text style={[styles.actionBtnText, { color: '#ef4444' }]}>Slett</Text>
                 </TouchableOpacity>
+                {code.is_active && (
+                  <TouchableOpacity
+                    style={styles.actionBtn}
+                    onPress={() => openEmailModal(code.code_id)}
+                    data-testid={`send-email-${code.code_id}`}
+                  >
+                    <Ionicons name="mail-outline" size={16} color="#f59e0b" />
+                    <Text style={[styles.actionBtnText, { color: '#f59e0b' }]}>Send e-post</Text>
+                  </TouchableOpacity>
+                )}
               </View>
 
               {/* Redemptions list */}
