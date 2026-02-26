@@ -227,6 +227,32 @@ export default function LandmarkCommunityPhotosScreen() {
           </View>
         }
       />
+
+      {/* Diary Modal */}
+      <Modal
+        visible={diaryModal.visible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setDiaryModal({ visible: false, text: '', userName: '' })}
+      >
+        <TouchableOpacity
+          style={styles.diaryModalOverlay}
+          activeOpacity={1}
+          onPress={() => setDiaryModal({ visible: false, text: '', userName: '' })}
+        >
+          <View style={styles.diaryModalContent} data-testid="diary-modal">
+            <View style={styles.diaryModalHeader}>
+              <Ionicons name="book" size={20} color={theme.colors.primary} />
+              <Text style={styles.diaryModalTitle}>Travel Diary</Text>
+              <TouchableOpacity onPress={() => setDiaryModal({ visible: false, text: '', userName: '' })}>
+                <Ionicons name="close" size={22} color={theme.colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.diaryModalAuthor}>by {diaryModal.userName}</Text>
+            <Text style={styles.diaryModalText}>{diaryModal.text}</Text>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 }
