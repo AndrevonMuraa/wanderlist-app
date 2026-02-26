@@ -1,0 +1,556 @@
+from fastapi import APIRouter, HTTPException, Depends, Request, Response, Cookie, Body
+from fastapi.responses import HTMLResponse
+from typing import List, Optional
+import os
+import logging
+import uuid
+from datetime import datetime, timezone, timedelta
+
+from utils.db import db
+from utils.auth import get_current_user, is_user_pro, get_user_limits
+from models.all import User, CountryVisitCreate, UserCreatedVisitCreate
+from utils.helpers import check_and_award_badges
+
+
+router = APIRouter()
+
+# ============= COUNTRY VISIT ENDPOINTS =============
+
+@router.post("/country-visits")
+async def create_country_visit(data: CountryVisitCreate, current_user: User = Depends(get_current_user)):
+    """Create a country visit with photo collage and diary.
+    
+    Users can mark a country as visited without having visited any landmarks.
+    If a country was already auto-marked via landmark visits, this upgrades it with photos/diary.
+    
+    Points Logic:
+    - Personal points (points): Always awarded for visits
+    - Leaderboard points (leaderboard_points): Only awarded when photos are included
+    """
+    
+    # Get user limits based on subscription
+    limits = get_user_limits(current_user)
+    max_photos = limits["photos_per_visit"]
+    
+    # Validate photos based on subscription tier
+    if len(data.photos) > max_photos:
+        if max_photos == 1:
+            raise HTTPException(
+                status_code=403, 
+                detail="Free users can add 1 photo per country visit. Upgrade to WanderMark Pro for up to 10 photos!"
+            )
+        else:
+            raise HTTPException(status_code=400, detail=f"Maximum {max_photos} photos allowed")
+    
+    has_photos = len(data.photos) > 0
+    
+    # Look up country details from database
+    country = await db.countries.find_one({"country_id": data.country_id}, {"_id": 0})
+    if not country:
+        raise HTTPException(status_code=404, detail="Country not found")
+    
+    country_name = country.get("name", "Unknown")
+    continent = country.get("continent", "Unknown")
+    
+    # Check if country visit already exists (either manual or auto from landmark)
+    existing_visit = await db.country_visits.find_one({
+        "user_id": current_user.user_id,
+        "country_id": data.country_id
+    })
+    
+    # Parse visit date
+    visited_at = datetime.now(timezone.utc)
+    if data.visited_at:
+        try:
+            visited_at = datetime.fromisoformat(data.visited_at.replace('Z', '+00:00'))
+        except:
+            pass
+    
+    # Determine visibility (use provided or user's default)
+    visibility = data.visibility or current_user.default_privacy or "public"
+    
+    if existing_visit:
+        # Upgrade existing visit with new photos/diary
+        # If adding photos for the first time, also award leaderboard points
+        existing_has_photos = bool(existing_visit.get("photos", []))
+        leaderboard_points_to_add = 0
+        
+        # If upgrading from no photos to having photos, award leaderboard points
+        if has_photos and not existing_has_photos:
+            leaderboard_points_to_add = existing_visit.get("points_earned", 50)
+        
+        await db.country_visits.update_one(
+            {"country_visit_id": existing_visit["country_visit_id"]},
+            {"$set": {
+                "photos": data.photos,
+                "diary": data.diary_notes,
+                "visibility": visibility,
+                "source": "manual",
+                "has_photos": has_photos,
+                "leaderboard_points_earned": existing_visit.get("points_earned", 50) if has_photos else 0,
+                "updated_at": datetime.now(timezone.utc)
+            }}
+        )
+        
+        # If adding photos for first time, award leaderboard points
+        if leaderboard_points_to_add > 0:
+            await db.users.update_one(
+                {"user_id": current_user.user_id},
+                {"$inc": {"leaderboard_points": leaderboard_points_to_add}}
+            )
+        
+        # Update activity if exists
+        await db.activities.update_one(
+            {"country_visit_id": existing_visit["country_visit_id"]},
+            {"$set": {
+                "photos": data.photos,
+                "diary": data.diary_notes,
+                "visibility": visibility,
+                "has_photos": has_photos,
+                "updated_at": datetime.now(timezone.utc)
+            }}
+        )
+        
+        return {
+            "message": "Country visit updated" + (" with photos - leaderboard points earned!" if leaderboard_points_to_add > 0 else ""),
+            "country_visit_id": existing_visit["country_visit_id"],
+            "points_earned": 0,
+            "leaderboard_points_earned": leaderboard_points_to_add,
+            "was_upgrade": True,
+            "has_photos": has_photos
+        }
+    
+    # Award 50 points for new country visit
+    points_earned = 50
+    leaderboard_points_earned = 50 if has_photos else 0
+    
+    # Create country visit
+    country_visit_id = f"cv_{uuid.uuid4().hex[:12]}"
+    country_visit = {
+        "country_visit_id": country_visit_id,
+        "user_id": current_user.user_id,
+        "user_name": current_user.name,
+        "user_picture": current_user.picture,
+        "country_id": data.country_id,
+        "country_name": country_name,
+        "continent": continent,
+        "photos": data.photos,
+        "diary": data.diary_notes,
+        "visibility": visibility,
+        "visited_at": visited_at,
+        "points_earned": points_earned,
+        "leaderboard_points_earned": leaderboard_points_earned,
+        "has_photos": has_photos,
+        "source": "manual",
+        "created_at": datetime.now(timezone.utc)
+    }
+    
+    await db.country_visits.insert_one(country_visit)
+    
+    # Award points to user
+    # Personal points: always awarded
+    # Leaderboard points: only if has photos
+    increment_fields = {"points": points_earned}
+    if has_photos:
+        increment_fields["leaderboard_points"] = leaderboard_points_earned
+    
+    await db.users.update_one(
+        {"user_id": current_user.user_id},
+        {"$inc": increment_fields}
+    )
+    
+    # Create activity for feed
+    activity_id = f"activity_{uuid.uuid4().hex[:12]}"
+    activity = {
+        "activity_id": activity_id,
+        "user_id": current_user.user_id,
+        "user_name": current_user.name,
+        "user_picture": current_user.picture,
+        "activity_type": "country_visit",
+        "country_visit_id": country_visit_id,
+        "country_id": data.country_id,
+        "country_name": country_name,
+        "continent": continent,
+        "photos": data.photos,
+        "diary": data.diary_notes,
+        "visibility": visibility,
+        "points_earned": points_earned,
+        "has_photos": has_photos,
+        "created_at": datetime.now(timezone.utc),
+        "likes_count": 0,
+        "comments_count": 0
+    }
+    await db.activities.insert_one(activity)
+    
+    # Build response message
+    if has_photos:
+        message = "Country visit recorded with photos! Points added to leaderboard."
+    else:
+        message = "Country visit recorded! Add photos to earn leaderboard points 📸"
+    
+    return {
+        "message": message,
+        "country_visit_id": country_visit_id,
+        "points_earned": points_earned,
+        "leaderboard_points_earned": leaderboard_points_earned,
+        "has_photos": has_photos
+    }
+
+@router.get("/country-visits")
+async def get_country_visits(current_user: User = Depends(get_current_user)):
+    """Get user's country visits"""
+    country_visits = await db.country_visits.find(
+        {"user_id": current_user.user_id},
+        {"_id": 0}
+    ).sort("visited_at", -1).to_list(1000)
+    
+    return country_visits
+
+@router.get("/country-visits/{country_visit_id}")
+async def get_country_visit_details(country_visit_id: str, current_user: User = Depends(get_current_user)):
+    """Get country visit details"""
+    country_visit = await db.country_visits.find_one(
+        {"country_visit_id": country_visit_id},
+        {"_id": 0}
+    )
+    
+    if not country_visit:
+        raise HTTPException(status_code=404, detail="Country visit not found")
+    
+    return country_visit
+
+@router.delete("/country-visits/{country_visit_id}")
+async def delete_country_visit(country_visit_id: str, current_user: User = Depends(get_current_user)):
+    """Delete a country visit"""
+    # Verify ownership
+    country_visit = await db.country_visits.find_one({
+        "country_visit_id": country_visit_id,
+        "user_id": current_user.user_id
+    })
+    
+    if not country_visit:
+        raise HTTPException(status_code=404, detail="Country visit not found")
+    
+    # Delete country visit
+    await db.country_visits.delete_one({"country_visit_id": country_visit_id})
+    
+    # Delete associated activity
+    await db.activities.delete_many({"country_visit_id": country_visit_id})
+    
+    # Deduct points (50 points for country visits)
+    points_to_deduct = country_visit.get("points_earned", 50)
+    await db.users.update_one(
+        {"user_id": current_user.user_id},
+        {"$inc": {"points": -points_to_deduct}}
+    )
+    
+    return {"message": "Country visit deleted"}
+
+@router.put("/country-visits/{country_visit_id}")
+async def update_country_visit(country_visit_id: str, data: dict, current_user: User = Depends(get_current_user)):
+    """Update a country visit (diary entry)"""
+    # Verify ownership
+    country_visit = await db.country_visits.find_one({
+        "country_visit_id": country_visit_id,
+        "user_id": current_user.user_id
+    })
+    
+    if not country_visit:
+        raise HTTPException(status_code=404, detail="Country visit not found")
+    
+    # Build update fields
+    update_fields = {}
+    if "diary" in data:
+        update_fields["diary"] = data["diary"]
+    if "visibility" in data and data["visibility"] in ["public", "friends", "private"]:
+        update_fields["visibility"] = data["visibility"]
+    
+    if not update_fields:
+        raise HTTPException(status_code=400, detail="No valid fields to update")
+    
+    # Update country visit
+    await db.country_visits.update_one(
+        {"country_visit_id": country_visit_id},
+        {"$set": update_fields}
+    )
+    
+    # Also update the associated activity if diary changed
+    if "diary" in update_fields:
+        await db.activities.update_many(
+            {"country_visit_id": country_visit_id},
+            {"$set": {"diary": update_fields["diary"]}}
+        )
+    if "visibility" in update_fields:
+        await db.activities.update_many(
+            {"country_visit_id": country_visit_id},
+            {"$set": {"visibility": update_fields["visibility"]}}
+        )
+    
+    # Return updated visit
+    updated_visit = await db.country_visits.find_one(
+        {"country_visit_id": country_visit_id},
+        {"_id": 0}
+    )
+    return updated_visit
+
+@router.get("/country-visits/check/{country_id}")
+async def check_country_visit_status(country_id: str, current_user: User = Depends(get_current_user)):
+    """
+    Check if a country has been visited by the user.
+    Returns visit status based on:
+    1. Explicit country visit record exists, OR
+    2. At least one landmark in the country has been visited
+    """
+    # First, check for explicit country visit record
+    country_visit = await db.country_visits.find_one(
+        {"user_id": current_user.user_id, "country_id": country_id},
+        {"_id": 0}
+    )
+    
+    if country_visit:
+        return {
+            "visited": True,
+            "source": country_visit.get("source", "manual"),
+            "country_visit_id": country_visit.get("country_visit_id"),
+            "visited_at": country_visit.get("visited_at"),
+            "has_photos": bool(country_visit.get("photos", [])),
+            "has_diary": bool(country_visit.get("diary"))
+        }
+    
+    # Check if any landmarks in this country have been visited
+    # Get all landmarks for this country
+    country_landmarks = await db.landmarks.find(
+        {"country_id": country_id},
+        {"landmark_id": 1}
+    ).to_list(1000)
+    
+    landmark_ids = [lm["landmark_id"] for lm in country_landmarks]
+    
+    if landmark_ids:
+        # Check if user has visited any of these landmarks
+        landmark_visit = await db.visits.find_one({
+            "user_id": current_user.user_id,
+            "landmark_id": {"$in": landmark_ids}
+        })
+        
+        if landmark_visit:
+            # User has visited a landmark but no country visit record exists
+            # This means they visited before auto-creation was implemented
+            # Return as visited via landmarks
+            return {
+                "visited": True,
+                "source": "landmark_visits",
+                "country_visit_id": None,
+                "visited_at": landmark_visit.get("visited_at"),
+                "has_photos": False,
+                "has_diary": False
+            }
+    
+    return {
+        "visited": False,
+        "source": None,
+        "country_visit_id": None,
+        "visited_at": None,
+        "has_photos": False,
+        "has_diary": False
+    }
+
+# ============= END COUNTRY VISIT ENDPOINTS =============
+
+# ============= USER CREATED VISIT ENDPOINTS =============
+
+@router.post("/user-created-visits")
+async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: User = Depends(get_current_user)):
+    """
+    Create a user-created visit for countries/landmarks not in the app database.
+    No points are awarded for user-created visits.
+    
+    REQUIRES: WanderMark Pro subscription
+    
+    Landmarks can now have individual photos:
+    - landmarks: List of {name: str, photo: Optional[str]} (max 10 landmarks)
+    - photos: General country photos (max 10)
+    - Total photos: max 20 (10 country + 10 landmark photos)
+    """
+    
+    # Check if user has Pro subscription
+    if not is_user_pro(current_user):
+        raise HTTPException(
+            status_code=403,
+            detail="Custom visits require WanderMark Pro. Upgrade to record visits to places not in our database!"
+        )
+    
+    # Validate country name
+    if not data.country_name or len(data.country_name.strip()) < 2:
+        raise HTTPException(status_code=400, detail="Country name is required (at least 2 characters)")
+    
+    # Validate general photos (max 10)
+    if len(data.photos) > 10:
+        raise HTTPException(status_code=400, detail="Maximum 10 general photos allowed")
+    
+    # Process and validate landmarks (max 10)
+    # Each landmark is a dict with 'name' (required) and 'photo' (optional)
+    processed_landmarks = []
+    for lm in data.landmarks[:10]:  # Max 10 landmarks
+        if isinstance(lm, dict):
+            name = lm.get('name', '').strip() if lm.get('name') else ''
+            if name:  # Only include landmarks with valid names
+                processed_landmarks.append({
+                    'name': name,
+                    'photo': lm.get('photo')  # Can be None or base64 string
+                })
+        elif isinstance(lm, str) and lm.strip():
+            # Backward compatibility: if just a string, convert to dict
+            processed_landmarks.append({
+                'name': lm.strip(),
+                'photo': None
+            })
+    
+    # Count total photos for validation
+    landmark_photos_count = sum(1 for lm in processed_landmarks if lm.get('photo'))
+    total_photos = len(data.photos) + landmark_photos_count
+    if total_photos > 20:
+        raise HTTPException(status_code=400, detail="Maximum 20 total photos allowed (10 country + 10 landmark)")
+    
+    # Parse visit date
+    visited_at = datetime.now(timezone.utc)
+    if data.visited_at:
+        try:
+            visited_at = datetime.fromisoformat(data.visited_at.replace('Z', '+00:00'))
+        except:
+            pass
+    
+    # Determine visibility
+    visibility = data.visibility or "public"
+    
+    # Create user created visit
+    user_created_visit_id = f"ucv_{uuid.uuid4().hex[:12]}"
+    user_created_visit = {
+        "user_created_visit_id": user_created_visit_id,
+        "user_id": current_user.user_id,
+        "user_name": current_user.name,
+        "user_picture": current_user.picture,
+        "country_name": data.country_name.strip(),
+        "landmarks": processed_landmarks,  # Array of {name, photo} objects
+        "photos": data.photos,  # General country photos
+        "diary": data.diary_notes,
+        "visibility": visibility,
+        "visited_at": visited_at,
+        "created_at": datetime.now(timezone.utc)
+    }
+    
+    await db.user_created_visits.insert_one(user_created_visit)
+    
+    # Create activity for feed (respects privacy settings)
+    activity_id = f"activity_{uuid.uuid4().hex[:12]}"
+    
+    # Build description for activity
+    landmark_names = [lm['name'] for lm in processed_landmarks]
+    if landmark_names:
+        if len(landmark_names) == 1:
+            activity_description = f"visited {landmark_names[0]} in {data.country_name.strip()}"
+        else:
+            activity_description = f"visited {len(landmark_names)} places in {data.country_name.strip()}"
+    else:
+        activity_description = f"visited {data.country_name.strip()}"
+    
+    activity = {
+        "activity_id": activity_id,
+        "user_id": current_user.user_id,
+        "user_name": current_user.name,
+        "user_picture": current_user.picture,
+        "activity_type": "user_created_visit",
+        "user_created_visit_id": user_created_visit_id,
+        "country_name": data.country_name.strip(),
+        "landmarks": processed_landmarks,  # Array of {name, photo} objects
+        "description": activity_description,
+        "photos": data.photos,
+        "diary": data.diary_notes,
+        "visibility": visibility,
+        "points_earned": 0,  # No points for user-created visits
+        "created_at": datetime.now(timezone.utc),
+        "likes_count": 0,
+        "comments_count": 0
+    }
+    await db.activities.insert_one(activity)
+    
+    return {
+        "message": "Custom visit recorded successfully!",
+        "user_created_visit_id": user_created_visit_id,
+        "country_name": data.country_name.strip(),
+        "landmarks": processed_landmarks,
+        "landmarks_count": len(processed_landmarks),
+        "total_photos": total_photos
+    }
+
+
+@router.get("/user-created-visits")
+async def get_user_created_visits(current_user: User = Depends(get_current_user)):
+    """Get all user-created visits for the current user"""
+    visits = await db.user_created_visits.find(
+        {"user_id": current_user.user_id}
+    ).sort("visited_at", -1).to_list(1000)
+    
+    # Convert _id to visit_id for API response
+    for visit in visits:
+        visit["visit_id"] = str(visit.pop("_id"))
+    
+    return visits
+
+
+@router.get("/user-created-visits/{user_id}/public")
+async def get_user_created_visits_public(user_id: str, current_user: User = Depends(get_current_user)):
+    """Get user-created visits for a specific user (respecting privacy settings)"""
+    
+    # Check if requesting own visits
+    if user_id == current_user.user_id:
+        # Return all own visits
+        visits = await db.user_created_visits.find(
+            {"user_id": user_id},
+            {"_id": 0}
+        ).sort("visited_at", -1).to_list(1000)
+        return visits
+    
+    # Check if users are friends
+    are_friends = await db.friends.find_one({
+        "$or": [
+            {"user_id": current_user.user_id, "friend_id": user_id, "status": "accepted"},
+            {"user_id": user_id, "friend_id": current_user.user_id, "status": "accepted"}
+        ]
+    })
+    
+    # Build visibility filter
+    visibility_filter = ["public"]
+    if are_friends:
+        visibility_filter.append("friends")
+    
+    visits = await db.user_created_visits.find(
+        {"user_id": user_id, "visibility": {"$in": visibility_filter}},
+        {"_id": 0}
+    ).sort("visited_at", -1).to_list(1000)
+    
+    return visits
+
+
+@router.delete("/user-created-visits/{visit_id}")
+async def delete_user_created_visit(visit_id: str, current_user: User = Depends(get_current_user)):
+    """Delete a user-created visit"""
+    
+    # Find the visit
+    visit = await db.user_created_visits.find_one({
+        "user_created_visit_id": visit_id,
+        "user_id": current_user.user_id
+    })
+    
+    if not visit:
+        raise HTTPException(status_code=404, detail="Visit not found or not authorized")
+    
+    # Delete the visit
+    await db.user_created_visits.delete_one({"user_created_visit_id": visit_id})
+    
+    # Delete associated activity
+    await db.activities.delete_one({"user_created_visit_id": visit_id})
+    
+    return {"message": "Custom visit deleted successfully"}
+
+# ============= END USER CREATED VISIT ENDPOINTS =============
