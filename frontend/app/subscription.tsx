@@ -149,10 +149,10 @@ export default function SubscriptionScreen() {
         fetchSubscriptionStatus();
         refresh();
       } else {
-        setPromoResult({ success: false, message: data.detail || 'Ugyldig kode' });
+        setPromoResult({ success: false, message: data.detail || 'Invalid code' });
       }
     } catch {
-      setPromoResult({ success: false, message: 'Noe gikk galt. Prøv igjen.' });
+      setPromoResult({ success: false, message: 'Something went wrong. Please try again.' });
     } finally {
       setPromoLoading(false);
     }
@@ -425,14 +425,14 @@ export default function SubscriptionScreen() {
 
         {/* Promo Code Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Har du en kampanjekode?</Text>
+          <Text style={styles.sectionTitle}>Have a promo code?</Text>
           <Surface style={styles.promoCard}>
             <View style={styles.promoInputRow}>
               <TextInput
                 style={styles.promoInput}
                 value={promoCode}
                 onChangeText={setPromoCode}
-                placeholder="Skriv inn kode"
+                placeholder="Enter code"
                 placeholderTextColor="#999"
                 autoCapitalize="characters"
                 editable={!promoLoading}
@@ -447,7 +447,7 @@ export default function SubscriptionScreen() {
                 {promoLoading ? (
                   <ActivityIndicator color="#fff" size="small" />
                 ) : (
-                  <Text style={styles.promoButtonText}>Aktiver</Text>
+                  <Text style={styles.promoButtonText}>Activate</Text>
                 )}
               </TouchableOpacity>
             </View>
