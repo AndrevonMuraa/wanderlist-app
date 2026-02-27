@@ -379,11 +379,11 @@ export default function SettingsScreen() {
               onPress={() => {
                 Alert.alert(
                   'Delete Account',
-                  'Are you sure you want to permanently delete your account? All your data, visits, photos, and progress will be lost forever. This action cannot be undone.',
+                  'Your account will be deactivated and permanently deleted after 30 days. If you change your mind, simply log in again within 30 days to reactivate.',
                   [
                     { text: 'Cancel', style: 'cancel' },
                     { 
-                      text: 'Delete', 
+                      text: 'Deactivate', 
                       style: 'destructive', 
                       onPress: async () => {
                         try {
@@ -398,9 +398,13 @@ export default function SettingsScreen() {
                             } else {
                               await SecureStore.deleteItemAsync('auth_token');
                             }
-                            router.replace('/(auth)/login');
+                            Alert.alert(
+                              'Account Deactivated',
+                              'Your account has been deactivated and will be permanently deleted in 30 days. Log in again to reactivate.',
+                              [{ text: 'OK', onPress: () => router.replace('/(auth)/login') }]
+                            );
                           } else {
-                            Alert.alert('Error', 'Failed to delete account. Please try again.');
+                            Alert.alert('Error', 'Failed to deactivate account. Please try again.');
                           }
                         } catch (error) {
                           Alert.alert('Error', 'Something went wrong. Please try again.');
