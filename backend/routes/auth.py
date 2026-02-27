@@ -539,3 +539,27 @@ async def get_temp_token(email: str = "mobile@test.com"):
         "user": UserPublic(**user_doc),
         "expires_at": expires_at.isoformat()
     }
+
+
+@router.delete("/account")
+async def delete_account(current_user: User = Depends(get_current_user)):
+    """Permanently delete user account and all associated data"""
+    user_id = current_user.user_id
+    
+    # Delete all user data from every collection
+    await db.visits.delete_many({"user_id": user_id})
+    await db.country_visits.delete_many({"user_id": user_id})
+    await db.user_created_visits.delete_many({"user_id": user_id})
+    await db.achievements.delete_many({"user_id": user_id})
+    await db.friendships.delete_many({"$or": [{"user_id": user_id}, {"friend_id": user_id}]})
+    await db.friend_requests.delete_many({"$or": [{"from_user_id": user_id}, {"to_user_id": user_id}]})
+    await db.messages.delete_many({"$or": [{"sender_id": user_id}, {"receiver_id": user_id}]})
+    await db.notifications.delete_many({"user_id": user_id})
+    await db.activities.delete_many({"user_id": user_id})
+    await db.community_photos.delete_many({"user_id": user_id})
+    await db.travel_diaries.delete_many({"user_id": user_id})
+    
+    # Finally delete the user document
+    await db.users.delete_one({"user_id": user_id})
+    
+    return {"message": "Account deleted successfully"}
