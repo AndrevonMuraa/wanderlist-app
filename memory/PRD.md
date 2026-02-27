@@ -1,104 +1,66 @@
 # WanderMark - Product Requirements Document
 
-## Original Problem Statement
-Build a travel engagement app (WanderMark) with content management, admin features, community engagement, and marketing tools. The app should be English-only for all UI and API content.
+## Problem Statement
+WanderMark is a travel companion app (React Native + FastAPI) for discovering and tracking visits to 796 landmarks across 66 countries and 5 continents. Features include community sharing, points/leaderboards, badges, messaging, and custom visits.
 
-## Core Requirements
-- Full-stack React Native (Expo SDK 54) + FastAPI + MongoDB
-- Admin panel for content management
-- Community features (Photo Gallery, Photo of the Week, Travel Diary, Community Feed)
-- Promo code system for marketing
-- Editable email template for promo code emails
-
-## Architecture
-- **Backend**: Modular FastAPI with routes in `backend/routes/`, models in `backend/models/all.py`, utils in `backend/utils/`
-- **Frontend**: Expo Router (file-based routing) at `frontend/app/`
-- **Database**: MongoDB via `MONGO_URL` env variable
+## Core Architecture
+- **Frontend**: React Native with Expo SDK 54, Expo Router v6
+- **Backend**: FastAPI (modular routes structure)
+- **Database**: MongoDB
+- **Integrations**: Resend (email), RevenueCat (IAP), React Native WebView
 
 ## What's Been Implemented
 
-### Backend Refactoring ✅
-- Migrated monolithic `server.py` into modular route files
-- Routes: auth, admin, promo, etc.
+### Navigation Fix (Feb 2026)
+- Root `_layout.tsx` changed from `<Slot />` to `<Stack />` - fixes iOS back button crash
+- Added `_layout.tsx` to 10 subdirectories (auth, admin, messages, add-visit, landmark-detail, visit-detail, country-visit-detail, landmark-community-photos, country-community-photos, landmarks)
+- `safeGoBack()` utility still in place as additional safety
 
-### Promo Code System ✅
-- Admin: create single/batch codes, deactivate, delete, export CSV
-- Email dispatch via Resend integration
-- Email dispatch history
-- User redemption via subscription page
-- **Editable email template** (GET/PUT /api/admin/email-template)
+### About/Info Page Overhaul (Feb 2026)
+- Updated all stats: 796 landmarks, 66 countries, 10,000 total points
+- FAQ updated: privacy answer includes diary sharing, delete account references Settings, badges include Elite Explorer (250)
+- Badge System: added streak badges (3→7→30 days) and Elite Explorer
+- Contact Support: replaced form with simple email reference (support@wandermark.app), moved to bottom
+- Version updated to 1.1.0, date to February 2026
+- Removed unused code (TextInput, handleSendSupport, etc.)
 
-### Norwegian → English Translation ✅ (Feb 26, 2026)
-- All UI text in `promo-codes.tsx` translated to English
-- All UI text in `subscription.tsx` translated to English
-- All backend error messages in `promo.py` translated to English
-- Email template content translated to English
-- Date formats changed from `nb-NO` to `en-US`
+### Subscription Page Update (Feb 2026)
+- Free features: 700+ Official Landmarks, Community Photo Preview, Photo of the Week
+- Pro features: 93 Premium Landmarks, Full Community Gallery, Photo Upvoting, Travel Diary Access, Direct Messaging, Share in Community Feed
+- Corrected landmark counts throughout
 
-### Editable Email Template ✅ (Feb 26, 2026)
-- Backend: `email_templates` collection in MongoDB
-- GET /api/admin/email-template returns current template
-- PUT /api/admin/email-template updates template fields
-- Template fields: subject, heading, subheading, body_text, code_label, steps_title, steps[], footer_text, support_text
-- Send-email endpoint uses stored template
-- Admin UI: new "Email Template" tab in promo-codes page
+### Delete Account (Feb 2026)
+- Backend: `DELETE /api/auth/account` - deletes all user data across all collections
+- Frontend: Settings page "Delete Account" button now functional with confirmation dialog
 
-### UI Layout ✅
-- "Photo of the Week" moved to bottom of Explore page
+### Previous Work (Jan-Feb 2026)
+- Critical crash fix: `router.back()` → `safeGoBack()` across 23+ files
+- Landing page: "Compete & Climb" section
+- Community features: Custom Visits in feed, visibility toggle, explorer endpoint
+- Promo code system with editable email template
+- All text translated from Norwegian to English
+- EAS build process (v1.1.0, build 51)
 
-### Navigation Crash Fix — Safe Back Navigation (Feb 26, 2026)
-- Created `utils/navigation.ts` with `safeGoBack()` — checks `canGoBack()` before navigating
-- Falls back to explore tab if no history exists (prevents crash)
-- Fixed `UniversalHeader` component (used by 15+ screens)
-- Fixed all 23 files with direct `router.back()` calls (32 total replacements)
-- This fixes the reported crash when pressing back on "Photo of the Week" and prevents similar crashes app-wide
+## Prioritized Backlog
 
-### Landing Page Redesign — Compete Section (Feb 26, 2026)
-- Replaced "Earn Achievements" with "Compete & Climb" in feature cards
-- Added new "Compete with Travelers Worldwide" showcase section with dark gradient
-- Shows rank tiers (Explorer, Adventurer, Legend) with medal icons
-- Points breakdown: Visit +100pts, Photo +50pts, Diary +75pts, Streak +25pts
-- Updated Quick Start step 3 to "Compete & Rise"
+### P0 - Critical
+- User E2E testing on TestFlight (back button, promo codes, community features)
 
-### Custom Visits Community Improvements (Feb 26, 2026)
-- P1: Community feed now includes custom visits (source='custom') merged with landmark visits
-- P2: PATCH /api/user-created-visits/{id}/visibility — change visibility after creation (public/friends/private)
-- P3: GET /api/community/custom-visits — dedicated paginated endpoint for browsing all public custom visits
+### P1 - Important
+- Verify all new changes on device (About page, subscription page, delete account)
 
-### Email Preview & Reset Feature (Feb 26, 2026)
-- "Preview email" button in template editor opens full-screen modal
-- Renders the email HTML template with sample data (EXAMPLE-CODE, lifetime Premium)
-- Shows subject line in a preview bar
-- Uses iframe on web, WebView on native
-- "Reset to default" button restores template to factory settings (with confirmation dialog)
-- Fixed tab rendering bug: template tab no longer shows history content
-- Added error/retry state when template fetch fails
+### P2 - Future
+- Rename GitHub repo: wanderlist-app → wandermark-app
+- App Store release preparation
+- Verify RevenueCat and statistics sharing on device
 
 ## Key API Endpoints
-- POST /api/auth/login → {access_token}
-- GET/POST /api/admin/promo-codes
-- POST /api/admin/promo-codes/batch
-- DELETE /api/admin/promo-codes/{code_id}
-- GET /api/admin/promo-codes/export (CSV)
-- POST /api/admin/promo-codes/send-email
-- GET /api/admin/promo-codes/email-history
-- GET/PUT/DELETE /api/admin/email-template
-- PATCH /api/user-created-visits/{id}/visibility
-- GET /api/community/custom-visits
-- POST /api/promo-codes/redeem
+- `DELETE /api/auth/account` - Delete user account
+- `GET/PUT/DELETE /api/admin/promo-codes/template` - Email template CRUD
+- `PATCH /api/users/me/custom-visits/{visit_id}/visibility` - Toggle visibility
+- `GET /api/social/community-custom-visits` - Explore custom visits
+- `GET /api/continent-stats` - Continent statistics
 
-## DB Collections
-- `promo_codes`: code, type, duration_days, max_uses, current_uses, is_active, created_at
-- `promo_redemptions`: code_id, user_id, redeemed_at
-- `promo_email_logs`: log_id, code_ids, emails, subject, results, sent, failed
-- `email_templates`: template_id="promo_email", subject, heading, subheading, body_text, etc.
-
-## 3rd Party Integrations
-- Expo SDK 54, Apple Authentication, Resend (email), RevenueCat (IAP), Cloudflare (DNS/email)
-
-## Test Credentials
-- Email: test@wandermark.app / Password: Test1234! (admin role)
-
-## Backlog
-- **P0**: New EAS Build for device testing
-- **P2**: Verify RevenueCat, statistics sharing on device
+## Credentials
+- Email: test@wandermark.app
+- Password: Test1234!
