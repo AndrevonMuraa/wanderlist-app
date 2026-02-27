@@ -16,7 +16,7 @@ export default function WelcomeScreen() {
   const features = [
     {
       icon: 'earth',
-      title: 'Explore 580 Landmarks',
+      title: 'Explore 796 Landmarks',
       description: '66 countries across 5 continents waiting for you',
       color: theme.colors.primary,
     },
