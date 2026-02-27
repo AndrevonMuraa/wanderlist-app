@@ -31,7 +31,7 @@ const slides: OnboardingSlide[] = [
     icon: 'globe-outline',
     iconColor: '#4DB8D8',
     title: 'Discover the World',
-    description: 'Explore 740+ iconic landmarks across 66 countries on 5 continents.',
+    description: 'Explore 796 iconic landmarks across 66 countries on 5 continents.',
     gradient: ['#4DB8D8', '#7DCBE3'],
   },
   {
@@ -44,10 +44,10 @@ const slides: OnboardingSlide[] = [
   },
   {
     id: '3',
-    icon: 'trophy-outline',
+    icon: 'podium-outline',
     iconColor: '#f59e0b',
-    title: 'Earn Achievements',
-    description: 'Collect badges, maintain streaks, and climb the global leaderboard.',
+    title: 'Compete & Climb',
+    description: 'Earn points for every visit, climb the leaderboard, and compete with travelers worldwide.',
     gradient: ['#f59e0b', '#fbbf24'],
   },
   {
