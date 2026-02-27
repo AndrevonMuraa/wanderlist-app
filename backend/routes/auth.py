@@ -565,7 +565,7 @@ async def get_temp_token(email: str = "mobile@test.com"):
     }
 
 
-@router.delete("/account")
+@router.delete("/auth/account")
 async def deactivate_account(current_user: User = Depends(get_current_user)):
     """Deactivate user account. Account will be permanently deleted after 30 days."""
     user_id = current_user.user_id
@@ -587,7 +587,7 @@ async def deactivate_account(current_user: User = Depends(get_current_user)):
     }
 
 
-@router.post("/account/purge-deactivated")
+@router.post("/auth/account/purge-deactivated")
 async def purge_deactivated_accounts():
     """Permanently delete accounts that have been deactivated for over 30 days.
     Call this periodically (e.g. daily cron job)."""
