@@ -484,6 +484,14 @@ Plus streak badges, social badges, and point milestones!`}
           </Surface>
         </View>
 
+        {/* Contact Support - placed at the bottom, discreet */}
+        <View style={[styles.section, { opacity: 0.7 }]}>
+          <Surface style={styles.card}>
+            <Text style={[styles.cardTitle, { fontSize: 14 }]}>Need Help?</Text>
+            <Text style={styles.contactSubtitle}>Reach out to us at support@wandermark.app</Text>
+          </Surface>
+        </View>
+
         {/* CTA */}
         <View style={styles.ctaSection}>
           <TouchableOpacity
