@@ -92,12 +92,23 @@ async def login(data: LoginRequest):
     if not verify_password(data.password, user_doc["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
+    # Reactivate if deactivated
+    reactivated = False
+    if user_doc.get("is_active") is False:
+        await db.users.update_one(
+            {"user_id": user_doc["user_id"]},
+            {"$unset": {"deactivated_at": "", "scheduled_deletion_at": ""}, "$set": {"is_active": True}}
+        )
+        reactivated = True
+    
     access_token, expires_at = create_access_token({"sub": user_doc["user_id"]})
     
     return {
         "access_token": access_token,
         "token_type": "bearer",
-        "user": UserPublic(**user_doc)
+        "user": UserPublic(**user_doc),
+        "reactivated": reactivated,
+    }
     }
 
 @router.post("/auth/google/callback")
