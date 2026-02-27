@@ -312,42 +312,8 @@ Plus streak badges, social badges, and point milestones!`}
         <View style={styles.section}>
           <Surface style={styles.card}>
             <Text style={styles.cardTitle}>Contact Support</Text>
-            <Text style={styles.cardSubtitle}>We typically respond within 24-48 hours</Text>
-            
-            <TextInput
-              style={styles.input}
-              placeholder="Subject (e.g., Bug Report, Feature Request)"
-              placeholderTextColor={theme.colors.textLight}
-              value={supportSubject}
-              onChangeText={setSupportSubject}
-            />
-            
-            <TextInput
-              style={[styles.input, styles.textArea]}
-              placeholder="Describe your issue or question..."
-              placeholderTextColor={theme.colors.textLight}
-              value={supportMessage}
-              onChangeText={setSupportMessage}
-              multiline
-              numberOfLines={5}
-              textAlignVertical="top"
-            />
-            
-            <TouchableOpacity
-              style={[styles.sendButton, (!supportSubject.trim() || !supportMessage.trim()) && styles.sendButtonDisabled]}
-              onPress={handleSendSupport}
-              disabled={sendingSupport || !supportSubject.trim() || !supportMessage.trim()}
-            >
-              <LinearGradient
-                colors={supportSubject.trim() && supportMessage.trim() ? [theme.colors.primary, theme.colors.secondary] : ['#ccc', '#aaa']}
-                style={styles.sendButtonGradient}
-              >
-                <Ionicons name="send" size={20} color="#fff" />
-                <Text style={styles.sendButtonText}>
-                  {sendingSupport ? 'Sending...' : 'Send Message'}
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
+            <Text style={styles.contactSubtitle}>{"Can't find what you're looking for? Reach out to us at:"}</Text>
+            <Text style={styles.contactEmail}>support@wandermark.app</Text>
           </Surface>
         </View>
 
@@ -362,7 +328,7 @@ Plus streak badges, social badges, and point milestones!`}
               number={1}
               icon="compass"
               title="Explore Landmarks"
-              description="Browse 740+ landmarks across 66 countries and 5 continents."
+              description="Browse 796 landmarks across 66 countries and 5 continents."
             />
             <HowItWorksStep
               number={2}
@@ -496,12 +462,14 @@ Plus streak badges, social badges, and point milestones!`}
                 <View style={styles.expandableContent}>
                   <Text style={styles.expandableText}>
                     <Text style={styles.bold}>Visit Milestones:</Text>{'\n'}
-                    10 → 25 → 50 → 100 → 200 → 350 → 500{'\n\n'}
+                    10 → 25 → 50 → 100 → 200 → 250 → 350 → 500{'\n\n'}
                     <Text style={styles.bold}>Points Milestones:</Text>{'\n'}
                     100 → 500 → 1,000 → 5,000 pts{'\n\n'}
                     <Text style={styles.bold}>Social Badges:</Text>{'\n'}
                     5 → 10 → 25 friends{'\n\n'}
-                    Badges are awarded automatically! 🎉
+                    <Text style={styles.bold}>Streak Badges:</Text>{'\n'}
+                    3 → 7 → 30 day streaks{'\n\n'}
+                    Badges are awarded automatically!
                   </Text>
                 </View>
               )}
