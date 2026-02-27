@@ -1,4 +1,4 @@
-import { Slot } from 'expo-router';
+import { Stack } from 'expo-router';
 import { AuthProvider } from '../contexts/AuthContext';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import { OfflineProvider } from '../contexts/OfflineContext';
@@ -15,7 +15,7 @@ export default function RootLayout() {
           <AuthProvider>
             <OfflineProvider>
               <PurchaseProvider>
-                <Slot />
+                <Stack screenOptions={{ headerShown: false }} />
               </PurchaseProvider>
             </OfflineProvider>
           </AuthProvider>
