@@ -218,8 +218,8 @@ export default function JourneyScreen() {
 
   const getNextMilestone = () => {
     const visited = progressStats?.overall.visited || 0;
-    // Milestones adjusted for 689 total landmarks
-    const milestones = [10, 25, 50, 100, 200, 350, 500];
+    // Milestones matching badge system (796 total landmarks)
+    const milestones = [10, 25, 50, 100, 200, 250, 350, 500];
     const next = milestones.find(m => m > visited);
     if (next) {
       return {
@@ -230,6 +230,7 @@ export default function JourneyScreen() {
               next === 50 ? 'Globetrotter' : 
               next === 100 ? 'World Traveler' : 
               next === 200 ? 'Seasoned Traveler' :
+              next === 250 ? 'Elite Explorer' :
               next === 350 ? 'Legend' : 
               'Ultimate Explorer'
       };
