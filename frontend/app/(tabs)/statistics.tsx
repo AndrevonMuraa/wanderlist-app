@@ -86,7 +86,7 @@ export default function StatisticsScreen() {
       // Get continent data from API (real counts)
       const continents: ContinentData[] = (continentData.continents || []).map((c: any) => ({
         continent: c.continent || 'Unknown',
-        total_countries: c.total_countries || 0,
+        total_countries: c.countries || 0,
         visited_countries: c.visited_countries || 0,
         total_landmarks: c.total_landmarks || 0,
         total_points: c.total_points || 0,
