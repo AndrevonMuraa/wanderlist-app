@@ -268,7 +268,7 @@ Plus streak badges, social badges, and point milestones!`}
             <FAQItem
               id="delete"
               question="How do I delete my account?"
-              answer="You can delete your account directly from the Settings page. Just tap 'Delete Account' at the bottom and confirm. All your data will be permanently removed."
+              answer="Go to Settings and tap 'Delete Account' at the bottom. Your account will be deactivated for 30 days before permanent deletion. If you change your mind, simply log in again within 30 days to reactivate your account and recover all your data."
             />
           </Surface>
         </View>
