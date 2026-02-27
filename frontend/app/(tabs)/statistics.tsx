@@ -12,33 +12,32 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const { width } = Dimensions.get('window');
 
-// Continent data
-const CONTINENTS = [
-  { id: 'europe', name: 'Europe', icon: '🏰', color: '#4DB8D8', totalCountries: 44 },
-  { id: 'asia', name: 'Asia', icon: '🏯', color: '#E57373', totalCountries: 48 },
-  { id: 'africa', name: 'Africa', icon: '🦁', color: '#FFB74D', totalCountries: 54 },
-  { id: 'north_america', name: 'North America', icon: '🗽', color: '#81C784', totalCountries: 23 },
-  { id: 'south_america', name: 'South America', icon: '🌴', color: '#64B5F6', totalCountries: 12 },
-  { id: 'oceania', name: 'Oceania', icon: '🦘', color: '#BA68C8', totalCountries: 14 },
-];
+// Continent icons for display
+const CONTINENT_ICONS: { [key: string]: { icon: string; color: string } } = {
+  'Europe': { icon: '🏰', color: '#4DB8D8' },
+  'Asia': { icon: '🏯', color: '#E57373' },
+  'Africa': { icon: '🦁', color: '#FFB74D' },
+  'Americas': { icon: '🗽', color: '#81C784' },
+  'Oceania': { icon: '🦘', color: '#BA68C8' },
+  'South America': { icon: '🌴', color: '#64B5F6' },
+};
 
-// Landmark categories
-const LANDMARK_CATEGORIES = [
-  { id: 'historical', name: 'Historical', icon: 'time', color: '#8D6E63' },
-  { id: 'natural', name: 'Natural', icon: 'leaf', color: '#66BB6A' },
-  { id: 'architectural', name: 'Architectural', icon: 'business', color: '#42A5F5' },
-  { id: 'cultural', name: 'Cultural', icon: 'color-palette', color: '#1E8A8A' },
-  { id: 'religious', name: 'Religious', icon: 'star', color: '#FFA726' },
-];
+interface ContinentData {
+  continent: string;
+  total_countries: number;
+  visited_countries: number;
+  total_landmarks: number;
+  total_points: number;
+}
 
 interface Stats {
   totalCountries: number;
   totalLandmarks: number;
   totalPoints: number;
-  continentStats: { [key: string]: number };
+  totalAppCountries: number;
+  continents: ContinentData[];
   topCountries: { name: string; visits: number }[];
   monthlyVisits: { month: string; count: number }[];
-  categoryBreakdown: { [key: string]: number };
   globalRank: number;
   totalUsers: number;
   percentile: number;
