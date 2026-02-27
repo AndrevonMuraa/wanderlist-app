@@ -12,45 +12,51 @@ WanderMark is a travel companion app (React Native + FastAPI) for discovering an
 ## What's Been Implemented
 
 ### Navigation Fix (Feb 2026)
-- Root `_layout.tsx` changed from `<Slot />` to `<Stack />` - fixes iOS back button crash
-- Added `_layout.tsx` to 10 subdirectories
-- `safeGoBack()` utility still in place as additional safety
+- Root `_layout.tsx`: `<Slot />` → `<Stack />` (fixes iOS back button crash)
+- Added `_layout.tsx` to 10+ subdirectories
+- `safeGoBack()` utility as additional safety layer
 
 ### Onboarding Fix (Feb 2026)
-- `OnboardingFlow.tsx` slide 3: "Earn Achievements" → "Compete & Climb" with podium icon
-- Landmark count updated to 796 in OnboardingFlow and welcome.tsx
+- `OnboardingFlow.tsx` slide 3: "Earn Achievements" → "Compete & Climb"
+- Landmark count updated to 796
 
 ### About/Info Page Overhaul (Feb 2026)
 - Stats: 796 landmarks, 66 countries, 10,000 total points
-- FAQ: privacy includes diary sharing, delete account references Settings with 30-day deactivation, badges include Elite Explorer (250)
-- Badge System: streak badges (3→7→30 days), Elite Explorer added
-- Contact Support: form replaced with simple email reference (support@wandermark.app), moved to bottom
+- FAQ: privacy with diary sharing, badges with Elite Explorer (250), delete account with 30-day deactivation, streak badges
+- Contact Support: simple email reference (support@wandermark.app) at bottom
 - Version: 1.1.0, February 2026
 
 ### Subscription Page Update (Feb 2026)
 - Free: 700+ Official Landmarks, Community Photo Preview, Photo of the Week
-- Pro: 93 Premium Landmarks, Full Community Gallery, Upvoting, Diary, Messaging, Community Feed
+- Pro: 93 Premium, Full Gallery, Upvoting, Diary, Messaging, Community Feed
 
 ### Account Deactivation System (Feb 2026)
-- `DELETE /api/auth/account` deactivates for 30 days (not immediate delete)
-- Auto-reactivation on login (password, Apple Sign-In, magic code)
-- `POST /api/auth/account/purge-deactivated` for cleanup cron job
-- Settings UI shows deactivation dialog with explanation
-- Login returns `reactivated: true` if account was reactivated
+- `DELETE /api/auth/account` deactivates for 30 days
+- Auto-reactivation on all login methods (password, Apple, magic code)
+- `POST /api/auth/account/purge-deactivated` for cleanup
+- Settings UI with deactivation dialog
+
+### Statistics Page Fix (Feb 2026)
+- Moved to `(tabs)/statistics.tsx` — bottom tab bar now visible
+- Continent Progress: uses real API data instead of hardcoded world-country counts
+- Fun Facts: "explored X% of WanderMark countries" instead of "countries in the world"
+- Removed fake Category Breakdown (was using Math.random())
+
+### Journey Page Fix (Feb 2026)
+- Added "Elite Explorer" (250) to milestone list
+- Updated comment to 796 total landmarks
 
 ### Previous Work (Jan-Feb 2026)
-- Critical crash fix: `router.back()` → `safeGoBack()` across 23+ files
 - Landing page: "Compete & Climb" section
-- Community features: Custom Visits in feed, visibility toggle, explorer endpoint
-- Promo code system with editable email template
+- Community features, promo code system, email templates
 - All text translated from Norwegian to English
-- Persistent login via SecureStore (7-day token expiration)
+- Persistent login via SecureStore (7-day token)
 
 ## Prioritized Backlog
 
 ### P0 - Critical
-- Save to GitHub and build EAS (build 52) for TestFlight testing
-- User E2E testing: back button, onboarding, about page, deactivation flow
+- Save to GitHub and build EAS (build 53) for TestFlight testing
+- User E2E testing on device
 
 ### P2 - Future
 - Rename GitHub repo: wanderlist-app → wandermark-app
@@ -59,11 +65,11 @@ WanderMark is a travel companion app (React Native + FastAPI) for discovering an
 - Verify RevenueCat on device
 
 ## Key API Endpoints
-- `DELETE /api/auth/account` - Deactivate account (30-day grace period)
+- `DELETE /api/auth/account` - Deactivate account (30-day grace)
 - `POST /api/auth/account/purge-deactivated` - Cleanup expired accounts
-- `GET/PUT/DELETE /api/admin/promo-codes/template` - Email template CRUD
+- `GET /api/continent-stats` - Real continent statistics
+- `GET/PUT/DELETE /api/admin/promo-codes/template` - Email template
 - `PATCH /api/users/me/custom-visits/{visit_id}/visibility` - Toggle visibility
-- `GET /api/social/community-custom-visits` - Explore custom visits
 
 ## Credentials
 - Email: test@wandermark.app
