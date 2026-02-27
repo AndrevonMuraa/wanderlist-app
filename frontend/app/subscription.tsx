@@ -305,7 +305,7 @@ export default function SubscriptionScreen() {
           
           <Surface style={styles.featuresCard}>
             <Text style={styles.tierLabel}>Free</Text>
-            <FeatureRow icon="flag" text="920+ Official Landmarks" included />
+            <FeatureRow icon="flag" text="700+ Official Landmarks" included />
             <FeatureRow icon="camera" text="1 Photo per Visit" included />
             <FeatureRow icon="people" text="5 Friends Maximum" included />
             <FeatureRow icon="trophy" text="Leaderboard & Rankings" included />

@@ -199,7 +199,7 @@ export default function AboutScreen() {
           <Surface style={styles.statsCard}>
             <View style={styles.statsGrid}>
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>740+</Text>
+                <Text style={styles.statNumber}>796</Text>
                 <Text style={styles.statLabel}>Landmarks</Text>
               </View>
               <View style={styles.statDivider} />
@@ -214,7 +214,7 @@ export default function AboutScreen() {
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>9,650</Text>
+                <Text style={styles.statNumber}>10,000</Text>
                 <Text style={styles.statLabel}>Total Points</Text>
               </View>
             </View>
@@ -235,7 +235,7 @@ export default function AboutScreen() {
             <FAQItem
               id="points"
               question="How do I earn points?"
-              answer={`You earn points for visiting landmarks: 10 points for official landmarks, 25 points for premium landmarks. There are two types of points:
+              answer={`You earn points for visiting landmarks: 10 points for official landmarks, 25 points for premium landmarks, and 50 points for country visits. There are two types of points:
 
 • Personal Points: Earned for all visits (with or without photos)
 • Leaderboard Points: Only earned when you upload photos with your visit
@@ -252,6 +252,7 @@ This encourages sharing your travel memories while still rewarding all visits!`}
 • Add up to 10 landmarks with individual photos
 • Add up to 10 general country photos
 • Write diary notes
+• Share publicly in the community feed (Pro feature)
 
 Find it on the Journey page under 'Custom Visits' or on the Explore page at the bottom.`}
             />
@@ -261,11 +262,13 @@ Find it on the Journey page under 'Custom Visits' or on the Explore page at the 
               question="Can I control who sees my visits?"
               answer={`You control your privacy! Each visit can be set to:
 
-🌐 Public - Everyone can see
-👥 Friends - Only your friends
-🔒 Private - Only you
+• Public - Everyone can see
+• Friends - Only your friends
+• Private - Only you
 
-Change this when creating a visit or edit it later.`}
+You can also choose to share or hide your travel diary independently — so you can make a visit public while keeping your diary notes private.
+
+Set privacy when creating a visit, or change it anytime. You can also set a default privacy level in Settings.`}
             />
             
             <FAQItem
@@ -285,19 +288,22 @@ You can filter by country, year, or type.`}
               question="How do badges work?"
               answer={`Earn badges as you explore:
 
-🗺️ Explorer - 10 landmarks
-🧗 Adventurer - 25 landmarks
-🌍 Globetrotter - 50 landmarks
-✈️ World Traveler - 100 landmarks
-🧭 Seasoned Traveler - 200 landmarks
-🏆 Legend - 350 landmarks
-👑 Ultimate Explorer - 500 landmarks`}
+• Explorer - 10 landmarks
+• Adventurer - 25 landmarks
+• Globetrotter - 50 landmarks
+• World Traveler - 100 landmarks
+• Seasoned Traveler - 200 landmarks
+• Elite Explorer - 250 landmarks
+• Legend - 350 landmarks
+• Ultimate Explorer - 500 landmarks
+
+Plus streak badges, social badges, and point milestones!`}
             />
             
             <FAQItem
               id="delete"
               question="How do I delete my account?"
-              answer="To delete your account, please contact us using the form below with subject 'Account Deletion Request'. We'll process your request within 48 hours and permanently delete all your data."
+              answer="You can delete your account directly from the Settings page. Just tap 'Delete Account' at the bottom and confirm. All your data will be permanently removed."
             />
           </Surface>
         </View>
