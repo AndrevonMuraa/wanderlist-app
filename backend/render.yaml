@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: wandermark-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: MONGO_URL
+        sync: false
+      - key: DB_NAME
+        value: wandermark
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: RESEND_API_KEY
+        sync: false
+      - key: SENDER_EMAIL
+        value: noreply@wandermark.app
+      - key: PYTHON_VERSION
+        value: "3.11.0"
