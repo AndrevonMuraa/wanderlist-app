@@ -60,6 +60,7 @@ export default function LeaderboardScreen() {
   const [userRank, setUserRank] = useState<number | null>(null);
   const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [showPointsInfo, setShowPointsInfo] = useState(false);
 
   // Navigate back to social tab explicitly
   const handleBack = () => {
@@ -104,7 +105,7 @@ export default function LeaderboardScreen() {
 
   const getCategoryLabel = () => {
     switch (category) {
-      case 'points': return 'Points';
+      case 'points': return friendsOnly ? 'Points' : 'Verified';
       case 'visits': return 'Visits';
       case 'countries': return 'Countries';
       case 'streaks': return 'Streak Days';
