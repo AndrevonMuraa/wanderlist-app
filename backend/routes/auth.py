@@ -223,6 +223,13 @@ async def apple_callback(auth_data: AppleAuthRequest, response: Response):
                     {"user_id": user_id},
                     {"$set": {"apple_user_id": apple_user_id}}
                 )
+            # Reactivate if deactivated
+            if existing_user.get("is_active") is False:
+                await db.users.update_one(
+                    {"user_id": user_id},
+                    {"$unset": {"deactivated_at": "", "scheduled_deletion_at": ""}, "$set": {"is_active": True}}
+                )
+                logging.info(f"[Apple Auth] Reactivated deactivated account: {user_id}")
         else:
             # Create new user with auto-generated username
             user_id = f"user_{uuid.uuid4().hex[:12]}"
@@ -361,6 +368,13 @@ async def verify_magic_link(data: MagicLinkVerifyRequest):
     if existing_user:
         user_id = existing_user["user_id"]
         logging.info(f"[Magic Link] Existing user logged in: {user_id}")
+        # Reactivate if deactivated
+        if existing_user.get("is_active") is False:
+            await db.users.update_one(
+                {"user_id": user_id},
+                {"$unset": {"deactivated_at": "", "scheduled_deletion_at": ""}, "$set": {"is_active": True}}
+            )
+            logging.info(f"[Magic Link] Reactivated deactivated account: {user_id}")
     else:
         user_id = f"user_{uuid.uuid4().hex[:12]}"
         name = email.split("@")[0]
