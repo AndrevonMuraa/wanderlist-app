@@ -52,15 +52,16 @@ WanderMark is a travel companion app (React Native + FastAPI) for discovering an
 - All text translated from Norwegian to English
 - Persistent login via SecureStore (7-day token)
 
-### Leaderboard Points Fix (Feb 2026)
-- Changed leaderboard to use `points` instead of `leaderboard_points`
-- Root cause: `leaderboard_points` only awarded for photo-verified visits, causing 0 for most users
-- Now leaderboard matches what users see in "My Journey" profile
+### Leaderboard Anti-Cheat System Overhaul (Feb 2026)
+- **Forslag 1 - Bonus-fiks**: Kontinent/land bonuser (`+50`, `+200` pts) tildeler nå `leaderboard_points` når besøk har bilder
+- **Forslag 2 - Differensiert leaderboard**: Global = `leaderboard_points` (anti-juks), Friends = `points` (tillit). UI viser begge verdier med info-banner
+- **Forslag 3 - Retroaktiv beregning**: Admin-endepunkt `POST /api/admin/recalculate-leaderboard-points` scanner alle besøk og beregner korrekt `leaderboard_points`
 
 ## Prioritized Backlog
 
 ### P0 - Critical
-- User E2E testing of build 53 on TestFlight (navigation, stats, leaderboard)
+- User E2E testing of new build on TestFlight (navigation, stats, leaderboard)
+- Run `POST /api/admin/recalculate-leaderboard-points` once in production to fix historical data
 
 ### P2 - Future
 - Rename GitHub repo: wanderlist-app → wandermark-app
