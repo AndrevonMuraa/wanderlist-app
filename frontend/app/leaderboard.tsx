@@ -131,6 +131,7 @@ export default function LeaderboardScreen() {
   const renderLeaderboardEntry = (entry: LeaderboardEntry, index: number) => {
     const medal = getMedalEmoji(entry.rank);
     const rankInfo = getUserRank(Math.max(entry.value || 0, 0));
+    const showDualPoints = category === 'points' && !friendsOnly && entry.total_points !== undefined;
 
     return (
       <Surface key={entry.user_id} style={styles.entryCard} elevation={1}>
@@ -187,6 +188,9 @@ export default function LeaderboardScreen() {
           <View style={styles.valueContainer}>
             <Text style={styles.valueText}>{entry.value.toLocaleString()}</Text>
             <Text style={styles.valueLabel}>{getCategoryLabel()}</Text>
+            {showDualPoints && entry.total_points !== entry.value && (
+              <Text style={styles.totalPointsLabel}>{entry.total_points?.toLocaleString()} total</Text>
+            )}
           </View>
         </View>
       </Surface>
