@@ -311,9 +311,12 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
                 
                 if user_continent_visits == 1:  # First country in this continent
                     continent_bonus_points = 50
+                    continent_bonus_increment = {"points": continent_bonus_points}
+                    if has_photos:
+                        continent_bonus_increment["leaderboard_points"] = continent_bonus_points
                     await db.users.update_one(
                         {"user_id": current_user.user_id},
-                        {"$inc": {"points": continent_bonus_points}}
+                        {"$inc": continent_bonus_increment}
                     )
 
     # Track completion bonuses
@@ -341,10 +344,13 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
             country_completed = True
             completed_country_name = landmark.get("country_name")
             
-            # Award bonus points to user
+            # Award bonus points to user (leaderboard_points only if visit has photos)
+            completion_increment = {"points": country_completion_bonus}
+            if has_photos:
+                completion_increment["leaderboard_points"] = country_completion_bonus
             await db.users.update_one(
                 {"user_id": current_user.user_id},
-                {"$inc": {"points": country_completion_bonus}}
+                {"$inc": completion_increment}
             )
             
             # Create country completion activity
@@ -392,10 +398,13 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
                     continent_completed = True
                     completed_continent = continent
                     
-                    # Award bonus points to user
+                    # Award bonus points to user (leaderboard_points only if visit has photos)
+                    cont_completion_increment = {"points": continent_completion_bonus}
+                    if has_photos:
+                        cont_completion_increment["leaderboard_points"] = continent_completion_bonus
                     await db.users.update_one(
                         {"user_id": current_user.user_id},
-                        {"$inc": {"points": continent_completion_bonus}}
+                        {"$inc": cont_completion_increment}
                     )
                     
                     # Create continent completion activity
