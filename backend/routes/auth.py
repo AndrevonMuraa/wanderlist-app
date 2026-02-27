@@ -109,7 +109,6 @@ async def login(data: LoginRequest):
         "user": UserPublic(**user_doc),
         "reactivated": reactivated,
     }
-    }
 
 @router.post("/auth/google/callback")
 async def google_callback(session_id: str, response: Response):
