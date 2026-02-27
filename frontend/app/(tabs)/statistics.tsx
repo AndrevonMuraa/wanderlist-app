@@ -294,21 +294,23 @@ export default function StatisticsScreen() {
                 <Ionicons name="globe" size={22} color="#64B5F6" />
                 <Text style={styles.sectionTitle}>Continent Progress</Text>
               </View>
-              {CONTINENTS.map((continent) => {
-                const visited = stats.continentStats[continent.id] || 0;
-                const progress = visited / continent.totalCountries;
+              {stats.continents.map((continent) => {
+                const iconData = CONTINENT_ICONS[continent.continent] || { icon: '🌍', color: '#999' };
+                const total = continent.total_countries || 1;
+                const visited = continent.visited_countries || 0;
+                const progress = visited / total;
                 return (
-                  <View key={continent.id} style={styles.continentItem}>
+                  <View key={continent.continent} style={styles.continentItem}>
                     <View style={styles.continentHeader}>
-                      <Text style={styles.continentEmoji}>{continent.icon}</Text>
-                      <Text style={styles.continentName}>{continent.name}</Text>
+                      <Text style={styles.continentEmoji}>{iconData.icon}</Text>
+                      <Text style={styles.continentName}>{continent.continent}</Text>
                       <Text style={styles.continentProgress}>
-                        {visited}/{continent.totalCountries}
+                        {visited}/{total}
                       </Text>
                     </View>
                     <ProgressBar
                       progress={progress}
-                      color={continent.color}
+                      color={iconData.color}
                       style={styles.progressBar}
                     />
                     <Text style={styles.continentPercent}>
@@ -317,31 +319,6 @@ export default function StatisticsScreen() {
                   </View>
                 );
               })}
-            </Surface>
-
-            {/* Category Breakdown */}
-            <Surface style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <Ionicons name="pie-chart" size={22} color="#1E8A8A" />
-                <Text style={styles.sectionTitle}>Landmark Categories</Text>
-              </View>
-              <View style={styles.categoryGrid}>
-                {LANDMARK_CATEGORIES.map((category) => {
-                  const count = stats.categoryBreakdown[category.id] || 0;
-                  const total = Object.values(stats.categoryBreakdown).reduce((a, b) => a + b, 0) || 1;
-                  const percent = Math.round((count / total) * 100);
-                  return (
-                    <View key={category.id} style={styles.categoryItem}>
-                      <View style={[styles.categoryIcon, { backgroundColor: category.color + '20' }]}>
-                        <Ionicons name={category.icon as any} size={24} color={category.color} />
-                      </View>
-                      <Text style={styles.categoryName}>{category.name}</Text>
-                      <Text style={styles.categoryPercent}>{percent}%</Text>
-                      <Text style={styles.categoryCount}>{count} visits</Text>
-                    </View>
-                  );
-                })}
-              </View>
             </Surface>
 
             {/* Fun Facts */}
@@ -354,7 +331,7 @@ export default function StatisticsScreen() {
                 <View style={styles.funFact}>
                   <Text style={styles.funFactEmoji}>🌍</Text>
                   <Text style={styles.funFactText}>
-                    You've visited <Text style={styles.funFactHighlight}>{Math.round((stats.totalCountries / 195) * 100)}%</Text> of all countries in the world!
+                    You've explored <Text style={styles.funFactHighlight}>{Math.round((stats.totalCountries / stats.totalAppCountries) * 100)}%</Text> of all countries available in WanderMark!
                   </Text>
                 </View>
                 <View style={styles.funFact}>
