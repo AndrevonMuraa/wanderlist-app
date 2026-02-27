@@ -20,8 +20,14 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
     """
     Get dynamic statistics for all continents.
     Returns landmark counts, total points, and country counts for each continent.
-    This endpoint provides real-time data to keep continent cards in sync with database.
+    Normalizes continent names (North/South America → Americas) to match 5 continent cards.
     """
+    # Mapping to normalize continent names to the 5 standard cards
+    CONTINENT_MAP = {
+        "North America": "Americas",
+        "South America": "Americas",
+    }
+    
     # Aggregate landmark stats by continent
     pipeline = [
         {
@@ -38,13 +44,23 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
                 "continent": "$_id",
                 "landmarks": "$total_landmarks",
                 "points": "$total_points",
-                "countries": {"$size": "$countries"}
+                "country_list": "$countries"
             }
         },
         {"$sort": {"continent": 1}}
     ]
     
-    stats = await db.landmarks.aggregate(pipeline).to_list(10)
+    raw_stats = await db.landmarks.aggregate(pipeline).to_list(10)
+    
+    # Merge continents using the map
+    merged: dict = {}
+    for stat in raw_stats:
+        name = CONTINENT_MAP.get(stat["continent"], stat["continent"])
+        if name not in merged:
+            merged[name] = {"landmarks": 0, "points": 0, "country_set": set()}
+        merged[name]["landmarks"] += stat["landmarks"]
+        merged[name]["points"] += stat["points"]
+        merged[name]["country_set"].update(stat["country_list"])
     
     # Get user's visited landmarks by continent for progress
     user_visits = await db.visits.find(
@@ -54,17 +70,15 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
     visited_landmark_ids = [v["landmark_id"] for v in user_visits]
     
     # Get visited landmarks by continent AND count visited countries
-    visited_by_continent = {}
+    visited_by_continent: dict = {}
     if visited_landmark_ids:
-        # Get visited landmarks with their country info
         visited_landmarks = await db.landmarks.find(
             {"landmark_id": {"$in": visited_landmark_ids}},
             {"continent": 1, "country_name": 1, "points": 1}
         ).to_list(10000)
         
-        # Group by continent
         for landmark in visited_landmarks:
-            continent = landmark.get("continent")
+            continent = CONTINENT_MAP.get(landmark.get("continent", ""), landmark.get("continent", ""))
             if continent not in visited_by_continent:
                 visited_by_continent[continent] = {
                     "visited_count": 0,
@@ -75,31 +89,32 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
             visited_by_continent[continent]["visited_points"] += landmark.get("points", 0)
             visited_by_continent[continent]["visited_countries"].add(landmark.get("country_name"))
     
-    # Combine stats with user progress
+    # Build final result
     result = []
-    for stat in stats:
-        continent = stat["continent"]
-        visited_data = visited_by_continent.get(continent, {})
+    for name in sorted(merged.keys()):
+        data = merged[name]
+        country_count = len(data["country_set"])
+        visited_data = visited_by_continent.get(name, {})
         visited_landmarks_count = visited_data.get("visited_count", 0) if visited_data else 0
         visited_countries_count = len(visited_data.get("visited_countries", set())) if visited_data else 0
         
         result.append({
-            "continent": continent,
-            "total_landmarks": stat["landmarks"],
-            "total_points": stat["points"],
-            "countries": stat["countries"],
+            "continent": name,
+            "total_landmarks": data["landmarks"],
+            "total_points": data["points"],
+            "countries": country_count,
             "visited_landmarks": visited_landmarks_count,
             "visited_countries": visited_countries_count,
             "visited_points": visited_data.get("visited_points", 0) if visited_data else 0,
-            "progress_percent": round((visited_countries_count / stat["countries"]) * 100, 1) if stat["countries"] > 0 else 0
+            "progress_percent": round((visited_countries_count / country_count) * 100, 1) if country_count > 0 else 0
         })
     
     return {
         "continents": result,
         "grand_total": {
-            "landmarks": sum(s["landmarks"] for s in stats),
-            "points": sum(s["points"] for s in stats),
-            "countries": sum(s["countries"] for s in stats)
+            "landmarks": sum(s["total_landmarks"] for s in result),
+            "points": sum(s["total_points"] for s in result),
+            "countries": sum(s["countries"] for s in result)
         }
     }
 
