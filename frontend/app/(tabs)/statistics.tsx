@@ -79,47 +79,36 @@ export default function StatisticsScreen() {
       ]);
 
       const statsData = statsRes.ok ? await statsRes.json() : {};
-      const continentData = continentRes.ok ? await continentRes.json() : [];
+      const continentData = continentRes.ok ? await continentRes.json() : { continents: [] };
       const visitsData = visitsRes.ok ? await visitsRes.json() : [];
       const leaderboardData = leaderboardRes.ok ? await leaderboardRes.json() : [];
 
-      // Process continent stats
-      const continentStats: { [key: string]: number } = {};
-      if (Array.isArray(continentData)) {
-        continentData.forEach((c: any) => {
-          const key = c.continent?.toLowerCase().replace(' ', '_') || 'unknown';
-          continentStats[key] = c.visited_countries || 0;
-        });
-      }
+      // Get continent data from API (real counts)
+      const continents: ContinentData[] = (continentData.continents || []).map((c: any) => ({
+        continent: c.continent || 'Unknown',
+        total_countries: c.total_countries || 0,
+        visited_countries: c.visited_countries || 0,
+        total_landmarks: c.total_landmarks || 0,
+        total_points: c.total_points || 0,
+      }));
+      
+      // Calculate total countries in the app
+      const totalAppCountries = continents.reduce((sum, c) => sum + c.total_countries, 0);
 
       // Process visits for top countries and monthly breakdown
       const countryVisits: { [key: string]: number } = {};
       const monthlyData: { [key: string]: number } = {};
-      const categoryData: { [key: string]: number } = {
-        historical: 0,
-        natural: 0,
-        architectural: 0,
-        cultural: 0,
-        religious: 0,
-      };
 
       if (Array.isArray(visitsData)) {
         visitsData.forEach((visit: any) => {
-          // Count country visits
           if (visit.country_name) {
             countryVisits[visit.country_name] = (countryVisits[visit.country_name] || 0) + 1;
           }
-
-          // Count monthly visits
           if (visit.visited_at) {
             const date = new Date(visit.visited_at);
             const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
             monthlyData[monthKey] = (monthlyData[monthKey] || 0) + 1;
           }
-
-          // Simulate category breakdown (in real app, landmarks would have categories)
-          const randomCategory = Object.keys(categoryData)[Math.floor(Math.random() * 5)];
-          categoryData[randomCategory]++;
         });
       }
 
