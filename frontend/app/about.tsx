@@ -688,40 +688,16 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
     paddingLeft: theme.spacing.xs,
   },
-  // Contact Form
-  input: {
-    backgroundColor: theme.colors.backgroundSecondary,
-    borderRadius: theme.borderRadius.md,
-    padding: theme.spacing.md,
-    fontSize: 14,
-    color: theme.colors.text,
+  // Contact
+  contactSubtitle: {
+    fontSize: 13,
+    color: theme.colors.textSecondary,
     marginBottom: theme.spacing.sm,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
   },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
-  },
-  sendButton: {
-    marginTop: theme.spacing.sm,
-    borderRadius: theme.borderRadius.md,
-    overflow: 'hidden',
-  },
-  sendButtonDisabled: {
-    opacity: 0.7,
-  },
-  sendButtonGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: theme.spacing.md,
-    gap: theme.spacing.sm,
-  },
-  sendButtonText: {
+  contactEmail: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#fff',
+    color: theme.colors.primary,
   },
   // Steps
   stepContainer: {
