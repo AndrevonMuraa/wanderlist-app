@@ -681,4 +681,34 @@ const styles = StyleSheet.create({
     marginTop: 4,
     textAlign: 'center',
   },
+  infoBanner: {
+    backgroundColor: '#E8F6F9',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#B8E4ED',
+  },
+  infoBannerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  infoBannerText: {
+    flex: 1,
+    fontSize: 13,
+    color: '#2E7D8C',
+    fontWeight: '500',
+  },
+  infoBannerDetail: {
+    fontSize: 12,
+    color: '#5A9DAA',
+    marginTop: 8,
+    lineHeight: 18,
+  },
+  totalPointsLabel: {
+    fontSize: 10,
+    color: '#999',
+    marginTop: 1,
+  },
 });
