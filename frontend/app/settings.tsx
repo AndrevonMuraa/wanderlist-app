@@ -378,11 +378,35 @@ export default function SettingsScreen() {
               style={styles.accountItem}
               onPress={() => {
                 Alert.alert(
-                  t('settings.deleteAccount'),
-                  t('common.cancel'),
+                  'Delete Account',
+                  'Are you sure you want to permanently delete your account? All your data, visits, photos, and progress will be lost forever. This action cannot be undone.',
                   [
-                    { text: t('common.cancel'), style: 'cancel' },
-                    { text: t('common.delete'), style: 'destructive', onPress: () => {} },
+                    { text: 'Cancel', style: 'cancel' },
+                    { 
+                      text: 'Delete', 
+                      style: 'destructive', 
+                      onPress: async () => {
+                        try {
+                          const token = await getToken();
+                          const response = await fetch(`${BACKEND_URL}/api/auth/account`, {
+                            method: 'DELETE',
+                            headers: { Authorization: `Bearer ${token}` },
+                          });
+                          if (response.ok) {
+                            if (Platform.OS === 'web') {
+                              localStorage.removeItem('auth_token');
+                            } else {
+                              await SecureStore.deleteItemAsync('auth_token');
+                            }
+                            router.replace('/(auth)/login');
+                          } else {
+                            Alert.alert('Error', 'Failed to delete account. Please try again.');
+                          }
+                        } catch (error) {
+                          Alert.alert('Error', 'Something went wrong. Please try again.');
+                        }
+                      }
+                    },
                   ]
                 );
               }}
