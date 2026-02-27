@@ -60,8 +60,16 @@ WanderMark is a travel companion app (React Native + FastAPI) for discovering an
 ## Prioritized Backlog
 
 ### P0 - Critical
-- User E2E testing of new build on TestFlight (navigation, stats, leaderboard)
-- Run `POST /api/admin/recalculate-leaderboard-points` once in production to fix historical data
+- Sett opp MongoDB Atlas + Render.com (se MIGRATION_GUIDE.md)
+- Seed landmarks-data i ny produksjonsdatabase
+- Oppdater frontend config.ts med permanent backend-URL
+- Bygg ny EAS-build med ny backend-URL
+- Kjør `POST /api/admin/recalculate-leaderboard-points` etter migrering
+- E2E-testing av ny build
+
+### P1 - Important
+- Sett opp custom domene: api.wandermark.app → Render (via Cloudflare)
+- Oppdater privacy/terms of service for App Store-krav
 
 ### P2 - Future
 - Rename GitHub repo: wanderlist-app → wandermark-app
