@@ -588,42 +588,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
     textAlign: 'right',
   },
-  categoryGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.spacing.sm,
-  },
-  categoryItem: {
-    width: (width - theme.spacing.md * 4 - theme.spacing.sm * 2) / 3,
-    alignItems: 'center',
-    padding: theme.spacing.sm,
-    backgroundColor: theme.colors.background,
-    borderRadius: theme.borderRadius.md,
-  },
-  categoryIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: theme.spacing.xs,
-  },
-  categoryName: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: theme.colors.text,
-    textAlign: 'center',
-  },
-  categoryPercent: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: theme.colors.primary,
-    marginTop: 2,
-  },
-  categoryCount: {
-    fontSize: 10,
-    color: theme.colors.textSecondary,
-  },
   funFactsContainer: {
     gap: theme.spacing.sm,
   },
