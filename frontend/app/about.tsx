@@ -6,37 +6,24 @@ import {
   TouchableOpacity,
   Platform,
   Dimensions,
-  TextInput,
-  Alert,
   StatusBar,
+  Linking,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as SecureStore from 'expo-secure-store';
 import theme, { gradients } from '../styles/theme';
-import { BACKEND_URL } from '../utils/config';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 
 const { width } = Dimensions.get('window');
-
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  }
-  return await SecureStore.getItemAsync('auth_token');
-};
 
 export default function AboutScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null);
-  const [supportSubject, setSupportSubject] = useState('');
-  const [supportMessage, setSupportMessage] = useState('');
-  const [sendingSupport, setSendingSupport] = useState(false);
 
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
@@ -46,28 +33,6 @@ export default function AboutScreen() {
 
   const toggleFAQ = (faq: string) => {
     setExpandedFAQ(expandedFAQ === faq ? null : faq);
-  };
-
-  const handleSendSupport = async () => {
-    if (!supportSubject.trim() || !supportMessage.trim()) {
-      Alert.alert('Missing Information', 'Please fill in both subject and message.');
-      return;
-    }
-
-    setSendingSupport(true);
-    try {
-      // For now, just show success - in production this would send to backend
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      Alert.alert(
-        'Message Sent! ✅',
-        'Thank you for contacting us. We\'ll get back to you within 24-48 hours.',
-        [{ text: 'OK', onPress: () => { setSupportSubject(''); setSupportMessage(''); } }]
-      );
-    } catch (error) {
-      Alert.alert('Error', 'Failed to send message. Please try again.');
-    } finally {
-      setSendingSupport(false);
-    }
   };
 
   const FAQItem = ({ id, question, answer }: { id: string; question: string; answer: string }) => (
