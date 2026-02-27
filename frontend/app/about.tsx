@@ -190,7 +190,7 @@ export default function AboutScreen() {
             <Text style={styles.heroSubtitle}>
               Your personal travel companion for discovering and conquering the world's most amazing landmarks
             </Text>
-            <Text style={styles.versionText}>Version 1.0.0</Text>
+            <Text style={styles.versionText}>Version 1.1.0</Text>
           </LinearGradient>
         </View>
 
@@ -513,7 +513,7 @@ Plus streak badges, social badges, and point milestones!`}
           <Surface style={styles.infoCard}>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Version</Text>
-              <Text style={styles.infoValue}>1.0.0</Text>
+              <Text style={styles.infoValue}>1.1.0</Text>
             </View>
             <View style={styles.infoDivider} />
             <View style={styles.infoRow}>
