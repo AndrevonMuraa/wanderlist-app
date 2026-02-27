@@ -33,6 +33,8 @@ interface LeaderboardEntry {
   picture?: string;
   username?: string;
   value: number;
+  verified_points?: number;
+  total_points?: number;
   rank: number;
   current_streak?: number;
   longest_streak?: number;
