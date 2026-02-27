@@ -13,25 +13,30 @@ WanderMark is a travel companion app (React Native + FastAPI) for discovering an
 
 ### Navigation Fix (Feb 2026)
 - Root `_layout.tsx` changed from `<Slot />` to `<Stack />` - fixes iOS back button crash
-- Added `_layout.tsx` to 10 subdirectories (auth, admin, messages, add-visit, landmark-detail, visit-detail, country-visit-detail, landmark-community-photos, country-community-photos, landmarks)
+- Added `_layout.tsx` to 10 subdirectories
 - `safeGoBack()` utility still in place as additional safety
 
+### Onboarding Fix (Feb 2026)
+- `OnboardingFlow.tsx` slide 3: "Earn Achievements" → "Compete & Climb" with podium icon
+- Landmark count updated to 796 in OnboardingFlow and welcome.tsx
+
 ### About/Info Page Overhaul (Feb 2026)
-- Updated all stats: 796 landmarks, 66 countries, 10,000 total points
-- FAQ updated: privacy answer includes diary sharing, delete account references Settings, badges include Elite Explorer (250)
-- Badge System: added streak badges (3→7→30 days) and Elite Explorer
-- Contact Support: replaced form with simple email reference (support@wandermark.app), moved to bottom
-- Version updated to 1.1.0, date to February 2026
-- Removed unused code (TextInput, handleSendSupport, etc.)
+- Stats: 796 landmarks, 66 countries, 10,000 total points
+- FAQ: privacy includes diary sharing, delete account references Settings with 30-day deactivation, badges include Elite Explorer (250)
+- Badge System: streak badges (3→7→30 days), Elite Explorer added
+- Contact Support: form replaced with simple email reference (support@wandermark.app), moved to bottom
+- Version: 1.1.0, February 2026
 
 ### Subscription Page Update (Feb 2026)
-- Free features: 700+ Official Landmarks, Community Photo Preview, Photo of the Week
-- Pro features: 93 Premium Landmarks, Full Community Gallery, Photo Upvoting, Travel Diary Access, Direct Messaging, Share in Community Feed
-- Corrected landmark counts throughout
+- Free: 700+ Official Landmarks, Community Photo Preview, Photo of the Week
+- Pro: 93 Premium Landmarks, Full Community Gallery, Upvoting, Diary, Messaging, Community Feed
 
-### Delete Account (Feb 2026)
-- Backend: `DELETE /api/auth/account` - deletes all user data across all collections
-- Frontend: Settings page "Delete Account" button now functional with confirmation dialog
+### Account Deactivation System (Feb 2026)
+- `DELETE /api/auth/account` deactivates for 30 days (not immediate delete)
+- Auto-reactivation on login (password, Apple Sign-In, magic code)
+- `POST /api/auth/account/purge-deactivated` for cleanup cron job
+- Settings UI shows deactivation dialog with explanation
+- Login returns `reactivated: true` if account was reactivated
 
 ### Previous Work (Jan-Feb 2026)
 - Critical crash fix: `router.back()` → `safeGoBack()` across 23+ files
@@ -39,27 +44,26 @@ WanderMark is a travel companion app (React Native + FastAPI) for discovering an
 - Community features: Custom Visits in feed, visibility toggle, explorer endpoint
 - Promo code system with editable email template
 - All text translated from Norwegian to English
-- EAS build process (v1.1.0, build 51)
+- Persistent login via SecureStore (7-day token expiration)
 
 ## Prioritized Backlog
 
 ### P0 - Critical
-- User E2E testing on TestFlight (back button, promo codes, community features)
-
-### P1 - Important
-- Verify all new changes on device (About page, subscription page, delete account)
+- Save to GitHub and build EAS (build 52) for TestFlight testing
+- User E2E testing: back button, onboarding, about page, deactivation flow
 
 ### P2 - Future
 - Rename GitHub repo: wanderlist-app → wandermark-app
 - App Store release preparation
-- Verify RevenueCat and statistics sharing on device
+- Set up cron job for purge-deactivated endpoint
+- Verify RevenueCat on device
 
 ## Key API Endpoints
-- `DELETE /api/auth/account` - Delete user account
+- `DELETE /api/auth/account` - Deactivate account (30-day grace period)
+- `POST /api/auth/account/purge-deactivated` - Cleanup expired accounts
 - `GET/PUT/DELETE /api/admin/promo-codes/template` - Email template CRUD
 - `PATCH /api/users/me/custom-visits/{visit_id}/visibility` - Toggle visibility
 - `GET /api/social/community-custom-visits` - Explore custom visits
-- `GET /api/continent-stats` - Continent statistics
 
 ## Credentials
 - Email: test@wandermark.app
