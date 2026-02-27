@@ -376,6 +376,33 @@ export default function LeaderboardScreen() {
             <Text style={styles.sectionTitle}>Top Rankings</Text>
           </View>
 
+          {/* Info banner for global points leaderboard */}
+          {category === 'points' && !friendsOnly && (
+            <TouchableOpacity 
+              style={styles.infoBanner}
+              onPress={() => setShowPointsInfo(!showPointsInfo)}
+              activeOpacity={0.7}
+            >
+              <View style={styles.infoBannerRow}>
+                <Ionicons name="shield-checkmark" size={16} color="#2E9AB5" />
+                <Text style={styles.infoBannerText}>
+                  Global rankings use verified points (photo-confirmed visits)
+                </Text>
+                <Ionicons 
+                  name={showPointsInfo ? "chevron-up" : "chevron-down"} 
+                  size={16} 
+                  color="#999" 
+                />
+              </View>
+              {showPointsInfo && (
+                <Text style={styles.infoBannerDetail}>
+                  Add photos to your visits to earn verified points and climb the global leaderboard. 
+                  Switch to Friends to see total points.
+                </Text>
+              )}
+            </TouchableOpacity>
+          )}
+
           {leaderboard.length === 0 ? (
             <Surface style={styles.emptyCard} elevation={1}>
               <Ionicons name="trophy-outline" size={48} color="#ccc" />
