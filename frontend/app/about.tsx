@@ -273,15 +273,6 @@ Plus streak badges, social badges, and point milestones!`}
           </Surface>
         </View>
 
-        {/* Contact Support */}
-        <View style={styles.section}>
-          <Surface style={styles.card}>
-            <Text style={styles.cardTitle}>Contact Support</Text>
-            <Text style={styles.contactSubtitle}>{"Can't find what you're looking for? Reach out to us at:"}</Text>
-            <Text style={styles.contactEmail}>support@wandermark.app</Text>
-          </Surface>
-        </View>
-
         {/* How It Works */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
