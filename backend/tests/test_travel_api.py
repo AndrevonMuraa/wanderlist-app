@@ -20,7 +20,7 @@ import os
 from collections import Counter
 
 # Get BASE_URL from environment
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://wandermark-v1.preview.emergentagent.com')).rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://wandermark-test.preview.emergentagent.com')).rstrip('/')
 
 print(f"Testing against: {BASE_URL}")
 
