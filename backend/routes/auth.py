@@ -542,24 +542,53 @@ async def get_temp_token(email: str = "mobile@test.com"):
 
 
 @router.delete("/account")
-async def delete_account(current_user: User = Depends(get_current_user)):
-    """Permanently delete user account and all associated data"""
+async def deactivate_account(current_user: User = Depends(get_current_user)):
+    """Deactivate user account. Account will be permanently deleted after 30 days."""
     user_id = current_user.user_id
+    deletion_date = datetime.now(timezone.utc) + timedelta(days=30)
     
-    # Delete all user data from every collection
-    await db.visits.delete_many({"user_id": user_id})
-    await db.country_visits.delete_many({"user_id": user_id})
-    await db.user_created_visits.delete_many({"user_id": user_id})
-    await db.achievements.delete_many({"user_id": user_id})
-    await db.friendships.delete_many({"$or": [{"user_id": user_id}, {"friend_id": user_id}]})
-    await db.friend_requests.delete_many({"$or": [{"from_user_id": user_id}, {"to_user_id": user_id}]})
-    await db.messages.delete_many({"$or": [{"sender_id": user_id}, {"receiver_id": user_id}]})
-    await db.notifications.delete_many({"user_id": user_id})
-    await db.activities.delete_many({"user_id": user_id})
-    await db.community_photos.delete_many({"user_id": user_id})
-    await db.travel_diaries.delete_many({"user_id": user_id})
+    await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": {
+            "deactivated_at": datetime.now(timezone.utc),
+            "scheduled_deletion_at": deletion_date,
+            "is_active": False,
+        }}
+    )
     
-    # Finally delete the user document
-    await db.users.delete_one({"user_id": user_id})
+    return {
+        "message": "Account deactivated",
+        "scheduled_deletion_at": deletion_date.isoformat(),
+        "reactivation_info": "Log in again within 30 days to reactivate your account."
+    }
+
+
+@router.post("/account/purge-deactivated")
+async def purge_deactivated_accounts():
+    """Permanently delete accounts that have been deactivated for over 30 days.
+    Call this periodically (e.g. daily cron job)."""
+    now = datetime.now(timezone.utc)
     
-    return {"message": "Account deleted successfully"}
+    expired = db.users.find(
+        {"is_active": False, "scheduled_deletion_at": {"$lte": now}},
+        {"_id": 0, "user_id": 1}
+    )
+    
+    deleted_count = 0
+    async for user_doc in expired:
+        uid = user_doc["user_id"]
+        await db.visits.delete_many({"user_id": uid})
+        await db.country_visits.delete_many({"user_id": uid})
+        await db.user_created_visits.delete_many({"user_id": uid})
+        await db.achievements.delete_many({"user_id": uid})
+        await db.friendships.delete_many({"$or": [{"user_id": uid}, {"friend_id": uid}]})
+        await db.friend_requests.delete_many({"$or": [{"from_user_id": uid}, {"to_user_id": uid}]})
+        await db.messages.delete_many({"$or": [{"sender_id": uid}, {"receiver_id": uid}]})
+        await db.notifications.delete_many({"user_id": uid})
+        await db.activities.delete_many({"user_id": uid})
+        await db.community_photos.delete_many({"user_id": uid})
+        await db.travel_diaries.delete_many({"user_id": uid})
+        await db.users.delete_one({"user_id": uid})
+        deleted_count += 1
+    
+    return {"purged_accounts": deleted_count}
