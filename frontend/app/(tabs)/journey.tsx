@@ -572,7 +572,7 @@ export default function JourneyScreen() {
         <Surface style={[styles.countryVisitsCard, { backgroundColor: colors.surface }]}>
           <TouchableOpacity
             style={styles.countryVisitsRow}
-            onPress={() => router.push('/statistics')}
+            onPress={() => router.push('/(tabs)/statistics')}
             activeOpacity={0.7}
           >
             <View style={styles.countryVisitsLeft}>
