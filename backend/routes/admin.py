@@ -535,3 +535,84 @@ async def get_notification_stats(
 
 # ============= LEADERBOARD ENDPOINTS =============
 
+@router.post("/admin/recalculate-leaderboard-points")
+async def recalculate_leaderboard_points(admin_user: User = Depends(get_admin_user)):
+    """Recalculate leaderboard_points for all users based on actual photo-verified visits.
+    
+    This endpoint scans all visits and country_visits, sums up points only from
+    entries that have photos, and updates each user's leaderboard_points field.
+    Use this to fix historical data from before the dual-points system was introduced.
+    """
+    users = await db.users.find({}, {"_id": 0, "user_id": 1, "name": 1}).to_list(100000)
+    
+    updated_count = 0
+    results = []
+    
+    for user in users:
+        uid = user["user_id"]
+        verified_points = 0
+        
+        # Sum points from landmark visits that have photos
+        visits = await db.visits.find(
+            {"user_id": uid},
+            {"_id": 0, "photos": 1, "photo_base64": 1, "points_earned": 1, "landmark_id": 1}
+        ).to_list(100000)
+        
+        visited_countries = set()
+        visited_continents = set()
+        
+        for visit in visits:
+            has_photos = bool(visit.get("photos")) or bool(visit.get("photo_base64"))
+            if has_photos:
+                verified_points += visit.get("points_earned", 10)
+                
+                # Track countries/continents for bonus calculation
+                landmark = await db.landmarks.find_one(
+                    {"landmark_id": visit.get("landmark_id")},
+                    {"_id": 0, "country_id": 1, "continent": 1}
+                )
+                if landmark:
+                    visited_countries.add(landmark.get("country_id"))
+                    visited_continents.add(landmark.get("continent"))
+        
+        # Sum points from country visits that have photos
+        country_visits = await db.country_visits.find(
+            {"user_id": uid},
+            {"_id": 0, "photos": 1, "points_earned": 1}
+        ).to_list(100000)
+        
+        for cv in country_visits:
+            if bool(cv.get("photos")):
+                verified_points += cv.get("points_earned", 50)
+        
+        # Add country exploration bonuses (20pts per first country with photo-verified visits)
+        verified_points += len(visited_countries) * 20
+        
+        # Add continent exploration bonuses (50pts per first continent with photo-verified visits)
+        verified_points += len(visited_continents) * 50
+        
+        # Update user's leaderboard_points
+        old_value = (await db.users.find_one({"user_id": uid}, {"_id": 0, "leaderboard_points": 1})) or {}
+        old_lp = old_value.get("leaderboard_points", 0)
+        
+        await db.users.update_one(
+            {"user_id": uid},
+            {"$set": {"leaderboard_points": verified_points}}
+        )
+        
+        if verified_points != old_lp:
+            updated_count += 1
+            results.append({
+                "user_id": uid,
+                "name": user.get("name", "Unknown"),
+                "old_leaderboard_points": old_lp,
+                "new_leaderboard_points": verified_points
+            })
+    
+    return {
+        "message": f"Recalculated leaderboard points for {len(users)} users. {updated_count} users updated.",
+        "total_users_processed": len(users),
+        "users_updated": updated_count,
+        "changes": results
+    }
+
