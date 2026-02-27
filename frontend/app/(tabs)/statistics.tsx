@@ -142,12 +142,12 @@ export default function StatisticsScreen() {
         totalCountries: statsData.countries_visited || 0,
         totalLandmarks: statsData.landmarks_visited || 0,
         totalPoints: statsData.total_points || 0,
-        continentStats,
+        totalAppCountries: totalAppCountries || 66,
+        continents,
         topCountries,
         monthlyVisits,
-        categoryBreakdown: categoryData,
         globalRank,
-        totalUsers: Math.max(totalUsers, 100), // Minimum 100 for display
+        totalUsers: Math.max(totalUsers, 100),
         percentile: Math.max(percentile, 1),
       });
     } catch (error) {
