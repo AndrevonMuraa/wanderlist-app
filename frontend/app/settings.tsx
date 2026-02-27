@@ -446,7 +446,7 @@ export default function SettingsScreen() {
 
         {/* App Version */}
         <View style={styles.versionContainer}>
-          <Text style={[styles.versionText, { color: colors.textLight }]}>WanderMark v1.0.0</Text>
+          <Text style={[styles.versionText, { color: colors.textLight }]}>WanderMark v1.1.0</Text>
           <Text style={[styles.copyrightText, { color: colors.textLight }]}>© 2026 WanderMark. All rights reserved.</Text>
         </View>
 

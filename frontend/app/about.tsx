@@ -518,12 +518,12 @@ Plus streak badges, social badges, and point milestones!`}
             <View style={styles.infoDivider} />
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Last Updated</Text>
-              <Text style={styles.infoValue}>January 2026</Text>
+              <Text style={styles.infoValue}>February 2026</Text>
             </View>
             <View style={styles.infoDivider} />
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Database</Text>
-              <Text style={styles.infoValue}>740+ landmarks, 66 countries</Text>
+              <Text style={styles.infoValue}>796 landmarks, 66 countries</Text>
             </View>
           </Surface>
         </View>
