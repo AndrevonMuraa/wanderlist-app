@@ -484,7 +484,7 @@ export default function SubscriptionScreen() {
                 { name: 'Antelope Canyon', country: 'USA 🇺🇸' },
                 { name: 'Hallstatt', country: 'Austria 🇦🇹' },
                 { name: 'Bora Bora', country: 'French Polynesia 🇵🇫' },
-                { name: '+ 87 more', country: 'worldwide' },
+                { name: '+ 88 more', country: 'worldwide' },
               ].map((item, idx) => (
                 <View key={idx} style={styles.previewItem}>
                   <Text style={styles.previewName}>{item.name}</Text>
