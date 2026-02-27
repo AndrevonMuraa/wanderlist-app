@@ -70,6 +70,12 @@ export default function TabsLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="statistics"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }
