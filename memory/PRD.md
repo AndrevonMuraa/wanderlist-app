@@ -59,13 +59,19 @@ WanderMark is a travel companion app (React Native + FastAPI) for discovering an
 
 ## Prioritized Backlog
 
+### Production Hosting Migration (Feb 2026)
+- MongoDB Atlas (M0 Free, Stockholm/eu-north-1) configured and seeded with 797 landmarks, 66 countries
+- Render.com ($7/mnd Starter) deployed from GitHub, auto-deploy enabled
+- Backend URL: `https://wandermark-api.onrender.com`
+- SSL fix: certifi + tlsAllowInvalidCertificates for Render ↔ Atlas
+- bcrypt pinned to 4.0.1 for passlib compatibility
+- Frontend config.ts updated to point to Render
+- Build number bumped to 54
+
 ### P0 - Critical
-- Sett opp MongoDB Atlas + Render.com (se MIGRATION_GUIDE.md)
-- Seed landmarks-data i ny produksjonsdatabase
-- Oppdater frontend config.ts med permanent backend-URL
-- Bygg ny EAS-build med ny backend-URL
-- Kjør `POST /api/admin/recalculate-leaderboard-points` etter migrering
-- E2E-testing av ny build
+- Save to GitHub and build EAS #54 with new Render backend URL
+- E2E testing of new build on TestFlight
+- Test: login, landmarks, visits, leaderboard, navigation
 
 ### P1 - Important
 - Sett opp custom domene: api.wandermark.app → Render (via Cloudflare)
