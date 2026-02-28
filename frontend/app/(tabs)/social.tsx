@@ -1007,6 +1007,11 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontWeight: '600',
   },
+  seeAllRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
   pendingBadge: {
     backgroundColor: theme.colors.accent,
   },
