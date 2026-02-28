@@ -62,7 +62,7 @@ WanderMark is a travel companion app (React Native + FastAPI) for discovering an
 ### Production Hosting Migration (Feb 2026)
 - MongoDB Atlas (M0 Free, Stockholm/eu-north-1) configured and seeded with 797 landmarks, 66 countries
 - Render.com ($7/mnd Starter) deployed from GitHub, auto-deploy enabled
-- Backend URL: `https://wandermark-api.onrender.com`
+- Backend URL: `https://api.wandermark.app` (custom domene via Cloudflare CNAME → Render)
 - SSL fix: certifi + tlsAllowInvalidCertificates for Render ↔ Atlas
 - bcrypt pinned to 4.0.1 for passlib compatibility
 - Frontend config.ts updated to point to Render
