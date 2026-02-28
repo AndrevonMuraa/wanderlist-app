@@ -1,4 +1,7 @@
-"""Temporary script to seed MongoDB Atlas with WanderMark data"""
+"""Temporary script to seed MongoDB Atlas with WanderMark data.
+Run with ATLAS_URL environment variable set:
+  ATLAS_URL="mongodb+srv://..." python3 seed_atlas.py
+"""
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 import certifi
@@ -12,7 +15,10 @@ from seed_data import COUNTRIES_DATA, LANDMARKS_DATA
 from premium_landmarks import PREMIUM_LANDMARKS
 from datetime import datetime, timezone
 
-ATLAS_URL = 'mongodb+srv://wandermark_admin:KvaEFtaic8e9gsZC@wandermark-cluster.jacptse.mongodb.net/wandermark?appName=wandermark-cluster'
+ATLAS_URL = os.environ.get('ATLAS_URL') or os.environ.get('MONGO_URL')
+if not ATLAS_URL:
+    print("ERROR: Set ATLAS_URL or MONGO_URL environment variable")
+    sys.exit(1)
 
 async def seed_atlas():
     client = AsyncIOMotorClient(ATLAS_URL, tls=True, tlsCAFile=certifi.where(), tlsAllowInvalidCertificates=True)
