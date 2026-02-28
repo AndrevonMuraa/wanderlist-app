@@ -22,7 +22,7 @@ export default function PrivacyPolicyScreen() {
   const insets = useSafeAreaInsets();
 
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
-  const lastUpdated = 'January 20, 2026';
+  const lastUpdated = 'February 28, 2026';
 
   const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
     <View style={styles.section}>
@@ -153,7 +153,8 @@ export default function PrivacyPolicyScreen() {
             <BulletPoint text="Set default privacy (public, friends-only, or private)" />
             <BulletPoint text="Choose visibility for each visit individually" />
             <BulletPoint text="Edit or delete your profile information" />
-            <BulletPoint text="Delete your account and all associated data" />
+            <BulletPoint text="Deactivate your account (30-day grace period before permanent deletion)" />
+            <BulletPoint text="Reactivate your account by logging in within the 30-day window" />
             <BulletPoint text="Manage friend connections" />
             <BulletPoint text="Control notification preferences" />
           </Section>
@@ -163,7 +164,7 @@ export default function PrivacyPolicyScreen() {
         <Surface style={styles.card}>
           <Section title="5. Data Storage & Security">
             <Text style={styles.paragraph}>
-              We implement appropriate technical and organizational security measures to protect your information. Your data is stored securely on cloud servers with encryption in transit and at rest.
+              We implement appropriate technical and organizational security measures to protect your information. Your data is stored securely on cloud servers located in the European Union (Stockholm, Sweden), with encryption in transit and at rest.
             </Text>
             <Text style={[styles.paragraph, { marginTop: 12 }]}>
               While we strive to protect your information, no method of transmission over the internet is 100% secure. We cannot guarantee absolute security.
@@ -206,8 +207,10 @@ export default function PrivacyPolicyScreen() {
               We may use the following third-party services:
             </Text>
             <BulletPoint text="Apple Sign-In and email-based authentication" />
-            <BulletPoint text="Analytics services to improve our app" />
-            <BulletPoint text="Cloud storage for data and photos" />
+            <BulletPoint text="RevenueCat for subscription and payment processing" />
+            <BulletPoint text="Resend for transactional emails" />
+            <BulletPoint text="MongoDB Atlas for secure data storage (EU servers)" />
+            <BulletPoint text="Render.com for application hosting" />
           </Section>
         </Surface>
 
