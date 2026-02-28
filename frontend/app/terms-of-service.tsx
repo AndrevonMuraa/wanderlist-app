@@ -21,8 +21,8 @@ export default function TermsOfServiceScreen() {
   const insets = useSafeAreaInsets();
 
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
-  const lastUpdated = 'January 20, 2026';
-  const effectiveDate = 'January 20, 2026';
+  const lastUpdated = 'February 28, 2026';
+  const effectiveDate = 'February 28, 2026';
 
   const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
     <View style={styles.section}>
@@ -288,13 +288,17 @@ export default function TermsOfServiceScreen() {
 
         {/* Termination */}
         <Surface style={styles.card}>
-          <Section title="11. Termination">
+          <Section title="11. Account Deactivation & Termination">
             <Text style={styles.paragraph}>
-              We may terminate or suspend your account immediately, without prior notice, for any reason, including breach of these Terms. Upon termination:
+              You may deactivate your account at any time through the app's Settings. Upon deactivation:
             </Text>
-            <BulletPoint text="Your right to use the App will immediately cease" />
-            <BulletPoint text="You may request deletion of your data" />
+            <BulletPoint text="Your account enters a 30-day grace period" />
+            <BulletPoint text="During this period, you can reactivate by simply logging in again" />
+            <BulletPoint text="After 30 days, your account and all associated data will be permanently deleted" />
             <BulletPoint text="Certain provisions of these Terms will survive termination" />
+            <Text style={[styles.paragraph, { marginTop: 12 }]}>
+              We may also terminate or suspend your account immediately, without prior notice, for breach of these Terms or other violations. Upon termination, your right to use the App will immediately cease.
+            </Text>
           </Section>
         </Surface>
 
