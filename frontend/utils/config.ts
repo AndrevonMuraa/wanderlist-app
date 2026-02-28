@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 
 // Production backend URL - hardcoded as fallback to ensure it's always available
-const PRODUCTION_BACKEND_URL = 'https://wandermark-api.onrender.com';
+const PRODUCTION_BACKEND_URL = 'https://api.wandermark.app';
 
 // Determine the correct backend URL based on environment
 const getBackendURL = () => {
