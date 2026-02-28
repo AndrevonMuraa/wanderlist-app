@@ -725,6 +725,10 @@ export default function SocialHubScreen() {
                 <Ionicons name="earth" size={24} color={theme.colors.primary} />
                 <Text style={styles.sectionTitle}>Community Feed</Text>
               </View>
+              <TouchableOpacity onPress={() => router.push('/feed')} style={styles.seeAllRow}>
+                <Text style={styles.seeAllButton}>{t('common.seeAll')}</Text>
+                <Ionicons name="chevron-forward" size={16} color={theme.colors.primary} />
+              </TouchableOpacity>
             </View>
             <ScrollView
               horizontal
