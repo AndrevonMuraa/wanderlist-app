@@ -18,6 +18,7 @@ import OfflineStatusBar from '../../components/OfflineStatusBar';
 import AddUserCreatedVisitModal from '../../components/AddUserCreatedVisitModal';
 import ProFeatureLock from '../../components/ProFeatureLock';
 import { useSubscription } from '../../hooks/useSubscription';
+import { useScrollRestore } from '../../hooks/useScrollRestore';
 import { BACKEND_URL } from '../../utils/config';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 
