@@ -104,9 +104,11 @@ export default function VisitDetailScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView style={styles.scrollView}>
-        {/* Header */}
+        {/* Header - using UniversalHeader-matching gradient */}
         <LinearGradient
-          colors={[theme.colors.primary, theme.colors.primaryDark]}
+          colors={['#4DB8D8', '#C9A961']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
           style={styles.header}
         >
           <TouchableOpacity 
@@ -119,7 +121,7 @@ export default function VisitDetailScreen() {
             <Ionicons name="arrow-back" size={22} color="#fff" />
           </TouchableOpacity>
           <View style={styles.headerContent}>
-            <Text style={styles.headerTitle}>{visit.landmark_name || 'Visit Details'}</Text>
+            <Text style={styles.headerTitle} numberOfLines={1}>{visit.landmark_name || 'Visit Details'}</Text>
             {visit.country_name && (
               <Text style={styles.headerSubtitle}>{visit.country_name}</Text>
             )}
