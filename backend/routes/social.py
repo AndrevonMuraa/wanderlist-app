@@ -559,6 +559,17 @@ async def get_activity_feed(current_user: User = Depends(get_current_user), limi
         # Get comments count
         comments_count = await db.comments.count_documents({"activity_id": activity["activity_id"]})
         
+        # Get first photo URL from associated visit
+        photo_url = None
+        if activity.get("has_photos") and activity.get("visit_id"):
+            visit = await db.visits.find_one(
+                {"visit_id": activity["visit_id"], "photos": {"$exists": True, "$ne": []}},
+                {"photos": {"$slice": 1}, "_id": 0}
+            )
+            if visit and visit.get("photos"):
+                photo_url = visit["photos"][0]
+        
+        activity["photo_url"] = photo_url
         activity["likes_count"] = likes_count
         activity["comments_count"] = comments_count
         activity["is_liked"] = bool(user_like)
