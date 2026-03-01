@@ -115,6 +115,7 @@ export default function JourneyScreen() {
   const subscriptionData = useSubscription();
   const canCreateCustomVisits = subscriptionData.canCreateCustomVisits;
   const isPro = subscriptionData.isPro;
+  const { scrollRef, scrollHandler } = useScrollRestore();
 
   useEffect(() => {
     fetchAllData();
