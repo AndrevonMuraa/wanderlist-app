@@ -7,7 +7,7 @@ import {
   Platform,
   RefreshControl,
 } from 'react-native';
-import { Text, Surface, Avatar, SegmentedButtons, Chip } from 'react-native-paper';
+import { Text, Surface, Avatar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
