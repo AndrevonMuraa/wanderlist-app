@@ -2,7 +2,7 @@ from fastapi import FastAPI, APIRouter
 from starlette.middleware.cors import CORSMiddleware
 import logging
 
-from utils.db import db, client
+from utils.db import db, client, create_indexes
 from routes import (
     auth, content, community, visits, admin, social,
     collections, notifications, country_visits, photos,
