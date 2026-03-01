@@ -241,6 +241,8 @@ export default function LandmarksScreen() {
       subText: hasLandmarkVisits ? 'Add photos & diary' : 'Tap to remove'
     };
   };
+
+  const handleRemoveCountryVisit = async () => {
     // If no country_visit_id, the visit was detected via landmarks only
     // In this case, we can't remove it directly - need to inform the user
     if (!countryVisitId) {
