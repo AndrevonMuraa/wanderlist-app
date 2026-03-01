@@ -319,7 +319,12 @@ export default function JourneyScreen() {
             </View>
 
             <View style={styles.statsGridCompact}>
-              <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
+              <TouchableOpacity 
+                style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}
+                onPress={() => router.push('/my-country-visits')}
+                activeOpacity={0.7}
+                data-testid="stat-countries"
+              >
                 <Ionicons name="flag" size={20} color={colors.primary} />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
                   {Object.keys(progressStats.countries).filter(
@@ -327,19 +332,29 @@ export default function JourneyScreen() {
                   ).length}
                 </Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.countries')}</Text>
-              </View>
+              </TouchableOpacity>
 
-              <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
+              <TouchableOpacity 
+                style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}
+                onPress={() => router.push('/my-landmark-visits')}
+                activeOpacity={0.7}
+                data-testid="stat-landmarks"
+              >
                 <Ionicons name="location" size={20} color={colors.accent} />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.overall.visited}</Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.landmarks')}</Text>
-              </View>
+              </TouchableOpacity>
 
-              <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
+              <TouchableOpacity 
+                style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}
+                onPress={() => router.push('/points-summary')}
+                activeOpacity={0.7}
+                data-testid="stat-points"
+              >
                 <Ionicons name="star" size={20} color={colors.accentYellow} />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.totalPoints || 0}</Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.points')}</Text>
-              </View>
+              </TouchableOpacity>
 
               <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
                 <Ionicons name="flame" size={20} color={colors.error} />
@@ -347,13 +362,18 @@ export default function JourneyScreen() {
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.streak')}</Text>
               </View>
 
-              <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
+              <TouchableOpacity 
+                style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}
+                onPress={() => router.push('/leaderboard')}
+                activeOpacity={0.7}
+                data-testid="stat-rank"
+              >
                 <Ionicons name="trophy" size={20} color={colors.accentBronze} />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
                   {stats.rank && stats.rank > 0 ? `#${stats.rank}` : 'N/A'}
                 </Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.rank')}</Text>
-              </View>
+              </TouchableOpacity>
 
               <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
                 <Ionicons name="ribbon" size={20} color={colors.primary} />
