@@ -278,12 +278,13 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
                         "country_id": country_id,
                         "country_name": country_doc.get("name", "Unknown"),
                         "continent": country_doc.get("continent", "Unknown"),
-                        "photos": photos if has_photos else [],  # Include photos if present
+                        "photos": [],  # Auto-visits start empty — user adds photos via country page
                         "diary": None,
                         "visibility": "public",
                         "visited_at": datetime.now(timezone.utc),
                         "points_earned": country_bonus_points,
-                        "leaderboard_points_earned": country_bonus_points if has_photos else 0,
+                        "leaderboard_points_earned": 0,  # No leaderboard points until user adds photos
+                        "has_photos": False,
                         "source": "auto_landmark",
                         "first_landmark_id": data.landmark_id,
                         "first_landmark_name": landmark.get("name"),
