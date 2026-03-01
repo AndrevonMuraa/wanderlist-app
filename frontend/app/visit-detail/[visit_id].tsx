@@ -371,6 +371,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     padding: theme.spacing.lg,
     borderRadius: theme.borderRadius.xl,
+    backgroundColor: '#fff',
     ...theme.shadows.card,
   },
   tipsCard: {
@@ -378,6 +379,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     padding: theme.spacing.lg,
     borderRadius: theme.borderRadius.xl,
+    backgroundColor: '#fff',
     ...theme.shadows.card,
   },
   commentsCard: {
@@ -385,6 +387,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     padding: theme.spacing.lg,
     borderRadius: theme.borderRadius.xl,
+    backgroundColor: '#fff',
     ...theme.shadows.card,
   },
   sectionHeader: {
