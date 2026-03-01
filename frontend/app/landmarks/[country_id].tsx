@@ -555,7 +555,7 @@ export default function LandmarksScreen() {
           data-testid="country-visit-fab"
         >
           <LinearGradient
-            colors={getFabConfig().colors as unknown as string[]}
+            colors={getFabConfig().colors}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.fabGradient}
