@@ -135,26 +135,50 @@ export default function SettingsScreen() {
   };
 
   const updatePrivacy = async (value: 'public' | 'friends' | 'private') => {
-    setDefaultPrivacy(value);
-    try {
-      const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/auth/privacy`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ privacy: value }),
-      });
-      
-      if (response.ok) {
-        Alert.alert('Updated', `Default privacy set to ${value}`);
-      } else {
+    const showWarningAndUpdate = async () => {
+      setDefaultPrivacy(value);
+      try {
+        const token = await getToken();
+        const response = await fetch(`${BACKEND_URL}/api/auth/privacy`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ privacy: value }),
+        });
+        
+        if (response.ok) {
+          Alert.alert('Updated', `Default privacy set to ${value}`);
+        } else {
+          Alert.alert('Error', 'Failed to update privacy setting');
+        }
+      } catch (error) {
+        console.error('Error updating privacy:', error);
         Alert.alert('Error', 'Failed to update privacy setting');
       }
-    } catch (error) {
-      console.error('Error updating privacy:', error);
-      Alert.alert('Error', 'Failed to update privacy setting');
+    };
+
+    if (value === 'friends' || value === 'private') {
+      Alert.alert(
+        'Leaderboard Impact',
+        'With this privacy setting, your visits will not earn verified points for the global leaderboard. Your total points for the friends leaderboard are not affected.\n\nIf you switch back to Public later, your verified points will be restored automatically.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Continue', onPress: showWarningAndUpdate },
+        ]
+      );
+    } else if (value === 'public' && defaultPrivacy !== 'public') {
+      Alert.alert(
+        'Welcome Back to Public!',
+        'Your verified points from photo-documented visits will now count towards the global leaderboard again.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Switch to Public', onPress: showWarningAndUpdate },
+        ]
+      );
+    } else {
+      showWarningAndUpdate();
     }
   };
 
