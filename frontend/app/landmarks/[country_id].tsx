@@ -190,7 +190,57 @@ export default function LandmarksScreen() {
     console.log('User wants to upgrade to:', tier);
   };
 
-  const handleRemoveCountryVisit = async () => {
+  const handleCountryVisitAction = () => {
+    // Determine if user has landmark visits in this country
+    const hasLandmarkVisits = visitedLandmarkIds.size > 0;
+    
+    if (!isCountryVisited) {
+      // Not visited — open modal to create new country visit
+      setShowCountryVisitModal(true);
+    } else if (hasLandmarkVisits && !countryVisitHasPhotos) {
+      // Auto-visited via landmarks but no photos/diary — open modal to add content
+      setShowCountryVisitModal(true);
+    } else if (countryVisitHasPhotos && countryVisitId) {
+      // Has content — navigate to view/edit
+      router.push(`/country-visit-detail/${countryVisitId}`);
+    } else if (!hasLandmarkVisits && countryVisitId) {
+      // Standalone visit, no landmarks — allow removal
+      handleRemoveCountryVisit();
+    } else {
+      // Fallback: open modal to add/edit
+      setShowCountryVisitModal(true);
+    }
+  };
+
+  const getFabConfig = () => {
+    const hasLandmarkVisits = visitedLandmarkIds.size > 0;
+    
+    if (!isCountryVisited) {
+      return { 
+        text: 'Mark as Visited', 
+        colors: [theme.colors.primary, theme.colors.secondary] as const,
+        icon: 'checkmark-circle' as const,
+        subText: null 
+      };
+    }
+    
+    if (countryVisitHasPhotos) {
+      return { 
+        text: 'Visited', 
+        colors: ['#4CAF50', '#66BB6A'] as const,
+        icon: 'checkmark-circle' as const,
+        subText: 'View details' 
+      };
+    }
+    
+    // Visited but no photos — prompt to add content
+    return { 
+      text: 'Visited', 
+      colors: ['#4CAF50', '#66BB6A'] as const,
+      icon: 'checkmark-circle' as const,
+      subText: hasLandmarkVisits ? 'Add photos & diary' : 'Tap to remove'
+    };
+  };
     // If no country_visit_id, the visit was detected via landmarks only
     // In this case, we can't remove it directly - need to inform the user
     if (!countryVisitId) {
