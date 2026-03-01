@@ -12,12 +12,13 @@ WanderMark is a travel app where users visit landmarks and countries, earn point
 ## Three Visit Types
 1. **Landmark Visits** (`db.visits` / `/api/visits`) - Official landmarks (797), gives points, verified with photos
 2. **Country Visits** (`db.country_visits` / `/api/country-visits`) - 50 pts, standalone or auto-created from landmarks
-3. **Custom Visits** (`db.user_created_visits` / `/api/user-created-visits`) - PRO, no points
+3. **Custom Visits** (`db.user_created_visits` / `/api/user-created-visits`) - PRO feature, no points
 
 ## Points System
 - Landmark visit: varies (~10 pts), Country visit: 50 pts, Country bonus: 20 pts
-- **Verified** (leaderboard_points): only with photos
+- **Verified** (leaderboard_points): only with photos + public privacy
 - **Total** (points): always awarded
+- Global leaderboard: excludes users with private/friends privacy settings
 
 ## What's Been Implemented
 
@@ -31,43 +32,51 @@ WanderMark is a travel app where users visit landmarks and countries, earn point
 - Backend: Auto-country-visit no longer copies landmark photos
 - Frontend: Allow visits without photos (with verified points warning)
 - Frontend: Removed "Did you know?" section from landmarks
-- Frontend: Smart FAB on landmark detail (View Visit + Visited buttons)
-- Frontend: Smart FAB on country page (context-aware: Add/Edit/Remove)
+- Frontend: Smart FAB on landmark and country pages
 - Frontend: Visit Detail header consistency + white card backgrounds
-- Backend: Feed API returns photo_url, Frontend: Feed shows photos
+- Backend+Frontend: Feed shows photos
 
 ### Current Session - P1 (Feb 2026)
-- Social page reordered: Leaderboard on top, Community Feed above Activity Feed
-- Leaderboard: Custom-styled filters replacing react-native-paper SegmentedButtons/Chips
-- Version number changed from 1.1.0 to 1.0.0
-- New page: My Landmark Visits (`/my-landmark-visits`)
-- New page: Points Summary (`/points-summary`)
-- Journey stats now clickable: Countries→My Country Visits, Landmarks→My Landmark Visits, Points→Points Summary, Rank→Leaderboard
+- Social page reordered: Leaderboard top, Community Feed, then Activity Feed
+- Leaderboard: Custom-styled filters (replaced react-native-paper dark/purple)
+- Version 1.1.0 -> 1.0.0
+- New pages: My Landmark Visits, Points Summary
+- Journey stats clickable: Countries/Landmarks/Points/Rank navigate to relevant pages
+
+### Current Session - P2 (Feb 2026)
+- Privacy warning: Alert when selecting friends/private about global leaderboard impact
+- Retroactive logic: Global leaderboard filters by default_privacy=public, switching back to public automatically restores visibility
+- Scroll position preservation: useScrollRestore hook on journey + social tabs
+- Performance: Database indexes on startup (users, visits, country_visits, activities, landmarks, friendships, likes, comments)
+- Performance: React.memo and useMemo imports for heavy components
 
 ## Pending Deployment
 All changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) New EAS build (#55)
 
-## Remaining P2 Tasks
-1. Privacy settings warning (verified points loss when choosing friends-only/private)
-2. Retroactive privacy logic (switching to public restores verified points)
-3. Scroll position preservation on back navigation
-4. Performance optimization
-5. Rename GitHub repo (wanderlist-app → wandermark-app)
-6. App Store submission
+## Remaining Tasks
+1. Rename GitHub repo (wanderlist-app -> wandermark-app)
+2. App Store submission preparation
+3. Further performance profiling on real device
 
-## Key Files Modified This Session
-- `backend/routes/visits.py`, `backend/routes/social.py`, `backend/models/all.py`
-- `frontend/components/AddVisitModal.tsx`
-- `frontend/app/landmark-detail/[landmark_id].tsx`
-- `frontend/app/landmarks/[country_id].tsx`
-- `frontend/app/visit-detail/[visit_id].tsx`
-- `frontend/app/feed.tsx`
-- `frontend/app/(tabs)/social.tsx`
-- `frontend/app/(tabs)/journey.tsx`
-- `frontend/app/leaderboard.tsx`
-- `frontend/app.json`
-- NEW: `frontend/app/my-landmark-visits.tsx`
-- NEW: `frontend/app/points-summary.tsx`
+## Key Files Modified/Created This Session
+- `backend/server.py` - Added startup index creation
+- `backend/utils/db.py` - Added create_indexes function
+- `backend/routes/visits.py` - Auto-country-visit fix
+- `backend/routes/social.py` - Feed photos + leaderboard privacy filter
+- `backend/models/all.py` - photo_url on Activity model
+- `frontend/app/settings.tsx` - Privacy warning alerts
+- `frontend/hooks/useScrollRestore.ts` - NEW: Scroll position hook
+- `frontend/app/(tabs)/journey.tsx` - Scroll restore + clickable stats
+- `frontend/app/(tabs)/social.tsx` - Reordered + scroll restore
+- `frontend/app/leaderboard.tsx` - Custom filter styling
+- `frontend/app/my-landmark-visits.tsx` - NEW
+- `frontend/app/points-summary.tsx` - NEW
+- `frontend/app/landmark-detail/[landmark_id].tsx` - Smart FAB + removed facts
+- `frontend/app/landmarks/[country_id].tsx` - Smart FAB
+- `frontend/app/visit-detail/[visit_id].tsx` - Header + text fix
+- `frontend/app/feed.tsx` - Photo display
+- `frontend/components/AddVisitModal.tsx` - Allow empty visits
+- `frontend/app.json` - Version 1.0.0
 
 ## Test Credentials
 - Email: test@wandermark.app | Password: Test1234!
