@@ -305,6 +305,9 @@ export default function JourneyScreen() {
       <OfflineStatusBar onSyncPress={syncPendingVisits} />
 
       <ScrollView
+        ref={scrollRef}
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
         style={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
