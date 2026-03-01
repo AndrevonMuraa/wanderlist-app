@@ -19,6 +19,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useTranslation } from 'react-i18next';
 import theme, { gradients } from '../../styles/theme';
 import { useAuth } from '../../contexts/AuthContext';
+import { useScrollRestore } from '../../hooks/useScrollRestore';
 import RankBadge from '../../components/RankBadge';
 import CommentsSection from '../../components/CommentsSection';
 import ReportModal from '../../components/ReportModal';
