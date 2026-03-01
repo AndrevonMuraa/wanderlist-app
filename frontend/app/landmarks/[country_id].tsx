@@ -99,13 +99,16 @@ export default function LandmarksScreen() {
         const visitStatus = await response.json();
         if (visitStatus.visited) {
           setIsCountryVisited(true);
-          // Only set countryVisitId if there's an actual record (not just landmark-based)
+          setCountryVisitSource(visitStatus.source || null);
+          setCountryVisitHasPhotos(visitStatus.has_photos || false);
           if (visitStatus.country_visit_id) {
             setCountryVisitId(visitStatus.country_visit_id);
           }
         } else {
           setIsCountryVisited(false);
           setCountryVisitId(null);
+          setCountryVisitSource(null);
+          setCountryVisitHasPhotos(false);
         }
       }
     } catch (error) {
