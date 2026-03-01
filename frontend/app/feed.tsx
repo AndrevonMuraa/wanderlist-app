@@ -166,6 +166,21 @@ export default function FeedScreen() {
           </View>
         </View>
 
+        {/* Photo Preview */}
+        {activity.photo_url && (
+          <TouchableOpacity 
+            onPress={() => activity.visit_id ? router.push(`/visit-detail/${activity.visit_id}`) : null}
+            activeOpacity={0.9}
+            data-testid={`feed-photo-${activity.activity_id}`}
+          >
+            <Image 
+              source={{ uri: activity.photo_url }} 
+              style={styles.activityPhoto} 
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+        )}
+
         {/* Activity Content */}
         <View style={styles.activityContent}>
           {activity.activity_type === 'visit' && (
