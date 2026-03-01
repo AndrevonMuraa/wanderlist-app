@@ -710,6 +710,36 @@ const styles = StyleSheet.create({
     left: theme.spacing.lg,
     right: theme.spacing.lg,
   },
+  fabRow: {
+    flexDirection: 'row',
+    gap: theme.spacing.sm,
+  },
+  fabSecondary: {
+    flex: 1,
+    borderRadius: theme.borderRadius.xl,
+    overflow: 'hidden',
+    ...theme.shadows.card,
+  },
+  fabSecondaryInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.md + 2,
+    gap: theme.spacing.sm,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.xl,
+  },
+  fabSecondaryText: {
+    ...theme.typography.body,
+    color: theme.colors.primary,
+    fontWeight: '700',
+  },
+  fabPrimary: {
+    flex: 1,
+    borderRadius: theme.borderRadius.xl,
+    overflow: 'hidden',
+    ...theme.shadows.card,
+  },
   fab: {
     borderRadius: theme.borderRadius.xl,
     overflow: 'hidden',
