@@ -52,7 +52,7 @@ async def create_indexes():
         await db.activities.create_index([("user_id", 1), ("created_at", -1)])
         
         # Landmarks
-        await db.landmarks.create_index("landmark_id", unique=True)
+        await db.landmarks.create_index("landmark_id")
         await db.landmarks.create_index("country_id")
         
         # Social
