@@ -218,8 +218,8 @@ export default function LandmarksScreen() {
     if (!isCountryVisited) {
       return { 
         text: 'Mark as Visited', 
-        colors: [theme.colors.primary, theme.colors.secondary] as const,
-        icon: 'checkmark-circle' as const,
+        colors: [theme.colors.primary, theme.colors.secondary],
+        icon: 'checkmark-circle',
         subText: null 
       };
     }
@@ -227,8 +227,8 @@ export default function LandmarksScreen() {
     if (countryVisitHasPhotos) {
       return { 
         text: 'Visited', 
-        colors: ['#4CAF50', '#66BB6A'] as const,
-        icon: 'checkmark-circle' as const,
+        colors: ['#4CAF50', '#66BB6A'],
+        icon: 'checkmark-circle',
         subText: 'View details' 
       };
     }
@@ -236,8 +236,8 @@ export default function LandmarksScreen() {
     // Visited but no photos — prompt to add content
     return { 
       text: 'Visited', 
-      colors: ['#4CAF50', '#66BB6A'] as const,
-      icon: 'checkmark-circle' as const,
+      colors: ['#4CAF50', '#66BB6A'],
+      icon: 'checkmark-circle',
       subText: hasLandmarkVisits ? 'Add photos & diary' : 'Tap to remove'
     };
   };
