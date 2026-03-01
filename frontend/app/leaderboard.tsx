@@ -443,10 +443,57 @@ const styles = StyleSheet.create({
   segmentedButtons: {
     backgroundColor: '#fff',
   },
+  timePeriodContainer: {
+    flexDirection: 'row',
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: 12,
+    padding: 3,
+    gap: 3,
+  },
+  timePeriodButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    borderRadius: 10,
+    gap: 6,
+  },
+  timePeriodButtonActive: {
+    backgroundColor: theme.colors.primary,
+  },
+  timePeriodText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  timePeriodTextActive: {
+    color: '#fff',
+  },
   categoryChips: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
+  },
+  categoryChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    backgroundColor: theme.colors.backgroundSecondary,
+    gap: 6,
+  },
+  categoryChipActive: {
+    backgroundColor: theme.colors.primary,
+  },
+  categoryChipText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  categoryChipTextActive: {
+    color: '#fff',
   },
   chip: {
     marginBottom: 4,
