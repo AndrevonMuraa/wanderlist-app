@@ -30,6 +30,7 @@ interface Activity {
   has_diary?: boolean;
   has_tips?: boolean;
   photo_count?: number;
+  photo_url?: string;
   visit_id?: string;
 }
 
