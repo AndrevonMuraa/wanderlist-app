@@ -241,69 +241,68 @@ export default function LeaderboardScreen() {
         style={styles.content}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        {/* Time Period Filter */}
+        {/* Time Period Filter - Custom styled */}
         <View style={styles.filterSection}>
           <Text style={styles.filterLabel}>Time Period</Text>
-          <SegmentedButtons
-            value={timePeriod}
-            onValueChange={(value) => setTimePeriod(value as any)}
-            buttons={[
-              {
-                value: 'all_time',
-                label: 'All Time',
-                icon: 'calendar',
-              },
-              {
-                value: 'monthly',
-                label: 'Monthly',
-                icon: 'calendar-month',
-              },
-              {
-                value: 'weekly',
-                label: 'Weekly',
-                icon: 'calendar-week',
-              },
-            ]}
-            style={styles.segmentedButtons}
-          />
+          <View style={styles.timePeriodContainer}>
+            {[
+              { value: 'all_time', label: 'All Time', icon: 'calendar-outline' },
+              { value: 'monthly', label: 'Monthly', icon: 'calendar' },
+              { value: 'weekly', label: 'Weekly', icon: 'today' },
+            ].map((item) => (
+              <TouchableOpacity
+                key={item.value}
+                style={[
+                  styles.timePeriodButton,
+                  timePeriod === item.value && styles.timePeriodButtonActive,
+                ]}
+                onPress={() => setTimePeriod(item.value as any)}
+                activeOpacity={0.7}
+              >
+                <Ionicons 
+                  name={item.icon as any} 
+                  size={16} 
+                  color={timePeriod === item.value ? '#fff' : theme.colors.textSecondary} 
+                />
+                <Text style={[
+                  styles.timePeriodText,
+                  timePeriod === item.value && styles.timePeriodTextActive,
+                ]}>{item.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
 
-        {/* Category Filter */}
+        {/* Category Filter - Custom styled */}
         <View style={styles.filterSection}>
           <Text style={styles.filterLabel}>Category</Text>
           <View style={styles.categoryChips}>
-            <Chip
-              selected={category === 'points'}
-              onPress={() => setCategory('points')}
-              icon="star"
-              style={styles.chip}
-            >
-              Points
-            </Chip>
-            <Chip
-              selected={category === 'visits'}
-              onPress={() => setCategory('visits')}
-              icon="location"
-              style={styles.chip}
-            >
-              Visits
-            </Chip>
-            <Chip
-              selected={category === 'countries'}
-              onPress={() => setCategory('countries')}
-              icon="earth"
-              style={styles.chip}
-            >
-              Countries
-            </Chip>
-            <Chip
-              selected={category === 'streaks'}
-              onPress={() => setCategory('streaks')}
-              icon="flame"
-              style={styles.chip}
-            >
-              Streaks
-            </Chip>
+            {[
+              { value: 'points', label: 'Points', icon: 'star' },
+              { value: 'visits', label: 'Visits', icon: 'location' },
+              { value: 'countries', label: 'Countries', icon: 'earth' },
+              { value: 'streaks', label: 'Streaks', icon: 'flame' },
+            ].map((item) => (
+              <TouchableOpacity
+                key={item.value}
+                style={[
+                  styles.categoryChip,
+                  category === item.value && styles.categoryChipActive,
+                ]}
+                onPress={() => setCategory(item.value as any)}
+                activeOpacity={0.7}
+              >
+                <Ionicons 
+                  name={item.icon as any} 
+                  size={14} 
+                  color={category === item.value ? '#fff' : theme.colors.textSecondary} 
+                />
+                <Text style={[
+                  styles.categoryChipText,
+                  category === item.value && styles.categoryChipTextActive,
+                ]}>{item.label}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
 
