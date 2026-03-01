@@ -48,6 +48,11 @@ api_router.include_router(promo.router)
 app.include_router(api_router)
 
 
+@app.on_event("startup")
+async def startup_db_indexes():
+    await create_indexes()
+
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
