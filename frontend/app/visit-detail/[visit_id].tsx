@@ -106,7 +106,7 @@ export default function VisitDetailScreen() {
       <ScrollView style={styles.scrollView}>
         {/* Header - using UniversalHeader-matching gradient */}
         <LinearGradient
-          colors={['#4DB8D8', '#C9A961']}
+          colors={['#4DB8D8', '#E8DCC8']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.header}
