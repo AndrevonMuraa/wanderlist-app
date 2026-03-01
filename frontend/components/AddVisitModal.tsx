@@ -110,11 +110,29 @@ export default function AddVisitModal({
   };
 
   const handleSubmit = async () => {
-    if (photos.length === 0 && !diaryText.trim()) {
-      Alert.alert('Add Content', 'Please add at least one photo or a note about your visit');
+    // Allow submitting with no content (unverified visit for total points)
+    // Show info if no photo about verified points
+    if (photos.length === 0) {
+      Alert.alert(
+        'Record Without Photo?',
+        'Visits without photos earn total points but not verified points for the global leaderboard. Add a photo to earn verified points!',
+        [
+          { text: 'Add Photo', style: 'cancel' },
+          {
+            text: 'Record Anyway',
+            onPress: async () => {
+              await submitVisit();
+            },
+          },
+        ]
+      );
       return;
     }
 
+    await submitVisit();
+  };
+
+  const submitVisit = async () => {
     setIsSubmitting(true);
     try {
       await onSubmit({
