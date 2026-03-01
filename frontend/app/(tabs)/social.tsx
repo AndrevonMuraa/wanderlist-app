@@ -678,6 +678,9 @@ export default function SocialHubScreen() {
       </LinearGradient>
 
       <ScrollView
+        ref={scrollRef}
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
         style={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
