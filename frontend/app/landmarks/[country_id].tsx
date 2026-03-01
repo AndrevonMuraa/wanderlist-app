@@ -544,26 +544,27 @@ export default function LandmarksScreen() {
         }
       />
 
-      {/* Floating Action Button - Mark Country as Visited */}
+      {/* Floating Action Button - Smart Country Visit */}
       <View style={styles.fabContainer}>
         <TouchableOpacity 
           style={styles.fab}
-          onPress={isCountryVisited ? handleRemoveCountryVisit : () => setShowCountryVisitModal(true)}
+          onPress={handleCountryVisitAction}
           activeOpacity={0.8}
+          data-testid="country-visit-fab"
         >
           <LinearGradient
-            colors={isCountryVisited ? ['#4CAF50', '#66BB6A'] : [theme.colors.primary, theme.colors.secondary]}
+            colors={getFabConfig().colors as unknown as string[]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.fabGradient}
           >
-            <Ionicons name="checkmark-circle" size={24} color="#fff" />
+            <Ionicons name={getFabConfig().icon} size={24} color="#fff" />
             <Text style={styles.fabText}>
-              {isCountryVisited ? "Visited" : "Mark as Visited"}
+              {getFabConfig().text}
             </Text>
-            {isCountryVisited && (
+            {getFabConfig().subText && (
               <View style={styles.fabRemoveHint}>
-                <Text style={styles.fabRemoveHintText}>Tap to remove</Text>
+                <Text style={styles.fabRemoveHintText}>{getFabConfig().subText}</Text>
               </View>
             )}
           </LinearGradient>
