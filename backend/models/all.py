@@ -211,6 +211,7 @@ class Activity(BaseModel):
     has_tips: Optional[bool] = False
     has_photos: Optional[bool] = False
     photo_count: Optional[int] = 0
+    photo_url: Optional[str] = None
     visibility: Optional[str] = "public"
     created_at: datetime
     likes_count: int = 0
