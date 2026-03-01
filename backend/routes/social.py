@@ -62,6 +62,12 @@ async def get_enhanced_leaderboard(
         query = {}
         if user_filter:
             query["user_id"] = {"$in": user_filter}
+        elif not friends_only:
+            # Global leaderboard: only include users with public privacy
+            query["$or"] = [
+                {"default_privacy": "public"},
+                {"default_privacy": {"$exists": False}}
+            ]
         
         # Friends leaderboard: sort by total points (trust among friends)
         # Global leaderboard: sort by leaderboard_points (anti-cheat, photo-verified)
