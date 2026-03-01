@@ -683,36 +683,34 @@ export default function SocialHubScreen() {
         showsVerticalScrollIndicator={false}
       >
 
-        {/* Activity Feed Section */}
+        {/* Leaderboard Section - TOP */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="newspaper" size={24} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>{t('social.feed')}</Text>
+              <Ionicons name="trophy" size={24} color={theme.colors.primary} />
+              <Text style={styles.sectionTitle}>Leaderboard</Text>
             </View>
-            <TouchableOpacity onPress={() => router.push('/feed')} style={styles.seeAllRow}>
-              <Text style={styles.seeAllButton}>{t('common.seeAll')}</Text>
-              <Ionicons name="chevron-forward" size={16} color={theme.colors.primary} />
+            <TouchableOpacity onPress={() => router.push('/leaderboard')}>
+              <Text style={styles.seeAllButton}>Full List →</Text>
             </TouchableOpacity>
           </View>
 
           <Surface style={styles.card}>
-            {activities.length > 0 ? (
+            {leaderboard.length > 0 ? (
               <>
-                {activities.map(activity => renderActivityItem(activity))}
+                {leaderboard.map((entry, index) => renderLeaderboardItem(entry, index))}
                 <TouchableOpacity 
                   style={styles.viewAllButton}
-                  onPress={() => router.push('/feed')}
+                  onPress={() => router.push('/leaderboard')}
                 >
-                  <Text style={styles.viewAllText}>{t('common.viewAll')}</Text>
+                  <Text style={styles.viewAllText}>View Full Leaderboard</Text>
                   <Ionicons name="arrow-forward" size={16} color={theme.colors.primary} />
                 </TouchableOpacity>
               </>
             ) : (
               <View style={styles.emptyState}>
-                <Ionicons name="newspaper-outline" size={48} color={theme.colors.textLight} />
-                <Text style={styles.emptyText}>{t('social.noActivity')}</Text>
-                <Text style={styles.emptySubtext}>{t('explore.startExploring')}</Text>
+                <Ionicons name="trophy-outline" size={48} color={theme.colors.textLight} />
+                <Text style={styles.emptyText}>No rankings yet</Text>
               </View>
             )}
           </Surface>
@@ -778,6 +776,41 @@ export default function SocialHubScreen() {
             </ScrollView>
           </View>
         )}
+
+        {/* Activity Feed Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionTitleRow}>
+              <Ionicons name="newspaper" size={24} color={theme.colors.primary} />
+              <Text style={styles.sectionTitle}>{t('social.feed')}</Text>
+            </View>
+            <TouchableOpacity onPress={() => router.push('/feed')} style={styles.seeAllRow}>
+              <Text style={styles.seeAllButton}>{t('common.seeAll')}</Text>
+              <Ionicons name="chevron-forward" size={16} color={theme.colors.primary} />
+            </TouchableOpacity>
+          </View>
+
+          <Surface style={styles.card}>
+            {activities.length > 0 ? (
+              <>
+                {activities.map(activity => renderActivityItem(activity))}
+                <TouchableOpacity 
+                  style={styles.viewAllButton}
+                  onPress={() => router.push('/feed')}
+                >
+                  <Text style={styles.viewAllText}>{t('common.viewAll')}</Text>
+                  <Ionicons name="arrow-forward" size={16} color={theme.colors.primary} />
+                </TouchableOpacity>
+              </>
+            ) : (
+              <View style={styles.emptyState}>
+                <Ionicons name="newspaper-outline" size={48} color={theme.colors.textLight} />
+                <Text style={styles.emptyText}>{t('social.noActivity')}</Text>
+                <Text style={styles.emptySubtext}>{t('explore.startExploring')}</Text>
+              </View>
+            )}
+          </Surface>
+        </View>}
 
         {/* Friends Section */}
         <View style={styles.section}>
