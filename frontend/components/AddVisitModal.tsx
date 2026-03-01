@@ -298,7 +298,7 @@ export default function AddVisitModal({
           {/* Submit Button */}
           <TouchableOpacity
             onPress={handleSubmit}
-            disabled={isSubmitting || (photos.length === 0 && !diaryText.trim())}
+            disabled={isSubmitting}
             activeOpacity={0.9}
             style={styles.submitContainer}
           >
