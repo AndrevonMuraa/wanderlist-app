@@ -1,95 +1,82 @@
 # WanderMark - Product Requirements Document
 
-## Problem Statement
-WanderMark is a travel companion app (React Native + FastAPI) for discovering and tracking visits to 796 landmarks across 66 countries and 5 continents. Features include community sharing, points/leaderboards, badges, messaging, and custom visits.
+## Original Problem Statement
+WanderMark is a travel app where users visit landmarks and countries, earn points, and compete on leaderboards. The app uses React Native (Expo) for frontend and FastAPI for backend, with MongoDB Atlas as the database.
 
-## Core Architecture
-- **Frontend**: React Native with Expo SDK 54, Expo Router v6
-- **Backend**: FastAPI (modular routes structure)
-- **Database**: MongoDB
-- **Integrations**: Resend (email), RevenueCat (IAP), React Native WebView
+## Architecture
+- **Frontend**: React Native with Expo Router, built via EAS
+- **Backend**: FastAPI on Render (https://api.wandermark.app)
+- **Database**: MongoDB Atlas
+- **DNS**: Cloudflare/Namecheap for wandermark.app
+
+## Three Visit Types
+1. **Landmark Visits** (`db.visits` / `/api/visits`) - Official landmarks (797 total), gives points, verified with photos
+2. **Country Visits** (`db.country_visits` / `/api/country-visits`) - Country-level visits, 50 pts, can be standalone or auto-created from landmark visits
+3. **Custom Visits** (`db.user_created_visits` / `/api/user-created-visits`) - PRO feature, no points
+
+## Points System
+- Landmark visit: varies per landmark (~10 pts)
+- Country visit: 50 pts
+- Country bonus (first landmark in country): 20 pts
+- **Verified points** (leaderboard_points): only with photos
+- **Total points** (points): always awarded
 
 ## What's Been Implemented
 
-### Navigation Fix (Feb 2026)
-- Root `_layout.tsx`: `<Slot />` → `<Stack />` (fixes iOS back button crash)
-- Added `_layout.tsx` to 10+ subdirectories
-- `safeGoBack()` utility as additional safety layer
+### Session 1 (Previous)
+- Full production migration (Render + MongoDB Atlas)
+- Custom domain setup (api.wandermark.app)
+- Security fix (leaked password rotated)
+- Leaderboard overhaul (Global=Verified, Friends=Total)
+- Legal document updates
+- Repository cleanup (35+ files deleted)
+- Build #54 successfully deployed to TestFlight
 
-### Onboarding Fix (Feb 2026)
-- `OnboardingFlow.tsx` slide 3: "Earn Achievements" → "Compete & Climb"
-- Landmark count updated to 796
+### Session 2 (Current - Feb 2026)
+- **Backend: Auto-country-visit fix** - No longer copies landmark photos to auto-created country visits (visits.py)
+- **Frontend: Allow visits without photos** - AddVisitModal now allows submitting without photo/diary, with alert about verified points (AddVisitModal.tsx)
+- **Frontend: Removed "Did You Know?"** - Removed generic facts section from landmark detail (landmark-detail/[landmark_id].tsx)
+- **Frontend: Smart Landmark FAB** - Split into "View Visit" + "Visited" buttons when already visited (landmark-detail/[landmark_id].tsx)
+- **Frontend: Smart Country FAB** - Context-aware: shows "Add photos & diary" for auto-visits with landmarks, "View details" for visits with photos, "Tap to remove" only for standalone visits without landmarks (landmarks/[country_id].tsx)
+- **Frontend: Visit Detail header fix** - Changed to oceanToSand gradient matching UniversalHeader, white background on cards for text visibility (visit-detail/[visit_id].tsx)
+- **Backend: Feed photos** - Added photo_url to Activity model and feed API enrichment (models/all.py, routes/social.py)
+- **Frontend: Feed photos** - Added photo display in feed cards (feed.tsx)
 
-### About/Info Page Overhaul (Feb 2026)
-- Stats: 796 landmarks, 66 countries, 10,000 total points
-- FAQ: privacy with diary sharing, badges with Elite Explorer (250), delete account with 30-day deactivation, streak badges
-- Contact Support: simple email reference (support@wandermark.app) at bottom
-- Version: 1.1.0, February 2026
+## Pending Deployment
+All changes are in codebase but NOT yet deployed to production:
+- Backend changes need Render redeploy
+- Frontend changes need new EAS build (#55)
 
-### Subscription Page Update (Feb 2026)
-- Free: 700+ Official Landmarks, Community Photo Preview, Photo of the Week
-- Pro: 93 Premium, Full Gallery, Upvoting, Diary, Messaging, Community Feed
+## Remaining P1 Tasks (from E2E testing)
+1. Social page layout reorder (Leaderboard on top, Community Feed above Activity Feed)
+2. Leaderboard colors (replace dark/purple with app theme colors)
+3. Version number change (1.1.0 -> 1.0.0)
+4. My Landmark Visits page (new page)
+5. Clickable journey stats (Countries -> My Country Visits, Landmarks -> My Landmark Visits, Points -> Points Summary)
+6. Points Summary page (new page)
 
-### Account Deactivation System (Feb 2026)
-- `DELETE /api/auth/account` deactivates for 30 days
-- Auto-reactivation on all login methods (password, Apple, magic code)
-- `POST /api/auth/account/purge-deactivated` for cleanup
-- Settings UI with deactivation dialog
+## Remaining P2 Tasks
+1. Privacy settings warning (verified points loss when choosing friends-only/private)
+2. Retroactive privacy logic (switching public restores verified points)
+3. Scroll position preservation on back navigation
+4. Performance optimization
+5. Rename GitHub repo (wanderlist-app -> wandermark-app)
+6. App Store submission
 
-### Statistics Page Fix (Feb 2026)
-- Moved to `(tabs)/statistics.tsx` — bottom tab bar now visible
-- Continent Progress: uses real API data instead of hardcoded world-country counts
-- Fun Facts: "explored X% of WanderMark countries" instead of "countries in the world"
-- Removed fake Category Breakdown (was using Math.random())
+## Key Files
+- `backend/routes/visits.py` - Landmark visit creation + auto-country-visit
+- `backend/routes/country_visits.py` - Country visit CRUD
+- `backend/routes/social.py` - Feed + leaderboard
+- `backend/models/all.py` - Data models
+- `frontend/components/AddVisitModal.tsx` - Visit creation form
+- `frontend/app/landmark-detail/[landmark_id].tsx` - Landmark page
+- `frontend/app/landmarks/[country_id].tsx` - Country page
+- `frontend/app/visit-detail/[visit_id].tsx` - Visit detail
+- `frontend/app/feed.tsx` - Activity feed
+- `frontend/app/(tabs)/social.tsx` - Social hub
+- `frontend/app/leaderboard.tsx` - Leaderboard
+- `frontend/styles/theme.ts` - Design system
 
-### Journey Page Fix (Feb 2026)
-- Added "Elite Explorer" (250) to milestone list
-- Updated comment to 796 total landmarks
-
-### Previous Work (Jan-Feb 2026)
-- Landing page: "Compete & Climb" section
-- Community features, promo code system, email templates
-- All text translated from Norwegian to English
-- Persistent login via SecureStore (7-day token)
-
-### Leaderboard Anti-Cheat System Overhaul (Feb 2026)
-- **Forslag 1 - Bonus-fiks**: Kontinent/land bonuser (`+50`, `+200` pts) tildeler nå `leaderboard_points` når besøk har bilder
-- **Forslag 2 - Differensiert leaderboard**: Global = `leaderboard_points` (anti-juks), Friends = `points` (tillit). UI viser begge verdier med info-banner
-- **Forslag 3 - Retroaktiv beregning**: Admin-endepunkt `POST /api/admin/recalculate-leaderboard-points` scanner alle besøk og beregner korrekt `leaderboard_points`
-
-## Prioritized Backlog
-
-### Production Hosting Migration (Feb 2026)
-- MongoDB Atlas (M0 Free, Stockholm/eu-north-1) configured and seeded with 797 landmarks, 66 countries
-- Render.com ($7/mnd Starter) deployed from GitHub, auto-deploy enabled
-- Backend URL: `https://api.wandermark.app` (custom domene via Cloudflare CNAME → Render)
-- SSL fix: certifi + tlsAllowInvalidCertificates for Render ↔ Atlas
-- bcrypt pinned to 4.0.1 for passlib compatibility
-- Frontend config.ts updated to point to Render
-- Build number bumped to 54
-
-### P0 - Critical
-- Save to GitHub and build EAS #54 with new Render backend URL
-- E2E testing of new build on TestFlight
-- Test: login, landmarks, visits, leaderboard, navigation
-
-### P1 - Important
-- Sett opp custom domene: api.wandermark.app → Render (via Cloudflare)
-- Oppdater privacy/terms of service for App Store-krav
-
-### P2 - Future
-- Rename GitHub repo: wanderlist-app → wandermark-app
-- App Store release preparation
-- Set up cron job for purge-deactivated endpoint
-- Verify RevenueCat on device
-
-## Key API Endpoints
-- `DELETE /api/auth/account` - Deactivate account (30-day grace)
-- `POST /api/auth/account/purge-deactivated` - Cleanup expired accounts
-- `GET /api/continent-stats` - Real continent statistics
-- `GET/PUT/DELETE /api/admin/promo-codes/template` - Email template
-- `PATCH /api/users/me/custom-visits/{visit_id}/visibility` - Toggle visibility
-
-## Credentials
+## Test Credentials
 - Email: test@wandermark.app
 - Password: Test1234!
