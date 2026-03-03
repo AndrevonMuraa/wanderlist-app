@@ -191,8 +191,8 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     if current_streak > longest_streak:
         longest_streak = current_streak
     
-    # Check for streak milestones (7, 30, 100 days)
-    streak_milestones = [7, 30, 100]
+    # Check for streak milestones (3, 7, 30 days)
+    streak_milestones = [3, 7, 30]
     if streak_continued and current_streak in streak_milestones:
         streak_milestone_reached = True
         new_milestone = current_streak

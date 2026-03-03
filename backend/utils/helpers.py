@@ -217,6 +217,26 @@ async def check_and_award_badges(user_id: str):
                 await db.achievements.insert_one(achievement)
                 newly_awarded.append(badge_type)
 
+    # Check streak badges
+    streak_milestones = [(3, "streak_3"), (7, "streak_7"), (30, "streak_30")]
+    for days, badge_type in streak_milestones:
+        if longest_streak >= days and badge_type not in existing_badge_types:
+            badge_def = BADGE_DEFINITIONS.get(badge_type)
+            if badge_def:
+                achievement_id = f"achievement_{uuid.uuid4().hex[:12]}"
+                achievement = {
+                    "achievement_id": achievement_id,
+                    "user_id": user_id,
+                    "badge_type": badge_type,
+                    "badge_name": badge_def["name"],
+                    "badge_description": badge_def["description"],
+                    "badge_icon": badge_def["icon"],
+                    "earned_at": datetime.now(timezone.utc),
+                    "is_featured": days >= 30
+                }
+                await db.achievements.insert_one(achievement)
+                newly_awarded.append(badge_type)
+
     # Check country complete badges
     if visits:
         visited_by_country = {}
