@@ -313,22 +313,32 @@ export default function ExploreCountriesScreen() {
                     )}
                   </View>
                   
-                  {/* Info Bar - Bottom 30% */}
+                  {/* Info Bar - Bottom Section */}
                   <View style={styles.infoBar}>
-                    <View style={styles.pointsSection}>
-                      <Ionicons name="star" size={16} color="#FFD700" />
-                      <Text style={styles.pointsText}>{pointReward} points</Text>
-                    </View>
-                    
-                    {/* Progress indicator - only shown when user has visited landmarks */}
-                    {hasProgress && (
+                    <View style={styles.infoBarRow}>
+                      <View style={styles.pointsSection}>
+                        <Ionicons name="star" size={14} color="#FFD700" />
+                        <Text style={styles.pointsText}>{pointReward} pts</Text>
+                      </View>
                       <View style={styles.progressMini}>
-                        <Text style={styles.progressMiniText}>{country.visited}/{country.landmark_count}</Text>
+                        <Ionicons name="location" size={12} color={hasProgress ? theme.colors.primary : theme.colors.textLight} />
+                        <Text style={[styles.progressMiniText, hasProgress && { color: theme.colors.primary }]}>
+                          {country.visited || 0}/{country.landmark_count}
+                        </Text>
                         {isComplete && (
-                          <Ionicons name="checkmark-circle" size={16} color="#4CAF50" />
+                          <Ionicons name="checkmark-circle" size={14} color="#4CAF50" />
                         )}
                       </View>
-                    )}
+                    </View>
+                    <View style={styles.infoBarProgress}>
+                      <View style={[
+                        styles.infoBarProgressFill,
+                        { 
+                          width: `${country.percentage || 0}%`,
+                          backgroundColor: isComplete ? '#4CAF50' : theme.colors.primary,
+                        }
+                      ]} />
+                    </View>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -956,7 +966,7 @@ const styles = StyleSheet.create<any>({
     paddingLeft: theme.spacing.xs,
   },
   countryCard: {
-    height: 160,
+    height: 170,
     borderRadius: theme.borderRadius.lg,
     overflow: 'hidden',
     backgroundColor: theme.colors.surface,
@@ -1053,36 +1063,49 @@ const styles = StyleSheet.create<any>({
     elevation: 3,
   },
   infoBar: {
-    height: '30%',
+    paddingHorizontal: theme.spacing.sm,
+    paddingTop: 6,
+    paddingBottom: 8,
+    backgroundColor: theme.colors.surface,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.08)',
+  },
+  infoBarRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing.md,
-    backgroundColor: theme.colors.surface,
-    // Subtle top border with gradient effect
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.08)',
+    marginBottom: 5,
   },
   pointsSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.xs,
+    gap: 3,
   },
   pointsText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '700',
-    color: '#B8860B',  // Darker gold for premium feel
+    color: '#B8860B',
     letterSpacing: 0.2,
   },
   progressMini: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 3,
   },
   progressMiniText: {
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: '600',
-    color: theme.colors.textSecondary,
+    color: theme.colors.textLight,
+  },
+  infoBarProgress: {
+    height: 3,
+    backgroundColor: theme.colors.border,
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  infoBarProgressFill: {
+    height: '100%',
+    borderRadius: 2,
   },
   progressBarTiny: {
     width: 60,

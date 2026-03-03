@@ -82,6 +82,12 @@ WanderMark is a travel app where users visit landmarks and countries, earn point
 - **"Continents" stat added**: Shows X/7 continents visited, links to continents page
 - **DB fields kept** (current_streak, longest_streak) with default 0 for backward compatibility
 
+### Session Mar 2026 - Country Card Progress Bars
+- **Enhanced country card info bar**: Replaced single-line points display with two-line layout:
+  - Row 1: Points (left) + landmark progress count with location icon (right), always visible even at 0
+  - Row 2: Thin progress bar spanning full width, green when 100% complete
+- Card height increased from 160 to 170px to accommodate the new layout
+
 ## Current App Version
 - Version: 1.2.0
 - Build: 56
