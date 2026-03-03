@@ -122,7 +122,7 @@ export default function WelcomeScreen() {
               </View>
               <View style={styles.pointRow}>
                 <Ionicons name="flame" size={16} color="#ef4444" />
-                <Text style={styles.pointText}>Daily streak bonus</Text>
+                <Text style={styles.pointText}>Earn badges for milestones</Text>
                 <Text style={styles.pointValue}>+25 pts</Text>
               </View>
             </View>

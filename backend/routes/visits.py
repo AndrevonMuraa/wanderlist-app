@@ -154,60 +154,13 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     
     await db.visits.insert_one(visit)
     
-    # Update user streak
-    from datetime import date
-    today = date.today().isoformat()  # YYYY-MM-DD format
-    
-    user_doc = await db.users.find_one({"user_id": current_user.user_id})
-    last_visit_date = user_doc.get("last_visit_date")
-    current_streak = user_doc.get("current_streak", 0)
-    longest_streak = user_doc.get("longest_streak", 0)
-    
-    streak_continued = False
-    streak_milestone_reached = False
-    new_milestone = 0
-    
-    if last_visit_date:
-        from datetime import datetime as dt, timedelta
-        last_date_obj = dt.fromisoformat(last_visit_date).date()
-        today_obj = dt.fromisoformat(today).date()
-        days_diff = (today_obj - last_date_obj).days
-        
-        if days_diff == 0:
-            # Same day visit - don't change streak
-            pass
-        elif days_diff == 1:
-            # Consecutive day - increment streak
-            current_streak += 1
-            streak_continued = True
-        else:
-            # Streak broken - reset to 1
-            current_streak = 1
-    else:
-        # First ever visit
-        current_streak = 1
-    
-    # Update longest streak if current exceeds it
-    if current_streak > longest_streak:
-        longest_streak = current_streak
-    
-    # Check for streak milestones (3, 7, 30 days)
-    streak_milestones = [3, 7, 30]
-    if streak_continued and current_streak in streak_milestones:
-        streak_milestone_reached = True
-        new_milestone = current_streak
-    
-    # Update user document with new streak data AND award points
+    # Update user document - award points
     # Points are always awarded to personal total
     # Leaderboard points only awarded if visit has photos (verified)
     landmark_points = landmark.get("points", 10)
     has_photos = bool(data.photo_base64 or len(photos) > 0)
     
-    update_fields = {
-        "current_streak": current_streak,
-        "longest_streak": longest_streak,
-        "last_visit_date": today
-    }
+    update_fields = {}
     
     # Always increment personal points
     increment_fields = {"points": landmark_points}
@@ -465,9 +418,6 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     visit_dict["newly_awarded_badges"] = newly_awarded_badges
     visit_dict["country_completed"] = country_completed
     visit_dict["continent_completed"] = continent_completed
-    visit_dict["current_streak"] = current_streak
-    visit_dict["streak_milestone_reached"] = streak_milestone_reached
-    visit_dict["new_milestone"] = new_milestone if streak_milestone_reached else 0
     if country_completed:
         visit_dict["completed_country_name"] = completed_country_name
     if continent_completed:

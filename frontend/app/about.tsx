@@ -262,7 +262,7 @@ You can filter by country, year, or type.`}
 • Legend - 350 landmarks
 • Ultimate Explorer - 500 landmarks
 
-Plus streak badges, social badges, and point milestones!`}
+Plus social badges, and point milestones!`}
             />
             
             <FAQItem
@@ -424,7 +424,7 @@ Plus streak badges, social badges, and point milestones!`}
                     <Text style={styles.bold}>Social Badges:</Text>{'\n'}
                     5 → 10 → 25 friends{'\n\n'}
                     <Text style={styles.bold}>Streak Badges:</Text>{'\n'}
-                    3 → 7 → 30 day streaks{'\n\n'}
+                    Social milestones (5, 10, 25 friends){'\n\n'}
                     Badges are awarded automatically!
                   </Text>
                 </View>

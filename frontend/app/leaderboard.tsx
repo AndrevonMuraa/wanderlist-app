@@ -52,7 +52,7 @@ export default function LeaderboardScreen() {
   
   // Filter states
   const [timePeriod, setTimePeriod] = useState<'all_time' | 'monthly' | 'weekly'>('all_time');
-  const [category, setCategory] = useState<'points' | 'visits' | 'countries' | 'streaks'>('points');
+  const [category, setCategory] = useState<'points' | 'visits' | 'countries'>('points');
   const [friendsOnly, setFriendsOnly] = useState(false);
   
   // Data states
@@ -112,7 +112,6 @@ export default function LeaderboardScreen() {
       case 'points': return friendsOnly ? 'Points' : 'Verified';
       case 'visits': return 'Visits';
       case 'countries': return 'Countries';
-      case 'streaks': return 'Streak Days';
     }
   };
 
@@ -121,7 +120,6 @@ export default function LeaderboardScreen() {
       case 'points': return 'star';
       case 'visits': return 'location-outline';
       case 'countries': return 'earth-outline';
-      case 'streaks': return 'flame-outline';
     }
   };
 
@@ -174,18 +172,6 @@ export default function LeaderboardScreen() {
               <Text style={styles.username}>@{entry.username}</Text>
             )}
             
-            {/* Show additional stats for certain categories */}
-            {category === 'points' && entry.current_streak !== undefined && (
-              <View style={styles.statsRow}>
-                <Ionicons name="flame-outline" size={12} color="#FF6B35" />
-                <Text style={styles.statText}>{entry.current_streak} day streak</Text>
-              </View>
-            )}
-            {category === 'streaks' && entry.current_streak !== undefined && (
-              <View style={styles.statsRow}>
-                <Text style={styles.statText}>Current: {entry.current_streak} days</Text>
-              </View>
-            )}
           </View>
 
           {/* Value */}
@@ -285,7 +271,6 @@ export default function LeaderboardScreen() {
               { value: 'points', label: 'Points', icon: 'star' },
               { value: 'visits', label: 'Visits', icon: 'location' },
               { value: 'countries', label: 'Countries', icon: 'earth' },
-              { value: 'streaks', label: 'Streaks', icon: 'flame' },
             ].map((item) => (
               <TouchableOpacity
                 key={item.value}

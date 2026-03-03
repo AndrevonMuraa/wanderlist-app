@@ -276,8 +276,8 @@ export default function AnalyticsScreen() {
               {analytics.currentStreak > 7
                 ? "On Fire! Your consistency is incredible!"
                 : analytics.currentStreak > 0
-                ? "Building momentum! Keep that streak alive!"
-                : "Ready for your next adventure? Start a new streak!"}
+                ? "Building momentum! Keep exploring new landmarks!"
+                : "Ready for your next adventure? Explore a new landmark!"}
             </Text>
           </View>
 

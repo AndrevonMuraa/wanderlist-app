@@ -75,6 +75,13 @@ WanderMark is a travel app where users visit landmarks and countries, earn point
 - **Next Milestone icon**: Changed from `flag-outline` to `rocket` for better visual impact
 - **Next Milestone section verified**: Retroactive, uses same milestones as badge system (10, 25, 50, 100, 200, 250, 350, 500), names match BADGE_DEFINITIONS exactly
 
+### Session Mar 2026 - Streak Removal + Continents Stat
+- **Streak fully removed** from all active code paths (~15 files):
+  - Backend: Removed streak calculation from visits, streak badges (streak_3/7/30), streak leaderboard category, streak push reminders
+  - Frontend: Replaced streak stat with "Continents" (X/7), removed streak from leaderboard filters, celebration messages, notification settings
+- **"Continents" stat added**: Shows X/7 continents visited, links to continents page
+- **DB fields kept** (current_streak, longest_streak) with default 0 for backward compatibility
+
 ## Current App Version
 - Version: 1.2.0
 - Build: 56

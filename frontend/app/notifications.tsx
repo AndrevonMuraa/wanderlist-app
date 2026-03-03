@@ -136,7 +136,7 @@ export default function NotificationsScreen() {
       case 'achievement':
         return { name: 'trophy', color: '#FFD700' };
       case 'streak_milestone':
-        return { name: 'flame', color: '#FF6B35' };
+        return { name: 'ribbon', color: '#FFD700' };
       case 'rank_up':
         return { name: 'star', color: '#FFD700' };
       default:

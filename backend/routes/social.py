@@ -22,7 +22,7 @@ router = APIRouter()
 @router.get("/leaderboard")
 async def get_enhanced_leaderboard(
     time_period: str = "all_time",  # "all_time", "monthly", "weekly"
-    category: str = "points",  # "points", "visits", "countries", "streaks"
+    category: str = "points",  # "points", "visits", "countries"
     friends_only: bool = False,
     limit: int = 100,
     current_user: User = Depends(get_current_user)
@@ -139,28 +139,6 @@ async def get_enhanced_leaderboard(
                 })
                 if user["user_id"] == current_user.user_id:
                     user_rank = idx + 1
-                    
-    elif category == "streaks":
-        # Get users by longest streak
-        query = {}
-        if user_filter:
-            query["user_id"] = {"$in": user_filter}
-        
-        users = await db.users.find(query, {"_id": 0}).sort("longest_streak", -1).limit(limit).to_list(limit)
-        
-        for idx, user in enumerate(users):
-            leaderboard.append({
-                "user_id": user["user_id"],
-                "name": user["name"],
-                "picture": user.get("picture"),
-                "username": user.get("username"),
-                "value": user.get("longest_streak", 0),
-                "rank": idx + 1,
-                "current_streak": user.get("current_streak", 0),
-                "longest_streak": user.get("longest_streak", 0)
-            })
-            if user["user_id"] == current_user.user_id:
-                user_rank = idx + 1
     
     return {
         "leaderboard": leaderboard,

@@ -33,7 +33,6 @@ export const getBadgeColor = (badgeType: string): string => {
   if (badgeType === 'first_visit') return '#4CAF50';
   if (badgeType.startsWith('points_')) return '#FFB300';
   if (badgeType.startsWith('social_')) return '#AB47BC';
-  if (badgeType.startsWith('streak_')) return '#FF6B35';
   if (badgeType === 'country_complete') return '#26A69A';
   return '#4DB8D8';
 };

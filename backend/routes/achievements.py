@@ -39,7 +39,6 @@ async def get_achievements_showcase(current_user: User = Depends(get_current_use
     visit_count = await db.visits.count_documents({"user_id": current_user.user_id})
     user = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
     total_points = user.get("points", 0)
-    longest_streak = user.get("longest_streak", 0)
     
     # Count friends
     friend_count = await db.friends.count_documents({
@@ -113,14 +112,6 @@ async def get_achievements_showcase(current_user: User = Depends(get_current_use
             current_value = friend_count
             progress = min(100, int((friend_count / target) * 100))
             progress_text = f"{friend_count}/{target} friends"
-        
-        # Streak badges
-        elif badge_type.startswith("streak_"):
-            target = int(badge_type.split("_")[1])
-            target_value = target
-            current_value = longest_streak
-            progress = min(100, int((longest_streak / target) * 100))
-            progress_text = f"{longest_streak}/{target} days"
         
         # Country complete
         elif badge_type == "country_complete":

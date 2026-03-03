@@ -13,7 +13,6 @@ import {
   requestNotificationPermissions,
   getNotificationSettings,
   saveNotificationSettings,
-  scheduleStreakReminder,
 } from '../utils/notifications';
 
 export default function NotificationSettingsScreen() {
@@ -22,7 +21,6 @@ export default function NotificationSettingsScreen() {
   const [loading, setLoading] = useState(true);
   const [permissionGranted, setPermissionGranted] = useState(false);
   const [settings, setSettings] = useState({
-    streakReminders: true,
     dailyReminders: false,
     weeklyDigest: true,
     achievements: true,
@@ -59,7 +57,7 @@ export default function NotificationSettingsScreen() {
   const handleTimeChange = () => {
     Alert.alert(
       'Reminder Time',
-      'Select when you want to receive your daily streak reminder',
+      'Select when you want to receive your daily reminder',
       [
         { text: 'Morning (9:00)', onPress: () => updateTime('09:00') },
         { text: 'Afternoon (14:00)', onPress: () => updateTime('14:00') },
@@ -73,7 +71,6 @@ export default function NotificationSettingsScreen() {
   const updateTime = async (time: string) => {
     setSettings(prev => ({ ...prev, reminderTime: time }));
     await saveNotificationSettings({ reminderTime: time });
-    await scheduleStreakReminder(settings.streakReminders, time);
   };
 
   const formatTime = (time: string) => {
@@ -116,42 +113,6 @@ export default function NotificationSettingsScreen() {
             <Ionicons name="chevron-forward" size={20} color="#f59e0b" />
           </TouchableOpacity>
         )}
-
-        {/* Streak Reminders */}
-        <View style={[styles.section, { backgroundColor: colors.surface }]}>
-          <View style={styles.sectionHeader}>
-            <View style={[styles.iconContainer, { backgroundColor: '#ff6b3520' }]}>
-              <Ionicons name="flame" size={22} color="#ff6b35" />
-            </View>
-            <View style={styles.sectionHeaderText}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                Streak Reminders
-              </Text>
-              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
-                Don't break your streak!
-              </Text>
-            </View>
-            <Switch
-              value={settings.streakReminders}
-              onValueChange={() => handleToggle('streakReminders')}
-              color={theme.colors.primary}
-            />
-          </View>
-          
-          {settings.streakReminders && (
-            <TouchableOpacity style={styles.timeSelector} onPress={handleTimeChange}>
-              <Text style={[styles.timeLabel, { color: colors.textSecondary }]}>
-                Reminder Time
-              </Text>
-              <View style={styles.timeValue}>
-                <Text style={[styles.timeText, { color: colors.text }]}>
-                  {formatTime(settings.reminderTime)}
-                </Text>
-                <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
-              </View>
-            </TouchableOpacity>
-          )}
-        </View>
 
         {/* Achievements */}
         <View style={[styles.section, { backgroundColor: colors.surface }]}>

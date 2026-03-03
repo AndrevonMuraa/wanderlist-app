@@ -114,21 +114,6 @@ BADGE_DEFINITIONS = {
         "description": "25 friends! You\'re not just exploring the world - you\'re bringing people together!",
         "icon": "butterfly"
     },
-    "streak_3": {
-        "name": "Getting Started",
-        "description": "3 days in a row! Consistency is key - keep that fire burning!",
-        "icon": "flame"
-    },
-    "streak_7": {
-        "name": "Week Warrior",
-        "description": "A full week streak! You\'re building a habit that will change your life!",
-        "icon": "flame"
-    },
-    "streak_30": {
-        "name": "Monthly Master",
-        "description": "30-day visit streak",
-        "icon": "flame"
-    },
 }
 
 
@@ -144,7 +129,6 @@ async def check_and_award_badges(user_id: str):
         return newly_awarded
 
     total_points = user.get("points", 0)
-    longest_streak = user.get("longest_streak", 0)
 
     visits = await db.visits.find({"user_id": user_id}).to_list(1000)
     visit_count = len(visits)
@@ -213,26 +197,6 @@ async def check_and_award_badges(user_id: str):
                     "badge_icon": badge_def["icon"],
                     "earned_at": datetime.now(timezone.utc),
                     "is_featured": count >= 25
-                }
-                await db.achievements.insert_one(achievement)
-                newly_awarded.append(badge_type)
-
-    # Check streak badges
-    streak_milestones = [(3, "streak_3"), (7, "streak_7"), (30, "streak_30")]
-    for days, badge_type in streak_milestones:
-        if longest_streak >= days and badge_type not in existing_badge_types:
-            badge_def = BADGE_DEFINITIONS.get(badge_type)
-            if badge_def:
-                achievement_id = f"achievement_{uuid.uuid4().hex[:12]}"
-                achievement = {
-                    "achievement_id": achievement_id,
-                    "user_id": user_id,
-                    "badge_type": badge_type,
-                    "badge_name": badge_def["name"],
-                    "badge_description": badge_def["description"],
-                    "badge_icon": badge_def["icon"],
-                    "earned_at": datetime.now(timezone.utc),
-                    "is_featured": days >= 30
                 }
                 await db.achievements.insert_one(achievement)
                 newly_awarded.append(badge_type)
@@ -359,16 +323,4 @@ async def notify_achievement(user_id: str, badge_name: str, badge_icon: str):
         title=f"Achievement Unlocked! {badge_icon}",
         body=f"You earned: {badge_name}",
         data={"type": "achievement"}
-    )
-
-
-async def notify_streak_reminder(user_id: str, current_streak: int):
-    settings = await db.push_settings.find_one({"user_id": user_id})
-    if settings and not settings.get("streak_reminders_enabled", True):
-        return
-    await send_push_notification(
-        user_id=user_id,
-        title="Keep Your Streak!",
-        body=f"You have a {current_streak} day streak. Don\'t lose it!",
-        data={"type": "streak_reminder"}
     )

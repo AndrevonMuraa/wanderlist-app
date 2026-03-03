@@ -37,7 +37,7 @@ interface Stats {
   continents_visited: number;
   total_points: number;
   rank: number;
-  current_streak: number;
+  current_streak: number;  // deprecated, kept for API compatibility
 }
 
 interface ProgressStats {
@@ -347,11 +347,18 @@ export default function JourneyScreen() {
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.points')}</Text>
               </TouchableOpacity>
 
-              <View style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}>
-                <Ionicons name="flame" size={20} color={colors.error} />
-                <Text style={[styles.statValueCompact, { color: colors.text }]}>{stats.current_streak || 0}</Text>
-                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.streak')}</Text>
-              </View>
+              <TouchableOpacity 
+                style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}
+                onPress={() => router.push('/continents')}
+                activeOpacity={0.7}
+                data-testid="stat-continents"
+              >
+                <Ionicons name="earth" size={20} color={colors.accent} />
+                <Text style={[styles.statValueCompact, { color: colors.text }]}>
+                  {progressStats ? Object.values(progressStats.continents).filter((c: any) => c.visited > 0).length : 0}/7
+                </Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Continents</Text>
+              </TouchableOpacity>
 
               <TouchableOpacity 
                 style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}
