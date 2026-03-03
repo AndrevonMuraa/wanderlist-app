@@ -225,17 +225,23 @@ export default function JourneyScreen() {
     const milestones = [10, 25, 50, 100, 200, 250, 350, 500];
     const next = milestones.find(m => m > visited);
     if (next) {
+      const badgeMap: Record<number, { name: string; icon: string; type: string }> = {
+        10:  { name: 'Explorer', icon: 'map', type: 'milestone_10' },
+        25:  { name: 'Adventurer', icon: 'climbing', type: 'milestone_25' },
+        50:  { name: 'Globetrotter', icon: 'globe', type: 'milestone_50' },
+        100: { name: 'World Traveler', icon: 'plane', type: 'milestone_100' },
+        200: { name: 'Seasoned Traveler', icon: 'compass', type: 'milestone_200' },
+        250: { name: 'Elite Explorer', icon: 'medal', type: 'milestone_250' },
+        350: { name: 'Legend', icon: 'trophy', type: 'milestone_350' },
+        500: { name: 'Ultimate Explorer', icon: 'crown', type: 'milestone_500' },
+      };
+      const badge = badgeMap[next];
       return {
         target: next,
         remaining: next - visited,
-        name: next === 10 ? 'Explorer' : 
-              next === 25 ? 'Adventurer' : 
-              next === 50 ? 'Globetrotter' : 
-              next === 100 ? 'World Traveler' : 
-              next === 200 ? 'Seasoned Traveler' :
-              next === 250 ? 'Elite Explorer' :
-              next === 350 ? 'Legend' : 
-              'Ultimate Explorer'
+        name: badge.name,
+        badgeIcon: badge.icon,
+        badgeType: badge.type,
       };
     }
     return null;
@@ -417,18 +423,29 @@ export default function JourneyScreen() {
         {/* Next Milestone */}
         {nextMilestone && (
           <Surface style={[styles.milestoneCard, { backgroundColor: colors.surface }]}>
-            <View style={styles.milestoneHeader}>
-              <Ionicons name="rocket" size={24} color={colors.primary} />
-              <Text style={[styles.milestoneTitle, { color: colors.text }]}>{t('journey.nextMilestone')}</Text>
+            <View style={styles.milestoneRow}>
+              <View style={styles.milestoneContent}>
+                <View style={styles.milestoneHeader}>
+                  <Ionicons name="rocket" size={24} color={colors.primary} />
+                  <Text style={[styles.milestoneTitle, { color: colors.text }]}>{t('journey.nextMilestone')}</Text>
+                </View>
+                <Text style={[styles.milestoneName, { color: colors.primary }]}>{nextMilestone.name}</Text>
+                <Text style={[styles.milestoneProgress, { color: colors.textSecondary }]}>
+                  {t('journey.moreVisits', { count: nextMilestone.remaining })}
+                </Text>
+                <ProgressBar 
+                  percentage={((nextMilestone.target - nextMilestone.remaining) / nextMilestone.target) * 100}
+                  style={styles.milestoneProgressBar}
+                />
+              </View>
+              <View style={[styles.milestoneBadgeIcon, { backgroundColor: getBadgeColor(nextMilestone.badgeType) + '15' }]}>
+                <Ionicons 
+                  name={getBadgeIconName(nextMilestone.badgeIcon) as any} 
+                  size={36} 
+                  color={getBadgeColor(nextMilestone.badgeType)} 
+                />
+              </View>
             </View>
-            <Text style={[styles.milestoneName, { color: colors.primary }]}>{nextMilestone.name}</Text>
-            <Text style={[styles.milestoneProgress, { color: colors.textSecondary }]}>
-              {t('journey.moreVisits', { count: nextMilestone.remaining })}
-            </Text>
-            <ProgressBar 
-              percentage={((nextMilestone.target - nextMilestone.remaining) / nextMilestone.target) * 100}
-              style={styles.milestoneProgressBar}
-            />
           </Surface>
         )}
 
@@ -1014,6 +1031,21 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
+  },
+  milestoneRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  milestoneContent: {
+    flex: 1,
+  },
+  milestoneBadgeIcon: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: theme.spacing.md,
   },
   milestoneHeader: {
     flexDirection: 'row',

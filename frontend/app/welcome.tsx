@@ -90,17 +90,17 @@ export default function WelcomeScreen() {
               <View style={styles.rankCard}>
                 <Text style={styles.rankIcon}>🥉</Text>
                 <Text style={styles.rankName}>Explorer</Text>
-                <Text style={styles.rankPoints}>0 - 500 pts</Text>
+                <Text style={styles.rankPoints}>0 - 499 pts</Text>
               </View>
               <View style={[styles.rankCard, styles.rankCardHighlight]}>
                 <Text style={styles.rankIcon}>🥈</Text>
                 <Text style={styles.rankName}>Adventurer</Text>
-                <Text style={styles.rankPoints}>500 - 2000 pts</Text>
+                <Text style={styles.rankPoints}>500 - 1,499 pts</Text>
               </View>
               <View style={styles.rankCard}>
                 <Text style={styles.rankIcon}>🥇</Text>
                 <Text style={styles.rankName}>Legend</Text>
-                <Text style={styles.rankPoints}>5000+ pts</Text>
+                <Text style={styles.rankPoints}>5,000+ pts</Text>
               </View>
             </View>
 
@@ -108,22 +108,22 @@ export default function WelcomeScreen() {
               <View style={styles.pointRow}>
                 <Ionicons name="location" size={16} color={theme.colors.primaryLight} />
                 <Text style={styles.pointText}>Visit a landmark</Text>
-                <Text style={styles.pointValue}>+100 pts</Text>
+                <Text style={styles.pointValue}>+10 pts</Text>
               </View>
               <View style={styles.pointRow}>
-                <Ionicons name="camera" size={16} color={theme.colors.accent} />
-                <Text style={styles.pointText}>Add a photo</Text>
+                <Ionicons name="diamond" size={16} color={theme.colors.accent} />
+                <Text style={styles.pointText}>Premium landmark</Text>
+                <Text style={styles.pointValue}>+25 pts</Text>
+              </View>
+              <View style={styles.pointRow}>
+                <Ionicons name="earth" size={16} color="#10b981" />
+                <Text style={styles.pointText}>Country visit</Text>
                 <Text style={styles.pointValue}>+50 pts</Text>
               </View>
               <View style={styles.pointRow}>
-                <Ionicons name="book" size={16} color="#10b981" />
-                <Text style={styles.pointText}>Write a diary</Text>
-                <Text style={styles.pointValue}>+75 pts</Text>
-              </View>
-              <View style={styles.pointRow}>
-                <Ionicons name="flame" size={16} color="#ef4444" />
-                <Text style={styles.pointText}>Earn badges for milestones</Text>
-                <Text style={styles.pointValue}>+25 pts</Text>
+                <Ionicons name="flag" size={16} color="#ef4444" />
+                <Text style={styles.pointText}>New country bonus</Text>
+                <Text style={styles.pointValue}>+20 pts</Text>
               </View>
             </View>
           </LinearGradient>

@@ -1,5 +1,5 @@
 // User Rank System Configuration
-// Total points available in app: ~7,595 (560 landmarks: 427 official @ 10pts + 133 premium @ 25pts)
+// Total points available: ~15,900 (797 landmarks: 660 official @10pts + 137 premium @25pts = 10,025 + bonuses)
 
 export interface Rank {
   name: string;

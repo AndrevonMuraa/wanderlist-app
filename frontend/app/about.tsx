@@ -180,7 +180,7 @@ export default function AboutScreen() {
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>10,000</Text>
+                <Text style={styles.statNumber}>14,500+</Text>
                 <Text style={styles.statLabel}>Total Points</Text>
               </View>
             </View>
@@ -201,10 +201,19 @@ export default function AboutScreen() {
             <FAQItem
               id="points"
               question="How do I earn points?"
-              answer={`You earn points for visiting landmarks: 10 points for official landmarks, 25 points for premium landmarks, and 50 points for country visits. There are two types of points:
+              answer={`You earn points for visiting landmarks and exploring countries:
 
+• Official Landmarks: 10 points
+• Premium Landmarks: 25 points
+• Country Visit: 50 points
+• New Country Bonus: +20 points (first landmark)
+• New Continent Bonus: +50 points (first country)
+• Country Completion: +50 bonus points
+• Continent Completion: +200 bonus points
+
+There are two types of points:
 • Personal Points: Earned for all visits (with or without photos)
-• Leaderboard Points: Only earned when you upload photos with your visit
+• Leaderboard Points: Only earned when you upload photos
 
 This encourages sharing your travel memories while still rewarding all visits!`}
             />
@@ -388,7 +397,11 @@ Plus social badges, and point milestones!`}
                     <Text style={styles.bold}>Personal Points</Text> (always earned):{'\n'}
                     • Official Landmarks: 10 pts{'\n'}
                     • Premium Landmarks: 25 pts{'\n'}
-                    • Country Visit: 50 pts{'\n\n'}
+                    • Country Visit: 50 pts{'\n'}
+                    • New Country Bonus: +20 pts{'\n'}
+                    • New Continent Bonus: +50 pts{'\n'}
+                    • Country Completion: +50 pts{'\n'}
+                    • Continent Completion: +200 pts{'\n\n'}
                     <Text style={styles.bold}>Leaderboard Points</Text> (with photos):{'\n'}
                     • Same values, but only when you upload photos{'\n'}
                     • Compete fairly with verified visits!
@@ -616,7 +629,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   statNumber: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '700',
     color: theme.colors.primary,
   },
