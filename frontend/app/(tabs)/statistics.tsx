@@ -19,7 +19,6 @@ const CONTINENT_ICONS: { [key: string]: { icon: string; color: string } } = {
   'Africa': { icon: '🦁', color: '#FFB74D' },
   'Americas': { icon: '🗽', color: '#81C784' },
   'Oceania': { icon: '🦘', color: '#BA68C8' },
-  'South America': { icon: '🌴', color: '#64B5F6' },
 };
 
 interface ContinentData {

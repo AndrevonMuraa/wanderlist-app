@@ -85,8 +85,8 @@ async def get_enhanced_leaderboard(
                 "verified_points": user.get("leaderboard_points", 0),
                 "total_points": user.get("points", 0),
                 "rank": idx + 1,
-                "current_streak": user.get("current_streak", 0),
-                "longest_streak": user.get("longest_streak", 0)
+                "current_streak": 0,
+                "longest_streak": 0
             })
             if user["user_id"] == current_user.user_id:
                 user_rank = idx + 1

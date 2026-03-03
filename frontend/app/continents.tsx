@@ -23,57 +23,57 @@ const CONTINENTS = [
   {
     id: 'europe',
     name: 'Europe',
-    countries: 10,
-    landmarks: 107, // Fallback - API provides real count
+    countries: 16,
+    landmarks: 196,
     image: 'https://images.unsplash.com/photo-1683660107861-c555be9775b9?w=800',
     gradient: ['rgba(59,184,195,0.2)', 'rgba(59,184,195,0.7)'] as const,
-    totalPoints: 1505, // Fallback - API provides real total
+    totalPoints: 2620,
     description: 'Historic castles and cultural heritage',
-    accentColor: '#3BB8C3', // Turquoise/Cyan
+    accentColor: '#3BB8C3',
   },
   {
     id: 'asia',
     name: 'Asia',
-    countries: 10,
-    landmarks: 106,
+    countries: 16,
+    landmarks: 196,
     image: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800',
     gradient: ['rgba(255,140,66,0.2)', 'rgba(255,140,66,0.7)'] as const,
-    totalPoints: 1300,
+    totalPoints: 2550,
     description: 'Ancient temples and modern wonders',
-    accentColor: '#FF8C42', // Orange
+    accentColor: '#FF8C42',
   },
   {
     id: 'africa',
     name: 'Africa',
     countries: 10,
-    landmarks: 101,
+    landmarks: 121,
     image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800',
     gradient: ['rgba(218,165,32,0.2)', 'rgba(218,165,32,0.7)'] as const,
-    totalPoints: 1130,
+    totalPoints: 1525,
     description: 'Wild savannas and ancient civilizations',
-    accentColor: '#DAA520', // Golden
+    accentColor: '#DAA520',
   },
   {
     id: 'americas',
     name: 'Americas',
-    countries: 10,
-    landmarks: 107,
+    countries: 16,
+    landmarks: 189,
     image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800',
     gradient: ['rgba(76,175,80,0.2)', 'rgba(76,175,80,0.7)'] as const,
-    totalPoints: 1355,
+    totalPoints: 2475,
     description: 'Rainforests to mountain peaks',
-    accentColor: '#4CAF50', // Green
+    accentColor: '#4CAF50',
   },
   {
     id: 'oceania',
     name: 'Oceania',
     countries: 8,
-    landmarks: 81,
+    landmarks: 95,
     image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800',
     gradient: ['rgba(33,150,243,0.2)', 'rgba(33,150,243,0.7)'] as const,
     totalPoints: 855,
     description: 'Island paradise and coral reefs',
-    accentColor: '#2196F3', // Blue
+    accentColor: '#2196F3',
   },
 ];
 

@@ -107,14 +107,6 @@ export default function VisitDetailScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       <UniversalHeader 
         title={visit.landmark_name || 'Visit Details'}
-        rightElement={
-          <TouchableOpacity 
-            style={styles.shareButton}
-            onPress={handleShare}
-          >
-            <Ionicons name="share-social" size={22} color="#fff" />
-          </TouchableOpacity>
-        }
       />
       <ScrollView style={styles.scrollView}>
 
@@ -242,6 +234,17 @@ export default function VisitDetailScreen() {
             <Text style={styles.commentsText}>{visit.comments}</Text>
           </Surface>
         )}
+
+        {/* Share Visit */}
+        <TouchableOpacity
+          style={styles.shareVisitButton}
+          onPress={handleShare}
+          activeOpacity={0.7}
+          data-testid="share-visit-button"
+        >
+          <Ionicons name="share-social-outline" size={18} color={theme.colors.primary} />
+          <Text style={styles.shareVisitText}>Share This Visit</Text>
+        </TouchableOpacity>
 
         <View style={styles.bottomSpacer} />
       </ScrollView>
@@ -416,13 +419,19 @@ const styles = StyleSheet.create({
   bottomSpacer: {
     height: theme.spacing.xl * 2,
   },
-  shareButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center',
+  shareVisitButton: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 12,
+    marginHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
+  },
+  shareVisitText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: theme.colors.primary,
   },
   photoCountBadge: {
     position: 'absolute',

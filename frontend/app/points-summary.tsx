@@ -41,8 +41,8 @@ export default function PointsSummary() {
     const fetchStats = async () => {
       try {
         const token = await getToken();
-        const [profileRes, visitsRes] = await Promise.all([
-          fetch(`${BACKEND_URL}/api/auth/profile`, {
+        const [statsRes, visitsRes] = await Promise.all([
+          fetch(`${BACKEND_URL}/api/stats`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
           fetch(`${BACKEND_URL}/api/visits`, {
@@ -50,17 +50,17 @@ export default function PointsSummary() {
           }),
         ]);
         
-        if (profileRes.ok && visitsRes.ok) {
-          const profile = await profileRes.json();
+        if (statsRes.ok && visitsRes.ok) {
+          const statsData = await statsRes.json();
           const visits = await visitsRes.json();
           
           const withPhotos = visits.filter((v: any) => v.has_photos || (v.photos && v.photos.length > 0)).length;
           
           setStats({
-            total_points: profile.total_points || 0,
-            leaderboard_points: profile.leaderboard_points || 0,
-            landmarks_visited: profile.landmarks_visited || visits.length,
-            countries_visited: profile.countries_visited || 0,
+            total_points: statsData.points || 0,
+            leaderboard_points: statsData.leaderboard_points || 0,
+            landmarks_visited: statsData.total_visits || visits.length,
+            countries_visited: statsData.countries_visited || 0,
             visits_with_photos: withPhotos,
             visits_without_photos: visits.length - withPhotos,
           });
@@ -161,7 +161,7 @@ export default function PointsSummary() {
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Landmark Visit</Text>
-                <Text style={styles.infoDesc}>Points vary per landmark (typically 10 pts)</Text>
+                <Text style={styles.infoDesc}>10 pts (official) or 25 pts (premium)</Text>
               </View>
             </View>
             
@@ -181,7 +181,27 @@ export default function PointsSummary() {
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Country Bonus</Text>
-                <Text style={styles.infoDesc}>20 bonus points for first landmark in a new country</Text>
+                <Text style={styles.infoDesc}>+20 pts for first landmark in a new country</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#F3E5F5' }]}>
+                <Ionicons name="globe" size={18} color="#9C27B0" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Continent Bonus</Text>
+                <Text style={styles.infoDesc}>+50 pts for first country on a new continent</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#E0F7FA' }]}>
+                <Ionicons name="checkmark-circle" size={18} color="#00BCD4" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Completion Bonuses</Text>
+                <Text style={styles.infoDesc}>+50 pts per country, +200 pts per continent completed</Text>
               </View>
             </View>
             
@@ -191,7 +211,7 @@ export default function PointsSummary() {
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Photo Verification</Text>
-                <Text style={styles.infoDesc}>Add photos to earn verified points for the global leaderboard</Text>
+                <Text style={styles.infoDesc}>Add photos to earn verified points for the leaderboard</Text>
               </View>
             </View>
           </Surface>

@@ -11,7 +11,6 @@ import {
   ActivityIndicator,
   FlatList,
   Animated,
-  Modal,
   Alert,
   TextInput,
   KeyboardAvoidingView,
@@ -93,7 +92,6 @@ export default function CountryVisitDetailScreen() {
   const [editDiary, setEditDiary] = useState('');
   const [deleting, setDeleting] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [showOptionsMenu, setShowOptionsMenu] = useState(false);
   const [visitedLandmarks, setVisitedLandmarks] = useState<any[]>([]);
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
   
@@ -745,58 +743,6 @@ export default function CountryVisitDetailScreen() {
         <View style={styles.bottomSpacer} />
       </ScrollView>
 
-      {/* Options Menu Modal */}
-      <Modal
-        visible={showOptionsMenu}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowOptionsMenu(false)}
-      >
-        <TouchableOpacity 
-          style={styles.optionsOverlay}
-          activeOpacity={1}
-          onPress={() => setShowOptionsMenu(false)}
-        >
-          <View style={styles.optionsMenu}>
-            <TouchableOpacity 
-              style={styles.optionItem}
-              onPress={() => {
-                setShowOptionsMenu(false);
-                handleShare();
-              }}
-            >
-              <Ionicons name="share-social-outline" size={22} color={theme.colors.text} />
-              <Text style={styles.optionText}>Share</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.optionItem}
-              onPress={() => {
-                setShowOptionsMenu(false);
-                setEditDiary(visit.diary || '');
-                setShowEditDialog(true);
-              }}
-            >
-              <Ionicons name="create-outline" size={22} color={theme.colors.text} />
-              <Text style={styles.optionText}>Edit Diary</Text>
-            </TouchableOpacity>
-            
-            <View style={styles.optionDivider} />
-            
-            <TouchableOpacity 
-              style={styles.optionItem}
-              onPress={() => {
-                setShowOptionsMenu(false);
-                setShowDeleteDialog(true);
-              }}
-            >
-              <Ionicons name="trash-outline" size={22} color={theme.colors.error} />
-              <Text style={[styles.optionText, { color: theme.colors.error }]}>Delete Visit</Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      </Modal>
-
       {/* Fullscreen Photo Viewer with Pinch-to-Zoom and Rotate */}
       <PhotoViewer
         visible={showFullscreen}
@@ -1179,37 +1125,6 @@ const styles = StyleSheet.create({
     height: theme.spacing.xl,
   },
   // Options Menu
-  optionsOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-    paddingTop: 60,
-    paddingRight: theme.spacing.md,
-  },
-  optionsMenu: {
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.lg,
-    paddingVertical: theme.spacing.sm,
-    minWidth: 180,
-    ...theme.shadows.md,
-  },
-  optionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.lg,
-    gap: theme.spacing.sm,
-  },
-  optionText: {
-    fontSize: 16,
-    color: theme.colors.text,
-  },
-  optionDivider: {
-    height: 1,
-    backgroundColor: theme.colors.border,
-    marginVertical: theme.spacing.xs,
-  },
   // Fullscreen
   fullscreenContainer: {
     flex: 1,

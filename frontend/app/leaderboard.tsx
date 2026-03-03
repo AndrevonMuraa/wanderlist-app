@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Platform,
   RefreshControl,
+  Share,
 } from 'react-native';
 import { Text, Surface, Avatar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
@@ -36,8 +37,6 @@ interface LeaderboardEntry {
   verified_points?: number;
   total_points?: number;
   rank: number;
-  current_streak?: number;
-  longest_streak?: number;
 }
 
 interface LeaderboardResponse {
@@ -357,6 +356,29 @@ export default function LeaderboardScreen() {
         {/* User Rank Card */}
         {renderUserRankCard()}
 
+        {/* Share Ranking */}
+        {userRank !== null && (
+          <TouchableOpacity
+            style={styles.shareRankButton}
+            onPress={async () => {
+              try {
+                const categoryLabel = category === 'points' ? 'points' : category === 'visits' ? 'visits' : 'countries explored';
+                await Share.share({
+                  message: `I'm ranked #${userRank} out of ${totalUsers.toLocaleString()} travelers on WanderMark! 🌍🏆\n\nTrack your travels: https://wandermark.app`,
+                  title: 'My WanderMark Ranking',
+                });
+              } catch (error) {
+                console.error('Error sharing rank:', error);
+              }
+            }}
+            activeOpacity={0.7}
+            data-testid="share-ranking-button"
+          >
+            <Ionicons name="share-social-outline" size={16} color={theme.colors.primary} />
+            <Text style={styles.shareRankText}>Share My Ranking</Text>
+          </TouchableOpacity>
+        )}
+
         {/* Leaderboard Entries */}
         <View style={styles.leaderboardSection}>
           <View style={styles.sectionHeader}>
@@ -428,6 +450,20 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#666',
     marginBottom: 8,
+  },
+  shareRankButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 10,
+    marginHorizontal: 16,
+    marginBottom: 4,
+  },
+  shareRankText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: theme.colors.primary,
   },
   segmentedButtons: {
     backgroundColor: '#fff',

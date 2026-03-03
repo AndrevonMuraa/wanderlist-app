@@ -310,9 +310,6 @@ export default function JourneyScreen() {
           <Surface style={[styles.statsCard, { backgroundColor: colors.surface }]}>
             <View style={styles.statsHeader}>
               <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('journey.yourStats')}</Text>
-              <TouchableOpacity>
-                <Ionicons name="share-social-outline" size={20} color={colors.primary} />
-              </TouchableOpacity>
             </View>
 
             <View style={styles.statsGridCompact}>
@@ -361,7 +358,7 @@ export default function JourneyScreen() {
               >
                 <Ionicons name="earth" size={20} color={colors.accent} />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
-                  {progressStats ? Object.values(progressStats.continents).filter((c: any) => c.visited > 0).length : 0}/7
+                  {progressStats ? Object.values(progressStats.continents).filter((c: any) => c.visited > 0).length : 0}/5
                 </Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Continents</Text>
               </TouchableOpacity>
