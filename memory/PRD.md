@@ -123,12 +123,23 @@ WanderMark is a travel app where users visit landmarks and countries, earn point
 ## Pending Deployment
 All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) New EAS build
 
+### Session Mar 2026 - Comprehensive Code Audit & Bug Fixes
+- **P0 CRITICAL: Points Summary page fixed** - Was completely broken (GET to PUT-only /api/auth/profile returned 405). Now uses /api/stats with correct field mapping.
+- **P0 CRITICAL: Continents stat corrected** - Journey page showed "/7" but app only has 5 continents. Fixed to "/5".
+- **P1: Share buttons removed from ALL headers** - Journey stats header share icon removed, Visit Detail share moved from header to content area button.
+- **P1: Dead options menu removed** - Country Visit Detail had an options modal that could never be opened (no trigger). Removed modal, state, import, and styles.
+- **P1: Statistics continent mapping fixed** - Had "South America" key but backend uses "Americas". Fixed to match.
+- **P1: Points Summary bonus types added** - Now shows all 6 earning methods: Landmark (10/25), Country Visit (50), Country Bonus (+20), Continent Bonus (+50), Completion Bonuses (+50/+200), Photo Verification.
+- **P1: Continents fallback data updated** - Was significantly outdated (e.g., Europe showed 107 landmarks, actual is 196). Updated all 5 continents.
+- **P2: Dead streak code removed** - Deleted StreakDisplay.tsx (132 lines), removed streak fields from leaderboard interface, hardcoded backend streak response to 0.
+- **P3: Leaderboard share added** - "Share My Ranking" button showing rank position with wandermark.app link.
+- **P3: Backend scripts reorganized** - 11 one-time seed/migration scripts moved to /backend/scripts/ folder.
+
 ## Remaining Tasks
-1. Deploy all Mar 2026 changes: Save to GitHub → Deploy backend to Render → New EAS build
+1. Deploy all changes: Save to GitHub → Deploy backend to Render → New EAS build
 2. User E2E testing of new build with all fixes
 3. App Store submission preparation
-4. Further performance profiling on real device
-5. P2: Rename GitHub repository (`wanderlist-app` → `wandermark-app`)
+4. P2: Rename GitHub repository (`wanderlist-app` → `wandermark-app`)
 
 ## Key Files Modified (Latest)
 - `backend/routes/country_visits.py` - Full PUT endpoint with photo management + landmarks endpoint + migration
