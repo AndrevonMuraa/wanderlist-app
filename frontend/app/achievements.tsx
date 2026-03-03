@@ -104,6 +104,18 @@ export default function AchievementsScreen() {
     }
   };
 
+  const handleShareSingleBadge = async (badge: BadgeData) => {
+    try {
+      const message = `🏆 Badge Unlocked: ${badge.badge_name}!\n\n${badge.badge_description}\n\n${badge.earned_at ? `Earned: ${formatDate(badge.earned_at)}` : ''}\n\nTrack your travels on WanderMark: https://wandermark.app`;
+      await Share.share({
+        message,
+        title: `${badge.badge_name} - WanderMark Badge`,
+      });
+    } catch (error) {
+      console.error('Error sharing badge:', error);
+    }
+  };
+
   const formatDate = (dateString: string | null) => {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -112,6 +124,7 @@ export default function AchievementsScreen() {
 
   const renderBadgeCard = (badge: BadgeData) => {
     const isEarned = badge.is_earned;
+    const badgeColor = getBadgeColor(badge.badge_type);
 
     return (
       <Surface
@@ -129,11 +142,11 @@ export default function AchievementsScreen() {
           </View>
         )}
 
-        <View style={[styles.badgeIconContainer, { backgroundColor: isEarned ? getBadgeColor(badge.badge_type) + '20' : colors.border }]}>
+        <View style={[styles.badgeIconContainer, { backgroundColor: isEarned ? badgeColor + '20' : colors.border }]}>
           <Ionicons 
             name={getBadgeIconName(badge.badge_icon) as any} 
             size={32} 
-            color={isEarned ? getBadgeColor(badge.badge_type) : colors.textLight} 
+            color={isEarned ? badgeColor : colors.textLight} 
           />
         </View>
 
@@ -159,18 +172,31 @@ export default function AchievementsScreen() {
             </View>
             <PaperProgressBar
               progress={badge.progress / 100}
-              color={colors.primary}
+              color={badgeColor}
               style={[styles.progressBar, { backgroundColor: colors.border }]}
             />
           </View>
         )}
 
-        {isEarned && badge.earned_at && (
-          <View style={styles.earnedDateContainer}>
-            <Ionicons name="calendar-outline" size={12} color={colors.textSecondary} />
-            <Text style={[styles.earnedDate, { color: colors.textSecondary }]}>
-              {formatDate(badge.earned_at)}
-            </Text>
+        {isEarned && (
+          <View style={styles.earnedFooter}>
+            {badge.earned_at && (
+              <View style={styles.earnedDateContainer}>
+                <Ionicons name="calendar-outline" size={12} color={colors.textSecondary} />
+                <Text style={[styles.earnedDate, { color: colors.textSecondary }]}>
+                  {formatDate(badge.earned_at)}
+                </Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={[styles.shareSingleBadge, { backgroundColor: badgeColor + '15' }]}
+              onPress={() => handleShareSingleBadge(badge)}
+              activeOpacity={0.7}
+              data-testid={`share-badge-${badge.badge_type}`}
+            >
+              <Ionicons name="share-social-outline" size={14} color={badgeColor} />
+              <Text style={[styles.shareSingleText, { color: badgeColor }]}>Share</Text>
+            </TouchableOpacity>
           </View>
         )}
       </Surface>
@@ -509,11 +535,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    marginTop: 8,
   },
   earnedDate: {
     fontSize: 11,
     color: '#666',
+  },
+  earnedFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 10,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.06)',
+  },
+  shareSingleBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 12,
+  },
+  shareSingleText: {
+    fontSize: 12,
+    fontWeight: '600',
   },
   emptyCard: {
     padding: 40,
