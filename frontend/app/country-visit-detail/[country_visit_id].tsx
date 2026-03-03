@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -23,6 +23,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { safeGoBack } from '../../utils/navigation';
 import { Surface, Portal, Dialog, Button } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
+import * as ImagePicker from 'expo-image-picker';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import PhotoViewer from '../../components/PhotoViewer';
@@ -95,6 +96,7 @@ export default function CountryVisitDetailScreen() {
   const [saving, setSaving] = useState(false);
   const [showOptionsMenu, setShowOptionsMenu] = useState(false);
   const [visitedLandmarks, setVisitedLandmarks] = useState<any[]>([]);
+  const [uploadingPhotos, setUploadingPhotos] = useState(false);
   
   const flatListRef = useRef<FlatList>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -145,6 +147,106 @@ export default function CountryVisitDetailScreen() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAddPhotos = async () => {
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission Required', 'Please allow photo library access to add photos.');
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true,
+        quality: 0.7,
+        base64: true,
+      });
+
+      if (!result.canceled && result.assets) {
+        setUploadingPhotos(true);
+        const newPhotos = result.assets
+          .filter(asset => asset.base64)
+          .map(asset => `data:image/jpeg;base64,${asset.base64}`);
+        
+        const existingPhotos = visit?.photos || [];
+        const allPhotos = [...existingPhotos, ...newPhotos];
+        
+        const token = await getToken();
+        const response = await fetch(
+          `${BACKEND_URL}/api/country-visits/${country_visit_id}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ photos: allPhotos }),
+          }
+        );
+
+        if (response.ok) {
+          const updated = await response.json();
+          setVisit(updated);
+          Alert.alert('Success', 'Photos added successfully!');
+        } else {
+          const err = await response.json().catch(() => null);
+          Alert.alert('Error', err?.detail || 'Failed to add photos');
+        }
+        setUploadingPhotos(false);
+      }
+    } catch (error) {
+      console.error('Error adding photos:', error);
+      setUploadingPhotos(false);
+      Alert.alert('Error', 'Failed to add photos');
+    }
+  };
+
+  const handleRemovePhoto = (photoIndex: number) => {
+    Alert.alert(
+      'Remove Photo',
+      'Are you sure you want to remove this photo?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const currentPhotos = [...(visit?.photos || [])];
+              currentPhotos.splice(photoIndex, 1);
+              
+              const token = await getToken();
+              const response = await fetch(
+                `${BACKEND_URL}/api/country-visits/${country_visit_id}`,
+                {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                  },
+                  body: JSON.stringify({ photos: currentPhotos }),
+                }
+              );
+
+              if (response.ok) {
+                const updated = await response.json();
+                setVisit(updated);
+                if (selectedPhotoIndex >= currentPhotos.length && currentPhotos.length > 0) {
+                  setSelectedPhotoIndex(currentPhotos.length - 1);
+                }
+              } else {
+                Alert.alert('Error', 'Failed to remove photo');
+              }
+            } catch (error) {
+              console.error('Error removing photo:', error);
+              Alert.alert('Error', 'Failed to remove photo');
+            }
+          },
+        },
+      ]
+    );
   };
 
   const handleDelete = async () => {
@@ -439,12 +541,68 @@ export default function CountryVisitDetailScreen() {
                 ))}
               </ScrollView>
             )}
+
+            {/* Photo Management Buttons */}
+            <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 12, paddingVertical: 12, paddingHorizontal: 16 }}>
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row', alignItems: 'center', gap: 6,
+                  backgroundColor: theme.colors.primary + '15',
+                  paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
+                }}
+                onPress={handleAddPhotos}
+                disabled={uploadingPhotos}
+              >
+                {uploadingPhotos ? (
+                  <ActivityIndicator size="small" color={theme.colors.primary} />
+                ) : (
+                  <Ionicons name="add-circle-outline" size={18} color={theme.colors.primary} />
+                )}
+                <Text style={{ color: theme.colors.primary, fontWeight: '600', fontSize: 13 }}>
+                  {uploadingPhotos ? 'Uploading...' : 'Add More'}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row', alignItems: 'center', gap: 6,
+                  backgroundColor: theme.colors.error + '12',
+                  paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
+                }}
+                onPress={() => handleRemovePhoto(selectedPhotoIndex)}
+              >
+                <Ionicons name="trash-outline" size={16} color={theme.colors.error} />
+                <Text style={{ color: theme.colors.error, fontWeight: '600', fontSize: 13 }}>Remove</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         ) : (
           <Surface style={[styles.infoCard, { alignItems: 'center', paddingVertical: 32 }]}>
             <Ionicons name="camera-outline" size={48} color={theme.colors.textLight} />
             <Text style={{ color: theme.colors.textSecondary, fontSize: 15, marginTop: 12, fontWeight: '600' }}>No photos added yet</Text>
             <Text style={{ color: theme.colors.textLight, fontSize: 13, marginTop: 4 }}>Add photos to this country visit</Text>
+            <TouchableOpacity 
+              style={{ 
+                marginTop: 16, 
+                backgroundColor: theme.colors.primary, 
+                paddingHorizontal: 24, 
+                paddingVertical: 10, 
+                borderRadius: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 6,
+              }}
+              onPress={handleAddPhotos}
+              disabled={uploadingPhotos}
+            >
+              {uploadingPhotos ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Ionicons name="add-circle" size={18} color="#fff" />
+              )}
+              <Text style={{ color: '#fff', fontWeight: '600', fontSize: 14 }}>
+                {uploadingPhotos ? 'Uploading...' : 'Add Photos'}
+              </Text>
+            </TouchableOpacity>
           </Surface>
         )}
 

@@ -248,7 +248,7 @@ async def delete_country_visit(country_visit_id: str, current_user: User = Depen
 
 @router.put("/country-visits/{country_visit_id}")
 async def update_country_visit(country_visit_id: str, data: dict, current_user: User = Depends(get_current_user)):
-    """Update a country visit (diary entry)"""
+    """Update a country visit (diary, photos, visibility)"""
     # Verify ownership
     country_visit = await db.country_visits.find_one({
         "country_visit_id": country_visit_id,
@@ -264,9 +264,42 @@ async def update_country_visit(country_visit_id: str, data: dict, current_user: 
         update_fields["diary"] = data["diary"]
     if "visibility" in data and data["visibility"] in ["public", "friends", "private"]:
         update_fields["visibility"] = data["visibility"]
+    if "photos" in data:
+        # Validate photo limits
+        limits = get_user_limits(current_user)
+        max_photos = limits["photos_per_visit"]
+        new_photos = data["photos"]
+        if len(new_photos) > max_photos:
+            raise HTTPException(status_code=403, detail=f"Maximum {max_photos} photos allowed for your plan")
+        update_fields["photos"] = new_photos
+        has_photos = len(new_photos) > 0
+        update_fields["has_photos"] = has_photos
+        
+        # Handle leaderboard points changes
+        existing_has_photos = bool(country_visit.get("photos", []))
+        points_earned = country_visit.get("points_earned", 50)
+        
+        if has_photos and not existing_has_photos:
+            # Adding photos for the first time → award leaderboard points
+            update_fields["leaderboard_points_earned"] = points_earned
+            await db.users.update_one(
+                {"user_id": current_user.user_id},
+                {"$inc": {"leaderboard_points": points_earned}}
+            )
+        elif not has_photos and existing_has_photos:
+            # Removing all photos → revoke leaderboard points
+            old_lb_points = country_visit.get("leaderboard_points_earned", 0)
+            update_fields["leaderboard_points_earned"] = 0
+            if old_lb_points > 0:
+                await db.users.update_one(
+                    {"user_id": current_user.user_id},
+                    {"$inc": {"leaderboard_points": -old_lb_points}}
+                )
     
     if not update_fields:
         raise HTTPException(status_code=400, detail="No valid fields to update")
+    
+    update_fields["updated_at"] = datetime.now(timezone.utc)
     
     # Update country visit
     await db.country_visits.update_one(

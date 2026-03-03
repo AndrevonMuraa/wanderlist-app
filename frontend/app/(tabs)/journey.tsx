@@ -425,6 +425,61 @@ export default function JourneyScreen() {
           </Surface>
         )}
 
+        {/* Recently Visited - Visual Carousel */}
+        {recentVisits.length > 0 && (
+          <View style={{ marginBottom: theme.spacing.md }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: theme.spacing.md, marginBottom: 12 }}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Recently Visited</Text>
+            </View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: theme.spacing.md, gap: 14 }}
+            >
+              {recentVisits.map((visit) => (
+                <TouchableOpacity
+                  key={visit.visit_id}
+                  style={{
+                    width: 160,
+                    borderRadius: theme.borderRadius.xl,
+                    overflow: 'hidden',
+                    backgroundColor: colors.surface,
+                    ...theme.shadows.card,
+                  }}
+                  onPress={() => router.push(`/visit-detail/${visit.visit_id}`)}
+                  activeOpacity={0.85}
+                >
+                  {visit.photos && visit.photos.length > 0 ? (
+                    <Image
+                      source={{ uri: visit.photos[0] }}
+                      style={{ width: 160, height: 120 }}
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <View style={{ width: 160, height: 120, backgroundColor: colors.primaryLight, alignItems: 'center', justifyContent: 'center' }}>
+                      <Ionicons name="location" size={36} color={colors.primary} />
+                    </View>
+                  )}
+                  <View style={{ padding: 10 }}>
+                    <Text style={{ fontSize: 13, fontWeight: '700', color: colors.text }} numberOfLines={1}>
+                      {visit.landmark_name || 'Landmark'}
+                    </Text>
+                    <Text style={{ fontSize: 11, color: colors.textSecondary, marginTop: 2 }}>
+                      {new Date(visit.visited_at).toLocaleDateString('en-US', {
+                        month: 'short', day: 'numeric'
+                      })}
+                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 3 }}>
+                      <Ionicons name="star" size={12} color={colors.accentYellow} />
+                      <Text style={{ fontSize: 11, fontWeight: '600', color: colors.text }}>{visit.points_earned} pts</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        )}
+
         {/* Continental Progress */}
         {progressStats && (
           <Surface style={[styles.continentalCard, { backgroundColor: colors.surface }]}>
@@ -614,39 +669,6 @@ export default function JourneyScreen() {
           </Surface>
         )}
 
-        {/* Recent Visits */}
-        {recentVisits.length > 0 && (
-          <Surface style={[styles.recentVisitsCard, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('journey.recentVisits')}</Text>
-            {recentVisits.map((visit) => (
-              <TouchableOpacity
-                key={visit.visit_id}
-                style={[styles.visitItem, { borderBottomColor: colors.border }]}
-                onPress={() => router.push(`/visit-detail/${visit.visit_id}`)}
-                activeOpacity={0.7}
-              >
-                <View style={[styles.visitIcon, { backgroundColor: colors.primaryLight }]}>
-                  <Ionicons name="location" size={20} color={colors.primary} />
-                </View>
-                <View style={styles.visitInfo}>
-                  <Text style={[styles.visitName, { color: colors.text }]}>{visit.landmark_name || 'Landmark'}</Text>
-                  <Text style={[styles.visitDate, { color: colors.textSecondary }]}>
-                    {new Date(visit.visited_at).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric'
-                    })}
-                  </Text>
-                </View>
-                <View style={[styles.visitPoints, { backgroundColor: colors.surfaceTinted }]}>
-                  <Ionicons name="star" size={14} color={colors.accentYellow} />
-                  <Text style={[styles.visitPointsText, { color: colors.text }]}>{visit.points_earned}</Text>
-                </View>
-                <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
-              </TouchableOpacity>
-            ))}
-          </Surface>
-        )}
 
         {/* Custom Visits Section */}
         <Surface style={[styles.customVisitsCard, { backgroundColor: colors.surface }]}>

@@ -42,30 +42,37 @@ WanderMark is a travel app where users visit landmarks and countries, earn point
 - Database indexes
 
 ### Session Mar 2026 - E2E-2 Fixes
-- **Badge icons**: Fixed broken icons (grey circles with text) → now renders proper Ionicons
-- **Achievements page**: Fixed tab visibility (earned/in progress tabs now show white text on active)
-- **Achievements page**: Badge icon containers with proper sizing and colors
-- **My Landmark Visits**: Fixed auth token key (`token` → `auth_token`) - was causing 0 stats
-- **Points Summary**: Fixed auth token key (`token` → `auth_token`) - was causing 0 stats
-- **Visit model**: Added `landmark_name` and `country_name` fields for retroactive display
-- **Visits endpoint**: Now enriches visits with landmark names from DB for old records
-- **Explore progress bars**: Now shown on ALL continent cards (not just >0%)
+- **Badge icons**: Fixed broken icons (grey circles with text) → Ionicons with proper colors
+- **Achievements page**: Fixed tab visibility (white text on active solid background)
+- **My Landmark Visits**: Fixed auth token key (`token` → `auth_token`)
+- **Points Summary**: Fixed auth token key (`token` → `auth_token`)
+- **Visit model**: Added `landmark_name` and `country_name` fields
+- **Visits endpoint**: Enriches visits with landmark names retroactively
+- **Explore progress bars**: Shown on ALL continent cards
 - **Journey page restructured**:
-  - Removed "Your Top Continent" section (redundant)
-  - Moved link lines above "Recent Achievements" and below "Continental Progress"
-  - Added new links: My Landmark Visits, Achievements & Badges, Points Summary
-  - Made badge count clickable → navigates to /achievements
-  - "View All Badges" now navigates to /achievements (was /profile)
+  - Removed "Your Top Continent" (redundant)
+  - Moved link lines above "Recent Achievements" below "Continental Progress"
+  - Added links: My Landmark Visits, Achievements & Badges, Points Summary
+  - Badge count clickable → /achievements
+  - "View All Badges" → /achievements (was /profile)
+  - Replaced "Recent Visits" list with visual carousel (photos + cards)
+  - Carousel placed under "Overall Progress" section
 - **Country visit detail**:
-  - Removed three-dots options menu from header
-  - Added "No photos added yet" empty state
-  - Added "Visited Landmarks" list at bottom with navigation
-- **Country visit photos migration**: Backend endpoint to clean auto-created visit photos (retroactive fix)
-- **My Country Visits**: Auto-triggers migration on page load to clean landmark photos
-- **Visit detail page**: Updated to use UniversalHeader, theme.colors.surface cards, country subtitle
-- **Social page**: Removed duplicate leaderboard section (bottom), changed community feed to vertical layout
-- **Leaderboard**: Fixed back navigation (router.back() instead of always pushing social)
-- **Badge logic**: Added milestone_250 to award milestones list
+  - Removed three-dots menu from header
+  - Added "No photos" empty state with "Add Photos" button
+  - Added "Visited Landmarks" list at bottom
+  - **Photo management**: Add photos, remove individual photos (via ImagePicker)
+- **Country visit photos migration**: Backend endpoint to clean auto-created visit photos
+- **My Country Visits**: Auto-triggers migration on page load
+- **Visit detail page**: UniversalHeader, theme.colors.surface cards, country subtitle
+- **Social page**: Removed duplicate leaderboard, vertical community feed layout
+- **Leaderboard**: Context-aware back navigation
+- **Badge logic**: Added milestone_250
+
+### Session Mar 2026 - Photo Management + Carousel
+- **Country visit photo editing**: Full CRUD - add photos (ImagePicker), remove individual photos, backend PUT endpoint with proper leaderboard points handling
+- **Recently Visited carousel**: Horizontal scrollable photo cards replacing old text-only list, placed under Overall Progress
+- **Next Milestone section verified**: Retroactive, uses same milestones as badge system (10, 25, 50, 100, 200, 250, 350, 500), names match BADGE_DEFINITIONS exactly
 
 ## Current App Version
 - Version: 1.2.0
@@ -75,27 +82,25 @@ WanderMark is a travel app where users visit landmarks and countries, earn point
 All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) New EAS build
 
 ## Remaining Tasks
-1. User E2E testing of new build with all Mar 2026 fixes
-2. Country visit photo editing (add/remove/change photos)
-3. App Store submission preparation
-4. Further performance profiling on real device
+1. User E2E testing of new build with all fixes
+2. App Store submission preparation
+3. Further performance profiling on real device
 
-## Key Files Modified Mar 2026
-- `backend/models/all.py` - Added landmark_name, country_name to Visit model
-- `backend/routes/country_visits.py` - Added landmarks endpoint + migration endpoint
-- `backend/routes/visits.py` - Enriches visits with landmark names
-- `backend/utils/helpers.py` - Added milestone_250 to badge milestones
-- `frontend/utils/badgeIcons.ts` - NEW: Badge icon mapping utility
-- `frontend/app/(tabs)/journey.tsx` - Major restructuring (links, badges, removed top continent)
-- `frontend/app/(tabs)/social.tsx` - Removed duplicate leaderboard, vertical community feed
-- `frontend/app/achievements.tsx` - Fixed tabs, badge icons, container sizing
+## Key Files Modified (Latest)
+- `backend/routes/country_visits.py` - Full PUT endpoint with photo management + landmarks endpoint + migration
+- `frontend/app/(tabs)/journey.tsx` - Carousel, reordered sections, badge icons, navigation
+- `frontend/app/country-visit-detail/[country_visit_id].tsx` - Photo CRUD, landmarks list, empty states
+- `frontend/utils/badgeIcons.ts` - Badge icon mapping utility
+- `frontend/app/achievements.tsx` - Tab visibility, icon rendering
+- `frontend/app/my-landmark-visits.tsx` - Token fix, interface alignment
+- `frontend/app/points-summary.tsx` - Token fix
+- `frontend/app/visit-detail/[visit_id].tsx` - UniversalHeader, consistent styling
+- `frontend/app/(tabs)/social.tsx` - Removed duplicate leaderboard, vertical feed
 - `frontend/app/continents.tsx` - Progress bars on all continents
-- `frontend/app/country-visit-detail/[country_visit_id].tsx` - No-photo state, landmarks list, removed menu
-- `frontend/app/leaderboard.tsx` - Context-aware back navigation
-- `frontend/app/my-country-visits.tsx` - Auto-migration call
-- `frontend/app/my-landmark-visits.tsx` - Fixed token key, interface
-- `frontend/app/points-summary.tsx` - Fixed token key
-- `frontend/app/visit-detail/[visit_id].tsx` - UniversalHeader, theme colors
+- `frontend/app/leaderboard.tsx` - Context-aware back nav
+- `backend/models/all.py` - Visit model with landmark_name, country_name
+- `backend/routes/visits.py` - Enriches visits with landmark names
+- `backend/utils/helpers.py` - milestone_250 in badge milestones
 
 ## Test Credentials
 - Email: test@wandermark.app | Password: Test1234!
