@@ -15,6 +15,7 @@ import UpgradeModal from '../../components/UpgradeModal';
 import RankBadge from '../../components/RankBadge';
 import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
+import Constants from 'expo-constants';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import ShareStatsCard from '../../components/ShareStatsCard';
 
@@ -370,7 +371,7 @@ export default function ProfileScreen() {
           {t('auth.logout')}
         </Button>
 
-        <Text style={[styles.versionText, { color: colors.textLight }]}>WanderMark v1.0.0</Text>
+        <Text style={[styles.versionText, { color: colors.textLight }]}>WanderMark v{Constants.expoConfig?.version || '1.2.0'}</Text>
       </ScrollView>
 
       <Portal>

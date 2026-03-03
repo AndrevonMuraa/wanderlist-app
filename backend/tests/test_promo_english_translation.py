@@ -11,7 +11,7 @@ import uuid
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 if not BASE_URL:
-    BASE_URL = "https://eas-build-54.preview.emergentagent.com"
+    BASE_URL = "https://app-store-ready-13.preview.emergentagent.com"
 
 # Norwegian words/phrases to check for (should NOT appear in responses)
 NORWEGIAN_PATTERNS = [

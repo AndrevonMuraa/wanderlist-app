@@ -221,7 +221,7 @@ export default function JourneyScreen() {
 
   const getNextMilestone = () => {
     const visited = progressStats?.overall.visited || 0;
-    // Milestones matching badge system (796 total landmarks)
+    // Milestones matching badge system (797 total landmarks)
     const milestones = [10, 25, 50, 100, 200, 250, 350, 500];
     const next = milestones.find(m => m > visited);
     if (next) {
@@ -583,7 +583,7 @@ export default function JourneyScreen() {
                 <Ionicons name="ribbon" size={22} color="#FFB300" />
               </View>
               <View>
-                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>Achievements & Badges</Text>
+                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>My Badges</Text>
                 <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>Track your progress</Text>
               </View>
             </View>
@@ -678,7 +678,7 @@ export default function JourneyScreen() {
               style={styles.viewAllButton}
               onPress={() => router.push('/achievements')}
             >
-              <Text style={[styles.viewAllText, { color: colors.primary }]}>{t('journey.viewAllBadges')}</Text>
+              <Text style={[styles.viewAllText, { color: colors.primary }]}>View All Badges</Text>
               <Ionicons name="chevron-forward" size={16} color={colors.primary} />
             </TouchableOpacity>
           </Surface>

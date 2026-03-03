@@ -16,6 +16,7 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme, { gradients } from '../styles/theme';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
+import Constants from 'expo-constants';
 
 const { width } = Dimensions.get('window');
 
@@ -155,7 +156,7 @@ export default function AboutScreen() {
             <Text style={styles.heroSubtitle}>
               Your personal travel companion for discovering and conquering the world's most amazing landmarks
             </Text>
-            <Text style={styles.versionText}>Version 1.1.0</Text>
+            <Text style={styles.versionText}>Version {Constants.expoConfig?.version || '1.2.0'}</Text>
           </LinearGradient>
         </View>
 
@@ -164,7 +165,7 @@ export default function AboutScreen() {
           <Surface style={styles.statsCard}>
             <View style={styles.statsGrid}>
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>796</Text>
+                <Text style={styles.statNumber}>797</Text>
                 <Text style={styles.statLabel}>Landmarks</Text>
               </View>
               <View style={styles.statDivider} />
@@ -284,7 +285,7 @@ Plus social badges, and point milestones!`}
               number={1}
               icon="compass"
               title="Explore Landmarks"
-              description="Browse 796 landmarks across 66 countries and 5 continents."
+              description="Browse 797 landmarks across 66 countries and 5 continents."
             />
             <HowItWorksStep
               number={2}
@@ -423,8 +424,8 @@ Plus social badges, and point milestones!`}
                     100 → 500 → 1,000 → 5,000 pts{'\n\n'}
                     <Text style={styles.bold}>Social Badges:</Text>{'\n'}
                     5 → 10 → 25 friends{'\n\n'}
-                    <Text style={styles.bold}>Streak Badges:</Text>{'\n'}
-                    Social milestones (5, 10, 25 friends){'\n\n'}
+                    <Text style={styles.bold}>Country Complete:</Text>{'\n'}
+                    Visit all landmarks in a country{'\n\n'}
                     Badges are awarded automatically!
                   </Text>
                 </View>
@@ -479,7 +480,7 @@ Plus social badges, and point milestones!`}
             <View style={styles.infoDivider} />
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Database</Text>
-              <Text style={styles.infoValue}>796 landmarks, 66 countries</Text>
+              <Text style={styles.infoValue}>797 landmarks, 66 countries</Text>
             </View>
           </Surface>
         </View>

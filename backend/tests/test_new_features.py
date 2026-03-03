@@ -10,7 +10,7 @@ import requests
 import os
 import uuid
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://eas-build-54.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://app-store-ready-13.preview.emergentagent.com').rstrip('/')
 
 
 class TestPhotoOfTheWeek:

@@ -3,14 +3,14 @@ WanderMark Backend API Regression Tests
 Tests all endpoints after backend refactoring from monolithic to modular structure
 
 Test User: test@wandermark.app / Test1234!
-API URL: https://eas-build-54.preview.emergentagent.com
+API URL: https://app-store-ready-13.preview.emergentagent.com
 """
 
 import pytest
 import requests
 import os
 
-BASE_URL = "https://eas-build-54.preview.emergentagent.com"
+BASE_URL = "https://app-store-ready-13.preview.emergentagent.com"
 
 
 # ============= FIXTURES =============
