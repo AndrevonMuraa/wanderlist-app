@@ -88,6 +88,14 @@ WanderMark is a travel app where users visit landmarks and countries, earn point
   - Row 2: Thin progress bar spanning full width, green when 100% complete
 - Card height increased from 160 to 170px to accommodate the new layout
 
+### Session Mar 2026 - Terminology & Share Overhaul
+- **"Achievements" → "Badges" terminology standardized**: All user-facing text across the entire app now says "Badges" instead of "Achievements". Updated i18n strings, page titles (Badges page), about page, notification settings ("Badge Alerts"), analytics ("Badge Collector"), share messages ("Badges Unlocked"), push notification title ("Badge Unlocked!"), celebration message ("BADGE UNLOCKED!"), privacy policy, and legal pages. Internal variable/function names preserved to avoid breaking changes.
+- **Share functionality overhauled**: All share messages now include `https://wandermark.app` link. Added new `shareBadge` and `shareCountryVisit` utility functions. Standardized share format across visit detail, country visit detail, profile "Share My Journey", and progress sharing.
+- **"Share My Badges" button added**: New share functionality on the Badges page allowing users to share their badge progress with friends.
+- **Profile menu simplified**: Removed redundant "Badges" link from Profile menu (now accessible from Journey page).
+- **Badges page back navigation**: Updated to navigate back to Journey page instead of Profile page.
+- **About page fixes**: Version number in App Info section now dynamic (was hardcoded "1.1.0"), "Last Updated" corrected to "March 2026".
+
 ## Current App Version
 - Version: 1.2.0
 - Build: 56
@@ -96,9 +104,11 @@ WanderMark is a travel app where users visit landmarks and countries, earn point
 All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) New EAS build
 
 ## Remaining Tasks
-1. User E2E testing of new build with all fixes
-2. App Store submission preparation
-3. Further performance profiling on real device
+1. Deploy all Mar 2026 changes: Save to GitHub → Deploy backend to Render → New EAS build
+2. User E2E testing of new build with all fixes
+3. App Store submission preparation
+4. Further performance profiling on real device
+5. P2: Rename GitHub repository (`wanderlist-app` → `wandermark-app`)
 
 ## Key Files Modified (Latest)
 - `backend/routes/country_visits.py` - Full PUT endpoint with photo management + landmarks endpoint + migration
