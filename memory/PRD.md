@@ -109,6 +109,13 @@ WanderMark is a travel app where users visit landmarks and countries, earn point
   - Social: Purple (#AB47BC) → Dark Purple → Pink (#E91E63)
 - **Share Individual Badge feature**: Each earned badge card now has a "Share" button that shares the badge name, description, earned date, and wandermark.app link. Progress bars on locked badges now use badge-specific colors instead of generic primary color.
 
+### Session Mar 2026 - Points System Audit & Next Milestone Badge Icon
+- **Next Milestone badge icon**: Added badge-specific icon in a 68px colored circle on the right side of the milestone card. Rocket icon preserved on the left. Uses getBadgeIconName/getBadgeColor utilities for consistent styling.
+- **About page "Total Points" corrected**: Changed from "10,000" to "14,500+" to reflect actual total (landmark pts 10,025 + country visits 3,300 + country bonuses 1,320). Font size reduced to 18px to prevent text wrapping.
+- **Welcome page point values FIXED (CRITICAL)**: Previous values were completely fabricated (100, 50, 75, 25 pts). Corrected to match actual backend logic: Landmark +10 pts, Premium +25 pts, Country visit +50 pts, New country bonus +20 pts. Rank ranges also corrected.
+- **About page Points System & FAQ expanded**: Added all bonus types (country exploration 20, continent exploration 50, country completion 50, continent completion 200).
+- **rankSystem.ts comment updated**: Reflects correct total ~15,900 pts for 797 landmarks.
+
 ## Current App Version
 - Version: 1.2.0
 - Build: 56
