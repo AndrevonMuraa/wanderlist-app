@@ -105,7 +105,7 @@ export default function PrivacyPolicyScreen() {
             <BulletPoint text="Landmarks you visit and mark as complete" />
             <BulletPoint text="Photos you upload with visits" />
             <BulletPoint text="Travel diary notes and tips" />
-            <BulletPoint text="Points, achievements, and progress" />
+            <BulletPoint text="Points, badges, and progress" />
             <BulletPoint text="Activity on leaderboards and social features" />
 
             <Text style={[styles.subTitle, { marginTop: 16 }]}>Device Information</Text>
@@ -120,7 +120,7 @@ export default function PrivacyPolicyScreen() {
           <Section title="2. How We Use Your Information">
             <Text style={styles.paragraph}>We use the information we collect to:</Text>
             <BulletPoint text="Provide and maintain the WanderMark service" />
-            <BulletPoint text="Track your travel progress and achievements" />
+            <BulletPoint text="Track your travel progress and badges" />
             <BulletPoint text="Display leaderboards and social features" />
             <BulletPoint text="Enable friend connections and messaging" />
             <BulletPoint text="Send notifications about your activity" />

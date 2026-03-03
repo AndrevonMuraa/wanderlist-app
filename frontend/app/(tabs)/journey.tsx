@@ -531,7 +531,7 @@ export default function JourneyScreen() {
           </Surface>
         )}
 
-        {/* Quick Navigation Links - Between Continental Progress and Recent Achievements */}
+        {/* Quick Navigation Links - Between Continental Progress and Recent Badges */}
         <Surface style={[styles.countryVisitsCard, { backgroundColor: colors.surface }]}>
           <TouchableOpacity
             style={styles.countryVisitsRow}
@@ -576,7 +576,7 @@ export default function JourneyScreen() {
             style={styles.countryVisitsRow}
             onPress={() => router.push('/achievements')}
             activeOpacity={0.7}
-            data-testid="nav-achievements"
+            data-testid="nav-badges"
           >
             <View style={styles.countryVisitsLeft}>
               <View style={[styles.countryVisitsIcon, { backgroundColor: '#FFB300' + '20' }]}>

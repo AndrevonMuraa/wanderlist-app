@@ -320,7 +320,7 @@ async def notify_achievement(user_id: str, badge_name: str, badge_icon: str):
         return
     await send_push_notification(
         user_id=user_id,
-        title=f"Achievement Unlocked! {badge_icon}",
+        title=f"Badge Unlocked! {badge_icon}",
         body=f"You earned: {badge_name}",
         data={"type": "achievement"}
     )

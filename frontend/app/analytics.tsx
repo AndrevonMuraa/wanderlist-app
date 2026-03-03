@@ -282,11 +282,11 @@ export default function AnalyticsScreen() {
           </View>
 
           <View style={styles.insightCard}>
-            <Text style={styles.insightTitle}>🏆 Achievement Hunter</Text>
+            <Text style={styles.insightTitle}>🏆 Badge Collector</Text>
             <Text style={styles.insightText}>
               {analytics.badgesEarned >= 5
                 ? `Impressive! ${analytics.badgesEarned} badges earned - you're a collector!`
-                : `${analytics.badgesEarned} badges so far. More achievements await!`}
+                : `${analytics.badgesEarned} badges so far. More badges await!`}
             </Text>
           </View>
         </Surface>

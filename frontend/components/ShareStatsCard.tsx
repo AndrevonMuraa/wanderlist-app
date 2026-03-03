@@ -119,11 +119,11 @@ export default function ShareStatsCard({ visible, onDismiss, stats, userName }: 
               </View>
             </View>
 
-            {/* Achievement count if available */}
+            {/* Badge count if available */}
             {stats.achievements && stats.achievements > 0 && (
               <View style={styles.achievementBadge}>
                 <Ionicons name="trophy" size={16} color="#fbbf24" />
-                <Text style={styles.achievementText}>{stats.achievements} Achievements Unlocked</Text>
+                <Text style={styles.achievementText}>{stats.achievements} Badges Unlocked</Text>
               </View>
             )}
 
@@ -138,6 +138,7 @@ export default function ShareStatsCard({ visible, onDismiss, stats, userName }: 
             {/* Call to action */}
             <View style={styles.ctaRow}>
               <Text style={styles.ctaText}>Join me on WanderMark! 🌍</Text>
+              <Text style={styles.ctaUrl}>wandermark.app</Text>
             </View>
           </LinearGradient>
         </View>
@@ -285,6 +286,11 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.9)',
     fontSize: 14,
     fontWeight: '600',
+  },
+  ctaUrl: {
+    color: 'rgba(255,255,255,0.5)',
+    fontSize: 12,
+    marginTop: 4,
   },
   shareButton: {
     borderRadius: 16,

@@ -176,7 +176,7 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
     });
 
     await Notifications.setNotificationChannelAsync('achievements', {
-      name: 'Achievements',
+      name: 'Badges',
       description: 'Badges and milestones',
       importance: Notifications.AndroidImportance.HIGH,
       vibrationPattern: [0, 500],

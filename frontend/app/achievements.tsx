@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Platform,
   RefreshControl,
+  Share,
 } from 'react-native';
 import { Text, Surface, ProgressBar as PaperProgressBar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
@@ -89,6 +90,20 @@ export default function AchievementsScreen() {
     loadAchievements();
   };
 
+  const handleShareBadges = async () => {
+    if (!data) return;
+    try {
+      const earnedNames = data.earned_badges.slice(0, 3).map(b => b.badge_name).join(', ');
+      const message = `🏆 My WanderMark Badges: ${data.stats.earned_count}/${data.stats.total_badges} unlocked (${data.stats.completion_percentage}%)!\n\n${earnedNames ? `Latest: ${earnedNames}` : 'Just getting started!'}\n\nTrack your travels: https://wandermark.app`;
+      await Share.share({
+        message,
+        title: 'My WanderMark Badges',
+      });
+    } catch (error) {
+      console.error('Error sharing badges:', error);
+    }
+  };
+
   const formatDate = (dateString: string | null) => {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -165,9 +180,9 @@ export default function AchievementsScreen() {
   if (loading) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <UniversalHeader title="Achievements" onBack={() => router.push('/(tabs)/profile')} />
+        <UniversalHeader title="Badges" onBack={() => router.push('/(tabs)/journey')} />
         <View style={styles.loadingContainer}>
-          <Text style={{ color: colors.textSecondary }}>Loading achievements...</Text>
+          <Text style={{ color: colors.textSecondary }}>Loading badges...</Text>
         </View>
       </View>
     );
@@ -176,9 +191,9 @@ export default function AchievementsScreen() {
   if (!data) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <UniversalHeader title="Achievements" onBack={() => router.push('/(tabs)/profile')} />
+        <UniversalHeader title="Badges" onBack={() => router.push('/(tabs)/journey')} />
         <View style={styles.errorContainer}>
-          <Text style={{ color: colors.textSecondary }}>Failed to load achievements</Text>
+          <Text style={{ color: colors.textSecondary }}>Failed to load badges</Text>
         </View>
       </View>
     );
@@ -188,7 +203,7 @@ export default function AchievementsScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <UniversalHeader title="Achievements" onBack={() => router.push('/(tabs)/profile')} />
+      <UniversalHeader title="Badges" onBack={() => router.push('/(tabs)/journey')} />
 
       <ScrollView
         style={styles.content}
@@ -230,6 +245,17 @@ export default function AchievementsScreen() {
             </View>
           </LinearGradient>
         </Surface>
+
+        {/* Share Badges Button */}
+        <TouchableOpacity 
+          style={styles.shareBadgesButton}
+          onPress={handleShareBadges}
+          activeOpacity={0.7}
+          data-testid="share-badges-button"
+        >
+          <Ionicons name="share-social" size={18} color={colors.primary} />
+          <Text style={[styles.shareBadgesText, { color: colors.primary }]}>Share My Badges</Text>
+        </TouchableOpacity>
 
         {/* Tabs */}
         <View style={[styles.tabsContainer, { backgroundColor: colors.surface }]}>
@@ -274,8 +300,8 @@ export default function AchievementsScreen() {
               />
               <Text style={[styles.emptyText, { color: colors.text }]}>
                 {selectedTab === 'earned' 
-                  ? 'No achievements earned yet'
-                  : 'All achievements unlocked!'}
+                  ? 'No badges earned yet'
+                  : 'All badges unlocked!'}
               </Text>
               <Text style={[styles.emptySubtext, { color: colors.textSecondary }]}>
                 {selectedTab === 'earned'
@@ -314,12 +340,25 @@ const styles = StyleSheet.create({
   },
   statsCard: {
     margin: 16,
-    marginBottom: 8,
+    marginBottom: 4,
     borderRadius: 16,
     overflow: 'hidden',
   },
   statsGradient: {
     padding: 20,
+  },
+  shareBadgesButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 10,
+    marginHorizontal: 16,
+    marginBottom: 4,
+  },
+  shareBadgesText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
   statsContent: {
     gap: 16,

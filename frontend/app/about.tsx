@@ -343,7 +343,7 @@ Plus social badges, and point milestones!`}
 
           <FeatureCard
             icon="trophy"
-            title="Achievements"
+            title="Badges"
             description="Unlock badges as you reach travel milestones"
             color="#FFD700"
             onPress={() => router.push('/achievements')}
@@ -470,12 +470,12 @@ Plus social badges, and point milestones!`}
           <Surface style={styles.infoCard}>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Version</Text>
-              <Text style={styles.infoValue}>1.1.0</Text>
+              <Text style={styles.infoValue}>{Constants.expoConfig?.version || '1.2.0'}</Text>
             </View>
             <View style={styles.infoDivider} />
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Last Updated</Text>
-              <Text style={styles.infoValue}>February 2026</Text>
+              <Text style={styles.infoValue}>March 2026</Text>
             </View>
             <View style={styles.infoDivider} />
             <View style={styles.infoRow}>

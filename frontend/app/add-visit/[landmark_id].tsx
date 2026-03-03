@@ -198,7 +198,7 @@ export default function AddVisitScreen() {
       // Track visit for app review prompt
       await trackVisitForReview();
       
-      // Send notifications for achievements
+      // Send notifications for badges
       if (result.newly_awarded_badges && result.newly_awarded_badges.length > 0) {
         const badge = result.newly_awarded_badges[0];
         await sendAchievementNotification(badge.name, badge.icon || '🏆');
@@ -206,7 +206,7 @@ export default function AddVisitScreen() {
 
       // Show success message
       Alert.alert(
-        shouldCelebrate ? '🎉 AMAZING ACHIEVEMENT!' : '🎉 Visit Recorded!',
+        shouldCelebrate ? '🎉 BADGE UNLOCKED!' : '🎉 Visit Recorded!',
         celebrationMessage,
         [
           {
