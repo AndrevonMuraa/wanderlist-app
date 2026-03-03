@@ -14,6 +14,7 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Platform } from 'react-native';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 
@@ -26,7 +27,7 @@ interface LandmarkVisit {
   photos: string[];
   has_photos: boolean;
   points_earned: number;
-  is_verified: boolean;
+  verified: boolean;
   diary_notes?: string;
 }
 
@@ -37,7 +38,10 @@ export default function MyLandmarkVisits() {
   const [refreshing, setRefreshing] = useState(false);
 
   const getToken = async () => {
-    return await SecureStore.getItemAsync('token');
+    if (Platform.OS === 'web') {
+      return localStorage.getItem('auth_token');
+    }
+    return await SecureStore.getItemAsync('auth_token');
   };
 
   const fetchVisits = async () => {
@@ -151,7 +155,7 @@ export default function MyLandmarkVisits() {
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
-          <Text style={styles.statNumber}>{visits.filter(v => v.is_verified).length}</Text>
+          <Text style={styles.statNumber}>{visits.filter(v => v.verified).length}</Text>
           <Text style={styles.statLabel}>Verified</Text>
         </View>
         <View style={styles.statDivider} />

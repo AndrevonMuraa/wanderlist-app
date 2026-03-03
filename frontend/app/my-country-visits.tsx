@@ -99,6 +99,13 @@ export default function MyCountryVisitsScreen() {
   const fetchCountryVisits = async () => {
     try {
       const token = await getToken();
+      
+      // Run migration to clean auto-created visit photos (idempotent)
+      await fetch(`${BACKEND_URL}/api/country-visits/migrate-photos`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => {});
+      
       const response = await fetch(`${BACKEND_URL}/api/country-visits`, {
         headers: { Authorization: `Bearer ${token}` },
       });

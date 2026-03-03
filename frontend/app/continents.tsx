@@ -270,14 +270,14 @@ export default function ContinentsScreen() {
                       <Text style={styles.statsText}>
                         {continent.countries} Countries  |  {continent.landmarks} Landmarks
                       </Text>
-                      {/* Show progress if user has visited */}
-                      {continent.percentage !== undefined && continent.percentage > 0 && (
+                      {/* Show progress bar for all continents */}
+                      {continent.visited !== undefined && (
                         <View style={styles.progressRow}>
                           <View style={styles.progressBarContainer}>
-                            <View style={[styles.progressBarFill, { width: `${continent.percentage}%`, backgroundColor: continent.accentColor }]} />
+                            <View style={[styles.progressBarFill, { width: `${continent.percentage || 0}%`, backgroundColor: continent.accentColor }]} />
                           </View>
                           <Text style={styles.progressLabel}>
-                            {continent.visited}/{continent.countries} visited
+                            {continent.visited || 0}/{continent.countries} visited
                           </Text>
                         </View>
                       )}

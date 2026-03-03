@@ -94,6 +94,7 @@ export default function CountryVisitDetailScreen() {
   const [deleting, setDeleting] = useState(false);
   const [saving, setSaving] = useState(false);
   const [showOptionsMenu, setShowOptionsMenu] = useState(false);
+  const [visitedLandmarks, setVisitedLandmarks] = useState<any[]>([]);
   
   const flatListRef = useRef<FlatList>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -101,6 +102,28 @@ export default function CountryVisitDetailScreen() {
   useEffect(() => {
     fetchVisitDetails();
   }, [country_visit_id]);
+
+  useEffect(() => {
+    if (visit?.country_visit_id) {
+      fetchVisitedLandmarks();
+    }
+  }, [visit?.country_visit_id]);
+
+  const fetchVisitedLandmarks = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(
+        `${BACKEND_URL}/api/country-visits/${country_visit_id}/landmarks`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setVisitedLandmarks(data.landmarks || []);
+      }
+    } catch (error) {
+      console.error('Error fetching visited landmarks:', error);
+    }
+  };
 
   const fetchVisitDetails = async () => {
     try {
@@ -298,18 +321,11 @@ export default function CountryVisitDetailScreen() {
     <View style={styles.container}>
       <UniversalHeader 
         title={visit.country_name}
-        rightElement={
-          <View style={styles.headerActions}>
-            <TouchableOpacity onPress={() => setShowOptionsMenu(true)} style={styles.headerIconBtn}>
-              <Ionicons name="ellipsis-vertical" size={22} color="#fff" />
-            </TouchableOpacity>
-          </View>
-        }
       />
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Photo Gallery with Swipe */}
-        {visit.photos && visit.photos.length > 0 && (
+        {visit.photos && visit.photos.length > 0 ? (
           <View style={styles.gallerySection}>
             {/* Swipeable Photo Gallery */}
             <TouchableOpacity 
@@ -424,6 +440,12 @@ export default function CountryVisitDetailScreen() {
               </ScrollView>
             )}
           </View>
+        ) : (
+          <Surface style={[styles.infoCard, { alignItems: 'center', paddingVertical: 32 }]}>
+            <Ionicons name="camera-outline" size={48} color={theme.colors.textLight} />
+            <Text style={{ color: theme.colors.textSecondary, fontSize: 15, marginTop: 12, fontWeight: '600' }}>No photos added yet</Text>
+            <Text style={{ color: theme.colors.textLight, fontSize: 13, marginTop: 4 }}>Add photos to this country visit</Text>
+          </Surface>
         )}
 
         {/* Visit Info Card */}
@@ -506,6 +528,61 @@ export default function CountryVisitDetailScreen() {
             <Text style={styles.deleteText}>Delete Visit</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Visited Landmarks in This Country */}
+        <Surface style={styles.diaryCard}>
+          <View style={styles.diaryHeader}>
+            <View style={styles.diaryTitleRow}>
+              <Ionicons name="location" size={22} color={theme.colors.accent} />
+              <Text style={styles.diaryTitle}>Visited Landmarks</Text>
+            </View>
+          </View>
+          {visitedLandmarks.length > 0 ? (
+            <View>
+              {visitedLandmarks.map((lm, index) => (
+                <TouchableOpacity
+                  key={lm.visit_id || index}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingVertical: 12,
+                    borderBottomWidth: index < visitedLandmarks.length - 1 ? 1 : 0,
+                    borderBottomColor: theme.colors.border,
+                  }}
+                  onPress={() => router.push(`/visit-detail/${lm.visit_id}`)}
+                  activeOpacity={0.7}
+                >
+                  <View style={{
+                    width: 40, height: 40, borderRadius: 20,
+                    backgroundColor: theme.colors.primary + '15',
+                    justifyContent: 'center', alignItems: 'center',
+                    marginRight: 12,
+                  }}>
+                    <Ionicons name="location" size={20} color={theme.colors.primary} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ fontSize: 15, fontWeight: '600', color: theme.colors.text }}>{lm.landmark_name}</Text>
+                    {lm.visited_at && (
+                      <Text style={{ fontSize: 12, color: theme.colors.textSecondary, marginTop: 2 }}>
+                        {new Date(lm.visited_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </Text>
+                    )}
+                  </View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                    <Ionicons name="star" size={14} color="#FFD700" />
+                    <Text style={{ fontSize: 13, fontWeight: '600', color: theme.colors.text }}>{lm.points_earned}</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={18} color={theme.colors.textLight} style={{ marginLeft: 8 }} />
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : (
+            <View style={{ alignItems: 'center', paddingVertical: 16 }}>
+              <Ionicons name="location-outline" size={32} color={theme.colors.textLight} />
+              <Text style={{ color: theme.colors.textSecondary, marginTop: 8, fontSize: 14 }}>No landmarks visited yet</Text>
+            </View>
+          )}
+        </Surface>
 
         <View style={styles.bottomSpacer} />
       </ScrollView>

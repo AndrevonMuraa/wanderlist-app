@@ -64,7 +64,11 @@ export default function LeaderboardScreen() {
 
   // Navigate back to social tab explicitly
   const handleBack = () => {
-    router.push('/(tabs)/social');
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.push('/(tabs)/social');
+    }
   };
 
   useEffect(() => {

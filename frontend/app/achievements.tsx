@@ -16,6 +16,7 @@ import theme, { gradients } from '../styles/theme';
 import { useTheme } from '../contexts/ThemeContext';
 import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
+import { getBadgeIconName, getBadgeColor } from '../utils/badgeIcons';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -113,13 +114,12 @@ export default function AchievementsScreen() {
           </View>
         )}
 
-        <View style={[styles.badgeIconContainer, { backgroundColor: isEarned ? colors.primary + '20' : colors.border }]}>
-          <Text style={[
-            styles.badgeIcon,
-            !isEarned && styles.badgeIconLocked,
-          ]}>
-            {badge.badge_icon}
-          </Text>
+        <View style={[styles.badgeIconContainer, { backgroundColor: isEarned ? getBadgeColor(badge.badge_type) + '20' : colors.border }]}>
+          <Ionicons 
+            name={getBadgeIconName(badge.badge_icon) as any} 
+            size={32} 
+            color={isEarned ? getBadgeColor(badge.badge_type) : colors.textLight} 
+          />
         </View>
 
         <Text style={[
@@ -234,30 +234,30 @@ export default function AchievementsScreen() {
         {/* Tabs */}
         <View style={[styles.tabsContainer, { backgroundColor: colors.surface }]}>
           <TouchableOpacity
-            style={[styles.tab, selectedTab === 'earned' && [styles.tabActive, { borderBottomColor: colors.primary }]]}
+            style={[styles.tab, selectedTab === 'earned' && [styles.tabActive, { backgroundColor: colors.primary }]]}
             onPress={() => setSelectedTab('earned')}
           >
             <Ionicons 
               name="trophy" 
               size={18} 
-              color={selectedTab === 'earned' ? colors.primary : colors.textSecondary} 
+              color={selectedTab === 'earned' ? '#fff' : colors.textSecondary} 
               style={{ marginRight: 6 }}
             />
-            <Text style={[styles.tabText, { color: selectedTab === 'earned' ? colors.primary : colors.textSecondary }]}>
+            <Text style={[styles.tabText, selectedTab === 'earned' && { color: '#fff', fontWeight: '700' }]}>
               Earned ({data.stats.earned_count})
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.tab, selectedTab === 'locked' && [styles.tabActive, { borderBottomColor: colors.primary }]]}
+            style={[styles.tab, selectedTab === 'locked' && [styles.tabActive, { backgroundColor: colors.primary }]]}
             onPress={() => setSelectedTab('locked')}
           >
             <Ionicons 
               name="lock-closed" 
               size={18} 
-              color={selectedTab === 'locked' ? colors.primary : colors.textSecondary} 
+              color={selectedTab === 'locked' ? '#fff' : colors.textSecondary} 
               style={{ marginRight: 6 }}
             />
-            <Text style={[styles.tabText, { color: selectedTab === 'locked' ? colors.primary : colors.textSecondary }]}>
+            <Text style={[styles.tabText, selectedTab === 'locked' && { color: '#fff', fontWeight: '700' }]}>
               In Progress ({data.stats.locked_count})
             </Text>
           </TouchableOpacity>
@@ -372,8 +372,10 @@ const styles = StyleSheet.create({
   },
   tab: {
     flex: 1,
+    flexDirection: 'row',
     paddingVertical: 12,
     alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 8,
   },
   tabActive: {
@@ -417,13 +419,12 @@ const styles = StyleSheet.create({
     right: 8,
   },
   badgeIconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 12,
-  },
-  badgeIcon: {
-    fontSize: 48,
-  },
-  badgeIconLocked: {
-    opacity: 0.5,
   },
   badgeName: {
     fontSize: 16,

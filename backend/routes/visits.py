@@ -19,6 +19,19 @@ router = APIRouter()
 @router.get("/visits", response_model=List[Visit])
 async def get_visits(current_user: User = Depends(get_current_user)):
     visits = await db.visits.find({"user_id": current_user.user_id}, {"_id": 0}).sort("visited_at", -1).to_list(1000)
+    
+    # Enrich visits with landmark_name if missing
+    missing_name_ids = [v["landmark_id"] for v in visits if not v.get("landmark_name")]
+    if missing_name_ids:
+        landmarks = await db.landmarks.find(
+            {"landmark_id": {"$in": list(set(missing_name_ids))}},
+            {"_id": 0, "landmark_id": 1, "name": 1}
+        ).to_list(1000)
+        name_map = {lm["landmark_id"]: lm["name"] for lm in landmarks}
+        for v in visits:
+            if not v.get("landmark_name") and v.get("landmark_id") in name_map:
+                v["landmark_name"] = name_map[v["landmark_id"]]
+    
     return [Visit(**v) for v in visits]
 
 @router.get("/visits/stats")

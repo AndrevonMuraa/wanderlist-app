@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Platform } from 'react-native';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 
@@ -30,7 +31,10 @@ export default function PointsSummary() {
   const [loading, setLoading] = useState(true);
 
   const getToken = async () => {
-    return await SecureStore.getItemAsync('token');
+    if (Platform.OS === 'web') {
+      return localStorage.getItem('auth_token');
+    }
+    return await SecureStore.getItemAsync('auth_token');
   };
 
   useEffect(() => {

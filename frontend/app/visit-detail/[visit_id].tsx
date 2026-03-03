@@ -13,6 +13,8 @@ import { lightHaptic } from '../../utils/haptics';
 import { PhotoGalleryModal } from '../../components/PhotoGalleryModal';
 import { shareVisit } from '../../utils/shareUtils';
 
+import UniversalHeader from '../../components/UniversalHeader';
+
 const { width } = Dimensions.get('window');
 
 const getToken = async (): Promise<string | null> => {
@@ -103,36 +105,18 @@ export default function VisitDetailScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <ScrollView style={styles.scrollView}>
-        {/* Header - using UniversalHeader-matching gradient */}
-        <LinearGradient
-          colors={['#4DB8D8', '#E8DCC8']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.header}
-        >
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={async () => {
-              await lightHaptic();
-              safeGoBack(router);
-            }}
-          >
-            <Ionicons name="arrow-back" size={22} color="#fff" />
-          </TouchableOpacity>
-          <View style={styles.headerContent}>
-            <Text style={styles.headerTitle} numberOfLines={1}>{visit.landmark_name || 'Visit Details'}</Text>
-            {visit.country_name && (
-              <Text style={styles.headerSubtitle}>{visit.country_name}</Text>
-            )}
-          </View>
+      <UniversalHeader 
+        title={visit.landmark_name || 'Visit Details'}
+        rightElement={
           <TouchableOpacity 
             style={styles.shareButton}
             onPress={handleShare}
           >
-            <Ionicons name="share-social" size={24} color="#fff" />
+            <Ionicons name="share-social" size={22} color="#fff" />
           </TouchableOpacity>
-        </LinearGradient>
+        }
+      />
+      <ScrollView style={styles.scrollView}>
 
         {/* Photo Gallery */}
         {photos.length > 0 && (
@@ -187,6 +171,11 @@ export default function VisitDetailScreen() {
 
         {/* Visit Info */}
         <Surface style={styles.infoCard}>
+          {visit.country_name && (
+            <Text style={{ fontSize: 14, color: theme.colors.textSecondary, marginBottom: 12, textAlign: 'center' }}>
+              {visit.country_name}
+            </Text>
+          )}
           <View style={styles.infoRow}>
             <View style={styles.infoItem}>
               <Ionicons name="calendar" size={20} color={theme.colors.primary} />
@@ -371,7 +360,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     padding: theme.spacing.lg,
     borderRadius: theme.borderRadius.xl,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
   tipsCard: {
@@ -379,7 +368,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     padding: theme.spacing.lg,
     borderRadius: theme.borderRadius.xl,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
   commentsCard: {
@@ -387,7 +376,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     padding: theme.spacing.lg,
     borderRadius: theme.borderRadius.xl,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
   sectionHeader: {

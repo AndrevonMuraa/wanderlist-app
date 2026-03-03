@@ -334,9 +334,6 @@ async def check_country_visit_status(country_id: str, current_user: User = Depen
         })
         
         if landmark_visit:
-            # User has visited a landmark but no country visit record exists
-            # This means they visited before auto-creation was implemented
-            # Return as visited via landmarks
             return {
                 "visited": True,
                 "source": "landmark_visits",
@@ -353,6 +350,77 @@ async def check_country_visit_status(country_id: str, current_user: User = Depen
         "visited_at": None,
         "has_photos": False,
         "has_diary": False
+    }
+
+
+@router.get("/country-visits/{country_visit_id}/landmarks")
+async def get_country_visit_landmarks(country_visit_id: str, current_user: User = Depends(get_current_user)):
+    """
+    Get all visited landmarks for a specific country visit.
+    """
+    # Get the country visit
+    country_visit = await db.country_visits.find_one(
+        {"country_visit_id": country_visit_id, "user_id": current_user.user_id},
+        {"_id": 0}
+    )
+    
+    if not country_visit:
+        return {"landmarks": []}
+    
+    country_id = country_visit.get("country_id")
+    if not country_id:
+        return {"landmarks": []}
+    
+    # Get all landmarks for this country
+    country_landmarks = await db.landmarks.find(
+        {"country_id": country_id},
+        {"_id": 0, "landmark_id": 1, "name": 1}
+    ).to_list(1000)
+    
+    if not country_landmarks:
+        return {"landmarks": []}
+    
+    landmark_ids = [lm["landmark_id"] for lm in country_landmarks]
+    landmark_name_map = {lm["landmark_id"]: lm["name"] for lm in country_landmarks}
+    
+    # Get user's visits for these landmarks
+    visited_landmarks = await db.visits.find(
+        {"user_id": current_user.user_id, "landmark_id": {"$in": landmark_ids}},
+        {"_id": 0, "visit_id": 1, "landmark_id": 1, "landmark_name": 1, "visited_at": 1, "points_earned": 1}
+    ).to_list(1000)
+    
+    results = []
+    for v in visited_landmarks:
+        results.append({
+            "visit_id": v.get("visit_id"),
+            "landmark_id": v.get("landmark_id"),
+            "landmark_name": v.get("landmark_name") or landmark_name_map.get(v.get("landmark_id"), "Unknown"),
+            "visited_at": str(v.get("visited_at", "")),
+            "points_earned": v.get("points_earned", 0),
+        })
+    
+    return {"landmarks": results}
+
+
+@router.post("/country-visits/migrate-photos")
+async def migrate_country_visit_photos(current_user: User = Depends(get_current_user)):
+    """
+    Migration endpoint: Clear photos from auto-created country visits
+    that were copied from landmark visits before the fix.
+    Only affects the current user's visits.
+    """
+    result = await db.country_visits.update_many(
+        {
+            "user_id": current_user.user_id,
+            "source": "auto_landmark",
+            "photos": {"$ne": []}
+        },
+        {"$set": {"photos": [], "has_photos": False, "leaderboard_points_earned": 0}}
+    )
+    
+    return {
+        "message": f"Cleaned {result.modified_count} auto-created country visits",
+        "modified_count": result.modified_count
     }
 
 # ============= END COUNTRY VISIT ENDPOINTS =============

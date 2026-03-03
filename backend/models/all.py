@@ -135,6 +135,8 @@ class Visit(BaseModel):
     visit_id: str
     user_id: str
     landmark_id: str
+    landmark_name: Optional[str] = None
+    country_name: Optional[str] = None
     photo_base64: Optional[str] = None
     photos: Optional[List[str]] = []
     points_earned: int = 10

@@ -734,51 +734,39 @@ export default function SocialHubScreen() {
                 <Ionicons name="chevron-forward" size={16} color={theme.colors.primary} />
               </TouchableOpacity>
             </View>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.cfScroll}
-            >
-              {communityFeed.map((item) => (
+            <View style={styles.cfVerticalList}>
+              {communityFeed.slice(0, 5).map((item) => (
                 <TouchableOpacity
                   key={item.visit_id}
-                  style={styles.cfCard}
+                  style={styles.cfVerticalCard}
                   onPress={() => router.push(`/landmark-community-photos/${item.landmark_id}?name=${encodeURIComponent(item.landmark_name)}&country=${encodeURIComponent(item.country_name || '')}`)}
                   activeOpacity={0.85}
                   data-testid={`cf-card-${item.visit_id}`}
                 >
                   {item.photo_url ? (
-                    <Image source={{ uri: item.photo_url }} style={styles.cfImage} resizeMode="cover" />
+                    <Image source={{ uri: item.photo_url }} style={styles.cfVerticalImage} resizeMode="cover" />
                   ) : (
-                    <View style={[styles.cfImage, { backgroundColor: theme.colors.surface, alignItems: 'center', justifyContent: 'center' }]}>
+                    <View style={[styles.cfVerticalImage, { backgroundColor: theme.colors.surface, alignItems: 'center', justifyContent: 'center' }]}>
                       <Ionicons name="image-outline" size={30} color={theme.colors.textLight} />
                     </View>
                   )}
-                  <LinearGradient
-                    colors={['transparent', 'rgba(0,0,0,0.8)']}
-                    style={styles.cfOverlay}
-                  >
-                    <Text style={styles.cfLandmark} numberOfLines={1}>{item.landmark_name}</Text>
-                    <Text style={styles.cfCountry} numberOfLines={1}>{item.country_name}</Text>
-                    <View style={styles.cfBottom}>
-                      <Text style={styles.cfUser} numberOfLines={1}>{item.user_name}</Text>
+                  <View style={styles.cfVerticalContent}>
+                    <Text style={styles.cfVerticalLandmark} numberOfLines={1}>{item.landmark_name}</Text>
+                    <Text style={styles.cfVerticalCountry} numberOfLines={1}>{item.country_name}</Text>
+                    <View style={styles.cfVerticalBottom}>
+                      <Text style={styles.cfVerticalUser} numberOfLines={1}>{item.user_name}</Text>
                       <View style={styles.cfMeta}>
                         {item.has_diary && (
-                          <Ionicons name="book" size={11} color="rgba(255,255,255,0.7)" style={{ marginRight: 4 }} />
+                          <Ionicons name="book" size={11} color={theme.colors.textLight} style={{ marginRight: 4 }} />
                         )}
                         <Ionicons name="heart" size={11} color="#FF6B6B" />
                         <Text style={styles.cfUpvotes}>{item.upvotes}</Text>
                       </View>
                     </View>
-                  </LinearGradient>
-                  {item.has_diary && item.diary_snippet && (
-                    <View style={styles.cfDiaryBadge}>
-                      <Text style={styles.cfDiarySnippet} numberOfLines={2}>{item.diary_snippet}</Text>
-                    </View>
-                  )}
+                  </View>
                 </TouchableOpacity>
               ))}
-            </ScrollView>
+            </View>
           </View>
         )}
 
@@ -933,39 +921,6 @@ export default function SocialHubScreen() {
                 ? '🔒 Upgrade to Pro to message friends'
                 : 'Stay in touch with your travel buddies'}
             </Text>
-          </Surface>
-        </View>
-
-        {/* Leaderboard Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <View style={styles.sectionTitleRow}>
-              <Ionicons name="trophy" size={24} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Leaderboard</Text>
-            </View>
-            <TouchableOpacity onPress={() => router.push('/leaderboard')}>
-              <Text style={styles.seeAllButton}>Full List →</Text>
-            </TouchableOpacity>
-          </View>
-
-          <Surface style={styles.card}>
-            {leaderboard.length > 0 ? (
-              <>
-                {leaderboard.map((entry, index) => renderLeaderboardItem(entry, index))}
-                <TouchableOpacity 
-                  style={styles.viewAllButton}
-                  onPress={() => router.push('/leaderboard')}
-                >
-                  <Text style={styles.viewAllText}>View Full Leaderboard</Text>
-                  <Ionicons name="arrow-forward" size={16} color={theme.colors.primary} />
-                </TouchableOpacity>
-              </>
-            ) : (
-              <View style={styles.emptyState}>
-                <Ionicons name="trophy-outline" size={48} color={theme.colors.textLight} />
-                <Text style={styles.emptyText}>No rankings yet</Text>
-              </View>
-            )}
           </Surface>
         </View>
 
@@ -1585,7 +1540,7 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   cfUpvotes: {
-    color: '#fff',
+    color: theme.colors.textSecondary,
     fontSize: 10,
     fontWeight: '600',
     marginLeft: 2,
@@ -1605,5 +1560,49 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontStyle: 'italic',
     lineHeight: 12,
+  },
+  // Vertical Community Feed Styles
+  cfVerticalList: {
+    gap: theme.spacing.sm,
+  },
+  cfVerticalCard: {
+    flexDirection: 'row',
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    overflow: 'hidden',
+    ...theme.shadows.card,
+  },
+  cfVerticalImage: {
+    width: 100,
+    height: 100,
+    borderTopLeftRadius: theme.borderRadius.lg,
+    borderBottomLeftRadius: theme.borderRadius.lg,
+  },
+  cfVerticalContent: {
+    flex: 1,
+    padding: theme.spacing.sm,
+    justifyContent: 'center',
+  },
+  cfVerticalLandmark: {
+    color: theme.colors.text,
+    fontSize: 14,
+    fontWeight: '700',
+    lineHeight: 18,
+  },
+  cfVerticalCountry: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    marginTop: 2,
+  },
+  cfVerticalBottom: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  cfVerticalUser: {
+    color: theme.colors.textLight,
+    fontSize: 11,
+    flex: 1,
   },
 });
