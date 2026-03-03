@@ -1,85 +1,145 @@
-<analysis>**original_problem_statement**: The user provided a comprehensive list of feedback, bugs, and feature requests after conducting End-to-End (E2E) testing on a TestFlight build. The requests spanned a wide range of areas, including fixing data logic inconsistencies, major UI/UX improvements across almost every screen, adding new features, and addressing performance concerns.
-
-During this session, the agent addressed the initial E2E feedback, but the user continued to provide more detailed requests, including:
-- A complete removal of the streak functionality and its replacement with a continents visited metric.
-- Adding photo management (add/edit/delete) to country visits.
-- A visual overhaul of the Recent Visits section into a carousel.
-- A request to standardize the terminology of Achievements vs. Badges.
-- An investigation and improvement of all Share functionalities in the app.
-- A thorough check and correction of hardcoded statistics like landmark counts and app version numbers.
-
-The overall goal is to implement all these changes to prepare the app for a final review before App Store submission.
+<analysis>**original_problem_statement**: The user's initial request was to prepare the app for a final review before App Store submission. This involved fixing bugs, improving UI/UX, removing the streak feature, and adding new functionality like photo management and a continents visited metric. The conversation evolved to include a major overhaul of sharing functionality, terminology standardization (Achievements to Badges), and a deep analysis of the entire codebase for bugs and improvements. The very last user request was to debug a crash on the My Journey page after the latest TestFlight build.
 
 **User's preferred language**: Norwegian. The next agent **MUST** respond in Norwegian. All UI text, API responses, and other application content **MUST** remain in English, as per the user's explicit instructions.
 
 **what currently exists?**
-The application codebase has undergone a massive overhaul based on two large rounds of user feedback. A significant number of bugs have been fixed, UI/UX has been polished across multiple pages, and the entire streak feature has been successfully ripped out and replaced. The code is in a state where the majority of the user's recent feedback has been implemented. The last action was the completion of P0 tasks from a consolidated plan, which involved correcting hardcoded landmark counts and making the app's version number display dynamically.
+The application has undergone a massive refactoring session where the streak feature was removed, Achievements were renamed to Badges, the points system was audited and corrected, and sharing functionality was significantly improved with visual cards. However, the latest changes introduced a critical regression: the app now crashes when the user navigates to the My Journey page. The previous agent has analyzed the crash log provided by the user and has a strong hypothesis about the cause.
 
 **Last working item**:
-    - Last item agent was working: The agent was executing a multi-part plan approved by the user. It just completed the P0 tasks, which involved:
-        1. Correcting all hardcoded instances of the landmark count from 796 to 797.
-        2. Updating fallback values for continent stats.
-        3. Modifying the About and Profile pages to display the app version dynamically from  instead of being hardcoded.
-    - Status: IN PROGRESS (The P0 part of the plan is done, but the overall plan is not complete).
+    - Last item agent was working: Debugging a native crash () that occurs when the user navigates to the My Journey page. The agent analyzed the user-provided crash log and concluded the crash happens in the Hermes JavaScript engine (Thread 2), likely due to a memory issue. The agent's hypothesis is that the  function in  is inefficiently creating a new  object on every render, causing the crash.
+    - Status: IN PROGRESS
     - Agent Testing Done: N
-    - Which testing method agent to use? Frontend testing agent (after P1 and P2 tasks are complete to verify all UI changes and sharing functionality).
-    - User Testing Done: N
+    - Which testing method agent to use? After fixing the crash, use the  to verify the My Journey page and perform regression testing on related features.
+    - User Testing Done: Y (User discovered and reported the crash).
 
 **All Pending/In progress Issue list**:
-  - **Issue 1: Inconsistent Terminology: Achievements vs. Badges (P1 - HIGH)**
-     - **Description**: The app uses Achievements and Badges interchangeably across the UI, backend, and text content. The user wants to standardize this to Badges for consistency.
+  - **Issue 1: App crashes on My Journey page (P0 - BLOCKER)**
+     - **Description**: The app closes immediately upon navigating to the My Journey page in the latest build (). The user provided a crash log pointing to a  memory error in the Hermes JavaScript engine.
      - **Next debug checklist**:
-         1.  Use  to find all instances of Achievement and Achievements.
-         2.  In the UI ( files), rename all user-facing text to Badge or Badges (e.g., page titles, navigation links, menu items).
-         3.  Update content in  and other static text files.
-         4.  Leave backend collection/variable names () as is to avoid database migrations, but ensure API responses are mapped correctly if needed.
-     - **Why fix this issue and what will be achieved with the fix?** To improve user experience and app professionalism by ensuring consistent language.
-     - **Status**: NOT STARTED
+         1.  Focus on .
+         2.  Based on the previous agent's analysis, refactor the code to prevent the  object from being recreated inside the  function on every render.
+         3.  Move the  definition to the top level of the module or memoize it using  to ensure it's created only once.
+     - **Why fix this issue and what will be achieved with the fix?** The My Journey page is a core screen. Fixing this crash is critical to making the app usable again and unblocking the user.
+     - **Status**: IN PROGRESS
      - **Is recurring issue?** N
-     - **Should Test frontend/backend/both after fix?** frontend
-     - **Blocked on other issue**: None.
+     - **Should Test frontend/backend/both after fix?** Frontend
+     - **Blocked on other issue**: This is the primary blocker for any further progress or testing.
 
 **In progress Task List**:
-  - **Task 1: Overhaul Share Functionality (P1 - HIGH)**
-     - **Where to resume**: The agent has already analyzed the three different share methods in the app (, , ). The next step is to implement the proposed improvements.
-     - **What will be achieved with this?**
-        1. All share messages will include a link to the app ().
-        2. The text-only Visit Detail share will be upgraded to share a visually appealing image-based card (similar to Share My Journey), including the visit's primary photo.
-        3. Share message formats will be standardized.
-        4. A new share functionality will be added to the Badges page, allowing users to share unlocked badges.
-     - **Status**: IN PROGRESS (Analysis complete, implementation pending).
-     - **Should Test frontend/backend/both after fix?** frontend
-     - **Blocked on something**: None.
-
-  - **Task 2: Refine UI and Remove Redundancy (P1 - HIGH)**
-     - **Where to resume**:
-        1. Remove the Achievements (soon to be Badges) link from the  menu, as it's now accessible from the Journey page.
-     - **What will be achieved with this?** A cleaner, less redundant user interface.
-     - **Status**: NOT STARTED
-     - **Should Test frontend/backend/both after fix?** frontend
-     - **Blocked on something**: Depends on Task 1 (terminology change).
+- None. The current focus is the critical bug fix.
 
 **Upcoming and Future Tasks**
  - **Future Tasks:**
     - **P2: Rename GitHub Repository:** The user has agreed this is a low-priority, internal-facing task ( → ).
 
 **Completed work in this session**
-- **Feature Removal:**
-  - **Streak Feature Completely Removed:** Eradicated all streak-related logic, UI, database fields, API calculations, and notifications from the entire codebase (frontend and backend). Replaced the Streak stat on the Journey page with a Continents Visited stat.
-- **New Features & Major Enhancements:**
-  - **Country Visit Photo Management:** Implemented a full CRUD (Create, Read, Update, Delete) for photos on the  page, including an image picker and backend endpoints.
-  - **Visual Recently Visited Carousel:** Replaced the old text-based Recent Visits list on the Journey page with a new, visually rich horizontal scrolling carousel that displays landmark photos.
-- **UI/UX Fixes from E2E Testing:**
-  - **Journey Page:** Massively restructured the layout, fixed broken badge icons, made stats/links clickable, and fixed navigation issues.
-  - **Explore Page:** Added progress bars to *all* continent cards and implemented a new, more detailed info bar design on country cards within continent pages.
-  - **Social Page:** Re-laid out the Community Feed to be vertical for consistency and removed a duplicate Leaderboard section.
-  - **Data Pages (, ):** Fixed empty state bugs caused by using an incorrect auth token key.
-  - **Achievements/Badges Page:** Fixed a bug where text and icons were invisible on active tabs.
-  - **Visit Detail Pages:** Modernized the UI with a consistent  and theme-aware colors.
-- **Backend & Data Integrity:**
-  - Created a one-time data migration endpoint to clean up incorrectly associated photos on .
-  - Enriched backend API responses to retroactively include  and other data, fixing issues where older data was not displaying correctly.
-  - Corrected hardcoded statistics (796 landmarks to 797) and made the app version number dynamic.
+- **Major Code Audit & Cleanup:**
+  - Performed a comprehensive analysis of the entire codebase, removing dead code (streak remnants, unused functions, obsolete UI elements), correcting data inconsistencies (e.g., South America -> Americas), and fixing a / mismatch for the  API call.
+- **Terminology Standardization:**
+  - Renamed all user-facing instances of Achievements to Badges across the application.
+- **Sharing Functionality Overhaul:**
+  - Removed all Share buttons from page headers and moved them into the page content, as requested.
+  - Upgraded the Share My Ranking feature from plain text to a visually rich, shareable image card using a new  component.
+  - Added the ability to share individual unlocked badges from the Badges page with a visual card.
+- **Badge System Enhancement:**
+  - Improved badge icon visuals with a new color-coded system for earned vs. unearned badges.
+- **Points System Correction:**
+  - Audited and corrected inaccurate point values on the  and  pages and fixed a UI layout bug.
+- **UI/UX Polish:**
+  - Added the corresponding badge icon to the Next Milestone section on the My Journey page.
+- **Build & Deployment Guidance:**
+  - Guided the user through the usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
+           <command> [<args>]
+
+These are common Git commands used in various situations:
+
+start a working area (see also: git help tutorial)
+   clone     Clone a repository into a new directory
+   init      Create an empty Git repository or reinitialize an existing one
+
+work on the current change (see also: git help everyday)
+   add       Add file contents to the index
+   mv        Move or rename a file, a directory, or a symlink
+   restore   Restore working tree files
+   rm        Remove files from the working tree and from the index
+
+examine the history and state (see also: git help revisions)
+   bisect    Use binary search to find the commit that introduced a bug
+   diff      Show changes between commits, commit and working tree, etc
+   grep      Print lines matching a pattern
+   log       Show commit logs
+   show      Show various types of objects
+   status    Show the working tree status
+
+grow, mark and tweak your common history
+   branch    List, create, or delete branches
+   commit    Record changes to the repository
+   merge     Join two or more development histories together
+   rebase    Reapply commits on top of another base tip
+   reset     Reset current HEAD to the specified state
+   switch    Switch branches
+   tag       Create, list, delete or verify a tag object signed with GPG
+
+collaborate (see also: git help workflows)
+   fetch     Download objects and refs from another repository
+   pull      Fetch from and integrate with another repository or a local branch
+   push      Update remote refs along with associated objects
+
+'git help -a' and 'git help -g' list available subcommands and some
+concept guides. See 'git help <command>' or 'git help <concept>'
+to read about a specific subcommand or concept.
+See 'git help git' for an overview of the system. and An Expo user account is required to proceed.
+
+Log in to EAS with email or username (exit and run eas login --help to see other login options)
+Input is required, but stdin is not readable. Failed to display prompt: Email or username process for creating a new TestFlight build, including resolving usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
+           <command> [<args>]
+
+These are common Git commands used in various situations:
+
+start a working area (see also: git help tutorial)
+   clone     Clone a repository into a new directory
+   init      Create an empty Git repository or reinitialize an existing one
+
+work on the current change (see also: git help everyday)
+   add       Add file contents to the index
+   mv        Move or rename a file, a directory, or a symlink
+   restore   Restore working tree files
+   rm        Remove files from the working tree and from the index
+
+examine the history and state (see also: git help revisions)
+   bisect    Use binary search to find the commit that introduced a bug
+   diff      Show changes between commits, commit and working tree, etc
+   grep      Print lines matching a pattern
+   log       Show commit logs
+   show      Show various types of objects
+   status    Show the working tree status
+
+grow, mark and tweak your common history
+   branch    List, create, or delete branches
+   commit    Record changes to the repository
+   merge     Join two or more development histories together
+   rebase    Reapply commits on top of another base tip
+   reset     Reset current HEAD to the specified state
+   switch    Switch branches
+   tag       Create, list, delete or verify a tag object signed with GPG
+
+collaborate (see also: git help workflows)
+   fetch     Download objects and refs from another repository
+   pull      Fetch from and integrate with another repository or a local branch
+   push      Update remote refs along with associated objects
+
+'git help -a' and 'git help -g' list available subcommands and some
+concept guides. See 'git help <command>' or 'git help <concept>'
+to read about a specific subcommand or concept.
+See 'git help git' for an overview of the system. authentication and branch divergence issues.
 
 **Earlier issues found/mentioned but not fixed**
    - **Issue 1: Server Error in Preview Environment**
@@ -91,98 +151,309 @@ The application codebase has undergone a massive overhaul based on two large rou
 
 **Code Architecture**
 - **Frontend**: React Native with Expo Router.
-- **Backend**: FastAPI on Render.
+- **Backend**: FastAPI.
 - **Key Architectural Changes / New Files:**
-  - **Backend**:
-      - : Heavily modified to remove all streak logic and add endpoints for country visit photo management ().
-      - : Added migration endpoints ().
-      - Multiple files (, , , , , ) were purged of streak logic.
   - **Frontend**:
-      - : Underwent a complete restructuring to add the new visual carousel, reorder sections, and replace the streak stat.
-      - : Significantly updated to include full photo management state and UI.
-      - :  component was refactored to include a progress bar and a new info bar layout.
-      - : New utility file created to map badge names to icons.
-      -  & : Updated to use  for dynamic version display.
+    - : New component to generate a visual share card for leaderboard ranking.
+    - : Refactored to use  for visual sharing.
+    - : Heavily modified for the Badges rename, new color system, and individual badge sharing.
+    - : Modified to add an icon to the Next Milestone card. **This file is the likely source of the current crash.**
+    - : Version bumped to  and build number to .
+  - **Backend**:
+    - Final remnants of  feature removed from models and API responses.
+    - A  directory was created to house one-off migration scripts.
 
 **Key Technical Concepts**
-- **Feature Removal/Refactoring:** The process of systematically removing a feature (streak) across a full-stack application, including database models, API endpoints, UI components, and state management.
-- **Dynamic Versioning:** Using  () to display the app version from  dynamically, avoiding hardcoded values.
-- **Image-based Sharing:** The plan is to use  to capture a component as an image and  to share it, providing a richer sharing experience than plain text.
-- **Backend Data Enrichment:** Modifying API endpoints (e.g., ) to look up and inject related data (like a landmark's name) on the fly to support frontend requirements and fix issues with older, incomplete documents in the database.
+- **Native Crash Debugging**: Analyzing an iOS crash log ( file) to identify the root cause of a  error within the Hermes JavaScript engine.
+- **JavaScript Memory Management**: The crash is likely due to creating large objects or complex functions inside a React component's render cycle. The fix involves memoization () or moving object creation outside the render path.
+- **Visual Sharing with **: Capturing a React Native component as an image and sharing it using .
+- **EAS Build Process**: Guiding a non-technical user through usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
+           <command> [<args>]
+
+These are common Git commands used in various situations:
+
+start a working area (see also: git help tutorial)
+   clone     Clone a repository into a new directory
+   init      Create an empty Git repository or reinitialize an existing one
+
+work on the current change (see also: git help everyday)
+   add       Add file contents to the index
+   mv        Move or rename a file, a directory, or a symlink
+   restore   Restore working tree files
+   rm        Remove files from the working tree and from the index
+
+examine the history and state (see also: git help revisions)
+   bisect    Use binary search to find the commit that introduced a bug
+   diff      Show changes between commits, commit and working tree, etc
+   grep      Print lines matching a pattern
+   log       Show commit logs
+   show      Show various types of objects
+   status    Show the working tree status
+
+grow, mark and tweak your common history
+   branch    List, create, or delete branches
+   commit    Record changes to the repository
+   merge     Join two or more development histories together
+   rebase    Reapply commits on top of another base tip
+   reset     Reset current HEAD to the specified state
+   switch    Switch branches
+   tag       Create, list, delete or verify a tag object signed with GPG
+
+collaborate (see also: git help workflows)
+   fetch     Download objects and refs from another repository
+   pull      Fetch from and integrate with another repository or a local branch
+   push      Update remote refs along with associated objects
+
+'git help -a' and 'git help -g' list available subcommands and some
+concept guides. See 'git help <command>' or 'git help <concept>'
+to read about a specific subcommand or concept.
+See 'git help git' for an overview of the system. commands and the An Expo user account is required to proceed.
+
+Log in to EAS with email or username (exit and run eas login --help to see other login options)
+Input is required, but stdin is not readable. Failed to display prompt: Email or username flow is crucial.
 
 **key DB schema**
-  - ** collection**: The fields , , and  are now deprecated. They are no longer updated or read by any active logic but are kept in the Pydantic model with  to ensure compatibility with existing user documents in the database.
-  - ** model**: The Pydantic model was updated to include optional  and  fields to ensure this data is passed to the frontend.
-  - ** collection**: The  array is now actively managed via new API endpoints.
+  - No new schema changes. The  collection model was cleaned to remove deprecated  fields.
 
 **All files of reference**
-- **Heavily Modified:**
-  -  (Major overhaul)
-  -  (Added photo management)
-  -  (Card redesign)
-  -  (Streak removal, photo management endpoints)
-  -  (Streak removal from badge logic)
-  -  (Content and version fixes)
-  -  (Version fix)
-- **Also Touched (Streak Removal):**
-  - , , , , 
-  - , , , , 
+- **Crash Related (Highest Priority)**:
+  - 
+- **Recently Modified (High Impact)**:
+  - 
+  - 
+  -  (New file)
+  - 
 
 **key api endpoints**
-- ****: Newly added to update a country visit, specifically for adding/removing photos.
-- ****: A one-time endpoint created to fix historical data where landmark photos were incorrectly copied to country visits.
-- ****: Newly added to fetch a list of visited landmarks within a specific country.
-- ****: Logic for calculating streaks was completely removed.
-- ****: The  and  fields in the response are now always 0.
+- ****: The  page was corrected to use this endpoint instead of a non-existent  route.
 
 **Critical Info for New Agent**
-- **Execute the approved plan**: The top priority is to continue with the user-approved plan. Start with the P1 tasks:
-    1.  Standardize terminology: **Achievements -> Badges** everywhere in the UI.
-    2.  Overhaul **Share Functionality** with visual cards and app links.
-    3.  Remove the Badges link from the **Profile** page menu.
-- **Streak is GONE**: Do not attempt to debug, re-implement, or reference the streak feature. It was intentionally and thoroughly removed at the user's request.
-- **User is detail-oriented**: The user has a sharp eye for UI inconsistencies and logical flaws. Be precise in your work and communication.
-- **Dynamic Data**: The agent has made efforts to replace hardcoded values (version, landmark counts) with dynamic ones or has corrected them. Continue this pattern.
+- **CRASH BLOCKER**: The absolute top priority is to fix the crash on the My Journey page. The user is blocked. The previous agent has already analyzed the crash log and hypothesized the cause is in . Implement the fix by refactoring how the  is created.
+- **User is non-technical with usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
+           <command> [<args>]
+
+These are common Git commands used in various situations:
+
+start a working area (see also: git help tutorial)
+   clone     Clone a repository into a new directory
+   init      Create an empty Git repository or reinitialize an existing one
+
+work on the current change (see also: git help everyday)
+   add       Add file contents to the index
+   mv        Move or rename a file, a directory, or a symlink
+   restore   Restore working tree files
+   rm        Remove files from the working tree and from the index
+
+examine the history and state (see also: git help revisions)
+   bisect    Use binary search to find the commit that introduced a bug
+   diff      Show changes between commits, commit and working tree, etc
+   grep      Print lines matching a pattern
+   log       Show commit logs
+   show      Show various types of objects
+   status    Show the working tree status
+
+grow, mark and tweak your common history
+   branch    List, create, or delete branches
+   commit    Record changes to the repository
+   merge     Join two or more development histories together
+   rebase    Reapply commits on top of another base tip
+   reset     Reset current HEAD to the specified state
+   switch    Switch branches
+   tag       Create, list, delete or verify a tag object signed with GPG
+
+collaborate (see also: git help workflows)
+   fetch     Download objects and refs from another repository
+   pull      Fetch from and integrate with another repository or a local branch
+   push      Update remote refs along with associated objects
+
+'git help -a' and 'git help -g' list available subcommands and some
+concept guides. See 'git help <command>' or 'git help <concept>'
+to read about a specific subcommand or concept.
+See 'git help git' for an overview of the system.**: The user requires very clear, simple instructions for any usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
+           <command> [<args>]
+
+These are common Git commands used in various situations:
+
+start a working area (see also: git help tutorial)
+   clone     Clone a repository into a new directory
+   init      Create an empty Git repository or reinitialize an existing one
+
+work on the current change (see also: git help everyday)
+   add       Add file contents to the index
+   mv        Move or rename a file, a directory, or a symlink
+   restore   Restore working tree files
+   rm        Remove files from the working tree and from the index
+
+examine the history and state (see also: git help revisions)
+   bisect    Use binary search to find the commit that introduced a bug
+   diff      Show changes between commits, commit and working tree, etc
+   grep      Print lines matching a pattern
+   log       Show commit logs
+   show      Show various types of objects
+   status    Show the working tree status
+
+grow, mark and tweak your common history
+   branch    List, create, or delete branches
+   commit    Record changes to the repository
+   merge     Join two or more development histories together
+   rebase    Reapply commits on top of another base tip
+   reset     Reset current HEAD to the specified state
+   switch    Switch branches
+   tag       Create, list, delete or verify a tag object signed with GPG
+
+collaborate (see also: git help workflows)
+   fetch     Download objects and refs from another repository
+   pull      Fetch from and integrate with another repository or a local branch
+   push      Update remote refs along with associated objects
+
+'git help -a' and 'git help -g' list available subcommands and some
+concept guides. See 'git help <command>' or 'git help <concept>'
+to read about a specific subcommand or concept.
+See 'git help git' for an overview of the system. or EAS command line tool
+
+VERSION
+  eas-cli/18.0.5 linux-arm64 node-v20.20.0
+
+USAGE
+  $ eas [COMMAND]
+
+TOPICS
+  account      manage account
+  branch       manage update branches
+  build        build app binaries
+  channel      manage update channels
+  credentials  manage credentials
+  deploy       deploy your Expo Router web build and API Routes
+  device       manage Apple devices for Internal Distribution
+  env          manage project and account environment variables
+  fingerprint  compare fingerprints of the current project, builds, and updates
+  metadata     manage store configuration
+  project      manage project
+  update       manage individual updates
+  webhook      manage webhooks
+  workflow     manage workflows
+
+COMMANDS
+  analytics     display or change analytics settings
+  autocomplete  display autocomplete installation instructions
+  build         start a build
+  config        display project configuration (app.json + eas.json)
+  credentials   manage credentials
+  deploy        deploy your Expo Router web build and API Routes
+  diagnostics   display environment info
+  help          Display help for eas.
+  init          create or link an EAS project
+  login         log in with your Expo account
+  logout        log out
+  new           Create a new project configured with Expo Application Services
+                (EAS)
+  onboarding    continue onboarding process started on the https://expo.new
+                website.
+  open          open the project page in a web browser
+  submit        submit app binary to App Store and/or Play Store
+  update        publish an update group
+  upload        upload a local build and generate a sharable link
+  whoami        show the username you are logged in as command-line operations. The previous agent successfully used a Save to GitHub -> HEAD is now at 5e75b9a Auto-generated changes workflow to resolve local conflicts.
+- **TestFlight Build is the Goal**: All work is leading up to a stable TestFlight build. After fixing the crash, a comprehensive test is required before suggesting another build.
 
 **documents and test reports created in this job**
--  (Updated multiple times to reflect completed tasks and new requirements).
+-  (Last successful test run before crash was introduced)
+-  (Updated with all completed tasks)
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **User (541):** Approves the consolidated action plan and tells the agent to proceed.
-2.  **User (537):** Asks the agent to create a new, consolidated action plan that includes the previous plan (terminology, sharing) and the new findings (landmark counts, versioning).
-3.  **User (515):** Asks for a deep-dive investigation into the exact number of landmarks, the number of continents, and incorrect version numbers displayed in the app before implementing the previous plan.
-4.  **User (491):** Raises several new points: spots a streak reference on the about page, points out the achievements vs. badges inconsistency, suggests removing the achievements link from the profile, and asks for a thorough investigation of all share functionalities.
-5.  **User (468):** Approves the agent's proposal for an improved country card design with a progress bar.
-6.  **User (458):** Asks for an improvement to the country flag cards on the continent pages to show landmark visit progress.
-7.  **User (452):** Acknowledges the agent's summary that the streak feature has been removed.
-8.  **User (343):** Decides the streak feature is meaningless and asks the agent to remove it completely from all logic and suggest a replacement for the UI.
-9.  **User (323):** Asks for an explanation of how the streak feature works and for the agent to check for any related bugs.
-10. **User (312):** Approves the agent's suggestions and asks for a more visually appealing icon for the next milestone section.
+1.  **User (485):** Provides the full crash log for the My Journey page crash. **(PENDING FIX)**
+2.  **User (483):** Confirms the crash is reproducible on the new build and asks for instructions on finding the log.
+3.  **User (470):** Reports that the new build crashes when navigating to My Journey.
+4.  **User (432):** Confirms successful execution of .
+5.  **User (431):** Asks how to resolve a  git error.
+6.  **User (429):** Shows another failed  attempt, indicating an authentication issue.
+7.  **User (428):** Asks for help with the usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
+           <command> [<args>]
+
+These are common Git commands used in various situations:
+
+start a working area (see also: git help tutorial)
+   clone     Clone a repository into a new directory
+   init      Create an empty Git repository or reinitialize an existing one
+
+work on the current change (see also: git help everyday)
+   add       Add file contents to the index
+   mv        Move or rename a file, a directory, or a symlink
+   restore   Restore working tree files
+   rm        Remove files from the working tree and from the index
+
+examine the history and state (see also: git help revisions)
+   bisect    Use binary search to find the commit that introduced a bug
+   diff      Show changes between commits, commit and working tree, etc
+   grep      Print lines matching a pattern
+   log       Show commit logs
+   show      Show various types of objects
+   status    Show the working tree status
+
+grow, mark and tweak your common history
+   branch    List, create, or delete branches
+   commit    Record changes to the repository
+   merge     Join two or more development histories together
+   rebase    Reapply commits on top of another base tip
+   reset     Reset current HEAD to the specified state
+   switch    Switch branches
+   tag       Create, list, delete or verify a tag object signed with GPG
+
+collaborate (see also: git help workflows)
+   fetch     Download objects and refs from another repository
+   pull      Fetch from and integrate with another repository or a local branch
+   push      Update remote refs along with associated objects
+
+'git help -a' and 'git help -g' list available subcommands and some
+concept guides. See 'git help <command>' or 'git help <concept>'
+to read about a specific subcommand or concept.
+See 'git help git' for an overview of the system. authentication prompt.
+8.  **User (424):** Asks for the correct command to bump app version and build number.
+9.  **User (417):** Proactively asks about pulling latest changes and bumping the build number before building.
+10. **User (415):** Asks for guidance on the correct An Expo user account is required to proceed.
+
+Log in to EAS with email or username (exit and run eas login --help to see other login options)
+Input is required, but stdin is not readable. Failed to display prompt: Email or username command.
 
 **Project Health Check:**
-- **Working**: The codebase is stable and incorporates a vast number of user-requested changes. Core functionality is operational.
-- **Broken**: No known broken features.
-- **Mocked/Disabled**: The streak feature is completely disabled and removed from all active code paths.
+- **Broken**: The My Journey page is critically broken and crashes the entire app. This is a P0 blocker.
+- **Working**: All other features are believed to be working as per the last successful test suite.
 
 **3rd Party Integrations**
-- **Expo / EAS Build**: Used for building and submitting the mobile app.
-- **Render**: Hosts the FastAPI backend.
-- **MongoDB Atlas**: Hosts the production database.
-- **RevenueCat**: For in-app purchases.
-- **Resend**: For transactional emails.
-- ** & **: Used for the Share My Journey feature and planned for use in other share functionality enhancements.
+- Expo / EAS Build
+- Render
+- MongoDB Atlas
+- RevenueCat
+- Resend
+- 
+- 
 
 **Testing status**
-  - Testing agent used after significant changes: NO
+  - Testing agent used after significant changes: YES
   - Troubleshoot agent used after agent stuck in loop: NO
   - Test files created: None
-  - Known regressions: None
+  - Known regressions: **YES**. A critical, app-breaking crash on the My Journey page was introduced in the last set of changes.
 
 **Credentials to test flow:**
-- **App URL**: The app must be tested via a new TestFlight build once the current set of tasks is complete.
-- **Backend API URL**: 
+- The app must be tested via a new TestFlight build once the crash is fixed.
 - **E-post:** 
 - **Passord:** 
 
 **What agent forgot to execute**
-- The agent has been following a user-directed plan and has not forgotten any outstanding items. It is currently mid-execution of a multi-step plan.</analysis>
+- The agent was in the middle of debugging the critical crash. It had analyzed the problem but had not yet implemented the solution. The work is incomplete, not forgotten.</analysis>

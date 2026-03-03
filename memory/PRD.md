@@ -117,11 +117,18 @@ WanderMark is a travel app where users visit landmarks and countries, earn point
 - **rankSystem.ts comment updated**: Reflects correct total ~15,900 pts for 797 landmarks.
 
 ## Current App Version
-- Version: 1.2.0
-- Build: 56
+- Version: 1.3.0
+- Build: 58
 
 ## Pending Deployment
 All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) New EAS build
+
+### Session Mar 2026 - CRITICAL Crash Fix (Build 58)
+- **P0 CRITICAL: "My Journey" page crash fixed** - App crashed with SIGSEGV when navigating to the Journey page. Four root causes identified and fixed:
+  1. `Image` component from `react-native` was used but never imported → Added to imports
+  2. `useSafeAreaInsets()` hook was called AFTER a conditional `return` statement, violating React's Rules of Hooks → Moved before any returns
+  3. `photos` field was missing from the `Visit` TypeScript interface → Added to interface
+  4. `badgeMap` object was recreated on every render inside `getNextMilestone()` → Extracted to module-level constants (`MILESTONE_BADGE_MAP`, `MILESTONES`)
 
 ### Session Mar 2026 - Comprehensive Code Audit & Bug Fixes
 - **P0 CRITICAL: Points Summary page fixed** - Was completely broken (GET to PUT-only /api/auth/profile returned 405). Now uses /api/stats with correct field mapping.

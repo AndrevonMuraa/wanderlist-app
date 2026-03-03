@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Platform, RefreshControl, StatusBar } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Platform, RefreshControl, StatusBar, Image } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -30,6 +30,19 @@ const getToken = async (): Promise<string | null> => {
     return await SecureStore.getItemAsync('auth_token');
   }
 };
+
+// Static milestone badge map - defined outside component to avoid recreation on each render
+const MILESTONE_BADGE_MAP: Record<number, { name: string; icon: string; type: string }> = {
+  10:  { name: 'Explorer', icon: 'map', type: 'milestone_10' },
+  25:  { name: 'Adventurer', icon: 'climbing', type: 'milestone_25' },
+  50:  { name: 'Globetrotter', icon: 'globe', type: 'milestone_50' },
+  100: { name: 'World Traveler', icon: 'plane', type: 'milestone_100' },
+  200: { name: 'Seasoned Traveler', icon: 'compass', type: 'milestone_200' },
+  250: { name: 'Elite Explorer', icon: 'medal', type: 'milestone_250' },
+  350: { name: 'Legend', icon: 'trophy', type: 'milestone_350' },
+  500: { name: 'Ultimate Explorer', icon: 'crown', type: 'milestone_500' },
+};
+const MILESTONES = [10, 25, 50, 100, 200, 250, 350, 500];
 
 interface Stats {
   total_visits: number;
@@ -77,6 +90,7 @@ interface Visit {
   country_name?: string;
   visited_at: string;
   points_earned: number;
+  photos?: string[];
 }
 
 interface LandmarkEntry {
@@ -117,6 +131,7 @@ export default function JourneyScreen() {
   const canCreateCustomVisits = subscriptionData.canCreateCustomVisits;
   const isPro = subscriptionData.isPro;
   const { scrollRef, scrollHandler } = useScrollRestore();
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     fetchAllData();
@@ -221,21 +236,9 @@ export default function JourneyScreen() {
 
   const getNextMilestone = () => {
     const visited = progressStats?.overall.visited || 0;
-    // Milestones matching badge system (797 total landmarks)
-    const milestones = [10, 25, 50, 100, 200, 250, 350, 500];
-    const next = milestones.find(m => m > visited);
+    const next = MILESTONES.find(m => m > visited);
     if (next) {
-      const badgeMap: Record<number, { name: string; icon: string; type: string }> = {
-        10:  { name: 'Explorer', icon: 'map', type: 'milestone_10' },
-        25:  { name: 'Adventurer', icon: 'climbing', type: 'milestone_25' },
-        50:  { name: 'Globetrotter', icon: 'globe', type: 'milestone_50' },
-        100: { name: 'World Traveler', icon: 'plane', type: 'milestone_100' },
-        200: { name: 'Seasoned Traveler', icon: 'compass', type: 'milestone_200' },
-        250: { name: 'Elite Explorer', icon: 'medal', type: 'milestone_250' },
-        350: { name: 'Legend', icon: 'trophy', type: 'milestone_350' },
-        500: { name: 'Ultimate Explorer', icon: 'crown', type: 'milestone_500' },
-      };
-      const badge = badgeMap[next];
+      const badge = MILESTONE_BADGE_MAP[next];
       return {
         target: next,
         remaining: next - visited,
@@ -259,9 +262,6 @@ export default function JourneyScreen() {
   }
 
   const nextMilestone = getNextMilestone();
-  
-  // Get safe area insets for proper header padding (matches Explore Continents)
-  const insets = useSafeAreaInsets();
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   return (
