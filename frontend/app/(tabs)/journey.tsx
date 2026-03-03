@@ -411,7 +411,7 @@ export default function JourneyScreen() {
         {nextMilestone && (
           <Surface style={[styles.milestoneCard, { backgroundColor: colors.surface }]}>
             <View style={styles.milestoneHeader}>
-              <Ionicons name="flag-outline" size={24} color={colors.primary} />
+              <Ionicons name="rocket" size={24} color={colors.primary} />
               <Text style={[styles.milestoneTitle, { color: colors.text }]}>{t('journey.nextMilestone')}</Text>
             </View>
             <Text style={[styles.milestoneName, { color: colors.primary }]}>{nextMilestone.name}</Text>
@@ -456,9 +456,17 @@ export default function JourneyScreen() {
                       resizeMode="cover"
                     />
                   ) : (
-                    <View style={{ width: 160, height: 120, backgroundColor: colors.primaryLight, alignItems: 'center', justifyContent: 'center' }}>
-                      <Ionicons name="location" size={36} color={colors.primary} />
-                    </View>
+                    <TouchableOpacity
+                      style={{ width: 160, height: 120, backgroundColor: colors.primaryLight, alignItems: 'center', justifyContent: 'center' }}
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        router.push(`/visit-detail/${visit.visit_id}`);
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Ionicons name="camera-outline" size={28} color={colors.primary} />
+                      <Text style={{ fontSize: 10, color: colors.primary, fontWeight: '600', marginTop: 4 }}>Add Photo</Text>
+                    </TouchableOpacity>
                   )}
                   <View style={{ padding: 10 }}>
                     <Text style={{ fontSize: 13, fontWeight: '700', color: colors.text }} numberOfLines={1}>

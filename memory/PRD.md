@@ -71,7 +71,8 @@ WanderMark is a travel app where users visit landmarks and countries, earn point
 
 ### Session Mar 2026 - Photo Management + Carousel
 - **Country visit photo editing**: Full CRUD - add photos (ImagePicker), remove individual photos, backend PUT endpoint with proper leaderboard points handling
-- **Recently Visited carousel**: Horizontal scrollable photo cards replacing old text-only list, placed under Overall Progress
+- **Recently Visited carousel**: Horizontal scrollable photo cards replacing old text-only list, placed under Overall Progress. Visits without photos show "Add Photo" prompt with camera icon
+- **Next Milestone icon**: Changed from `flag-outline` to `rocket` for better visual impact
 - **Next Milestone section verified**: Retroactive, uses same milestones as badge system (10, 25, 50, 100, 200, 250, 350, 500), names match BADGE_DEFINITIONS exactly
 
 ## Current App Version
