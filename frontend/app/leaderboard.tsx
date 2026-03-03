@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Platform,
   RefreshControl,
-  Share,
 } from 'react-native';
 import { Text, Surface, Avatar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,6 +16,7 @@ import theme from '../styles/theme';
 import RankBadge from '../components/RankBadge';
 import { getUserRank } from '../utils/rankSystem';
 import UniversalHeader from '../components/UniversalHeader';
+import ShareRankCard from '../components/ShareRankCard';
 import { BACKEND_URL } from '../utils/config';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
@@ -60,6 +60,9 @@ export default function LeaderboardScreen() {
   const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showPointsInfo, setShowPointsInfo] = useState(false);
+  const [showShareRank, setShowShareRank] = useState(false);
+  const [userValue, setUserValue] = useState(0);
+  const [userName, setUserName] = useState('');
 
   // Navigate back to social tab explicitly
   const handleBack = () => {
@@ -92,6 +95,31 @@ export default function LeaderboardScreen() {
         setLeaderboard(data.leaderboard);
         setUserRank(data.user_rank);
         setTotalUsers(data.total_users);
+        
+        // Find the current user's entry for share card
+        const token2 = await getToken();
+        try {
+          const meRes = await fetch(`${BACKEND_URL}/api/auth/me`, {
+            headers: { 'Authorization': `Bearer ${token2}` },
+          });
+          if (meRes.ok) {
+            const me = await meRes.json();
+            setUserName(me.name || me.username || 'Traveler');
+          }
+        } catch {}
+        
+        // Get user value from their rank position in the leaderboard or stats
+        try {
+          const statsRes = await fetch(`${BACKEND_URL}/api/stats`, {
+            headers: { 'Authorization': `Bearer ${token2}` },
+          });
+          if (statsRes.ok) {
+            const stats = await statsRes.json();
+            if (category === 'points') setUserValue(stats.leaderboard_points || stats.points || 0);
+            else if (category === 'visits') setUserValue(stats.total_visits || 0);
+            else setUserValue(stats.countries_visited || 0);
+          }
+        } catch {}
       }
     } catch (error) {
       console.error('Error loading leaderboard:', error);
@@ -360,17 +388,7 @@ export default function LeaderboardScreen() {
         {userRank !== null && (
           <TouchableOpacity
             style={styles.shareRankButton}
-            onPress={async () => {
-              try {
-                const categoryLabel = category === 'points' ? 'points' : category === 'visits' ? 'visits' : 'countries explored';
-                await Share.share({
-                  message: `I'm ranked #${userRank} out of ${totalUsers.toLocaleString()} travelers on WanderMark! 🌍🏆\n\nTrack your travels: https://wandermark.app`,
-                  title: 'My WanderMark Ranking',
-                });
-              } catch (error) {
-                console.error('Error sharing rank:', error);
-              }
-            }}
+            onPress={() => setShowShareRank(true)}
             activeOpacity={0.7}
             data-testid="share-ranking-button"
           >
@@ -428,6 +446,17 @@ export default function LeaderboardScreen() {
           )}
         </View>
       </ScrollView>
+
+      {/* Share Rank Card Modal */}
+      <ShareRankCard
+        visible={showShareRank}
+        onDismiss={() => setShowShareRank(false)}
+        rank={userRank || 0}
+        totalUsers={totalUsers}
+        category={category}
+        value={userValue}
+        userName={userName}
+      />
     </View>
   );
 }
