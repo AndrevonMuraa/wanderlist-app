@@ -132,7 +132,7 @@ All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) Ne
 - **P1: Points Summary bonus types added** - Now shows all 6 earning methods: Landmark (10/25), Country Visit (50), Country Bonus (+20), Continent Bonus (+50), Completion Bonuses (+50/+200), Photo Verification.
 - **P1: Continents fallback data updated** - Was significantly outdated (e.g., Europe showed 107 landmarks, actual is 196). Updated all 5 continents.
 - **P2: Dead streak code removed** - Deleted StreakDisplay.tsx (132 lines), removed streak fields from leaderboard interface, hardcoded backend streak response to 0.
-- **P3: Leaderboard share added** - "Share My Ranking" button showing rank position with wandermark.app link.
+- **P3: Leaderboard share added** - "Share My Ranking" button with visual card (ShareRankCard component). Dark gradient card with medal icon, rank number, user name, 3 stats columns (category value, total travelers, percentile), and wandermark.app CTA. Uses react-native-view-shot for image capture and expo-sharing for sharing.
 - **P3: Backend scripts reorganized** - 11 one-time seed/migration scripts moved to /backend/scripts/ folder.
 
 ## Remaining Tasks
