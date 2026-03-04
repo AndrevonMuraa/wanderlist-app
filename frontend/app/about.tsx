@@ -62,14 +62,12 @@ export default function AboutScreen() {
     description,
     color,
     onPress,
-    isNew,
   }: {
     icon: string;
     title: string;
     description: string;
     color: string;
     onPress: () => void;
-    isNew?: boolean;
   }) => (
     <TouchableOpacity onPress={onPress} activeOpacity={0.8} style={styles.featureCard}>
       <Surface style={styles.featureCardSurface}>
@@ -77,14 +75,7 @@ export default function AboutScreen() {
           <Ionicons name={icon as any} size={28} color={color} />
         </View>
         <View style={styles.featureContent}>
-          <View style={styles.featureTitleRow}>
-            <Text style={styles.featureTitle}>{title}</Text>
-            {isNew && (
-              <View style={styles.newBadge}>
-                <Text style={styles.newBadgeText}>NEW</Text>
-              </View>
-            )}
-          </View>
+          <Text style={styles.featureTitle}>{title}</Text>
           <Text style={styles.featureDescription}>{description}</Text>
         </View>
         <Ionicons name="chevron-forward" size={20} color={theme.colors.textLight} />
@@ -325,12 +316,19 @@ Plus social badges, and point milestones!`}
           </View>
 
           <FeatureCard
-            icon="images"
-            title="Photo Collection"
-            description="All your travel photos in one beautiful gallery"
-            color="#FF6B6B"
-            onPress={() => router.push('/photo-collection')}
-            isNew
+            icon="location"
+            title="Landmark Visits"
+            description="Visit 797 landmarks and earn points"
+            color={theme.colors.accent}
+            onPress={() => router.push('/my-landmark-visits')}
+          />
+
+          <FeatureCard
+            icon="earth"
+            title="Explore Continents"
+            description="Discover countries across 5 continents"
+            color="#3BB8C3"
+            onPress={() => router.push('/continents')}
           />
 
           <FeatureCard
@@ -339,7 +337,6 @@ Plus social badges, and point milestones!`}
             description="Record trips to places not in our database"
             color="#1E8A8A"
             onPress={() => router.push('/(tabs)/journey')}
-            isNew
           />
 
           <FeatureCard
@@ -510,7 +507,7 @@ Plus social badges, and point milestones!`}
         <View style={styles.ctaSection}>
           <TouchableOpacity
             style={styles.ctaButton}
-            onPress={() => router.push('/continents')}
+            onPress={() => router.push('/(tabs)/explore')}
             activeOpacity={0.8}
           >
             <LinearGradient
@@ -626,10 +623,10 @@ const styles = StyleSheet.create({
   },
   statItem: {
     alignItems: 'center',
-    flex: 1,
+    paddingHorizontal: 4,
   },
   statNumber: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: theme.colors.primary,
   },
@@ -774,11 +771,6 @@ const styles = StyleSheet.create({
   featureContent: {
     flex: 1,
   },
-  featureTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.xs,
-  },
   featureTitle: {
     fontSize: 15,
     fontWeight: '600',
@@ -788,17 +780,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginTop: 2,
-  },
-  newBadge: {
-    backgroundColor: '#FF6B6B',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 8,
-  },
-  newBadgeText: {
-    fontSize: 9,
-    fontWeight: '700',
-    color: '#fff',
   },
   // Expandable
   expandableCard: {

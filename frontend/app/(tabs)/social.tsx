@@ -900,9 +900,7 @@ export default function SocialHubScreen() {
               }}
             >
               <LinearGradient
-                colors={user?.subscription_tier === 'free' 
-                  ? ['#6b7280', '#4b5563'] 
-                  : [theme.colors.primary, theme.colors.secondary]}
+                colors={[theme.colors.primary, theme.colors.secondary]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.messagesGradient}

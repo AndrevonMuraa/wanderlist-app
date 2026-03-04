@@ -122,19 +122,23 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
 async def get_countries(current_user: User = Depends(get_current_user)):
     countries = await db.countries.find({}, {"_id": 0}).to_list(1000)
     
-    # Count ALL landmarks for each country and calculate total available points
+    # Single aggregation to get landmark counts and total points per country
+    pipeline = [
+        {
+            "$group": {
+                "_id": "$country_id",
+                "landmark_count": {"$sum": 1},
+                "total_points": {"$sum": {"$ifNull": ["$points", 10]}}
+            }
+        }
+    ]
+    landmark_stats = await db.landmarks.aggregate(pipeline).to_list(1000)
+    stats_map = {s["_id"]: s for s in landmark_stats}
+    
     for country in countries:
-        # Get all landmarks for this country
-        landmarks = await db.landmarks.find(
-            {"country_id": country["country_id"]}, 
-            {"category": 1, "points": 1}
-        ).to_list(1000)
-        
-        country["landmark_count"] = len(landmarks)
-        
-        # Calculate total available points (official=10pts, premium=25pts)
-        total_points = sum(lm.get("points", 10) for lm in landmarks)
-        country["total_points"] = total_points
+        stats = stats_map.get(country["country_id"], {})
+        country["landmark_count"] = stats.get("landmark_count", 0)
+        country["total_points"] = stats.get("total_points", 0)
     
     return [Country(**c) for c in countries]
 

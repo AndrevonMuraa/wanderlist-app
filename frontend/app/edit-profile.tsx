@@ -33,13 +33,6 @@ interface UserProfile {
   bio?: string;
   location?: string;
   banner_image?: string;
-  featured_badges?: string[];
-}
-
-interface Achievement {
-  achievement_id: string;
-  badge_name: string;
-  badge_icon: string;
 }
 
 export default function EditProfileScreen() {
@@ -51,8 +44,6 @@ export default function EditProfileScreen() {
   const [location, setLocation] = useState('');
   const [picture, setPicture] = useState<string | undefined>();
   const [bannerImage, setBannerImage] = useState<string | undefined>();
-  const [achievements, setAchievements] = useState<Achievement[]>([]);
-  const [featuredBadges, setFeaturedBadges] = useState<string[]>([]);
 
   // Navigate back to profile tab explicitly
   const handleBack = () => {
@@ -61,7 +52,6 @@ export default function EditProfileScreen() {
 
   useEffect(() => {
     loadProfile();
-    loadAchievements();
   }, []);
 
   const loadProfile = async () => {
@@ -78,28 +68,11 @@ export default function EditProfileScreen() {
         setLocation(data.location || '');
         setPicture(data.picture);
         setBannerImage(data.banner_image);
-        setFeaturedBadges(data.featured_badges || []);
       }
     } catch (error) {
       console.error('Error loading profile:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const loadAchievements = async () => {
-    try {
-      const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/achievements`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setAchievements(data);
-      }
-    } catch (error) {
-      console.error('Error loading achievements:', error);
     }
   };
 
@@ -157,22 +130,9 @@ export default function EditProfileScreen() {
     }
   };
 
-  const toggleFeaturedBadge = (achievementId: string) => {
-    setFeaturedBadges(prev => {
-      if (prev.includes(achievementId)) {
-        return prev.filter(id => id !== achievementId);
-      } else if (prev.length < 3) {
-        return [...prev, achievementId];
-      } else {
-        Alert.alert('Maximum Reached', 'You can only feature up to 3 badges');
-        return prev;
-      }
-    });
-  };
-
   const handleSave = async () => {
     if (!name.trim()) {
-      Alert.alert('Error', 'Name is required');
+      Alert.alert('Error', 'Username is required');
       return;
     }
 
@@ -191,7 +151,6 @@ export default function EditProfileScreen() {
           location: location.trim() || null,
           picture: picture || null,
           banner_image: bannerImage || null,
-          featured_badges: featuredBadges.length > 0 ? featuredBadges : null,
         }),
       });
 
@@ -216,11 +175,6 @@ export default function EditProfileScreen() {
         <UniversalHeader 
           title="Edit Profile" 
           onBack={handleBack}
-          rightElement={
-            <TouchableOpacity style={styles.saveButton} disabled>
-              <Text style={[styles.saveText, styles.saveTextDisabled]}>Save</Text>
-            </TouchableOpacity>
-          }
         />
         <View style={styles.centerContainer}>
           <Text style={styles.loadingText}>Loading...</Text>
@@ -237,17 +191,6 @@ export default function EditProfileScreen() {
       <UniversalHeader 
         title="Edit Profile" 
         onBack={handleBack}
-        rightElement={
-          <TouchableOpacity
-            onPress={handleSave}
-            style={styles.saveButton}
-            disabled={saving}
-          >
-            <Text style={[styles.saveText, saving && styles.saveTextDisabled]}>
-              {saving ? 'Saving...' : 'Save'}
-            </Text>
-          </TouchableOpacity>
-        }
       />
       
       <KeyboardAvoidingView
@@ -279,12 +222,12 @@ export default function EditProfileScreen() {
             <Text style={styles.pictureHint}>Tap the camera icon to change</Text>
           </Surface>
 
-          {/* Name */}
+          {/* Username */}
           <Surface style={styles.inputSection}>
-            <Text style={styles.inputLabel}>Name *</Text>
+            <Text style={styles.inputLabel}>Username *</Text>
             <TextInput
               style={styles.input}
-              placeholder="Your name"
+              placeholder="Your username"
               placeholderTextColor={theme.colors.textLight}
               value={name}
               onChangeText={setName}
@@ -356,52 +299,18 @@ export default function EditProfileScreen() {
             <Text style={styles.pictureHint}>Recommended: 3:1 aspect ratio</Text>
           </Surface>
 
-          {/* Featured Badges */}
-          {achievements.length > 0 && (
-            <Surface style={styles.inputSection}>
-              <View style={styles.labelRow}>
-                <Text style={styles.sectionTitle}>Featured Badges</Text>
-                <Text style={styles.charCount}>
-                  {featuredBadges.length}/3 selected
-                </Text>
-              </View>
-              <Text style={styles.badgeHint}>
-                Select up to 3 badges to display on your profile
-              </Text>
-              <View style={styles.badgeGrid}>
-                {achievements.map((achievement) => {
-                  const isSelected = featuredBadges.includes(achievement.achievement_id);
-                  return (
-                    <TouchableOpacity
-                      key={achievement.achievement_id}
-                      style={[
-                        styles.badgeItem,
-                        isSelected && styles.badgeItemSelected,
-                      ]}
-                      onPress={() => toggleFeaturedBadge(achievement.achievement_id)}
-                      activeOpacity={0.7}
-                    >
-                      <Text style={styles.badgeIcon}>{achievement.badge_icon}</Text>
-                      <Text 
-                        style={[
-                          styles.badgeName, 
-                          isSelected && styles.badgeNameSelected
-                        ]}
-                        numberOfLines={2}
-                      >
-                        {achievement.badge_name}
-                      </Text>
-                      {isSelected && (
-                        <View style={styles.badgeCheck}>
-                          <Ionicons name="checkmark" size={12} color="#fff" />
-                        </View>
-                      )}
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            </Surface>
-          )}
+          {/* Save Button */}
+          <TouchableOpacity
+            onPress={handleSave}
+            style={styles.saveButtonMain}
+            disabled={saving}
+            activeOpacity={0.8}
+            data-testid="save-profile-button"
+          >
+            <Text style={styles.saveButtonMainText}>
+              {saving ? 'Saving...' : 'Save Changes'}
+            </Text>
+          </TouchableOpacity>
 
           <View style={{ height: theme.spacing.xl }} />
         </ScrollView>
@@ -561,53 +470,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...theme.shadows.sm,
   },
-  // Badge selection styles
-  badgeHint: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.md,
-  },
-  badgeGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.spacing.sm,
-  },
-  badgeItem: {
-    width: 80,
-    padding: theme.spacing.sm,
-    borderRadius: theme.borderRadius.md,
-    backgroundColor: theme.colors.background,
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: 'transparent',
-  },
-  badgeItemSelected: {
-    borderColor: theme.colors.primary,
-    backgroundColor: theme.colors.primary + '10',
-  },
-  badgeIcon: {
-    fontSize: 28,
-    marginBottom: theme.spacing.xs,
-  },
-  badgeName: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    textAlign: 'center',
-    fontSize: 10,
-  },
-  badgeNameSelected: {
-    color: theme.colors.primary,
-    fontWeight: '600',
-  },
-  badgeCheck: {
-    position: 'absolute',
-    top: -4,
-    right: -4,
-    width: 18,
-    height: 18,
-    borderRadius: 9,
+  saveButtonMain: {
     backgroundColor: theme.colors.primary,
-    justifyContent: 'center',
+    borderRadius: theme.borderRadius.lg,
+    paddingVertical: 16,
     alignItems: 'center',
+    marginTop: theme.spacing.lg,
+    ...theme.shadows.md,
+  },
+  saveButtonMainText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
 });
