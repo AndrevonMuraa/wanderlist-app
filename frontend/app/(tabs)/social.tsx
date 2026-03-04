@@ -77,8 +77,10 @@ export default function SocialHubScreen() {
   };
 
   useEffect(() => {
-    loadAllData();
-  }, []);
+    if (user) {
+      loadAllData();
+    }
+  }, [user]);
 
   const loadAllData = async () => {
     await Promise.all([

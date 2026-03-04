@@ -82,7 +82,7 @@ export default function ProfileScreen() {
     fetchStats();
     fetchProgressStats();
     fetchUnreadCount();
-  }, []);
+  }, [user]);
 
   const fetchUnreadCount = async () => {
     try {

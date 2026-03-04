@@ -101,8 +101,10 @@ export default function JourneyScreen() {
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
-    fetchAllData();
-  }, []);
+    if (user) {
+      fetchAllData();
+    }
+  }, [user]);
 
   const fetchAllData = async () => {
     try {

@@ -158,8 +158,10 @@ export default function ExploreCountriesScreen() {
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   useEffect(() => {
-    fetchData();
-  }, [continent]);
+    if (user) {
+      fetchData();
+    }
+  }, [continent, user]);
 
   const fetchData = async () => {
     try {

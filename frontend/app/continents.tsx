@@ -120,9 +120,11 @@ export default function ContinentsScreen() {
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   useEffect(() => {
-    fetchContinentStats();
-    fetchPhotoOfTheWeek();
-  }, []);
+    if (user) {
+      fetchContinentStats();
+      fetchPhotoOfTheWeek();
+    }
+  }, [user]);
 
   const fetchPhotoOfTheWeek = async () => {
     try {
