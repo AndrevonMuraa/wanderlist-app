@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Platform, RefreshControl, StatusBar, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Platform, RefreshControl, StatusBar } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -62,16 +62,6 @@ interface ProgressStats {
   }>;
 }
 
-interface Visit {
-  visit_id: string;
-  landmark_id: string;
-  landmark_name?: string;
-  country_name?: string;
-  visited_at: string;
-  points_earned: number;
-  photos?: string[];
-}
-
 interface LandmarkEntry {
   name: string;
   photo?: string | null;
@@ -91,7 +81,6 @@ interface UserCreatedVisit {
 export default function JourneyScreen() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [progressStats, setProgressStats] = useState<ProgressStats | null>(null);
-  const [recentVisits, setRecentVisits] = useState<Visit[]>([]);
   const [userCreatedVisits, setUserCreatedVisits] = useState<UserCreatedVisit[]>([]);
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
@@ -142,7 +131,7 @@ export default function JourneyScreen() {
         }
         
         if (cachedVisits) {
-          setRecentVisits(cachedVisits.slice(0, 5));
+          // Cache available for offline
         }
         
         setLoading(false);
@@ -178,7 +167,6 @@ export default function JourneyScreen() {
 
       if (visitsRes.ok) {
         const data = await visitsRes.json();
-        setRecentVisits(data.slice(0, 5)); // Show 5 most recent
         // Cache visits for offline use
         await cacheVisits(data);
       }
@@ -1014,56 +1002,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: theme.colors.primary,
-  },
-  recentVisitsCard: {
-    margin: theme.spacing.md,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
-  visitItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: theme.spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-  },
-  visitIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: theme.colors.primaryLight,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: theme.spacing.md,
-  },
-  visitInfo: {
-    flex: 1,
-  },
-  visitName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: theme.colors.text,
-    marginBottom: 2,
-  },
-  visitDate: {
-    fontSize: 12,
-    color: theme.colors.textSecondary,
-  },
-  visitPoints: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: theme.colors.backgroundSecondary,
-    paddingHorizontal: theme.spacing.sm,
-    paddingVertical: 4,
-    borderRadius: theme.borderRadius.sm,
-  },
-  visitPointsText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: theme.colors.text,
   },
   quickActionsCard: {
     margin: theme.spacing.md,
