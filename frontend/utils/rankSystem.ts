@@ -1,5 +1,6 @@
 // User Rank System Configuration
-// Total points available: ~15,900 (797 landmarks: 660 official @10pts + 137 premium @25pts = 10,025 + bonuses)
+// Total points available: ~19,000 (796 landmarks + bonuses + country visits)
+// 8 ranks with progressive thresholds
 
 export interface Rank {
   name: string;
@@ -13,49 +14,76 @@ export interface Rank {
 
 export const RANKS: Rank[] = [
   {
-    name: 'Explorer',
+    name: 'Newcomer',
     minPoints: 0,
-    maxPoints: 499,
+    maxPoints: 199,
     color: '#CD7F32',
-    icon: 'compass',
+    icon: 'compass-outline',
     gradient: ['#CD7F32', '#A0522D'],
-    description: 'Just starting your journey',
+    description: 'Taking your first steps',
+  },
+  {
+    name: 'Wanderer',
+    minPoints: 200,
+    maxPoints: 749,
+    color: '#A8A8A8',
+    icon: 'footsteps',
+    gradient: ['#C0C0C0', '#A8A8A8'],
+    description: 'The world is calling',
+  },
+  {
+    name: 'Explorer',
+    minPoints: 750,
+    maxPoints: 1999,
+    color: '#4CAF50',
+    icon: 'map',
+    gradient: ['#4CAF50', '#388E3C'],
+    description: 'Charting new territory',
   },
   {
     name: 'Adventurer',
-    minPoints: 500,
-    maxPoints: 1499,
-    color: '#C0C0C0',
-    icon: 'navigate',
-    gradient: ['#C0C0C0', '#A8A8A8'],
-    description: 'Building your travel portfolio',
+    minPoints: 2000,
+    maxPoints: 4499,
+    color: '#2196F3',
+    icon: 'airplane',
+    gradient: ['#2196F3', '#1976D2'],
+    description: 'No border can stop you',
   },
   {
-    name: 'Voyager',
-    minPoints: 1500,
-    maxPoints: 2999,
-    color: '#FFD700',
-    icon: 'airplane',
-    gradient: ['#FFD700', '#FFA500'],
-    description: 'Seasoned traveler',
+    name: 'Trailblazer',
+    minPoints: 4500,
+    maxPoints: 8499,
+    color: '#FF6B35',
+    icon: 'flame',
+    gradient: ['#FF6B35', '#E65100'],
+    description: 'Blazing your own path',
   },
   {
     name: 'Globetrotter',
-    minPoints: 3000,
-    maxPoints: 4999,
+    minPoints: 8500,
+    maxPoints: 13999,
     color: '#20B2AA',
     icon: 'earth',
-    gradient: ['#20B2AA', '#48D1CC'],
-    description: 'World explorer extraordinaire',
+    gradient: ['#20B2AA', '#008B8B'],
+    description: 'The world knows your name',
   },
   {
     name: 'Legend',
-    minPoints: 5000,
+    minPoints: 14000,
+    maxPoints: 17999,
+    color: '#FFD700',
+    icon: 'star',
+    gradient: ['#FFD700', '#FFA000'],
+    description: 'A true travel legend',
+  },
+  {
+    name: 'Titan',
+    minPoints: 18000,
     maxPoints: Infinity,
-    color: '#1E8A8A',
-    icon: 'trophy',
-    gradient: ['#1E8A8A', '#E1BEE7'],
-    description: 'Elite travel master',
+    color: '#E040FB',
+    icon: 'diamond',
+    gradient: ['#E040FB', '#AA00FF'],
+    description: 'Master of all destinations',
   },
 ];
 
@@ -65,7 +93,7 @@ export function getUserRank(points: number): Rank {
       return RANKS[i];
     }
   }
-  return RANKS[0]; // Default to Explorer
+  return RANKS[0];
 }
 
 export function getNextRank(currentPoints: number): Rank | null {
@@ -76,7 +104,7 @@ export function getNextRank(currentPoints: number): Rank | null {
     return RANKS[currentIndex + 1];
   }
   
-  return null; // Already at max rank
+  return null;
 }
 
 export function getProgressToNextRank(points: number): {
@@ -90,7 +118,6 @@ export function getProgressToNextRank(points: number): {
   const nextRank = getNextRank(points);
   
   if (!nextRank) {
-    // Max rank reached
     return {
       currentRank,
       nextRank: null,
@@ -118,7 +145,7 @@ export function checkLevelUp(oldPoints: number, newPoints: number): Rank | null 
   const newRank = getUserRank(newPoints);
   
   if (oldRank.name !== newRank.name) {
-    return newRank; // User leveled up!
+    return newRank;
   }
   
   return null;

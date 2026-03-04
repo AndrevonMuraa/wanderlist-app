@@ -72,7 +72,6 @@ export default function ProfileScreen() {
   const { t } = useTranslation();
   const [stats, setStats] = useState<UserStats | null>(null);
   const [progressStats, setProgressStats] = useState<ProgressStats | null>(null);
-  const [badges, setBadges] = useState<Badge[]>([]);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -135,24 +134,6 @@ export default function ProfileScreen() {
       }
     } catch (error) {
       console.error('Error fetching progress stats:', error);
-    }
-  };
-
-  const fetchBadges = async () => {
-    try {
-      const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/achievements`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setBadges(data);
-      }
-    } catch (error) {
-      console.error('Error fetching badges:', error);
     }
   };
 
@@ -399,7 +380,7 @@ export default function ProfileScreen() {
           countriesVisited: stats?.countries_visited || 0,
           continentsVisited: stats?.continents_visited || 0,
           points: progressStats?.totalPoints || 0,
-          achievements: badges?.length || 0,
+          achievements: 0,
         }}
         userName={user?.name || 'Traveler'}
       />

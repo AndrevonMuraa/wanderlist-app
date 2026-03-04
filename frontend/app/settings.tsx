@@ -67,6 +67,65 @@ export default function SettingsScreen() {
   // Check if user is admin or moderator
   const isAdmin = user?.role === 'admin' || user?.role === 'moderator';
 
+  const handleChangePassword = () => {
+    Alert.prompt(
+      'Change Password',
+      'Enter your current password:',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Next',
+          onPress: (currentPassword?: string) => {
+            if (!currentPassword) return;
+            Alert.prompt(
+              'New Password',
+              'Enter your new password (min 6 characters):',
+              [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: 'Change',
+                  onPress: async (newPassword?: string) => {
+                    if (!newPassword || newPassword.length < 6) {
+                      Alert.alert('Error', 'Password must be at least 6 characters');
+                      return;
+                    }
+                    try {
+                      const token = Platform.OS === 'web' 
+                        ? localStorage.getItem('auth_token')
+                        : await SecureStore.getItemAsync('auth_token');
+                      const response = await fetch(`${BACKEND_URL}/api/auth/change-password`, {
+                        method: 'PUT',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'Authorization': `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({
+                          current_password: currentPassword,
+                          new_password: newPassword,
+                        }),
+                      });
+                      if (response.ok) {
+                        Alert.alert('Success', 'Password changed successfully');
+                      } else {
+                        const error = await response.json();
+                        Alert.alert('Error', error.detail || 'Failed to change password');
+                      }
+                    } catch {
+                      Alert.alert('Error', 'Network error. Please try again.');
+                    }
+                  },
+                },
+              ],
+              'secure-text'
+            );
+          },
+        },
+      ],
+      'secure-text'
+    );
+  };
+
+
   const handleClearCache = () => {
     Alert.alert(
       'Clear Offline Cache',
@@ -347,23 +406,7 @@ export default function SettingsScreen() {
             
             <TouchableOpacity 
               style={styles.accountItem}
-              onPress={() => Alert.alert(t('common.settings'), t('settings.changeEmail'))}
-              activeOpacity={0.7}
-            >
-              <View style={styles.settingItemLeft}>
-                <View style={[styles.settingIcon, { backgroundColor: 'rgba(52, 152, 219, 0.1)' }]}>
-                  <Ionicons name="at" size={18} color="#3498db" />
-                </View>
-                <Text style={[styles.accountLabel, { color: colors.text }]}>{t('settings.changeEmail')}</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
-            </TouchableOpacity>
-            
-            <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
-            
-            <TouchableOpacity 
-              style={styles.accountItem}
-              onPress={() => Alert.alert(t('common.settings'), t('settings.changePassword'))}
+              onPress={handleChangePassword}
               activeOpacity={0.7}
             >
               <View style={styles.settingItemLeft}>

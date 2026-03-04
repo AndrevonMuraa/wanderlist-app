@@ -328,7 +328,7 @@ export default function TermsOfServiceScreen() {
             </Text>
             <View style={styles.contactBox}>
               <Ionicons name="mail" size={20} color={theme.colors.primary} />
-              <Text style={styles.contactText}>legal@wandermark.app</Text>
+              <Text style={styles.contactText}>support@wandermark.app</Text>
             </View>
           </Section>
         </Surface>

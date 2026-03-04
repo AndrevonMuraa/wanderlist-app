@@ -540,6 +540,33 @@ async def update_default_privacy(
     
     return {"message": "Privacy setting updated", "default_privacy": privacy}
 
+@router.put("/auth/change-password")
+async def change_password(
+    request: Request,
+    current_user: User = Depends(get_current_user)
+):
+    """Change user password. Requires current password and new password."""
+    body = await request.json()
+    current_password = body.get("current_password", "")
+    new_password = body.get("new_password", "")
+    
+    if not current_password or not new_password:
+        raise HTTPException(status_code=400, detail="Both current and new password are required")
+    
+    if len(new_password) < 6:
+        raise HTTPException(status_code=400, detail="New password must be at least 6 characters")
+    
+    user_doc = await db.users.find_one({"user_id": current_user.user_id})
+    if not user_doc or not verify_password(current_password, user_doc.get("password_hash", "")):
+        raise HTTPException(status_code=400, detail="Current password is incorrect")
+    
+    await db.users.update_one(
+        {"user_id": current_user.user_id},
+        {"$set": {"password_hash": hash_password(new_password)}}
+    )
+    
+    return {"message": "Password changed successfully"}
+
 @router.post("/auth/logout")
 async def logout(response: Response, session_token: Optional[str] = Cookie(None)):
     if session_token:

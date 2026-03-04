@@ -11,7 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
@@ -77,7 +77,7 @@ export default function PointsSummary() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={gradients.oceanToSand} start={gradients.horizontal.start} end={gradients.horizontal.end} style={styles.header}>
+        <LinearGradient colors={gradients.oceanToSand} start={gradients.horizontal.start} end={gradients.horizontal.end} style={[styles.header, { paddingTop: insets.top + 8 }]}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={22} color="#fff" />
           </TouchableOpacity>
@@ -96,8 +96,8 @@ export default function PointsSummary() {
   const unverifiedPoints = totalPoints - verifiedPoints;
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <LinearGradient colors={gradients.oceanToSand} start={gradients.horizontal.start} end={gradients.horizontal.end} style={styles.header}>
+    <View style={styles.container}>
+      <LinearGradient colors={gradients.oceanToSand} start={gradients.horizontal.start} end={gradients.horizontal.end} style={[styles.header, { paddingTop: insets.top + 8 }]}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
@@ -265,7 +265,7 @@ export default function PointsSummary() {
 
         <View style={{ height: 40 }} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

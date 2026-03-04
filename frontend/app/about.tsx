@@ -171,7 +171,7 @@ export default function AboutScreen() {
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>14,500+</Text>
+                <Text style={styles.statNumber}>19,000+</Text>
                 <Text style={styles.statLabel}>Total Points</Text>
               </View>
             </View>
@@ -349,10 +349,10 @@ Plus social badges, and point milestones!`}
 
           <FeatureCard
             icon="trophy"
-            title="Badges"
-            description="Unlock badges as you reach travel milestones"
+            title="Rank System"
+            description="Progress through 8 ranks as you earn points"
             color="#FFD700"
-            onPress={() => router.push('/achievements')}
+            onPress={() => router.push('/(tabs)/journey')}
           />
 
           <FeatureCard

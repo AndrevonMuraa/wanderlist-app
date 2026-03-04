@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
@@ -33,6 +33,7 @@ interface LandmarkVisit {
 
 export default function MyLandmarkVisits() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [visits, setVisits] = useState<LandmarkVisit[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -138,8 +139,8 @@ export default function MyLandmarkVisits() {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <LinearGradient colors={gradients.oceanToSand} start={gradients.horizontal.start} end={gradients.horizontal.end} style={styles.header}>
+    <View style={styles.container}>
+      <LinearGradient colors={gradients.oceanToSand} start={gradients.horizontal.start} end={gradients.horizontal.end} style={[styles.header, { paddingTop: insets.top + 8 }]}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
@@ -179,7 +180,7 @@ export default function MyLandmarkVisits() {
           </View>
         }
       />
-    </SafeAreaView>
+    </View>
   );
 }
 

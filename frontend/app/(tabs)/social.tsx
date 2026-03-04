@@ -727,7 +727,7 @@ export default function SocialHubScreen() {
             <View style={styles.sectionHeader}>
               <View style={styles.sectionTitleRow}>
                 <Ionicons name="earth" size={24} color={theme.colors.primary} />
-                <Text style={styles.sectionTitle}>Community Feed</Text>
+                <Text style={styles.sectionTitle}>Activity Feed</Text>
               </View>
               <TouchableOpacity onPress={() => router.push('/feed')} style={styles.seeAllRow}>
                 <Text style={styles.seeAllButton}>{t('common.seeAll')}</Text>

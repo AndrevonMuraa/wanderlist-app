@@ -21,8 +21,8 @@ import { useSubscription } from '../../hooks/useSubscription';
 import { useScrollRestore } from '../../hooks/useScrollRestore';
 import { BACKEND_URL } from '../../utils/config';
 import { cachedFetch } from '../../utils/apiCache';
+import { getUserRank, getProgressToNextRank } from '../../utils/rankSystem';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
-import { getBadgeIconName, getBadgeColor } from '../../utils/badgeIcons';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -31,19 +31,6 @@ const getToken = async (): Promise<string | null> => {
     return await SecureStore.getItemAsync('auth_token');
   }
 };
-
-// Static milestone badge map - defined outside component to avoid recreation on each render
-const MILESTONE_BADGE_MAP: Record<number, { name: string; icon: string; type: string }> = {
-  10:  { name: 'Explorer', icon: 'map', type: 'milestone_10' },
-  25:  { name: 'Adventurer', icon: 'climbing', type: 'milestone_25' },
-  50:  { name: 'Globetrotter', icon: 'globe', type: 'milestone_50' },
-  100: { name: 'World Traveler', icon: 'plane', type: 'milestone_100' },
-  200: { name: 'Seasoned Traveler', icon: 'compass', type: 'milestone_200' },
-  250: { name: 'Elite Explorer', icon: 'medal', type: 'milestone_250' },
-  350: { name: 'Legend', icon: 'trophy', type: 'milestone_350' },
-  500: { name: 'Ultimate Explorer', icon: 'crown', type: 'milestone_500' },
-};
-const MILESTONES = [10, 25, 50, 100, 200, 250, 350, 500];
 
 interface Stats {
   total_visits: number;
@@ -75,15 +62,6 @@ interface ProgressStats {
   }>;
 }
 
-interface Badge {
-  achievement_id: string;
-  badge_type: string;
-  badge_name: string;
-  badge_description: string;
-  badge_icon: string;
-  earned_at: string;
-}
-
 interface Visit {
   visit_id: string;
   landmark_id: string;
@@ -113,7 +91,6 @@ interface UserCreatedVisit {
 export default function JourneyScreen() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [progressStats, setProgressStats] = useState<ProgressStats | null>(null);
-  const [badges, setBadges] = useState<Badge[]>([]);
   const [recentVisits, setRecentVisits] = useState<Visit[]>([]);
   const [userCreatedVisits, setUserCreatedVisits] = useState<UserCreatedVisit[]>([]);
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
@@ -176,10 +153,9 @@ export default function JourneyScreen() {
       // Online - fetch fresh data
       setIsOfflineData(false);
       
-      const [statsRes, progressRes, badgesRes, visitsRes, customVisitsRes] = await Promise.all([
+      const [statsRes, progressRes, visitsRes, customVisitsRes] = await Promise.all([
         cachedFetch(`${BACKEND_URL}/api/stats`, token, 'stats'),
         cachedFetch(`${BACKEND_URL}/api/progress`, token, 'progress'),
-        cachedFetch(`${BACKEND_URL}/api/achievements`, token, 'achievements'),
         fetch(`${BACKEND_URL}/api/visits`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
@@ -198,11 +174,6 @@ export default function JourneyScreen() {
         setProgressStats(data);
         // Cache progress data for offline use
         await cacheProgress(data);
-      }
-
-      if (badgesRes.ok) {
-        const data = await badgesRes.json();
-        setBadges(data);
       }
 
       if (visitsRes.ok) {
@@ -229,22 +200,6 @@ export default function JourneyScreen() {
     fetchAllData();
   };
 
-  const getNextMilestone = () => {
-    const visited = progressStats?.overall.visited || 0;
-    const next = MILESTONES.find(m => m > visited);
-    if (next) {
-      const badge = MILESTONE_BADGE_MAP[next];
-      return {
-        target: next,
-        remaining: next - visited,
-        name: badge.name,
-        badgeIcon: badge.icon,
-        badgeType: badge.type,
-      };
-    }
-    return null;
-  };
-
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Good morning';
@@ -256,7 +211,7 @@ export default function JourneyScreen() {
     return <LoadingSpinner message="Loading your journey..." />;
   }
 
-  const nextMilestone = getNextMilestone();
+  const rankProgress = getProgressToNextRank(progressStats?.totalPoints || 0);
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   return (
@@ -371,16 +326,14 @@ export default function JourneyScreen() {
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.rank')}</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity 
-                style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}
-                onPress={() => router.push('/achievements')}
-                activeOpacity={0.7}
-                data-testid="stat-badges"
+              <View 
+                style={[styles.statBoxCompact, { backgroundColor: rankProgress.currentRank.color + '15' }]}
+                data-testid="stat-rank-level"
               >
-                <Ionicons name="ribbon" size={20} color={colors.primary} />
-                <Text style={[styles.statValueCompact, { color: colors.text }]}>{badges.length}</Text>
-                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.badges')}</Text>
-              </TouchableOpacity>
+                <Ionicons name={rankProgress.currentRank.icon as any} size={20} color={rankProgress.currentRank.color} />
+                <Text style={[styles.statValueCompact, { color: colors.text }]}>{rankProgress.currentRank.name}</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Rank</Text>
+              </View>
             </View>
           </Surface>
         )}
@@ -412,29 +365,29 @@ export default function JourneyScreen() {
           </Surface>
         )}
 
-        {/* Next Milestone */}
-        {nextMilestone && (
+        {/* Next Rank */}
+        {rankProgress.nextRank && (
           <Surface style={[styles.milestoneCard, { backgroundColor: colors.surface }]}>
             <View style={styles.milestoneRow}>
               <View style={styles.milestoneContent}>
                 <View style={styles.milestoneHeader}>
-                  <Ionicons name="rocket" size={24} color={colors.primary} />
-                  <Text style={[styles.milestoneTitle, { color: colors.text }]}>{t('journey.nextMilestone')}</Text>
+                  <Ionicons name="rocket" size={24} color={rankProgress.nextRank.color} />
+                  <Text style={[styles.milestoneTitle, { color: colors.text }]}>Next Rank</Text>
                 </View>
-                <Text style={[styles.milestoneName, { color: colors.primary }]}>{nextMilestone.name}</Text>
+                <Text style={[styles.milestoneName, { color: rankProgress.nextRank.color }]}>{rankProgress.nextRank.name}</Text>
                 <Text style={[styles.milestoneProgress, { color: colors.textSecondary }]}>
-                  {t('journey.moreVisits', { count: nextMilestone.remaining })}
+                  {rankProgress.pointsNeededForNext} more points needed
                 </Text>
                 <ProgressBar 
-                  percentage={((nextMilestone.target - nextMilestone.remaining) / nextMilestone.target) * 100}
+                  percentage={rankProgress.progressPercentage}
                   style={styles.milestoneProgressBar}
                 />
               </View>
-              <View style={[styles.milestoneBadgeIcon, { backgroundColor: getBadgeColor(nextMilestone.badgeType) + '15' }]}>
+              <View style={[styles.milestoneBadgeIcon, { backgroundColor: rankProgress.nextRank.color + '15' }]}>
                 <Ionicons 
-                  name={getBadgeIconName(nextMilestone.badgeIcon) as any} 
+                  name={rankProgress.nextRank.icon as any} 
                   size={36} 
-                  color={getBadgeColor(nextMilestone.badgeType)} 
+                  color={rankProgress.nextRank.color} 
                 />
               </View>
             </View>
@@ -583,26 +536,6 @@ export default function JourneyScreen() {
         <Surface style={[styles.countryVisitsCard, { backgroundColor: colors.surface }]}>
           <TouchableOpacity
             style={styles.countryVisitsRow}
-            onPress={() => router.push('/achievements')}
-            activeOpacity={0.7}
-            data-testid="nav-badges"
-          >
-            <View style={styles.countryVisitsLeft}>
-              <View style={[styles.countryVisitsIcon, { backgroundColor: '#FFB300' + '20' }]}>
-                <Ionicons name="ribbon" size={22} color="#FFB300" />
-              </View>
-              <View>
-                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>My Badges</Text>
-                <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>Track your progress</Text>
-              </View>
-            </View>
-            <Ionicons name="chevron-forward" size={22} color={colors.textLight} />
-          </TouchableOpacity>
-        </Surface>
-
-        <Surface style={[styles.countryVisitsCard, { backgroundColor: colors.surface }]}>
-          <TouchableOpacity
-            style={styles.countryVisitsRow}
             onPress={() => router.push('/points-summary')}
             activeOpacity={0.7}
             data-testid="nav-points-summary"
@@ -659,41 +592,6 @@ export default function JourneyScreen() {
         </Surface>
 
         {/* Recent Milestones */}
-        {badges.length > 0 && (
-          <Surface style={[styles.recentBadgesCard, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('journey.recentAchievements')}</Text>
-            <View style={styles.timelineContainer}>
-              {badges
-                .sort((a, b) => new Date(b.earned_at).getTime() - new Date(a.earned_at).getTime())
-                .slice(0, 3)
-                .map((badge) => (
-                  <View key={badge.achievement_id} style={styles.timelineItem}>
-                    <View style={[styles.timelineDot, { backgroundColor: getBadgeColor(badge.badge_type) + '20' }]}>
-                      <Ionicons name={getBadgeIconName(badge.badge_icon) as any} size={22} color={getBadgeColor(badge.badge_type)} />
-                    </View>
-                    <View style={styles.timelineContent}>
-                      <Text style={[styles.badgeName, { color: colors.text }]}>{badge.badge_name}</Text>
-                      <Text style={[styles.badgeDate, { color: colors.textSecondary }]}>
-                        {new Date(badge.earned_at).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric'
-                        })}
-                      </Text>
-                    </View>
-                  </View>
-                ))}
-            </View>
-            <TouchableOpacity 
-              style={styles.viewAllButton}
-              onPress={() => router.push('/achievements')}
-            >
-              <Text style={[styles.viewAllText, { color: colors.primary }]}>View All Badges</Text>
-              <Ionicons name="chevron-forward" size={16} color={colors.primary} />
-            </TouchableOpacity>
-          </Surface>
-        )}
-
-
         {/* Custom Visits Section */}
         <Surface style={[styles.customVisitsCard, { backgroundColor: colors.surface }]}>
           <View style={styles.customVisitsHeader}>
