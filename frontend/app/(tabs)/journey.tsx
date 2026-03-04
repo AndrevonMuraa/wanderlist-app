@@ -330,8 +330,8 @@ export default function JourneyScreen() {
                 style={[styles.statBoxCompact, { backgroundColor: rankProgress.currentRank.color + '15' }]}
                 data-testid="stat-rank-level"
               >
-                <Ionicons name={rankProgress.currentRank.icon as any} size={20} color={rankProgress.currentRank.color} />
-                <Text style={[styles.statValueCompact, { color: colors.text }]}>{rankProgress.currentRank.name}</Text>
+                <Ionicons name={rankProgress.currentRank.icon as any} size={32} color={rankProgress.currentRank.color} />
+                <Text style={[styles.statValueCompact, { color: colors.text, fontSize: 14 }]}>{rankProgress.currentRank.name}</Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Rank</Text>
               </View>
             </View>
