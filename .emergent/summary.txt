@@ -1,54 +1,42 @@
-<analysis>**original_problem_statement**: The user's initial request was to prepare the app for a final review before App Store submission. This involved fixing bugs, improving UI/UX, removing the streak feature, and adding new functionality like photo management and a continents visited metric. The conversation evolved to include a major overhaul of sharing functionality, terminology standardization (Achievements to Badges), and a deep analysis of the entire codebase for bugs and improvements. The very last user request was to debug a crash on the My Journey page after the latest TestFlight build.
+<analysis>**original_problem_statement**: The user's initial request was to prepare the app for a final review before App Store submission. This involved fixing bugs, improving UI/UX, and adding features. The scope expanded significantly to address critical crashes, performance bottlenecks, and major UI inconsistencies reported by the user after TestFlight builds. This led to a large-scale refactoring where the Badge system was completely removed and consolidated into a more robust Rank system. The last user request was to identify and fix any remaining stability issues (especially around caching and authentication edge cases) and perform a final cleanup of all dead code before creating a new, definitive build for testing.
 
 **User's preferred language**: Norwegian. The next agent **MUST** respond in Norwegian. All UI text, API responses, and other application content **MUST** remain in English, as per the user's explicit instructions.
 
 **what currently exists?**
-The application has undergone a massive refactoring session where the streak feature was removed, Achievements were renamed to Badges, the points system was audited and corrected, and sharing functionality was significantly improved with visual cards. However, the latest changes introduced a critical regression: the app now crashes when the user navigates to the My Journey page. The previous agent has analyzed the crash log provided by the user and has a strong hypothesis about the cause.
+The application has just undergone a massive refactoring. The original Badge system has been completely deprecated and removed, and a new, more comprehensive Rank system has been implemented in its place. A critical performance issue (N+1 query) causing missing content on the Explore pages has been resolved with a backend aggregation pipeline. A client-side caching mechanism was implemented to improve performance but was then refactored to fix a native crash on iOS (Hermes engine compatibility). The agent was in the final stages of a user-approved cleanup plan to harden the app, which includes hiding the Change Password feature for social login users and deleting all remaining dead code from the old Badge system.
 
 **Last working item**:
-    - Last item agent was working: Debugging a native crash () that occurs when the user navigates to the My Journey page. The agent analyzed the user-provided crash log and concluded the crash happens in the Hermes JavaScript engine (Thread 2), likely due to a memory issue. The agent's hypothesis is that the  function in  is inefficiently creating a new  object on every render, causing the crash.
+    - Last item agent was working: Performing a final, comprehensive code cleanup and hardening pass before a new TestFlight build. The agent was executing a multi-step plan that included:
+        1. Fixing potential crashes related to the new caching system.
+        2. Hiding the Change Password option for users who signed in via Apple.
+        3. Deleting all dead code and components related to the now-removed Badge system.
+        4. Updating UI text to reflect the new Rank system (e.g., in notification settings).
     - Status: IN PROGRESS
     - Agent Testing Done: N
-    - Which testing method agent to use? After fixing the crash, use the  to verify the My Journey page and perform regression testing on related features.
-    - User Testing Done: Y (User discovered and reported the crash).
+    - Which testing method agent to use? After this large-scale refactoring, a full run of the  is mandatory to ensure no regressions were introduced.
+    - User Testing Done: N
 
 **All Pending/In progress Issue list**:
-  - **Issue 1: App crashes on My Journey page (P0 - BLOCKER)**
-     - **Description**: The app closes immediately upon navigating to the My Journey page in the latest build (). The user provided a crash log pointing to a  memory error in the Hermes JavaScript engine.
+  - **Issue 1: Complete the Final Code Cleanup and Hardening (P0 - BLOCKER)**
+     - **Description**: The agent was in the middle of executing a multi-part cleanup plan approved by the user. This is the last step before creating a new stable build for TestFlight.
      - **Next debug checklist**:
-         1.  Focus on .
-         2.  Based on the previous agent's analysis, refactor the code to prevent the  object from being recreated inside the  function on every render.
-         3.  Move the  definition to the top level of the module or memoize it using  to ensure it's created only once.
-     - **Why fix this issue and what will be achieved with the fix?** The My Journey page is a core screen. Fixing this crash is critical to making the app usable again and unblocking the user.
+         1.  Verify that all parts of the cleanup plan were successfully executed. The previous agent ran many parallel operations.
+         2.  Confirm that the Change Password option in Settings is now hidden for users with . Check .
+         3.  Ensure all dead code related to the Badge system is gone. Key files to check for complete removal/cleanup are ,  (should not reference badges),  (should not have ), and .
+         4.  Confirm the cache-hardening fix in  (removing ) is correctly implemented.
+         5.  Run a full test suite using the  to catch any regressions from this massive cleanup.
+     - **Why fix this issue and what will be achieved with the fix?** This will produce a clean, stable, and production-ready codebase, addressing all of the user's latest concerns and paving the way for a successful TestFlight build.
      - **Status**: IN PROGRESS
      - **Is recurring issue?** N
-     - **Should Test frontend/backend/both after fix?** Frontend
-     - **Blocked on other issue**: This is the primary blocker for any further progress or testing.
+     - **Should Test frontend/backend/both after fix?** Both
+     - **Blocked on other issue**: None. This is the main task.
 
 **In progress Task List**:
-- None. The current focus is the critical bug fix.
+- None besides the main pending issue.
 
 **Upcoming and Future Tasks**
- - **Future Tasks:**
-    - **P2: Rename GitHub Repository:** The user has agreed this is a low-priority, internal-facing task ( → ).
-
-**Completed work in this session**
-- **Major Code Audit & Cleanup:**
-  - Performed a comprehensive analysis of the entire codebase, removing dead code (streak remnants, unused functions, obsolete UI elements), correcting data inconsistencies (e.g., South America -> Americas), and fixing a / mismatch for the  API call.
-- **Terminology Standardization:**
-  - Renamed all user-facing instances of Achievements to Badges across the application.
-- **Sharing Functionality Overhaul:**
-  - Removed all Share buttons from page headers and moved them into the page content, as requested.
-  - Upgraded the Share My Ranking feature from plain text to a visually rich, shareable image card using a new  component.
-  - Added the ability to share individual unlocked badges from the Badges page with a visual card.
-- **Badge System Enhancement:**
-  - Improved badge icon visuals with a new color-coded system for earned vs. unearned badges.
-- **Points System Correction:**
-  - Audited and corrected inaccurate point values on the  and  pages and fixed a UI layout bug.
-- **UI/UX Polish:**
-  - Added the corresponding badge icon to the Next Milestone section on the My Journey page.
-- **Build & Deployment Guidance:**
-  - Guided the user through the usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
+- **Upcoming Tasks:**
+    - **P0: New EAS Build & User Guidance:** After the cleanup and successful testing, the top priority is to guide the user through creating a new **production** build for TestFlight (build  or higher). Provide clear, step-by-step usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
            [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
            [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
            [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
@@ -92,236 +80,7 @@ collaborate (see also: git help workflows)
 'git help -a' and 'git help -g' list available subcommands and some
 concept guides. See 'git help <command>' or 'git help <concept>'
 to read about a specific subcommand or concept.
-See 'git help git' for an overview of the system. and An Expo user account is required to proceed.
-
-Log in to EAS with email or username (exit and run eas login --help to see other login options)
-Input is required, but stdin is not readable. Failed to display prompt: Email or username process for creating a new TestFlight build, including resolving usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
-           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
-           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
-           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
-           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
-           <command> [<args>]
-
-These are common Git commands used in various situations:
-
-start a working area (see also: git help tutorial)
-   clone     Clone a repository into a new directory
-   init      Create an empty Git repository or reinitialize an existing one
-
-work on the current change (see also: git help everyday)
-   add       Add file contents to the index
-   mv        Move or rename a file, a directory, or a symlink
-   restore   Restore working tree files
-   rm        Remove files from the working tree and from the index
-
-examine the history and state (see also: git help revisions)
-   bisect    Use binary search to find the commit that introduced a bug
-   diff      Show changes between commits, commit and working tree, etc
-   grep      Print lines matching a pattern
-   log       Show commit logs
-   show      Show various types of objects
-   status    Show the working tree status
-
-grow, mark and tweak your common history
-   branch    List, create, or delete branches
-   commit    Record changes to the repository
-   merge     Join two or more development histories together
-   rebase    Reapply commits on top of another base tip
-   reset     Reset current HEAD to the specified state
-   switch    Switch branches
-   tag       Create, list, delete or verify a tag object signed with GPG
-
-collaborate (see also: git help workflows)
-   fetch     Download objects and refs from another repository
-   pull      Fetch from and integrate with another repository or a local branch
-   push      Update remote refs along with associated objects
-
-'git help -a' and 'git help -g' list available subcommands and some
-concept guides. See 'git help <command>' or 'git help <concept>'
-to read about a specific subcommand or concept.
-See 'git help git' for an overview of the system. authentication and branch divergence issues.
-
-**Earlier issues found/mentioned but not fixed**
-   - **Issue 1: Server Error in Preview Environment**
-     - **Description**: The preview environment shows a server error because its backend is connected to a local, often empty, MongoDB instance, not the production Atlas database.
-     - **Note for next agent**: This is a known artifact of the development environment and does not affect the TestFlight build. It should be ignored. The user is aware of this.
-
-**Known issue recurrence from previous fork**
-  - None.
-
-**Code Architecture**
-- **Frontend**: React Native with Expo Router.
-- **Backend**: FastAPI.
-- **Key Architectural Changes / New Files:**
-  - **Frontend**:
-    - : New component to generate a visual share card for leaderboard ranking.
-    - : Refactored to use  for visual sharing.
-    - : Heavily modified for the Badges rename, new color system, and individual badge sharing.
-    - : Modified to add an icon to the Next Milestone card. **This file is the likely source of the current crash.**
-    - : Version bumped to  and build number to .
-  - **Backend**:
-    - Final remnants of  feature removed from models and API responses.
-    - A  directory was created to house one-off migration scripts.
-
-**Key Technical Concepts**
-- **Native Crash Debugging**: Analyzing an iOS crash log ( file) to identify the root cause of a  error within the Hermes JavaScript engine.
-- **JavaScript Memory Management**: The crash is likely due to creating large objects or complex functions inside a React component's render cycle. The fix involves memoization () or moving object creation outside the render path.
-- **Visual Sharing with **: Capturing a React Native component as an image and sharing it using .
-- **EAS Build Process**: Guiding a non-technical user through usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
-           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
-           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
-           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
-           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
-           <command> [<args>]
-
-These are common Git commands used in various situations:
-
-start a working area (see also: git help tutorial)
-   clone     Clone a repository into a new directory
-   init      Create an empty Git repository or reinitialize an existing one
-
-work on the current change (see also: git help everyday)
-   add       Add file contents to the index
-   mv        Move or rename a file, a directory, or a symlink
-   restore   Restore working tree files
-   rm        Remove files from the working tree and from the index
-
-examine the history and state (see also: git help revisions)
-   bisect    Use binary search to find the commit that introduced a bug
-   diff      Show changes between commits, commit and working tree, etc
-   grep      Print lines matching a pattern
-   log       Show commit logs
-   show      Show various types of objects
-   status    Show the working tree status
-
-grow, mark and tweak your common history
-   branch    List, create, or delete branches
-   commit    Record changes to the repository
-   merge     Join two or more development histories together
-   rebase    Reapply commits on top of another base tip
-   reset     Reset current HEAD to the specified state
-   switch    Switch branches
-   tag       Create, list, delete or verify a tag object signed with GPG
-
-collaborate (see also: git help workflows)
-   fetch     Download objects and refs from another repository
-   pull      Fetch from and integrate with another repository or a local branch
-   push      Update remote refs along with associated objects
-
-'git help -a' and 'git help -g' list available subcommands and some
-concept guides. See 'git help <command>' or 'git help <concept>'
-to read about a specific subcommand or concept.
-See 'git help git' for an overview of the system. commands and the An Expo user account is required to proceed.
-
-Log in to EAS with email or username (exit and run eas login --help to see other login options)
-Input is required, but stdin is not readable. Failed to display prompt: Email or username flow is crucial.
-
-**key DB schema**
-  - No new schema changes. The  collection model was cleaned to remove deprecated  fields.
-
-**All files of reference**
-- **Crash Related (Highest Priority)**:
-  - 
-- **Recently Modified (High Impact)**:
-  - 
-  - 
-  -  (New file)
-  - 
-
-**key api endpoints**
-- ****: The  page was corrected to use this endpoint instead of a non-existent  route.
-
-**Critical Info for New Agent**
-- **CRASH BLOCKER**: The absolute top priority is to fix the crash on the My Journey page. The user is blocked. The previous agent has already analyzed the crash log and hypothesized the cause is in . Implement the fix by refactoring how the  is created.
-- **User is non-technical with usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
-           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
-           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
-           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
-           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
-           <command> [<args>]
-
-These are common Git commands used in various situations:
-
-start a working area (see also: git help tutorial)
-   clone     Clone a repository into a new directory
-   init      Create an empty Git repository or reinitialize an existing one
-
-work on the current change (see also: git help everyday)
-   add       Add file contents to the index
-   mv        Move or rename a file, a directory, or a symlink
-   restore   Restore working tree files
-   rm        Remove files from the working tree and from the index
-
-examine the history and state (see also: git help revisions)
-   bisect    Use binary search to find the commit that introduced a bug
-   diff      Show changes between commits, commit and working tree, etc
-   grep      Print lines matching a pattern
-   log       Show commit logs
-   show      Show various types of objects
-   status    Show the working tree status
-
-grow, mark and tweak your common history
-   branch    List, create, or delete branches
-   commit    Record changes to the repository
-   merge     Join two or more development histories together
-   rebase    Reapply commits on top of another base tip
-   reset     Reset current HEAD to the specified state
-   switch    Switch branches
-   tag       Create, list, delete or verify a tag object signed with GPG
-
-collaborate (see also: git help workflows)
-   fetch     Download objects and refs from another repository
-   pull      Fetch from and integrate with another repository or a local branch
-   push      Update remote refs along with associated objects
-
-'git help -a' and 'git help -g' list available subcommands and some
-concept guides. See 'git help <command>' or 'git help <concept>'
-to read about a specific subcommand or concept.
-See 'git help git' for an overview of the system.**: The user requires very clear, simple instructions for any usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
-           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
-           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
-           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
-           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
-           <command> [<args>]
-
-These are common Git commands used in various situations:
-
-start a working area (see also: git help tutorial)
-   clone     Clone a repository into a new directory
-   init      Create an empty Git repository or reinitialize an existing one
-
-work on the current change (see also: git help everyday)
-   add       Add file contents to the index
-   mv        Move or rename a file, a directory, or a symlink
-   restore   Restore working tree files
-   rm        Remove files from the working tree and from the index
-
-examine the history and state (see also: git help revisions)
-   bisect    Use binary search to find the commit that introduced a bug
-   diff      Show changes between commits, commit and working tree, etc
-   grep      Print lines matching a pattern
-   log       Show commit logs
-   show      Show various types of objects
-   status    Show the working tree status
-
-grow, mark and tweak your common history
-   branch    List, create, or delete branches
-   commit    Record changes to the repository
-   merge     Join two or more development histories together
-   rebase    Reapply commits on top of another base tip
-   reset     Reset current HEAD to the specified state
-   switch    Switch branches
-   tag       Create, list, delete or verify a tag object signed with GPG
-
-collaborate (see also: git help workflows)
-   fetch     Download objects and refs from another repository
-   pull      Fetch from and integrate with another repository or a local branch
-   push      Update remote refs along with associated objects
-
-'git help -a' and 'git help -g' list available subcommands and some
-concept guides. See 'git help <command>' or 'git help <concept>'
-to read about a specific subcommand or concept.
-See 'git help git' for an overview of the system. or EAS command line tool
+See 'git help git' for an overview of the system. and EAS command line tool
 
 VERSION
   eas-cli/18.0.5 linux-arm64 node-v20.20.0
@@ -365,21 +124,29 @@ COMMANDS
   submit        submit app binary to App Store and/or Play Store
   update        publish an update group
   upload        upload a local build and generate a sharable link
-  whoami        show the username you are logged in as command-line operations. The previous agent successfully used a Save to GitHub -> HEAD is now at 5e75b9a Auto-generated changes workflow to resolve local conflicts.
-- **TestFlight Build is the Goal**: All work is leading up to a stable TestFlight build. After fixing the crash, a comprehensive test is required before suggesting another build.
+  whoami        show the username you are logged in as commands.
+- **Future Tasks:**
+    - **P2: Rename GitHub Repository:** The user has agreed this is a low-priority, internal-facing task ( → ).
 
-**documents and test reports created in this job**
--  (Last successful test run before crash was introduced)
--  (Updated with all completed tasks)
-
-**Last 10 User Messages and any pending HUMAN messages**
-1.  **User (485):** Provides the full crash log for the My Journey page crash. **(PENDING FIX)**
-2.  **User (483):** Confirms the crash is reproducible on the new build and asks for instructions on finding the log.
-3.  **User (470):** Reports that the new build crashes when navigating to My Journey.
-4.  **User (432):** Confirms successful execution of .
-5.  **User (431):** Asks how to resolve a  git error.
-6.  **User (429):** Shows another failed  attempt, indicating an authentication issue.
-7.  **User (428):** Asks for help with the usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
+**Completed work in this session**
+- **Major Refactoring: Badges -> Ranks:**
+  - Designed and implemented a new, unified Rank system, merging the previous Badge and Rank systems.
+  - Removed the entire Badge system, including the  page, related components (), backend logic, and UI references.
+  - Updated  with the new Rank logic.
+  - Refactored , , and other UI components to display Rank progression.
+- **Critical Bug Fixes & Performance Optimization:**
+  - **Fixed Missing Content:** Resolved a critical performance issue ( query) in the  endpoint by implementing a MongoDB aggregation pipeline. This fixed the empty Explore/Continent pages.
+  - **Fixed Native Crash (Caching):** Refactored the  hook to remove the  constructor, which was incompatible with the Hermes JS engine and caused content to disappear on device.
+- **New Feature: Change Password:**
+  - Implemented a new backend endpoint .
+  - Added the Change Password functionality to the Settings page, including input validation.
+- **UI/UX Overhaul (based on user feedback):**
+  - Fixed numerous header layout issues (e.g., white bars on  and  pages) by standardizing the use of  and .
+  - Removed the Featured Badges section and moved the Save button on the Edit Profile page.
+  - Corrected email addresses in the Privacy Policy and Terms of Service.
+  - Standardized terminology across the app (e.g., Feed vs. Activity Feed).
+- **EAS Build Process Support:**
+  - Guided the user through resolving usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
            [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
            [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
            [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
@@ -423,17 +190,123 @@ collaborate (see also: git help workflows)
 'git help -a' and 'git help -g' list available subcommands and some
 concept guides. See 'git help <command>' or 'git help <concept>'
 to read about a specific subcommand or concept.
-See 'git help git' for an overview of the system. authentication prompt.
-8.  **User (424):** Asks for the correct command to bump app version and build number.
-9.  **User (417):** Proactively asks about pulling latest changes and bumping the build number before building.
-10. **User (415):** Asks for guidance on the correct An Expo user account is required to proceed.
+See 'git help git' for an overview of the system. conflicts and  configuration issues to enable successful TestFlight builds and submissions.
+
+**Earlier issues found/mentioned but not fixed**
+   - **Issue 1: Server Error in Preview Environment**
+     - **Description**: The preview environment shows a server error because its backend is connected to a local, often empty, MongoDB instance, not the production Atlas database.
+     - **Note for next agent**: This is a known artifact of the development environment and does not affect the TestFlight build. It should be ignored. The user is aware of this.
+
+**Known issue recurrence from previous fork**
+  - None.
+
+**Code Architecture**
+- **Frontend**: React Native with Expo Router.
+- **Backend**: FastAPI & MongoDB.
+- **Key Architectural Changes**:
+  - **System Unification**: The Badge system has been entirely deprecated and removed. All related files (, , ) have been deleted or are slated for deletion. The app now uses a single Rank progression system.
+  - **Caching Layer**: A new client-side caching layer has been introduced with  and .
+  - **New Endpoint**: A  endpoint was added to .
+
+**Key Technical Concepts**
+- **Dead Code Elimination**: A primary focus of the last session was identifying and purging obsolete code related to the removed Badge system.
+- **System Unification**: Merging two overlapping gamification systems (Badges, Ranks) into a single, clearer progression path for the user.
+- **Hermes Engine Compatibility**: Debugging and fixing code that works in web/simulators but fails on the native React Native JS engine (e.g., the  issue).
+- **React Native Build Profiles ():** Differentiating between  (Ad Hoc for internal testing) and  (App Store for TestFlight/release) build profiles.
+
+**key DB schema**
+  - No new schema changes.  collection fields related to  are now obsolete and should not be used.
+
+**All files of reference**
+- **Cleanup Targets (Verify Deletion/Modification)**:
+  - 
+  - 
+  - 
+  - 
+- **Key Modified Files**:
+  -  (Change Password logic, conditional rendering for Apple users)
+  -  (Major refactoring to use Ranks)
+  -  (Refactored to use Ranks)
+  -  (Contains the new Rank system logic)
+  -  (New  endpoint)
+  -  (Hermes-compatible caching logic)
+
+**key api endpoints**
+- : New endpoint to allow users to change their password.
+- : Performance was critically optimized using a MongoDB aggregation pipeline.
+
+**Critical Info for New Agent**
+- **Top Priority:** Complete the final cleanup plan. This is a critical step to ensure the next TestFlight build is stable and free of regressions after a very large refactoring. Verify all dead code is gone and all new logic (hiding password change for Apple users) is working.
+- **Mandatory Testing:** After confirming the cleanup is complete, you **must** run a full regression test using the . Do not proceed to the build step without a successful test run.
+- **User Guidance for Build:** The user will need clear, simple instructions to create the next build. The correct command will be An Expo user account is required to proceed.
 
 Log in to EAS with email or username (exit and run eas login --help to see other login options)
-Input is required, but stdin is not readable. Failed to display prompt: Email or username command.
+Input is required, but stdin is not readable. Failed to display prompt: Email or username. Be prepared to help them with usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
+           <command> [<args>]
+
+These are common Git commands used in various situations:
+
+start a working area (see also: git help tutorial)
+   clone     Clone a repository into a new directory
+   init      Create an empty Git repository or reinitialize an existing one
+
+work on the current change (see also: git help everyday)
+   add       Add file contents to the index
+   mv        Move or rename a file, a directory, or a symlink
+   restore   Restore working tree files
+   rm        Remove files from the working tree and from the index
+
+examine the history and state (see also: git help revisions)
+   bisect    Use binary search to find the commit that introduced a bug
+   diff      Show changes between commits, commit and working tree, etc
+   grep      Print lines matching a pattern
+   log       Show commit logs
+   show      Show various types of objects
+   status    Show the working tree status
+
+grow, mark and tweak your common history
+   branch    List, create, or delete branches
+   commit    Record changes to the repository
+   merge     Join two or more development histories together
+   rebase    Reapply commits on top of another base tip
+   reset     Reset current HEAD to the specified state
+   switch    Switch branches
+   tag       Create, list, delete or verify a tag object signed with GPG
+
+collaborate (see also: git help workflows)
+   fetch     Download objects and refs from another repository
+   pull      Fetch from and integrate with another repository or a local branch
+   push      Update remote refs along with associated objects
+
+'git help -a' and 'git help -g' list available subcommands and some
+concept guides. See 'git help <command>' or 'git help <concept>'
+to read about a specific subcommand or concept.
+See 'git help git' for an overview of the system. commands (, ) if needed.
+- **Focus on Stability:** The user has experienced several broken builds. The main goal now is to deliver a stable, working app that incorporates all the recent changes and fixes.
+
+**documents and test reports created in this job**
+- 
+-  (Updated with Rank system and removal of Badges)
+
+**Last 10 User Messages and any pending HUMAN messages**
+1.  **User (460):** Supert, gjennomfør! (Great, execute it!) - Approving the final cleanup and hardening plan.
+2.  **User (449):** Raises critical concerns about Change Password for Apple Sign-In users, potential hidden cache bugs, and asks for a final code cleanup. **(This initiated the last working item)**.
+3.  **User (445):** Acknowledges the fixes and is ready to proceed.
+4.  **User (441):** Asks to update FAQ content from Badges to Ranks.
+5.  **User (292):** Fornøyd! (Satisfied!) - Approving the new Rank system design.
+6.  **User (285):** Requests a new, well-thought-out Rank system to replace the redundant Badge system.
+7.  **User (283):** Questions the necessity of having both a Badge and a Rank system, suggesting they are redundant.
+8.  **User (272):** Asks for a thorough analysis of the outdated Rank system before any changes are made.
+9.  **User (257):** Reports a new, long list of bugs and missing content found in the latest TestFlight build (build 59), including issues on My Journey, Profile, and Settings pages.
+10. **User (256):** Confirms readiness to build after the agent prepared build 60 with a proposed fix.
 
 **Project Health Check:**
-- **Broken**: The My Journey page is critically broken and crashes the entire app. This is a P0 blocker.
-- **Working**: All other features are believed to be working as per the last successful test suite.
+- **Broken**: None known, but the application is in a fragile state post-refactoring and requires immediate, thorough testing.
+- **Mocked**: None.
 
 **3rd Party Integrations**
 - Expo / EAS Build
@@ -448,12 +321,11 @@ Input is required, but stdin is not readable. Failed to display prompt: Email or
   - Testing agent used after significant changes: YES
   - Troubleshoot agent used after agent stuck in loop: NO
   - Test files created: None
-  - Known regressions: **YES**. A critical, app-breaking crash on the My Journey page was introduced in the last set of changes.
+  - Known regressions: All known regressions from the previous build (missing content due to caching/performance) are believed to be fixed. This requires verification.
 
 **Credentials to test flow:**
-- The app must be tested via a new TestFlight build once the crash is fixed.
 - **E-post:** 
 - **Passord:** 
 
 **What agent forgot to execute**
-- The agent was in the middle of debugging the critical crash. It had analyzed the problem but had not yet implemented the solution. The work is incomplete, not forgotten.</analysis>
+- The agent was mid-execution of the final cleanup plan. The plan itself was comprehensive, but its execution was interrupted. The next agent must verify that all steps of the plan were completed successfully before moving on.</analysis>

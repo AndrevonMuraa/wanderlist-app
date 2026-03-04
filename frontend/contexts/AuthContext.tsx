@@ -280,6 +280,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Error logging out:', error);
     } finally {
       await removeToken();
+      // Clear API cache to prevent data leakage between accounts
+      const { clearAllCache } = require('../utils/apiCache');
+      clearAllCache();
       setUser(null);
     }
   };

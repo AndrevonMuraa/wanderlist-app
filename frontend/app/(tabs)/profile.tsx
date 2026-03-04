@@ -81,7 +81,6 @@ export default function ProfileScreen() {
   useEffect(() => {
     fetchStats();
     fetchProgressStats();
-    fetchBadges();
     fetchUnreadCount();
   }, []);
 

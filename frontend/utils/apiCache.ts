@@ -19,7 +19,7 @@ const cache = new Map<string, CacheEntry>();
 
 // Cache key groups — invalidating a group clears all associated keys
 const CACHE_GROUPS: Record<string, string[]> = {
-  visit: ['countries', 'continent-stats', 'progress', 'stats', 'visits', 'achievements', 'country-visits'],
+  visit: ['countries', 'continent-stats', 'progress', 'stats', 'visits', 'country-visits'],
 };
 
 /**

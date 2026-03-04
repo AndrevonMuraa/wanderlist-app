@@ -51,18 +51,16 @@ export default function AnalyticsScreen() {
     try {
       const token = await getToken();
       
-      const [statsRes, progressRes, visitsRes, achievementsRes] = await Promise.all([
+      const [statsRes, progressRes, visitsRes] = await Promise.all([
         fetch(`${BACKEND_URL}/api/stats`, { headers: { Authorization: `Bearer ${token}` } }),
         fetch(`${BACKEND_URL}/api/progress`, { headers: { Authorization: `Bearer ${token}` } }),
         fetch(`${BACKEND_URL}/api/visits`, { headers: { Authorization: `Bearer ${token}` } }),
-        fetch(`${BACKEND_URL}/api/achievements`, { headers: { Authorization: `Bearer ${token}` } }),
       ]);
 
       if (statsRes.ok && progressRes.ok && visitsRes.ok) {
         const stats = await statsRes.json();
         const progress = await progressRes.json();
         const visits = await visitsRes.json();
-        const achievements = await achievementsRes.json();
 
         // Process visits for analytics
         const countryVisits: { [key: string]: number } = {};
@@ -89,7 +87,7 @@ export default function AnalyticsScreen() {
           totalPoints: progress.totalPoints || 0,
           currentStreak: 0,
           longestStreak: 0,
-          badgesEarned: Array.isArray(achievements) ? achievements.length : 0,
+          badgesEarned: 0,
           continentBreakdown: progress.continents || {},
           countryBreakdown,
           topLandmarks: [],

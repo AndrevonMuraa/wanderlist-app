@@ -7,7 +7,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://app-store-ready-13.preview.emergentagent.com')
+BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://testflight-ready-2.preview.emergentagent.com')
 TEST_EMAIL = "test@wandermark.app"
 TEST_PASSWORD = "Test1234!"
 

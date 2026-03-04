@@ -557,7 +557,14 @@ async def change_password(
         raise HTTPException(status_code=400, detail="New password must be at least 6 characters")
     
     user_doc = await db.users.find_one({"user_id": current_user.user_id})
-    if not user_doc or not verify_password(current_password, user_doc.get("password_hash", "")):
+    if not user_doc:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Apple/Google sign-in users don't have a password
+    if not user_doc.get("password_hash"):
+        raise HTTPException(status_code=400, detail="Password change is not available for social login accounts")
+    
+    if not verify_password(current_password, user_doc.get("password_hash", "")):
         raise HTTPException(status_code=400, detail="Current password is incorrect")
     
     await db.users.update_one(

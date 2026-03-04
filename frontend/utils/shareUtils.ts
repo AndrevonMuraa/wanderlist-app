@@ -23,23 +23,6 @@ export const shareVisit = async (landmarkName: string, countryName: string, poin
   }
 };
 
-export const shareBadge = async (badgeName: string, badgeDescription: string) => {
-  try {
-    await successHaptic();
-    
-    const message = `🏆 Badge Unlocked: ${badgeName}! ${badgeDescription}\n\nTrack your travels on WanderMark: ${APP_LINK}`;
-    
-    await Share.share({
-      message,
-      title: 'Badge Unlocked on WanderMark',
-    });
-    return true;
-  } catch (error) {
-    console.error('Error sharing badge:', error);
-    return false;
-  }
-};
-
 export const shareProgress = async (visits: number, countries: number, points: number) => {
   try {
     await successHaptic();

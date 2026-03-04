@@ -23,7 +23,7 @@ export default function NotificationSettingsScreen() {
   const [settings, setSettings] = useState({
     dailyReminders: false,
     weeklyDigest: true,
-    achievements: true,
+    rankProgress: true,
     reminderTime: '19:00',
   });
 
@@ -129,8 +129,8 @@ export default function NotificationSettingsScreen() {
               </Text>
             </View>
             <Switch
-              value={settings.achievements}
-              onValueChange={() => handleToggle('achievements')}
+              value={settings.rankProgress}
+              onValueChange={() => handleToggle('rankProgress')}
               color={theme.colors.primary}
             />
           </View>
