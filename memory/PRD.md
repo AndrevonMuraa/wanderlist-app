@@ -177,6 +177,18 @@ All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) Ne
 3. App Store submission preparation
 4. P2: Rename GitHub repository (`wanderlist-app` → `wandermark-app`)
 
+### Session Feb 2026 - Final Code Cleanup & Hardening
+- **Badge→Rank terminology finalized across entire app**:
+  - about.tsx: "Badge System" expandable → "Rank System" with all 8 rank descriptions
+  - notification-settings.tsx: "Badge Alerts" → "Rank Alerts"
+  - add-visit celebration: "BADGE UNLOCKED!" → "RANK UP!"
+  - ShareStatsCard: "X Badges Unlocked" → rank name display
+- **Dead badge code deleted**: achievements.tsx, badgeIcons.ts removed
+- **has_password field added**: Backend /api/auth/me now returns `has_password` boolean
+- **Change Password hidden for Apple users**: Conditional rendering based on `has_password` field
+- **featured_badges removed**: Cleaned from UserPublic and ProfileUpdate models
+- **Unused import removed**: `sendAchievementNotification` removed from add-visit
+
 ## Key Files Modified (Latest)
 - `backend/routes/country_visits.py` - Full PUT endpoint with photo management + landmarks endpoint + migration
 - `frontend/app/(tabs)/journey.tsx` - Carousel, reordered sections, badge icons, navigation
