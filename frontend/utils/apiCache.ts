@@ -69,6 +69,7 @@ export function clearAllCache(): void {
 
 /**
  * Fetch with caching. Returns cached data if available, otherwise fetches from API.
+ * Returns a Response-like object compatible with both web and React Native.
  * @param url - Full API URL
  * @param token - Auth token
  * @param cacheKey - Key to store/retrieve cached data
@@ -79,14 +80,14 @@ export async function cachedFetch(
   token: string,
   cacheKey: string,
   ttl: number = DEFAULT_TTL
-): Promise<Response> {
+): Promise<{ ok: boolean; status: number; json: () => Promise<any> }> {
   const cached = getCached(cacheKey);
   if (cached !== null) {
-    // Return a mock Response with cached JSON data
-    return new Response(JSON.stringify(cached), {
+    return {
+      ok: true,
       status: 200,
-      headers: { 'Content-Type': 'application/json', 'X-Cache': 'HIT' },
-    });
+      json: async () => cached,
+    };
   }
 
   const response = await fetch(url, {
@@ -96,12 +97,18 @@ export async function cachedFetch(
   if (response.ok) {
     const data = await response.json();
     setCache(cacheKey, data, ttl);
-    // Return a new Response so the caller can still call .json()
-    return new Response(JSON.stringify(data), {
+    return {
+      ok: true,
       status: 200,
-      headers: { 'Content-Type': 'application/json', 'X-Cache': 'MISS' },
-    });
+      json: async () => data,
+    };
   }
 
-  return response;
+  return {
+    ok: false,
+    status: response.status,
+    json: async () => {
+      try { return await response.json(); } catch { return null; }
+    },
+  };
 }
