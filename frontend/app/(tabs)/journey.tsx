@@ -311,7 +311,7 @@ export default function JourneyScreen() {
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
                   {stats.rank && stats.rank > 0 ? `#${stats.rank}` : 'N/A'}
                 </Text>
-                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.rank')}</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Leaderboard</Text>
               </TouchableOpacity>
 
               <View 
