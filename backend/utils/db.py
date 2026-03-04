@@ -38,7 +38,7 @@ async def create_indexes():
         await db.visits.create_index("user_id")
         await db.visits.create_index("landmark_id")
         await db.visits.create_index("visit_id", unique=True)
-        await db.visits.create_index([("user_id", 1), ("landmark_id", 1)])
+        await db.visits.create_index([("user_id", 1), ("landmark_id", 1)], unique=True)
         
         # Country visits
         await db.country_visits.create_index("user_id")
