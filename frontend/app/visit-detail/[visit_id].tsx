@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Image, Dimensions, Platform, TouchableOpacity } from 'react-native';
-import { Text, Surface } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { safeGoBack } from '../../utils/navigation';
@@ -162,7 +162,7 @@ export default function VisitDetailScreen() {
         )}
 
         {/* Visit Info */}
-        <Surface style={styles.infoCard}>
+        <View style={styles.infoCard}>
           {visit.country_name && (
             <Text style={{ fontSize: 14, color: theme.colors.textSecondary, marginBottom: 12, textAlign: 'center' }}>
               {visit.country_name}
@@ -195,22 +195,22 @@ export default function VisitDetailScreen() {
               <Text style={styles.infoValue}>{visit.verified ? 'Verified' : 'Unverified'}</Text>
             </View>
           </View>
-        </Surface>
+        </View>
 
         {/* Travel Diary */}
         {visit.diary_notes && (
-          <Surface style={styles.diaryCard}>
+          <View style={styles.diaryCard}>
             <View style={styles.sectionHeader}>
               <Ionicons name="journal" size={24} color={theme.colors.primary} />
               <Text style={styles.sectionTitle}>Travel Diary</Text>
             </View>
             <Text style={styles.diaryText}>{visit.diary_notes}</Text>
-          </Surface>
+          </View>
         )}
 
         {/* Travel Tips */}
         {visit.travel_tips && visit.travel_tips.length > 0 && (
-          <Surface style={styles.tipsCard}>
+          <View style={styles.tipsCard}>
             <View style={styles.sectionHeader}>
               <Ionicons name="bulb" size={24} color={theme.colors.accent} />
               <Text style={styles.sectionTitle}>Travel Tips</Text>
@@ -221,18 +221,18 @@ export default function VisitDetailScreen() {
                 <Text style={styles.tipText}>{tip}</Text>
               </View>
             ))}
-          </Surface>
+          </View>
         )}
 
         {/* Comments */}
         {visit.comments && (
-          <Surface style={styles.commentsCard}>
+          <View style={styles.commentsCard}>
             <View style={styles.sectionHeader}>
               <Ionicons name="chatbubble" size={24} color={theme.colors.primary} />
               <Text style={styles.sectionTitle}>Quick Notes</Text>
             </View>
             <Text style={styles.commentsText}>{visit.comments}</Text>
-          </Surface>
+          </View>
         )}
 
         {/* Share Visit */}
