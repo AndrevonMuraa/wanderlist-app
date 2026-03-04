@@ -385,18 +385,30 @@ async def get_messages(friend_id: str, current_user: User = Depends(get_current_
 
 @router.get("/stats")
 async def get_stats(current_user: User = Depends(get_current_user)):
-    # Get user document
-    user = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0})
+    # Use aggregation pipeline instead of loading all data into memory
+    user = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0, "points": 1, "leaderboard_points": 1})
     
-    # Get user's visits
-    visits = await db.visits.find({"user_id": current_user.user_id}, {"_id": 0}).to_list(1000)
+    # Single aggregation: visits → lookup landmarks → get unique countries/continents
+    pipeline = [
+        {"$match": {"user_id": current_user.user_id}},
+        {"$lookup": {
+            "from": "landmarks",
+            "localField": "landmark_id",
+            "foreignField": "landmark_id",
+            "as": "landmark",
+            "pipeline": [{"$project": {"country_name": 1, "continent": 1}}]
+        }},
+        {"$unwind": {"path": "$landmark", "preserveNullAndEmptyArrays": True}},
+        {"$group": {
+            "_id": None,
+            "total_visits": {"$sum": 1},
+            "countries": {"$addToSet": "$landmark.country_name"},
+            "continents": {"$addToSet": "$landmark.continent"},
+        }}
+    ]
     
-    # Get unique countries and continents
-    landmark_ids = [v["landmark_id"] for v in visits]
-    landmarks = await db.landmarks.find({"landmark_id": {"$in": landmark_ids}}, {"_id": 0}).to_list(1000)
-    
-    countries = set(l["country_name"] for l in landmarks)
-    continents = set(l["continent"] for l in landmarks)
+    result = await db.visits.aggregate(pipeline).to_list(1)
+    stats = result[0] if result else {"total_visits": 0, "countries": [], "continents": []}
     
     # Count friends
     friend_count = await db.friends.count_documents({
@@ -407,85 +419,119 @@ async def get_stats(current_user: User = Depends(get_current_user)):
     })
     
     return {
-        "total_visits": len(visits),
-        "countries_visited": len(countries),
-        "continents_visited": len(continents),
+        "total_visits": stats["total_visits"],
+        "countries_visited": len([c for c in stats.get("countries", []) if c]),
+        "continents_visited": len([c for c in stats.get("continents", []) if c]),
         "friends_count": friend_count,
-        "points": user.get("points", 0),
-        "leaderboard_points": user.get("leaderboard_points", 0)
+        "points": user.get("points", 0) if user else 0,
+        "leaderboard_points": user.get("leaderboard_points", 0) if user else 0
     }
 
 # ============= PROGRESS STATISTICS ENDPOINT =============
 
 @router.get("/progress")
 async def get_progress_stats(current_user: User = Depends(get_current_user)):
-    """Get comprehensive progress statistics for user"""
+    """Get comprehensive progress statistics for user - optimized with aggregation"""
     
-    # Get all user's visits
-    visits = await db.visits.find({"user_id": current_user.user_id}, {"_id": 0}).to_list(10000)
-    visited_landmark_ids = {v["landmark_id"] for v in visits}
+    # Get user's visited landmark IDs and total points in one query
+    visits_pipeline = [
+        {"$match": {"user_id": current_user.user_id}},
+        {"$group": {
+            "_id": None,
+            "landmark_ids": {"$addToSet": "$landmark_id"},
+            "total_points": {"$sum": {"$ifNull": ["$points_earned", 10]}},
+            "visited_count": {"$sum": 1}
+        }}
+    ]
+    visits_result = await db.visits.aggregate(visits_pipeline).to_list(1)
     
-    # Calculate total points earned
-    total_points = sum(v.get("points_earned", 10) for v in visits)
-    
-    # Get all landmarks and countries
-    all_landmarks = await db.landmarks.find({}, {"_id": 0}).to_list(10000)
-    all_countries = await db.countries.find({}, {"_id": 0}).to_list(100)
-    
-    # Calculate overall progress
-    total_landmarks = len(all_landmarks)
-    visited_landmarks = len(visited_landmark_ids)
-    overall_percentage = round((visited_landmarks / total_landmarks * 100) if total_landmarks > 0 else 0, 1)
-    
-    # Calculate continental progress
-    continental_progress = {}
-    continent_country_map = {}
-    
-    for country in all_countries:
-        continent = country["continent"]
-        if continent not in continent_country_map:
-            continent_country_map[continent] = []
-        continent_country_map[continent].append(country["country_id"])
-    
-    for continent, country_ids in continent_country_map.items():
-        # Count countries in this continent
-        total_countries = len(country_ids)
+    if not visits_result:
+        # No visits — return empty progress
+        all_countries = await db.countries.find({}, {"_id": 0, "country_id": 1, "name": 1, "continent": 1}).to_list(100)
+        all_landmark_count = await db.landmarks.count_documents({})
         
-        # Count visited countries in this continent
-        visited_countries = set()
-        for landmark in all_landmarks:
-            if landmark["country_id"] in country_ids and landmark["landmark_id"] in visited_landmark_ids:
-                visited_countries.add(landmark["country_id"])
+        continental_progress = {}
+        country_progress = {}
+        for country in all_countries:
+            continent = country["continent"]
+            if continent not in continental_progress:
+                continental_progress[continent] = {"visited": 0, "total": 0, "percentage": 0}
+            continental_progress[continent]["total"] += 1
+            
+            country_landmark_count = await db.landmarks.count_documents({"country_id": country["country_id"]})
+            country_progress[country["country_id"]] = {
+                "country_name": country["name"],
+                "continent": continent,
+                "visited": 0,
+                "total": country_landmark_count,
+                "percentage": 0
+            }
         
-        visited_count = len(visited_countries)
-        percentage = round((visited_count / total_countries * 100) if total_countries > 0 else 0, 1)
-        
-        continental_progress[continent] = {
-            "visited": visited_count,
-            "total": total_countries,
-            "percentage": percentage
+        return {
+            "overall": {"visited": 0, "total": all_landmark_count, "percentage": 0},
+            "totalPoints": 0,
+            "continents": continental_progress,
+            "countries": country_progress
         }
     
-    # Calculate per-country progress
+    visited_landmark_ids = set(visits_result[0]["landmark_ids"])
+    total_points = visits_result[0]["total_points"]
+    visited_count = visits_result[0]["visited_count"]
+    
+    # Use aggregation to compute per-country stats (landmarks per country, how many visited)
+    country_stats_pipeline = [
+        {"$group": {
+            "_id": "$country_id",
+            "total_landmarks": {"$sum": 1},
+            "landmark_ids": {"$push": "$landmark_id"}
+        }}
+    ]
+    country_landmark_stats = await db.landmarks.aggregate(country_stats_pipeline).to_list(200)
+    country_landmark_map = {s["_id"]: s for s in country_landmark_stats}
+    
+    # Get total landmarks count
+    total_landmarks = sum(s["total_landmarks"] for s in country_landmark_stats)
+    overall_percentage = round((visited_count / total_landmarks * 100) if total_landmarks > 0 else 0, 1)
+    
+    # Get all countries
+    all_countries = await db.countries.find({}, {"_id": 0, "country_id": 1, "name": 1, "continent": 1}).to_list(100)
+    
+    continental_progress = {}
     country_progress = {}
+    
     for country in all_countries:
         country_id = country["country_id"]
-        country_landmarks = [l for l in all_landmarks if l["country_id"] == country_id]
-        total = len(country_landmarks)
-        visited = sum(1 for l in country_landmarks if l["landmark_id"] in visited_landmark_ids)
+        continent = country["continent"]
+        stats = country_landmark_map.get(country_id, {"total_landmarks": 0, "landmark_ids": []})
+        
+        total = stats["total_landmarks"]
+        visited = sum(1 for lid in stats["landmark_ids"] if lid in visited_landmark_ids)
         percentage = round((visited / total * 100) if total > 0 else 0, 1)
         
         country_progress[country_id] = {
             "country_name": country["name"],
-            "continent": country["continent"],
+            "continent": continent,
             "visited": visited,
             "total": total,
             "percentage": percentage
         }
+        
+        if continent not in continental_progress:
+            continental_progress[continent] = {"visited": 0, "total": 0, "percentage": 0}
+        continental_progress[continent]["total"] += 1
+        if visited > 0:
+            continental_progress[continent]["visited"] += 1
+    
+    # Calculate continental percentages
+    for continent_data in continental_progress.values():
+        if continent_data["total"] > 0:
+            continent_data["percentage"] = round(
+                continent_data["visited"] / continent_data["total"] * 100, 1
+            )
     
     return {
         "overall": {
-            "visited": visited_landmarks,
+            "visited": len(visited_landmark_ids),
             "total": total_landmarks,
             "percentage": overall_percentage
         },
