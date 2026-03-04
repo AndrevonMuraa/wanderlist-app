@@ -297,7 +297,7 @@ export default function ContinentsScreen() {
 
         {/* Can't find your destination? Link */}
         <TouchableOpacity 
-          style={[styles.cantFindContainer, !canCreateCustomVisits && styles.cantFindContainerLocked]}
+          style={styles.cantFindContainer}
           onPress={() => {
             if (canCreateCustomVisits) {
               setShowCustomVisitModal(true);
@@ -308,22 +308,17 @@ export default function ContinentsScreen() {
           activeOpacity={0.7}
         >
           <Ionicons 
-            name={canCreateCustomVisits ? "help-circle-outline" : "lock-closed"} 
+            name="help-circle-outline"
             size={20} 
-            color={canCreateCustomVisits ? theme.colors.primary : "#1E8A8A"} 
+            color={theme.colors.primary} 
           />
-          <Text style={[styles.cantFindText, !canCreateCustomVisits && styles.cantFindTextLocked]}>
-            {canCreateCustomVisits ? "Can't find your destination?" : "Custom Visits (Pro)"}
+          <Text style={styles.cantFindText}>
+            Can't find your destination?
           </Text>
-          {!canCreateCustomVisits && (
-            <View style={styles.proTagSmall}>
-              <Text style={styles.proTagSmallText}>PRO</Text>
-            </View>
-          )}
           <Ionicons 
             name="chevron-forward" 
             size={18} 
-            color={canCreateCustomVisits ? theme.colors.primary : "#1E8A8A"} 
+            color={theme.colors.primary} 
           />
         </TouchableOpacity>
 
