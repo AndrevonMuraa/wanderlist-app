@@ -20,6 +20,7 @@ import ProFeatureLock from '../../components/ProFeatureLock';
 import { useSubscription } from '../../hooks/useSubscription';
 import { useScrollRestore } from '../../hooks/useScrollRestore';
 import { BACKEND_URL } from '../../utils/config';
+import { cachedFetch } from '../../utils/apiCache';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import { getBadgeIconName, getBadgeColor } from '../../utils/badgeIcons';
 
@@ -176,15 +177,9 @@ export default function JourneyScreen() {
       setIsOfflineData(false);
       
       const [statsRes, progressRes, badgesRes, visitsRes, customVisitsRes] = await Promise.all([
-        fetch(`${BACKEND_URL}/api/stats`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }),
-        fetch(`${BACKEND_URL}/api/progress`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }),
-        fetch(`${BACKEND_URL}/api/achievements`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }),
+        cachedFetch(`${BACKEND_URL}/api/stats`, token, 'stats'),
+        cachedFetch(`${BACKEND_URL}/api/progress`, token, 'progress'),
+        cachedFetch(`${BACKEND_URL}/api/achievements`, token, 'achievements'),
         fetch(`${BACKEND_URL}/api/visits`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),

@@ -8,6 +8,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
+import { invalidateCacheGroup } from '../utils/apiCache';
 import { successHaptic } from '../utils/haptics';
 import { PrivacySelector } from './PrivacySelector';
 
@@ -179,6 +180,8 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
       });
 
       if (response.ok) {
+        // Invalidate cached data so stats refresh immediately
+        invalidateCacheGroup('visit');
         await successHaptic();
         
         // Build success message

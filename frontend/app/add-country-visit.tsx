@@ -22,6 +22,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
+import { invalidateCacheGroup } from '../utils/apiCache';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -133,6 +134,8 @@ export default function AddCountryVisitScreen() {
       });
 
       if (response.ok) {
+        // Invalidate cached data so stats refresh immediately
+        invalidateCacheGroup('visit');
         Alert.alert('Success', 'Country visit shared! +15 points', [
           { text: 'OK', onPress: () => safeGoBack(router) },
         ]);

@@ -10,6 +10,7 @@ import { Text } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { safeGoBack } from '../../utils/navigation';
 import { BACKEND_URL } from '../../utils/config';
+import { invalidateCacheGroup } from '../../utils/apiCache';
 import theme from '../../styles/theme';
 import AddVisitModal from '../../components/AddVisitModal';
 import CelebrationEffect from '../../components/CelebrationEffect';
@@ -135,6 +136,9 @@ export default function AddVisitScreen() {
       }
 
       const result = await response.json();
+
+      // Invalidate cached data so stats refresh immediately
+      invalidateCacheGroup('visit');
 
       // Fetch updated user data to get new points and check for level-up
       const userToken = await getToken();

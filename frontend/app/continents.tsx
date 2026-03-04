@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import theme, { gradients } from '../styles/theme';
 import { useTheme } from '../contexts/ThemeContext';
 import { BACKEND_URL } from '../utils/config';
+import { cachedFetch } from '../utils/apiCache';
 import * as SecureStore from 'expo-secure-store';
 import { useAuth } from '../contexts/AuthContext';
 import AddUserCreatedVisitModal from '../components/AddUserCreatedVisitModal';
@@ -144,10 +145,12 @@ export default function ContinentsScreen() {
     try {
       const token = await getToken();
       
-      // Fetch dynamic continent stats from backend
-      const response = await fetch(`${BACKEND_URL}/api/continent-stats`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      // Fetch dynamic continent stats from backend (cached for 5 min)
+      const response = await cachedFetch(
+        `${BACKEND_URL}/api/continent-stats`,
+        token || '',
+        'continent-stats'
+      );
 
       if (response.ok) {
         const data = await response.json();

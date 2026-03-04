@@ -6,6 +6,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { safeGoBack } from '../utils/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import { BACKEND_URL } from '../utils/config';
+import { cachedFetch } from '../utils/apiCache';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -171,17 +172,11 @@ export default function ExploreCountriesScreen() {
         return;
       }
       
-      // Fetch countries, progress data, AND country visits in parallel
+      // Fetch countries, progress data, AND country visits in parallel (cached)
       const [countriesResponse, progressResponse, countryVisitsResponse] = await Promise.all([
-        fetch(`${BACKEND_URL}/api/countries`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }),
-        fetch(`${BACKEND_URL}/api/progress`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }),
-        fetch(`${BACKEND_URL}/api/country-visits`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        })
+        cachedFetch(`${BACKEND_URL}/api/countries`, token, 'countries'),
+        cachedFetch(`${BACKEND_URL}/api/progress`, token, 'progress'),
+        cachedFetch(`${BACKEND_URL}/api/country-visits`, token, 'country-visits'),
       ]);
 
       if (countriesResponse.ok && progressResponse.ok) {
