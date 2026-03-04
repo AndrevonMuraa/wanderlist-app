@@ -250,20 +250,18 @@ You can filter by country, year, or type.`}
             />
             
             <FAQItem
-              id="badges"
-              question="How do badges work?"
-              answer={`Earn badges as you explore:
+              id="ranks"
+              question="How does the rank system work?"
+              answer={`Progress through 8 ranks as you earn points:
 
-• Explorer - 10 landmarks
-• Adventurer - 25 landmarks
-• Globetrotter - 50 landmarks
-• World Traveler - 100 landmarks
-• Seasoned Traveler - 200 landmarks
-• Elite Explorer - 250 landmarks
-• Legend - 350 landmarks
-• Ultimate Explorer - 500 landmarks
-
-Plus social badges, and point milestones!`}
+• Newcomer (0-199 pts) - Taking your first steps
+• Wanderer (200-749 pts) - The world is calling
+• Explorer (750-1,999 pts) - Charting new territory
+• Adventurer (2,000-4,499 pts) - No border can stop you
+• Trailblazer (4,500-8,499 pts) - Blazing your own path
+• Globetrotter (8,500-13,999 pts) - The world knows your name
+• Legend (14,000-17,999 pts) - A true travel legend
+• Titan (18,000+ pts) - Master of all destinations`}
             />
             
             <FAQItem
@@ -296,7 +294,7 @@ Plus social badges, and point milestones!`}
             <HowItWorksStep
               number={3}
               icon="star"
-              title="Earn Points & Badges"
+              title="Earn Points & Rank Up"
               description="Collect points for visits. Upload photos for leaderboard points!"
             />
             <HowItWorksStep

@@ -143,6 +143,21 @@ All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) Ne
 - **Cached endpoints**: `/api/countries`, `/api/continent-stats`, `/api/progress`, `/api/stats`, `/api/achievements`, `/api/country-visits`
 - **Cache invalidation on visit creation**: All 3 visit flows (landmark, country, custom) call `invalidateCacheGroup('visit')` after successful POST, clearing all related caches instantly
 - **Result**: Navigation between pages uses cached data (instant). After registering a visit, all stats refresh immediately with fresh data
+- **Hermes fix**: Replaced `new Response()` in `cachedFetch` with plain JS object for React Native Hermes compatibility
+
+### Session Mar 2026 - Major Rank System Overhaul & Bug Fixes (Build 60)
+- **New 8-level rank system** replacing the old badge/achievement system:
+  - Newcomer (0-199), Wanderer (200-749), Explorer (750-1,999), Adventurer (2,000-4,499)
+  - Trailblazer (4,500-8,499), Globetrotter (8,500-13,999), Legend (14,000-17,999), Titan (18,000+)
+  - Each rank has unique Ionicons icon and color
+- **Badge system removed**: achievements.tsx page, Badge interface, My Badges navigation, Recent Badges section all removed
+- **Journey page updated**: "Next Milestone" → "Next Rank" with progress bar and rank icon
+- **Profile page updated**: Shows current rank (not badge count)
+- **Header fixes**: points-summary and my-landmark-visits changed from SafeAreaView to useSafeAreaInsets for flush-to-top headers
+- **Settings**: Removed "Change Email", implemented working "Change Password" with backend endpoint
+- **Email addresses fixed**: privacy-policy and terms-of-service now use support@wandermark.app
+- **Social Feed**: Renamed "Feed"/"Community Feed" to consistent "Activity Feed"
+- **About page**: Updated FAQ with rank descriptions, "14,500+" → "19,000+", Key Features now shows "Rank System" and "Explore Continents" instead of Badges and Photo Collection
 
 ### Session Mar 2026 - Comprehensive Code Audit & Bug Fixes
 - **P0 CRITICAL: Points Summary page fixed** - Was completely broken (GET to PUT-only /api/auth/profile returned 405). Now uses /api/stats with correct field mapping.

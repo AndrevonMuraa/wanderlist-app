@@ -374,7 +374,7 @@ export default function SettingsScreen() {
             </View>
             <View style={styles.sectionHeaderText}>
               <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('settings.account')}</Text>
-              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>{t('settings.changeEmail')}</Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>Manage your account</Text>
             </View>
           </View>
           
