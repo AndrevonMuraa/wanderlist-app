@@ -79,9 +79,11 @@ export default function ProfileScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    fetchStats();
-    fetchProgressStats();
-    fetchUnreadCount();
+    if (user) {
+      fetchStats();
+      fetchProgressStats();
+      fetchUnreadCount();
+    }
   }, [user]);
 
   const fetchUnreadCount = async () => {

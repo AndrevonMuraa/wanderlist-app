@@ -110,14 +110,53 @@ export default function JourneyScreen() {
     try {
       const token = await getToken();
       
-      // If offline, try to load from cache
-      if (!isOnline) {
+      // Always try API first, fall back to cache on failure
+      setIsOfflineData(false);
+      
+      const results = await Promise.allSettled([
+        cachedFetch(`${BACKEND_URL}/api/stats`, token || '', 'stats'),
+        cachedFetch(`${BACKEND_URL}/api/progress`, token || '', 'progress'),
+        fetch(`${BACKEND_URL}/api/visits`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${BACKEND_URL}/api/user-created-visits`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+
+      const [statsResult, progressResult, visitsResult, customVisitsResult] = results;
+      let gotProgress = false;
+
+      if (statsResult.status === 'fulfilled' && statsResult.value.ok) {
+        const data = await statsResult.value.json();
+        setStats(data);
+      }
+
+      if (progressResult.status === 'fulfilled' && progressResult.value.ok) {
+        const data = await progressResult.value.json();
+        setProgressStats(data);
+        gotProgress = true;
+        // Cache progress data for offline use
+        await cacheProgress(data);
+      }
+
+      if (visitsResult.status === 'fulfilled' && visitsResult.value.ok) {
+        const data = await visitsResult.value.json();
+        // Cache visits for offline use
+        await cacheVisits(data);
+      }
+      
+      if (customVisitsResult.status === 'fulfilled' && customVisitsResult.value.ok) {
+        const data = await customVisitsResult.value.json();
+        setUserCreatedVisits(data);
+      }
+
+      // If API failed for progress, try offline cache as fallback
+      if (!gotProgress) {
         const cachedProgress = await getCachedProgress();
-        const cachedVisits = await getCachedVisits();
-        
         if (cachedProgress) {
           setProgressStats(cachedProgress);
-          setStats({
+          setStats(prev => prev || {
             total_visits: cachedProgress.overall?.visited || 0,
             countries_visited: Object.keys(cachedProgress.countries || {}).filter(
               k => cachedProgress.countries[k].visited > 0
@@ -131,54 +170,17 @@ export default function JourneyScreen() {
           });
           setIsOfflineData(true);
         }
-        
-        if (cachedVisits) {
-          // Cache available for offline
-        }
-        
-        setLoading(false);
-        setRefreshing(false);
-        return;
-      }
-      
-      // Online - fetch fresh data
-      setIsOfflineData(false);
-      
-      const [statsRes, progressRes, visitsRes, customVisitsRes] = await Promise.all([
-        cachedFetch(`${BACKEND_URL}/api/stats`, token, 'stats'),
-        cachedFetch(`${BACKEND_URL}/api/progress`, token, 'progress'),
-        fetch(`${BACKEND_URL}/api/visits`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }),
-        fetch(`${BACKEND_URL}/api/user-created-visits`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        })
-      ]);
-
-      if (statsRes.ok) {
-        const data = await statsRes.json();
-        setStats(data);
-      }
-
-      if (progressRes.ok) {
-        const data = await progressRes.json();
-        setProgressStats(data);
-        // Cache progress data for offline use
-        await cacheProgress(data);
-      }
-
-      if (visitsRes.ok) {
-        const data = await visitsRes.json();
-        // Cache visits for offline use
-        await cacheVisits(data);
-      }
-      
-      if (customVisitsRes.ok) {
-        const data = await customVisitsRes.json();
-        setUserCreatedVisits(data);
       }
     } catch (error) {
       console.error('Error fetching journey data:', error);
+      // Last resort: try offline cache
+      try {
+        const cachedProgress = await getCachedProgress();
+        if (cachedProgress) {
+          setProgressStats(cachedProgress);
+          setIsOfflineData(true);
+        }
+      } catch {}
     } finally {
       setLoading(false);
       setRefreshing(false);

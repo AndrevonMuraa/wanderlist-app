@@ -168,28 +168,27 @@ export default function ExploreCountriesScreen() {
       setLoading(true);
       const token = await getToken();
       
-      if (!token) {
-        console.error('No authentication token found');
-        setLoading(false);
-        return;
-      }
-      
       // Fetch countries, progress data, AND country visits in parallel (cached)
-      const [countriesResponse, progressResponse, countryVisitsResponse] = await Promise.all([
-        cachedFetch(`${BACKEND_URL}/api/countries`, token, 'countries'),
-        cachedFetch(`${BACKEND_URL}/api/progress`, token, 'progress'),
-        cachedFetch(`${BACKEND_URL}/api/country-visits`, token, 'country-visits'),
+      const results = await Promise.allSettled([
+        cachedFetch(`${BACKEND_URL}/api/countries`, token || '', 'countries'),
+        cachedFetch(`${BACKEND_URL}/api/progress`, token || '', 'progress'),
+        cachedFetch(`${BACKEND_URL}/api/country-visits`, token || '', 'country-visits'),
       ]);
 
-      if (countriesResponse.ok && progressResponse.ok) {
-        let countries = await countriesResponse.json();
-        const progress = await progressResponse.json();
+      const [countriesResult, progressResult, countryVisitsResult] = results;
+
+      const countriesOk = countriesResult.status === 'fulfilled' && countriesResult.value.ok;
+      const progressOk = progressResult.status === 'fulfilled' && progressResult.value.ok;
+
+      if (countriesOk && progressOk) {
+        let countries = await countriesResult.value.json();
+        const progress = await progressResult.value.json();
         setProgressData(progress);
         
         // Get country visits (set of country_ids that have been visited)
         let visitedCountryIds = new Set<string>();
-        if (countryVisitsResponse.ok) {
-          const countryVisits = await countryVisitsResponse.json();
+        if (countryVisitsResult.status === 'fulfilled' && countryVisitsResult.value.ok) {
+          const countryVisits = await countryVisitsResult.value.json();
           visitedCountryIds = new Set(countryVisits.map((v: any) => v.country_id));
         }
         
