@@ -267,8 +267,8 @@ export default function AdminDashboard() {
             onPress={() => router.push('/admin/users?filter=banned')}
           />
           <MenuCard
-            title="Kampanjekoder"
-            description="Opprett og administrer promo-koder"
+            title="Promo Codes"
+            description="Create and manage promo codes"
             icon="ticket-outline"
             color="#f59e0b"
             onPress={() => router.push('/admin/promo-codes')}
