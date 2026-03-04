@@ -394,69 +394,6 @@ export default function JourneyScreen() {
           </Surface>
         )}
 
-        {/* Recently Visited - Visual Carousel */}
-        {recentVisits.length > 0 && (
-          <View style={{ marginBottom: theme.spacing.md }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: theme.spacing.md, marginBottom: 12 }}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Recently Visited</Text>
-            </View>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingHorizontal: theme.spacing.md, gap: 14 }}
-            >
-              {recentVisits.map((visit) => (
-                <TouchableOpacity
-                  key={visit.visit_id}
-                  style={{
-                    width: 160,
-                    borderRadius: theme.borderRadius.xl,
-                    overflow: 'hidden',
-                    backgroundColor: colors.surface,
-                    ...theme.shadows.card,
-                  }}
-                  onPress={() => router.push(`/visit-detail/${visit.visit_id}`)}
-                  activeOpacity={0.85}
-                >
-                  {visit.photos && visit.photos.length > 0 ? (
-                    <Image
-                      source={{ uri: visit.photos[0] }}
-                      style={{ width: 160, height: 120 }}
-                      resizeMode="cover"
-                    />
-                  ) : (
-                    <TouchableOpacity
-                      style={{ width: 160, height: 120, backgroundColor: colors.primaryLight, alignItems: 'center', justifyContent: 'center' }}
-                      onPress={(e) => {
-                        e.stopPropagation();
-                        router.push(`/visit-detail/${visit.visit_id}`);
-                      }}
-                      activeOpacity={0.7}
-                    >
-                      <Ionicons name="camera-outline" size={28} color={colors.primary} />
-                      <Text style={{ fontSize: 10, color: colors.primary, fontWeight: '600', marginTop: 4 }}>Add Photo</Text>
-                    </TouchableOpacity>
-                  )}
-                  <View style={{ padding: 10 }}>
-                    <Text style={{ fontSize: 13, fontWeight: '700', color: colors.text }} numberOfLines={1}>
-                      {visit.landmark_name || 'Landmark'}
-                    </Text>
-                    <Text style={{ fontSize: 11, color: colors.textSecondary, marginTop: 2 }}>
-                      {new Date(visit.visited_at).toLocaleDateString('en-US', {
-                        month: 'short', day: 'numeric'
-                      })}
-                    </Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, gap: 3 }}>
-                      <Ionicons name="star" size={12} color={colors.accentYellow} />
-                      <Text style={{ fontSize: 11, fontWeight: '600', color: colors.text }}>{visit.points_earned} pts</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-        )}
-
         {/* Continental Progress */}
         {progressStats && (
           <Surface style={[styles.continentalCard, { backgroundColor: colors.surface }]}>
