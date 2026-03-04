@@ -119,11 +119,11 @@ export default function ShareStatsCard({ visible, onDismiss, stats, userName }: 
               </View>
             </View>
 
-            {/* Badge count if available */}
+            {/* Rank info if available */}
             {stats.achievements && stats.achievements > 0 && (
               <View style={styles.achievementBadge}>
                 <Ionicons name="trophy" size={16} color="#fbbf24" />
-                <Text style={styles.achievementText}>{stats.achievements} Badges Unlocked</Text>
+                <Text style={styles.achievementText}>Rank: {stats.rankName || 'Newcomer'}</Text>
               </View>
             )}
 

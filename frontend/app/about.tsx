@@ -408,33 +408,34 @@ You can filter by country, year, or type.`}
 
           <TouchableOpacity
             style={styles.expandableCard}
-            onPress={() => toggleSection('badges')}
+            onPress={() => toggleSection('ranks')}
             activeOpacity={0.8}
           >
             <Surface style={styles.card}>
               <View style={styles.expandableHeader}>
                 <View style={styles.expandableHeaderLeft}>
-                  <Ionicons name="ribbon" size={22} color="#FF6B6B" />
-                  <Text style={styles.expandableTitle}>Badge System</Text>
+                  <Ionicons name="trophy" size={22} color="#FFD700" />
+                  <Text style={styles.expandableTitle}>Rank System</Text>
                 </View>
                 <Ionicons
-                  name={expandedSection === 'badges' ? 'chevron-up' : 'chevron-down'}
+                  name={expandedSection === 'ranks' ? 'chevron-up' : 'chevron-down'}
                   size={22}
                   color={theme.colors.textLight}
                 />
               </View>
-              {expandedSection === 'badges' && (
+              {expandedSection === 'ranks' && (
                 <View style={styles.expandableContent}>
                   <Text style={styles.expandableText}>
-                    <Text style={styles.bold}>Visit Milestones:</Text>{'\n'}
-                    10 → 25 → 50 → 100 → 200 → 250 → 350 → 500{'\n\n'}
-                    <Text style={styles.bold}>Points Milestones:</Text>{'\n'}
-                    100 → 500 → 1,000 → 5,000 pts{'\n\n'}
-                    <Text style={styles.bold}>Social Badges:</Text>{'\n'}
-                    5 → 10 → 25 friends{'\n\n'}
-                    <Text style={styles.bold}>Country Complete:</Text>{'\n'}
-                    Visit all landmarks in a country{'\n\n'}
-                    Badges are awarded automatically!
+                    <Text style={styles.bold}>8 Ranks to Climb:</Text>{'\n\n'}
+                    Newcomer (0-199 pts){'\n'}
+                    Wanderer (200-749 pts){'\n'}
+                    Explorer (750-1,999 pts){'\n'}
+                    Adventurer (2,000-4,499 pts){'\n'}
+                    Trailblazer (4,500-8,499 pts){'\n'}
+                    Globetrotter (8,500-13,999 pts){'\n'}
+                    Legend (14,000-17,999 pts){'\n'}
+                    Titan (18,000+ pts){'\n\n'}
+                    Ranks update automatically as you earn points!
                   </Text>
                 </View>
               )}

@@ -33,11 +33,11 @@ class UserPublic(BaseModel):
     bio: Optional[str] = None
     location: Optional[str] = None
     banner_image: Optional[str] = None
-    featured_badges: Optional[List[str]] = None
     is_premium: bool = False
     subscription_tier: str = "free"
     default_privacy: str = "public"
     role: str = "user"
+    has_password: bool = True
 
 
 class ProfileUpdate(BaseModel):
@@ -47,7 +47,6 @@ class ProfileUpdate(BaseModel):
     bio: Optional[str] = None
     location: Optional[str] = None
     banner_image: Optional[str] = None
-    featured_badges: Optional[List[str]] = None
 
 
 class RegisterRequest(BaseModel):

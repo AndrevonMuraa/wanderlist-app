@@ -114,7 +114,7 @@ export default function NotificationSettingsScreen() {
           </TouchableOpacity>
         )}
 
-        {/* Badges */}
+        {/* Rank Progress */}
         <View style={[styles.section, { backgroundColor: colors.surface }]}>
           <View style={styles.sectionHeader}>
             <View style={[styles.iconContainer, { backgroundColor: '#fbbf2420' }]}>
@@ -122,10 +122,10 @@ export default function NotificationSettingsScreen() {
             </View>
             <View style={styles.sectionHeaderText}>
               <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                Badge Alerts
+                Rank Alerts
               </Text>
               <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
-                Badge unlocks & milestones
+                Rank ups & milestones
               </Text>
             </View>
             <Switch

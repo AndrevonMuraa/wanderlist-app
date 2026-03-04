@@ -12,6 +12,7 @@ interface User {
   is_premium: boolean;
   subscription_tier?: string;
   role?: string;
+  has_password?: boolean;
 }
 
 interface AuthContextType {

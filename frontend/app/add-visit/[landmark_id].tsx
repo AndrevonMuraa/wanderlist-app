@@ -17,7 +17,7 @@ import CelebrationEffect from '../../components/CelebrationEffect';
 import { checkLevelUp } from '../../utils/rankSystem';
 import UniversalHeader from '../../components/UniversalHeader';
 import { trackVisitForReview, maybePromptForReview } from '../../utils/appReview';
-import { sendAchievementNotification } from '../../utils/notifications';
+
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
@@ -183,11 +183,6 @@ export default function AddVisitScreen() {
         celebType = 'milestone';
       }
 
-      // Add badge info if available
-      if (result.newly_awarded_badges && result.newly_awarded_badges.length > 0) {
-        celebrationMessage += `\n\nNew badge unlocked: ${result.newly_awarded_badges[0].name}!`;
-      }
-      
       // Add rank up mention even if there's a country/continent completion
       if (rankedUp && newRank && (result.country_completed || result.continent_completed)) {
         celebrationMessage += `\n\nBONUS: You also ranked up to ${newRank.name}!`;
@@ -201,16 +196,10 @@ export default function AddVisitScreen() {
 
       // Track visit for app review prompt
       await trackVisitForReview();
-      
-      // Send notifications for badges
-      if (result.newly_awarded_badges && result.newly_awarded_badges.length > 0) {
-        const badge = result.newly_awarded_badges[0];
-        await sendAchievementNotification(badge.name, badge.icon || '🏆');
-      }
 
       // Show success message
       Alert.alert(
-        shouldCelebrate ? '🎉 BADGE UNLOCKED!' : '🎉 Visit Recorded!',
+        shouldCelebrate ? '🎉 RANK UP!' : '🎉 Visit Recorded!',
         celebrationMessage,
         [
           {

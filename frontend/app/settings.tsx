@@ -402,21 +402,25 @@ export default function SettingsScreen() {
               </>
             )}
             
-            <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
-            
-            <TouchableOpacity 
-              style={styles.accountItem}
-              onPress={handleChangePassword}
-              activeOpacity={0.7}
-            >
-              <View style={styles.settingItemLeft}>
-                <View style={[styles.settingIcon, { backgroundColor: 'rgba(241, 196, 15, 0.1)' }]}>
-                  <Ionicons name="key-outline" size={18} color="#f1c40f" />
-                </View>
-                <Text style={[styles.accountLabel, { color: colors.text }]}>{t('settings.changePassword')}</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
-            </TouchableOpacity>
+            {user?.has_password !== false && (
+              <>
+                <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
+                
+                <TouchableOpacity 
+                  style={styles.accountItem}
+                  onPress={handleChangePassword}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.settingItemLeft}>
+                    <View style={[styles.settingIcon, { backgroundColor: 'rgba(241, 196, 15, 0.1)' }]}>
+                      <Ionicons name="key-outline" size={18} color="#f1c40f" />
+                    </View>
+                    <Text style={[styles.accountLabel, { color: colors.text }]}>{t('settings.changePassword')}</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
+                </TouchableOpacity>
+              </>
+            )}
             
             <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
             
