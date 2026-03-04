@@ -130,6 +130,14 @@ All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) Ne
   3. `photos` field was missing from the `Visit` TypeScript interface → Added to interface
   4. `badgeMap` object was recreated on every render inside `getNextMilestone()` → Extracted to module-level constants (`MILESTONE_BADGE_MAP`, `MILESTONES`)
 
+### Session Mar 2026 - Multi-Bug Fix & Performance (Build 58)
+- **Backend /api/countries performance fix**: Replaced N+1 query pattern (67 separate DB queries) with single aggregation pipeline (2 queries). Response time reduced from potential 3-13s to ~120ms on Atlas.
+- **About page "14,500+" stat box**: Fixed text wrapping by adjusting stat item padding
+- **About page Key Features updated**: Removed "Photo Collection" and "NEW" tags, added "Landmark Visits" and "Explore Continents" features
+- **About page "Start Exploring"**: Navigation already correctly uses `/(tabs)/explore` for tab bar visibility
+- **Edit Profile page**: "Name" → "Username", removed "Featured Badges" section, moved "Save" button from header to page content as prominent styled button
+- **Social page Messages gradient**: Fixed grey gradient for free users → always uses colorful theme gradient (lock icon still communicates pro-only status)
+
 ### Session Mar 2026 - Comprehensive Code Audit & Bug Fixes
 - **P0 CRITICAL: Points Summary page fixed** - Was completely broken (GET to PUT-only /api/auth/profile returned 405). Now uses /api/stats with correct field mapping.
 - **P0 CRITICAL: Continents stat corrected** - Journey page showed "/7" but app only has 5 continents. Fixed to "/5".
