@@ -337,6 +337,7 @@ const styles = StyleSheet.create({
     margin: theme.spacing.md,
     padding: theme.spacing.lg,
     borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
   infoRow: {
