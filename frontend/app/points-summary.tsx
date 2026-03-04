@@ -27,6 +27,7 @@ interface UserStats {
 
 export default function PointsSummary() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
 
