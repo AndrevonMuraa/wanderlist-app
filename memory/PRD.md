@@ -138,6 +138,12 @@ All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) Ne
 - **Edit Profile page**: "Name" → "Username", removed "Featured Badges" section, moved "Save" button from header to page content as prominent styled button
 - **Social page Messages gradient**: Fixed grey gradient for free users → always uses colorful theme gradient (lock icon still communicates pro-only status)
 
+### Session Mar 2026 - Client-Side API Caching with Smart Invalidation
+- **Cache utility created** (`utils/apiCache.ts`): In-memory cache with 5-minute TTL, group invalidation, and `cachedFetch` helper
+- **Cached endpoints**: `/api/countries`, `/api/continent-stats`, `/api/progress`, `/api/stats`, `/api/achievements`, `/api/country-visits`
+- **Cache invalidation on visit creation**: All 3 visit flows (landmark, country, custom) call `invalidateCacheGroup('visit')` after successful POST, clearing all related caches instantly
+- **Result**: Navigation between pages uses cached data (instant). After registering a visit, all stats refresh immediately with fresh data
+
 ### Session Mar 2026 - Comprehensive Code Audit & Bug Fixes
 - **P0 CRITICAL: Points Summary page fixed** - Was completely broken (GET to PUT-only /api/auth/profile returned 405). Now uses /api/stats with correct field mapping.
 - **P0 CRITICAL: Continents stat corrected** - Journey page showed "/7" but app only has 5 continents. Fixed to "/5".
