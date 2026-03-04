@@ -7,6 +7,27 @@ from datetime import datetime, timezone
 from utils.db import db
 
 
+# Rank thresholds matching frontend rankSystem.ts
+RANK_THRESHOLDS = [
+    {"name": "Newcomer", "min_points": 0},
+    {"name": "Wanderer", "min_points": 200},
+    {"name": "Explorer", "min_points": 750},
+    {"name": "Adventurer", "min_points": 2000},
+    {"name": "Trailblazer", "min_points": 4500},
+    {"name": "Globetrotter", "min_points": 8500},
+    {"name": "Legend", "min_points": 14000},
+    {"name": "Titan", "min_points": 18000},
+]
+
+def get_rank_for_points(points: int) -> str:
+    rank_name = RANK_THRESHOLDS[0]["name"]
+    for rank in RANK_THRESHOLDS:
+        if points >= rank["min_points"]:
+            rank_name = rank["name"]
+    return rank_name
+
+
+
 async def create_notification(user_id: str, notif_type: str, title: str, message: str,
                               related_id: Optional[str] = None, related_user_id: Optional[str] = None,
                               related_user_name: Optional[str] = None):

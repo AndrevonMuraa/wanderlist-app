@@ -253,6 +253,17 @@ async def send_friend_request(data: FriendRequest, current_user: User = Depends(
     }
     
     await db.friends.insert_one(friendship)
+    
+    # Notify the receiver about the friend request
+    await create_notification(
+        user_id=friend["user_id"],
+        notif_type="friend_request",
+        title="New Friend Request",
+        message=f"{current_user.name} wants to be your friend",
+        related_user_id=current_user.user_id,
+        related_user_name=current_user.name
+    )
+    
     return {"message": "Friend request sent"}
 
 @router.post("/friends/{friendship_id}/accept")
@@ -272,6 +283,16 @@ async def accept_friend_request(friendship_id: str, current_user: User = Depends
     # Check for social badges for both users
     await check_and_award_badges(current_user.user_id)
     await check_and_award_badges(friendship["user_id"])
+    
+    # Notify the sender that their request was accepted
+    await create_notification(
+        user_id=friendship["user_id"],
+        notif_type="friend_accepted",
+        title="Friend Request Accepted",
+        message=f"{current_user.name} accepted your friend request",
+        related_user_id=current_user.user_id,
+        related_user_name=current_user.name
+    )
     
     return {"message": "Friend request accepted"}
 

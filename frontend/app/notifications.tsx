@@ -42,11 +42,13 @@ interface Notification {
 export default function NotificationsScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Navigate back to profile tab explicitly
+  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
+
   const handleBack = () => {
     router.push('/(tabs)/profile');
   };
@@ -80,7 +82,6 @@ export default function NotificationsScreen() {
   };
 
   const handleNotificationTap = async (notification: Notification) => {
-    // Mark as read
     if (!notification.is_read) {
       try {
         const token = await getToken();
@@ -102,10 +103,21 @@ export default function NotificationsScreen() {
     }
 
     // Navigate based on type
-    if (notification.related_id) {
-      if (notification.type === 'like' || notification.type === 'comment' || notification.type === 'reply') {
-        router.push(`/visit-detail/${notification.related_id}`);
-      }
+    switch (notification.type) {
+      case 'like':
+      case 'comment':
+      case 'reply':
+        if (notification.related_id) {
+          router.push(`/visit-detail/${notification.related_id}`);
+        }
+        break;
+      case 'friend_request':
+      case 'friend_accepted':
+        router.push('/friends');
+        break;
+      case 'rank_up':
+        router.push('/(tabs)/journey');
+        break;
     }
   };
 
@@ -133,12 +145,10 @@ export default function NotificationsScreen() {
         return { name: 'chatbubbles', color: theme.colors.primary };
       case 'friend_request':
         return { name: 'person-add', color: theme.colors.success };
-      case 'achievement':
-        return { name: 'trophy', color: '#FFD700' };
-      case 'streak_milestone':
-        return { name: 'trophy', color: '#FFD700' };
+      case 'friend_accepted':
+        return { name: 'people', color: theme.colors.success };
       case 'rank_up':
-        return { name: 'star', color: '#FFD700' };
+        return { name: 'trophy', color: '#FFD700' };
       default:
         return { name: 'notifications', color: theme.colors.textSecondary };
     }
@@ -156,9 +166,33 @@ export default function NotificationsScreen() {
     return date.toLocaleDateString();
   };
 
+  const unreadCount = notifications.filter(n => !n.is_read).length;
+
   if (loading) {
     return (
       <View style={styles.container}>
+        <LinearGradient
+          colors={gradients.oceanToSand}
+          start={gradients.horizontal.start}
+          end={gradients.horizontal.end}
+          style={[styles.header, { paddingTop: topPadding }]}
+        >
+          <View style={styles.headerRow}>
+            <View style={styles.titleWithBack}>
+              <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+                <Ionicons name="arrow-back" size={22} color="#fff" />
+              </TouchableOpacity>
+              <Text style={styles.headerTitle}>{t('notifications.title')}</Text>
+            </View>
+            <TouchableOpacity 
+              style={styles.brandingContainer}
+              onPress={() => router.push('/about')}
+              activeOpacity={0.7}
+            >
+              <HeaderBranding size={18} textColor="#2A2A2A" />
+            </TouchableOpacity>
+          </View>
+        </LinearGradient>
         <View style={styles.centerContainer}>
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
@@ -166,15 +200,9 @@ export default function NotificationsScreen() {
     );
   }
 
-  const unreadCount = notifications.filter(n => !n.is_read).length;
-  
-  // Get safe area insets for proper header padding
-  const insets = useSafeAreaInsets();
-  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
-
   return (
     <View style={styles.container}>
-      {/* Sticky Header */}
+      {/* Header */}
       <LinearGradient
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
@@ -193,13 +221,25 @@ export default function NotificationsScreen() {
               </View>
             )}
           </View>
-          <TouchableOpacity 
-            style={styles.brandingContainer}
-            onPress={() => router.push('/about')}
-            activeOpacity={0.7}
-          >
-            <HeaderBranding size={18} textColor="#2A2A2A" />
-          </TouchableOpacity>
+          <View style={styles.headerRight}>
+            {unreadCount > 0 && (
+              <TouchableOpacity
+                onPress={handleMarkAllRead}
+                style={styles.markAllButton}
+                activeOpacity={0.7}
+                data-testid="mark-all-read-btn"
+              >
+                <Ionicons name="checkmark-done" size={22} color="#fff" />
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity 
+              style={styles.brandingContainer}
+              onPress={() => router.push('/about')}
+              activeOpacity={0.7}
+            >
+              <HeaderBranding size={18} textColor="#2A2A2A" />
+            </TouchableOpacity>
+          </View>
         </View>
       </LinearGradient>
 
@@ -218,6 +258,7 @@ export default function NotificationsScreen() {
                 key={notification.notification_id}
                 activeOpacity={0.7}
                 onPress={() => handleNotificationTap(notification)}
+                data-testid={`notification-${notification.notification_id}`}
               >
                 <Surface
                   style={[
@@ -306,15 +347,23 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#fff',
   },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
   brandingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
   },
-  brandingTextDark: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#2A2A2A',
+  markAllButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   unreadBadge: {
     backgroundColor: '#FF6B6B',
@@ -329,19 +378,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   scrollView: {
-  },
-  headerCenter: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: theme.spacing.md,
-    gap: theme.spacing.sm,
-  },
-  markAllButton: {
-    padding: theme.spacing.xs,
-  },
-  headerRight: {
-    width: 40,
   },
   notificationCard: {
     flexDirection: 'row',

@@ -9,7 +9,7 @@ from datetime import datetime, timezone, timedelta
 from utils.db import db
 from utils.auth import get_current_user, is_user_pro, get_user_limits
 from models.all import User, Visit, VisitCreate
-from utils.helpers import check_and_award_badges
+from utils.helpers import check_and_award_badges, create_notification, get_rank_for_points
 
 
 router = APIRouter()
@@ -153,6 +153,11 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     }
     
     await db.visits.insert_one(visit)
+    
+    # Get user's current points BEFORE awarding (for rank-up check)
+    user_doc_before = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0, "points": 1})
+    old_points = user_doc_before.get("points", 0) if user_doc_before else 0
+    old_rank = get_rank_for_points(old_points)
     
     # Update user document - award points
     # Points are always awarded to personal total
@@ -412,10 +417,26 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     # Check and award badges
     newly_awarded_badges = await check_and_award_badges(current_user.user_id)
     
-    # Create visit response with badge info and completion flags
+    # Check for rank-up notification
+    user_doc_after = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0, "points": 1})
+    new_points = user_doc_after.get("points", 0) if user_doc_after else 0
+    new_rank = get_rank_for_points(new_points)
+    
+    ranked_up = new_rank != old_rank
+    if ranked_up:
+        await create_notification(
+            user_id=current_user.user_id,
+            notif_type="rank_up",
+            title="Rank Up!",
+            message=f"Congratulations! You've reached the rank of {new_rank}!",
+        )
+    
+    # Create visit response with completion flags
     visit_response = Visit(**visit)
     visit_dict = visit_response.dict()
-    visit_dict["newly_awarded_badges"] = newly_awarded_badges
+    visit_dict["ranked_up"] = ranked_up
+    if ranked_up:
+        visit_dict["new_rank"] = new_rank
     visit_dict["country_completed"] = country_completed
     visit_dict["continent_completed"] = continent_completed
     if country_completed:
