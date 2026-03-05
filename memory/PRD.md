@@ -201,6 +201,7 @@ All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) Ne
 - **`/api/visits` optimized**: Replaced two-step query with single aggregation pipeline using `$lookup` for landmark names. Response time: 12s+ → <0.1s.
 - **Previous session**: `/api/stats`, `/api/progress`, `/api/landmarks` already optimized with same pattern.
 - Fixed missing `get_user_limits` import in `social.py`.
+- **Pull-to-refresh with haptic feedback**: Added light haptic on pull start + success haptic on completion for Social and Notifications pages.
 - All 20 backend tests passed (iteration_25).
 
 ## Key Files Modified (Latest)

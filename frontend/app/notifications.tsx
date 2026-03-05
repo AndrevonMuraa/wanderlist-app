@@ -17,6 +17,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useTranslation } from 'react-i18next';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
+import { lightHaptic, successHaptic } from '../utils/haptics';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 const getToken = async (): Promise<string | null> => {
@@ -77,7 +78,9 @@ export default function NotificationsScreen() {
 
   const onRefresh = async () => {
     setRefreshing(true);
+    await lightHaptic();
     await loadNotifications();
+    await successHaptic();
     setRefreshing(false);
   };
 

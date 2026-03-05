@@ -21,6 +21,7 @@ import theme, { gradients } from '../../styles/theme';
 import { useAuth } from '../../contexts/AuthContext';
 import { useScrollRestore } from '../../hooks/useScrollRestore';
 import RankBadge from '../../components/RankBadge';
+import { lightHaptic, successHaptic } from '../../utils/haptics';
 import ReportModal from '../../components/ReportModal';
 import { getUserRank } from '../../utils/rankSystem';
 import { BACKEND_URL } from '../../utils/config';
@@ -93,7 +94,9 @@ export default function SocialHubScreen() {
 
   const onRefresh = async () => {
     setRefreshing(true);
+    await lightHaptic();
     await loadAllData();
+    await successHaptic();
     setRefreshing(false);
   };
 
