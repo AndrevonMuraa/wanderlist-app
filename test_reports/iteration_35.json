@@ -1,0 +1,76 @@
+{
+  "summary": "FINAL Comprehensive Test - Iteration 35 for TestFlight Build. All 35 backend API tests PASSED. Frontend screenshots captured successfully for key pages. Minor UI issue: Comment Permission section not rendering on Privacy page in web preview.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Privacy Settings Page",
+        "issue": "Comment Permission section (Who Can Comment) not rendering in Expo web preview, though code exists in privacy.tsx lines 325-384",
+        "selector": "[data-testid='comment-perm-everyone']",
+        "priority": "MEDIUM",
+        "note": "The React Native component is in the code but doesn't render on web preview - may work fine on native iOS/Android"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_final_comprehensive_iteration35.py",
+    "/app/test_reports/pytest/pytest_final_iteration35.xml"
+  ],
+  "action_items": [
+    "VERIFY: Comment Permission section renders on actual iOS/Android device (may be web preview limitation)",
+    "Check if 'View All Visits' link appears on user profile page when visiting other users' profiles"
+  ],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_final_comprehensive_iteration35.py"
+  ],
+  "success_rate": {
+    "backend": "100% (35/35 passed)",
+    "frontend": "95% (all pages load, minor Comment Permission rendering issue on web)"
+  },
+  "test_credentials": {
+    "user1_pro": "test@wandermark.app / Test1234! / user_dd46a314f120",
+    "user2_free": "test2@wandermark.app / Test1234! / user_ff9a3f370f6b"
+  },
+  "seed_data_creation": "No new seed data created. Existing test users used.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All backend APIs thoroughly tested and passing. Comment Permission section code exists but may only render on native apps - verify on iOS TestFlight. Social flows working: friend requests, comments, likes, feed, leaderboard all functional. Privacy controls (default privacy, per-visit privacy) working with retroactive updates.",
+  "backend_tests_passed": {
+    "auth_and_user_info": ["User1 Pro login", "User2 Free login", "Tier verification"],
+    "privacy_settings": ["Get current privacy", "Change to friends (retroactive)", "Change back to public", "Per-visit privacy override via PUT /api/visits/{id}/privacy"],
+    "comment_permission": ["Set to nobody", "Comment blocked (403)", "Set to friends", "Set back to everyone"],
+    "social_friend_flow": ["Check existing friendship", "Send friend request", "Accept friend request", "Verify friendship both sides"],
+    "user_profile_endpoint": ["comment_permission in profile", "has_diary on recent_visits", "friendship_status"],
+    "view_all_visits": ["Paginated list with total/skip/limit", "has_diary and visibility fields"],
+    "feed_endpoint": ["like_count and comments_count present"],
+    "community_feed": ["Returns public content"],
+    "leaderboard": ["Returns entries with rank and value"],
+    "social_interactions": ["Like activity", "Comment on activity"],
+    "report_system": ["Submit report for activity type"],
+    "performance_endpoints": ["visits/check/{landmark_id} lightweight", "landmarks?country_id with is_visited"],
+    "premium_tier_limits": ["Free tier config verified", "Unlimited friends for free tier"],
+    "cleanup": ["Comment permission reset"]
+  },
+  "screenshots_captured": [
+    "Login page",
+    "My Journey page with stats and progress",
+    "Explore page with continents",
+    "Europe countries list",
+    "France landmarks list with visited badges",
+    "Social/Feed page with leaderboard and community photos",
+    "User profile (Olav Strand) with recent visits",
+    "Settings page with Privacy link",
+    "Privacy Settings page (default privacy options visible)",
+    "Profile page with Pro user badge"
+  ],
+  "mocked_api": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}
