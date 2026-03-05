@@ -7,52 +7,21 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as SecureStore from 'expo-secure-store';
 import { useTranslation } from 'react-i18next';
-import theme, { gradients, spacing, borderRadius, typography } from '../styles/theme';
-import { useTheme } from '../contexts/ThemeContext';
-import { useAuth } from '../contexts/AuthContext';
-import { useOffline } from '../contexts/OfflineContext';
-import { BACKEND_URL } from '../utils/config';
-import { PersistentTabBar } from '../components/PersistentTabBar';
+import theme, { gradients, spacing, borderRadius, typography } from '../../styles/theme';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { useOffline } from '../../contexts/OfflineContext';
+import { BACKEND_URL } from '../../utils/config';
+import { PersistentTabBar } from '../../components/PersistentTabBar';
 
-import { HeaderBranding } from '../components/BrandedGlobeIcon';
+import { HeaderBranding } from '../../components/BrandedGlobeIcon';
+
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
     return localStorage.getItem('auth_token');
   }
   return await SecureStore.getItemAsync('auth_token');
 };
-
-interface PrivacyOption {
-  value: 'public' | 'friends' | 'private';
-  icon: keyof typeof Ionicons.glyphMap;
-  label: string;
-  description: string;
-  color: string;
-}
-
-const PRIVACY_OPTIONS: PrivacyOption[] = [
-  {
-    value: 'public',
-    icon: 'globe-outline',
-    label: 'Public',
-    description: 'Your visits, photos and diary entries are visible to everyone',
-    color: '#27ae60',
-  },
-  {
-    value: 'friends',
-    icon: 'people-outline',
-    label: 'Friends Only',
-    description: 'Only your friends can see your visits and photos',
-    color: '#3498db',
-  },
-  {
-    value: 'private',
-    icon: 'lock-closed-outline',
-    label: 'Private',
-    description: 'Only you can see your visits — nothing shared',
-    color: '#e74c3c',
-  },
-];
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -62,7 +31,6 @@ export default function SettingsScreen() {
   const { user } = useAuth();
   const { clearCache, isOnline, pendingVisitsCount, lastSyncTime } = useOffline();
   const [defaultPrivacy, setDefaultPrivacy] = useState<'public' | 'friends' | 'private'>('public');
-  const [pushNotifications, setPushNotifications] = useState(true);
   
   // Check if user is admin or moderator
   const isAdmin = user?.role === 'admin' || user?.role === 'moderator';
@@ -144,31 +112,6 @@ export default function SettingsScreen() {
     );
   };
   
-  // Dynamic privacy options with translations
-  const privacyOptions: PrivacyOption[] = [
-    {
-      value: 'public',
-      icon: 'globe-outline',
-      label: t('settings.public'),
-      description: t('settings.publicDesc'),
-      color: '#27ae60',
-    },
-    {
-      value: 'friends',
-      icon: 'people-outline',
-      label: t('settings.friendsOnly'),
-      description: t('settings.friendsOnlyDesc'),
-      color: '#3498db',
-    },
-    {
-      value: 'private',
-      icon: 'lock-closed-outline',
-      label: t('settings.private'),
-      description: t('settings.privateDesc'),
-      color: '#e74c3c',
-    },
-  ];
-
   // Navigate back to profile explicitly
   const handleBack = () => {
     router.push('/(tabs)/profile');
@@ -185,59 +128,11 @@ export default function SettingsScreen() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
-        const user = await response.json();
-        setDefaultPrivacy(user.default_privacy || 'public');
+        const data = await response.json();
+        setDefaultPrivacy(data.default_privacy || 'public');
       }
     } catch (error) {
       console.error('Error loading settings:', error);
-    }
-  };
-
-  const updatePrivacy = async (value: 'public' | 'friends' | 'private') => {
-    const showWarningAndUpdate = async () => {
-      setDefaultPrivacy(value);
-      try {
-        const token = await getToken();
-        const response = await fetch(`${BACKEND_URL}/api/auth/privacy`, {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ privacy: value }),
-        });
-        
-        if (response.ok) {
-          Alert.alert('Updated', `Default privacy set to ${value}`);
-        } else {
-          Alert.alert('Error', 'Failed to update privacy setting');
-        }
-      } catch (error) {
-        console.error('Error updating privacy:', error);
-        Alert.alert('Error', 'Failed to update privacy setting');
-      }
-    };
-
-    if (value === 'friends' || value === 'private') {
-      Alert.alert(
-        'Leaderboard Impact',
-        'With this privacy setting, your visits will not earn verified points for the global leaderboard. Your total points for the friends leaderboard are not affected.\n\nIf you switch back to Public later, your verified points will be restored automatically.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Continue', onPress: showWarningAndUpdate },
-        ]
-      );
-    } else if (value === 'public' && defaultPrivacy !== 'public') {
-      Alert.alert(
-        'Welcome Back to Public!',
-        'Your verified points from photo-documented visits will now count towards the global leaderboard again.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Switch to Public', onPress: showWarningAndUpdate },
-        ]
-      );
-    } else {
-      showWarningAndUpdate();
     }
   };
 
@@ -287,50 +182,26 @@ export default function SettingsScreen() {
             </View>
           </View>
           
-          <View style={styles.privacyOptions}>
-            {privacyOptions.map((option) => {
-              const isSelected = defaultPrivacy === option.value;
-              return (
-                <TouchableOpacity
-                  key={option.value}
-                  style={[
-                    styles.privacyOption,
-                    { backgroundColor: colors.background },
-                    isSelected && [styles.privacyOptionSelected, { backgroundColor: colors.surface }],
-                    isSelected && { borderColor: option.color }
-                  ]}
-                  onPress={() => updatePrivacy(option.value)}
-                  activeOpacity={0.7}
-                >
-                  <View style={[
-                    styles.privacyIconCircle,
-                    { backgroundColor: colors.background },
-                    isSelected && { backgroundColor: option.color }
-                  ]}>
-                    <Ionicons
-                      name={option.icon}
-                      size={20}
-                      color={isSelected ? '#fff' : option.color}
-                    />
-                  </View>
-                  <View style={styles.privacyContent}>
-                    <Text style={[
-                      styles.privacyLabel,
-                      { color: colors.text },
-                      isSelected && { color: option.color, fontWeight: '700' }
-                    ]}>
-                      {option.label}
-                    </Text>
-                    <Text style={[styles.privacyDescription, { color: colors.textSecondary }]}>{option.description}</Text>
-                  </View>
-                  {isSelected && (
-                    <View style={[styles.checkCircle, { backgroundColor: option.color }]}>
-                      <Ionicons name="checkmark" size={14} color="#fff" />
-                    </View>
-                  )}
-                </TouchableOpacity>
-              );
-            })}
+          <View style={[styles.settingsList, { backgroundColor: colors.background }]}>
+            <TouchableOpacity
+              style={styles.settingItem}
+              onPress={() => router.push('/settings/privacy')}
+              activeOpacity={0.7}
+              data-testid="privacy-settings-link"
+            >
+              <View style={styles.settingItemLeft}>
+                <View style={[styles.settingIcon, { backgroundColor: 'rgba(39, 174, 96, 0.1)' }]}>
+                  <Ionicons name="shield-checkmark" size={18} color="#27ae60" />
+                </View>
+                <View style={styles.settingTexts}>
+                  <Text style={[styles.settingLabel, { color: colors.text }]}>Privacy & Visibility</Text>
+                  <Text style={[styles.settingDescription, { color: colors.textSecondary }]}>
+                    Default: {defaultPrivacy === 'public' ? 'Public' : defaultPrivacy === 'friends' ? 'Friends Only' : 'Private'}
+                  </Text>
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -643,55 +514,6 @@ const styles = StyleSheet.create({
   sectionSubtitle: {
     fontSize: 13,
     color: theme.colors.textSecondary,
-  },
-  privacyOptions: {
-    gap: 10,
-  },
-  privacyOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 14,
-    borderRadius: 14,
-    backgroundColor: theme.colors.background,
-    borderWidth: 2,
-    borderColor: 'transparent',
-  },
-  privacyOptionSelected: {
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  privacyIconCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: theme.colors.background,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  privacyContent: {
-    flex: 1,
-  },
-  privacyLabel: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: theme.colors.text,
-    marginBottom: 2,
-  },
-  privacyDescription: {
-    fontSize: 12,
-    color: theme.colors.textSecondary,
-  },
-  checkCircle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   settingsList: {
     backgroundColor: theme.colors.background,

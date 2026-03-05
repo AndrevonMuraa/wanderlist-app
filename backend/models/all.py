@@ -18,6 +18,7 @@ class User(BaseModel):
     current_streak: int = 0
     longest_streak: int = 0
     last_visit_date: Optional[str] = None
+    default_privacy: str = "public"
     role: str = "user"
     is_banned: bool = False
     banned_at: Optional[datetime] = None
@@ -143,7 +144,6 @@ class Visit(BaseModel):
     comments: Optional[str] = None
     visit_location: Optional[dict] = None
     diary_notes: Optional[str] = None
-    travel_tips: Optional[List[str]] = []
     status: str = "accepted"
     verified: bool = True
     visibility: str = "public"
@@ -158,8 +158,7 @@ class VisitCreate(BaseModel):
     comments: Optional[str] = None
     visit_location: Optional[dict] = None
     diary_notes: Optional[str] = None
-    travel_tips: Optional[List[str]] = []
-    visibility: Optional[str] = "public"
+    visibility: Optional[str] = None
     visited_at: Optional[datetime] = None
     share_diary: Optional[bool] = True
 

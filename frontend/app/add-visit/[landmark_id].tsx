@@ -34,6 +34,7 @@ export default function AddVisitScreen() {
   const [landmark, setLandmark] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [userTier, setUserTier] = useState('free');
+  const [defaultPrivacy, setDefaultPrivacy] = useState<'public' | 'friends' | 'private'>('public');
   const [modalVisible, setModalVisible] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [celebrationType, setCelebrationType] = useState<'landmark' | 'country' | 'continent' | 'milestone'>('landmark');
@@ -84,7 +85,8 @@ export default function AddVisitScreen() {
       if (response.ok) {
         const data = await response.json();
         setUserTier(data.subscription_tier || 'free');
-        setUserPoints(data.points || 0); // Track user points for level-up detection
+        setUserPoints(data.points || 0);
+        setDefaultPrivacy(data.default_privacy || 'public');
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -95,6 +97,7 @@ export default function AddVisitScreen() {
     photos: string[];
     diary_notes: string;
     share_diary: boolean;
+    visibility?: string;
   }) => {
     try {
       const token = await getToken();
@@ -112,6 +115,7 @@ export default function AddVisitScreen() {
           photo_base64: visitData.photos.length > 0 ? visitData.photos[0] : null, // First photo as main
           diary_notes: visitData.diary_notes,
           share_diary: visitData.share_diary,
+          visibility: visitData.visibility,
           comments: '', // Legacy field
         }),
       });
@@ -248,6 +252,7 @@ export default function AddVisitScreen() {
           landmarkId={landmark_id as string}
           onSubmit={handleSubmit}
           isPremium={userTier === 'premium'}
+          defaultPrivacy={defaultPrivacy}
         />
       )}
 

@@ -29,9 +29,17 @@ interface AddVisitModalProps {
     photos: string[];
     diary_notes: string;
     share_diary: boolean;
+    visibility?: string;
   }) => void;
   isPremium: boolean;
+  defaultPrivacy?: 'public' | 'friends' | 'private';
 }
+
+const VISIBILITY_OPTIONS = [
+  { value: 'public' as const, icon: 'globe-outline' as const, label: 'Public' },
+  { value: 'friends' as const, icon: 'people-outline' as const, label: 'Friends Only' },
+  { value: 'private' as const, icon: 'lock-closed-outline' as const, label: 'Private' },
+];
 
 export default function AddVisitModal({
   visible,
@@ -39,11 +47,12 @@ export default function AddVisitModal({
   landmarkName,
   onSubmit,
   isPremium,
+  defaultPrivacy = 'public',
 }: AddVisitModalProps) {
   const [photos, setPhotos] = useState<string[]>([]);
   const [diaryText, setDiaryText] = useState('');
   const [shareDiary, setShareDiary] = useState(true);
-  const [tipsText, setTipsText] = useState('');
+  const [visibility, setVisibility] = useState<'public' | 'friends' | 'private'>(defaultPrivacy);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -100,14 +109,6 @@ export default function AddVisitModal({
     setPhotos(photos.filter((_, i) => i !== index));
   };
 
-  const parseTips = (): string[] => {
-    return tipsText
-      .split('\n')
-      .map((tip) => tip.trim().replace(/^[•\-\*]\s*/, ''))
-      .filter((tip) => tip.length > 0)
-      .slice(0, 5);
-  };
-
   const handleSubmit = async () => {
     // Allow submitting with no content (unverified visit for total points)
     // Show info if no photo about verified points
@@ -137,14 +138,14 @@ export default function AddVisitModal({
       await onSubmit({
         photos,
         diary_notes: diaryText,
-        travel_tips: isPremium ? parseTips() : [],
         share_diary: shareDiary,
+        visibility,
       });
       // Reset form
       setPhotos([]);
       setDiaryText('');
       setShareDiary(true);
-      setTipsText('');
+      setVisibility(defaultPrivacy);
     } catch (error) {
       console.error('Error submitting visit:', error);
     } finally {
@@ -271,28 +272,33 @@ export default function AddVisitModal({
             )}
           </View>
 
-          {/* Travel Tips Section (Premium only) */}
-          {isPremium && (
-            <View style={styles.section}>
-              <View style={styles.sectionTitleRow}>
-                <Text style={styles.sectionTitle}>Travel Tips (Optional)</Text>
-                <View style={styles.premiumBadge}>
-                  <Ionicons name="star" size={12} color="#FFD700" />
-                  <Text style={styles.premiumBadgeText}>Premium</Text>
-                </View>
-              </View>
-              <TextInput
-                style={styles.tipsInput}
-                placeholder="• Best time to visit&#10;• Must-try local food&#10;• Hidden gems nearby"
-                placeholderTextColor={theme.colors.textLight}
-                value={tipsText}
-                onChangeText={setTipsText}
-                multiline
-                numberOfLines={4}
-              />
-              <Text style={styles.tipsHint}>One tip per line (up to 5 tips)</Text>
+          {/* Visibility Section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Who Can See This Visit?</Text>
+            <View style={styles.visibilityRow} data-testid="visibility-selector">
+              {VISIBILITY_OPTIONS.map((opt) => {
+                const isActive = visibility === opt.value;
+                return (
+                  <TouchableOpacity
+                    key={opt.value}
+                    style={[styles.visibilityChip, isActive && styles.visibilityChipActive]}
+                    onPress={() => setVisibility(opt.value)}
+                    activeOpacity={0.7}
+                    data-testid={`visibility-option-${opt.value}`}
+                  >
+                    <Ionicons
+                      name={opt.icon}
+                      size={16}
+                      color={isActive ? '#fff' : theme.colors.textSecondary}
+                    />
+                    <Text style={[styles.visibilityChipText, isActive && styles.visibilityChipTextActive]}>
+                      {opt.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
             </View>
-          )}
+          </View>
 
           {/* Submit Button */}
           <TouchableOpacity
@@ -507,21 +513,38 @@ const styles = StyleSheet.create({
   toggleThumbActive: {
     alignSelf: 'flex-end',
   },
-  tipsInput: {
-    backgroundColor: theme.colors.backgroundSecondary,
-    borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.md,
-    fontSize: 15,
-    color: theme.colors.text,
-    minHeight: 100,
-    textAlignVertical: 'top',
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-  },
   tipsHint: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginTop: theme.spacing.xs,
+  },
+  visibilityRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  visibilityChip: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 10,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.backgroundSecondary,
+  },
+  visibilityChipActive: {
+    borderColor: theme.colors.primary,
+    backgroundColor: theme.colors.primary,
+  },
+  visibilityChipText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  visibilityChipTextActive: {
+    color: '#fff',
   },
   premiumBadge: {
     flexDirection: 'row',

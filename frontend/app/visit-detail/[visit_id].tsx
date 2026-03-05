@@ -17,6 +17,12 @@ import UniversalHeader from '../../components/UniversalHeader';
 
 const { width } = Dimensions.get('window');
 
+const VISIBILITY_META: Record<string, { icon: string; label: string; color: string }> = {
+  public: { icon: 'globe-outline', label: 'Public', color: '#27ae60' },
+  friends: { icon: 'people-outline', label: 'Friends Only', color: '#3498db' },
+  private: { icon: 'lock-closed-outline', label: 'Private', color: '#e74c3c' },
+};
+
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
     return localStorage.getItem('auth_token');
@@ -33,11 +39,11 @@ interface VisitDetail {
   photo_base64?: string;
   photos?: string[];
   diary_notes?: string;
-  travel_tips?: string[];
   comments?: string;
   points_earned: number;
   visited_at: string;
   verified: boolean;
+  visibility?: string;
 }
 
 export default function VisitDetailScreen() {
@@ -46,6 +52,7 @@ export default function VisitDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState(0);
   const [showGallery, setShowGallery] = useState(false);
+  const [currentVisibility, setCurrentVisibility] = useState<string>('public');
   const router = useRouter();
 
   useEffect(() => {
@@ -62,6 +69,7 @@ export default function VisitDetailScreen() {
       if (response.ok) {
         const data = await response.json();
         setVisit(data);
+        setCurrentVisibility(data.visibility || 'public');
       }
     } catch (error) {
       console.error('Error fetching visit:', error);
@@ -77,6 +85,27 @@ export default function VisitDetailScreen() {
         visit.country_name || 'Country',
         visit.points_earned
       );
+    }
+  };
+
+  const handleChangeVisibility = async (newVisibility: string) => {
+    if (newVisibility === currentVisibility) return;
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/visits/${visit_id}/privacy`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ visibility: newVisibility }),
+      });
+      if (response.ok) {
+        setCurrentVisibility(newVisibility);
+        await lightHaptic();
+      }
+    } catch (error) {
+      console.error('Error updating visibility:', error);
     }
   };
 
@@ -208,21 +237,32 @@ export default function VisitDetailScreen() {
           </View>
         )}
 
-        {/* Travel Tips */}
-        {visit.travel_tips && visit.travel_tips.length > 0 && (
-          <View style={styles.tipsCard}>
-            <View style={styles.sectionHeader}>
-              <Ionicons name="bulb" size={24} color={theme.colors.accent} />
-              <Text style={styles.sectionTitle}>Travel Tips</Text>
-            </View>
-            {visit.travel_tips.map((tip, index) => (
-              <View key={index} style={styles.tipItem}>
-                <Ionicons name="checkmark-circle" size={16} color={theme.colors.primary} />
-                <Text style={styles.tipText}>{tip}</Text>
-              </View>
-            ))}
+        {/* Visibility Control */}
+        <View style={styles.visibilityCard} data-testid="visit-visibility-section">
+          <View style={styles.sectionHeader}>
+            <Ionicons name="shield-checkmark" size={24} color={theme.colors.primary} />
+            <Text style={styles.sectionTitle}>Visibility</Text>
           </View>
-        )}
+          <View style={styles.visibilityRow}>
+            {Object.entries(VISIBILITY_META).map(([key, meta]) => {
+              const isActive = currentVisibility === key;
+              return (
+                <TouchableOpacity
+                  key={key}
+                  style={[styles.visChip, isActive && { borderColor: meta.color, backgroundColor: meta.color + '15' }]}
+                  onPress={() => handleChangeVisibility(key)}
+                  activeOpacity={0.7}
+                  data-testid={`visit-visibility-${key}`}
+                >
+                  <Ionicons name={meta.icon as any} size={16} color={isActive ? meta.color : theme.colors.textLight} />
+                  <Text style={[styles.visChipText, isActive && { color: meta.color, fontWeight: '700' }]}>
+                    {meta.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
 
         {/* Comments */}
         {visit.comments && (
@@ -367,13 +407,34 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
-  tipsCard: {
+  visibilityCard: {
     margin: theme.spacing.md,
     marginTop: 0,
     padding: theme.spacing.lg,
     borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
+  },
+  visibilityRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  visChip: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.background,
+  },
+  visChipText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: theme.colors.textLight,
   },
   commentsCard: {
     margin: theme.spacing.md,
@@ -397,18 +458,6 @@ const styles = StyleSheet.create({
   diaryText: {
     fontSize: 15,
     lineHeight: 24,
-    color: theme.colors.text,
-  },
-  tipItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: theme.spacing.sm,
-    marginBottom: theme.spacing.sm,
-  },
-  tipText: {
-    flex: 1,
-    fontSize: 14,
-    lineHeight: 22,
     color: theme.colors.text,
   },
   commentsText: {
