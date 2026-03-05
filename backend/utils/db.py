@@ -33,12 +33,15 @@ async def create_indexes():
         await db.users.create_index("default_privacy")
         await db.users.create_index([("leaderboard_points", -1)])
         await db.users.create_index([("points", -1)])
+        await db.users.create_index("username")
         
         # Visit lookups
         await db.visits.create_index("user_id")
         await db.visits.create_index("landmark_id")
         await db.visits.create_index("visit_id", unique=True)
         await db.visits.create_index([("user_id", 1), ("landmark_id", 1)], unique=True)
+        await db.visits.create_index("visibility")
+        await db.visits.create_index([("visibility", 1), ("visited_at", -1)])
         
         # Country visits
         await db.country_visits.create_index("user_id")
@@ -54,12 +57,30 @@ async def create_indexes():
         # Landmarks
         await db.landmarks.create_index("landmark_id")
         await db.landmarks.create_index("country_id")
+        await db.landmarks.create_index("continent")
+        await db.landmarks.create_index([("country_id", 1), ("category", 1)])
         
-        # Social
-        await db.friendships.create_index("user_id")
-        await db.friendships.create_index("friend_id")
+        # Social - FIXED: use db.friends (matches route code), not db.friendships
+        await db.friends.create_index("user_id")
+        await db.friends.create_index("friend_id")
+        await db.friends.create_index([("user_id", 1), ("status", 1)])
+        await db.friends.create_index([("friend_id", 1), ("status", 1)])
+        
+        # Likes & comments
         await db.likes.create_index("activity_id")
+        await db.likes.create_index([("activity_id", 1), ("user_id", 1)])
         await db.comments.create_index("activity_id")
+        
+        # Photo upvotes (was completely missing!)
+        await db.photo_upvotes.create_index("photo_id")
+        await db.photo_upvotes.create_index([("photo_id", 1), ("user_id", 1)])
+        
+        # User-created visits (was completely missing!)
+        await db.user_created_visits.create_index("user_id")
+        await db.user_created_visits.create_index([("visibility", 1), ("visited_at", -1)])
+        
+        # Notifications
+        await db.notifications.create_index([("user_id", 1), ("created_at", -1)])
         
         print("Database indexes created successfully")
     except Exception as e:

@@ -92,52 +92,68 @@ async def get_enhanced_leaderboard(
                 user_rank = idx + 1
                 
     elif category == "visits":
-        # Get visit counts
+        # Get visit counts with user info via $lookup (eliminates N+1)
         pipeline = [
             {"$match": {**time_filter, **({"user_id": {"$in": user_filter}} if user_filter else {})}},
             {"$group": {"_id": "$user_id", "visit_count": {"$sum": 1}}},
             {"$sort": {"visit_count": -1}},
-            {"$limit": limit}
+            {"$limit": limit},
+            {"$lookup": {
+                "from": "users",
+                "localField": "_id",
+                "foreignField": "user_id",
+                "as": "u",
+                "pipeline": [{"$project": {"_id": 0, "user_id": 1, "name": 1, "picture": 1, "username": 1}}]
+            }},
+            {"$unwind": {"path": "$u", "preserveNullAndEmptyArrays": True}}
         ]
         results = await db.visits.aggregate(pipeline).to_list(limit)
         
         for idx, entry in enumerate(results):
-            user = await db.users.find_one({"user_id": entry["_id"]}, {"_id": 0})
-            if user:
+            u = entry.get("u", {})
+            if u:
                 leaderboard.append({
-                    "user_id": user["user_id"],
-                    "name": user["name"],
-                    "picture": user.get("picture"),
-                    "username": user.get("username"),
+                    "user_id": u.get("user_id", entry["_id"]),
+                    "name": u.get("name", "Unknown"),
+                    "picture": u.get("picture"),
+                    "username": u.get("username"),
                     "value": entry["visit_count"],
                     "rank": idx + 1
                 })
-                if user["user_id"] == current_user.user_id:
+                if u.get("user_id") == current_user.user_id:
                     user_rank = idx + 1
                     
     elif category == "countries":
-        # Get unique countries visited count
+        # Get unique countries visited count with user info via $lookup
         pipeline = [
             {"$match": {**time_filter, **({"user_id": {"$in": user_filter}} if user_filter else {})}},
             {"$group": {"_id": {"user_id": "$user_id", "country": "$country_name"}}},
             {"$group": {"_id": "$_id.user_id", "country_count": {"$sum": 1}}},
             {"$sort": {"country_count": -1}},
-            {"$limit": limit}
+            {"$limit": limit},
+            {"$lookup": {
+                "from": "users",
+                "localField": "_id",
+                "foreignField": "user_id",
+                "as": "u",
+                "pipeline": [{"$project": {"_id": 0, "user_id": 1, "name": 1, "picture": 1, "username": 1}}]
+            }},
+            {"$unwind": {"path": "$u", "preserveNullAndEmptyArrays": True}}
         ]
         results = await db.visits.aggregate(pipeline).to_list(limit)
         
         for idx, entry in enumerate(results):
-            user = await db.users.find_one({"user_id": entry["_id"]}, {"_id": 0})
-            if user:
+            u = entry.get("u", {})
+            if u:
                 leaderboard.append({
-                    "user_id": user["user_id"],
-                    "name": user["name"],
-                    "picture": user.get("picture"),
-                    "username": user.get("username"),
+                    "user_id": u.get("user_id", entry["_id"]),
+                    "name": u.get("name", "Unknown"),
+                    "picture": u.get("picture"),
+                    "username": u.get("username"),
                     "value": entry["country_count"],
                     "rank": idx + 1
                 })
-                if user["user_id"] == current_user.user_id:
+                if u.get("user_id") == current_user.user_id:
                     user_rank = idx + 1
     
     return {
@@ -151,25 +167,32 @@ async def get_rising_stars(limit: int = 10, current_user: User = Depends(get_cur
     """Get users with biggest point gains this week"""
     week_ago = datetime.now(timezone.utc) - timedelta(days=7)
     
-    # Get points earned this week from activities
     pipeline = [
         {"$match": {"created_at": {"$gte": week_ago}}},
         {"$group": {"_id": "$user_id", "points_this_week": {"$sum": "$points_earned"}}},
         {"$sort": {"points_this_week": -1}},
-        {"$limit": limit}
+        {"$limit": limit},
+        {"$lookup": {
+            "from": "users",
+            "localField": "_id",
+            "foreignField": "user_id",
+            "as": "u",
+            "pipeline": [{"$project": {"_id": 0, "user_id": 1, "name": 1, "picture": 1, "username": 1}}]
+        }},
+        {"$unwind": {"path": "$u", "preserveNullAndEmptyArrays": True}}
     ]
     
     results = await db.activities.aggregate(pipeline).to_list(limit)
     
     rising_stars = []
     for idx, entry in enumerate(results):
-        user = await db.users.find_one({"user_id": entry["_id"]}, {"_id": 0})
-        if user:
+        u = entry.get("u", {})
+        if u:
             rising_stars.append({
-                "user_id": user["user_id"],
-                "name": user["name"],
-                "picture": user.get("picture"),
-                "username": user.get("username"),
+                "user_id": u.get("user_id", entry["_id"]),
+                "name": u.get("name", "Unknown"),
+                "picture": u.get("picture"),
+                "username": u.get("username"),
                 "points_this_week": entry["points_this_week"],
                 "rank": idx + 1
             })
@@ -446,9 +469,16 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
     visits_result = await db.visits.aggregate(visits_pipeline).to_list(1)
     
     if not visits_result:
-        # No visits — return empty progress
+        # No visits — return empty progress (use aggregation, not N+1)
         all_countries = await db.countries.find({}, {"_id": 0, "country_id": 1, "name": 1, "continent": 1}).to_list(100)
-        all_landmark_count = await db.landmarks.count_documents({})
+        
+        # Single aggregation to get landmark count per country
+        country_lm_pipeline = [
+            {"$group": {"_id": "$country_id", "count": {"$sum": 1}}}
+        ]
+        country_lm_stats = await db.landmarks.aggregate(country_lm_pipeline).to_list(200)
+        lm_count_map = {s["_id"]: s["count"] for s in country_lm_stats}
+        all_landmark_count = sum(lm_count_map.values())
         
         continental_progress = {}
         country_progress = {}
@@ -458,12 +488,11 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
                 continental_progress[continent] = {"visited": 0, "total": 0, "percentage": 0}
             continental_progress[continent]["total"] += 1
             
-            country_landmark_count = await db.landmarks.count_documents({"country_id": country["country_id"]})
             country_progress[country["country_id"]] = {
                 "country_name": country["name"],
                 "continent": continent,
                 "visited": 0,
-                "total": country_landmark_count,
+                "total": lm_count_map.get(country["country_id"], 0),
                 "percentage": 0
             }
         
