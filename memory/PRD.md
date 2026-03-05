@@ -196,6 +196,13 @@ All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) Ne
 - Frontend useEffect guards: `if (user)` + `[user]` dependency on all tab pages
 - Promise.allSettled in journey.tsx for resilient data fetching
 
+### Session Feb 27, 2026 - Backend Performance Overhaul (Final)
+- **`/api/feed` optimized**: Replaced N+1 query loop (250 queries per request) with single MongoDB aggregation pipeline using `$lookup` for users, likes, comments, and visit photos. Response time: 12s+ → <0.1s.
+- **`/api/visits` optimized**: Replaced two-step query with single aggregation pipeline using `$lookup` for landmark names. Response time: 12s+ → <0.1s.
+- **Previous session**: `/api/stats`, `/api/progress`, `/api/landmarks` already optimized with same pattern.
+- Fixed missing `get_user_limits` import in `social.py`.
+- All 20 backend tests passed (iteration_25).
+
 ## Key Files Modified (Latest)
 - `backend/routes/country_visits.py` - Full PUT endpoint with photo management + landmarks endpoint + migration
 - `frontend/app/(tabs)/journey.tsx` - Carousel, reordered sections, badge icons, navigation
