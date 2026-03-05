@@ -28,7 +28,6 @@ interface Activity {
   visibility: 'public' | 'friends' | 'private';
   has_photos?: boolean;
   has_diary?: boolean;
-  has_tips?: boolean;
   photo_count?: number;
   photo_url?: string;
   visit_id?: string;
@@ -179,7 +178,7 @@ export default function FeedScreen() {
 
   const renderActivityItem = ({ item: activity }: { item: Activity }) => {
     const privacyInfo = getPrivacyIcon(activity.visibility);
-    const hasRichContent = activity.has_photos || activity.has_diary || activity.has_tips;
+    const hasRichContent = activity.has_photos || activity.has_diary;
 
     return (
       <Surface style={styles.activityCard}>
@@ -289,12 +288,6 @@ export default function FeedScreen() {
                 <View style={styles.richBadge}>
                   <Ionicons name="journal" size={12} color={theme.colors.primary} />
                   <Text style={styles.richBadgeText}>Diary</Text>
-                </View>
-              )}
-              {activity.has_tips && (
-                <View style={styles.richBadge}>
-                  <Ionicons name="bulb" size={12} color={theme.colors.primary} />
-                  <Text style={styles.richBadgeText}>Tips</Text>
                 </View>
               )}
             </View>

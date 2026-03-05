@@ -63,6 +63,13 @@ Prepare WanderMark app for App Store submission by fixing bugs, improving UI/UX,
 - Travel Tips confirmed fully removed from all UI surfaces
 - Social feed, landmarks, and visit detail all rendering correctly
 
+### Codebase Cleanup (Complete - March 5, 2026)
+- **Critical bug fixed**: `db.friendships` → `db.friends` in account deletion (friends were NOT being deleted when users deactivated accounts)
+- **has_tips completely removed**: Removed from Activity model, all API responses (social.py, visits.py), and frontend feed UI
+- **travel_tips text**: Updated onboarding description to not mention travel tips
+- **3 unused components deleted**: EnhancedEmptyState, OptimizedImage, RankProgress
+- **Backend import cleanup**: Removed unused imports from push.py, reports.py, achievements.py
+
 ## Key API Endpoints
 - `GET /api/visits/check/{landmark_id}` - Lightweight visit status check (single indexed query)
 - `POST /api/visits` - Create visit with optional `visibility` field

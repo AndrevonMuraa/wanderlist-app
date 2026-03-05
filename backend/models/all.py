@@ -209,7 +209,6 @@ class Activity(BaseModel):
     milestone_count: Optional[int] = None
     visit_id: Optional[str] = None
     has_diary: Optional[bool] = False
-    has_tips: Optional[bool] = False
     has_photos: Optional[bool] = False
     photo_count: Optional[int] = 0
     photo_url: Optional[str] = None

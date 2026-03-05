@@ -39,7 +39,7 @@ const slides: OnboardingSlide[] = [
     icon: 'camera-outline',
     iconColor: '#10b981',
     title: 'Capture Your Journey',
-    description: 'Take photos, write diary entries, and share travel tips for each landmark you visit.',
+    description: 'Take photos, write diary entries, and document each landmark you visit.',
     gradient: ['#10b981', '#34d399'],
   },
   {

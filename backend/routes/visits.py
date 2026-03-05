@@ -224,7 +224,6 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         "points_earned": landmark.get("points", 10),
         "visit_id": visit_id,  # Link to full visit details
         "has_diary": bool(data.diary_notes),
-        "has_tips": False,
         "has_photos": len(photos) > 0,
         "photo_count": len(photos),
         "visibility": data.visibility or current_user.default_privacy or "public",  # Privacy setting
