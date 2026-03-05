@@ -17,42 +17,31 @@ router = APIRouter()
 
 @router.get("/continent-stats")
 async def get_continent_stats(current_user: User = Depends(get_current_user)):
-    """
-    Get dynamic statistics for all continents.
-    Returns landmark counts, total points, and country counts for each continent.
-    Normalizes continent names (North/South America → Americas) to match 5 continent cards.
-    """
-    # Mapping to normalize continent names to the 5 standard cards
+    """Get dynamic statistics for all continents - optimized with aggregation."""
     CONTINENT_MAP = {
         "North America": "Americas",
         "South America": "Americas",
     }
-    
-    # Aggregate landmark stats by continent
+
+    # Single aggregation: landmark stats by continent
     pipeline = [
-        {
-            "$group": {
-                "_id": "$continent",
-                "total_landmarks": {"$sum": 1},
-                "total_points": {"$sum": "$points"},
-                "countries": {"$addToSet": "$country_name"}
-            }
-        },
-        {
-            "$project": {
-                "_id": 0,
-                "continent": "$_id",
-                "landmarks": "$total_landmarks",
-                "points": "$total_points",
-                "country_list": "$countries"
-            }
-        },
+        {"$group": {
+            "_id": "$continent",
+            "total_landmarks": {"$sum": 1},
+            "total_points": {"$sum": "$points"},
+            "countries": {"$addToSet": "$country_name"}
+        }},
+        {"$project": {
+            "_id": 0, "continent": "$_id",
+            "landmarks": "$total_landmarks",
+            "points": "$total_points",
+            "country_list": "$countries"
+        }},
         {"$sort": {"continent": 1}}
     ]
-    
     raw_stats = await db.landmarks.aggregate(pipeline).to_list(10)
-    
-    # Merge continents using the map
+
+    # Merge continents
     merged: dict = {}
     for stat in raw_stats:
         name = CONTINENT_MAP.get(stat["continent"], stat["continent"])
@@ -61,43 +50,45 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
         merged[name]["landmarks"] += stat["landmarks"]
         merged[name]["points"] += stat["points"]
         merged[name]["country_set"].update(stat["country_list"])
-    
-    # Get user's visited landmarks by continent for progress
-    user_visits = await db.visits.find(
-        {"user_id": current_user.user_id},
-        {"landmark_id": 1}
-    ).to_list(10000)
-    visited_landmark_ids = [v["landmark_id"] for v in user_visits]
-    
-    # Get visited landmarks by continent AND count visited countries
+
+    # Single aggregation: user's visited landmarks → group by continent + country
+    visited_pipeline = [
+        {"$match": {"user_id": current_user.user_id}},
+        {"$lookup": {
+            "from": "landmarks",
+            "localField": "landmark_id",
+            "foreignField": "landmark_id",
+            "as": "lm",
+            "pipeline": [{"$project": {"_id": 0, "continent": 1, "country_name": 1, "points": 1}}]
+        }},
+        {"$unwind": {"path": "$lm", "preserveNullAndEmptyArrays": False}},
+        {"$group": {
+            "_id": "$lm.continent",
+            "visited_count": {"$sum": 1},
+            "visited_points": {"$sum": "$lm.points"},
+            "visited_countries": {"$addToSet": "$lm.country_name"}
+        }}
+    ]
+    visited_results = await db.visits.aggregate(visited_pipeline).to_list(10)
+
     visited_by_continent: dict = {}
-    if visited_landmark_ids:
-        visited_landmarks = await db.landmarks.find(
-            {"landmark_id": {"$in": visited_landmark_ids}},
-            {"continent": 1, "country_name": 1, "points": 1}
-        ).to_list(10000)
-        
-        for landmark in visited_landmarks:
-            continent = CONTINENT_MAP.get(landmark.get("continent", ""), landmark.get("continent", ""))
-            if continent not in visited_by_continent:
-                visited_by_continent[continent] = {
-                    "visited_count": 0,
-                    "visited_points": 0,
-                    "visited_countries": set()
-                }
-            visited_by_continent[continent]["visited_count"] += 1
-            visited_by_continent[continent]["visited_points"] += landmark.get("points", 0)
-            visited_by_continent[continent]["visited_countries"].add(landmark.get("country_name"))
-    
-    # Build final result
+    for v in visited_results:
+        name = CONTINENT_MAP.get(v["_id"], v["_id"])
+        if name not in visited_by_continent:
+            visited_by_continent[name] = {"visited_count": 0, "visited_points": 0, "visited_countries": set()}
+        visited_by_continent[name]["visited_count"] += v["visited_count"]
+        visited_by_continent[name]["visited_points"] += v["visited_points"]
+        visited_by_continent[name]["visited_countries"].update(v["visited_countries"])
+
+    # Build result
     result = []
     for name in sorted(merged.keys()):
         data = merged[name]
         country_count = len(data["country_set"])
-        visited_data = visited_by_continent.get(name, {})
-        visited_landmarks_count = visited_data.get("visited_count", 0) if visited_data else 0
-        visited_countries_count = len(visited_data.get("visited_countries", set())) if visited_data else 0
-        
+        vd = visited_by_continent.get(name, {})
+        visited_landmarks_count = vd.get("visited_count", 0)
+        visited_countries_count = len(vd.get("visited_countries", set()))
+
         result.append({
             "continent": name,
             "total_landmarks": data["landmarks"],
@@ -105,10 +96,10 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
             "countries": country_count,
             "visited_landmarks": visited_landmarks_count,
             "visited_countries": visited_countries_count,
-            "visited_points": visited_data.get("visited_points", 0) if visited_data else 0,
+            "visited_points": vd.get("visited_points", 0),
             "progress_percent": round((visited_countries_count / country_count) * 100, 1) if country_count > 0 else 0
         })
-    
+
     return {
         "continents": result,
         "grand_total": {
@@ -176,69 +167,48 @@ async def get_landmarks(
         if max_points is not None:
             match_query["points"]["$lte"] = max_points
 
-    # Use aggregation with $lookup to check visited status in DB
+    # Determine sort
+    sort_map = {
+        "upvotes_desc": {"upvotes": -1},
+        "points_desc": {"points": -1},
+        "points_asc": {"points": 1},
+        "name_asc": {"name": 1},
+        "name_desc": {"name": -1},
+    }
+    sort_stage = sort_map.get(sort_by, {"name": 1})
+
+    # Step 1: Fetch landmarks (no correlated $lookup — much faster)
     pipeline = [
         {"$match": match_query},
-        {"$lookup": {
-            "from": "visits",
-            "let": {"lid": "$landmark_id"},
-            "pipeline": [
-                {"$match": {
-                    "$expr": {
-                        "$and": [
-                            {"$eq": ["$landmark_id", "$$lid"]},
-                            {"$eq": ["$user_id", current_user.user_id]}
-                        ]
-                    }
-                }},
-                {"$limit": 1},
-                {"$project": {"_id": 0, "visit_id": 1}}
-            ],
-            "as": "user_visit"
-        }},
-        {"$addFields": {
-            "is_visited": {"$gt": [{"$size": "$user_visit"}, 0]}
-        }},
-        {"$project": {"user_visit": 0, "_id": 0}}
+        {"$addFields": {"category_order": {"$cond": [{"$eq": ["$category", "official"]}, 0, 1]}}},
+        {"$sort": {"category_order": 1, **sort_stage}},
+        {"$project": {"category_order": 0, "_id": 0}},
+        {"$limit": limit},
     ]
-
-    # Filter by visited status
-    if visited == "true":
-        pipeline.append({"$match": {"is_visited": True}})
-    elif visited == "false":
-        pipeline.append({"$match": {"is_visited": False}})
-
-    # Sort in DB
-    sort_stage = {}
-    if sort_by == "upvotes_desc":
-        sort_stage = {"upvotes": -1}
-    elif sort_by == "points_desc":
-        sort_stage = {"points": -1}
-    elif sort_by == "points_asc":
-        sort_stage = {"points": 1}
-    elif sort_by == "name_asc":
-        sort_stage = {"name": 1}
-    elif sort_by == "name_desc":
-        sort_stage = {"name": -1}
-    else:
-        sort_stage = {"name": 1}
-
-    # Always sort official first
-    pipeline.append({"$addFields": {
-        "category_order": {"$cond": [{"$eq": ["$category", "official"]}, 0, 1]}
-    }})
-    pipeline.append({"$sort": {"category_order": 1, **sort_stage}})
-    pipeline.append({"$project": {"category_order": 0}})
-    pipeline.append({"$limit": limit})
-
     landmarks = await db.landmarks.aggregate(pipeline).to_list(limit)
 
-    # Add locked status
+    # Step 2: Batch-check visited status with a single indexed query
+    landmark_ids = [l["landmark_id"] for l in landmarks]
+    visited_docs = await db.visits.find(
+        {"user_id": current_user.user_id, "landmark_id": {"$in": landmark_ids}},
+        {"_id": 0, "landmark_id": 1}
+    ).to_list(len(landmark_ids))
+    visited_ids = {v["landmark_id"] for v in visited_docs}
+
+    # Step 3: Enrich + filter
     is_free = current_user.subscription_tier == "free"
+    result = []
     for l in landmarks:
+        l["is_visited"] = l["landmark_id"] in visited_ids
         l["is_locked"] = is_free and l.get("category") == "premium"
 
-    return [Landmark(**l) for l in landmarks]
+        if visited == "true" and not l["is_visited"]:
+            continue
+        if visited == "false" and l["is_visited"]:
+            continue
+        result.append(l)
+
+    return [Landmark(**l) for l in result]
 
 @router.get("/landmarks/{landmark_id}", response_model=Landmark)
 async def get_landmark(landmark_id: str, current_user: User = Depends(get_current_user)):

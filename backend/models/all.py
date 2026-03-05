@@ -121,6 +121,7 @@ class Landmark(BaseModel):
     created_by: Optional[str] = None
     created_at: datetime
     is_locked: bool = False
+    is_visited: bool = False
 
 
 class LandmarkCreate(BaseModel):

@@ -20,7 +20,7 @@ async def get_community_feed(
     limit: int = 10,
     current_user: User = Depends(get_current_user)
 ):
-    """Get a unified community feed of recent photos and diary entries from all countries, including custom visits."""
+    """Get a unified community feed - optimized to eliminate N+1 queries."""
     # Standard landmark visits
     pipeline = [
         {"$match": {
@@ -33,14 +33,16 @@ async def get_community_feed(
             "from": "users",
             "localField": "user_id",
             "foreignField": "user_id",
-            "as": "user_info"
+            "as": "user_info",
+            "pipeline": [{"$project": {"_id": 0, "name": 1, "picture": 1, "username": 1}}]
         }},
         {"$unwind": {"path": "$user_info", "preserveNullAndEmptyArrays": True}},
         {"$lookup": {
             "from": "landmarks",
             "localField": "landmark_id",
             "foreignField": "landmark_id",
-            "as": "landmark_info"
+            "as": "landmark_info",
+            "pipeline": [{"$project": {"_id": 0, "name": 1, "country_name": 1, "country_id": 1}}]
         }},
         {"$unwind": {"path": "$landmark_info", "preserveNullAndEmptyArrays": True}},
         {"$project": {
@@ -60,9 +62,18 @@ async def get_community_feed(
             "country_id": "$landmark_info.country_id",
         }}
     ]
-    
+
     visits = await db.visits.aggregate(pipeline).to_list(limit)
-    
+
+    # Batch-fetch upvote counts for all visits in one query
+    photo_ids = [f"{v['visit_id']}_0" for v in visits]
+    upvote_pipeline = [
+        {"$match": {"photo_id": {"$in": photo_ids}}},
+        {"$group": {"_id": "$photo_id", "count": {"$sum": 1}}}
+    ]
+    upvote_results = await db.photo_upvotes.aggregate(upvote_pipeline).to_list(len(photo_ids))
+    upvote_map = {r["_id"]: r["count"] for r in upvote_results}
+
     items = []
     for visit in visits:
         photo_url = visit.get("photos", [None])[0] if visit.get("photos") else None
@@ -71,11 +82,7 @@ async def get_community_feed(
         if has_diary and visit.get("diary_notes"):
             text = visit["diary_notes"]
             diary_snippet = text[:100] + "..." if len(text) > 100 else text
-        
-        # Count upvotes for the first photo
-        photo_id = f"{visit['visit_id']}_0"
-        upvote_count = await db.photo_upvotes.count_documents({"photo_id": photo_id})
-        
+
         items.append({
             "visit_id": visit["visit_id"],
             "type": "diary" if has_diary else "photo",
@@ -90,7 +97,7 @@ async def get_community_feed(
             "country_id": visit.get("country_id"),
             "diary_snippet": diary_snippet,
             "has_diary": has_diary,
-            "upvotes": upvote_count,
+            "upvotes": upvote_map.get(f"{visit['visit_id']}_0", 0),
             "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
         })
 
@@ -103,7 +110,8 @@ async def get_community_feed(
             "from": "users",
             "localField": "user_id",
             "foreignField": "user_id",
-            "as": "user_info"
+            "as": "user_info",
+            "pipeline": [{"$project": {"_id": 0, "name": 1, "picture": 1, "username": 1}}]
         }},
         {"$unwind": {"path": "$user_info", "preserveNullAndEmptyArrays": True}},
         {"$project": {
@@ -124,7 +132,6 @@ async def get_community_feed(
 
     for cv in custom_visits:
         photo_url = cv.get("photos", [None])[0] if cv.get("photos") else None
-        # If no general photo, check landmark photos
         if not photo_url and cv.get("landmarks"):
             for lm in cv["landmarks"]:
                 if lm.get("photo"):
@@ -163,7 +170,7 @@ async def get_community_feed(
     # Sort combined items by visited_at descending
     items.sort(key=lambda x: x.get("visited_at") or "", reverse=True)
     items = items[:limit]
-    
+
     return {"items": items, "count": len(items)}
 
 
