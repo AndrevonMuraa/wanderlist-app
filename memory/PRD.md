@@ -202,7 +202,11 @@ All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) Ne
 - **Previous session**: `/api/stats`, `/api/progress`, `/api/landmarks` already optimized with same pattern.
 - Fixed missing `get_user_limits` import in `social.py`.
 - **Pull-to-refresh with haptic feedback**: Added light haptic on pull start + success haptic on completion for Social and Notifications pages.
-- All 20 backend tests passed (iteration_25).
+- **`/api/landmarks` optimized**: Replaced correlated `$lookup` with `$expr` (per-landmark sub-query) with a batch `$in` query for visited status. Much faster with many landmarks.
+- **`/api/continent-stats` optimized**: Replaced Python loops + multiple queries with MongoDB aggregation pipeline using `$lookup` for visited landmarks by continent.
+- **`/api/community-feed` optimized**: Replaced N+1 upvote counting (`count_documents` per item) with single batch aggregation `$group`.
+- Added `is_visited` field to Landmark Pydantic model.
+- All 26 backend tests passed (iteration_26).
 
 ## Key Files Modified (Latest)
 - `backend/routes/country_visits.py` - Full PUT endpoint with photo management + landmarks endpoint + migration
