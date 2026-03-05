@@ -39,7 +39,10 @@ interface FriendRequest {
 export default function FriendsScreen() {
   const [friends, setFriends] = useState<User[]>([]);
   const [pendingRequests, setPendingRequests] = useState<FriendRequest[]>([]);
+  const [sentRequests, setSentRequests] = useState<FriendRequest[]>([]);
   const [searchUsername, setSearchUsername] = useState('');
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searching, setSearching] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [sending, setSending] = useState(false);
@@ -68,24 +71,21 @@ export default function FriendsScreen() {
     try {
       const token = await getToken();
       
-      const [friendsRes, requestsRes] = await Promise.all([
+      const [friendsRes, requestsRes, sentRes] = await Promise.all([
         fetch(`${BACKEND_URL}/api/friends`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
         fetch(`${BACKEND_URL}/api/friends/pending`, {
           headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch(`${BACKEND_URL}/api/friends/sent`, {
+          headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
 
-      if (friendsRes.ok) {
-        const friendsData = await friendsRes.json();
-        setFriends(friendsData);
-      }
-
-      if (requestsRes.ok) {
-        const requestsData = await requestsRes.json();
-        setPendingRequests(requestsData);
-      }
+      if (friendsRes.ok) setFriends(await friendsRes.json());
+      if (requestsRes.ok) setPendingRequests(await requestsRes.json());
+      if (sentRes.ok) setSentRequests(await sentRes.json());
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -159,9 +159,7 @@ export default function FriendsScreen() {
       const token = await getToken();
       const response = await fetch(`${BACKEND_URL}/api/friends/${friendshipId}/accept`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
 
       if (response.status === 403) {
@@ -186,11 +184,81 @@ export default function FriendsScreen() {
     }
   };
 
+  const handleRejectRequest = async (friendshipId: string) => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/friends/${friendshipId}/reject`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        Alert.alert('Done', 'Request rejected');
+        fetchData();
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to reject request');
+    }
+  };
+
+  const handleRemoveFriend = (friend: User, friendshipId?: string) => {
+    Alert.alert('Remove Friend', `Remove ${friend.name} as a friend?`, [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Remove', style: 'destructive', onPress: async () => {
+        try {
+          const token = await getToken();
+          // We need friendship_id. If not available, find via friends list
+          if (friendshipId) {
+            await fetch(`${BACKEND_URL}/api/friends/${friendshipId}`, {
+              method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
+            });
+          }
+          fetchData();
+        } catch (e) { Alert.alert('Error', 'Failed to remove friend'); }
+      }},
+    ]);
+  };
+
+  const handleSearchUsers = async (query: string) => {
+    setSearchUsername(query);
+    if (query.length < 2) { setSearchResults([]); return; }
+    setSearching(true);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/users/search?q=${encodeURIComponent(query)}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) setSearchResults(await res.json());
+    } catch (e) { console.error(e); }
+    finally { setSearching(false); }
+  };
+
+  const handleSendRequestToUser = async (username: string) => {
+    if (isAtLimit && !isPro) { setShowProLock(true); return; }
+    setSending(true);
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/friends/request`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ friend_username: username })
+      });
+      if (response.ok) {
+        Alert.alert('Success', 'Friend request sent!');
+        setSearchUsername(''); setSearchResults([]);
+        fetchData();
+      } else {
+        const error = await response.json();
+        Alert.alert('Error', error.detail || 'Failed to send request');
+      }
+    } catch (e) { Alert.alert('Error', 'Failed to send request'); }
+    finally { setSending(false); }
+  };
+
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 24);
 
   const renderFriend = ({ item }: { item: User }) => (
     <View style={styles.friendCard}>
-      <View style={styles.friendInfo}>
+      <TouchableOpacity style={styles.friendInfo} onPress={() => router.push(`/user-profile/${item.user_id}`)} data-testid={`friend-${item.user_id}`}>
         {item.picture ? (
           <Image source={{ uri: item.picture }} style={styles.avatar} />
         ) : (
@@ -209,19 +277,21 @@ export default function FriendsScreen() {
           </View>
           <Text style={styles.friendEmail}>@{item.username}</Text>
         </View>
-      </View>
-      <TouchableOpacity 
-        onPress={() => router.push(`/messages/${item.user_id}?name=${encodeURIComponent(item.name)}`)}
-        style={styles.messageButton}
-      >
-        <Ionicons name="chatbubble-outline" size={20} color={theme.colors.primary} />
       </TouchableOpacity>
+      <View style={styles.friendActions}>
+        <TouchableOpacity 
+          onPress={() => router.push(`/messages/${item.user_id}?name=${encodeURIComponent(item.name)}`)}
+          style={styles.messageButton}
+        >
+          <Ionicons name="chatbubble-outline" size={20} color={theme.colors.primary} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
   const renderRequest = ({ item }: { item: FriendRequest }) => (
     <View style={styles.requestCard}>
-      <View style={styles.friendInfo}>
+      <TouchableOpacity style={styles.friendInfo} onPress={() => router.push(`/user-profile/${item.user.user_id}`)}>
         {item.user.picture ? (
           <Image source={{ uri: item.user.picture }} style={styles.avatar} />
         ) : (
@@ -233,26 +303,36 @@ export default function FriendsScreen() {
           <Text style={styles.friendName}>{item.user.name}</Text>
           <Text style={styles.friendEmail}>@{item.user.username}</Text>
         </View>
-      </View>
-      <TouchableOpacity
-        style={styles.acceptButton}
-        onPress={() => handleAcceptRequest(item.friendship_id)}
-      >
-        <Text style={styles.acceptButtonText}>Accept</Text>
       </TouchableOpacity>
+      <View style={styles.requestActions}>
+        <TouchableOpacity
+          style={styles.acceptButton}
+          onPress={() => handleAcceptRequest(item.friendship_id)}
+          data-testid={`accept-${item.friendship_id}`}
+        >
+          <Text style={styles.acceptButtonText}>Accept</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.rejectButton}
+          onPress={() => handleRejectRequest(item.friendship_id)}
+          data-testid={`reject-${item.friendship_id}`}
+        >
+          <Ionicons name="close" size={18} color="#E53935" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
   const renderHeader = () => (
     <>
-      {/* Add Friend Section */}
+      {/* Search Users Section */}
       <View style={styles.addFriendCard}>
         <View style={styles.sectionHeader}>
           <View style={[styles.sectionIconCircle, { backgroundColor: 'rgba(77, 184, 216, 0.1)' }]}>
-            <Ionicons name="person-add" size={22} color={theme.colors.primary} />
+            <Ionicons name="search" size={22} color={theme.colors.primary} />
           </View>
           <View style={styles.sectionHeaderText}>
-            <Text style={styles.sectionTitle}>Add Friend</Text>
+            <Text style={styles.sectionTitle}>Find Friends</Text>
             <Text style={styles.sectionSubtitle}>
               {isPro ? 'Unlimited friends' : `${friendsRemaining} slot${friendsRemaining !== 1 ? 's' : ''} remaining`}
             </Text>
@@ -270,29 +350,54 @@ export default function FriendsScreen() {
           <View style={styles.searchInputContainer}>
             <Ionicons name="person-outline" size={18} color={theme.colors.textLight} style={styles.searchIcon} />
             <TextInput
-              placeholder="Enter username"
+              placeholder="Search by name or username"
               value={searchUsername}
-              onChangeText={setSearchUsername}
+              onChangeText={handleSearchUsers}
               style={styles.searchInput}
               autoCapitalize="none"
               placeholderTextColor={theme.colors.textLight}
+              data-testid="user-search-input"
             />
-          </View>
-          <TouchableOpacity
-            style={[styles.sendButton, sending && styles.sendButtonDisabled]}
-            onPress={handleSendRequest}
-            disabled={sending}
-          >
-            {sending ? (
-              <ActivityIndicator size="small" color="#fff" />
-            ) : (
-              <>
-                <Ionicons name="paper-plane" size={16} color="#fff" />
-                <Text style={styles.sendButtonText}>Send</Text>
-              </>
+            {searchUsername.length > 0 && (
+              <TouchableOpacity onPress={() => { setSearchUsername(''); setSearchResults([]); }}>
+                <Ionicons name="close-circle" size={18} color={theme.colors.textLight} />
+              </TouchableOpacity>
             )}
-          </TouchableOpacity>
+          </View>
         </View>
+
+        {/* Search Results */}
+        {searchResults.length > 0 && (
+          <View style={styles.searchResults}>
+            {searchResults.map((u: any) => (
+              <View key={u.user_id} style={styles.searchResultItem}>
+                <TouchableOpacity style={styles.friendInfo} onPress={() => router.push(`/user-profile/${u.user_id}`)}>
+                  {u.picture ? (
+                    <Image source={{ uri: u.picture }} style={styles.searchAvatar} />
+                  ) : (
+                    <View style={[styles.searchAvatar, styles.defaultAvatar]}>
+                      <Ionicons name="person" size={16} color={theme.colors.textLight} />
+                    </View>
+                  )}
+                  <View style={styles.friendTextContainer}>
+                    <Text style={styles.friendName}>{u.name}</Text>
+                    {u.username && <Text style={styles.friendEmail}>@{u.username}</Text>}
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.addButton}
+                  onPress={() => handleSendRequestToUser(u.username)}
+                  disabled={sending}
+                  data-testid={`add-${u.user_id}`}
+                >
+                  <Ionicons name="person-add-outline" size={16} color="#fff" />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        )}
+
+        {searching && <ActivityIndicator size="small" color={theme.colors.primary} style={{ marginTop: 8 }} />}
 
         {isAtLimit && !isPro && (
           <TouchableOpacity 
@@ -324,6 +429,40 @@ export default function FriendsScreen() {
           {pendingRequests.map((item) => (
             <View key={item.friendship_id}>
               {renderRequest({ item })}
+            </View>
+          ))}
+        </View>
+      )}
+
+      {/* Sent Requests */}
+      {sentRequests.length > 0 && (
+        <View style={styles.section}>
+          <View style={styles.sectionTitleRow}>
+            <View style={[styles.sectionIconSmall, { backgroundColor: 'rgba(33, 150, 243, 0.1)' }]}>
+              <Ionicons name="paper-plane" size={16} color="#2196F3" />
+            </View>
+            <Text style={styles.sectionTitleSmall}>
+              Sent Requests ({sentRequests.length})
+            </Text>
+          </View>
+          {sentRequests.map((item) => (
+            <View key={item.friendship_id} style={styles.requestCard}>
+              <TouchableOpacity style={styles.friendInfo} onPress={() => router.push(`/user-profile/${item.user.user_id}`)}>
+                {item.user.picture ? (
+                  <Image source={{ uri: item.user.picture }} style={styles.avatar} />
+                ) : (
+                  <View style={[styles.avatar, styles.defaultAvatar]}>
+                    <Ionicons name="person" size={24} color={theme.colors.textLight} />
+                  </View>
+                )}
+                <View style={styles.friendTextContainer}>
+                  <Text style={styles.friendName}>{item.user.name}</Text>
+                  <Text style={styles.friendEmail}>@{item.user.username}</Text>
+                </View>
+              </TouchableOpacity>
+              <View style={styles.pendingLabel}>
+                <Text style={styles.pendingLabelText}>Pending</Text>
+              </View>
             </View>
           ))}
         </View>
@@ -728,5 +867,60 @@ const styles = StyleSheet.create({
   },
   headerRight: {
     width: 36,
+  },
+  searchResults: {
+    marginTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+    paddingTop: 10,
+  },
+  searchResultItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+  },
+  searchAvatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    marginRight: 10,
+  },
+  addButton: {
+    backgroundColor: theme.colors.primary,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  requestActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  rejectButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(229, 57, 53, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  friendActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  pendingLabel: {
+    backgroundColor: '#E3F2FD',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+  },
+  pendingLabelText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#2196F3',
   },
 });

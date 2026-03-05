@@ -54,45 +54,18 @@ export default function MessagesScreen() {
   const fetchConversations = async () => {
     try {
       const token = await getToken();
-      const friendsRes = await fetch(`${BACKEND_URL}/api/friends`, {
+      const res = await fetch(`${BACKEND_URL}/api/messages/conversations`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      if (friendsRes.ok) {
-        const friends = await friendsRes.json();
-        
-        // Fetch last message for each friend
-        const convosPromises = friends.map(async (friend: Friend) => {
-          try {
-            const messagesRes = await fetch(`${BACKEND_URL}/api/messages/${friend.user_id}`, {
-              headers: { 'Authorization': `Bearer ${token}` }
-            });
-            
-            if (messagesRes.ok) {
-              const messages = await messagesRes.json();
-              const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
-              
-              return {
-                friend,
-                lastMessage: lastMessage ? lastMessage.content : undefined,
-                lastMessageTime: lastMessage ? formatTimestamp(lastMessage.created_at) : undefined,
-                unreadCount: 0  // TODO: Implement read status tracking
-              };
-            }
-          } catch (error) {
-            console.error(`Error fetching messages for ${friend.name}:`, error);
-          }
-          
-          return {
-            friend,
-            lastMessage: undefined,
-            lastMessageTime: undefined,
-            unreadCount: 0
-          };
-        });
-        
-        const convos = await Promise.all(convosPromises);
-        setConversations(convos);
+      if (res.ok) {
+        const data = await res.json();
+        setConversations(data.map((c: any) => ({
+          friend: c.friend,
+          lastMessage: c.last_message,
+          lastMessageTime: c.last_message_time ? formatTimestamp(c.last_message_time) : undefined,
+          unreadCount: c.unread_count || 0,
+        })));
       }
     } catch (error) {
       console.error('Error fetching conversations:', error);

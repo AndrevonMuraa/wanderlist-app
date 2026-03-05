@@ -62,8 +62,27 @@ const getPrivacyIcon = (visibility: string) => {
   }
 };
 
+interface CommunityFeedItem {
+  visit_id: string;
+  type: string;
+  source: string;
+  photo_url?: string;
+  user_name: string;
+  user_picture?: string;
+  username?: string;
+  landmark_name: string;
+  landmark_id?: string;
+  country_name?: string;
+  diary_snippet?: string;
+  has_diary: boolean;
+  upvotes: number;
+  visited_at?: string;
+}
+
 export default function FeedScreen() {
+  const [activeTab, setActiveTab] = useState<'friends' | 'community'>('friends');
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [communityItems, setCommunityItems] = useState<CommunityFeedItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(1);
@@ -95,13 +114,30 @@ export default function FeedScreen() {
   }, []);
 
   useEffect(() => {
-    loadFeed();
-  }, [loadFeed]);
+    if (activeTab === 'friends') loadFeed();
+    else loadCommunity();
+  }, [loadFeed, activeTab]);
+
+  const loadCommunity = async () => {
+    setLoading(true);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/community-feed?limit=20`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCommunityItems(data.items || []);
+      }
+    } catch (e) { console.error('Error loading community:', e); }
+    finally { setLoading(false); setRefreshing(false); }
+  };
 
   const onRefresh = () => {
     setRefreshing(true);
     setPage(1);
-    loadFeed(1, false);
+    if (activeTab === 'friends') loadFeed(1, false);
+    else loadCommunity();
   };
 
   const loadMore = () => {
@@ -290,19 +326,58 @@ export default function FeedScreen() {
     );
   };
 
+  const renderCommunityItem = ({ item }: { item: CommunityFeedItem }) => (
+    <Surface style={styles.activityCard}>
+      <View style={styles.activityHeader}>
+        <Avatar.Image size={44} source={{ uri: item.user_picture || 'https://via.placeholder.com/100' }} />
+        <View style={styles.activityInfo}>
+          <Text style={styles.activityUser}>{item.user_name}</Text>
+          <Text style={styles.activityTime}>{item.visited_at ? formatTimeAgo(item.visited_at) : ''}</Text>
+        </View>
+      </View>
+      {item.photo_url && (
+        <TouchableOpacity onPress={() => item.landmark_id ? router.push(`/landmark-community-photos/${item.landmark_id}?name=${encodeURIComponent(item.landmark_name)}`) : null} activeOpacity={0.9}>
+          <Image source={{ uri: item.photo_url }} style={styles.activityPhoto} resizeMode="cover" />
+        </TouchableOpacity>
+      )}
+      <View style={styles.activityContent}>
+        <Text style={styles.activityText}>
+          Visited <Text style={styles.activityHighlight}>{item.landmark_name}</Text>
+          {item.country_name && ` in ${item.country_name}`}
+        </Text>
+        {item.diary_snippet && (
+          <Text style={styles.diarySnippet} numberOfLines={2}>{item.diary_snippet}</Text>
+        )}
+      </View>
+      <View style={styles.activityActions}>
+        <View style={styles.likeButton}>
+          <Ionicons name="heart" size={18} color="#FF6B6B" />
+          <Text style={styles.likeCount}>{item.upvotes}</Text>
+        </View>
+        {item.has_diary && (
+          <View style={styles.richBadge}>
+            <Ionicons name="journal" size={12} color={theme.colors.primary} />
+            <Text style={styles.richBadgeText}>Diary</Text>
+          </View>
+        )}
+      </View>
+    </Surface>
+  );
+
   const renderEmpty = () => (
     <View style={styles.emptyState}>
       <Ionicons name="newspaper-outline" size={64} color={theme.colors.textLight} />
-      <Text style={styles.emptyTitle}>No Activity Yet</Text>
+      <Text style={styles.emptyTitle}>{activeTab === 'friends' ? 'No Friend Activity Yet' : 'No Community Posts Yet'}</Text>
       <Text style={styles.emptyText}>
-        When you or your friends visit landmarks, the activity will appear here
+        {activeTab === 'friends'
+          ? 'When your friends visit landmarks, their activity will appear here'
+          : 'Visit landmarks and share photos to appear in the community feed'}
       </Text>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      {/* Header - matching other sub-pages */}
       <LinearGradient
         colors={gradients.oceanToSand}
         start={gradients.horizontal.start}
@@ -313,30 +388,55 @@ export default function FeedScreen() {
           <TouchableOpacity onPress={handleBack} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Activity Feed</Text>
-          <TouchableOpacity 
-            style={styles.brandingContainer}
-            onPress={() => router.push('/about')}
-            activeOpacity={0.7}
-          >
+          <Text style={styles.headerTitle}>Feed</Text>
+          <TouchableOpacity style={styles.brandingContainer} onPress={() => router.push('/about')} activeOpacity={0.7}>
             <HeaderBranding size={18} textColor="#2A2A2A" />
+          </TouchableOpacity>
+        </View>
+        {/* Tabs */}
+        <View style={styles.tabRow}>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 'friends' && styles.tabActive]}
+            onPress={() => setActiveTab('friends')}
+            data-testid="tab-friends"
+          >
+            <Ionicons name="people-outline" size={16} color={activeTab === 'friends' ? '#fff' : 'rgba(255,255,255,0.6)'} />
+            <Text style={[styles.tabText, activeTab === 'friends' && styles.tabTextActive]}>Friends</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === 'community' && styles.tabActive]}
+            onPress={() => setActiveTab('community')}
+            data-testid="tab-community"
+          >
+            <Ionicons name="earth-outline" size={16} color={activeTab === 'community' ? '#fff' : 'rgba(255,255,255,0.6)'} />
+            <Text style={[styles.tabText, activeTab === 'community' && styles.tabTextActive]}>Community</Text>
           </TouchableOpacity>
         </View>
       </LinearGradient>
 
-      <FlatList
-        data={activities}
-        renderItem={renderActivityItem}
-        keyExtractor={(item) => item.activity_id}
-        contentContainerStyle={styles.listContent}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        onEndReached={loadMore}
-        onEndReachedThreshold={0.5}
-        ListEmptyComponent={!loading ? renderEmpty : null}
-        showsVerticalScrollIndicator={false}
-      />
+      {activeTab === 'friends' ? (
+        <FlatList
+          data={activities}
+          renderItem={renderActivityItem}
+          keyExtractor={(item) => item.activity_id}
+          contentContainerStyle={styles.listContent}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.5}
+          ListEmptyComponent={!loading ? renderEmpty : null}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <FlatList
+          data={communityItems}
+          renderItem={renderCommunityItem}
+          keyExtractor={(item) => item.visit_id}
+          contentContainerStyle={styles.listContent}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          ListEmptyComponent={!loading ? renderEmpty : null}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
       <PersistentTabBar />
     </View>
@@ -506,5 +606,38 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     textAlign: 'center',
     paddingHorizontal: 40,
+  },
+  tabRow: {
+    flexDirection: 'row',
+    marginTop: 12,
+    gap: 8,
+  },
+  tab: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 10,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+  },
+  tabActive: {
+    backgroundColor: 'rgba(255,255,255,0.3)',
+  },
+  tabText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'rgba(255,255,255,0.6)',
+  },
+  tabTextActive: {
+    color: '#fff',
+  },
+  diarySnippet: {
+    fontSize: 13,
+    color: theme.colors.textSecondary,
+    fontStyle: 'italic',
+    marginTop: 6,
+    lineHeight: 18,
   },
 });

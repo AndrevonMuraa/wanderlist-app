@@ -321,23 +321,242 @@ async def accept_friend_request(friendship_id: str, current_user: User = Depends
 
 @router.get("/friends/pending")
 async def get_pending_requests(current_user: User = Depends(get_current_user)):
-    friendships = await db.friends.find({
-        "friend_id": current_user.user_id,
-        "status": "pending"
-    }, {"_id": 0}).to_list(1000)
-    
-    requests = []
-    for f in friendships:
-        user = await db.users.find_one({"user_id": f["user_id"]}, {"_id": 0})
-        if user:
-            requests.append({
-                "friendship_id": f["friendship_id"],
-                "user": UserPublic(**user)
-            })
-    
-    return requests
+    # Optimized: use $lookup instead of N+1 individual user queries
+    pipeline = [
+        {"$match": {"friend_id": current_user.user_id, "status": "pending"}},
+        {"$lookup": {
+            "from": "users",
+            "localField": "user_id",
+            "foreignField": "user_id",
+            "as": "u",
+            "pipeline": [{"$project": {"_id": 0, "password_hash": 0}}]
+        }},
+        {"$unwind": {"path": "$u", "preserveNullAndEmptyArrays": False}},
+        {"$project": {"_id": 0, "friendship_id": 1, "user": "$u", "created_at": 1}}
+    ]
+    return await db.friends.aggregate(pipeline).to_list(100)
+
+@router.get("/friends/sent")
+async def get_sent_requests(current_user: User = Depends(get_current_user)):
+    """View friend requests you've sent"""
+    pipeline = [
+        {"$match": {"user_id": current_user.user_id, "status": "pending"}},
+        {"$lookup": {
+            "from": "users",
+            "localField": "friend_id",
+            "foreignField": "user_id",
+            "as": "u",
+            "pipeline": [{"$project": {"_id": 0, "password_hash": 0}}]
+        }},
+        {"$unwind": {"path": "$u", "preserveNullAndEmptyArrays": False}},
+        {"$project": {"_id": 0, "friendship_id": 1, "user": "$u", "created_at": 1}}
+    ]
+    return await db.friends.aggregate(pipeline).to_list(100)
+
+@router.post("/friends/{friendship_id}/reject")
+async def reject_friend_request(friendship_id: str, current_user: User = Depends(get_current_user)):
+    friendship = await db.friends.find_one({"friendship_id": friendship_id}, {"_id": 0})
+    if not friendship:
+        raise HTTPException(status_code=404, detail="Friend request not found")
+    if friendship["friend_id"] != current_user.user_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    await db.friends.delete_one({"friendship_id": friendship_id})
+    return {"message": "Friend request rejected"}
+
+@router.delete("/friends/{friendship_id}")
+async def remove_friend(friendship_id: str, current_user: User = Depends(get_current_user)):
+    friendship = await db.friends.find_one({"friendship_id": friendship_id}, {"_id": 0})
+    if not friendship:
+        raise HTTPException(status_code=404, detail="Friendship not found")
+    if friendship["user_id"] != current_user.user_id and friendship["friend_id"] != current_user.user_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    await db.friends.delete_one({"friendship_id": friendship_id})
+    return {"message": "Friend removed"}
+
+@router.get("/users/search")
+async def search_users(q: str, current_user: User = Depends(get_current_user)):
+    """Search users by name or username"""
+    if len(q) < 2:
+        return []
+    results = await db.users.find(
+        {"$or": [
+            {"username": {"$regex": q, "$options": "i"}},
+            {"name": {"$regex": q, "$options": "i"}}
+        ]},
+        {"_id": 0, "password_hash": 0}
+    ).limit(20).to_list(20)
+    # Exclude self, return public fields
+    return [
+        {"user_id": u["user_id"], "name": u["name"], "username": u.get("username"),
+         "picture": u.get("picture"), "bio": u.get("bio")}
+        for u in results if u["user_id"] != current_user.user_id
+    ]
+
+@router.get("/users/{user_id}/profile")
+async def get_user_profile(user_id: str, current_user: User = Depends(get_current_user)):
+    """Get a user's public profile"""
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0, "password_hash": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Check friendship status
+    friendship = await db.friends.find_one({
+        "$or": [
+            {"user_id": current_user.user_id, "friend_id": user_id},
+            {"user_id": user_id, "friend_id": current_user.user_id}
+        ]
+    }, {"_id": 0, "friendship_id": 1, "status": 1, "user_id": 1})
+
+    friendship_status = "none"
+    friendship_id = None
+    if friendship:
+        friendship_id = friendship.get("friendship_id")
+        if friendship["status"] == "accepted":
+            friendship_status = "friends"
+        elif friendship["status"] == "pending":
+            friendship_status = "pending_sent" if friendship["user_id"] == current_user.user_id else "pending_received"
+
+    is_own = user_id == current_user.user_id
+
+    # Stats: visits, countries, continents (via aggregation)
+    stats_pipeline = [
+        {"$match": {"user_id": user_id}},
+        {"$lookup": {
+            "from": "landmarks", "localField": "landmark_id", "foreignField": "landmark_id",
+            "as": "lm", "pipeline": [{"$project": {"_id": 0, "country_name": 1, "continent": 1}}]
+        }},
+        {"$unwind": {"path": "$lm", "preserveNullAndEmptyArrays": True}},
+        {"$group": {
+            "_id": None,
+            "total_visits": {"$sum": 1},
+            "countries": {"$addToSet": "$lm.country_name"},
+            "continents": {"$addToSet": "$lm.continent"},
+        }}
+    ]
+    stats_result = await db.visits.aggregate(stats_pipeline).to_list(1)
+    stats = stats_result[0] if stats_result else {"total_visits": 0, "countries": [], "continents": []}
+
+    # Recent public visits (limit 5)
+    privacy_filter = {"user_id": user_id}
+    if not is_own and friendship_status != "friends":
+        privacy_filter["visibility"] = "public"
+    elif not is_own:
+        privacy_filter["visibility"] = {"$in": ["public", "friends"]}
+
+    recent_visits = await db.visits.find(
+        privacy_filter, {"_id": 0, "visit_id": 1, "landmark_id": 1, "landmark_name": 1, "visited_at": 1, "photos": {"$slice": 1}}
+    ).sort("visited_at", -1).limit(5).to_list(5)
+
+    friends_count = await db.friends.count_documents({
+        "$or": [
+            {"user_id": user_id, "status": "accepted"},
+            {"friend_id": user_id, "status": "accepted"}
+        ]
+    })
+
+    return {
+        "user_id": user["user_id"],
+        "name": user.get("name", "Unknown"),
+        "username": user.get("username"),
+        "picture": user.get("picture"),
+        "bio": user.get("bio"),
+        "location": user.get("location"),
+        "banner_image": user.get("banner_image"),
+        "is_premium": user.get("is_premium", False),
+        "points": user.get("points", 0),
+        "leaderboard_points": user.get("leaderboard_points", 0),
+        "created_at": user.get("created_at"),
+        "friendship_status": friendship_status,
+        "friendship_id": friendship_id,
+        "is_own_profile": is_own,
+        "stats": {
+            "total_visits": stats["total_visits"],
+            "countries_visited": len([c for c in stats["countries"] if c]),
+            "continents_visited": len([c for c in stats["continents"] if c]),
+            "friends_count": friends_count,
+        },
+        "recent_visits": [
+            {"visit_id": v["visit_id"], "landmark_id": v.get("landmark_id"), "landmark_name": v.get("landmark_name"),
+             "visited_at": v.get("visited_at"), "photo_url": v["photos"][0] if v.get("photos") else None}
+            for v in recent_visits
+        ]
+    }
 
 # ============= MESSAGING ENDPOINTS (Basic+ Only) =============
+
+@router.get("/messages/conversations")
+async def get_conversations(current_user: User = Depends(get_current_user)):
+    """Get conversations list with last message and unread count — single optimized query"""
+    if current_user.subscription_tier == "free":
+        raise HTTPException(status_code=403, detail="Messaging is a premium feature.")
+
+    # Get friend list
+    friendships = await db.friends.find({
+        "$or": [
+            {"user_id": current_user.user_id, "status": "accepted"},
+            {"friend_id": current_user.user_id, "status": "accepted"}
+        ]
+    }, {"_id": 0}).to_list(1000)
+
+    friend_ids = []
+    for f in friendships:
+        friend_ids.append(f["friend_id"] if f["user_id"] == current_user.user_id else f["user_id"])
+
+    if not friend_ids:
+        return []
+
+    # Batch fetch friend info
+    friends_docs = await db.users.find(
+        {"user_id": {"$in": friend_ids}},
+        {"_id": 0, "user_id": 1, "name": 1, "picture": 1, "username": 1}
+    ).to_list(len(friend_ids))
+    friend_map = {f["user_id"]: f for f in friends_docs}
+
+    # Aggregation: get last message + unread count per friend in one pipeline
+    pipeline = [
+        {"$match": {"$or": [
+            {"sender_id": current_user.user_id, "receiver_id": {"$in": friend_ids}},
+            {"receiver_id": current_user.user_id, "sender_id": {"$in": friend_ids}}
+        ]}},
+        {"$addFields": {
+            "friend_id": {"$cond": [
+                {"$eq": ["$sender_id", current_user.user_id]},
+                "$receiver_id", "$sender_id"
+            ]}
+        }},
+        {"$sort": {"created_at": -1}},
+        {"$group": {
+            "_id": "$friend_id",
+            "last_message": {"$first": "$content"},
+            "last_message_time": {"$first": "$created_at"},
+            "last_sender_id": {"$first": "$sender_id"},
+            "unread_count": {"$sum": {"$cond": [
+                {"$and": [
+                    {"$ne": ["$sender_id", current_user.user_id]},
+                    {"$eq": [{"$ifNull": ["$read", False]}, False]}
+                ]}, 1, 0
+            ]}}
+        }}
+    ]
+    msg_results = await db.messages.aggregate(pipeline).to_list(len(friend_ids))
+    msg_map = {r["_id"]: r for r in msg_results}
+
+    conversations = []
+    for fid in friend_ids:
+        friend = friend_map.get(fid)
+        if not friend:
+            continue
+        msg = msg_map.get(fid, {})
+        conversations.append({
+            "friend": friend,
+            "last_message": msg.get("last_message"),
+            "last_message_time": msg.get("last_message_time"),
+            "unread_count": msg.get("unread_count", 0),
+        })
+
+    # Sort: conversations with messages first (by time), then without
+    conversations.sort(key=lambda c: c.get("last_message_time") or datetime.min, reverse=True)
+    return conversations
 
 @router.post("/messages", response_model=Message)
 async def send_message(data: MessageCreate, current_user: User = Depends(get_current_user)):

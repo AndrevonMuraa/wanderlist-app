@@ -43,6 +43,19 @@ async def get_visits(current_user: User = Depends(get_current_user), limit: int 
     visits = await db.visits.aggregate(pipeline).to_list(limit)
     return [Visit(**v) for v in visits]
 
+@router.put("/visits/{visit_id}/privacy")
+async def update_visit_privacy(visit_id: str, visibility: str = Body(..., embed=True), current_user: User = Depends(get_current_user)):
+    """Change privacy on an existing visit"""
+    if visibility not in ["public", "friends", "private"]:
+        raise HTTPException(status_code=400, detail="Invalid visibility")
+    visit = await db.visits.find_one({"visit_id": visit_id, "user_id": current_user.user_id}, {"_id": 0, "visit_id": 1})
+    if not visit:
+        raise HTTPException(status_code=404, detail="Visit not found")
+    await db.visits.update_one({"visit_id": visit_id}, {"$set": {"visibility": visibility}})
+    # Also update the associated activity
+    await db.activities.update_one({"visit_id": visit_id}, {"$set": {"visibility": visibility}})
+    return {"message": "Privacy updated", "visibility": visibility}
+
 @router.get("/visits/stats")
 async def get_visit_stats(current_user: User = Depends(get_current_user)):
     """Get visit statistics including monthly count for free users"""
