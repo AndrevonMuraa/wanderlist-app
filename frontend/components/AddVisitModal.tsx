@@ -65,34 +65,53 @@ export default function AddVisitModal({
   // Calculate safe area padding
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
-  const pickImages = async () => {
-    if (photos.length >= maxPhotos) {
-      if (!isProUser) {
-        Alert.alert(
-          'Photo Limit Reached',
-          `Free users can add up to ${maxPhotos} photo per visit. Upgrade to Pro for up to 10 photos!`,
-          [
-            { text: 'Maybe Later', style: 'cancel' },
-            { text: 'Upgrade to Pro', onPress: () => {
-              onClose();
-              router.push('/subscription');
-            }}
-          ]
-        );
-      } else {
-        Alert.alert('Limit Reached', `You can add up to ${maxPhotos} photos per visit`);
-      }
-      return;
-    }
+  const canAddMore = photos.length < maxPhotos;
 
+  const showPhotoLimitAlert = () => {
+    if (!isProUser) {
+      Alert.alert(
+        'Photo Limit Reached',
+        `Free users can add up to ${maxPhotos} photo per visit. Upgrade to Pro for up to 10 photos!`,
+        [
+          { text: 'Maybe Later', style: 'cancel' },
+          { text: 'Upgrade to Pro', onPress: () => { onClose(); router.push('/subscription'); }}
+        ]
+      );
+    } else {
+      Alert.alert('Limit Reached', `You can add up to ${maxPhotos} photos per visit`);
+    }
+  };
+
+  const takePhoto = async () => {
+    if (!canAddMore) { showPhotoLimitAlert(); return; }
     try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsMultipleSelection: isProUser, // Only Pro users can select multiple
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Camera Access', 'Please allow camera access in your device settings to take photos.');
+        return;
+      }
+      const result = await ImagePicker.launchCameraAsync({
         quality: 0.7,
         base64: true,
       });
+      if (!result.canceled && result.assets[0]?.base64) {
+        setPhotos([...photos, `data:image/jpeg;base64,${result.assets[0].base64}`]);
+      }
+    } catch (error) {
+      console.error('Error taking photo:', error);
+      Alert.alert('Error', 'Failed to take photo');
+    }
+  };
 
+  const pickImages = async () => {
+    if (!canAddMore) { showPhotoLimitAlert(); return; }
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: isProUser,
+        quality: 0.7,
+        base64: true,
+      });
       if (!result.canceled) {
         const newPhotos = result.assets
           .slice(0, maxPhotos - photos.length)
@@ -110,20 +129,13 @@ export default function AddVisitModal({
   };
 
   const handleSubmit = async () => {
-    // Allow submitting with no content (unverified visit for total points)
-    // Show info if no photo about verified points
     if (photos.length === 0) {
       Alert.alert(
         'Record Without Photo?',
-        'Visits without photos earn total points but not verified points for the global leaderboard. Add a photo to earn verified points!',
+        'Visits without a personal photo will not earn verified points for the global leaderboard.\n\nTo earn verified points, add a photo of yourself at the landmark.',
         [
           { text: 'Add Photo', style: 'cancel' },
-          {
-            text: 'Record Anyway',
-            onPress: async () => {
-              await submitVisit();
-            },
-          },
+          { text: 'Record Anyway', onPress: async () => { await submitVisit(); } },
         ]
       );
       return;
@@ -203,6 +215,15 @@ export default function AddVisitModal({
                 </TouchableOpacity>
               )}
             </View>
+
+            {/* Photo verification guidelines */}
+            <View style={styles.photoGuidelines} data-testid="photo-guidelines">
+              <Ionicons name="shield-checkmark" size={16} color={theme.colors.primary} />
+              <Text style={styles.photoGuidelinesText}>
+                Take a personal photo of yourself at the landmark to earn verified points. Photos without you in them may result in verified points being removed.
+              </Text>
+            </View>
+
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.photoScroll}>
               {photos.map((photo, index) => (
                 <View key={index} style={styles.photoItem}>
@@ -215,12 +236,19 @@ export default function AddVisitModal({
                   </TouchableOpacity>
                 </View>
               ))}
-              {photos.length < maxPhotos ? (
-                <TouchableOpacity style={styles.addPhotoButton} onPress={pickImages}>
-                  <Ionicons name="add-circle" size={40} color={theme.colors.primary} />
-                  <Text style={styles.addPhotoText}>Add Photos</Text>
-                </TouchableOpacity>
-              ) : !isProUser ? (
+              {canAddMore && (
+                <View style={styles.photoButtonsColumn}>
+                  <TouchableOpacity style={styles.cameraButton} onPress={takePhoto} data-testid="take-photo-btn">
+                    <Ionicons name="camera" size={28} color="#fff" />
+                    <Text style={styles.cameraButtonText}>Take Photo</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.libraryButton} onPress={pickImages} data-testid="pick-photo-btn">
+                    <Ionicons name="images-outline" size={16} color={theme.colors.textSecondary} />
+                    <Text style={styles.libraryButtonText}>Choose from Library</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              {!canAddMore && !isProUser && (
                 <TouchableOpacity 
                   style={styles.addPhotoButtonLocked}
                   onPress={() => {
@@ -232,8 +260,18 @@ export default function AddVisitModal({
                   <Text style={styles.addPhotoTextLocked}>Upgrade</Text>
                   <Text style={styles.addPhotoSubtext}>for more</Text>
                 </TouchableOpacity>
-              ) : null}
+              )}
             </ScrollView>
+
+            {/* Library disclaimer */}
+            {photos.length > 0 && (
+              <View style={styles.photoDisclaimer} data-testid="photo-disclaimer">
+                <Ionicons name="information-circle-outline" size={14} color={theme.colors.textSecondary} />
+                <Text style={styles.photoDisclaimerText}>
+                  Only personal photos where you are visible count toward verified points. Using photos from the internet or without yourself in them may lead to removal of verified points.
+                </Text>
+              </View>
+            )}
           </View>
 
           {/* Travel Diary Section */}
@@ -424,6 +462,65 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: theme.colors.primary,
     marginTop: 4,
+  },
+  photoButtonsColumn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 6,
+  },
+  cameraButton: {
+    width: 100,
+    height: 72,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 2,
+  },
+  cameraButtonText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  libraryButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: 4,
+  },
+  libraryButtonText: {
+    fontSize: 11,
+    color: theme.colors.textSecondary,
+  },
+  photoGuidelines: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    backgroundColor: 'rgba(77, 184, 216, 0.08)',
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
+    borderLeftWidth: 3,
+    borderLeftColor: theme.colors.primary,
+  },
+  photoGuidelinesText: {
+    flex: 1,
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+    lineHeight: 17,
+  },
+  photoDisclaimer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 6,
+    marginTop: theme.spacing.sm,
+    paddingHorizontal: 2,
+  },
+  photoDisclaimerText: {
+    flex: 1,
+    fontSize: 11,
+    color: theme.colors.textSecondary,
+    lineHeight: 15,
   },
   addPhotoButtonLocked: {
     width: 100,

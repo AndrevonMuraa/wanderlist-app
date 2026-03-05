@@ -414,7 +414,7 @@ export default function LeaderboardScreen() {
               <View style={styles.infoBannerRow}>
                 <Ionicons name="shield-checkmark" size={16} color="#2E9AB5" />
                 <Text style={styles.infoBannerText}>
-                  Global rankings use verified points (photo-confirmed visits)
+                  Global rankings use verified points. Only personal photos where you are clearly visible at the landmark count as verified. Photos from the internet or without yourself in them may lead to removal of verified points.
                 </Text>
                 <Ionicons 
                   name={showPointsInfo ? "chevron-up" : "chevron-down"} 
@@ -424,7 +424,7 @@ export default function LeaderboardScreen() {
               </View>
               {showPointsInfo && (
                 <Text style={styles.infoBannerDetail}>
-                  Add photos to your visits to earn verified points and climb the global leaderboard. 
+                  Take a personal photo of yourself at each landmark to earn verified points and climb the global leaderboard. Only photos where you are visible count as verified.
                   Switch to Friends to see total points.
                 </Text>
               )}

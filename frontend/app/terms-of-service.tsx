@@ -212,14 +212,14 @@ export default function TermsOfServiceScreen() {
             <Text style={styles.paragraph}>
               To ensure fair competition on leaderboards:
             </Text>
-            <BulletPoint text="Visits require photo proof to earn leaderboard points" />
+            <BulletPoint text="Visits require a personal photo (with you visible at the landmark) to earn verified leaderboard points" />
             <BulletPoint text="Photos are subject to verification and review" />
             <BulletPoint text="Suspicious activity patterns are monitored" />
             <BulletPoint text="Fraudulent visits will be removed and points deducted" />
             <BulletPoint text="Repeated violations result in leaderboard ban or account termination" />
             
             <Text style={[styles.paragraph, { marginTop: 12 }]}>
-              We reserve the right to modify the points system at any time. Leaderboard rankings are based on leaderboard points (visits with photos) to ensure fair competition.
+              We reserve the right to modify the points system at any time. Leaderboard rankings are based on verified points from visits with personal photos at the landmark. Photos without the user visible, or photos sourced from the internet, may result in removal of verified points. We reserve the right to revoke verified status for any visit that does not meet the photo verification guidelines.
             </Text>
           </Section>
         </Surface>

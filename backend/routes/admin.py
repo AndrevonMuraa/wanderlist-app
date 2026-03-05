@@ -615,3 +615,54 @@ async def recalculate_leaderboard_points(admin_user: User = Depends(get_admin_us
         "changes": results
     }
 
+
+@router.put("/admin/users/{user_id}/strip-verified")
+async def strip_verified_points(user_id: str, admin_user: User = Depends(get_admin_user)):
+    """
+    Strip all verified status from a user's visits without deleting content.
+    - Sets all visits to verified=false
+    - Sets leaderboard_points to 0
+    - Keeps photos, diary, personal points intact
+    - Visit still counts for total points and friends leaderboard
+    """
+    # Verify the target user exists
+    target_user = await db.users.find_one({"user_id": user_id}, {"_id": 0, "name": 1, "user_id": 1})
+    if not target_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Count verified visits before stripping
+    verified_count = await db.visits.count_documents({"user_id": user_id, "verified": True})
+    
+    if verified_count == 0:
+        return {"message": "User has no verified visits", "visits_stripped": 0}
+    
+    # Strip verified status from all visits (keep photos and content)
+    result = await db.visits.update_many(
+        {"user_id": user_id, "verified": True},
+        {"$set": {"verified": False}}
+    )
+    
+    # Reset leaderboard points to 0
+    await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": {"leaderboard_points": 0}}
+    )
+    
+    # Log the admin action
+    log_entry = {
+        "action_id": f"admin_action_{uuid.uuid4().hex[:12]}",
+        "action": "strip_verified",
+        "target_user_id": user_id,
+        "target_user_name": target_user.get("name", "Unknown"),
+        "performed_by": admin_user.user_id,
+        "visits_stripped": result.modified_count,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.admin_logs.insert_one(log_entry)
+    
+    return {
+        "message": f"Stripped verified status from {result.modified_count} visits for user {target_user.get('name', user_id)}",
+        "visits_stripped": result.modified_count,
+        "leaderboard_points_reset": True
+    }
+

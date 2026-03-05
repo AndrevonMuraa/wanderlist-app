@@ -212,7 +212,7 @@ export default function PointsSummary() {
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Photo Verification</Text>
-                <Text style={styles.infoDesc}>Add photos to earn verified points for the leaderboard</Text>
+                <Text style={styles.infoDesc}>Take a personal photo of yourself at the landmark to earn verified points for the leaderboard</Text>
               </View>
             </View>
           </Surface>

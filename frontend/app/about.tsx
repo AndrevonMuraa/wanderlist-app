@@ -295,7 +295,7 @@ You can filter by country, year, or type.`}
               number={3}
               icon="star"
               title="Earn Points & Rank Up"
-              description="Collect points for visits. Upload photos for leaderboard points!"
+              description="Collect points for visits. Take personal photos at landmarks for verified leaderboard points!"
             />
             <HowItWorksStep
               number={4}
@@ -399,7 +399,7 @@ You can filter by country, year, or type.`}
                     • Continent Completion: +200 pts{'\n\n'}
                     <Text style={styles.bold}>Leaderboard Points</Text> (with photos):{'\n'}
                     • Same values, but only when you upload photos{'\n'}
-                    • Compete fairly with verified visits!
+                    • Compete fairly with verified visits — be in your photos!
                   </Text>
                 </View>
               )}
