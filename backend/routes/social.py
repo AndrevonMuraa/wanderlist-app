@@ -822,13 +822,26 @@ async def get_stats(current_user: User = Depends(get_current_user)):
         ]
     })
     
+    # Calculate leaderboard rank
+    user_lb_points = user.get("leaderboard_points", 0) if user else 0
+    rank_query = {
+        "leaderboard_points": {"$gt": user_lb_points},
+        "$or": [
+            {"default_privacy": "public"},
+            {"default_privacy": {"$exists": False}}
+        ]
+    }
+    users_above = await db.users.count_documents(rank_query)
+    rank = users_above + 1
+    
     return {
         "total_visits": stats["total_visits"],
         "countries_visited": len([c for c in stats.get("countries", []) if c]),
         "continents_visited": len([c for c in stats.get("continents", []) if c]),
         "friends_count": friend_count,
         "points": user.get("points", 0) if user else 0,
-        "leaderboard_points": user.get("leaderboard_points", 0) if user else 0
+        "leaderboard_points": user_lb_points,
+        "rank": rank
     }
 
 # ============= PROGRESS STATISTICS ENDPOINT =============
