@@ -68,6 +68,7 @@ async def register(data: RegisterRequest):
         "password_hash": hash_password(data.password),
         "is_premium": False,
         "subscription_tier": "free",
+        "default_privacy": "public",
         "picture": None,
         "created_at": datetime.now(timezone.utc)
     }

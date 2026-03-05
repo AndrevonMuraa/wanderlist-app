@@ -170,6 +170,40 @@ export default function WelcomeScreen() {
           </View>
         </View>
 
+        {/* Privacy Notice */}
+        <View style={styles.privacySection}>
+          <View style={styles.privacyCard}>
+            <View style={styles.privacyHeader}>
+              <View style={styles.privacyIconCircle}>
+                <Ionicons name="shield-checkmark" size={24} color="#27ae60" />
+              </View>
+              <Text style={styles.privacyTitle}>Your Privacy</Text>
+            </View>
+            <Text style={styles.privacyText}>
+              Your profile starts as <Text style={styles.privacyBold}>Public</Text> — your visits and photos are visible to the WanderMark community. You can change this anytime.
+            </Text>
+            <View style={styles.privacyOptions}>
+              <View style={styles.privacyOption}>
+                <Ionicons name="globe-outline" size={18} color="#27ae60" />
+                <Text style={styles.privacyOptionLabel}>Public</Text>
+                <View style={styles.privacyDefault}><Text style={styles.privacyDefaultText}>Default</Text></View>
+              </View>
+              <View style={styles.privacyOption}>
+                <Ionicons name="people-outline" size={18} color="#3498db" />
+                <Text style={styles.privacyOptionLabel}>Friends Only</Text>
+              </View>
+              <View style={styles.privacyOption}>
+                <Ionicons name="lock-closed-outline" size={18} color="#e74c3c" />
+                <Text style={styles.privacyOptionLabel}>Private</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.privacySettingsBtn} onPress={() => router.push('/settings')}>
+              <Text style={styles.privacySettingsBtnText}>Change in Settings</Text>
+              <Ionicons name="chevron-forward" size={16} color={theme.colors.primary} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
         {/* CTA */}
         <View style={styles.ctaSection}>
           <TouchableOpacity 
@@ -422,5 +456,86 @@ const styles = StyleSheet.create({
   },
   bottomSpacer: {
     height: theme.spacing.xl,
+  },
+  privacySection: {
+    paddingHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
+  },
+  privacyCard: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.xl,
+    padding: theme.spacing.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(39, 174, 96, 0.15)',
+  },
+  privacyHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    gap: 10,
+  },
+  privacyIconCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(39, 174, 96, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  privacyTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  privacyText: {
+    fontSize: 14,
+    color: theme.colors.textSecondary,
+    lineHeight: 20,
+    marginBottom: 14,
+  },
+  privacyBold: {
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  privacyOptions: {
+    gap: 8,
+    marginBottom: 14,
+  },
+  privacyOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingVertical: 6,
+  },
+  privacyOptionLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: theme.colors.text,
+    flex: 1,
+  },
+  privacyDefault: {
+    backgroundColor: 'rgba(39, 174, 96, 0.12)',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: 10,
+  },
+  privacyDefaultText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#27ae60',
+  },
+  privacySettingsBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+  },
+  privacySettingsBtnText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: theme.colors.primary,
   },
 });
