@@ -1,11 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends
 import os
-import logging
-import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from utils.db import db
-from utils.auth import get_current_user, is_user_pro
+from utils.auth import get_current_user
 from models.all import User
 
 

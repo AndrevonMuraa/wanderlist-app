@@ -2,7 +2,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
 from pathlib import Path
 import os
-import ssl
 import certifi
 
 ROOT_DIR = Path(__file__).parent.parent

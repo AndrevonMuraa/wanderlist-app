@@ -1,13 +1,12 @@
-from fastapi import APIRouter, HTTPException, Depends, Request, Response, Cookie, Body
-from fastapi.responses import HTMLResponse
-from typing import List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Request, Response
+from typing import Optional
 import os
 import logging
 import uuid
 from datetime import datetime, timezone, timedelta
 
 from utils.db import db
-from utils.auth import get_current_user, get_admin_user, get_super_admin_user, is_user_pro
+from utils.auth import get_admin_user, get_super_admin_user
 from models.all import User, AdminUserUpdate, AdminReportUpdate, AdminNotificationRequest
 
 

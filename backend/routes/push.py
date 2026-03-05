@@ -1,7 +1,5 @@
 from fastapi import APIRouter, Depends
 import os
-import logging
-import uuid
 from datetime import datetime, timezone
 
 from utils.db import db

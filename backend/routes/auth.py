@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends, Request, Response, Cookie, Body
-from fastapi.responses import HTMLResponse
-from typing import List, Optional
+from typing import Optional
 import os
 import logging
 import uuid

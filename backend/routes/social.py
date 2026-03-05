@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException, Depends, Request
-from typing import List, Optional
+from typing import List
 import os
 import logging
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from utils.db import db
-from utils.auth import get_current_user, is_user_pro, get_user_limits
+from utils.auth import get_current_user, get_user_limits
 from models.all import (
     User, UserPublic, Friend, FriendRequest, Message, MessageCreate,
     Activity, Comment, CommentCreate,

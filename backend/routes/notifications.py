@@ -1,15 +1,8 @@
-from fastapi import APIRouter, HTTPException, Depends, Request, Response, Cookie, Body
-from fastapi.responses import HTMLResponse
-from typing import List, Optional
-import os
-import logging
-import uuid
-from datetime import datetime, timezone, timedelta
+from fastapi import APIRouter, HTTPException, Depends
 
 from utils.db import db
 from utils.auth import get_current_user
 from models.all import User
-from utils.helpers import create_notification
 
 
 router = APIRouter()

@@ -1,14 +1,12 @@
 from fastapi import APIRouter, HTTPException, Depends, Body
 from typing import List, Optional
 import os
-import logging
 import uuid
 from datetime import datetime, timezone
 
 from utils.db import db
 from utils.auth import get_current_user, is_user_pro, get_user_limits
 from models.all import User, CountryVisitCreate, UserCreatedVisitCreate
-from utils.helpers import check_and_award_badges
 
 
 router = APIRouter()

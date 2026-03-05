@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
-from typing import List
+from typing import List, Optional
 import os
-import logging
 import uuid
 from datetime import datetime, timezone
 
