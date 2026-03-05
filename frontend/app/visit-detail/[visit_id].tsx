@@ -12,6 +12,7 @@ import { BACKEND_URL } from '../../utils/config';
 import { lightHaptic } from '../../utils/haptics';
 import { PhotoGalleryModal } from '../../components/PhotoGalleryModal';
 import { shareVisit } from '../../utils/shareUtils';
+import ReportButton from '../../components/ReportButton';
 
 import UniversalHeader from '../../components/UniversalHeader';
 
@@ -286,6 +287,12 @@ export default function VisitDetailScreen() {
           <Text style={styles.shareVisitText}>Share This Visit</Text>
         </TouchableOpacity>
 
+        {/* Report */}
+        <View style={styles.reportRow}>
+          <ReportButton contentType="activity" contentId={visit_id as string} size={16} />
+          <Text style={styles.reportLabel}>Report this visit</Text>
+        </View>
+
         <View style={styles.bottomSpacer} />
       </ScrollView>
       
@@ -482,6 +489,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: theme.colors.primary,
+  },
+  reportRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    margin: theme.spacing.md,
+    marginTop: 0,
+    padding: 12,
+  },
+  reportLabel: {
+    fontSize: 13,
+    color: theme.colors.textLight,
   },
   photoCountBadge: {
     position: 'absolute',

@@ -154,6 +154,24 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     # Determine if visit is verified (has photo proof)
     is_verified = bool(data.photo_base64 or len(photos) > 0)
     
+    # Check diary limit for free users
+    if data.diary_notes and data.diary_notes.strip():
+        user_limits = get_user_limits(current_user)
+        diary_limit = user_limits.get("diary_entries_per_month", 999999)
+        if diary_limit < 999999:
+            now = datetime.now(timezone.utc)
+            start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            diary_count = await db.visits.count_documents({
+                "user_id": current_user.user_id,
+                "diary_notes": {"$exists": True, "$ne": None, "$ne": ""},
+                "created_at": {"$gte": start_of_month}
+            })
+            if diary_count >= diary_limit:
+                raise HTTPException(
+                    status_code=403,
+                    detail=f"Free plan allows {diary_limit} diary entries per month. Upgrade to Pro for unlimited diaries."
+                )
+    
     visit_id = f"visit_{uuid.uuid4().hex[:12]}"
     
     # Determine privacy setting (use provided or user's default)

@@ -565,6 +565,24 @@ async def update_default_privacy(
         "updated_activities": activities_result.modified_count
     }
 
+@router.put("/auth/comment-permission")
+async def update_comment_permission(
+    request: Request,
+    current_user: User = Depends(get_current_user)
+):
+    """Update who can comment on the user's content."""
+    body = await request.json()
+    permission = body.get("comment_permission", "everyone")
+    if permission not in ["everyone", "friends", "nobody"]:
+        raise HTTPException(status_code=400, detail="Invalid permission. Must be everyone, friends, or nobody")
+    
+    await db.users.update_one(
+        {"user_id": current_user.user_id},
+        {"$set": {"comment_permission": permission}}
+    )
+    
+    return {"message": "Comment permission updated", "comment_permission": permission}
+
 @router.put("/auth/change-password")
 async def change_password(
     request: Request,

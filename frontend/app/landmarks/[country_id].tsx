@@ -346,10 +346,13 @@ export default function LandmarksScreen() {
               </View>
             </View>
             
-            {/* Right: Lock icon or chevron */}
+            {/* Right: Lock icon/upgrade hint or chevron */}
             <View style={styles.landmarkActionIcon}>
               {item.is_locked ? (
-                <Ionicons name="lock-closed" size={20} color="rgba(0,0,0,0.3)" />
+                <View style={styles.upgradeHint}>
+                  <Ionicons name="lock-closed" size={16} color="#fff" />
+                  <Text style={styles.upgradeHintText}>PRO</Text>
+                </View>
               ) : (
                 <Ionicons name="chevron-forward" size={20} color="rgba(0,0,0,0.3)" />
               )}
@@ -750,6 +753,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 24,
+  },
+  upgradeHint: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: theme.colors.primary,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  upgradeHintText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#fff',
+    letterSpacing: 0.5,
   },
   emptyContainer: {
     alignItems: 'center',

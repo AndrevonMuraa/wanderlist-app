@@ -503,9 +503,66 @@ async def get_user_profile(user_id: str, current_user: User = Depends(get_curren
         },
         "recent_visits": [
             {"visit_id": v["visit_id"], "landmark_id": v.get("landmark_id"), "landmark_name": v.get("landmark_name"),
-             "visited_at": v.get("visited_at"), "photo_url": v["photos"][0] if v.get("photos") else None}
+             "visited_at": v.get("visited_at"), "photo_url": v["photos"][0] if v.get("photos") else None,
+             "has_diary": bool(v.get("diary_notes")), "country_name": v.get("country_name")}
             for v in recent_visits
-        ]
+        ],
+        "comment_permission": user.get("comment_permission", "everyone"),
+    }
+
+@router.get("/users/{user_id}/visits")
+async def get_user_all_visits(
+    user_id: str,
+    skip: int = 0,
+    limit: int = 20,
+    current_user: User = Depends(get_current_user)
+):
+    """Get all visits from a user with privacy filtering and pagination"""
+    is_own = user_id == current_user.user_id
+    
+    # Determine visibility filter
+    if is_own:
+        vis_filter = {}
+    else:
+        # Check friendship
+        friendship = await db.friends.find_one({
+            "status": "accepted",
+            "$or": [
+                {"user_id": current_user.user_id, "friend_id": user_id},
+                {"user_id": user_id, "friend_id": current_user.user_id}
+            ]
+        })
+        is_friend = friendship is not None
+        
+        if is_friend:
+            vis_filter = {"visibility": {"$in": ["public", "friends"]}}
+        else:
+            vis_filter = {"visibility": "public"}
+    
+    query = {"user_id": user_id, **vis_filter}
+    total = await db.visits.count_documents(query)
+    visits = await db.visits.find(
+        query, {"_id": 0}
+    ).sort("visited_at", -1).skip(skip).limit(limit).to_list(limit)
+    
+    return {
+        "visits": [
+            {
+                "visit_id": v["visit_id"],
+                "landmark_id": v.get("landmark_id"),
+                "landmark_name": v.get("landmark_name"),
+                "country_name": v.get("country_name"),
+                "visited_at": v.get("visited_at"),
+                "photo_url": v["photos"][0] if v.get("photos") else None,
+                "has_diary": bool(v.get("diary_notes")),
+                "points_earned": v.get("points_earned", 0),
+                "visibility": v.get("visibility", "public"),
+            }
+            for v in visits
+        ],
+        "total": total,
+        "skip": skip,
+        "limit": limit,
     }
 
 # ============= MESSAGING ENDPOINTS (Basic+ Only) =============
@@ -1034,6 +1091,23 @@ async def add_comment(activity_id: str, data: CommentCreate, current_user: User 
     activity = await db.activities.find_one({"activity_id": activity_id})
     if not activity:
         raise HTTPException(status_code=404, detail="Activity not found")
+    
+    # Check comment_permission of activity owner
+    if activity["user_id"] != current_user.user_id:
+        owner = await db.users.find_one({"user_id": activity["user_id"]}, {"_id": 0, "comment_permission": 1})
+        perm = (owner or {}).get("comment_permission", "everyone")
+        if perm == "nobody":
+            raise HTTPException(status_code=403, detail="This user has disabled comments")
+        if perm == "friends":
+            friendship = await db.friends.find_one({
+                "status": "accepted",
+                "$or": [
+                    {"user_id": current_user.user_id, "friend_id": activity["user_id"]},
+                    {"user_id": activity["user_id"], "friend_id": current_user.user_id}
+                ]
+            })
+            if not friendship:
+                raise HTTPException(status_code=403, detail="Only friends can comment on this content")
     
     # If this is a reply, get parent comment details
     reply_to_user = None

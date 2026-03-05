@@ -296,6 +296,9 @@ async def get_landmark_community_photos(
     
     # Build photo list from visits
     photos = []
+    all_photo_ids = []
+    photo_visit_map = []
+    
     for visit in visits:
         visit_photos = visit.get("photos", [])
         photo_base64 = visit.get("photo_base64")
@@ -308,34 +311,43 @@ async def get_landmark_community_photos(
         
         for idx, photo in enumerate(all_visit_photos):
             photo_id = f"{visit['visit_id']}_{idx}"
-            
-            # Get upvote count for this photo
-            upvote_count = await db.photo_upvotes.count_documents({"photo_id": photo_id})
-            
-            # Check if current user has upvoted
-            user_upvoted = False
-            if is_premium:
-                existing_upvote = await db.photo_upvotes.find_one({
-                    "photo_id": photo_id,
-                    "user_id": current_user.user_id
-                })
-                user_upvoted = existing_upvote is not None
-            
-            photos.append({
-                "photo_id": photo_id,
-                "photo_url": photo,
-                "visit_id": visit["visit_id"],
-                "user_id": visit["user_id"],
-                "user_name": visit.get("user_name", "Anonymous"),
-                "user_picture": visit.get("user_picture"),
-                "username": visit.get("username"),
-                "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
-                "comments": visit.get("comments"),
-                "diary_notes": visit.get("diary_notes") if visit.get("share_diary", True) else None,
-                "has_diary": bool(visit.get("diary_notes")) and visit.get("share_diary", True),
-                "upvotes": upvote_count,
-                "user_upvoted": user_upvoted
-            })
+            all_photo_ids.append(photo_id)
+            photo_visit_map.append((photo_id, photo, visit))
+    
+    # Batch fetch upvote counts for ALL photos at once (fixes N+1)
+    upvote_counts = {}
+    user_upvotes = set()
+    if all_photo_ids:
+        upvote_pipeline = [
+            {"$match": {"photo_id": {"$in": all_photo_ids}}},
+            {"$group": {"_id": "$photo_id", "count": {"$sum": 1}}}
+        ]
+        upvote_results = await db.photo_upvotes.aggregate(upvote_pipeline).to_list(len(all_photo_ids))
+        upvote_counts = {r["_id"]: r["count"] for r in upvote_results}
+        
+        if is_premium:
+            user_upvote_docs = await db.photo_upvotes.find(
+                {"photo_id": {"$in": all_photo_ids}, "user_id": current_user.user_id},
+                {"_id": 0, "photo_id": 1}
+            ).to_list(len(all_photo_ids))
+            user_upvotes = {d["photo_id"] for d in user_upvote_docs}
+    
+    for photo_id, photo, visit in photo_visit_map:
+        photos.append({
+            "photo_id": photo_id,
+            "photo_url": photo,
+            "visit_id": visit["visit_id"],
+            "user_id": visit["user_id"],
+            "user_name": visit.get("user_name", "Anonymous"),
+            "user_picture": visit.get("user_picture"),
+            "username": visit.get("username"),
+            "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
+            "comments": visit.get("comments"),
+            "diary_notes": visit.get("diary_notes") if visit.get("share_diary", True) else None,
+            "has_diary": bool(visit.get("diary_notes")) and visit.get("share_diary", True),
+            "upvotes": upvote_counts.get(photo_id, 0),
+            "user_upvoted": photo_id in user_upvotes
+        })
     
     # Sort by upvotes (most upvoted first), then by date
     if sort == "newest":
@@ -449,8 +461,10 @@ async def get_country_community_photos(
     ]
     country_visits = await db.country_visits.aggregate(country_visits_pipeline).to_list(500)
     
-    # Build photo list
+    # Build photo list - collect all photo IDs first for batch upvote fetch
     photos = []
+    all_photo_ids = []
+    photo_entries = []
     
     for visit in visits:
         visit_photos = visit.get("photos", [])
@@ -466,17 +480,8 @@ async def get_country_community_photos(
         
         for idx, photo in enumerate(all_visit_photos):
             photo_id = f"{visit['visit_id']}_{idx}"
-            upvote_count = await db.photo_upvotes.count_documents({"photo_id": photo_id})
-            
-            user_upvoted = False
-            if is_premium:
-                existing = await db.photo_upvotes.find_one({
-                    "photo_id": photo_id,
-                    "user_id": current_user.user_id
-                })
-                user_upvoted = existing is not None
-            
-            photos.append({
+            all_photo_ids.append(photo_id)
+            photo_entries.append({
                 "photo_id": photo_id,
                 "photo_url": photo,
                 "landmark_name": lm_name,
@@ -488,25 +493,14 @@ async def get_country_community_photos(
                 "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
                 "diary_notes": visit.get("diary_notes") if visit.get("share_diary", True) else None,
                 "has_diary": bool(visit.get("diary_notes")) and visit.get("share_diary", True),
-                "upvotes": upvote_count,
-                "user_upvoted": user_upvoted
             })
     
     # Add country visit photos
     for cv in country_visits:
         for idx, photo in enumerate(cv.get("photos", [])):
             photo_id = f"cv_{cv['country_visit_id']}_{idx}"
-            upvote_count = await db.photo_upvotes.count_documents({"photo_id": photo_id})
-            
-            user_upvoted = False
-            if is_premium:
-                existing = await db.photo_upvotes.find_one({
-                    "photo_id": photo_id,
-                    "user_id": current_user.user_id
-                })
-                user_upvoted = existing is not None
-            
-            photos.append({
+            all_photo_ids.append(photo_id)
+            photo_entries.append({
                 "photo_id": photo_id,
                 "photo_url": photo,
                 "landmark_name": "Country Visit",
@@ -516,9 +510,30 @@ async def get_country_community_photos(
                 "user_picture": cv.get("user_picture"),
                 "username": cv.get("username"),
                 "visited_at": cv.get("visited_at").isoformat() if cv.get("visited_at") else None,
-                "upvotes": upvote_count,
-                "user_upvoted": user_upvoted
             })
+    
+    # Batch fetch upvote counts (fixes N+1 query)
+    upvote_counts = {}
+    user_upvotes = set()
+    if all_photo_ids:
+        upvote_pipeline = [
+            {"$match": {"photo_id": {"$in": all_photo_ids}}},
+            {"$group": {"_id": "$photo_id", "count": {"$sum": 1}}}
+        ]
+        upvote_results = await db.photo_upvotes.aggregate(upvote_pipeline).to_list(len(all_photo_ids))
+        upvote_counts = {r["_id"]: r["count"] for r in upvote_results}
+        
+        if is_premium:
+            user_upvote_docs = await db.photo_upvotes.find(
+                {"photo_id": {"$in": all_photo_ids}, "user_id": current_user.user_id},
+                {"_id": 0, "photo_id": 1}
+            ).to_list(len(all_photo_ids))
+            user_upvotes = {d["photo_id"] for d in user_upvote_docs}
+    
+    for entry in photo_entries:
+        entry["upvotes"] = upvote_counts.get(entry["photo_id"], 0)
+        entry["user_upvoted"] = entry["photo_id"] in user_upvotes
+        photos.append(entry)
     
     if sort == "newest":
         photos.sort(key=lambda x: x.get("visited_at", "") or "", reverse=True)

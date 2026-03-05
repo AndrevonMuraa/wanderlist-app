@@ -13,6 +13,7 @@ import RankBadge from '../../components/RankBadge';
 import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
+import ReportButton from '../../components/ReportButton';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') return localStorage.getItem('auth_token');
@@ -228,14 +229,23 @@ export default function UserProfileScreen() {
                 <Text style={styles.messageBtnText}>Message</Text>
               </TouchableOpacity>
             )}
+            <ReportButton contentType="user" contentId={profile.user_id} size={18} color={theme.colors.textLight} />
           </View>
         )}
 
         {/* Recent Visits */}
         {profile.recent_visits.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Recent Visits</Text>
-            {profile.recent_visits.map((v) => (
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <Text style={styles.sectionTitle}>Recent Visits</Text>
+              <TouchableOpacity
+                onPress={() => router.push(`/user-visits/${profile.user_id}?user_name=${encodeURIComponent(profile.name)}`)}
+                data-testid="view-all-visits-btn"
+              >
+                <Text style={{ fontSize: 14, fontWeight: '600', color: theme.colors.primary }}>View All</Text>
+              </TouchableOpacity>
+            </View>
+            {profile.recent_visits.map((v: any) => (
               <TouchableOpacity
                 key={v.visit_id}
                 style={styles.visitCard}
@@ -250,9 +260,12 @@ export default function UserProfileScreen() {
                   </View>
                 )}
                 <View style={styles.visitInfo}>
-                  <Text style={styles.visitName} numberOfLines={1}>{v.landmark_name}</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                    <Text style={styles.visitName} numberOfLines={1}>{v.landmark_name}</Text>
+                    {v.has_diary && <Ionicons name="journal" size={14} color={theme.colors.primary} />}
+                  </View>
                   <Text style={styles.visitDate}>
-                    {v.visited_at ? new Date(v.visited_at).toLocaleDateString() : ''}
+                    {v.country_name ? `${v.country_name} · ` : ''}{v.visited_at ? new Date(v.visited_at).toLocaleDateString() : ''}
                   </Text>
                 </View>
                 <Ionicons name="chevron-forward" size={18} color={theme.colors.textLight} />

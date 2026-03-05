@@ -19,6 +19,7 @@ class User(BaseModel):
     longest_streak: int = 0
     last_visit_date: Optional[str] = None
     default_privacy: str = "public"
+    comment_permission: str = "everyone"
     role: str = "user"
     is_banned: bool = False
     banned_at: Optional[datetime] = None
@@ -37,8 +38,8 @@ class UserPublic(BaseModel):
     is_premium: bool = False
     subscription_tier: str = "free"
     default_privacy: str = "public"
+    comment_permission: str = "everyone"
     role: str = "user"
-    has_password: bool = True
 
 
 class ProfileUpdate(BaseModel):

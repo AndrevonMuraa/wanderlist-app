@@ -44,14 +44,16 @@ def is_user_pro(user: User) -> bool:
 
 LIMITS = {
     "free": {
-        "max_friends": 5,
+        "max_friends": 999999,
         "photos_per_visit": 1,
+        "diary_entries_per_month": 3,
         "can_access_premium_landmarks": False,
         "can_create_custom_visits": False,
     },
     "pro": {
         "max_friends": 999999,
         "photos_per_visit": 10,
+        "diary_entries_per_month": 999999,
         "can_access_premium_landmarks": True,
         "can_create_custom_visits": True,
     }

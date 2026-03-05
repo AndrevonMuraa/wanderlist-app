@@ -55,6 +55,7 @@ export default function PrivacySettingsScreen() {
   const insets = useSafeAreaInsets();
   const { colors, gradientColors } = useTheme();
   const [defaultPrivacy, setDefaultPrivacy] = useState<'public' | 'friends' | 'private'>('public');
+  const [commentPermission, setCommentPermission] = useState<'everyone' | 'friends' | 'nobody'>('everyone');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -71,6 +72,7 @@ export default function PrivacySettingsScreen() {
       if (response.ok) {
         const user = await response.json();
         setDefaultPrivacy(user.default_privacy || 'public');
+        setCommentPermission(user.comment_permission || 'everyone');
       }
     } catch (error) {
       console.error('Error loading settings:', error);
@@ -317,6 +319,67 @@ export default function PrivacySettingsScreen() {
                 Switching back to Public restores your verified points automatically.
               </Text>
             </View>
+          </View>
+        </View>
+
+        {/* Comment Permission */}
+        <View style={[styles.section, { backgroundColor: colors.surface }]}>
+          <View style={styles.sectionHeader}>
+            <View style={[styles.sectionIconCircle, { backgroundColor: '#8e44ad15' }]}>
+              <Ionicons name="chatbubble-ellipses" size={22} color="#8e44ad" />
+            </View>
+            <View style={styles.sectionHeaderText}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Who Can Comment</Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
+                Control who can comment on your shared content
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.privacyOptions}>
+            {([
+              { value: 'everyone' as const, icon: 'globe-outline', label: 'Everyone', desc: 'Anyone who can see your content can comment', color: '#27ae60' },
+              { value: 'friends' as const, icon: 'people-outline', label: 'Friends Only', desc: 'Only friends can comment, even on public content', color: '#3498db' },
+              { value: 'nobody' as const, icon: 'chatbubble-outline', label: 'Nobody', desc: 'Comments are disabled on all your content', color: '#e74c3c' },
+            ]).map((opt) => {
+              const isSelected = commentPermission === opt.value;
+              return (
+                <TouchableOpacity
+                  key={opt.value}
+                  style={[
+                    styles.privacyOption,
+                    { backgroundColor: colors.background },
+                    isSelected && [styles.privacyOptionSelected, { backgroundColor: colors.surface, borderColor: opt.color }],
+                  ]}
+                  onPress={async () => {
+                    setCommentPermission(opt.value);
+                    try {
+                      const token = await getToken();
+                      await fetch(`${BACKEND_URL}/api/auth/comment-permission`, {
+                        method: 'PUT',
+                        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ comment_permission: opt.value }),
+                      });
+                    } catch (e) { console.error(e); }
+                  }}
+                  activeOpacity={0.7}
+                  data-testid={`comment-perm-${opt.value}`}
+                >
+                  <View style={[styles.privacyIconCircle, { backgroundColor: colors.background }, isSelected && { backgroundColor: opt.color }]}>
+                    <Ionicons name={opt.icon as any} size={20} color={isSelected ? '#fff' : opt.color} />
+                  </View>
+                  <View style={styles.privacyContent}>
+                    <Text style={[styles.privacyLabel, { color: colors.text }, isSelected && { color: opt.color, fontWeight: '700' }]}>{opt.label}</Text>
+                    <Text style={[styles.privacyDescription, { color: colors.textSecondary }]}>{opt.desc}</Text>
+                  </View>
+                  {isSelected && (
+                    <View style={[styles.checkCircle, { backgroundColor: opt.color }]}>
+                      <Ionicons name="checkmark" size={14} color="#fff" />
+                    </View>
+                  )}
+                </TouchableOpacity>
+              );
+            })}
           </View>
         </View>
 
