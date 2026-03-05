@@ -2,7 +2,7 @@
   "expo": {
     "name": "WanderMark",
     "slug": "wandermark",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "wandermark",
@@ -11,7 +11,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.wandermark.app",
-      "buildNumber": "63",
+      "buildNumber": "64",
       "usesAppleSignIn": true,
       "infoPlist": {
         "NSCameraUsageDescription": "Take photos of landmarks you visit",
