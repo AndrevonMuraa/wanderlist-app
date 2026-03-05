@@ -7,7 +7,7 @@ import uuid
 from datetime import datetime, timezone, timedelta
 
 from utils.db import db
-from utils.auth import get_current_user, is_user_pro
+from utils.auth import get_current_user, is_user_pro, get_user_limits
 from models.all import (
     User, UserPublic, Friend, FriendRequest, Message, MessageCreate,
     Activity, Comment, CommentCreate,
@@ -544,95 +544,139 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
 
 @router.get("/feed", response_model=List[Activity])
 async def get_activity_feed(current_user: User = Depends(get_current_user), limit: int = 50):
-    """Get activity feed from friends with privacy filtering"""
-    
-    # Get all accepted friends
+    """Get activity feed from friends with privacy filtering - optimized with aggregation"""
+
+    # Get all accepted friends (single query, lightweight projection)
     friendships = await db.friends.find({
         "$or": [
             {"user_id": current_user.user_id, "status": "accepted"},
             {"friend_id": current_user.user_id, "status": "accepted"}
         ]
-    }).to_list(1000)
-    
-    # Extract friend IDs
+    }, {"_id": 0, "user_id": 1, "friend_id": 1}).to_list(1000)
+
     friend_ids = []
-    for friendship in friendships:
-        if friendship["user_id"] == current_user.user_id:
-            friend_ids.append(friendship["friend_id"])
-        else:
-            friend_ids.append(friendship["user_id"])
-    
-    # Privacy filtering query:
-    # - Show all own activities (any visibility)
-    # - Show friends' activities that are "public" or "friends"
-    # - Never show "private" activities from others
+    for f in friendships:
+        friend_ids.append(f["friend_id"] if f["user_id"] == current_user.user_id else f["user_id"])
+
+    # Privacy filter
     privacy_filter = {
         "$or": [
-            # Own activities - show all
             {"user_id": current_user.user_id},
-            # Friends' public activities
             {
                 "user_id": {"$in": friend_ids},
                 "$or": [
                     {"visibility": "public"},
                     {"visibility": "friends"},
-                    {"visibility": {"$exists": False}}  # Legacy activities without visibility
+                    {"visibility": {"$exists": False}}
                 ]
             }
         ]
     }
-    
-    # Get activities with privacy filter, sorted by recent
-    activities = await db.activities.find(privacy_filter).sort("created_at", -1).limit(limit).to_list(limit)
-    
-    # Enrich activities with like and comment counts, and check if current user liked
-    enriched_activities = []
-    for activity in activities:
-        # Skip activities missing required fields
-        if not activity.get("user_name"):
-            # Try to get user_name from user_id
-            user = await db.users.find_one({"user_id": activity.get("user_id")})
-            if user:
-                activity["user_name"] = user.get("name", "Unknown User")
-                activity["user_picture"] = user.get("picture")
-            else:
-                activity["user_name"] = "Unknown User"
-        
-        # Get likes count
-        likes_count = await db.likes.count_documents({"activity_id": activity["activity_id"]})
-        
-        # Check if current user liked this
-        user_like = await db.likes.find_one({
-            "activity_id": activity["activity_id"],
-            "user_id": current_user.user_id
-        })
-        
-        # Get comments count
-        comments_count = await db.comments.count_documents({"activity_id": activity["activity_id"]})
-        
-        # Get first photo URL from associated visit
-        photo_url = None
-        if activity.get("has_photos") and activity.get("visit_id"):
-            visit = await db.visits.find_one(
-                {"visit_id": activity["visit_id"], "photos": {"$exists": True, "$ne": []}},
-                {"photos": {"$slice": 1}, "_id": 0}
-            )
-            if visit and visit.get("photos"):
-                photo_url = visit["photos"][0]
-        
-        activity["photo_url"] = photo_url
-        activity["likes_count"] = likes_count
-        activity["comments_count"] = comments_count
-        activity["is_liked"] = bool(user_like)
-        
+
+    # Single aggregation pipeline: replaces N+1 individual queries
+    pipeline = [
+        {"$match": privacy_filter},
+        {"$sort": {"created_at": -1}},
+        {"$limit": limit},
+        # Lookup user info (for activities missing user_name)
+        {"$lookup": {
+            "from": "users",
+            "localField": "user_id",
+            "foreignField": "user_id",
+            "as": "_user",
+            "pipeline": [{"$project": {"_id": 0, "name": 1, "picture": 1}}]
+        }},
+        # Lookup likes
+        {"$lookup": {
+            "from": "likes",
+            "localField": "activity_id",
+            "foreignField": "activity_id",
+            "as": "_likes",
+            "pipeline": [{"$project": {"_id": 0, "user_id": 1}}]
+        }},
+        # Lookup comments count
+        {"$lookup": {
+            "from": "comments",
+            "localField": "activity_id",
+            "foreignField": "activity_id",
+            "as": "_comments",
+            "pipeline": [{"$project": {"_id": 0, "comment_id": 1}}]
+        }},
+        # Lookup visit photos
+        {"$lookup": {
+            "from": "visits",
+            "localField": "visit_id",
+            "foreignField": "visit_id",
+            "as": "_visit",
+            "pipeline": [
+                {"$match": {"photos": {"$exists": True, "$ne": []}}},
+                {"$project": {"_id": 0, "photos": {"$slice": ["$photos", 1]}}}
+            ]
+        }},
+        # Project final shape
+        {"$project": {
+            "_id": 0,
+            "activity_id": 1,
+            "user_id": 1,
+            "user_name": {
+                "$ifNull": [
+                    "$user_name",
+                    {"$ifNull": [{"$arrayElemAt": ["$_user.name", 0]}, "Unknown User"]}
+                ]
+            },
+            "user_picture": {
+                "$ifNull": [
+                    "$user_picture",
+                    {"$arrayElemAt": ["$_user.picture", 0]}
+                ]
+            },
+            "activity_type": 1,
+            "landmark_id": 1,
+            "landmark_name": 1,
+            "landmark_image": 1,
+            "country_id": 1,
+            "country_name": 1,
+            "continent": 1,
+            "countries_count": 1,
+            "landmarks_count": 1,
+            "points_earned": 1,
+            "milestone_count": 1,
+            "visit_id": 1,
+            "has_diary": 1,
+            "has_tips": 1,
+            "has_photos": 1,
+            "photo_count": 1,
+            "photo_url": {
+                "$cond": {
+                    "if": {"$and": [
+                        {"$eq": ["$has_photos", True]},
+                        {"$gt": [{"$size": "$_visit"}, 0]}
+                    ]},
+                    "then": {"$arrayElemAt": [{"$arrayElemAt": ["$_visit.photos", 0]}, 0]},
+                    "else": None
+                }
+            },
+            "visibility": 1,
+            "created_at": 1,
+            "likes_count": {"$size": "$_likes"},
+            "comments_count": {"$size": "$_comments"},
+            "is_liked": {"$in": [current_user.user_id, "$_likes.user_id"]}
+        }}
+    ]
+
+    activities = await db.activities.aggregate(pipeline).to_list(limit)
+
+    result = []
+    for a in activities:
+        if not a.get("user_name"):
+            a["user_name"] = "Unknown User"
         try:
-            enriched_activities.append(Activity(**activity))
+            result.append(Activity(**a))
         except Exception as e:
-            # Log the error but continue processing other activities
-            print(f"Error processing activity {activity.get('activity_id')}: {e}")
+            logging.warning(f"Error processing activity {a.get('activity_id')}: {e}")
             continue
-    
-    return enriched_activities
+
+    return result
 
 @router.post("/activities/{activity_id}/like")
 async def like_activity(activity_id: str, current_user: User = Depends(get_current_user)):
