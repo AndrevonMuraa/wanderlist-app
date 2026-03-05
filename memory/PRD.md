@@ -27,6 +27,15 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Backend enforces permission on POST /api/activities/{id}/comment
 - UI control in Privacy settings page
 
+### Leaderboard Rank Fix (Complete - March 6, 2026)
+- `/api/stats` now returns `rank` field calculated from leaderboard_points
+- Fixed N/A display on Journey page leaderboard section
+
+### Removed Detailed Statistics Page (March 6, 2026)
+- Deleted `(tabs)/statistics.tsx`
+- Removed navigation link from Journey page
+- Removed tab registration from `_layout.tsx`
+
 ### Comments UI Integration (Complete - March 6, 2026)
 - `CommentsSection` component integrated into visit-detail page
 - Full CRUD: view, add, reply, like/unlike, delete comments
