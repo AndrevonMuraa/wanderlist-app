@@ -57,12 +57,24 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - 3 unused components deleted
 - Backend import cleanup
 
+### Share Profile (Complete - March 5, 2026)
+- `shareProfile()` util generates shareable message with user stats
+- Share button on user profile pages (next to Report button)
+- Uses React Native Share API
+
+### User Activity Stream (Complete - March 5, 2026)
+- `GET /api/users/{user_id}/activity` endpoint with pagination
+- Privacy filtering: public-only for strangers, public+friends for friends, all for self
+- Activities show description, like count, comment count, diary/photo indicators
+- Displayed on profile page below Recent Visits
+
 ## Key API Endpoints
 - `GET /api/visits/check/{landmark_id}` - Lightweight visit status
 - `POST /api/visits` - Create visit with visibility + diary limit
 - `PUT /api/visits/{id}/privacy` - Per-item privacy change
 - `PUT /api/auth/privacy` - Global default (retroactive)
 - `PUT /api/auth/comment-permission` - Comment permission control
+- `GET /api/users/{id}/activity` - Paginated user activity stream with privacy
 - `GET /api/users/{id}/visits` - Paginated user visits with privacy
 - `GET /api/users/{id}/profile` - Profile with has_diary + comment_permission
 - `POST /api/reports` - Submit report (activity/comment/photo/user)
@@ -95,6 +107,4 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 ### P1 - Upcoming
 - Verify all features in TestFlight build
 ### P2 - Future
-- Share Profile function (external sharing)
-- User activity stream on profile
 - Rename GitHub repository (wanderlist-app → wandermark-app)
