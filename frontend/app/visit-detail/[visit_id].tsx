@@ -3,9 +3,7 @@ import { View, StyleSheet, ScrollView, Image, Dimensions, Platform, TouchableOpa
 import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { safeGoBack } from '../../utils/navigation';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
@@ -13,6 +11,8 @@ import { lightHaptic } from '../../utils/haptics';
 import { PhotoGalleryModal } from '../../components/PhotoGalleryModal';
 import { shareVisit } from '../../utils/shareUtils';
 import ReportButton from '../../components/ReportButton';
+import CommentsSection from '../../components/CommentsSection';
+import { useAuth } from '../../contexts/AuthContext';
 
 import UniversalHeader from '../../components/UniversalHeader';
 
@@ -34,6 +34,7 @@ const getToken = async (): Promise<string | null> => {
 
 interface VisitDetail {
   visit_id: string;
+  user_id?: string;
   landmark_id: string;
   landmark_name?: string;
   country_name?: string;
@@ -45,15 +46,19 @@ interface VisitDetail {
   visited_at: string;
   verified: boolean;
   visibility?: string;
+  activity_id?: string;
+  comments_count?: number;
 }
 
 export default function VisitDetailScreen() {
   const { visit_id } = useLocalSearchParams();
+  const { user } = useAuth();
   const [visit, setVisit] = useState<VisitDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState(0);
   const [showGallery, setShowGallery] = useState(false);
   const [currentVisibility, setCurrentVisibility] = useState<string>('public');
+  const [commentsCount, setCommentsCount] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -71,6 +76,7 @@ export default function VisitDetailScreen() {
         const data = await response.json();
         setVisit(data);
         setCurrentVisibility(data.visibility || 'public');
+        setCommentsCount(data.comments_count || 0);
       }
     } catch (error) {
       console.error('Error fetching visit:', error);
@@ -276,6 +282,18 @@ export default function VisitDetailScreen() {
           </View>
         )}
 
+        {/* Social Comments Section */}
+        {visit.activity_id && user && (
+          <View style={styles.socialCommentsCard} data-testid="comments-section">
+            <CommentsSection
+              activityId={visit.activity_id}
+              commentsCount={commentsCount}
+              currentUserId={user.user_id}
+              onCommentsChange={setCommentsCount}
+            />
+          </View>
+        )}
+
         {/* Share Visit */}
         <TouchableOpacity
           style={styles.shareVisitButton}
@@ -444,6 +462,14 @@ const styles = StyleSheet.create({
     color: theme.colors.textLight,
   },
   commentsCard: {
+    margin: theme.spacing.md,
+    marginTop: 0,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
+  socialCommentsCard: {
     margin: theme.spacing.md,
     marginTop: 0,
     padding: theme.spacing.lg,

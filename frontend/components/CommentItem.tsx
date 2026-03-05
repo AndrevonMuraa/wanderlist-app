@@ -110,12 +110,14 @@ export default function CommentItem({
             </TouchableOpacity>
           )}
 
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={handleDelete}
-          >
-            <Ionicons name="trash-outline" size={16} color={theme.colors.textLight} />
-          </TouchableOpacity>
+          {comment.user_id === currentUserId && (
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={handleDelete}
+            >
+              <Ionicons name="trash-outline" size={16} color={theme.colors.textLight} />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>

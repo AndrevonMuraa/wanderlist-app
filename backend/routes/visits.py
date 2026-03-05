@@ -112,6 +112,12 @@ async def get_visit_details(visit_id: str, current_user: User = Depends(get_curr
         {"_id": 0, "name": 1, "picture": 1, "username": 1}
     )
     
+    # Get linked activity for comments
+    activity = await db.activities.find_one(
+        {"visit_id": visit_id},
+        {"_id": 0, "activity_id": 1, "comments_count": 1}
+    )
+    
     return {
         **visit,
         "landmark_name": landmark.get("name") if landmark else None,
@@ -119,7 +125,9 @@ async def get_visit_details(visit_id: str, current_user: User = Depends(get_curr
         "landmark_image": landmark.get("image_url") if landmark else None,
         "user_name": user.get("name") if user else None,
         "user_picture": user.get("picture") if user else None,
-        "username": user.get("username") if user else None
+        "username": user.get("username") if user else None,
+        "activity_id": activity.get("activity_id") if activity else None,
+        "comments_count": activity.get("comments_count", 0) if activity else 0,
     }
 
 @router.post("/visits", response_model=Visit)
