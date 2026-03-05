@@ -11,7 +11,7 @@ import uuid
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 if not BASE_URL:
-    BASE_URL = "https://granular-control.preview.emergentagent.com"
+    BASE_URL = "https://cleanup-verify-1.preview.emergentagent.com"
 
 # Norwegian words/phrases to check for (should NOT appear in responses)
 NORWEGIAN_PATTERNS = [

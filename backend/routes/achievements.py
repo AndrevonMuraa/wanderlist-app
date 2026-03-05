@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends
-from typing import List
 import os
 import logging
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime
 
 from utils.db import db
 from utils.auth import get_current_user

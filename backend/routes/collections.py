@@ -1,10 +1,8 @@
-from fastapi import APIRouter, HTTPException, Depends, Request, Response, Cookie, Body
-from fastapi.responses import HTMLResponse
-from typing import List, Optional
+from fastapi import APIRouter, HTTPException, Depends, Body
 import os
 import logging
 import uuid
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 
 from utils.db import db
 from utils.auth import get_current_user, is_user_pro

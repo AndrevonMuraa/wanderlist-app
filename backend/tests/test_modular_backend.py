@@ -3,14 +3,14 @@ WanderMark Backend API Regression Tests
 Tests all endpoints after backend refactoring from monolithic to modular structure
 
 Test User: test@wandermark.app / Test1234!
-API URL: https://granular-control.preview.emergentagent.com
+API URL: https://cleanup-verify-1.preview.emergentagent.com
 """
 
 import pytest
 import requests
 import os
 
-BASE_URL = "https://granular-control.preview.emergentagent.com"
+BASE_URL = "https://cleanup-verify-1.preview.emergentagent.com"
 
 
 # ============= FIXTURES =============

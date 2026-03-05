@@ -12,7 +12,7 @@ import requests
 import os
 import time
 
-BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://granular-control.preview.emergentagent.com')
+BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://cleanup-verify-1.preview.emergentagent.com')
 
 # Test users
 USER1 = {"email": "test@wandermark.app", "password": "Test1234!", "user_id": "user_dd46a314f120"}
