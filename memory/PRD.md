@@ -27,6 +27,14 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Backend enforces permission on POST /api/activities/{id}/comment
 - UI control in Privacy settings page
 
+### Anti-Cheat / Photo Verification System (Complete - March 6, 2026)
+- **Camera-first**: Primary action is now "Take Photo" (camera), "Choose from Library" is secondary
+- **Photo guidelines**: Prominent banner in AddVisitModal: "Take a personal photo of yourself at the landmark"
+- **Disclaimer**: Warning that photos without user visible may lead to verified points removal
+- **Updated text across app**: leaderboard, points-summary, about, terms-of-service all emphasize personal photo requirement
+- **Admin strip-verified endpoint**: `PUT /api/admin/users/{user_id}/strip-verified` removes verified status from all visits and resets leaderboard_points to 0, without deleting photos or content. Action logged to admin_logs collection
+- **Terms of Service**: Updated with revocation clause for non-compliant photos
+
 ### Performance Optimizations v2 (Complete - March 6, 2026)
 - `/api/stats`: 4 sequential DB calls → 3 parallel (asyncio.gather) + 1 sequential for rank
 - `/api/progress`: Added 5-min TTL in-memory cache for static geo data (countries + landmark counts) + parallel query execution
