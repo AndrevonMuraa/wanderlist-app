@@ -140,10 +140,6 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         else:
             raise HTTPException(status_code=400, detail=f"Maximum {max_photos} photos allowed per visit")
     
-    # Validate travel tips limit (max 5 tips)
-    travel_tips = data.travel_tips or []
-    if len(travel_tips) > 5:
-        raise HTTPException(status_code=400, detail="Maximum 5 travel tips allowed per visit")
     
     # Determine if visit is verified (has photo proof)
     is_verified = bool(data.photo_base64 or len(photos) > 0)
@@ -165,7 +161,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         "comments": data.comments,
         "visit_location": data.visit_location,
         "diary_notes": data.diary_notes,
-        "travel_tips": travel_tips,
+        "travel_tips": [],
         "share_diary": data.share_diary if data.share_diary is not None else True,
         "status": "accepted",
         "verified": is_verified,
@@ -219,7 +215,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         "points_earned": landmark.get("points", 10),
         "visit_id": visit_id,  # Link to full visit details
         "has_diary": bool(data.diary_notes),
-        "has_tips": len(travel_tips) > 0,
+        "has_tips": False,
         "has_photos": len(photos) > 0,
         "photo_count": len(photos),
         "visibility": data.visibility or current_user.default_privacy or "public",  # Privacy setting

@@ -29,7 +29,7 @@
   "seed_data_creation": "None - used existing test user",
   "retest_needed": false,
   "should_main_agent_self_test": false,
-  "context_for_next_testing_agent": "React Native/Expo app - cannot be tested in browser. Backend API at https://query-boost-2.preview.emergentagent.com works correctly.",
+  "context_for_next_testing_agent": "React Native/Expo app - cannot be tested in browser. Backend API at https://granular-control.preview.emergentagent.com works correctly.",
   "verification_results": {
     "badge_icon_mappings": {
       "climbing_to_footsteps": "PASS - badgeIcons.ts line 5: climbing: 'footsteps'",

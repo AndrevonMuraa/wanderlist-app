@@ -28,7 +28,6 @@ interface AddVisitModalProps {
   onSubmit: (data: {
     photos: string[];
     diary_notes: string;
-    travel_tips: string[];
     share_diary: boolean;
   }) => void;
   isPremium: boolean;

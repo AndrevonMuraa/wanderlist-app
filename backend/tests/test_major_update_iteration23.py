@@ -10,7 +10,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get("EXPO_PUBLIC_BACKEND_URL", "https://query-boost-2.preview.emergentagent.com")
+BASE_URL = os.environ.get("EXPO_PUBLIC_BACKEND_URL", "https://granular-control.preview.emergentagent.com")
 
 # Test credentials
 TEST_EMAIL = "test@wandermark.app"

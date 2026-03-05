@@ -37,7 +37,7 @@
   "seed_data_creation": "None - used existing test user",
   "retest_needed": false,
   "should_main_agent_self_test": false,
-  "context_for_next_testing_agent": "Backend refactoring complete and verified. All 31 requested endpoints tested plus 2 additional auth tests. Modular structure: server.py (52 lines) imports 15 route files. Test file at /app/backend/tests/test_modular_backend.py covers all routes. API URL: https://query-boost-2.preview.emergentagent.com",
+  "context_for_next_testing_agent": "Backend refactoring complete and verified. All 31 requested endpoints tested plus 2 additional auth tests. Modular structure: server.py (52 lines) imports 15 route files. Test file at /app/backend/tests/test_modular_backend.py covers all routes. API URL: https://granular-control.preview.emergentagent.com",
   "features_tested": {
     "auth_routes": {
       "POST /api/auth/login - Login with test credentials": "PASS",
