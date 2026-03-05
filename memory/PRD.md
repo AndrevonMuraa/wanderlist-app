@@ -212,6 +212,23 @@ All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) Ne
 - **Optimized leaderboard endpoints**: Replaced N+1 user lookups in `/api/leaderboard?category=visits`, `?category=countries`, and `/api/leaderboard/rising-stars` with `$lookup` in aggregation pipelines.
 - All 34 backend tests passed (iteration_27).
 
+### Session Feb 27, 2026 - Social Features Overhaul
+**Backend:**
+- **New: Public User Profile** (`GET /api/users/{user_id}/profile`): Returns name, stats (visits/countries/continents/friends), friendship status, recent visits. Respects privacy settings.
+- **New: User Search** (`GET /api/users/search?q=X`): Search by name or username, excludes self.
+- **New: Conversations endpoint** (`GET /api/messages/conversations`): Single aggregation returns all conversations with last message + unread count. Replaces N+1 fetch.
+- **New: Friend improvements**: `POST /api/friends/{id}/reject`, `DELETE /api/friends/{id}` (remove), `GET /api/friends/sent`.
+- **New: Visit privacy** (`PUT /api/visits/{id}/privacy`): Change visibility on existing visits (updates both visits + activities).
+- Optimized `GET /api/friends/pending` with `$lookup` (was N+1).
+
+**Frontend:**
+- **New: User profile page** (`/app/user-profile/[user_id].tsx`): Avatar, stats, rank, friend/message buttons, recent visits.
+- **Updated: Friends page**: User search (typeahead), reject button on requests, sent requests section, profile navigation on tap.
+- **Updated: Feed page**: Merged feed with "Friends" | "Community" tabs. Community tab shows public visit photos/diaries.
+- **Updated: Social page**: Community Feed renamed from "Activity Feed". Leaderboard items now link to profiles.
+- **Updated: Settings**: Better privacy descriptions ("Your visits, photos and diary entries are visible to everyone").
+- All 30 backend tests passed (iteration_28).
+
 ## Key Files Modified (Latest)
 - `backend/routes/country_visits.py` - Full PUT endpoint with photo management + landmarks endpoint + migration
 - `frontend/app/(tabs)/journey.tsx` - Carousel, reordered sections, badge icons, navigation
