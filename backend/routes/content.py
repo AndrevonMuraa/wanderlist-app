@@ -148,103 +148,97 @@ async def get_landmarks(
     continent: Optional[str] = None,
     category: Optional[str] = None,
     search: Optional[str] = None,
-    visited: Optional[str] = None,  # "true", "false", or None (all)
-    sort_by: Optional[str] = "upvotes_desc",  # upvotes_desc, points_desc, points_asc, name_asc, name_desc
+    visited: Optional[str] = None,
+    sort_by: Optional[str] = "upvotes_desc",
     min_points: Optional[int] = None,
     max_points: Optional[int] = None,
     limit: int = 1000,
     current_user: User = Depends(get_current_user)
 ):
-    """
-    Get landmarks with advanced filtering and search
-    
-    Parameters:
-    - country_id: Filter by country
-    - continent: Filter by continent
-    - category: Filter by category (free/premium)
-    - search: Text search in name, description, country_name
-    - visited: Filter by visit status ("true"/"false"/None)
-    - sort_by: Sort order (upvotes_desc, points_desc, points_asc, name_asc, name_desc)
-    - min_points, max_points: Filter by points range
-    - limit: Maximum results
-    """
-    
-    # Build query
-    query = {}
-    
+    # Build match query
+    match_query = {}
     if country_id:
-        query["country_id"] = country_id
-    
+        match_query["country_id"] = country_id
     if continent:
-        query["continent"] = continent
-    
+        match_query["continent"] = continent
     if category:
-        query["category"] = category
-    
-    # Text search
+        match_query["category"] = category
     if search:
-        query["$or"] = [
+        match_query["$or"] = [
             {"name": {"$regex": search, "$options": "i"}},
             {"description": {"$regex": search, "$options": "i"}},
             {"country_name": {"$regex": search, "$options": "i"}}
         ]
-    
-    # Points range filter
     if min_points is not None or max_points is not None:
-        query["points"] = {}
+        match_query["points"] = {}
         if min_points is not None:
-            query["points"]["$gte"] = min_points
+            match_query["points"]["$gte"] = min_points
         if max_points is not None:
-            query["points"]["$lte"] = max_points
-    
-    # Fetch landmarks
-    landmarks = await db.landmarks.find(query, {"_id": 0}).to_list(limit)
-    
-    # If filtering by visited status, get user's visits
-    if visited is not None:
-        user_visits = await db.visits.find(
-            {"user_id": current_user.user_id},
-            {"landmark_id": 1, "_id": 0}
-        ).to_list(10000)
-        visited_landmark_ids = {v["landmark_id"] for v in user_visits}
-        
-        if visited == "true":
-            # Only visited landmarks
-            landmarks = [l for l in landmarks if l["landmark_id"] in visited_landmark_ids]
-        elif visited == "false":
-            # Only unvisited landmarks
-            landmarks = [l for l in landmarks if l["landmark_id"] not in visited_landmark_ids]
-    
-    # Add locked status for premium landmarks if user is free tier
-    results = []
-    for l in landmarks:
-        landmark_dict = dict(l)
-        if current_user.subscription_tier == "free" and landmark_dict.get("category") == "premium":
-            landmark_dict["is_locked"] = True
-        else:
-            landmark_dict["is_locked"] = False
-        results.append(landmark_dict)
-    
-    # Sort results - ALWAYS put official landmarks first, then premium
-    # Category sort: official (0) comes before premium (1)
-    def get_category_order(x):
-        return 0 if x.get("category") == "official" else 1
-    
+            match_query["points"]["$lte"] = max_points
+
+    # Use aggregation with $lookup to check visited status in DB
+    pipeline = [
+        {"$match": match_query},
+        {"$lookup": {
+            "from": "visits",
+            "let": {"lid": "$landmark_id"},
+            "pipeline": [
+                {"$match": {
+                    "$expr": {
+                        "$and": [
+                            {"$eq": ["$landmark_id", "$$lid"]},
+                            {"$eq": ["$user_id", current_user.user_id]}
+                        ]
+                    }
+                }},
+                {"$limit": 1},
+                {"$project": {"_id": 0, "visit_id": 1}}
+            ],
+            "as": "user_visit"
+        }},
+        {"$addFields": {
+            "is_visited": {"$gt": [{"$size": "$user_visit"}, 0]}
+        }},
+        {"$project": {"user_visit": 0, "_id": 0}}
+    ]
+
+    # Filter by visited status
+    if visited == "true":
+        pipeline.append({"$match": {"is_visited": True}})
+    elif visited == "false":
+        pipeline.append({"$match": {"is_visited": False}})
+
+    # Sort in DB
+    sort_stage = {}
     if sort_by == "upvotes_desc":
-        results.sort(key=lambda x: (get_category_order(x), -x.get("upvotes", 0)))
+        sort_stage = {"upvotes": -1}
     elif sort_by == "points_desc":
-        results.sort(key=lambda x: (get_category_order(x), -x.get("points", 0)))
+        sort_stage = {"points": -1}
     elif sort_by == "points_asc":
-        results.sort(key=lambda x: (get_category_order(x), x.get("points", 0)))
+        sort_stage = {"points": 1}
     elif sort_by == "name_asc":
-        results.sort(key=lambda x: (get_category_order(x), x.get("name", "")))
+        sort_stage = {"name": 1}
     elif sort_by == "name_desc":
-        results.sort(key=lambda x: (get_category_order(x), x.get("name", "")[::-1]))
+        sort_stage = {"name": -1}
     else:
-        # Default sort: official first, then by name
-        results.sort(key=lambda x: (get_category_order(x), x.get("name", "")))
-    
-    return [Landmark(**r) for r in results]
+        sort_stage = {"name": 1}
+
+    # Always sort official first
+    pipeline.append({"$addFields": {
+        "category_order": {"$cond": [{"$eq": ["$category", "official"]}, 0, 1]}
+    }})
+    pipeline.append({"$sort": {"category_order": 1, **sort_stage}})
+    pipeline.append({"$project": {"category_order": 0}})
+    pipeline.append({"$limit": limit})
+
+    landmarks = await db.landmarks.aggregate(pipeline).to_list(limit)
+
+    # Add locked status
+    is_free = current_user.subscription_tier == "free"
+    for l in landmarks:
+        l["is_locked"] = is_free and l.get("category") == "premium"
+
+    return [Landmark(**l) for l in landmarks]
 
 @router.get("/landmarks/{landmark_id}", response_model=Landmark)
 async def get_landmark(landmark_id: str, current_user: User = Depends(get_current_user)):

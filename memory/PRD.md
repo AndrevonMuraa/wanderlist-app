@@ -177,17 +177,24 @@ All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) Ne
 3. App Store submission preparation
 4. P2: Rename GitHub repository (`wanderlist-app` → `wandermark-app`)
 
-### Session Feb 2026 - Final Code Cleanup & Hardening
-- **Badge→Rank terminology finalized across entire app**:
-  - about.tsx: "Badge System" expandable → "Rank System" with all 8 rank descriptions
-  - notification-settings.tsx: "Badge Alerts" → "Rank Alerts"
-  - add-visit celebration: "BADGE UNLOCKED!" → "RANK UP!"
-  - ShareStatsCard: "X Badges Unlocked" → rank name display
-- **Dead badge code deleted**: achievements.tsx, badgeIcons.ts removed
-- **has_password field added**: Backend /api/auth/me now returns `has_password` boolean
-- **Change Password hidden for Apple users**: Conditional rendering based on `has_password` field
-- **featured_badges removed**: Cleaned from UserPublic and ProfileUpdate models
-- **Unused import removed**: `sendAchievementNotification` removed from add-visit
+## Session Mar 4, 2026 - Backend Performance Optimization
+### Root cause: Backend timeouts, NOT frontend/cache
+- `/api/stats` → Rewritten with `$lookup` + `$group` aggregation (was >30s, now 0.19s)
+- `/api/progress` → Rewritten with aggregation pipeline (was >15s, now 0.20s)
+- `/api/landmarks` → Rewritten with `$lookup` for visited-status in DB (was slow, now 0.19s)
+### Other fixes this session:
+- Badge→Rank terminology finalized across entire app
+- has_password field added to /api/auth/me (hides Change Password for Apple users)
+- Dead badge code deleted (achievements.tsx, badgeIcons.ts)
+- Visit-detail Surface→View for text visibility fix
+- Notifications page: Hook crash fix, navigation, mark-all-read, backend notifications for friends + rank-up
+- "Can't find your destination?" box made consistent for all users
+- Journey: Rank icon bigger, text smaller, "Recently Visited" removed, "Rank"→"Leaderboard"
+- Social: Duplicate Activity Feed removed + 290 lines dead code
+- Norwegian text removed (Kampanjekoder → Promo Codes)
+- Points Summary crash fixed (missing `insets`)
+- Frontend useEffect guards: `if (user)` + `[user]` dependency on all tab pages
+- Promise.allSettled in journey.tsx for resilient data fetching
 
 ## Key Files Modified (Latest)
 - `backend/routes/country_visits.py` - Full PUT endpoint with photo management + landmarks endpoint + migration
