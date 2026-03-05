@@ -51,12 +51,6 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Like/comment on activities, upvote community photos
 - Travel Tips completely removed; diary is sole text feature
 
-### Codebase Cleanup (Complete)
-- travel_tips, has_tips fully removed from all code
-- db.friendships → db.friends fix in account deletion
-- 3 unused components deleted
-- Backend import cleanup
-
 ### Share Profile (Complete - March 5, 2026)
 - `shareProfile()` util generates shareable message with user stats
 - Share button on user profile pages (next to Report button)
@@ -67,6 +61,15 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Privacy filtering: public-only for strangers, public+friends for friends, all for self
 - Activities show description, like count, comment count, diary/photo indicators
 - Displayed on profile page below Recent Visits
+
+### Codebase Cleanup (Complete - March 6, 2026)
+- travel_tips, has_tips fully removed from all code
+- db.friendships -> db.friends fix in account deletion
+- 3 unused components deleted
+- Full backend import cleanup across all 14 route files + utils/db.py
+- Removed unused imports: HTMLResponse, List, Optional, Cookie, Body, logging, uuid, datetime, timedelta, ssl, check_and_award_badges, create_notification, is_user_pro, get_current_user (from admin.py)
+- Old test reports cleaned up
+- Verified with 25/25 backend regression tests passing
 
 ## Key API Endpoints
 - `GET /api/visits/check/{landmark_id}` - Lightweight visit status
@@ -105,6 +108,7 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 ## Prioritized Backlog
 ### P0 - None
 ### P1 - Upcoming
+- Wire up Comments UI (CommentsSection, CommentItem) in visit-detail.tsx
 - Verify all features in TestFlight build
 ### P2 - Future
-- Rename GitHub repository (wanderlist-app → wandermark-app)
+- Rename GitHub repository (wanderlist-app -> wandermark-app)
