@@ -27,6 +27,13 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Backend enforces permission on POST /api/activities/{id}/comment
 - UI control in Privacy settings page
 
+### Performance Optimizations v2 (Complete - March 6, 2026)
+- `/api/stats`: 4 sequential DB calls → 3 parallel (asyncio.gather) + 1 sequential for rank
+- `/api/progress`: Added 5-min TTL in-memory cache for static geo data (countries + landmark counts) + parallel query execution
+- `/api/photos/collection`: 3 sequential DB queries → 3 parallel (asyncio.gather) with minimal projections
+- New DB indexes: `comments.comment_id` (unique), `activities.visit_id`
+- All endpoints now respond under 200ms
+
 ### Leaderboard Rank Fix (Complete - March 6, 2026)
 - `/api/stats` now returns `rank` field calculated from leaderboard_points
 - Fixed N/A display on Journey page leaderboard section
