@@ -206,7 +206,11 @@ All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) Ne
 - **`/api/continent-stats` optimized**: Replaced Python loops + multiple queries with MongoDB aggregation pipeline using `$lookup` for visited landmarks by continent.
 - **`/api/community-feed` optimized**: Replaced N+1 upvote counting (`count_documents` per item) with single batch aggregation `$group`.
 - Added `is_visited` field to Landmark Pydantic model.
-- All 26 backend tests passed (iteration_26).
+- **CRITICAL: Fixed index mismatch**: Indexes were created on `db.friendships` but all code uses `db.friends` — the `friends` collection had ZERO indexes, causing full collection scans on every friend query.
+- **Added 15+ missing indexes**: `photo_upvotes.photo_id`, `user_created_visits.(user_id, visibility)`, `notifications.(user_id, created_at)`, `visits.visibility`, `landmarks.continent`, `friends.(user_id/friend_id + status)`, `likes.(activity_id + user_id)`.
+- **Fixed N+1 in `/api/progress` (empty user)**: Replaced per-country `count_documents` (50+ queries) with single aggregation.
+- **Optimized leaderboard endpoints**: Replaced N+1 user lookups in `/api/leaderboard?category=visits`, `?category=countries`, and `/api/leaderboard/rising-stars` with `$lookup` in aggregation pipelines.
+- All 34 backend tests passed (iteration_27).
 
 ## Key Files Modified (Latest)
 - `backend/routes/country_visits.py` - Full PUT endpoint with photo management + landmarks endpoint + migration
