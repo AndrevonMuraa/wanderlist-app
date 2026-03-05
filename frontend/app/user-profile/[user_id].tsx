@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform, Alert, StatusBar } from 'react-native';
+import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform, Alert, StatusBar, Share } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -14,6 +14,7 @@ import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
 import ReportButton from '../../components/ReportButton';
+import { shareProfile } from '../../utils/shareUtils';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') return localStorage.getItem('auth_token');
@@ -42,12 +43,15 @@ export default function UserProfileScreen() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [activities, setActivities] = useState<any[]>([]);
+  const [activitiesLoading, setActivitiesLoading] = useState(false);
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 24);
 
   useEffect(() => { loadProfile(); }, [user_id]);
+  useEffect(() => { if (profile) loadActivity(); }, [profile]);
 
   const loadProfile = async () => {
     try {
@@ -58,6 +62,34 @@ export default function UserProfileScreen() {
       if (res.ok) setProfile(await res.json());
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
+  };
+
+  const loadActivity = async () => {
+    setActivitiesLoading(true);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/users/${user_id}/activity?limit=5`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setActivities(data.activities || []);
+      }
+    } catch (e) {
+      console.error('Error loading activity:', e);
+    } finally {
+      setActivitiesLoading(false);
+    }
+  };
+
+  const handleShareProfile = async () => {
+    if (!profile) return;
+    await shareProfile(
+      profile.name,
+      profile.stats.total_visits,
+      profile.stats.countries_visited,
+      profile.points || 0
+    );
   };
 
   const handleFriendAction = async () => {
@@ -230,6 +262,9 @@ export default function UserProfileScreen() {
               </TouchableOpacity>
             )}
             <ReportButton contentType="user" contentId={profile.user_id} size={18} color={theme.colors.textLight} />
+            <TouchableOpacity onPress={handleShareProfile} style={{ padding: 4 }} data-testid="share-profile-btn">
+              <Ionicons name="share-outline" size={18} color={theme.colors.textLight} />
+            </TouchableOpacity>
           </View>
         )}
 
@@ -273,6 +308,47 @@ export default function UserProfileScreen() {
             ))}
           </View>
         )}
+
+        {/* Activity Stream */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Recent Activity</Text>
+          {activitiesLoading ? (
+            <ActivityIndicator size="small" color={theme.colors.primary} style={{ marginVertical: 16 }} />
+          ) : activities.length > 0 ? (
+            activities.map((act: any) => (
+              <View key={act.activity_id} style={styles.activityCard} data-testid={`activity-${act.activity_id}`}>
+                <View style={styles.activityIconCol}>
+                  <View style={[styles.activityDot, { backgroundColor: theme.colors.primary + '20' }]}>
+                    <Ionicons
+                      name={act.activity_type === 'visit' ? 'location' : act.activity_type === 'country_visit' ? 'flag' : 'star'}
+                      size={16} color={theme.colors.primary}
+                    />
+                  </View>
+                </View>
+                <View style={styles.activityContent}>
+                  <Text style={styles.activityDesc} numberOfLines={2}>{act.description}</Text>
+                  <View style={styles.activityMeta}>
+                    <Text style={styles.activityDate}>
+                      {act.created_at ? new Date(act.created_at).toLocaleDateString() : ''}
+                    </Text>
+                    {act.has_diary && <Ionicons name="journal" size={12} color={theme.colors.primary} style={{ marginLeft: 6 }} />}
+                    {act.has_photos && <Ionicons name="camera" size={12} color={theme.colors.textSecondary} style={{ marginLeft: 6 }} />}
+                    <View style={styles.activityStats}>
+                      <Ionicons name="heart" size={12} color={act.is_liked ? '#e74c3c' : theme.colors.textLight} />
+                      <Text style={styles.activityStatNum}>{act.like_count || 0}</Text>
+                      <Ionicons name="chatbubble-outline" size={12} color={theme.colors.textLight} style={{ marginLeft: 6 }} />
+                      <Text style={styles.activityStatNum}>{act.comments_count || 0}</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ))
+          ) : (
+            <Text style={{ fontSize: 14, color: theme.colors.textSecondary, textAlign: 'center', paddingVertical: 20 }}>
+              No visible activity yet
+            </Text>
+          )}
+        </View>
 
         <View style={{ height: 120 }} />
       </ScrollView>
@@ -321,4 +397,13 @@ const styles = StyleSheet.create({
   visitInfo: { flex: 1 },
   visitName: { fontSize: 14, fontWeight: '600', color: theme.colors.text },
   visitDate: { fontSize: 12, color: theme.colors.textSecondary, marginTop: 2 },
+  activityCard: { flexDirection: 'row', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#f5f5f5' },
+  activityIconCol: { marginRight: 12, paddingTop: 2 },
+  activityDot: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
+  activityContent: { flex: 1 },
+  activityDesc: { fontSize: 14, color: theme.colors.text, lineHeight: 20 },
+  activityMeta: { flexDirection: 'row', alignItems: 'center', marginTop: 6 },
+  activityDate: { fontSize: 12, color: theme.colors.textSecondary },
+  activityStats: { flexDirection: 'row', alignItems: 'center', marginLeft: 'auto' },
+  activityStatNum: { fontSize: 12, color: theme.colors.textLight, marginLeft: 3 },
 });

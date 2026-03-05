@@ -74,3 +74,16 @@ export const shareCountryVisit = async (countryName: string, photoCount: number,
     return false;
   }
 };
+
+
+export const shareProfile = async (name: string, visits: number, countries: number, points: number) => {
+  try {
+    await successHaptic();
+    const message = `Check out ${name}'s travel profile on WanderMark!\n\n${visits} landmarks | ${countries} countries | ${points.toLocaleString()} points\n\nJoin the adventure: ${APP_LINK}`;
+    await Share.share({ message, title: `${name} on WanderMark` });
+    return true;
+  } catch (error) {
+    console.error('Error sharing profile:', error);
+    return false;
+  }
+};

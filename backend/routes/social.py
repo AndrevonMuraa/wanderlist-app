@@ -565,6 +565,86 @@ async def get_user_all_visits(
         "limit": limit,
     }
 
+@router.get("/users/{user_id}/activity")
+async def get_user_activity(
+    user_id: str,
+    skip: int = 0,
+    limit: int = 20,
+    current_user: User = Depends(get_current_user)
+):
+    """Get a user's activity stream with privacy filtering"""
+    is_own = user_id == current_user.user_id
+    
+    if is_own:
+        vis_filter = {}
+    else:
+        friendship = await db.friends.find_one({
+            "status": "accepted",
+            "$or": [
+                {"user_id": current_user.user_id, "friend_id": user_id},
+                {"user_id": user_id, "friend_id": current_user.user_id}
+            ]
+        })
+        is_friend = friendship is not None
+        if is_friend:
+            vis_filter = {"visibility": {"$in": ["public", "friends"]}}
+        else:
+            vis_filter = {"visibility": "public"}
+    
+    query = {"user_id": user_id, **vis_filter}
+    total = await db.activities.count_documents(query)
+    
+    pipeline = [
+        {"$match": query},
+        {"$sort": {"created_at": -1}},
+        {"$skip": skip},
+        {"$limit": limit},
+        {"$lookup": {
+            "from": "activity_likes",
+            "localField": "activity_id",
+            "foreignField": "activity_id",
+            "as": "likes"
+        }},
+        {"$lookup": {
+            "from": "comments",
+            "localField": "activity_id",
+            "foreignField": "activity_id",
+            "as": "comments_list"
+        }},
+        {"$addFields": {
+            "like_count": {"$size": "$likes"},
+            "comments_count": {"$size": "$comments_list"},
+            "is_liked": {"$in": [current_user.user_id, "$likes.user_id"]}
+        }},
+        {"$project": {
+            "_id": 0,
+            "activity_id": 1,
+            "activity_type": 1,
+            "description": {"$ifNull": [
+                "$description",
+                {"$concat": ["Visited ", {"$ifNull": ["$landmark_name", "a landmark"]}]}
+            ]},
+            "landmark_name": 1,
+            "country_name": 1,
+            "points_earned": 1,
+            "has_diary": 1,
+            "has_photos": 1,
+            "like_count": 1,
+            "comments_count": 1,
+            "is_liked": 1,
+            "created_at": 1,
+        }}
+    ]
+    
+    activities = await db.activities.aggregate(pipeline).to_list(limit)
+    
+    return {
+        "activities": activities,
+        "total": total,
+        "skip": skip,
+        "limit": limit,
+    }
+
 # ============= MESSAGING ENDPOINTS (Basic+ Only) =============
 
 @router.get("/messages/conversations")
