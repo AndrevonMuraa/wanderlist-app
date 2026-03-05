@@ -917,7 +917,7 @@ async def get_activity_feed(current_user: User = Depends(get_current_user), limi
             "milestone_count": 1,
             "visit_id": 1,
             "has_diary": 1,
-            "has_tips": 0,
+            "has_tips": {"$literal": False},
             "has_photos": 1,
             "photo_count": 1,
             "photo_url": {
