@@ -273,7 +273,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
                         "continent": country_doc.get("continent", "Unknown"),
                         "photos": [],  # Auto-visits start empty — user adds photos via country page
                         "diary": None,
-                        "visibility": "public",
+                        "visibility": visibility,
                         "visited_at": datetime.now(timezone.utc),
                         "points_earned": country_bonus_points,
                         "leaderboard_points_earned": 0,  # No leaderboard points until user adds photos
@@ -360,6 +360,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
                 "continent": landmark.get("continent"),
                 "points_earned": country_completion_bonus,
                 "landmarks_count": total_landmarks_in_country,
+                "visibility": visibility,
                 "created_at": datetime.now(timezone.utc),
                 "likes_count": 0,
                 "comments_count": 0
@@ -412,6 +413,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
                         "continent": continent,
                         "points_earned": continent_completion_bonus,
                         "countries_count": len(country_ids_in_continent),
+                        "visibility": visibility,
                         "created_at": datetime.now(timezone.utc),
                         "likes_count": 0,
                         "comments_count": 0
@@ -430,6 +432,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
             "user_picture": current_user.picture,
             "activity_type": "milestone",
             "milestone_count": visit_count,
+            "visibility": visibility,
             "created_at": datetime.now(timezone.utc),
             "likes_count": 0,
             "comments_count": 0

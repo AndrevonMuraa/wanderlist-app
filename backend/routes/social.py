@@ -92,9 +92,19 @@ async def get_enhanced_leaderboard(
                 user_rank = idx + 1
                 
     elif category == "visits":
-        # Get visit counts with user info via $lookup (eliminates N+1)
+        # Privacy filter: only include public users on global leaderboard
+        privacy_match = {}
+        if not user_filter:
+            # Get public user IDs first
+            public_users = await db.users.find(
+                {"$or": [{"default_privacy": "public"}, {"default_privacy": {"$exists": False}}]},
+                {"_id": 0, "user_id": 1}
+            ).to_list(10000)
+            public_ids = [u["user_id"] for u in public_users]
+            privacy_match = {"user_id": {"$in": public_ids}}
+
         pipeline = [
-            {"$match": {**time_filter, **({"user_id": {"$in": user_filter}} if user_filter else {})}},
+            {"$match": {**time_filter, **({"user_id": {"$in": user_filter}} if user_filter else privacy_match)}},
             {"$group": {"_id": "$user_id", "visit_count": {"$sum": 1}}},
             {"$sort": {"visit_count": -1}},
             {"$limit": limit},
@@ -124,9 +134,18 @@ async def get_enhanced_leaderboard(
                     user_rank = idx + 1
                     
     elif category == "countries":
-        # Get unique countries visited count with user info via $lookup
+        # Privacy filter: only include public users on global leaderboard
+        privacy_match = {}
+        if not user_filter:
+            public_users = await db.users.find(
+                {"$or": [{"default_privacy": "public"}, {"default_privacy": {"$exists": False}}]},
+                {"_id": 0, "user_id": 1}
+            ).to_list(10000)
+            public_ids = [u["user_id"] for u in public_users]
+            privacy_match = {"user_id": {"$in": public_ids}}
+
         pipeline = [
-            {"$match": {**time_filter, **({"user_id": {"$in": user_filter}} if user_filter else {})}},
+            {"$match": {**time_filter, **({"user_id": {"$in": user_filter}} if user_filter else privacy_match)}},
             {"$group": {"_id": {"user_id": "$user_id", "country": "$country_name"}}},
             {"$group": {"_id": "$_id.user_id", "country_count": {"$sum": 1}}},
             {"$sort": {"country_count": -1}},
@@ -167,8 +186,15 @@ async def get_rising_stars(limit: int = 10, current_user: User = Depends(get_cur
     """Get users with biggest point gains this week"""
     week_ago = datetime.now(timezone.utc) - timedelta(days=7)
     
+    # Only include public users
+    public_users = await db.users.find(
+        {"$or": [{"default_privacy": "public"}, {"default_privacy": {"$exists": False}}]},
+        {"_id": 0, "user_id": 1}
+    ).to_list(10000)
+    public_ids = [u["user_id"] for u in public_users]
+    
     pipeline = [
-        {"$match": {"created_at": {"$gte": week_ago}}},
+        {"$match": {"created_at": {"$gte": week_ago}, "user_id": {"$in": public_ids}}},
         {"$group": {"_id": "$user_id", "points_this_week": {"$sum": "$points_earned"}}},
         {"$sort": {"points_this_week": -1}},
         {"$limit": limit},

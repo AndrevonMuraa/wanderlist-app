@@ -534,16 +534,36 @@ async def update_default_privacy(
     privacy: str = Body(..., embed=True),
     current_user: User = Depends(get_current_user)
 ):
-    """Update user's default privacy setting"""
+    """Update user's default privacy setting — retroactively updates all existing content"""
     if privacy not in ["public", "friends", "private"]:
         raise HTTPException(status_code=400, detail="Invalid privacy setting")
     
+    # Update user setting
     await db.users.update_one(
         {"user_id": current_user.user_id},
         {"$set": {"default_privacy": privacy}}
     )
     
-    return {"message": "Privacy setting updated", "default_privacy": privacy}
+    # Retroactive: update all existing visits and activities
+    visits_result = await db.visits.update_many(
+        {"user_id": current_user.user_id},
+        {"$set": {"visibility": privacy}}
+    )
+    activities_result = await db.activities.update_many(
+        {"user_id": current_user.user_id},
+        {"$set": {"visibility": privacy}}
+    )
+    await db.country_visits.update_many(
+        {"user_id": current_user.user_id},
+        {"$set": {"visibility": privacy}}
+    )
+    
+    return {
+        "message": "Privacy setting updated",
+        "default_privacy": privacy,
+        "updated_visits": visits_result.modified_count,
+        "updated_activities": activities_result.modified_count
+    }
 
 @router.put("/auth/change-password")
 async def change_password(
