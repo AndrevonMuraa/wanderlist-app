@@ -83,6 +83,16 @@ async def get_visit_stats(current_user: User = Depends(get_current_user)):
     }
 
 
+@router.get("/visits/check/{landmark_id}")
+async def check_landmark_visit_status(landmark_id: str, current_user: User = Depends(get_current_user)):
+    """Lightweight check if user has visited a specific landmark. Single indexed query."""
+    visit = await db.visits.find_one(
+        {"user_id": current_user.user_id, "landmark_id": landmark_id},
+        {"_id": 0, "visit_id": 1}
+    )
+    return {"visited": bool(visit), "visit_id": visit["visit_id"] if visit else None}
+
+
 @router.get("/visits/{visit_id}")
 async def get_visit_details(visit_id: str, current_user: User = Depends(get_current_user)):
     """Get full visit details including photos, diary, and tips"""

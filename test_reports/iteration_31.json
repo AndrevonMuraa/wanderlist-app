@@ -1,0 +1,93 @@
+{
+  "summary": "Iteration 31 - Performance Optimization Testing. Backend: 12/12 tests passed (100%). New lightweight /api/visits/check/{landmark_id} endpoint works correctly. Existing endpoints (/api/visits, /api/landmarks, /api/progress) continue to work. Frontend code changes verified via code review.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_performance_optimization_iteration31.py",
+    "/app/test_reports/pytest/pytest_performance_optimization_iteration31.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "VERIFIED: New GET /api/visits/check/{landmark_id} endpoint correctly implemented - lightweight, returns only {visited, visit_id}",
+    "VERIFIED: Frontend landmarks/[country_id].tsx fetchData() no longer calls /api/visits or /api/progress - now computes progress locally from landmarks is_visited field",
+    "VERIFIED: Frontend landmark-detail/[landmark_id].tsx checkVisitStatus() uses new /api/visits/check/{landmark_id} endpoint",
+    "VERIFIED: GET /api/landmarks?country_id=france still returns landmarks with is_visited boolean enrichment"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_performance_optimization_iteration31.py"
+  ],
+  "success_rate": {
+    "backend": "100% (12/12 tests passed)",
+    "frontend": "Code review only - no UI testing required per request"
+  },
+  "test_credentials": {
+    "email": "test@wandermark.app",
+    "password": "Test1234!"
+  },
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Performance optimization for country pages and landmark detail pages. New endpoint /api/visits/check/{landmark_id} provides lightweight single-visit status check. Country page (landmarks/[country_id].tsx) no longer calls /api/visits or /api/progress - computes progress locally from landmarks data which already has is_visited. Landmark detail page (landmark-detail/[landmark_id].tsx) uses new check endpoint instead of fetching all visits. All existing endpoints still work.",
+  "passed_tests": [
+    "TestAuthentication::test_login_success",
+    "TestVisitCheckEndpoint::test_check_visited_landmark_returns_visited_true",
+    "TestVisitCheckEndpoint::test_check_nonexistent_landmark_returns_visited_false",
+    "TestVisitCheckEndpoint::test_check_endpoint_requires_auth",
+    "TestVisitCheckEndpoint::test_check_endpoint_response_is_lightweight",
+    "TestLandmarksEndpointWithIsVisited::test_landmarks_by_country_returns_is_visited",
+    "TestLandmarksEndpointWithIsVisited::test_eiffel_tower_shows_as_visited",
+    "TestExistingVisitsEndpoint::test_get_visits_still_works",
+    "TestExistingVisitsEndpoint::test_visits_includes_eiffel_tower",
+    "TestExistingProgressEndpoint::test_get_progress_still_works",
+    "TestVisitStatsEndpoint::test_get_visit_stats_works",
+    "TestVisitPrivacyEndpoint::test_update_visit_privacy_works"
+  ],
+  "failed_tests": [],
+  "api_verification": {
+    "GET /api/visits/check/{landmark_id}": {
+      "status": "PASS",
+      "notes": "New lightweight endpoint returns {visited: bool, visit_id: string|null} - single indexed query"
+    },
+    "GET /api/landmarks?country_id=france": {
+      "status": "PASS",
+      "notes": "Still returns landmarks with is_visited field enriched via batch lookup"
+    },
+    "GET /api/visits": {
+      "status": "PASS",
+      "notes": "Full visits list endpoint still works (no longer called from country page)"
+    },
+    "GET /api/progress": {
+      "status": "PASS",
+      "notes": "Progress endpoint still works (no longer called from country page)"
+    },
+    "GET /api/visits/stats": {
+      "status": "PASS",
+      "notes": "Visit statistics endpoint working"
+    },
+    "PUT /api/visits/{visit_id}/privacy": {
+      "status": "PASS",
+      "notes": "Privacy change endpoint working"
+    }
+  },
+  "frontend_code_verification": {
+    "landmarks/[country_id].tsx fetchData()": {
+      "status": "CODE_VERIFIED",
+      "notes": "Lines 119-168: Only calls /api/landmarks, removed /api/visits and /api/progress calls, computes progress locally"
+    },
+    "landmark-detail/[landmark_id].tsx checkVisitStatus()": {
+      "status": "CODE_VERIFIED",
+      "notes": "Lines 91-109: Uses /api/visits/check/{landmark_id} instead of /api/visits"
+    }
+  },
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "note": "All APIs are real implementations"
+  }
+}

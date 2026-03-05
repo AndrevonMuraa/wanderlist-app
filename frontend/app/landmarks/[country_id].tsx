@@ -121,17 +121,13 @@ export default function LandmarksScreen() {
       const token = await getToken();
       console.log('Fetching landmarks for country:', country_id);
       
-      // Fetch landmarks and progress in parallel
-      const [landmarksResponse, progressResponse, visitsResponse] = await Promise.all([
+      // Only fetch landmarks - they already include is_visited status
+      // Removed: /api/progress (heavy, computed locally now)
+      // Removed: /api/visits (heavy, redundant with is_visited on landmarks)
+      const [landmarksResponse] = await Promise.all([
         fetch(`${BACKEND_URL}/api/landmarks?country_id=${country_id}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch(`${BACKEND_URL}/api/progress`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }),
-        fetch(`${BACKEND_URL}/api/visits`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        })
       ]);
 
       console.log('Landmarks API response status:', landmarksResponse.status);
@@ -140,24 +136,23 @@ export default function LandmarksScreen() {
         const data = await landmarksResponse.json();
         console.log('Landmarks fetched:', data.length, 'including', data.filter((l: Landmark) => l.is_locked).length, 'locked premium');
         setLandmarks(data);
-      }
-      
-      if (progressResponse.ok) {
-        const progressData = await progressResponse.json();
-        const countryData = progressData.countries[country_id as string];
-        if (countryData) {
+        
+        // Compute visited IDs from landmarks response (already has is_visited)
+        const visitedIds = new Set<string>(
+          data.filter((l: any) => l.is_visited).map((l: any) => l.landmark_id)
+        );
+        setVisitedLandmarkIds(visitedIds);
+        
+        // Compute country progress locally from landmarks data
+        const totalLandmarks = data.length;
+        const visitedCount = data.filter((l: any) => l.is_visited).length;
+        if (totalLandmarks > 0) {
           setCountryProgress({
-            visited: countryData.visited,
-            total: countryData.total,
-            percentage: countryData.percentage
+            visited: visitedCount,
+            total: totalLandmarks,
+            percentage: Math.round((visitedCount / totalLandmarks) * 1000) / 10
           });
         }
-      }
-      
-      if (visitsResponse.ok) {
-        const visitsData = await visitsResponse.json();
-        const visitedIds = new Set<string>(visitsData.map((v: any) => v.landmark_id));
-        setVisitedLandmarkIds(visitedIds);
       }
     } catch (error) {
       console.error('Error fetching data:', error);

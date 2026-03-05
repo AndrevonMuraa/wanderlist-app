@@ -91,16 +91,15 @@ export default function LandmarkDetailScreen() {
   const checkVisitStatus = async () => {
     try {
       const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/visits`, {
+      const response = await fetch(`${BACKEND_URL}/api/visits/check/${landmark_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.ok) {
-        const visits = await response.json();
-        const visit = visits.find((v: any) => v.landmark_id === landmark_id);
-        if (visit) {
+        const data = await response.json();
+        if (data.visited) {
           setIsVisited(true);
-          setVisitId(visit.visit_id);
+          setVisitId(data.visit_id);
         }
       }
     } catch (error) {
