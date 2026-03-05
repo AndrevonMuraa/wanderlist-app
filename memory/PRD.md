@@ -229,6 +229,14 @@ All Mar 2026 changes need: 1) Save to GitHub, 2) Deploy backend to Render, 3) Ne
 - **Updated: Settings**: Better privacy descriptions ("Your visits, photos and diary entries are visible to everyone").
 - All 30 backend tests passed (iteration_28).
 
+### Session Feb 27, 2026 - Privacy × Points Coherence Fix
+- **Leaderboard privacy**: All categories (visits, countries, rising-stars) now filter by `default_privacy` — private users hidden from ALL leaderboards, not just points.
+- **Auto-content privacy**: Auto-created country visits and bonus activities (country_complete, continent_complete, milestone) now inherit user's `default_privacy`.
+- **Retroactive privacy**: `PUT /api/auth/privacy` now updates ALL existing visits, activities, and country_visits. Returns `{updated_visits: N, updated_activities: N}`.
+- **Registration**: New users get `default_privacy: "public"` explicitly.
+- **Onboarding**: Privacy awareness section in welcome screen.
+- All 29 backend tests passed (iteration_29).
+
 ## Key Files Modified (Latest)
 - `backend/routes/country_visits.py` - Full PUT endpoint with photo management + landmarks endpoint + migration
 - `frontend/app/(tabs)/journey.tsx` - Carousel, reordered sections, badge icons, navigation
