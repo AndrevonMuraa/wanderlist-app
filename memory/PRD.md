@@ -26,68 +26,67 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - `comment_permission` field on users (everyone/friends/nobody)
 - Backend enforces permission on POST /api/activities/{id}/comment
 - UI control in Privacy settings page
-- Allows sharing content publicly while controlling who can interact
+
+### Comments UI Integration (Complete - March 6, 2026)
+- `CommentsSection` component integrated into visit-detail page
+- Full CRUD: view, add, reply, like/unlike, delete comments
+- Threaded replies with parent/child organization
+- Delete button only shown for own comments (CommentItem fix)
+- Visit detail endpoint extended to return `activity_id` and `comments_count`
+- Comment permission enforcement (everyone/friends/nobody) verified with 27 tests
 
 ### Report/Moderation System (Complete - March 5, 2026)
 - `ReportButton` component on visits, profiles
-- Backend `POST /api/reports` validates type (activity/comment/photo/user) and reason
+- Backend `POST /api/reports` validates type and reason
 - Prevents self-reporting
-- Connected to existing admin report management
 
 ### Premium Differentiation (Complete - March 5, 2026)
-- Friend limit REMOVED for free tier (was 5, now unlimited)
+- Friend limit REMOVED for free tier (now unlimited)
 - Diary hybrid model: 3 entries/month (free), unlimited (pro)
 - "PRO" upgrade hint badge on locked premium landmarks
-- Premium landmarks, 10 photos/visit, custom visits, messaging remain pro-only
 
 ### Profile Improvements (Complete - March 5, 2026)
-- "View All Visits" page (`/user-visits/[user_id]`) with pagination and privacy filtering
-- Diary indicator (journal icon) on profile visit cards
-- Country name shown on profile visits
-- Report button on user profiles
+- "View All Visits" page with pagination and privacy filtering
+- Diary indicator on profile visit cards
+- Country name on profile visits, Report button on profiles
 
 ### Social Features (Complete)
 - Friends, user profiles, unified feed, leaderboards
 - Like/comment on activities, upvote community photos
-- Travel Tips completely removed; diary is sole text feature
 
 ### Share Profile (Complete - March 5, 2026)
-- `shareProfile()` util generates shareable message with user stats
-- Share button on user profile pages (next to Report button)
-- Uses React Native Share API
+- Share button on user profile pages using React Native Share API
 
 ### User Activity Stream (Complete - March 5, 2026)
-- `GET /api/users/{user_id}/activity` endpoint with pagination
-- Privacy filtering: public-only for strangers, public+friends for friends, all for self
-- Activities show description, like count, comment count, diary/photo indicators
-- Displayed on profile page below Recent Visits
+- `GET /api/users/{user_id}/activity` endpoint with pagination and privacy filtering
 
 ### Codebase Cleanup (Complete - March 6, 2026)
-- travel_tips, has_tips fully removed from all code
-- db.friendships -> db.friends fix in account deletion
-- 3 unused components deleted
 - Full backend import cleanup across all 14 route files + utils/db.py
-- Removed unused imports: HTMLResponse, List, Optional, Cookie, Body, logging, uuid, datetime, timedelta, ssl, check_and_award_badges, create_notification, is_user_pro, get_current_user (from admin.py)
+- travel_tips, has_tips fully removed
 - Old test reports cleaned up
-- Verified with 25/25 backend regression tests passing
+- Verified with 25/25 backend regression tests
 
 ## Key API Endpoints
 - `GET /api/visits/check/{landmark_id}` - Lightweight visit status
+- `GET /api/visits/{visit_id}` - Visit details with activity_id + comments_count
 - `POST /api/visits` - Create visit with visibility + diary limit
 - `PUT /api/visits/{id}/privacy` - Per-item privacy change
 - `PUT /api/auth/privacy` - Global default (retroactive)
 - `PUT /api/auth/comment-permission` - Comment permission control
-- `GET /api/users/{id}/activity` - Paginated user activity stream with privacy
-- `GET /api/users/{id}/visits` - Paginated user visits with privacy
-- `GET /api/users/{id}/profile` - Profile with has_diary + comment_permission
-- `POST /api/reports` - Submit report (activity/comment/photo/user)
-- `GET /api/feed` - Activity feed
-- `GET /api/community-feed` - Public community feed
+- `GET /api/activities/{id}/comments` - Get comments for activity
+- `POST /api/activities/{id}/comment` - Add comment (permission enforced)
+- `DELETE /api/comments/{id}` - Delete own comment
+- `POST /api/comments/{id}/like` - Like comment
+- `DELETE /api/comments/{id}/like` - Unlike comment
+- `GET /api/users/{id}/activity` - User activity stream
+- `GET /api/users/{id}/visits` - User visits with privacy
+- `POST /api/reports` - Submit report
 
 ## DB Schema (Key Fields)
 - **users**: `default_privacy`, `comment_permission`, `subscription_tier`
 - **visits**: `visibility`, `diary_notes`, `share_diary`
-- **activities**: `visibility`
+- **activities**: `visibility`, `visit_id`, `comments_count`
+- **comments**: `comment_id`, `activity_id`, `user_id`, `content`, `parent_comment_id`, `likes_count`
 - **friends**: Friend relationships (indexed)
 - **reports**: `report_type`, `content_id`, `reason`, `status`
 
@@ -108,7 +107,6 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 ## Prioritized Backlog
 ### P0 - None
 ### P1 - Upcoming
-- Wire up Comments UI (CommentsSection, CommentItem) in visit-detail.tsx
 - Verify all features in TestFlight build
 ### P2 - Future
 - Rename GitHub repository (wanderlist-app -> wandermark-app)
