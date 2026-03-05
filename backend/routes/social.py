@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, Request
 from typing import List
+import asyncio
 import os
 import logging
 import uuid
@@ -15,6 +16,26 @@ from utils.helpers import check_and_award_badges, create_notification
 
 
 router = APIRouter()
+
+# Simple TTL cache for static reference data (countries + landmark stats)
+_cache = {}
+_CACHE_TTL = 300  # 5 minutes
+
+async def _get_static_geo_data():
+    """Cached countries list + landmark-per-country counts."""
+    now = datetime.now(timezone.utc).timestamp()
+    if "geo" in _cache and now - _cache["geo"]["ts"] < _CACHE_TTL:
+        return _cache["geo"]["countries"], _cache["geo"]["lm_map"], _cache["geo"]["total_lm"]
+
+    countries_task = db.countries.find({}, {"_id": 0, "country_id": 1, "name": 1, "continent": 1}).to_list(300)
+    lm_pipeline = [{"$group": {"_id": "$country_id", "count": {"$sum": 1}, "landmark_ids": {"$push": "$landmark_id"}}}]
+    lm_task = db.landmarks.aggregate(lm_pipeline).to_list(300)
+    countries, lm_stats = await asyncio.gather(countries_task, lm_task)
+
+    lm_map = {s["_id"]: s for s in lm_stats}
+    total_lm = sum(s["count"] for s in lm_stats)
+    _cache["geo"] = {"countries": countries, "lm_map": lm_map, "total_lm": total_lm, "ts": now}
+    return countries, lm_map, total_lm
 
 # ============= LEADERBOARD ENDPOINTS =============
 
@@ -789,8 +810,8 @@ async def get_messages(friend_id: str, current_user: User = Depends(get_current_
 
 @router.get("/stats")
 async def get_stats(current_user: User = Depends(get_current_user)):
-    # Use aggregation pipeline instead of loading all data into memory
-    user = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0, "points": 1, "leaderboard_points": 1})
+    """Optimized stats: runs all DB queries in parallel."""
+    import asyncio
     
     # Single aggregation: visits → lookup landmarks → get unique countries/continents
     pipeline = [
@@ -811,28 +832,32 @@ async def get_stats(current_user: User = Depends(get_current_user)):
         }}
     ]
     
-    result = await db.visits.aggregate(pipeline).to_list(1)
-    stats = result[0] if result else {"total_visits": 0, "countries": [], "continents": []}
-    
-    # Count friends
-    friend_count = await db.friends.count_documents({
+    # Run all queries in parallel
+    visits_task = db.visits.aggregate(pipeline).to_list(1)
+    user_task = db.users.find_one(
+        {"user_id": current_user.user_id},
+        {"_id": 0, "points": 1, "leaderboard_points": 1}
+    )
+    friends_task = db.friends.count_documents({
         "$or": [
             {"user_id": current_user.user_id, "status": "accepted"},
             {"friend_id": current_user.user_id, "status": "accepted"}
         ]
     })
     
-    # Calculate leaderboard rank
+    result, user, friend_count = await asyncio.gather(visits_task, user_task, friends_task)
+    
+    stats = result[0] if result else {"total_visits": 0, "countries": [], "continents": []}
     user_lb_points = user.get("leaderboard_points", 0) if user else 0
-    rank_query = {
+    
+    # Calculate rank
+    users_above = await db.users.count_documents({
         "leaderboard_points": {"$gt": user_lb_points},
         "$or": [
             {"default_privacy": "public"},
             {"default_privacy": {"$exists": False}}
         ]
-    }
-    users_above = await db.users.count_documents(rank_query)
-    rank = users_above + 1
+    })
     
     return {
         "total_visits": stats["total_visits"],
@@ -841,16 +866,16 @@ async def get_stats(current_user: User = Depends(get_current_user)):
         "friends_count": friend_count,
         "points": user.get("points", 0) if user else 0,
         "leaderboard_points": user_lb_points,
-        "rank": rank
+        "rank": users_above + 1
     }
 
 # ============= PROGRESS STATISTICS ENDPOINT =============
 
 @router.get("/progress")
 async def get_progress_stats(current_user: User = Depends(get_current_user)):
-    """Get comprehensive progress statistics for user - optimized with aggregation"""
+    """Get comprehensive progress statistics - optimized with cache + parallel queries."""
     
-    # Get user's visited landmark IDs and total points in one query
+    # Run user visits aggregation in parallel with cached static geo data
     visits_pipeline = [
         {"$match": {"user_id": current_user.user_id}},
         {"$group": {
@@ -860,20 +885,13 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
             "visited_count": {"$sum": 1}
         }}
     ]
-    visits_result = await db.visits.aggregate(visits_pipeline).to_list(1)
+    
+    visits_task = db.visits.aggregate(visits_pipeline).to_list(1)
+    geo_task = _get_static_geo_data()
+    visits_result, (all_countries, lm_map, total_landmarks) = await asyncio.gather(visits_task, geo_task)
     
     if not visits_result:
-        # No visits — return empty progress (use aggregation, not N+1)
-        all_countries = await db.countries.find({}, {"_id": 0, "country_id": 1, "name": 1, "continent": 1}).to_list(100)
-        
-        # Single aggregation to get landmark count per country
-        country_lm_pipeline = [
-            {"$group": {"_id": "$country_id", "count": {"$sum": 1}}}
-        ]
-        country_lm_stats = await db.landmarks.aggregate(country_lm_pipeline).to_list(200)
-        lm_count_map = {s["_id"]: s["count"] for s in country_lm_stats}
-        all_landmark_count = sum(lm_count_map.values())
-        
+        # No visits — build empty progress from cached data
         continental_progress = {}
         country_progress = {}
         for country in all_countries:
@@ -881,17 +899,15 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
             if continent not in continental_progress:
                 continental_progress[continent] = {"visited": 0, "total": 0, "percentage": 0}
             continental_progress[continent]["total"] += 1
-            
             country_progress[country["country_id"]] = {
                 "country_name": country["name"],
                 "continent": continent,
                 "visited": 0,
-                "total": lm_count_map.get(country["country_id"], 0),
+                "total": lm_map.get(country["country_id"], {}).get("count", 0),
                 "percentage": 0
             }
-        
         return {
-            "overall": {"visited": 0, "total": all_landmark_count, "percentage": 0},
+            "overall": {"visited": 0, "total": total_landmarks, "percentage": 0},
             "totalPoints": 0,
             "continents": continental_progress,
             "countries": country_progress
@@ -899,25 +915,8 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
     
     visited_landmark_ids = set(visits_result[0]["landmark_ids"])
     total_points = visits_result[0]["total_points"]
-    visited_count = visits_result[0]["visited_count"]
-    
-    # Use aggregation to compute per-country stats (landmarks per country, how many visited)
-    country_stats_pipeline = [
-        {"$group": {
-            "_id": "$country_id",
-            "total_landmarks": {"$sum": 1},
-            "landmark_ids": {"$push": "$landmark_id"}
-        }}
-    ]
-    country_landmark_stats = await db.landmarks.aggregate(country_stats_pipeline).to_list(200)
-    country_landmark_map = {s["_id"]: s for s in country_landmark_stats}
-    
-    # Get total landmarks count
-    total_landmarks = sum(s["total_landmarks"] for s in country_landmark_stats)
+    visited_count = len(visited_landmark_ids)
     overall_percentage = round((visited_count / total_landmarks * 100) if total_landmarks > 0 else 0, 1)
-    
-    # Get all countries
-    all_countries = await db.countries.find({}, {"_id": 0, "country_id": 1, "name": 1, "continent": 1}).to_list(100)
     
     continental_progress = {}
     country_progress = {}
@@ -925,10 +924,10 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
     for country in all_countries:
         country_id = country["country_id"]
         continent = country["continent"]
-        stats = country_landmark_map.get(country_id, {"total_landmarks": 0, "landmark_ids": []})
+        stats = lm_map.get(country_id, {"count": 0, "landmark_ids": []})
         
-        total = stats["total_landmarks"]
-        visited = sum(1 for lid in stats["landmark_ids"] if lid in visited_landmark_ids)
+        total = stats["count"]
+        visited = sum(1 for lid in stats.get("landmark_ids", []) if lid in visited_landmark_ids)
         percentage = round((visited / total * 100) if total > 0 else 0, 1)
         
         country_progress[country_id] = {
@@ -945,7 +944,6 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
         if visited > 0:
             continental_progress[continent]["visited"] += 1
     
-    # Calculate continental percentages
     for continent_data in continental_progress.values():
         if continent_data["total"] > 0:
             continent_data["percentage"] = round(

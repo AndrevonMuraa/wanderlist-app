@@ -69,6 +69,10 @@ async def create_indexes():
         await db.likes.create_index("activity_id")
         await db.likes.create_index([("activity_id", 1), ("user_id", 1)])
         await db.comments.create_index("activity_id")
+        await db.comments.create_index("comment_id", unique=True)
+        
+        # Activities - visit_id lookup (for visit-detail comments)
+        await db.activities.create_index("visit_id")
         
         # Photo upvotes (was completely missing!)
         await db.photo_upvotes.create_index("photo_id")
