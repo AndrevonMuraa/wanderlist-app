@@ -51,7 +51,14 @@ Prepare WanderMark app for App Store submission by fixing bugs, improving UI/UX,
 - Settings page simplified - privacy controls moved to dedicated page
 - Route conflict fixed (settings.tsx → settings/index.tsx for Expo Router compatibility)
 
+### Performance Optimization - Country & Landmark Pages (Complete - March 5, 2026)
+- **Root cause identified**: Both country page and landmark detail page fetched ALL user visits (`GET /api/visits`) just to check visit status - extremely wasteful
+- **Country page**: Removed 2 heavy API calls (`/api/visits` + `/api/progress`), now computes progress locally from landmarks data which already includes `is_visited`
+- **Landmark detail page**: Replaced `GET /api/visits` (all visits) with new `GET /api/visits/check/{landmark_id}` (single indexed lookup, 48 bytes vs 4KB+)
+- **Net result**: Country page reduced from 5→3 API calls; Landmark page's heaviest call replaced with lightweight endpoint
+
 ## Key API Endpoints
+- `GET /api/visits/check/{landmark_id}` - Lightweight visit status check (single indexed query)
 - `POST /api/visits` - Create visit with optional `visibility` field
 - `PUT /api/visits/{visit_id}/privacy` - Change per-item visibility
 - `PUT /api/auth/privacy` - Change global default (retroactive)
