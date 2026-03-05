@@ -27,6 +27,14 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Backend enforces permission on POST /api/activities/{id}/comment
 - UI control in Privacy settings page
 
+### Privacy Policy Updated (March 6, 2026)
+- Updated date to March 6, 2026
+- Section 4: Added visibility settings (global default + per-visit override + retroactive), interaction controls (comment permissions, reporting)
+- Section 6: Camera as primary method, photo verification requirements (user must be visible), moderation/revocation clause
+- New Section 7: Content Reporting & Moderation (report types, data collected, anonymity, abuse policy)
+- Renumbered sections 8-11
+- Updated all 3 versions: in-app (privacy-policy.tsx), website_updates/privacy.html, wandermark-site/privacy.html
+
 ### Anti-Cheat / Photo Verification System (Complete - March 6, 2026)
 - **Camera-first**: Primary action is now "Take Photo" (camera), "Choose from Library" is secondary
 - **Photo guidelines**: Prominent banner in AddVisitModal: "Take a personal photo of yourself at the landmark"

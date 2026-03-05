@@ -22,7 +22,7 @@ export default function PrivacyPolicyScreen() {
   const insets = useSafeAreaInsets();
 
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
-  const lastUpdated = 'February 28, 2026';
+  const lastUpdated = 'March 6, 2026';
 
   const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
     <View style={styles.section}>
@@ -150,12 +150,20 @@ export default function PrivacyPolicyScreen() {
             <Text style={styles.paragraph}>
               You have control over your information:
             </Text>
-            <BulletPoint text="Set default privacy (public, friends-only, or private)" />
-            <BulletPoint text="Choose visibility for each visit individually" />
-            <BulletPoint text="Edit or delete your profile information" />
+            <Text style={[styles.subTitle, { marginTop: 12 }]}>Visibility Settings</Text>
+            <BulletPoint text="Set a global default privacy level (public, friends-only, or private) that applies to all your content" />
+            <BulletPoint text="Override visibility for individual visits — each visit can have its own setting" />
+            <BulletPoint text="Changing your default privacy retroactively updates all existing content that uses the default" />
+
+            <Text style={[styles.subTitle, { marginTop: 12 }]}>Interaction Controls</Text>
+            <BulletPoint text="Control who can comment on your content (everyone, friends only, or nobody)" />
+            <BulletPoint text="Report inappropriate content, comments, or user profiles" />
+
+            <Text style={[styles.subTitle, { marginTop: 12 }]}>Account Management</Text>
+            <BulletPoint text="Edit or delete your profile information at any time" />
             <BulletPoint text="Deactivate your account (30-day grace period before permanent deletion)" />
             <BulletPoint text="Reactivate your account by logging in within the 30-day window" />
-            <BulletPoint text="Manage friend connections" />
+            <BulletPoint text="Manage friend connections and block users" />
             <BulletPoint text="Control notification preferences" />
           </Section>
         </Surface>
@@ -178,19 +186,38 @@ export default function PrivacyPolicyScreen() {
             <Text style={styles.paragraph}>
               WanderMark requests camera and photo library access to:
             </Text>
-            <BulletPoint text="Take photos of landmarks you visit" />
-            <BulletPoint text="Select existing photos from your gallery" />
+            <BulletPoint text="Take personal photos of yourself at landmarks (primary method)" />
+            <BulletPoint text="Select existing personal photos from your gallery" />
             <BulletPoint text="Add a profile picture" />
             
+            <Text style={[styles.subTitle, { marginTop: 16 }]}>Photo Verification</Text>
+            <Text style={styles.paragraph}>
+              To earn verified leaderboard points, photos must be personal images where you are clearly visible at the landmark. Photos sourced from the internet or without the user present do not qualify as verified and may result in removal of verified points by our moderation team.
+            </Text>
+            
             <Text style={[styles.paragraph, { marginTop: 12 }]}>
-              Photos you upload are stored securely and their visibility is controlled by your privacy settings. You can delete uploaded photos at any time.
+              Photos you upload are stored securely and their visibility is controlled by your privacy settings. You can delete uploaded photos at any time. Removing a photo may affect the verified status of the associated visit.
             </Text>
           </Section>
         </Surface>
 
         {/* Children's Privacy */}
         <Surface style={styles.card}>
-          <Section title="7. Children's Privacy">
+          <Section title="7. Content Reporting & Moderation">
+            <Text style={styles.paragraph}>
+              WanderMark provides tools to maintain a safe and fair community:
+            </Text>
+            <BulletPoint text="You can report visits, comments, photos, or user profiles that violate our guidelines" />
+            <BulletPoint text="When you submit a report, we collect the report reason and the content identifier to investigate" />
+            <BulletPoint text="Our moderation team reviews reports and may take actions including removing content or revoking verified status" />
+            <BulletPoint text="We do not disclose the identity of reporters to the reported user" />
+            <BulletPoint text="Abuse of the reporting system may result in restrictions on your account" />
+          </Section>
+        </Surface>
+
+        {/* Children's Privacy */}
+        <Surface style={styles.card}>
+          <Section title="8. Children's Privacy">
             <Text style={styles.paragraph}>
               WanderMark is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.
             </Text>
@@ -199,7 +226,7 @@ export default function PrivacyPolicyScreen() {
 
         {/* Third-Party Services */}
         <Surface style={styles.card}>
-          <Section title="8. Third-Party Services">
+          <Section title="9. Third-Party Services">
             <Text style={styles.paragraph}>
               Our app may contain links to third-party websites or services. We are not responsible for the privacy practices of these third parties. We encourage you to read their privacy policies.
             </Text>
@@ -216,7 +243,7 @@ export default function PrivacyPolicyScreen() {
 
         {/* Changes to Policy */}
         <Surface style={styles.card}>
-          <Section title="9. Changes to This Policy">
+          <Section title="10. Changes to This Policy">
             <Text style={styles.paragraph}>
               We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.
             </Text>
@@ -228,7 +255,7 @@ export default function PrivacyPolicyScreen() {
 
         {/* Contact Us */}
         <Surface style={styles.card}>
-          <Section title="10. Contact Us">
+          <Section title="11. Contact Us">
             <Text style={styles.paragraph}>
               If you have questions or concerns about this Privacy Policy or our data practices, please contact us:
             </Text>
