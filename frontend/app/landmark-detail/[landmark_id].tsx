@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   View, 
   StyleSheet, 
@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Text, ActivityIndicator, Surface } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { safeGoBack } from '../../utils/navigation';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
@@ -65,8 +66,14 @@ export default function LandmarkDetailScreen() {
   useEffect(() => {
     fetchLandmark();
     checkBucketListStatus();
-    checkVisitStatus();
   }, []);
+
+  // Re-check visit status every time the screen gets focus (e.g. returning from add-visit)
+  useFocusEffect(
+    useCallback(() => {
+      checkVisitStatus();
+    }, [landmark_id])
+  );
 
   const fetchLandmark = async () => {
     try {
