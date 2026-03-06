@@ -282,18 +282,21 @@ export default function SocialHubScreen() {
         </View>
 
         {/* Community Feed Section */}
-        {communityFeed.length > 0 && (
-          <View style={styles.section} data-testid="community-feed-section">
-            <View style={styles.sectionHeader}>
-              <View style={styles.sectionTitleRow}>
-                <Ionicons name="earth" size={24} color={theme.colors.primary} />
-                <Text style={styles.sectionTitle}>Community</Text>
-              </View>
+        <View style={styles.section} data-testid="community-feed-section">
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionTitleRow}>
+              <Ionicons name="earth" size={24} color={theme.colors.primary} />
+              <Text style={styles.sectionTitle}>Community</Text>
+            </View>
+            {communityFeed.length > 0 && (
               <TouchableOpacity onPress={() => router.push('/feed')} style={styles.seeAllRow}>
                 <Text style={styles.seeAllButton}>{t('common.seeAll')}</Text>
                 <Ionicons name="chevron-forward" size={16} color={theme.colors.primary} />
               </TouchableOpacity>
-            </View>
+            )}
+          </View>
+
+          {communityFeed.length > 0 ? (
             <View style={styles.cfVerticalList}>
               {communityFeed.slice(0, 5).map((item) => (
                 <TouchableOpacity
@@ -327,8 +330,16 @@ export default function SocialHubScreen() {
                 </TouchableOpacity>
               ))}
             </View>
-          </View>
-        )}
+          ) : (
+            <Surface style={styles.card}>
+              <View style={styles.emptyState}>
+                <Ionicons name="earth-outline" size={48} color={theme.colors.textLight} />
+                <Text style={styles.emptyText}>No community activity yet</Text>
+                <Text style={styles.emptySubtext}>Visit landmarks and share your adventures to see them here!</Text>
+              </View>
+            </Surface>
+          )}
+        </View>
 
 
         {/* Friends Section */}
