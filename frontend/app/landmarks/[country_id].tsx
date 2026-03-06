@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, FlatList, Image, RefreshControl, TouchableOpacity, Platform, StatusBar, Alert } from 'react-native';
 import { Text, ActivityIndicator, Surface, FAB, Searchbar } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { safeGoBack } from '../../utils/navigation';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
@@ -66,10 +67,16 @@ export default function LandmarksScreen() {
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   useEffect(() => {
-    fetchData();
-    checkCountryVisitStatus();
     fetchHighlights();
   }, []);
+
+  // Re-fetch data and visit status every time screen gets focus (e.g. returning from add-visit)
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+      checkCountryVisitStatus();
+    }, [country_id])
+  );
 
   const fetchHighlights = async () => {
     try {
