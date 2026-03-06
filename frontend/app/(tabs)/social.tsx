@@ -297,6 +297,7 @@ export default function SocialHubScreen() {
           </View>
 
           {communityFeed.length > 0 ? (
+            <>
             <View style={styles.cfVerticalList}>
               {communityFeed.slice(0, 5).map((item) => (
                 <TouchableOpacity
@@ -339,6 +340,7 @@ export default function SocialHubScreen() {
                 <Ionicons name="arrow-forward" size={16} color={theme.colors.primary} />
               </TouchableOpacity>
             </Surface>
+            </>
           ) : (
             <Surface style={styles.card}>
               <View style={styles.emptyState}>
