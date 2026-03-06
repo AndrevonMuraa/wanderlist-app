@@ -285,8 +285,8 @@ export default function SocialHubScreen() {
         <View style={styles.section} data-testid="community-feed-section">
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="earth" size={24} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Community</Text>
+              <Ionicons name="newspaper" size={24} color={theme.colors.primary} />
+              <Text style={styles.sectionTitle}>Feed</Text>
             </View>
             {communityFeed.length > 0 && (
               <TouchableOpacity onPress={() => router.push('/feed')} style={styles.seeAllRow}>
@@ -330,13 +330,29 @@ export default function SocialHubScreen() {
                 </TouchableOpacity>
               ))}
             </View>
+            <Surface style={[styles.card, { marginTop: theme.spacing.sm }]}>
+              <TouchableOpacity 
+                style={styles.viewAllButton}
+                onPress={() => router.push('/feed')}
+              >
+                <Text style={styles.viewAllText}>View All Activity</Text>
+                <Ionicons name="arrow-forward" size={16} color={theme.colors.primary} />
+              </TouchableOpacity>
+            </Surface>
           ) : (
             <Surface style={styles.card}>
               <View style={styles.emptyState}>
-                <Ionicons name="earth-outline" size={48} color={theme.colors.textLight} />
-                <Text style={styles.emptyText}>No community activity yet</Text>
+                <Ionicons name="newspaper-outline" size={48} color={theme.colors.textLight} />
+                <Text style={styles.emptyText}>No activity yet</Text>
                 <Text style={styles.emptySubtext}>Visit landmarks and share your adventures to see them here!</Text>
               </View>
+              <TouchableOpacity 
+                style={styles.viewAllButton}
+                onPress={() => router.push('/feed')}
+              >
+                <Text style={styles.viewAllText}>View All Activity</Text>
+                <Ionicons name="arrow-forward" size={16} color={theme.colors.primary} />
+              </TouchableOpacity>
             </Surface>
           )}
         </View>
