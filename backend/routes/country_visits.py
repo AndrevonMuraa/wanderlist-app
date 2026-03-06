@@ -271,22 +271,20 @@ async def update_country_visit(country_visit_id: str, data: dict, current_user: 
         update_fields["photos"] = new_photos
         has_photos = len(new_photos) > 0
         update_fields["has_photos"] = has_photos
-    if "share_diary" in data:
-        update_fields["share_diary"] = bool(data["share_diary"])
         
-        # Handle leaderboard points changes
+        # Handle leaderboard points changes when photos change
         existing_has_photos = bool(country_visit.get("photos", []))
         points_earned = country_visit.get("points_earned", 50)
         
         if has_photos and not existing_has_photos:
-            # Adding photos for the first time → award leaderboard points
+            # Adding photos for the first time - award leaderboard points
             update_fields["leaderboard_points_earned"] = points_earned
             await db.users.update_one(
                 {"user_id": current_user.user_id},
                 {"$inc": {"leaderboard_points": points_earned}}
             )
         elif not has_photos and existing_has_photos:
-            # Removing all photos → revoke leaderboard points
+            # Removing all photos - revoke leaderboard points
             old_lb_points = country_visit.get("leaderboard_points_earned", 0)
             update_fields["leaderboard_points_earned"] = 0
             if old_lb_points > 0:
@@ -294,6 +292,8 @@ async def update_country_visit(country_visit_id: str, data: dict, current_user: 
                     {"user_id": current_user.user_id},
                     {"$inc": {"leaderboard_points": -old_lb_points}}
                 )
+    if "share_diary" in data:
+        update_fields["share_diary"] = bool(data["share_diary"])
     
     if not update_fields:
         raise HTTPException(status_code=400, detail="No valid fields to update")

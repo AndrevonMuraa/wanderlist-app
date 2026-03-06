@@ -558,8 +558,8 @@ export default function CountryVisitDetailScreen() {
                       const existing = visit.photos || [];
                       const all = [...existing, newPhoto];
                       const token = await getToken();
-                      await fetch(`${BACKEND_URL}/api/country-visits/${country_visit_id}/update`, {
-                        method: 'PATCH',
+                      await fetch(`${BACKEND_URL}/api/country-visits/${country_visit_id}`, {
+                        method: 'PUT',
                         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                         body: JSON.stringify({ photos: all }),
                       });
@@ -674,8 +674,8 @@ export default function CountryVisitDetailScreen() {
                   const newVal = !(visit.share_diary ?? true);
                   try {
                     const token = await getToken();
-                    await fetch(`${BACKEND_URL}/api/country-visits/${country_visit_id}/update`, {
-                      method: 'PATCH',
+                    await fetch(`${BACKEND_URL}/api/country-visits/${country_visit_id}`, {
+                      method: 'PUT',
                       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                       body: JSON.stringify({ share_diary: newVal }),
                     });

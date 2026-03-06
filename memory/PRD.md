@@ -188,10 +188,32 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - FIX: Removed emoji character from modal text
 - Verified with 9/9 backend tests (full CRUD flow)
 
+### Landmark Visits Feature Enhancement (Complete - Feb 2026)
+**Backend:**
+- NEW: `PUT /api/visits/{id}` - Edit landmark visits (photos, diary, share_diary, visibility)
+- NEW: `DELETE /api/visits/{id}` - Delete landmark visits with point deduction and activity/comment cleanup
+**Frontend:**
+- visit-detail: Added edit diary (with dialog), share_diary toggle, add photos (camera + library), delete visit
+- Removed all console.error from visit-detail and add-visit
+
+### Country Visits Feature Enhancement (Complete - Feb 2026)
+**Backend:**
+- Added `share_diary` support to `PUT /api/country-visits/{id}` update endpoint
+- Fixed critical `UnboundLocalError` bug: leaderboard points logic was incorrectly nested under share_diary block instead of photos block
+**Frontend:**
+- country-visit-detail: Added share_diary toggle, camera button alongside library button
+- Replaced emojis with Ionicons for visibility indicators
+- Removed all console.error statements
+
+### Verified: Landmark Visits + Country Visits (Build 69)
+- 15/16 backend tests passed (1 fail was from before bug fix, retested manually)
+- Full CRUD verified: create, read, update (PUT), delete for landmark visits
+- Country visit share_diary update verified manually
+
 ## Prioritized Backlog
 ### P0 - None
 ### P1 - Upcoming
 - Deploy updated Privacy Policy / Terms to a live URL
-- Verify all features in TestFlight build 68
+- Verify all features in TestFlight build 69
 ### P2 - Future
 - Rename GitHub repository (wanderlist-app -> wandermark-app)
