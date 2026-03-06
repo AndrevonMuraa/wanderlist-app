@@ -43,6 +43,13 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - **Admin strip-verified endpoint**: `PUT /api/admin/users/{user_id}/strip-verified` removes verified status from all visits and resets leaderboard_points to 0, without deleting photos or content. Action logged to admin_logs collection
 - **Terms of Service**: Updated with revocation clause for non-compliant photos
 
+### Data Transfer Optimization (Complete - March 6, 2026)
+- **Root cause**: `/api/visits` returned full base64 photo data (500KB-2MB per photo) on every page load
+- **Journey page**: Removed `/api/visits` call entirely (was only used for offline caching, not display) — saves ~15-60MB per load
+- **Points Summary**: Now uses only `/api/stats` (added `visits_with_photos` count) — eliminated `/api/visits` call entirely
+- **My Landmark Visits**: Uses new lightweight `/api/visits/list` that excludes photo_base64, photos, diary_notes, comments — returns only metadata + has_photo/photo_count
+- **Estimated production impact**: Journey page data transfer reduced from ~60MB to ~10KB for users with many visits
+
 ### Performance Optimizations v2 (Complete - March 6, 2026)
 - `/api/stats`: 4 sequential DB calls → 3 parallel (asyncio.gather) + 1 sequential for rank
 - `/api/progress`: Added 5-min TTL in-memory cache for static geo data (countries + landmark counts) + parallel query execution
