@@ -105,6 +105,13 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Old test reports cleaned up
 - Verified with 25/25 backend regression tests
 
+### Codebase Cleanup v2 (Complete - Feb 2026)
+- Removed all debug console.log statements from frontend (profile, landmarks, analytics, config, purchases, push notifications, Apple Auth)
+- Removed obsolete TODO comments
+- Kept functional console.log in toast.ts (web fallback) and all console.error/console.warn for error handling
+- Bumped iOS buildNumber to 67
+- Verified with 25/25 backend regression tests
+
 ## Key API Endpoints
 - `GET /api/visits/check/{landmark_id}` - Lightweight visit status
 - `GET /api/visits/{visit_id}` - Visit details with activity_id + comments_count
@@ -146,6 +153,7 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 ## Prioritized Backlog
 ### P0 - None
 ### P1 - Upcoming
-- Verify all features in TestFlight build
+- Deploy updated Privacy Policy / Terms to a live URL
+- Verify all features in TestFlight build 67
 ### P2 - Future
 - Rename GitHub repository (wanderlist-app -> wandermark-app)
