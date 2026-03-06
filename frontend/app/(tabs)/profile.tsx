@@ -210,7 +210,6 @@ export default function ProfileScreen() {
                   <Text style={[styles.userNameLarge, { color: colors.text }]}>{user?.name}</Text>
                   <TouchableOpacity 
                     onPress={() => {
-                      console.log('Edit button pressed!');
                       router.push('/edit-profile');
                     }}
                     style={[styles.editButton, { backgroundColor: colors.primary }]}

@@ -193,20 +193,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error('Apple Sign-In is only available on iOS');
       }
 
-      console.log('[Apple Auth] Starting Apple Sign-In...');
-      console.log('[Apple Auth] BACKEND_URL:', BACKEND_URL);
-
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
-
-      console.log('[Apple Auth] Got credential from Apple');
-      console.log('[Apple Auth] Has identityToken:', !!credential.identityToken);
-      console.log('[Apple Auth] Has user:', !!credential.user);
-      console.log('[Apple Auth] Has email:', !!credential.email);
 
       const fullName = credential.fullName
         ? `${credential.fullName.givenName || ''} ${credential.fullName.familyName || ''}`.trim()
@@ -218,9 +210,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         email: credential.email || null,
         full_name: fullName || null,
       };
-
-      console.log('[Apple Auth] Sending to:', apiUrl);
-      console.log('[Apple Auth] Token length:', credential.identityToken?.length || 0);
 
       let response: Response;
       try {
@@ -236,14 +225,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error(`Network error: ${networkErr.message} [${apiUrl}]`);
       }
 
-      console.log('[Apple Auth] Response status:', response.status);
-
       const responseText = await response.text();
-      console.log('[Apple Auth] Response body:', responseText.substring(0, 300));
 
       if (response.ok) {
         const data = JSON.parse(responseText);
-        console.log('[Apple Auth] Login successful');
         await setToken(data.access_token);
         setUser(data.user);
       } else {
@@ -258,7 +243,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (error: any) {
       if (error.code === 'ERR_REQUEST_CANCELED') {
-        console.log('[Apple Auth] User cancelled sign-in');
         return;
       }
       console.error('[Apple Auth] Error:', error.message || error);

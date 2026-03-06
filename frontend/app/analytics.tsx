@@ -93,12 +93,6 @@ export default function AnalyticsScreen() {
           topLandmarks: [],
           monthlyProgress: [],
         });
-        
-        console.log('Analytics loaded:', {
-          visits: stats.total_visits,
-          countries: stats.countries_visited,
-          points: progress.totalPoints,
-        });
       }
     } catch (error) {
       console.error('Error loading analytics:', error);

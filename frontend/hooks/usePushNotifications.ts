@@ -100,8 +100,6 @@ export function usePushNotifications() {
 
   const handleNotificationResponse = (data: any) => {
     // Navigate based on notification type
-    // This will be handled by the app's navigation
-    console.log('Notification tapped with data:', data);
   };
 
   return {
@@ -116,13 +114,11 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
 
   // Push notifications don't work on web
   if (Platform.OS === 'web') {
-    console.log('Push notifications are not supported on web');
     return null;
   }
 
   // Check if running on a physical device
   if (!Device.isDevice) {
-    console.log('Push notifications require a physical device');
     return null;
   }
 
@@ -136,7 +132,6 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
   }
 
   if (finalStatus !== 'granted') {
-    console.log('Permission for push notifications not granted');
     return null;
   }
 
@@ -145,15 +140,13 @@ async function registerForPushNotificationsAsync(): Promise<string | null> {
     const projectId = Constants.expoConfig?.extra?.eas?.projectId ?? Constants.easConfig?.projectId;
     
     if (!projectId) {
-      // For development, use a placeholder
-      console.log('No project ID found, using development mode');
+      // Development mode - no project ID
     }
 
     const tokenData = await Notifications.getExpoPushTokenAsync({
       projectId: projectId,
     });
     token = tokenData.data;
-    console.log('Expo push token:', token);
   } catch (err) {
     console.error('Error getting push token:', err);
   }

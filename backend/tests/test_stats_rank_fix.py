@@ -17,7 +17,7 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 if not BASE_URL:
     # Fallback for testing
-    BASE_URL = "https://cleanup-verify-1.preview.emergentagent.com"
+    BASE_URL = "https://log-removal-pass.preview.emergentagent.com"
 
 TEST_CREDENTIALS = {
     "email": "test@wandermark.app",

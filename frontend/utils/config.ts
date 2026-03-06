@@ -17,9 +17,7 @@ const getBackendURL = () => {
   
   // Use environment variable if available, otherwise use hardcoded production URL
   const envUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
-  const finalUrl = envUrl || PRODUCTION_BACKEND_URL;
-  console.log('[Config] BACKEND_URL resolved to:', finalUrl, '(from env:', !!envUrl, ')');
-  return finalUrl;
+  return envUrl || PRODUCTION_BACKEND_URL;
 };
 
 export const BACKEND_URL = getBackendURL();

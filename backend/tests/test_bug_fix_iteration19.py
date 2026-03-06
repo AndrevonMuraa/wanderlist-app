@@ -18,7 +18,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://cleanup-verify-1.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://log-removal-pass.preview.emergentagent.com').rstrip('/')
 TEST_EMAIL = "test@wandermark.app"
 TEST_PASSWORD = "Test1234!"
 

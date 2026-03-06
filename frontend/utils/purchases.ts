@@ -107,13 +107,11 @@ let isInitialized = false;
  */
 export async function initializePurchases(userId?: string): Promise<void> {
   if (MOCK_PURCHASES) {
-    console.log('[Purchases] Running in MOCK mode');
     isInitialized = true;
     return;
   }
 
   if (Platform.OS === 'web') {
-    console.log('[Purchases] Web platform - purchases disabled');
     return;
   }
 
@@ -136,7 +134,6 @@ export async function initializePurchases(userId?: string): Promise<void> {
     }
     
     isInitialized = true;
-    console.log('[Purchases] Initialized successfully');
   } catch (error) {
     console.error('[Purchases] Initialization failed:', error);
   }
@@ -309,7 +306,6 @@ export async function restorePurchases(): Promise<{ success: boolean; customerIn
 export async function clearMockPurchase(): Promise<void> {
   if (MOCK_PURCHASES) {
     await AsyncStorage.removeItem(MOCK_PURCHASE_KEY);
-    console.log('[Purchases] Mock purchase cleared');
   }
 }
 

@@ -15,7 +15,7 @@ import requests
 import os
 import time
 
-BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://cleanup-verify-1.preview.emergentagent.com").rstrip("/")
+BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://log-removal-pass.preview.emergentagent.com").rstrip("/")
 
 # Test data storage for sharing between tests
 test_data = {}

@@ -119,22 +119,15 @@ export default function LandmarksScreen() {
   const fetchData = async () => {
     try {
       const token = await getToken();
-      console.log('Fetching landmarks for country:', country_id);
       
-      // Only fetch landmarks - they already include is_visited status
-      // Removed: /api/progress (heavy, computed locally now)
-      // Removed: /api/visits (heavy, redundant with is_visited on landmarks)
       const [landmarksResponse] = await Promise.all([
         fetch(`${BACKEND_URL}/api/landmarks?country_id=${country_id}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
       ]);
 
-      console.log('Landmarks API response status:', landmarksResponse.status);
-
       if (landmarksResponse.ok) {
         const data = await landmarksResponse.json();
-        console.log('Landmarks fetched:', data.length, 'including', data.filter((l: Landmark) => l.is_locked).length, 'locked premium');
         setLandmarks(data);
         
         // Compute visited IDs from landmarks response (already has is_visited)
@@ -181,8 +174,6 @@ export default function LandmarksScreen() {
     // In a real app, this would trigger payment flow
     // For now, just close the modal
     setShowUpgradeModal(false);
-    // TODO: Integrate with payment provider (Stripe/RevenueCat)
-    console.log('User wants to upgrade to:', tier);
   };
 
   const handleCountryVisitAction = () => {

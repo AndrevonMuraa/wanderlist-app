@@ -16,7 +16,7 @@ import time
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 if not BASE_URL:
-    BASE_URL = "https://cleanup-verify-1.preview.emergentagent.com"
+    BASE_URL = "https://log-removal-pass.preview.emergentagent.com"
 
 # Test credentials
 TEST_USER_1 = {

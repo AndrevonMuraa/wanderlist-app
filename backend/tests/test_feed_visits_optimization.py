@@ -17,7 +17,7 @@ import os
 import time
 import uuid
 
-BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://cleanup-verify-1.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://log-removal-pass.preview.emergentagent.com').rstrip('/')
 
 class TestAuthenticationSetup:
     """Authentication tests - must pass before other tests"""
