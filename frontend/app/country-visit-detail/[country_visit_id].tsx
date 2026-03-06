@@ -119,8 +119,8 @@ export default function CountryVisitDetailScreen() {
         const data = await response.json();
         setVisitedLandmarks(data.landmarks || []);
       }
-    } catch (error) {
-      console.error('Error fetching visited landmarks:', error);
+    } catch {
+      // Failed to fetch visited landmarks
     }
   };
 
@@ -139,8 +139,8 @@ export default function CountryVisitDetailScreen() {
         setVisit(data);
         setEditDiary(data.diary || '');
       }
-    } catch (error) {
-      console.error('Error fetching country visit:', error);
+    } catch {
+      // Failed to fetch visit details
     } finally {
       setLoading(false);
     }
@@ -193,8 +193,7 @@ export default function CountryVisitDetailScreen() {
         }
         setUploadingPhotos(false);
       }
-    } catch (error) {
-      console.error('Error adding photos:', error);
+    } catch {
       setUploadingPhotos(false);
       Alert.alert('Error', 'Failed to add photos');
     }
@@ -236,8 +235,7 @@ export default function CountryVisitDetailScreen() {
               } else {
                 Alert.alert('Error', 'Failed to remove photo');
               }
-            } catch (error) {
-              console.error('Error removing photo:', error);
+            } catch {
               Alert.alert('Error', 'Failed to remove photo');
             }
           },
@@ -270,8 +268,7 @@ export default function CountryVisitDetailScreen() {
       } else {
         throw new Error('Failed to delete');
       }
-    } catch (error) {
-      console.error('Error deleting visit:', error);
+    } catch {
       if (Platform.OS === 'web') {
         alert('Failed to delete visit');
       } else {
@@ -309,8 +306,7 @@ export default function CountryVisitDetailScreen() {
       } else {
         throw new Error('Failed to update');
       }
-    } catch (error) {
-      console.error('Error updating diary:', error);
+    } catch {
       if (Platform.OS === 'web') {
         alert('Failed to update diary');
       } else {
@@ -333,13 +329,13 @@ export default function CountryVisitDetailScreen() {
   const getVisibilityInfo = (visibility: string) => {
     switch (visibility) {
       case 'public':
-        return { icon: 'globe-outline', label: 'Public', emoji: '🌐' };
+        return { icon: 'globe-outline', label: 'Public' };
       case 'friends':
-        return { icon: 'people-outline', label: 'Friends Only', emoji: '👥' };
+        return { icon: 'people-outline', label: 'Friends Only' };
       case 'private':
-        return { icon: 'lock-closed-outline', label: 'Private', emoji: '🔒' };
+        return { icon: 'lock-closed-outline', label: 'Private' };
       default:
-        return { icon: 'globe-outline', label: 'Public', emoji: '🌐' };
+        return { icon: 'globe-outline', label: 'Public' };
     }
   };
 
@@ -354,8 +350,8 @@ export default function CountryVisitDetailScreen() {
         visit.points_earned,
         visit.diary
       );
-    } catch (error) {
-      console.error('Error sharing:', error);
+    } catch {
+      // Share failed silently
     }
   };
 
@@ -545,6 +541,44 @@ export default function CountryVisitDetailScreen() {
               <TouchableOpacity
                 style={{
                   flexDirection: 'row', alignItems: 'center', gap: 6,
+                  backgroundColor: '#E91E63' + '15',
+                  paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
+                }}
+                onPress={async () => {
+                  const { status } = await ImagePicker.requestCameraPermissionsAsync();
+                  if (status !== 'granted') {
+                    Alert.alert('Permission Required', 'Please allow camera access.');
+                    return;
+                  }
+                  const result = await ImagePicker.launchCameraAsync({ quality: 0.7, base64: true });
+                  if (!result.canceled && result.assets?.[0]?.base64) {
+                    setUploadingPhotos(true);
+                    try {
+                      const newPhoto = `data:image/jpeg;base64,${result.assets[0].base64}`;
+                      const existing = visit.photos || [];
+                      const all = [...existing, newPhoto];
+                      const token = await getToken();
+                      await fetch(`${BACKEND_URL}/api/country-visits/${country_visit_id}/update`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                        body: JSON.stringify({ photos: all }),
+                      });
+                      setVisit((prev: any) => prev ? { ...prev, photos: all } : prev);
+                    } catch {
+                      Alert.alert('Error', 'Could not take photo');
+                    } finally {
+                      setUploadingPhotos(false);
+                    }
+                  }
+                }}
+                disabled={uploadingPhotos}
+              >
+                <Ionicons name="camera" size={18} color="#E91E63" />
+                <Text style={{ color: '#E91E63', fontWeight: '600', fontSize: 13 }}>Camera</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row', alignItems: 'center', gap: 6,
                   backgroundColor: theme.colors.primary + '15',
                   paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
                 }}
@@ -554,10 +588,10 @@ export default function CountryVisitDetailScreen() {
                 {uploadingPhotos ? (
                   <ActivityIndicator size="small" color={theme.colors.primary} />
                 ) : (
-                  <Ionicons name="add-circle-outline" size={18} color={theme.colors.primary} />
+                  <Ionicons name="images" size={18} color={theme.colors.primary} />
                 )}
                 <Text style={{ color: theme.colors.primary, fontWeight: '600', fontSize: 13 }}>
-                  {uploadingPhotos ? 'Uploading...' : 'Add More'}
+                  {uploadingPhotos ? 'Uploading...' : 'Library'}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -620,7 +654,7 @@ export default function CountryVisitDetailScreen() {
             </View>
             <View style={styles.infoDivider} />
             <View style={styles.infoItem}>
-              <Text style={styles.privacyEmoji}>{visibilityInfo.emoji}</Text>
+              <Ionicons name={visibilityInfo.icon as any} size={24} color={theme.colors.primary} />
               <Text style={styles.infoLabel}>Visibility</Text>
               <Text style={styles.infoValue}>{visibilityInfo.label}</Text>
             </View>
@@ -634,15 +668,43 @@ export default function CountryVisitDetailScreen() {
               <Ionicons name="book" size={22} color={theme.colors.primary} />
               <Text style={styles.diaryTitle}>Travel Diary</Text>
             </View>
-            <TouchableOpacity 
-              onPress={() => {
-                setEditDiary(visit.diary || '');
-                setShowEditDialog(true);
-              }}
-              style={styles.editDiaryBtn}
-            >
-              <Ionicons name="create-outline" size={20} color={theme.colors.primary} />
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <TouchableOpacity
+                onPress={async () => {
+                  const newVal = !(visit.share_diary ?? true);
+                  try {
+                    const token = await getToken();
+                    await fetch(`${BACKEND_URL}/api/country-visits/${country_visit_id}/update`, {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                      body: JSON.stringify({ share_diary: newVal }),
+                    });
+                    setVisit((prev: any) => prev ? { ...prev, share_diary: newVal } : prev);
+                  } catch {
+                    Alert.alert('Error', 'Could not update diary sharing');
+                  }
+                }}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}
+              >
+                <Ionicons
+                  name={(visit.share_diary !== false) ? 'eye' : 'eye-off'}
+                  size={18}
+                  color={(visit.share_diary !== false) ? theme.colors.primary : theme.colors.textLight}
+                />
+                <Text style={{ fontSize: 12, fontWeight: '500', color: (visit.share_diary !== false) ? theme.colors.primary : theme.colors.textLight }}>
+                  {(visit.share_diary !== false) ? 'Shared' : 'Hidden'}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                onPress={() => {
+                  setEditDiary(visit.diary || '');
+                  setShowEditDialog(true);
+                }}
+                style={styles.editDiaryBtn}
+              >
+                <Ionicons name="create-outline" size={20} color={theme.colors.primary} />
+              </TouchableOpacity>
+            </View>
           </View>
           {visit.diary ? (
             <Text style={styles.diaryText}>{visit.diary}</Text>

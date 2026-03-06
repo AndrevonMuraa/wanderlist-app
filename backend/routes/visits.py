@@ -90,6 +90,87 @@ async def update_visit_privacy(visit_id: str, visibility: str = Body(..., embed=
     await db.activities.update_one({"visit_id": visit_id}, {"$set": {"visibility": visibility}})
     return {"message": "Privacy updated", "visibility": visibility}
 
+
+@router.put("/visits/{visit_id}")
+async def update_visit(visit_id: str, body: dict = Body(...), current_user: User = Depends(get_current_user)):
+    """Update a landmark visit (photos, diary, share_diary, visibility)"""
+    visit = await db.visits.find_one({"visit_id": visit_id, "user_id": current_user.user_id})
+    if not visit:
+        raise HTTPException(status_code=404, detail="Visit not found or not authorized")
+    
+    update_fields = {}
+    
+    if "photos" in body:
+        update_fields["photos"] = body["photos"][:10]
+        update_fields["has_photo"] = len(body["photos"]) > 0
+        update_fields["photo_count"] = len(body["photos"][:10])
+    
+    if "diary_notes" in body:
+        update_fields["diary"] = body["diary_notes"]
+    
+    if "share_diary" in body:
+        update_fields["share_diary"] = bool(body["share_diary"])
+    
+    if "visibility" in body:
+        if body["visibility"] in ("public", "friends", "private"):
+            update_fields["visibility"] = body["visibility"]
+    
+    if not update_fields:
+        return {"message": "No changes to apply"}
+    
+    await db.visits.update_one({"visit_id": visit_id}, {"$set": update_fields})
+    
+    # Sync relevant fields to activities
+    activity_update = {}
+    if "visibility" in update_fields:
+        activity_update["visibility"] = update_fields["visibility"]
+    if "photos" in update_fields:
+        activity_update["photos"] = update_fields["photos"]
+    if "diary" in update_fields:
+        activity_update["diary"] = update_fields["diary"]
+    if activity_update:
+        await db.activities.update_one({"visit_id": visit_id}, {"$set": activity_update})
+    
+    return {"message": "Visit updated successfully"}
+
+
+@router.delete("/visits/{visit_id}")
+async def delete_visit(visit_id: str, current_user: User = Depends(get_current_user)):
+    """Delete a landmark visit and associated data"""
+    visit = await db.visits.find_one({"visit_id": visit_id, "user_id": current_user.user_id})
+    if not visit:
+        raise HTTPException(status_code=404, detail="Visit not found or not authorized")
+    
+    landmark_id = visit.get("landmark_id")
+    points_earned = visit.get("points_earned", 0)
+    verified_points = visit.get("verified_points", 0)
+    
+    # Delete the visit
+    await db.visits.delete_one({"visit_id": visit_id})
+    
+    # Delete associated activity
+    await db.activities.delete_many({"visit_id": visit_id})
+    
+    # Delete associated comments
+    activity = await db.activities.find_one({"visit_id": visit_id}, {"_id": 0, "activity_id": 1})
+    if activity:
+        await db.comments.delete_many({"activity_id": activity["activity_id"]})
+    
+    # Deduct points from user
+    update_ops = {}
+    if points_earned > 0:
+        update_ops["points"] = -points_earned
+    if verified_points > 0:
+        update_ops["verified_points"] = -verified_points
+    if update_ops:
+        await db.users.update_one(
+            {"user_id": current_user.user_id},
+            {"$inc": update_ops}
+        )
+    
+    return {"message": "Visit deleted successfully", "points_deducted": points_earned, "landmark_id": landmark_id}
+
+
 @router.get("/visits/stats")
 async def get_visit_stats(current_user: User = Depends(get_current_user)):
     """Get visit statistics including monthly count for free users"""

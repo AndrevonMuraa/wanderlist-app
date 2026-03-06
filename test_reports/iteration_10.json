@@ -1,0 +1,77 @@
+{
+  "summary": "Backend testing for Landmark Visit CRUD enhancement (iteration 10). 15/16 tests passed. Landmark visit PUT and DELETE endpoints working correctly. One bug found: PUT /api/country-visits/{id} fails with 500 error when only share_diary is updated (UnboundLocalError: has_photos not defined).",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "PUT /api/country-visits/{id}",
+        "issue": "500 Internal Server Error when updating only share_diary field. UnboundLocalError: 'has_photos' variable is referenced in share_diary block but only defined in photos block",
+        "priority": "HIGH",
+        "file": "/app/backend/routes/country_visits.py",
+        "line": "274-296",
+        "root_cause": "In update_country_visit function, the share_diary update block (lines 274-296) references 'has_photos' variable which is only defined inside the 'if \"photos\" in data:' block (line 272). When share_diary is updated without photos, has_photos is undefined."
+      }
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_landmark_visit_crud_iteration10.py",
+    "/app/test_reports/pytest/pytest_iteration10.xml"
+  ],
+  "action_items": [
+    "Fix UnboundLocalError in country_visits.py update_country_visit function - the leaderboard points logic in share_diary block should either be removed (share_diary doesn't affect photos) or has_photos should be initialized before conditional blocks"
+  ],
+  "critical_code_review_comments": [
+    "In country_visits.py line 274-296: The share_diary update block incorrectly references 'has_photos' which is only defined in the photos block. The leaderboard points logic appears to be misplaced - share_diary changes should not trigger leaderboard points recalculation, only photo changes should."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_landmark_visit_crud_iteration10.py"
+  ],
+  "success_rate": {
+    "backend": "93.75% (15/16 tests passed)",
+    "frontend": "N/A - Backend only testing requested"
+  },
+  "test_credentials": "test@wandermark.app / Test1234!",
+  "seed_data_creation": "Landmark visit created and deleted during CRUD flow testing",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Landmark visit PUT and DELETE endpoints working correctly. Full CRUD flow verified: create -> update (diary, share_diary, visibility) -> delete -> verify 404. Country visit share_diary update has a bug (UnboundLocalError). The bug is in country_visits.py - the share_diary block references has_photos which is only defined in photos block.",
+  "tested_endpoints": [
+    {"endpoint": "POST /api/auth/login", "status": "PASS", "note": "Test credentials working"},
+    {"endpoint": "GET /api/landmarks", "status": "PASS", "note": "Returns landmark list"},
+    {"endpoint": "POST /api/visits", "status": "PASS", "note": "Creates landmark visit successfully"},
+    {"endpoint": "PUT /api/visits/{id}", "status": "PASS", "note": "Updates diary_notes, share_diary, visibility - all work"},
+    {"endpoint": "GET /api/visits/{id}", "status": "PASS", "note": "Returns visit details after update"},
+    {"endpoint": "DELETE /api/visits/{id}", "status": "PASS", "note": "Deletes visit, returns points_deducted and landmark_id"},
+    {"endpoint": "GET /api/visits/{id} (after delete)", "status": "PASS", "note": "Returns 404 as expected"},
+    {"endpoint": "GET /api/country-visits", "status": "PASS", "note": "Returns country visit list"},
+    {"endpoint": "PUT /api/country-visits/{id}", "status": "FAIL", "note": "500 error - UnboundLocalError: has_photos"},
+    {"endpoint": "GET /api/stats", "status": "PASS"},
+    {"endpoint": "GET /api/visits/list", "status": "PASS"},
+    {"endpoint": "GET /api/photos/collection", "status": "PASS"},
+    {"endpoint": "GET /api/landmarks", "status": "PASS"},
+    {"endpoint": "GET /api/progress", "status": "PASS"},
+    {"endpoint": "GET /api/user-created-visits", "status": "PASS", "note": "No _id leak"}
+  ],
+  "key_verifications": {
+    "landmark_visit_put": "VERIFIED - PUT /api/visits/{id} works for diary_notes, share_diary, visibility",
+    "landmark_visit_delete": "VERIFIED - DELETE /api/visits/{id} returns message, points_deducted, landmark_id",
+    "country_visit_share_diary": "FAILED - PUT /api/country-visits/{id} with share_diary causes 500 error",
+    "objectid_leak_fix": "VERIFIED - GET /api/user-created-visits does NOT return _id field"
+  },
+  "rca_of_issue": {
+    "issue": "PUT /api/country-visits/{id} returns 500 when updating share_diary alone",
+    "root_cause": "In update_country_visit() function (country_visits.py lines 246-326), the share_diary handling block (lines 274-296) references 'has_photos' variable which is only defined inside the 'if \"photos\" in data:' block at line 272. When the request body contains only share_diary without photos, Python raises UnboundLocalError because has_photos was never assigned.",
+    "reproduction_steps": [
+      "1. Login with test credentials",
+      "2. GET /api/country-visits to find a country_visit_id",
+      "3. PUT /api/country-visits/{id} with body: {\"share_diary\": true}",
+      "4. Observe 500 Internal Server Error"
+    ],
+    "suggested_fix": "Remove the leaderboard points logic from the share_diary block (lines 277-296) as share_diary changes should not affect leaderboard points. Alternatively, initialize has_photos at the beginning of the function using: has_photos = 'photos' in data and len(data['photos']) > 0"
+  }
+}

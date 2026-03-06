@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Image, Dimensions, Platform, TouchableOpacity } from 'react-native';
-import { Text } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, Image, Dimensions, Platform, TouchableOpacity, Alert, TextInput, ActivityIndicator } from 'react-native';
+import { Text, Surface, Portal, Dialog, Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
+import * as ImagePicker from 'expo-image-picker';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import { lightHaptic } from '../../utils/haptics';
 import { PhotoGalleryModal } from '../../components/PhotoGalleryModal';
 import { shareVisit } from '../../utils/shareUtils';
+import { safeGoBack } from '../../utils/navigation';
 import ReportButton from '../../components/ReportButton';
 import CommentsSection from '../../components/CommentsSection';
 import { useAuth } from '../../contexts/AuthContext';
@@ -41,11 +43,13 @@ interface VisitDetail {
   photo_base64?: string;
   photos?: string[];
   diary_notes?: string;
+  diary?: string;
   comments?: string;
   points_earned: number;
   visited_at: string;
   verified: boolean;
   visibility?: string;
+  share_diary?: boolean;
   activity_id?: string;
   comments_count?: number;
 }
@@ -59,7 +63,14 @@ export default function VisitDetailScreen() {
   const [showGallery, setShowGallery] = useState(false);
   const [currentVisibility, setCurrentVisibility] = useState<string>('public');
   const [commentsCount, setCommentsCount] = useState(0);
+  const [showEditDiaryDialog, setShowEditDiaryDialog] = useState(false);
+  const [editDiary, setEditDiary] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [uploadingPhotos, setUploadingPhotos] = useState(false);
   const router = useRouter();
+  const isOwner = user?.user_id === visit?.user_id;
 
   useEffect(() => {
     fetchVisitDetails();
@@ -78,8 +89,8 @@ export default function VisitDetailScreen() {
         setCurrentVisibility(data.visibility || 'public');
         setCommentsCount(data.comments_count || 0);
       }
-    } catch (error) {
-      console.error('Error fetching visit:', error);
+    } catch {
+      // Visit fetch failed
     } finally {
       setLoading(false);
     }
@@ -111,8 +122,133 @@ export default function VisitDetailScreen() {
         setCurrentVisibility(newVisibility);
         await lightHaptic();
       }
-    } catch (error) {
-      console.error('Error updating visibility:', error);
+    } catch {
+      // Visibility update failed
+    }
+  };
+
+  const handleSaveDiary = async () => {
+    setSaving(true);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/visits/${visit_id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ diary_notes: editDiary }),
+      });
+      if (res.ok) {
+        setVisit(prev => prev ? { ...prev, diary_notes: editDiary, diary: editDiary } : prev);
+        setShowEditDiaryDialog(false);
+      }
+    } catch {
+      Alert.alert('Error', 'Could not update diary');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleToggleShareDiary = async () => {
+    const newVal = !(visit?.share_diary ?? true);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/visits/${visit_id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ share_diary: newVal }),
+      });
+      if (res.ok) {
+        setVisit(prev => prev ? { ...prev, share_diary: newVal } : prev);
+      }
+    } catch {
+      Alert.alert('Error', 'Could not update diary sharing');
+    }
+  };
+
+  const handleAddPhotos = async () => {
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission Required', 'Please allow photo library access.');
+        return;
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true,
+        quality: 0.7,
+        base64: true,
+      });
+      if (!result.canceled && result.assets) {
+        setUploadingPhotos(true);
+        const newPhotos = result.assets
+          .filter(a => a.base64)
+          .map(a => `data:image/jpeg;base64,${a.base64}`);
+        const existing = visit?.photos || [];
+        const all = [...existing, ...newPhotos].slice(0, 10);
+        const token = await getToken();
+        const res = await fetch(`${BACKEND_URL}/api/visits/${visit_id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ photos: all }),
+        });
+        if (res.ok) {
+          setVisit(prev => prev ? { ...prev, photos: all } : prev);
+        }
+      }
+    } catch {
+      Alert.alert('Error', 'Could not add photos');
+    } finally {
+      setUploadingPhotos(false);
+    }
+  };
+
+  const handleTakePhoto = async () => {
+    try {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission Required', 'Please allow camera access.');
+        return;
+      }
+      const result = await ImagePicker.launchCameraAsync({ quality: 0.7, base64: true });
+      if (!result.canceled && result.assets?.[0]?.base64) {
+        setUploadingPhotos(true);
+        const newPhoto = `data:image/jpeg;base64,${result.assets[0].base64}`;
+        const existing = visit?.photos || [];
+        const all = [...existing, newPhoto].slice(0, 10);
+        const token = await getToken();
+        const res = await fetch(`${BACKEND_URL}/api/visits/${visit_id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ photos: all }),
+        });
+        if (res.ok) {
+          setVisit(prev => prev ? { ...prev, photos: all } : prev);
+        }
+      }
+    } catch {
+      Alert.alert('Error', 'Could not take photo');
+    } finally {
+      setUploadingPhotos(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/visits/${visit_id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        Alert.alert('Deleted', 'Visit has been removed.', [
+          { text: 'OK', onPress: () => safeGoBack(router) },
+        ]);
+      }
+    } catch {
+      Alert.alert('Error', 'Could not delete visit');
+    } finally {
+      setDeleting(false);
+      setShowDeleteDialog(false);
     }
   };
 
@@ -234,13 +370,38 @@ export default function VisitDetailScreen() {
         </View>
 
         {/* Travel Diary */}
-        {visit.diary_notes && (
+        {(visit.diary_notes || visit.diary || isOwner) && (
           <View style={styles.diaryCard}>
-            <View style={styles.sectionHeader}>
-              <Ionicons name="journal" size={24} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>Travel Diary</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View style={styles.sectionHeader}>
+                <Ionicons name="journal" size={24} color={theme.colors.primary} />
+                <Text style={styles.sectionTitle}>Travel Diary</Text>
+              </View>
+              {isOwner && (
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                  <TouchableOpacity onPress={handleToggleShareDiary} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                    <Ionicons
+                      name={(visit.share_diary !== false) ? 'eye' : 'eye-off'}
+                      size={18}
+                      color={(visit.share_diary !== false) ? theme.colors.primary : theme.colors.textLight}
+                    />
+                    <Text style={{ fontSize: 12, fontWeight: '500', color: (visit.share_diary !== false) ? theme.colors.primary : theme.colors.textLight }}>
+                      {(visit.share_diary !== false) ? 'Shared' : 'Hidden'}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => { setEditDiary(visit.diary_notes || visit.diary || ''); setShowEditDiaryDialog(true); }}>
+                    <Ionicons name="create-outline" size={20} color={theme.colors.primary} />
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
-            <Text style={styles.diaryText}>{visit.diary_notes}</Text>
+            {(visit.diary_notes || visit.diary) ? (
+              <Text style={styles.diaryText}>{visit.diary_notes || visit.diary}</Text>
+            ) : isOwner ? (
+              <TouchableOpacity onPress={() => setShowEditDiaryDialog(true)}>
+                <Text style={{ fontSize: 14, color: theme.colors.textLight, fontStyle: 'italic', paddingVertical: 8 }}>Tap to add diary notes...</Text>
+              </TouchableOpacity>
+            ) : null}
           </View>
         )}
 
@@ -311,9 +472,72 @@ export default function VisitDetailScreen() {
           <Text style={styles.reportLabel}>Report this visit</Text>
         </View>
 
+        {/* Owner Actions */}
+        {isOwner && (
+          <Surface style={styles.actionsCard}>
+            <Text style={styles.actionCardTitle}>Manage Visit</Text>
+            <View style={styles.actionsRow}>
+              <TouchableOpacity onPress={handleTakePhoto} style={styles.actionBtn} disabled={uploadingPhotos}>
+                <Ionicons name="camera" size={22} color={theme.colors.primary} />
+                <Text style={styles.actionBtnText}>Camera</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleAddPhotos} style={styles.actionBtn} disabled={uploadingPhotos}>
+                <Ionicons name="images" size={22} color="#4CAF50" />
+                <Text style={styles.actionBtnText}>Library</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setShowDeleteDialog(true)} style={styles.actionBtn}>
+                <Ionicons name="trash" size={22} color="#E53935" />
+                <Text style={[styles.actionBtnText, { color: '#E53935' }]}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+            {uploadingPhotos && (
+              <View style={styles.uploadingRow}>
+                <ActivityIndicator size="small" color={theme.colors.primary} />
+                <Text style={styles.uploadingText}>Uploading photos...</Text>
+              </View>
+            )}
+          </Surface>
+        )}
+
         <View style={styles.bottomSpacer} />
       </ScrollView>
       
+      {/* Edit Diary Dialog */}
+      <Portal>
+        <Dialog visible={showEditDiaryDialog} onDismiss={() => setShowEditDiaryDialog(false)}>
+          <Dialog.Title>Edit Diary</Dialog.Title>
+          <Dialog.Content>
+            <TextInput
+              style={{ borderWidth: 1, borderColor: theme.colors.border, borderRadius: 8, padding: 12, fontSize: 15, minHeight: 120, color: theme.colors.text, textAlignVertical: 'top' }}
+              value={editDiary}
+              onChangeText={setEditDiary}
+              placeholder="Write about your experience..."
+              multiline
+              numberOfLines={6}
+              textAlignVertical="top"
+            />
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowEditDiaryDialog(false)}>Cancel</Button>
+            <Button onPress={handleSaveDiary} loading={saving}>Save</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+
+      {/* Delete Dialog */}
+      <Portal>
+        <Dialog visible={showDeleteDialog} onDismiss={() => setShowDeleteDialog(false)}>
+          <Dialog.Title>Delete Visit</Dialog.Title>
+          <Dialog.Content>
+            <Text>Are you sure? This will remove the visit and deduct {visit?.points_earned || 0} points. This cannot be undone.</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowDeleteDialog(false)}>Cancel</Button>
+            <Button onPress={handleDelete} loading={deleting} textColor="#E53935">Delete</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+
       <PhotoGalleryModal
         visible={showGallery}
         photos={photos}
@@ -545,5 +769,45 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 13,
     fontWeight: '600',
+  },
+  actionsCard: {
+    marginHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
+    elevation: 1,
+  },
+  actionCardTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: 8,
+  },
+  actionsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingTop: 4,
+  },
+  actionBtn: {
+    alignItems: 'center',
+    padding: 12,
+  },
+  actionBtnText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: theme.colors.text,
+    marginTop: 4,
+  },
+  uploadingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: 8,
+  },
+  uploadingText: {
+    fontSize: 13,
+    color: theme.colors.textLight,
   },
 });

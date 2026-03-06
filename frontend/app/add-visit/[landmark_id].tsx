@@ -64,8 +64,7 @@ export default function AddVisitScreen() {
         Alert.alert('Error', 'Failed to load landmark details');
         safeGoBack(router);
       }
-    } catch (error) {
-      console.error('Error fetching landmark:', error);
+    } catch (error: any) {
       Alert.alert('Error', 'Failed to load landmark details');
       safeGoBack(router);
     } finally {
@@ -88,8 +87,8 @@ export default function AddVisitScreen() {
         setUserPoints(data.points || 0);
         setDefaultPrivacy(data.default_privacy || 'public');
       }
-    } catch (error) {
-      console.error('Error fetching user data:', error);
+    } catch (error: any) {
+      // User data fetch failed silently
     }
   };
 
@@ -216,7 +215,6 @@ export default function AddVisitScreen() {
         ]
       );
     } catch (error) {
-      console.error('Error submitting visit:', error);
       Alert.alert('Error', 'Failed to save your visit. Please try again.');
       throw error; // Re-throw to keep modal open
     }

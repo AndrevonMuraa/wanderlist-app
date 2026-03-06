@@ -271,6 +271,8 @@ async def update_country_visit(country_visit_id: str, data: dict, current_user: 
         update_fields["photos"] = new_photos
         has_photos = len(new_photos) > 0
         update_fields["has_photos"] = has_photos
+    if "share_diary" in data:
+        update_fields["share_diary"] = bool(data["share_diary"])
         
         # Handle leaderboard points changes
         existing_has_photos = bool(country_visit.get("photos", []))
