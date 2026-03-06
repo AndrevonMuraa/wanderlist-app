@@ -172,6 +172,22 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Fixed "5 ranks" → "8 ranks" in hero text
 - Added Verified Points info to "How to Earn Points" section
 
+### Custom Visits Feature Overhaul (Complete - Feb 2026)
+**Backend:**
+- NEW: `GET /api/user-created-visits/{visit_id}` - Get single custom visit with privacy check
+- NEW: `PUT /api/user-created-visits/{visit_id}` - Edit custom visit (country_name, landmarks, photos, diary, visibility, share_diary)
+- FIX: ObjectId leak in `GET /api/user-created-visits` - now excludes `_id` from projection
+- NEW: `share_diary` field support in create and edit
+
+**Frontend:**
+- NEW: `custom-visit-detail/[visit_id].tsx` - Full detail page with photo carousel, landmarks list, diary view/edit, visibility toggle, share_diary toggle, camera/library photo adding, delete functionality
+- UPDATE: Journey page custom visits are now tappable (TouchableOpacity → detail page)
+- UPDATE: "+X more" text is now a clickable link with "View all X custom visits"
+- UPDATE: AddUserCreatedVisitModal has camera button + library button (was library only)
+- UPDATE: AddUserCreatedVisitModal has share_diary toggle
+- FIX: Removed emoji character from modal text
+- Verified with 9/9 backend tests (full CRUD flow)
+
 ## Prioritized Backlog
 ### P0 - None
 ### P1 - Upcoming
