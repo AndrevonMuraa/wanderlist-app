@@ -116,15 +116,12 @@ export default function JourneyScreen() {
       const results = await Promise.allSettled([
         cachedFetch(`${BACKEND_URL}/api/stats`, token || '', 'stats'),
         cachedFetch(`${BACKEND_URL}/api/progress`, token || '', 'progress'),
-        fetch(`${BACKEND_URL}/api/visits`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }),
         fetch(`${BACKEND_URL}/api/user-created-visits`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
 
-      const [statsResult, progressResult, visitsResult, customVisitsResult] = results;
+      const [statsResult, progressResult, customVisitsResult] = results;
       let gotProgress = false;
 
       if (statsResult.status === 'fulfilled' && statsResult.value.ok) {
@@ -138,12 +135,6 @@ export default function JourneyScreen() {
         gotProgress = true;
         // Cache progress data for offline use
         await cacheProgress(data);
-      }
-
-      if (visitsResult.status === 'fulfilled' && visitsResult.value.ok) {
-        const data = await visitsResult.value.json();
-        // Cache visits for offline use
-        await cacheVisits(data);
       }
       
       if (customVisitsResult.status === 'fulfilled' && customVisitsResult.value.ok) {

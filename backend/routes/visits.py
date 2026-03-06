@@ -16,6 +16,40 @@ router = APIRouter()
 
 # ============= VISIT ENDPOINTS =============
 
+@router.get("/visits/list")
+async def get_visits_list(current_user: User = Depends(get_current_user), limit: int = 100):
+    """Lightweight visit list — no photo data. For lists, cards, offline cache."""
+    pipeline = [
+        {"$match": {"user_id": current_user.user_id}},
+        {"$sort": {"visited_at": -1}},
+        {"$limit": limit},
+        {"$lookup": {
+            "from": "landmarks",
+            "localField": "landmark_id",
+            "foreignField": "landmark_id",
+            "as": "_lm",
+            "pipeline": [{"$project": {"_id": 0, "name": 1, "country_name": 1}}]
+        }},
+        {"$addFields": {
+            "landmark_name": {"$ifNull": ["$landmark_name", {"$arrayElemAt": ["$_lm.name", 0]}]},
+            "country_name": {"$ifNull": ["$country_name", {"$arrayElemAt": ["$_lm.country_name", 0]}]},
+            "has_photo": {"$or": [
+                {"$gt": [{"$size": {"$ifNull": ["$photos", []]}}, 0]},
+                {"$and": [{"$ne": ["$photo_base64", None]}, {"$ne": ["$photo_base64", ""]}]}
+            ]},
+            "photo_count": {"$size": {"$ifNull": ["$photos", []]}},
+            "has_diary": {"$and": [{"$ne": ["$diary_notes", None]}, {"$ne": ["$diary_notes", ""]}]},
+        }},
+        {"$project": {
+            "_id": 0, "_lm": 0,
+            "photo_base64": 0, "photos": 0,
+            "diary_notes": 0, "comments": 0,
+            "visit_location": 0
+        }}
+    ]
+    return await db.visits.aggregate(pipeline).to_list(limit)
+
+
 @router.get("/visits", response_model=List[Visit])
 async def get_visits(current_user: User = Depends(get_current_user), limit: int = 100):
     # Single aggregation: fetch visits + lookup landmark names in one query

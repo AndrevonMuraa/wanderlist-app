@@ -4,7 +4,6 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  Image,
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
@@ -48,7 +47,7 @@ export default function MyLandmarkVisits() {
   const fetchVisits = async () => {
     try {
       const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/visits`, {
+      const response = await fetch(`${BACKEND_URL}/api/visits/list`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
@@ -85,13 +84,13 @@ export default function MyLandmarkVisits() {
       data-testid={`landmark-visit-${item.visit_id}`}
     >
       <Surface style={styles.visitSurface}>
-        {item.photos && item.photos.length > 0 ? (
-          <Image source={{ uri: item.photos[0] }} style={styles.visitImage} resizeMode="cover" />
-        ) : (
-          <View style={styles.visitImagePlaceholder}>
+        <View style={styles.visitImagePlaceholder}>
+          {item.has_photo ? (
+            <Ionicons name="camera" size={28} color={theme.colors.primary} />
+          ) : (
             <Ionicons name="location" size={32} color={theme.colors.textLight} />
-          </View>
-        )}
+          )}
+        </View>
         <View style={styles.visitContent}>
           <Text style={styles.visitLandmark} numberOfLines={1}>{item.landmark_name}</Text>
           <Text style={styles.visitCountry} numberOfLines={1}>{item.country_name}</Text>
@@ -103,16 +102,16 @@ export default function MyLandmarkVisits() {
             </View>
           </View>
           <View style={styles.visitBadges}>
-            {item.is_verified && (
+            {item.verified && (
               <View style={styles.verifiedBadge}>
                 <Ionicons name="shield-checkmark" size={12} color="#4CAF50" />
                 <Text style={styles.verifiedText}>Verified</Text>
               </View>
             )}
-            {item.has_photos && (
+            {item.has_photo && (
               <View style={styles.photoBadge}>
                 <Ionicons name="camera" size={12} color={theme.colors.primary} />
-                <Text style={styles.photoCount}>{item.photos?.length || 0}</Text>
+                <Text style={styles.photoCount}>{item.photo_count || 0}</Text>
               </View>
             )}
           </View>

@@ -42,28 +42,22 @@ export default function PointsSummary() {
     const fetchStats = async () => {
       try {
         const token = await getToken();
-        const [statsRes, visitsRes] = await Promise.all([
-          fetch(`${BACKEND_URL}/api/stats`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          fetch(`${BACKEND_URL}/api/visits`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
+        const statsRes = await fetch(`${BACKEND_URL}/api/stats`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         
-        if (statsRes.ok && visitsRes.ok) {
+        if (statsRes.ok) {
           const statsData = await statsRes.json();
-          const visits = await visitsRes.json();
-          
-          const withPhotos = visits.filter((v: any) => v.has_photos || (v.photos && v.photos.length > 0)).length;
+          const withPhotos = statsData.visits_with_photos || 0;
+          const totalVisits = statsData.total_visits || 0;
           
           setStats({
             total_points: statsData.points || 0,
             leaderboard_points: statsData.leaderboard_points || 0,
-            landmarks_visited: statsData.total_visits || visits.length,
+            landmarks_visited: totalVisits,
             countries_visited: statsData.countries_visited || 0,
             visits_with_photos: withPhotos,
-            visits_without_photos: visits.length - withPhotos,
+            visits_without_photos: totalVisits - withPhotos,
           });
         }
       } catch (error) {

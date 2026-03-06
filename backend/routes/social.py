@@ -844,11 +844,26 @@ async def get_stats(current_user: User = Depends(get_current_user)):
             {"friend_id": current_user.user_id, "status": "accepted"}
         ]
     })
+    # Count visits with photos (for points breakdown)
+    photos_pipeline = [
+        {"$match": {"user_id": current_user.user_id}},
+        {"$project": {
+            "has_photo": {"$or": [
+                {"$gt": [{"$size": {"$ifNull": ["$photos", []]}}, 0]},
+                {"$and": [{"$ne": ["$photo_base64", None]}, {"$ne": ["$photo_base64", ""]}]}
+            ]}
+        }},
+        {"$group": {"_id": None, "with_photos": {"$sum": {"$cond": ["$has_photo", 1, 0]}}}}
+    ]
+    photos_task = db.visits.aggregate(photos_pipeline).to_list(1)
     
-    result, user, friend_count = await asyncio.gather(visits_task, user_task, friends_task)
+    result, user, friend_count, photos_result = await asyncio.gather(
+        visits_task, user_task, friends_task, photos_task
+    )
     
     stats = result[0] if result else {"total_visits": 0, "countries": [], "continents": []}
     user_lb_points = user.get("leaderboard_points", 0) if user else 0
+    visits_with_photos = photos_result[0]["with_photos"] if photos_result else 0
     
     # Calculate rank
     users_above = await db.users.count_documents({
@@ -866,7 +881,8 @@ async def get_stats(current_user: User = Depends(get_current_user)):
         "friends_count": friend_count,
         "points": user.get("points", 0) if user else 0,
         "leaderboard_points": user_lb_points,
-        "rank": users_above + 1
+        "rank": users_above + 1,
+        "visits_with_photos": visits_with_photos
     }
 
 # ============= PROGRESS STATISTICS ENDPOINT =============
