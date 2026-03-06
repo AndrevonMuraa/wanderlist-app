@@ -178,100 +178,6 @@ export default function AboutScreen() {
           </Surface>
         </View>
 
-        {/* Help & Support Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Ionicons name="help-circle" size={24} color={theme.colors.primary} />
-            <Text style={styles.sectionTitle}>Help & Support</Text>
-          </View>
-
-          {/* FAQ */}
-          <Surface style={styles.card}>
-            <Text style={styles.cardTitle}>Frequently Asked Questions</Text>
-            
-            <FAQItem
-              id="points"
-              question="How do I earn points?"
-              answer={`You earn points for visiting landmarks and exploring countries:
-
-• Official Landmarks: 10 points
-• Premium Landmarks: 25 points
-• Country Visit: 50 points
-• New Country Bonus: +20 points (first landmark)
-• New Continent Bonus: +50 points (first country)
-• Country Completion: +50 bonus points
-• Continent Completion: +200 bonus points
-
-There are two types of points:
-• Personal Points: Earned for all visits (with or without photos)
-• Leaderboard Points: Only earned when you upload photos
-
-This encourages sharing your travel memories while still rewarding all visits!`}
-            />
-            
-            <FAQItem
-              id="custom"
-              question="What are Custom Visits?"
-              answer={`Use 'Custom Visits' to record trips to places not in our database! You can:
-
-• Add any country name
-• Add up to 10 landmarks with individual photos
-• Add up to 10 general country photos
-• Write diary notes
-• Share publicly in the community feed (Pro feature)
-
-Find it on the Journey page under 'Custom Visits' or on the Explore page at the bottom.`}
-            />
-            
-            <FAQItem
-              id="privacy"
-              question="Can I control who sees my visits?"
-              answer={`You control your privacy! Each visit can be set to:
-
-• Public - Everyone can see
-• Friends - Only your friends
-• Private - Only you
-
-You can also choose to share or hide your travel diary independently — so you can make a visit public while keeping your diary notes private.
-
-Set privacy when creating a visit, or change it anytime. You can also set a default privacy level in Settings.`}
-            />
-            
-            <FAQItem
-              id="photos"
-              question="Where are all my photos?"
-              answer={`Visit the 'My Photos' section on your Journey page! It shows all photos from:
-
-• Landmark visits
-• Country visits
-• Custom visits
-
-You can filter by country, year, or type.`}
-            />
-            
-            <FAQItem
-              id="ranks"
-              question="How does the rank system work?"
-              answer={`Progress through 8 ranks as you earn points:
-
-• Newcomer (0-199 pts) - Taking your first steps
-• Wanderer (200-749 pts) - The world is calling
-• Explorer (750-1,999 pts) - Charting new territory
-• Adventurer (2,000-4,499 pts) - No border can stop you
-• Trailblazer (4,500-8,499 pts) - Blazing your own path
-• Globetrotter (8,500-13,999 pts) - The world knows your name
-• Legend (14,000-17,999 pts) - A true travel legend
-• Titan (18,000+ pts) - Master of all destinations`}
-            />
-            
-            <FAQItem
-              id="delete"
-              question="How do I delete my account?"
-              answer="Go to Settings and tap 'Delete Account' at the bottom. Your account will be deactivated for 30 days before permanent deletion. If you change your mind, simply log in again within 30 days to reactivate your account and recover all your data."
-            />
-          </Surface>
-        </View>
-
         {/* How It Works */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -314,14 +220,6 @@ You can filter by country, year, or type.`}
           </View>
 
           <FeatureCard
-            icon="location"
-            title="Landmark Visits"
-            description="Visit 797 landmarks and earn points"
-            color={theme.colors.accent}
-            onPress={() => router.push('/my-landmark-visits')}
-          />
-
-          <FeatureCard
             icon="earth"
             title="Explore Continents"
             description="Discover countries across 5 continents"
@@ -330,11 +228,11 @@ You can filter by country, year, or type.`}
           />
 
           <FeatureCard
-            icon="airplane"
-            title="Custom Visits"
-            description="Record trips to places not in our database"
-            color="#1E8A8A"
-            onPress={() => router.push('/(tabs)/journey')}
+            icon="location"
+            title="Landmark Visits"
+            description="Visit 797 landmarks and earn points"
+            color={theme.colors.accent}
+            onPress={() => router.push('/my-landmark-visits')}
           />
 
           <FeatureCard
@@ -346,11 +244,19 @@ You can filter by country, year, or type.`}
           />
 
           <FeatureCard
+            icon="airplane"
+            title="Custom Visits"
+            description="Record trips to places not in our database"
+            color="#1E8A8A"
+            onPress={() => router.push({ pathname: '/(tabs)/journey', params: { scrollTo: 'custom-visits' } })}
+          />
+
+          <FeatureCard
             icon="trophy"
             title="Rank System"
             description="Progress through 8 ranks as you earn points"
             color="#FFD700"
-            onPress={() => router.push('/(tabs)/journey')}
+            onPress={() => router.push('/ranks')}
           />
 
           <FeatureCard
@@ -389,7 +295,7 @@ You can filter by country, year, or type.`}
               {expandedSection === 'points' && (
                 <View style={styles.expandableContent}>
                   <Text style={styles.expandableText}>
-                    <Text style={styles.bold}>Personal Points</Text> (always earned):{'\n'}
+                    <Text style={styles.bold}>Verified Points</Text> (with personal photos):{'\n'}
                     • Official Landmarks: 10 pts{'\n'}
                     • Premium Landmarks: 25 pts{'\n'}
                     • Country Visit: 50 pts{'\n'}
@@ -397,9 +303,10 @@ You can filter by country, year, or type.`}
                     • New Continent Bonus: +50 pts{'\n'}
                     • Country Completion: +50 pts{'\n'}
                     • Continent Completion: +200 pts{'\n\n'}
-                    <Text style={styles.bold}>Leaderboard Points</Text> (with photos):{'\n'}
-                    • Same values, but only when you upload photos{'\n'}
-                    • Compete fairly with verified visits — be in your photos!
+                    <Text style={styles.bold}>Unverified Points</Text> (without photos):{'\n'}
+                    • Same values, but without personal photo verification{'\n'}
+                    • Count for friends leaderboard only{'\n\n'}
+                    Photos must show you personally at the landmark to earn verified points. Non-compliant uploads may have their verified status revoked.
                   </Text>
                 </View>
               )}
@@ -408,7 +315,7 @@ You can filter by country, year, or type.`}
 
           <TouchableOpacity
             style={styles.expandableCard}
-            onPress={() => toggleSection('ranks')}
+            onPress={() => router.push('/ranks')}
             activeOpacity={0.8}
           >
             <Surface style={styles.card}>
@@ -418,27 +325,11 @@ You can filter by country, year, or type.`}
                   <Text style={styles.expandableTitle}>Rank System</Text>
                 </View>
                 <Ionicons
-                  name={expandedSection === 'ranks' ? 'chevron-up' : 'chevron-down'}
+                  name="chevron-forward"
                   size={22}
                   color={theme.colors.textLight}
                 />
               </View>
-              {expandedSection === 'ranks' && (
-                <View style={styles.expandableContent}>
-                  <Text style={styles.expandableText}>
-                    <Text style={styles.bold}>8 Ranks to Climb:</Text>{'\n\n'}
-                    Newcomer (0-199 pts){'\n'}
-                    Wanderer (200-749 pts){'\n'}
-                    Explorer (750-1,999 pts){'\n'}
-                    Adventurer (2,000-4,499 pts){'\n'}
-                    Trailblazer (4,500-8,499 pts){'\n'}
-                    Globetrotter (8,500-13,999 pts){'\n'}
-                    Legend (14,000-17,999 pts){'\n'}
-                    Titan (18,000+ pts){'\n\n'}
-                    Ranks update automatically as you earn points!
-                  </Text>
-                </View>
-              )}
             </Surface>
           </TouchableOpacity>
 
@@ -462,16 +353,119 @@ You can filter by country, year, or type.`}
               {expandedSection === 'privacy' && (
                 <View style={styles.expandableContent}>
                   <Text style={styles.expandableText}>
-                    Control who sees each visit:{'\n\n'}
-                    🌐 <Text style={styles.bold}>Public</Text> - Everyone{'\n'}
-                    👥 <Text style={styles.bold}>Friends</Text> - Only friends{'\n'}
-                    🔒 <Text style={styles.bold}>Private</Text> - Only you{'\n\n'}
-                    Set privacy when creating visits or change anytime.
+                    <Text style={styles.bold}>Visit Visibility:</Text>{'\n'}
+                    Set a default privacy level in Settings that applies to all new visits, or override it per visit:{'\n\n'}
+                    • Public — Everyone can see{'\n'}
+                    • Friends — Only your friends{'\n'}
+                    • Private — Only you{'\n\n'}
+                    <Text style={styles.bold}>Diary Sharing:</Text>{'\n'}
+                    Share or hide your travel diary independently — make a visit public while keeping diary notes private.{'\n\n'}
+                    <Text style={styles.bold}>Comment Permissions:</Text>{'\n'}
+                    Control who can comment on your visits: everyone, friends only, or nobody.{'\n\n'}
+                    <Text style={styles.bold}>Content Reporting:</Text>{'\n'}
+                    Report inappropriate content for moderation. All reports are anonymous.
                   </Text>
                 </View>
               )}
             </Surface>
           </TouchableOpacity>
+        </View>
+
+        {/* Help & Support Section - FAQ */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="help-circle" size={24} color={theme.colors.primary} />
+            <Text style={styles.sectionTitle}>Frequently Asked Questions</Text>
+          </View>
+
+          <Surface style={styles.card}>
+            <FAQItem
+              id="points"
+              question="How do I earn points?"
+              answer={`You earn points for visiting landmarks and exploring countries:
+
+• Official Landmarks: 10 points
+• Premium Landmarks: 25 points
+• Country Visit: 50 points
+• New Country Bonus: +20 points (first landmark)
+• New Continent Bonus: +50 points (first country)
+• Country Completion: +50 bonus points
+• Continent Completion: +200 bonus points
+
+There are two types of points:
+• Verified Points: Earned when you upload a personal photo of yourself at the landmark. These count for the global leaderboard.
+• Unverified Points: Earned for visits without personal photos. These count for the friends leaderboard.
+
+Photos must show you personally at the landmark. Uploads that don't meet this requirement may have their verified status revoked by moderators.`}
+            />
+            
+            <FAQItem
+              id="custom"
+              question="What are Custom Visits?"
+              answer={`Use 'Custom Visits' to record trips to places not in our database! You can:
+
+• Add any country name
+• Add up to 10 landmarks with individual photos
+• Add up to 10 general country photos
+• Write diary notes
+• Share publicly in the community feed (Pro feature)
+
+Find it on the Journey page under 'Custom Visits' or on the Explore page at the bottom.`}
+            />
+            
+            <FAQItem
+              id="privacy"
+              question="Can I control who sees my visits?"
+              answer={`Yes! WanderMark gives you full control over your privacy:
+
+Visibility levels for each visit:
+• Public — Everyone can see
+• Friends — Only your friends
+• Private — Only you
+
+You can set a default privacy level in Settings > Privacy that applies to all new visits. You can also override this on a per-visit basis when creating or editing a visit.
+
+Additional privacy controls:
+• Diary sharing — Share or hide your travel diary independently of visit visibility
+• Comment permissions — Choose who can comment on your visits: everyone, friends only, or nobody
+• Content reporting — Report inappropriate content for moderation
+
+All privacy settings can be changed at any time from Settings > Privacy.`}
+            />
+            
+            <FAQItem
+              id="photos"
+              question="Where are all my photos?"
+              answer={`Visit the 'My Photos' section on your Journey page! It shows all photos from:
+
+• Landmark visits
+• Country visits
+• Custom visits
+
+You can filter by country, year, or type.`}
+            />
+            
+            <FAQItem
+              id="ranks"
+              question="How does the rank system work?"
+              answer={`Progress through 8 ranks as you earn points:
+
+• Newcomer (0-199 pts) - Taking your first steps
+• Wanderer (200-749 pts) - The world is calling
+• Explorer (750-1,999 pts) - Charting new territory
+• Adventurer (2,000-4,499 pts) - No border can stop you
+• Trailblazer (4,500-8,499 pts) - Blazing your own path
+• Globetrotter (8,500-13,999 pts) - The world knows your name
+• Legend (14,000-17,999 pts) - A true travel legend
+• Titan (18,000+ pts) - Master of all destinations`}
+            />
+            
+            <FAQItem
+              id="delete"
+              question="How do I delete my account?"
+              answer="Go to Settings and tap 'Delete Account' at the bottom. Your account will be deactivated for 30 days before permanent deletion. If you change your mind, simply log in again within 30 days to reactivate your account and recover all your data."
+            />
+          </Surface>
         </View>
 
         {/* App Info */}

@@ -125,7 +125,7 @@ export default function PointsSummary() {
               </View>
               <View style={styles.breakdownContent}>
                 <Text style={styles.breakdownLabel}>Verified Points</Text>
-                <Text style={styles.breakdownDesc}>From visits with photos (counts for global leaderboard)</Text>
+                <Text style={styles.breakdownDesc}>From visits with personal photos (counts for global leaderboard)</Text>
               </View>
               <Text style={styles.breakdownValue}>{verifiedPoints.toLocaleString()}</Text>
             </View>
@@ -150,6 +150,16 @@ export default function PointsSummary() {
           <Text style={styles.sectionTitle}>How Points Work</Text>
           
           <Surface style={styles.card}>
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#FCE4EC' }]}>
+                <Ionicons name="camera" size={18} color="#E91E63" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Photo Verification</Text>
+                <Text style={styles.infoDesc}>Take a personal photo of yourself at the landmark to earn verified points for the leaderboard</Text>
+              </View>
+            </View>
+
             <View style={styles.infoRow}>
               <View style={[styles.infoIcon, { backgroundColor: '#E3F2FD' }]}>
                 <Ionicons name="location" size={18} color={theme.colors.primary} />
@@ -197,16 +207,6 @@ export default function PointsSummary() {
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Completion Bonuses</Text>
                 <Text style={styles.infoDesc}>+50 pts per country, +200 pts per continent completed</Text>
-              </View>
-            </View>
-            
-            <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#FCE4EC' }]}>
-                <Ionicons name="camera" size={18} color="#E91E63" />
-              </View>
-              <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Photo Verification</Text>
-                <Text style={styles.infoDesc}>Take a personal photo of yourself at the landmark to earn verified points for the leaderboard</Text>
               </View>
             </View>
           </Surface>

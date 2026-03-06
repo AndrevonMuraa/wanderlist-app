@@ -180,8 +180,8 @@ export default function RanksScreen() {
         <View style={styles.heroSection}>
           <Text style={styles.heroTitle}>Path to Legend</Text>
           <Text style={styles.heroSubtitle}>
-            Earn points by visiting landmarks and completing challenges. 
-            Advance through 5 ranks to become a travel legend!
+            Earn points by visiting landmarks and exploring countries. 
+            Advance through 8 ranks to become a travel legend!
           </Text>
 
           {/* Your Progress */}
@@ -212,6 +212,12 @@ export default function RanksScreen() {
         {/* How to Earn Points */}
         <Surface style={styles.infoCard}>
           <Text style={styles.infoTitle}>How to Earn Points</Text>
+          <View style={styles.infoItem}>
+            <Ionicons name="camera" size={20} color="#E91E63" />
+            <Text style={styles.infoText}>
+              <Text style={styles.infoBold}>Verified Points:</Text> Upload a personal photo of yourself at the landmark. Counts for the global leaderboard.
+            </Text>
+          </View>
           <View style={styles.infoItem}>
             <Ionicons name="location" size={20} color={theme.colors.primary} />
             <Text style={styles.infoText}>

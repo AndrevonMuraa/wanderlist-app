@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Platform, RefreshControl, StatusBar } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
 import { useTranslation } from 'react-i18next';
@@ -98,6 +98,8 @@ export default function JourneyScreen() {
   const canCreateCustomVisits = subscriptionData.canCreateCustomVisits;
   const isPro = subscriptionData.isPro;
   const { scrollRef, scrollHandler } = useScrollRestore();
+  const customVisitsRef = useRef<View>(null);
+  const params = useLocalSearchParams<{ scrollTo?: string }>();
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
@@ -105,6 +107,18 @@ export default function JourneyScreen() {
       fetchAllData();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (params.scrollTo === 'custom-visits' && !loading && customVisitsRef.current) {
+      customVisitsRef.current.measureLayout(
+        scrollRef.current as any,
+        (_x: number, y: number) => {
+          scrollRef.current?.scrollTo({ y, animated: true });
+        },
+        () => {}
+      );
+    }
+  }, [params.scrollTo, loading]);
 
   const fetchAllData = async () => {
     try {
@@ -493,6 +507,7 @@ export default function JourneyScreen() {
         </Surface>
 
         <View style={styles.bottomSpacer} />
+        <View ref={customVisitsRef}>
         <Surface style={[styles.customVisitsCard, { backgroundColor: colors.surface }]}>
           <View style={styles.customVisitsHeader}>
             <View style={styles.customVisitsHeaderLeft}>
@@ -639,6 +654,7 @@ export default function JourneyScreen() {
             </>
           )}
         </Surface>
+        </View>
 
         <View style={styles.bottomSpacer} />
       </ScrollView>

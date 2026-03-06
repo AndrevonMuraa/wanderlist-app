@@ -11,10 +11,10 @@ router = APIRouter()
 
 # ============= PHOTO COLLECTION ENDPOINTS =============
 
-# Projection: only fetch fields needed for photo collection
+# Projection: only fetch fields needed for photo collection (excludes heavy photo_base64)
 _VISIT_PHOTO_PROJ = {
     "_id": 0, "visit_id": 1, "landmark_id": 1, "landmark_name": 1,
-    "country_name": 1, "country_id": 1, "photos": 1, "photo_base64": 1,
+    "country_name": 1, "country_id": 1, "photos": 1,
     "visited_at": 1, "created_at": 1,
 }
 _COUNTRY_PHOTO_PROJ = {
@@ -70,9 +70,9 @@ async def get_photo_collection(current_user: User = Depends(get_current_user)):
             except Exception:
                 pass
 
-    # Process landmark visit photos
+    # Process landmark visit photos (only URL-based photos, excludes legacy base64)
     for v in landmark_visits:
-        visit_photos = v.get("photos") or ([v["photo_base64"]] if v.get("photo_base64") else [])
+        visit_photos = v.get("photos") or []
         for i, p in enumerate(visit_photos):
             if p:
                 _add_photo(p, "landmark", v.get("visit_id"), v.get("landmark_id"),
