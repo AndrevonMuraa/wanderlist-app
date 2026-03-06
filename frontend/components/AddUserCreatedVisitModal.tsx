@@ -40,6 +40,7 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
   const [photos, setPhotos] = useState<string[]>([]); // General country photos
   const [diary, setDiary] = useState('');
   const [privacy, setPrivacy] = useState<'public' | 'friends' | 'private'>('public');
+  const [shareDiary, setShareDiary] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const insets = useSafeAreaInsets();
   
@@ -74,6 +75,29 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
         .slice(0, 10 - photos.length)
         .map(asset => `data:image/jpeg;base64,${asset.base64}`);
       setPhotos([...photos, ...newPhotos]);
+    }
+  };
+
+  const takePhoto = async () => {
+    if (photos.length >= 10) {
+      Alert.alert('Limit Reached', 'Maximum 10 country photos allowed');
+      return;
+    }
+
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', 'Please allow camera access');
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      quality: 0.7,
+      base64: true,
+    });
+
+    if (!result.canceled && result.assets?.[0]?.base64) {
+      const newPhoto = `data:image/jpeg;base64,${result.assets[0].base64}`;
+      setPhotos([...photos, newPhoto]);
     }
   };
 
@@ -176,6 +200,7 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
           photos,
           diary_notes: diary || undefined,
           visibility: privacy,
+          share_diary: shareDiary,
         }),
       });
 
@@ -267,7 +292,7 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
               </View>
             </View>
             <Text style={styles.landmarkHint}>
-              Add a photo for each landmark to make your memories more vivid! 📸
+              Add a photo for each landmark to make your memories more vivid!
             </Text>
             
             {landmarks.map((landmark, index) => (
@@ -349,10 +374,16 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
                 </View>
               ))}
               {photos.length < 10 && (
-                <TouchableOpacity style={styles.addPhotoButton} onPress={pickImages}>
-                  <Ionicons name="add-circle" size={40} color={theme.colors.primary} />
-                  <Text style={styles.addPhotoText}>Add Photos</Text>
-                </TouchableOpacity>
+                <View style={styles.photoButtonsRow}>
+                  <TouchableOpacity style={styles.addPhotoButton} onPress={takePhoto}>
+                    <Ionicons name="camera" size={32} color="#E91E63" />
+                    <Text style={styles.addPhotoText}>Camera</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.addPhotoButton} onPress={pickImages}>
+                    <Ionicons name="images" size={32} color={theme.colors.primary} />
+                    <Text style={styles.addPhotoText}>Library</Text>
+                  </TouchableOpacity>
+                </View>
               )}
             </ScrollView>
           </View>
@@ -369,7 +400,22 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
 
           {/* Diary */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Travel Diary (Optional)</Text>
+            <View style={styles.diaryHeader}>
+              <Text style={styles.sectionTitle}>Travel Diary (Optional)</Text>
+              <TouchableOpacity
+                style={styles.shareDiaryToggle}
+                onPress={() => setShareDiary(!shareDiary)}
+              >
+                <Ionicons
+                  name={shareDiary ? 'eye' : 'eye-off'}
+                  size={18}
+                  color={shareDiary ? theme.colors.primary : theme.colors.textLight}
+                />
+                <Text style={[styles.shareDiaryLabel, shareDiary && { color: theme.colors.primary }]}>
+                  {shareDiary ? 'Shared' : 'Hidden'}
+                </Text>
+              </TouchableOpacity>
+            </View>
             <TextInput
               style={styles.diaryInput}
               placeholder="Share your experience..."
@@ -639,10 +685,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  photoButtonsRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
   addPhotoText: {
     fontSize: 12,
     color: theme.colors.textLight,
     marginTop: 4,
+  },
+  diaryHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  shareDiaryToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  shareDiaryLabel: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: theme.colors.textLight,
   },
   photoSummary: {
     flexDirection: 'row',

@@ -605,7 +605,12 @@ export default function JourneyScreen() {
                 }
                 
                 return (
-                  <View key={visit.user_created_visit_id} style={[styles.customVisitItem, { borderBottomColor: colors.border }]}>
+                  <TouchableOpacity
+                    key={visit.user_created_visit_id}
+                    style={[styles.customVisitItem, { borderBottomColor: colors.border }]}
+                    onPress={() => router.push(`/custom-visit-detail/${visit.user_created_visit_id}`)}
+                    activeOpacity={0.7}
+                  >
                     <View style={[styles.customVisitIcon, { backgroundColor: colors.accent + '20' }]}>
                       <Ionicons 
                         name={hasLandmarks ? "location" : "flag"} 
@@ -633,23 +638,21 @@ export default function JourneyScreen() {
                           <Text style={[styles.photoCountText, { color: colors.textLight }]}>{totalPhotos}</Text>
                         </View>
                       )}
-                      <Ionicons 
-                        name={
-                          visit.visibility === 'public' ? 'globe-outline' : 
-                          visit.visibility === 'friends' ? 'people-outline' : 
-                          'lock-closed-outline'
-                        } 
-                        size={16} 
-                        color={colors.textLight} 
-                      />
+                      <Ionicons name="chevron-forward" size={16} color={colors.textLight} />
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 );
               })}
               {userCreatedVisits.length > 5 && (
-                <Text style={[styles.viewMoreText, { color: colors.primary }]}>
-                  +{userCreatedVisits.length - 5} more custom visits
-                </Text>
+                <TouchableOpacity
+                  onPress={() => router.push({ pathname: '/(tabs)/journey', params: { scrollTo: 'custom-visits', showAll: 'true' } })}
+                  style={styles.viewMoreBtn}
+                >
+                  <Text style={[styles.viewMoreText, { color: colors.primary }]}>
+                    View all {userCreatedVisits.length} custom visits
+                  </Text>
+                  <Ionicons name="chevron-forward" size={16} color={colors.primary} />
+                </TouchableOpacity>
               )}
             </>
           )}
@@ -1169,9 +1172,15 @@ const styles = StyleSheet.create({
   viewMoreText: {
     fontSize: 13,
     color: theme.colors.primary,
-    textAlign: 'center',
-    marginTop: theme.spacing.sm,
     fontWeight: '500',
+  },
+  viewMoreBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    paddingVertical: theme.spacing.sm,
+    marginTop: theme.spacing.xs,
   },
   // Pro badge for locked features
   proBadge: {

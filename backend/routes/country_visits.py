@@ -532,6 +532,7 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
         "landmarks": processed_landmarks,  # Array of {name, photo} objects
         "photos": data.photos,  # General country photos
         "diary": data.diary_notes,
+        "share_diary": getattr(data, 'share_diary', True),
         "visibility": visibility,
         "visited_at": visited_at,
         "created_at": datetime.now(timezone.utc)
@@ -586,12 +587,9 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
 async def get_user_created_visits(current_user: User = Depends(get_current_user)):
     """Get all user-created visits for the current user"""
     visits = await db.user_created_visits.find(
-        {"user_id": current_user.user_id}
+        {"user_id": current_user.user_id},
+        {"_id": 0}
     ).sort("visited_at", -1).to_list(1000)
-    
-    # Convert _id to visit_id for API response
-    for visit in visits:
-        visit["visit_id"] = str(visit.pop("_id"))
     
     return visits
 
@@ -628,6 +626,124 @@ async def get_user_created_visits_public(user_id: str, current_user: User = Depe
     ).sort("visited_at", -1).to_list(1000)
     
     return visits
+
+
+@router.get("/user-created-visits/{visit_id}")
+async def get_user_created_visit(visit_id: str, current_user: User = Depends(get_current_user)):
+    """Get a single user-created visit by ID"""
+    visit = await db.user_created_visits.find_one(
+        {"user_created_visit_id": visit_id},
+        {"_id": 0}
+    )
+    if not visit:
+        raise HTTPException(status_code=404, detail="Visit not found")
+    
+    # Check access: own visit or respect privacy
+    if visit["user_id"] != current_user.user_id:
+        visibility = visit.get("visibility", "public")
+        if visibility == "private":
+            raise HTTPException(status_code=403, detail="This visit is private")
+        if visibility == "friends":
+            are_friends = await db.friends.find_one({
+                "$or": [
+                    {"user_id": current_user.user_id, "friend_id": visit["user_id"], "status": "accepted"},
+                    {"user_id": visit["user_id"], "friend_id": current_user.user_id, "status": "accepted"}
+                ]
+            })
+            if not are_friends:
+                raise HTTPException(status_code=403, detail="This visit is only visible to friends")
+    
+    return visit
+
+
+@router.put("/user-created-visits/{visit_id}")
+async def update_user_created_visit(visit_id: str, body: dict = Body(...), current_user: User = Depends(get_current_user)):
+    """Update a user-created visit (country name, landmarks, photos, diary, visibility, share_diary)"""
+    
+    # Verify ownership
+    visit = await db.user_created_visits.find_one(
+        {"user_created_visit_id": visit_id, "user_id": current_user.user_id}
+    )
+    if not visit:
+        raise HTTPException(status_code=404, detail="Visit not found or not authorized")
+    
+    update_fields = {}
+    
+    # Country name
+    if "country_name" in body:
+        name = body["country_name"].strip() if body["country_name"] else ""
+        if len(name) < 2:
+            raise HTTPException(status_code=400, detail="Country name must be at least 2 characters")
+        update_fields["country_name"] = name
+    
+    # Landmarks (max 10)
+    if "landmarks" in body:
+        processed = []
+        for lm in body["landmarks"][:10]:
+            if isinstance(lm, dict):
+                name = lm.get("name", "").strip() if lm.get("name") else ""
+                if name:
+                    processed.append({"name": name, "photo": lm.get("photo")})
+            elif isinstance(lm, str) and lm.strip():
+                processed.append({"name": lm.strip(), "photo": None})
+        update_fields["landmarks"] = processed
+    
+    # General photos (max 10)
+    if "photos" in body:
+        photos = body["photos"][:10]
+        update_fields["photos"] = photos
+    
+    # Diary
+    if "diary_notes" in body:
+        update_fields["diary"] = body["diary_notes"]
+    
+    # Visibility
+    if "visibility" in body:
+        if body["visibility"] in ("public", "friends", "private"):
+            update_fields["visibility"] = body["visibility"]
+    
+    # Share diary
+    if "share_diary" in body:
+        update_fields["share_diary"] = bool(body["share_diary"])
+    
+    if not update_fields:
+        return {"message": "No changes to apply"}
+    
+    await db.user_created_visits.update_one(
+        {"user_created_visit_id": visit_id},
+        {"$set": update_fields}
+    )
+    
+    # Also update associated activity with relevant fields
+    activity_update = {}
+    if "country_name" in update_fields:
+        activity_update["country_name"] = update_fields["country_name"]
+    if "landmarks" in update_fields:
+        activity_update["landmarks"] = update_fields["landmarks"]
+        # Update description
+        landmark_names = [lm["name"] for lm in update_fields["landmarks"]]
+        cn = update_fields.get("country_name", visit.get("country_name", ""))
+        if landmark_names:
+            if len(landmark_names) == 1:
+                activity_update["description"] = f"visited {landmark_names[0]} in {cn}"
+            else:
+                activity_update["description"] = f"visited {len(landmark_names)} places in {cn}"
+        else:
+            activity_update["description"] = f"visited {cn}"
+    if "photos" in update_fields:
+        activity_update["photos"] = update_fields["photos"]
+    if "diary" in update_fields:
+        activity_update["diary"] = update_fields["diary"]
+    if "visibility" in update_fields:
+        activity_update["visibility"] = update_fields["visibility"]
+    
+    if activity_update:
+        await db.activities.update_one(
+            {"user_created_visit_id": visit_id},
+            {"$set": activity_update}
+        )
+    
+    return {"message": "Visit updated successfully"}
 
 
 @router.delete("/user-created-visits/{visit_id}")
