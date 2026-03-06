@@ -150,10 +150,32 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Email: test@wandermark.app | Password: Test1234!
 - Email: test2@wandermark.app | Password: Test1234!
 
+### My Photos Performance Fix (Complete - Feb 2026)
+- Removed `photo_base64` from backend projection in `/api/photos/collection`
+- Same optimization pattern as Journey/Landmark Visits performance fixes
+
+### About & Help Page Overhaul (Complete - Feb 2026)
+- FAQ section moved below Game Mechanics
+- Key Features reordered: Explore Continents first, Custom Visits below Country Visits
+- Custom Visits link now auto-scrolls to bottom of Journey page
+- Rank System now links to dedicated `/ranks` page instead of expandable content
+- Updated terminology: "Personal Points" → "Unverified Points", "Leaderboard Points" → "Verified Points"
+- Expanded privacy FAQ with hybrid privacy details (default, per-visit, diary sharing, comments, reporting)
+- Updated "How do I earn points?" FAQ with anti-cheat info
+- Game Mechanics: Dual Points System and Privacy Controls fully updated
+
+### Points Summary Updates (Complete - Feb 2026)
+- "From visits with photos" → "From visits with personal photos"
+- Photo Verification moved to top of "How Points Work" section
+
+### Ranks Page Updates (Complete - Feb 2026)
+- Fixed "5 ranks" → "8 ranks" in hero text
+- Added Verified Points info to "How to Earn Points" section
+
 ## Prioritized Backlog
 ### P0 - None
 ### P1 - Upcoming
 - Deploy updated Privacy Policy / Terms to a live URL
-- Verify all features in TestFlight build 67
+- Verify all features in TestFlight build 68
 ### P2 - Future
 - Rename GitHub repository (wanderlist-app -> wandermark-app)
