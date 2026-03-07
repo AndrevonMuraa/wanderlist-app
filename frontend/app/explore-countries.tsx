@@ -52,7 +52,7 @@ interface ContinentSection {
 
 // ISO 3166-1 alpha-2 country codes for flag CDN
 const COUNTRY_FLAG_CODES: Record<string, string> = {
-  // Europe
+  // Europe (20)
   'France': 'fr',
   'Italy': 'it',
   'Spain': 'es',
@@ -69,12 +69,15 @@ const COUNTRY_FLAG_CODES: Record<string, string> = {
   'Croatia': 'hr',
   'Austria': 'at',
   'Finland': 'fi',
-  // Asia
+  'Turkey': 'tr',
+  'Ireland': 'ie',
+  'Hungary': 'hu',
+  'Czech Republic': 'cz',
+  // Asia (20)
   'Japan': 'jp',
   'China': 'cn',
   'Thailand': 'th',
   'India': 'in',
-  'United Arab Emirates': 'ae',
   'Singapore': 'sg',
   'Indonesia': 'id',
   'South Korea': 'kr',
@@ -85,19 +88,34 @@ const COUNTRY_FLAG_CODES: Record<string, string> = {
   'Philippines': 'ph',
   'Sri Lanka': 'lk',
   'Taiwan': 'tw',
-  'Maldives': 'mv',
-  // Africa
+  'Laos': 'la',
+  'Mongolia': 'mn',
+  'Bhutan': 'bt',
+  'Georgia': 'ge',
+  'Uzbekistan': 'uz',
+  'Kyrgyzstan': 'kg',
+  // Africa (20)
   'Egypt': 'eg',
   'Morocco': 'ma',
   'South Africa': 'za',
   'Kenya': 'ke',
   'Tanzania': 'tz',
-  'Mauritius': 'mu',
-  'Seychelles': 'sc',
   'Botswana': 'bw',
   'Namibia': 'na',
   'Tunisia': 'tn',
-  // Americas
+  'Ghana': 'gh',
+  'Rwanda': 'rw',
+  'Uganda': 'ug',
+  'Ethiopia': 'et',
+  'Senegal': 'sn',
+  'Zimbabwe': 'zw',
+  'Zambia': 'zm',
+  'Mozambique': 'mz',
+  'Ivory Coast': 'ci',
+  'Malawi': 'mw',
+  'Lesotho': 'ls',
+  'Eswatini': 'sz',
+  // Americas (20)
   'United States': 'us',
   'Canada': 'ca',
   'Mexico': 'mx',
@@ -114,7 +132,11 @@ const COUNTRY_FLAG_CODES: Record<string, string> = {
   'Barbados': 'bb',
   'Dominican Republic': 'do',
   'Panama': 'pa',
-  // Oceania
+  'Uruguay': 'uy',
+  'Bolivia': 'bo',
+  'Belize': 'bz',
+  'Saint Lucia': 'lc',
+  // Oceania & Island Paradises (20)
   'Australia': 'au',
   'New Zealand': 'nz',
   'Fiji': 'fj',
@@ -122,7 +144,19 @@ const COUNTRY_FLAG_CODES: Record<string, string> = {
   'Cook Islands': 'ck',
   'Samoa': 'ws',
   'Vanuatu': 'vu',
-  'Tonga': 'to',
+  'Maldives': 'mv',
+  'Mauritius': 'mu',
+  'Seychelles': 'sc',
+  'Hawaii': 'us',
+  'Madagascar': 'mg',
+  'Cape Verde': 'cv',
+  'Papua New Guinea': 'pg',
+  'Palau': 'pw',
+  'Solomon Islands': 'sb',
+  'New Caledonia': 'nc',
+  'Guam': 'gu',
+  'Comoros': 'km',
+  'Reunion': 're',
 };
 
 // Helper function to get flag URL
