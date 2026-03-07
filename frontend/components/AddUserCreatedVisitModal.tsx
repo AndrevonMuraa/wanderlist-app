@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Modal, ScrollView, TouchableOpacity, TextInput, Image, Alert, Platform, StatusBar } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, TextInput, Image, Alert, Platform } from 'react-native';
 import { Text } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import theme, { gradients } from '../styles/theme';
+import { VisitModalShell, PhotoSection, DiarySection, VisitSubmitButton } from './visit-shared';
+import { PrivacySelector } from './PrivacySelector';
+import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { invalidateCacheGroup } from '../utils/apiCache';
 import { successHaptic } from '../utils/haptics';
-import { PrivacySelector } from './PrivacySelector';
 
 interface AddUserCreatedVisitModalProps {
   visible: boolean;
@@ -36,126 +35,15 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
   onSuccess,
 }) => {
   const [countryName, setCountryName] = useState('');
-  const [landmarks, setLandmarks] = useState<LandmarkEntry[]>([{ name: '', photo: null }]); // Start with one empty input
-  const [photos, setPhotos] = useState<string[]>([]); // General country photos
+  const [landmarks, setLandmarks] = useState<LandmarkEntry[]>([{ name: '', photo: null }]);
+  const [photos, setPhotos] = useState<string[]>([]);
   const [diary, setDiary] = useState('');
   const [privacy, setPrivacy] = useState<'public' | 'friends' | 'private'>('public');
   const [shareDiary, setShareDiary] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const insets = useSafeAreaInsets();
-  
-  // Calculate safe area padding
-  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
-  // Calculate total photos
   const landmarkPhotosCount = landmarks.filter(lm => lm.photo).length;
   const totalPhotos = photos.length + landmarkPhotosCount;
-
-  const pickImages = async () => {
-    if (photos.length >= 10) {
-      Alert.alert('Limit Reached', 'Maximum 10 country photos allowed');
-      return;
-    }
-
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Please allow access to your photo library');
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
-      quality: 0.7,
-      base64: true,
-    });
-
-    if (!result.canceled && result.assets) {
-      const newPhotos = result.assets
-        .slice(0, 10 - photos.length)
-        .map(asset => `data:image/jpeg;base64,${asset.base64}`);
-      setPhotos([...photos, ...newPhotos]);
-    }
-  };
-
-  const takePhoto = async () => {
-    if (photos.length >= 10) {
-      Alert.alert('Limit Reached', 'Maximum 10 country photos allowed');
-      return;
-    }
-
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Please allow camera access');
-      return;
-    }
-
-    const result = await ImagePicker.launchCameraAsync({
-      quality: 0.7,
-      base64: true,
-    });
-
-    if (!result.canceled && result.assets?.[0]?.base64) {
-      const newPhoto = `data:image/jpeg;base64,${result.assets[0].base64}`;
-      setPhotos([...photos, newPhoto]);
-    }
-  };
-
-  const removePhoto = (index: number) => {
-    setPhotos(photos.filter((_, i) => i !== index));
-  };
-
-  // Landmark management functions
-  const updateLandmarkName = (index: number, value: string) => {
-    const newLandmarks = [...landmarks];
-    newLandmarks[index] = { ...newLandmarks[index], name: value };
-    setLandmarks(newLandmarks);
-  };
-
-  const pickLandmarkPhoto = async (index: number) => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Please allow access to your photo library');
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: false,
-      quality: 0.7,
-      base64: true,
-    });
-
-    if (!result.canceled && result.assets && result.assets[0]) {
-      const newLandmarks = [...landmarks];
-      newLandmarks[index] = { 
-        ...newLandmarks[index], 
-        photo: `data:image/jpeg;base64,${result.assets[0].base64}` 
-      };
-      setLandmarks(newLandmarks);
-    }
-  };
-
-  const removeLandmarkPhoto = (index: number) => {
-    const newLandmarks = [...landmarks];
-    newLandmarks[index] = { ...newLandmarks[index], photo: null };
-    setLandmarks(newLandmarks);
-  };
-
-  const addLandmark = () => {
-    if (landmarks.length < 10) {
-      setLandmarks([...landmarks, { name: '', photo: null }]);
-    }
-  };
-
-  const removeLandmark = (index: number) => {
-    if (landmarks.length > 1) {
-      setLandmarks(landmarks.filter((_, i) => i !== index));
-    } else {
-      // If only one, just clear it
-      setLandmarks([{ name: '', photo: null }]);
-    }
-  };
 
   const resetForm = () => {
     setCountryName('');
@@ -165,25 +53,61 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
     setPrivacy('public');
   };
 
-  const handleClose = () => {
-    resetForm();
-    onClose();
+  const handleClose = () => { resetForm(); onClose(); };
+
+  // Landmark management
+  const updateLandmarkName = (index: number, value: string) => {
+    const updated = [...landmarks];
+    updated[index] = { ...updated[index], name: value };
+    setLandmarks(updated);
+  };
+
+  const pickLandmarkPhoto = async (index: number) => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', 'Please allow access to your photo library');
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: false,
+      quality: 0.7,
+      base64: true,
+    });
+    if (!result.canceled && result.assets?.[0]) {
+      const updated = [...landmarks];
+      updated[index] = { ...updated[index], photo: `data:image/jpeg;base64,${result.assets[0].base64}` };
+      setLandmarks(updated);
+    }
+  };
+
+  const removeLandmarkPhoto = (index: number) => {
+    const updated = [...landmarks];
+    updated[index] = { ...updated[index], photo: null };
+    setLandmarks(updated);
+  };
+
+  const addLandmark = () => {
+    if (landmarks.length < 10) setLandmarks([...landmarks, { name: '', photo: null }]);
+  };
+
+  const removeLandmark = (index: number) => {
+    if (landmarks.length > 1) {
+      setLandmarks(landmarks.filter((_, i) => i !== index));
+    } else {
+      setLandmarks([{ name: '', photo: null }]);
+    }
   };
 
   const handleSubmit = async () => {
-    // Validate country name
     if (!countryName || countryName.trim().length < 2) {
       Alert.alert('Country Required', 'Please enter a country name (at least 2 characters)');
       return;
     }
 
-    // Filter out empty landmarks but keep the photo if name is present
     const validLandmarks = landmarks
       .filter(lm => lm.name.trim().length > 0)
-      .map(lm => ({
-        name: lm.name.trim(),
-        photo: lm.photo
-      }));
+      .map(lm => ({ name: lm.name.trim(), photo: lm.photo }));
 
     setSubmitting(true);
     try {
@@ -205,18 +129,14 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
       });
 
       if (response.ok) {
-        // Invalidate cached data so stats refresh immediately
         invalidateCacheGroup('visit');
         await successHaptic();
-        
-        // Build success message
         let message = countryName;
         if (validLandmarks.length === 1) {
           message = `${validLandmarks[0].name}, ${countryName}`;
         } else if (validLandmarks.length > 1) {
           message = `${validLandmarks.length} places in ${countryName}`;
         }
-        
         Alert.alert('Success!', `Your visit to ${message} has been recorded!`);
         resetForm();
         onSuccess();
@@ -232,293 +152,143 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
     }
   };
 
-  // Count non-empty landmarks for display
   const filledLandmarksCount = landmarks.filter(lm => lm.name.trim().length > 0).length;
 
   return (
-    <Modal visible={visible} animationType="slide" onRequestClose={handleClose}>
-      <View style={styles.container}>
-        {/* Header with Ocean to Sand gradient - matching other modals */}
-        <LinearGradient
-          colors={gradients.oceanToSand}
-          start={gradients.horizontal.start}
-          end={gradients.horizontal.end}
-          style={[styles.header, { paddingTop: topPadding }]}
-        >
-          <View style={styles.headerRow}>
-            <View style={styles.headerLeft}>
-              <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-                <Ionicons name="close" size={24} color="#fff" />
-              </TouchableOpacity>
-              <View style={styles.headerTitleContainer}>
-                <Text style={styles.headerTitle}>Record Custom Visit</Text>
-                <Text style={styles.headerSubtitle}>Add places not in our database</Text>
-              </View>
-            </View>
-            <View style={styles.brandingContainer}>
-              <Ionicons name="earth" size={16} color="#2A2A2A" />
-              <Text style={styles.brandingText}>WanderMark</Text>
-            </View>
+    <VisitModalShell
+      visible={visible}
+      onClose={handleClose}
+      title="Record Custom Visit"
+      subtitle="Add places not in our database"
+      keyboardPersist
+    >
+      {/* Country Name Input */}
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Country Name</Text>
+          <View style={styles.requiredBadge}>
+            <Text style={styles.requiredText}>Required</Text>
           </View>
-        </LinearGradient>
-
-        <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
-          {/* Country Name Input */}
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Country Name</Text>
-              <View style={styles.requiredBadge}>
-                <Text style={styles.requiredText}>Required</Text>
-              </View>
-            </View>
-            <TextInput
-              style={styles.textInput}
-              placeholder="e.g., Monaco, Liechtenstein, Vatican City..."
-              placeholderTextColor={theme.colors.textLight}
-              value={countryName}
-              onChangeText={setCountryName}
-              autoCapitalize="words"
-            />
-          </View>
-
-          {/* Landmarks Section - Dynamic inputs with per-landmark photos */}
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>
-                Landmarks {filledLandmarksCount > 0 ? `(${filledLandmarksCount})` : ''}
-              </Text>
-              <View style={styles.optionalBadge}>
-                <Text style={styles.optionalText}>Optional • Max 10</Text>
-              </View>
-            </View>
-            <Text style={styles.landmarkHint}>
-              Add a photo for each landmark to make your memories more vivid!
-            </Text>
-            
-            {landmarks.map((landmark, index) => (
-              <View key={index} style={styles.landmarkCard}>
-                <View style={styles.landmarkInputRow}>
-                  <View style={styles.landmarkNumber}>
-                    <Text style={styles.landmarkNumberText}>{index + 1}</Text>
-                  </View>
-                  <TextInput
-                    style={[styles.textInput, styles.landmarkInput]}
-                    placeholder={index === 0 ? "e.g., Prince's Palace, Monte Carlo Casino..." : "Add another landmark..."}
-                    placeholderTextColor={theme.colors.textLight}
-                    value={landmark.name}
-                    onChangeText={(value) => updateLandmarkName(index, value)}
-                    autoCapitalize="words"
-                  />
-                  {(landmarks.length > 1 || landmark.name.trim().length > 0 || landmark.photo) && (
-                    <TouchableOpacity 
-                      style={styles.removeLandmarkButton}
-                      onPress={() => removeLandmark(index)}
-                    >
-                      <Ionicons name="close-circle" size={24} color={theme.colors.textLight} />
-                    </TouchableOpacity>
-                  )}
-                </View>
-                
-                {/* Per-landmark photo section */}
-                <View style={styles.landmarkPhotoRow}>
-                  {landmark.photo ? (
-                    <View style={styles.landmarkPhotoPreview}>
-                      <Image source={{ uri: landmark.photo }} style={styles.landmarkPhoto} />
-                      <TouchableOpacity 
-                        style={styles.removeLandmarkPhotoButton}
-                        onPress={() => removeLandmarkPhoto(index)}
-                      >
-                        <Ionicons name="close-circle" size={20} color="#FF6B6B" />
-                      </TouchableOpacity>
-                    </View>
-                  ) : (
-                    <TouchableOpacity 
-                      style={styles.addLandmarkPhotoButton}
-                      onPress={() => pickLandmarkPhoto(index)}
-                    >
-                      <Ionicons name="camera-outline" size={18} color={theme.colors.primary} />
-                      <Text style={styles.addLandmarkPhotoText}>Add photo</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              </View>
-            ))}
-            
-            {/* Add Landmark Button */}
-            {landmarks.length < 10 && (
-              <TouchableOpacity style={styles.addLandmarkButton} onPress={addLandmark}>
-                <Ionicons name="add-circle" size={22} color={theme.colors.primary} />
-                <Text style={styles.addLandmarkText}>Add another landmark</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-
-          {/* General Country Photos */}
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Country Photos ({photos.length}/10)</Text>
-            </View>
-            <Text style={styles.photoHint}>
-              General photos of your trip (landscapes, food, moments...)
-            </Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.photoScroll}>
-              {photos.map((photo, index) => (
-                <View key={index} style={styles.photoItem}>
-                  <Image source={{ uri: photo }} style={styles.photo} />
-                  <TouchableOpacity
-                    style={styles.removePhoto}
-                    onPress={() => removePhoto(index)}
-                  >
-                    <Ionicons name="close-circle" size={24} color="#FF6B6B" />
-                  </TouchableOpacity>
-                </View>
-              ))}
-              {photos.length < 10 && (
-                <View style={styles.photoButtonsRow}>
-                  <TouchableOpacity style={styles.addPhotoButton} onPress={takePhoto}>
-                    <Ionicons name="camera" size={32} color="#E91E63" />
-                    <Text style={styles.addPhotoText}>Camera</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.addPhotoButton} onPress={pickImages}>
-                    <Ionicons name="images" size={32} color={theme.colors.primary} />
-                    <Text style={styles.addPhotoText}>Library</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-            </ScrollView>
-          </View>
-
-          {/* Photo Summary */}
-          {totalPhotos > 0 && (
-            <View style={styles.photoSummary}>
-              <Ionicons name="images-outline" size={18} color={theme.colors.accent} />
-              <Text style={styles.photoSummaryText}>
-                Total: {totalPhotos} photo{totalPhotos !== 1 ? 's' : ''} ({landmarkPhotosCount} landmark, {photos.length} country)
-              </Text>
-            </View>
-          )}
-
-          {/* Diary */}
-          <View style={styles.section}>
-            <View style={styles.diaryHeader}>
-              <Text style={styles.sectionTitle}>Travel Diary (Optional)</Text>
-              <TouchableOpacity
-                style={styles.shareDiaryToggle}
-                onPress={() => setShareDiary(!shareDiary)}
-              >
-                <Ionicons
-                  name={shareDiary ? 'eye' : 'eye-off'}
-                  size={18}
-                  color={shareDiary ? theme.colors.primary : theme.colors.textLight}
-                />
-                <Text style={[styles.shareDiaryLabel, shareDiary && { color: theme.colors.primary }]}>
-                  {shareDiary ? 'Shared' : 'Hidden'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <TextInput
-              style={styles.diaryInput}
-              placeholder="Share your experience..."
-              placeholderTextColor={theme.colors.textLight}
-              value={diary}
-              onChangeText={setDiary}
-              multiline
-              numberOfLines={6}
-              maxLength={500}
-            />
-          </View>
-
-          {/* Privacy Setting */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Who can see this?</Text>
-            <PrivacySelector selected={privacy} onChange={setPrivacy} />
-          </View>
-
-          {/* Info Box - No Points */}
-          <View style={styles.infoBox}>
-            <Ionicons name="information-circle-outline" size={20} color="#5C6BC0" />
-            <Text style={styles.infoText}>
-              Custom visits don't earn points or count towards leaderboards. Perfect for recording places outside our database!
-            </Text>
-          </View>
-
-          {/* Submit Button - matching other modals */}
-          <TouchableOpacity
-            onPress={handleSubmit}
-            disabled={submitting || countryName.trim().length < 2}
-            activeOpacity={0.9}
-            style={styles.submitContainer}
-          >
-            <LinearGradient
-              colors={countryName.trim().length >= 2 ? [theme.colors.primary, theme.colors.secondary] : ['#78909C', '#546E7A']}
-              style={styles.submitButton}
-            >
-              <Ionicons name="checkmark-circle" size={24} color="#fff" />
-              <Text style={styles.submitText}>
-                {submitting ? 'Saving...' : 'Record Visit'}
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </ScrollView>
+        </View>
+        <TextInput
+          style={styles.textInput}
+          placeholder="e.g., Monaco, Liechtenstein, Vatican City..."
+          placeholderTextColor={theme.colors.textLight}
+          value={countryName}
+          onChangeText={setCountryName}
+          autoCapitalize="words"
+        />
       </View>
-    </Modal>
+
+      {/* Landmarks Section */}
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>
+            Landmarks {filledLandmarksCount > 0 ? `(${filledLandmarksCount})` : ''}
+          </Text>
+          <View style={styles.optionalBadge}>
+            <Text style={styles.optionalText}>Optional</Text>
+          </View>
+        </View>
+        <Text style={styles.hint}>Add a photo for each landmark to make your memories more vivid!</Text>
+
+        {landmarks.map((landmark, index) => (
+          <View key={index} style={styles.landmarkCard}>
+            <View style={styles.landmarkInputRow}>
+              <View style={styles.landmarkNumber}>
+                <Text style={styles.landmarkNumberText}>{index + 1}</Text>
+              </View>
+              <TextInput
+                style={[styles.textInput, styles.landmarkInput]}
+                placeholder={index === 0 ? "e.g., Prince's Palace, Monte Carlo Casino..." : 'Add another landmark...'}
+                placeholderTextColor={theme.colors.textLight}
+                value={landmark.name}
+                onChangeText={(v) => updateLandmarkName(index, v)}
+                autoCapitalize="words"
+              />
+              {(landmarks.length > 1 || landmark.name.trim().length > 0 || landmark.photo) && (
+                <TouchableOpacity style={styles.removeLandmarkButton} onPress={() => removeLandmark(index)}>
+                  <Ionicons name="close-circle" size={24} color={theme.colors.textLight} />
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={styles.landmarkPhotoRow}>
+              {landmark.photo ? (
+                <View style={styles.landmarkPhotoPreview}>
+                  <Image source={{ uri: landmark.photo }} style={styles.landmarkPhoto} />
+                  <TouchableOpacity style={styles.removeLandmarkPhotoButton} onPress={() => removeLandmarkPhoto(index)}>
+                    <Ionicons name="close-circle" size={20} color="#FF6B6B" />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <TouchableOpacity style={styles.addLandmarkPhotoButton} onPress={() => pickLandmarkPhoto(index)}>
+                  <Ionicons name="camera-outline" size={18} color={theme.colors.primary} />
+                  <Text style={styles.addLandmarkPhotoText}>Add photo</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        ))}
+        {landmarks.length < 10 && (
+          <TouchableOpacity style={styles.addLandmarkButton} onPress={addLandmark}>
+            <Ionicons name="add-circle" size={22} color={theme.colors.primary} />
+            <Text style={styles.addLandmarkText}>Add another landmark</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+      {/* General Country Photos (reuses shared PhotoSection with maxOverride=10) */}
+      <PhotoSection
+        photos={photos}
+        onPhotosChange={setPhotos}
+        onClose={handleClose}
+        maxOverride={10}
+      />
+
+      {totalPhotos > 0 && (
+        <View style={styles.photoSummary}>
+          <Ionicons name="images-outline" size={18} color={theme.colors.accent} />
+          <Text style={styles.photoSummaryText}>
+            Total: {totalPhotos} photo{totalPhotos !== 1 ? 's' : ''} ({landmarkPhotosCount} landmark, {photos.length} country)
+          </Text>
+        </View>
+      )}
+
+      <DiarySection
+        diary={diary}
+        onDiaryChange={setDiary}
+        shareDiary={shareDiary}
+        onShareDiaryChange={setShareDiary}
+      />
+
+      {/* Privacy Setting */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Who can see this?</Text>
+        <PrivacySelector selected={privacy} onChange={setPrivacy} />
+      </View>
+
+      {/* Info Box */}
+      <View style={styles.infoBox}>
+        <Ionicons name="information-circle-outline" size={20} color="#5C6BC0" />
+        <Text style={styles.infoText}>
+          Custom visits don't earn points or count towards leaderboards. Perfect for recording places outside our database!
+        </Text>
+      </View>
+
+      <VisitSubmitButton
+        onPress={handleSubmit}
+        loading={submitting}
+        disabled={countryName.trim().length < 2}
+        label="Record Visit"
+        active={countryName.trim().length >= 2}
+      />
+    </VisitModalShell>
   );
 };
 
-// Export as default as well for compatibility
 export default AddUserCreatedVisitModal;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  header: {
-    paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
-  },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    minHeight: 32,
-  },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  closeButton: {
-    padding: theme.spacing.xs,
-    marginRight: theme.spacing.sm,
-  },
-  headerTitleContainer: {
-    flex: 1,
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#fff',
-  },
-  headerSubtitle: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.9)',
-    marginTop: 2,
-  },
-  brandingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  brandingText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#2A2A2A',
-  },
-  scrollView: {
-    flex: 1,
-    paddingTop: theme.spacing.md,
-  },
   section: {
     marginHorizontal: theme.spacing.lg,
     marginBottom: theme.spacing.lg,
@@ -565,7 +335,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.colors.border,
   },
-  landmarkHint: {
+  hint: {
     fontSize: 13,
     color: theme.colors.textLight,
     marginBottom: theme.spacing.md,
@@ -608,7 +378,7 @@ const styles = StyleSheet.create({
   },
   landmarkPhotoRow: {
     marginTop: theme.spacing.sm,
-    marginLeft: 32, // Align with input after the number badge
+    marginLeft: 32,
   },
   landmarkPhotoPreview: {
     position: 'relative',
@@ -652,65 +422,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: theme.colors.primary,
   },
-  photoHint: {
-    fontSize: 13,
-    color: theme.colors.textLight,
-    marginBottom: theme.spacing.sm,
-  },
-  photoScroll: {
-    marginTop: theme.spacing.xs,
-  },
-  photoItem: {
-    marginRight: theme.spacing.sm,
-    position: 'relative',
-  },
-  photo: {
-    width: 100,
-    height: 100,
-    borderRadius: theme.borderRadius.md,
-  },
-  removePhoto: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-  },
-  addPhotoButton: {
-    width: 100,
-    height: 100,
-    borderRadius: theme.borderRadius.md,
-    backgroundColor: theme.colors.backgroundSecondary,
-    borderWidth: 2,
-    borderColor: theme.colors.border,
-    borderStyle: 'dashed',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  photoButtonsRow: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  addPhotoText: {
-    fontSize: 12,
-    color: theme.colors.textLight,
-    marginTop: 4,
-  },
-  diaryHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  shareDiaryToggle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-  shareDiaryLabel: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: theme.colors.textLight,
-  },
   photoSummary: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -727,17 +438,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: theme.colors.accent,
   },
-  diaryInput: {
-    backgroundColor: theme.colors.backgroundSecondary,
-    borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.md,
-    fontSize: 15,
-    color: theme.colors.text,
-    minHeight: 120,
-    textAlignVertical: 'top',
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-  },
   infoBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -753,24 +453,5 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#3949AB',
     lineHeight: 18,
-  },
-  submitContainer: {
-    marginHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.xl,
-    borderRadius: theme.borderRadius.xl,
-    overflow: 'hidden',
-    ...theme.shadows.lg,
-  },
-  submitButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: theme.spacing.md,
-    gap: theme.spacing.sm,
-  },
-  submitText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#fff',
   },
 });
