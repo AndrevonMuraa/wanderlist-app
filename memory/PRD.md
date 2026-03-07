@@ -12,7 +12,7 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - **100 countries** across 5 continents (20 per continent)
 - **1,500 landmarks** (1,000 official + 500 premium)
 - **30,000 total achievable points** (22,500 landmarks + 1,500 country visits + 5,000 country bonuses + 1,000 continent bonuses)
-- **10 ranks**: Newcomer, Wanderer, Explorer, Adventurer, Trailblazer, Voyager, Globetrotter, Legend, Titan, Mythic
+- **20 ranks**: Newcomer, Wanderer, Scout, Explorer, Pathfinder, Adventurer, Voyager, Trailblazer, Navigator, Pioneer, Globetrotter, Nomad King, Horizon Chaser, Legend, Atlas, Titan, Sovereign, Mythic, Eternal, Transcendent
 - **30+ badge types**: Milestone (10), Points (6), Social (4), Country mastery (4+), Continent mastery
 
 ### Continent Distribution (PERFECTLY BALANCED)
@@ -32,7 +32,7 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Added: Saint Lucia to Americas
 - Duplicate cleanup: Removed 8 exact + 46 near-duplicate premium landmarks, replaced with unique ones
 - Added country images for all 54 new countries
-- Upgraded rank system: 8 → 10 ranks (Newcomer to Mythic) for 30K points
+- Upgraded rank system: 8 → 20 ranks (Newcomer to Transcendent) for 30K points
 - Upgraded badge system: 17 → 30+ badges (milestone, points, social, country mastery, continent mastery)
 
 ### DB/Architecture Notes for Future Agents
@@ -59,8 +59,8 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 ### Admin Panel (Complete)
 - Full admin section with dashboard, user management, report moderation, analytics, notifications, and promo codes
 
-### Quick Visit Feature (Complete - March 7, 2026)
-- Camera-first, minimal-step visit recording from Landmarks List and Landmark Detail pages
+### Quick Visit Feature (Removed - March 7, 2026)
+- QuickVisitButton removed from landmarks list and landmark detail pages
 
 ### Share My Journey Card (Complete - March 7, 2026)
 - Premium shareable card with travel stats, rank badge, and branding

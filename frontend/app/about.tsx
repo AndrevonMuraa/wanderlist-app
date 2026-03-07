@@ -171,7 +171,7 @@ export default function AboutScreen() {
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>19,000+</Text>
+                <Text style={styles.statNumber}>30,000+</Text>
                 <Text style={styles.statLabel}>Total Points</Text>
               </View>
             </View>
@@ -254,7 +254,7 @@ export default function AboutScreen() {
           <FeatureCard
             icon="trophy"
             title="Rank System"
-            description="Progress through 8 ranks as you earn points"
+            description="Progress through 20 ranks as you earn points"
             color="#FFD700"
             onPress={() => router.push('/ranks')}
           />
@@ -448,16 +448,28 @@ You can filter by country, year, or type.`}
             <FAQItem
               id="ranks"
               question="How does the rank system work?"
-              answer={`Progress through 8 ranks as you earn points:
+              answer={`Progress through 20 ranks as you earn points:
 
-• Newcomer (0-199 pts) - Taking your first steps
-• Wanderer (200-749 pts) - The world is calling
-• Explorer (750-1,999 pts) - Charting new territory
-• Adventurer (2,000-4,499 pts) - No border can stop you
-• Trailblazer (4,500-8,499 pts) - Blazing your own path
-• Globetrotter (8,500-13,999 pts) - The world knows your name
-• Legend (14,000-17,999 pts) - A true travel legend
-• Titan (18,000+ pts) - Master of all destinations`}
+• Newcomer (0 pts) - Taking your first steps
+• Wanderer (150 pts) - The world is calling
+• Scout (400 pts) - Eyes on the horizon
+• Explorer (800 pts) - Charting new territory
+• Pathfinder (1,500 pts) - Finding hidden trails
+• Adventurer (2,500 pts) - No border can stop you
+• Voyager (4,000 pts) - Sailing uncharted waters
+• Trailblazer (6,000 pts) - Blazing your own path
+• Navigator (8,000 pts) - Guided by the stars
+• Pioneer (10,000 pts) - Breaking new ground
+• Globetrotter (12,000 pts) - The world knows your name
+• Nomad King (14,000 pts) - Ruler of the open road
+• Horizon Chaser (16,000 pts) - Always chasing the next sunrise
+• Legend (18,000 pts) - A true travel legend
+• Atlas (20,000 pts) - Carrying the world
+• Titan (22,000 pts) - Forged in distant lands
+• Sovereign (24,000 pts) - Master of every continent
+• Mythic (26,000 pts) - Stories told around campfires
+• Eternal (28,000 pts) - Your legacy echoes forever
+• Transcendent (30,000 pts) - Beyond mortal. Beyond legendary.`}
             />
             
             <FAQItem

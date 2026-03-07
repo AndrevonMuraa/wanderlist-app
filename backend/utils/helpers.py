@@ -7,19 +7,29 @@ from datetime import datetime, timezone
 from utils.db import db
 
 
-# Rank thresholds - 10 ranks for ~30,000 total achievable points
+# Rank thresholds - 20 ranks for ~30,000 total achievable points
 # Updated March 2026 for 100 countries / 1500 landmarks expansion
 RANK_THRESHOLDS = [
     {"name": "Newcomer", "min_points": 0},
-    {"name": "Wanderer", "min_points": 250},
-    {"name": "Explorer", "min_points": 1000},
+    {"name": "Wanderer", "min_points": 150},
+    {"name": "Scout", "min_points": 400},
+    {"name": "Explorer", "min_points": 800},
+    {"name": "Pathfinder", "min_points": 1500},
     {"name": "Adventurer", "min_points": 2500},
-    {"name": "Trailblazer", "min_points": 5000},
-    {"name": "Voyager", "min_points": 8500},
-    {"name": "Globetrotter", "min_points": 13000},
+    {"name": "Voyager", "min_points": 4000},
+    {"name": "Trailblazer", "min_points": 6000},
+    {"name": "Navigator", "min_points": 8000},
+    {"name": "Pioneer", "min_points": 10000},
+    {"name": "Globetrotter", "min_points": 12000},
+    {"name": "Nomad King", "min_points": 14000},
+    {"name": "Horizon Chaser", "min_points": 16000},
     {"name": "Legend", "min_points": 18000},
-    {"name": "Titan", "min_points": 24000},
-    {"name": "Mythic", "min_points": 30000},
+    {"name": "Atlas", "min_points": 20000},
+    {"name": "Titan", "min_points": 22000},
+    {"name": "Sovereign", "min_points": 24000},
+    {"name": "Mythic", "min_points": 26000},
+    {"name": "Eternal", "min_points": 28000},
+    {"name": "Transcendent", "min_points": 30000},
 ]
 
 def get_rank_for_points(points: int) -> str:

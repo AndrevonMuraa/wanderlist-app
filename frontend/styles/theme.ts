@@ -86,7 +86,6 @@ export const countryAccents = {
   india: '#D4956A',       // Spice market
   brazil: '#5FB85F',      // Rainforest
   mexico: '#E8A872',      // Sunset orange
-  uae: '#C9A961',         // Desert gold
   germany: '#6B8E99',     // Rhine blue
   canada: '#D46B6B',      // Maple
   south_africa: '#C8854D', // Safari sunset

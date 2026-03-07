@@ -391,7 +391,7 @@ export default function ExploreCountriesScreen() {
       'Africa': 'Wildlife, deserts, and vibrant cultures',
       'North America': 'Natural beauty and urban adventures',
       'South America': 'Rainforests, mountains, and ancient ruins',
-      'Oceania': 'Paradise islands and unique wildlife',
+      'Oceania': 'Tropical islands, coral reefs and island paradises',
     };
     
     return (
