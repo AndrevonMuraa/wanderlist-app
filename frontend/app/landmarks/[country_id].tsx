@@ -18,6 +18,7 @@ import { ProgressBar } from '../../components/ProgressBar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
 import { AddCountryVisitModal } from '../../components/AddCountryVisitModal';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
+import QuickVisitButton from '../../components/QuickVisitButton';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
@@ -542,8 +543,17 @@ export default function LandmarksScreen() {
         }
       />
 
-      {/* Floating Action Button - Smart Country Visit */}
+      {/* Floating Action Buttons */}
       <View style={styles.fabContainer}>
+        {/* Quick Visit Camera FAB */}
+        <QuickVisitButton
+          landmarks={landmarks}
+          onSuccess={() => {
+            fetchData();
+            checkCountryVisitStatus();
+          }}
+        />
+        {/* Country Visit FAB */}
         <TouchableOpacity 
           style={styles.fab}
           onPress={handleCountryVisitAction}
@@ -821,8 +831,12 @@ const styles = StyleSheet.create({
     bottom: Platform.OS === 'ios' ? 100 : 90,
     left: theme.spacing.lg,
     right: theme.spacing.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
   },
   fab: {
+    flex: 1,
     borderRadius: theme.borderRadius.xl,
     overflow: 'hidden',
     ...theme.shadows.card,

@@ -18,6 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 import UniversalHeader from '../../components/UniversalHeader';
 import { BACKEND_URL } from '../../utils/config';
+import QuickVisitButton from '../../components/QuickVisitButton';
 
 const { width } = Dimensions.get('window');
 
@@ -420,22 +421,29 @@ export default function LandmarkDetailScreen() {
               </TouchableOpacity>
             </View>
           ) : (
-            <TouchableOpacity 
-              style={styles.fab}
-              onPress={handleMarkAsVisited}
-              activeOpacity={0.8}
-              data-testid="mark-visited-btn"
-            >
-              <LinearGradient
-                colors={[theme.colors.primary, theme.colors.secondary]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.fabGradient}
+            <View style={styles.fabRowNotVisited}>
+              <QuickVisitButton
+                landmarkId={landmark.landmark_id}
+                landmarkName={landmark.name}
+                onSuccess={fetchLandmark}
+              />
+              <TouchableOpacity 
+                style={styles.fab}
+                onPress={handleMarkAsVisited}
+                activeOpacity={0.8}
+                data-testid="mark-visited-btn"
               >
-                <Ionicons name="checkmark-circle" size={24} color="#fff" />
-                <Text style={styles.fabText}>Mark as Visited</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+                <LinearGradient
+                  colors={[theme.colors.primary, theme.colors.secondary]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.fabGradient}
+                >
+                  <Ionicons name="checkmark-circle" size={24} color="#fff" />
+                  <Text style={styles.fabText}>Mark as Visited</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
           )}
         </View>
       )}
@@ -720,6 +728,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: theme.spacing.sm,
   },
+  fabRowNotVisited: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
   fabSecondary: {
     flex: 1,
     borderRadius: theme.borderRadius.xl,
@@ -747,6 +760,7 @@ const styles = StyleSheet.create({
     ...theme.shadows.card,
   },
   fab: {
+    flex: 1,
     borderRadius: theme.borderRadius.xl,
     overflow: 'hidden',
     ...theme.shadows.card,
