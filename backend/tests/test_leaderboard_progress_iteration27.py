@@ -17,7 +17,7 @@ import requests
 import os
 import time
 
-BASE_URL = os.environ.get("EXPO_PUBLIC_BACKEND_URL", "https://audit-phase1.preview.emergentagent.com")
+BASE_URL = os.environ.get("EXPO_PUBLIC_BACKEND_URL", "https://wandermark-admin.preview.emergentagent.com")
 
 # Test credentials
 TEST_EMAIL = "test@wandermark.app"

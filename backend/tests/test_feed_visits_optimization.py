@@ -17,7 +17,7 @@ import os
 import time
 import uuid
 
-BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://audit-phase1.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://wandermark-admin.preview.emergentagent.com').rstrip('/')
 
 class TestAuthenticationSetup:
     """Authentication tests - must pass before other tests"""
