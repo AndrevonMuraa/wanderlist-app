@@ -25,12 +25,15 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 | Oceania & Island Paradises | 20 | 300 | 4,500 |
 
 ### Content Expansion (March 7, 2026)
-**Added 36 new countries** with 360 standard landmarks and 233 premium landmarks:
-- Europe: +4 (Turkey, Ireland, Hungary, Czech Republic)
-- Asia: +6 (Laos, Mongolia, Bhutan, Georgia, Uzbekistan, Kyrgyzstan) - UAE removed (conflict)
-- Africa: +12 (Ghana, Rwanda, Uganda, Ethiopia, Senegal, Zimbabwe, Zambia, Mozambique, Ivory Coast, Malawi, Lesotho, Eswatini) - Mauritius/Seychelles moved to Oceania
-- Americas: +4 (Uruguay, Bolivia, Belize, Saint Lucia)
-- Oceania: +10 (Hawaii, Madagascar, Cape Verde, Papua New Guinea, Palau, Solomon Islands, New Caledonia, Guam, Comoros, Reunion) + Maldives, Mauritius, Seychelles transferred in - Tonga removed (least popular)
+**Expanded from 66 to 100 countries** with 1,500 landmarks (perfectly balanced):
+- Added 36 new countries, 360 standard landmarks, 500 premium landmarks
+- Removed: UAE (conflict), Tonga (least popular)
+- Moved: Maldives, Mauritius, Seychelles to Oceania. Added Hawaii to Oceania
+- Added: Saint Lucia to Americas
+- Duplicate cleanup: Removed 8 exact + 46 near-duplicate premium landmarks, replaced with unique ones
+- Added country images for all 54 new countries
+- Upgraded rank system: 8 → 10 ranks (Newcomer to Mythic) for 30K points
+- Upgraded badge system: 17 → 30+ badges (milestone, points, social, country mastery, continent mastery)
 
 ### DB/Architecture Notes for Future Agents
 - **ALWAYS check the actual DATABASE** for current state, not seed files
