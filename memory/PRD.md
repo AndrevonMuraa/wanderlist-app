@@ -95,6 +95,15 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
   - my-landmark-visits.tsx: Card-style skeleton rows
   - my-country-visits.tsx: Grid-style skeleton layout
 
+### Quick Visit Feature (Complete - March 7, 2026)
+- Created `QuickVisitButton` component: camera-first, minimal-step visit recording
+- Integrated on **Landmarks List page**: Quick Visit FAB alongside country visit FAB
+- Integrated on **Landmark Detail page**: Quick Visit button next to "Mark as Visited" (only for unvisited landmarks)
+- Two modes: pre-selected landmark (detail page) or landmark picker (list page)
+- Dark gradient FAB with gold camera icon for premium feel
+- Bottom sheet confirmation with photo preview, retake option, and one-tap save
+- Uses existing `POST /api/visits` endpoint - no backend changes needed
+
 ### Share My Journey Card (Complete - March 7, 2026)
 - Created premium `ShareJourneyCard` component with dark gradient background, gold accents, and elegant typography
 - Card displays: countries visited, landmarks, continents, points earned, rank badge, global rank, WanderMark branding
