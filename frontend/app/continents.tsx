@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   card: {
-    height: 140,
+    height: 155,
     borderRadius: theme.borderRadius.xxl,
     overflow: 'hidden',
     ...theme.shadows.card,
@@ -573,11 +573,13 @@ const styles = StyleSheet.create({
   },
   cardTitleSection: {
     flex: 1,
+    height: 60,
     marginRight: theme.spacing.md,
     borderRadius: theme.borderRadius.md,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
     backgroundColor: 'rgba(0, 0, 0, 0.08)',
+    justifyContent: 'center',
   },
   cardTopRow: {
     flexDirection: 'row',
