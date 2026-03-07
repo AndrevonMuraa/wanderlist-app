@@ -144,7 +144,6 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 ## Prioritized Backlog
 ### P0 - None
 ### P1 - Upcoming
-- Refactor visit modals into single reusable component (Phase 3 remaining)
 - Deploy updated Privacy Policy / Terms to a live URL
 - Bump iOS build number and prepare TestFlight build
 ### P2 - Future
