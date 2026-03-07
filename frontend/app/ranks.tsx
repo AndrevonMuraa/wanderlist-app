@@ -84,7 +84,6 @@ export default function RanksScreen() {
         style={[
           styles.rankCard,
           isCurrent && styles.rankCardCurrent,
-          !isUnlocked && styles.rankCardLocked
         ]}
       >
         {isCurrent && (
@@ -104,13 +103,8 @@ export default function RanksScreen() {
           <View style={styles.rankNumber}>
             <Text style={styles.rankNumberText}>{index + 1}</Text>
           </View>
-          <View style={[styles.rankBadgeContainer, !isUnlocked && styles.lockedBadge]}>
+          <View style={styles.rankBadgeContainer}>
             <RankBadge rank={rank} size="large" showName={false} />
-            {!isUnlocked && (
-              <View style={styles.lockOverlay}>
-                <Ionicons name="lock-closed" size={32} color="#666" />
-              </View>
-            )}
           </View>
         </View>
 
@@ -178,7 +172,7 @@ export default function RanksScreen() {
       >
         {/* Hero Section */}
         <View style={styles.heroSection}>
-          <Text style={styles.heroTitle}>Path to Legend</Text>
+          <Text style={styles.heroTitle}>Path to Transcendent</Text>
           <Text style={styles.heroSubtitle}>
             Earn points by visiting landmarks and exploring countries. 
             Advance through 20 ranks to become a travel legend!
@@ -351,9 +345,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: theme.colors.primary,
   },
-  rankCardLocked: {
-    opacity: 0.6,
-  },
   currentBadge: {
     position: 'absolute',
     top: -10,
@@ -393,16 +384,6 @@ const styles = StyleSheet.create({
   },
   rankBadgeContainer: {
     position: 'relative',
-  },
-  lockedBadge: {
-    opacity: 0.4,
-  },
-  lockOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    borderRadius: 40,
   },
   rankCardContent: {
     gap: theme.spacing.sm,

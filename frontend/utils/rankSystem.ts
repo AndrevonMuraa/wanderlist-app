@@ -36,7 +36,7 @@ export const RANKS: Rank[] = [
     minPoints: 400,
     maxPoints: 799,
     color: '#8D6E63',
-    icon: 'binoculars',
+    icon: 'eye',
     gradient: ['#A1887F', '#6D4C41'],
     description: 'Eyes on the horizon',
   },
