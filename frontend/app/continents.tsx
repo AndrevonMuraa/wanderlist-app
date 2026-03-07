@@ -286,7 +286,7 @@ export default function ContinentsScreen() {
                       {continent.visited !== undefined && (
                         <View style={styles.progressRow}>
                           <View style={styles.progressBarContainer}>
-                            <View style={[styles.progressBarFill, { width: `${continent.percentage || 0}%`, backgroundColor: continent.accentColor }]} />
+                            <View style={[styles.progressBarFill, { width: `${continent.percentage || 0}%` }]} />
                           </View>
                           <Text style={styles.progressLabel}>
                             {continent.visited || 0}/{continent.countries} visited
@@ -625,14 +625,13 @@ const styles = StyleSheet.create({
   progressBarContainer: {
     flex: 1,
     height: 3,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.35)',
     borderRadius: 2,
-    overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
     borderRadius: 2,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#FFFFFF',
   },
   progressLabel: {
     fontSize: 10,
