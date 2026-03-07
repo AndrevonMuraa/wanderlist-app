@@ -18,7 +18,6 @@ import { ProgressBar } from '../../components/ProgressBar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
 import { AddCountryVisitModal } from '../../components/AddCountryVisitModal';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
-import QuickVisitButton from '../../components/QuickVisitButton';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
@@ -545,14 +544,6 @@ export default function LandmarksScreen() {
 
       {/* Floating Action Buttons */}
       <View style={styles.fabContainer}>
-        {/* Quick Visit Camera FAB */}
-        <QuickVisitButton
-          landmarks={landmarks}
-          onSuccess={() => {
-            fetchData();
-            checkCountryVisitStatus();
-          }}
-        />
         {/* Country Visit FAB */}
         <TouchableOpacity 
           style={styles.fab}

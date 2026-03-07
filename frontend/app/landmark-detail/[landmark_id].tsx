@@ -18,7 +18,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 import UniversalHeader from '../../components/UniversalHeader';
 import { BACKEND_URL } from '../../utils/config';
-import QuickVisitButton from '../../components/QuickVisitButton';
 
 const { width } = Dimensions.get('window');
 
@@ -422,11 +421,6 @@ export default function LandmarkDetailScreen() {
             </View>
           ) : (
             <View style={styles.fabRowNotVisited}>
-              <QuickVisitButton
-                landmarkId={landmark.landmark_id}
-                landmarkName={landmark.name}
-                onSuccess={fetchLandmark}
-              />
               <TouchableOpacity 
                 style={styles.fab}
                 onPress={handleMarkAsVisited}
