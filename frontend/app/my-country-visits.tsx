@@ -7,7 +7,6 @@ import {
   Image,
   TouchableOpacity,
   Platform,
-  ActivityIndicator,
   RefreshControl,
   Dimensions,
 } from 'react-native';
@@ -19,6 +18,7 @@ import * as SecureStore from 'expo-secure-store';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
+import { Skeleton } from '../components/Skeleton';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 const { width } = Dimensions.get('window');
@@ -142,9 +142,16 @@ export default function MyCountryVisitsScreen() {
     return (
       <View style={styles.container}>
         <UniversalHeader title="My Country Visits" onBack={handleBack} />
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={theme.colors.primary} />
-          <Text style={styles.loadingText}>Loading your visits...</Text>
+        <View style={{ padding: 16, gap: 12 }}>
+          <Skeleton height={80} borderRadius={16} />
+          <View style={{ flexDirection: 'row', gap: 12 }}>
+            <Skeleton height={180} borderRadius={16} style={{ flex: 1 }} />
+            <Skeleton height={180} borderRadius={16} style={{ flex: 1 }} />
+          </View>
+          <View style={{ flexDirection: 'row', gap: 12 }}>
+            <Skeleton height={180} borderRadius={16} style={{ flex: 1 }} />
+            <Skeleton height={180} borderRadius={16} style={{ flex: 1 }} />
+          </View>
         </View>
       </View>
     );

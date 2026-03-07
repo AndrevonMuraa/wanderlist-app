@@ -7,7 +7,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://log-removal-pass.preview.emergentagent.com')
+BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://audit-phase1.preview.emergentagent.com')
 TEST_EMAIL = "test@wandermark.app"
 TEST_PASSWORD = "Test1234!"
 

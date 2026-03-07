@@ -81,6 +81,7 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
             {"$set": {
                 "photos": data.photos,
                 "diary": data.diary_notes,
+                "share_diary": getattr(data, 'share_diary', True),
                 "visibility": visibility,
                 "source": "manual",
                 "has_photos": has_photos,
@@ -133,6 +134,7 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
         "continent": continent,
         "photos": data.photos,
         "diary": data.diary_notes,
+        "share_diary": getattr(data, 'share_diary', True),
         "visibility": visibility,
         "visited_at": visited_at,
         "points_earned": points_earned,

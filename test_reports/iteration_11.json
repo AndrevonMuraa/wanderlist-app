@@ -1,0 +1,77 @@
+{
+  "summary": "Backend testing for Audit Phase 1 (Iteration 11). All 12 tests passed. Verified: auth login access_token, user profile comment_permission, country-visits share_diary POST/GET/PUT, landmark visits PUT/DELETE, user-created-visits CRUD. Found and FIXED bug: country-visits POST 'upgrade' path was not saving share_diary field.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_audit_phase1_iteration11.py",
+    "/app/test_reports/pytest/pytest_iteration11.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_audit_phase1_iteration11.py",
+    "/app/backend/routes/country_visits.py"
+  ],
+  "success_rate": {
+    "backend": "100% (12/12 tests passed)",
+    "frontend": "N/A - Backend only testing requested"
+  },
+  "test_credentials": "test@wandermark.app / Test1234!",
+  "seed_data_creation": "Custom visit created and deleted during CRUD flow testing",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All requested features verified working: 1) auth login returns access_token (not 'token'), 2) user profile returns comment_permission, 3) country-visits POST/GET/PUT all handle share_diary correctly, 4) landmark visits PUT/DELETE work, 5) user-created-visits full CRUD works. Previous iteration bug (PUT /api/country-visits with share_diary only causing UnboundLocalError) is FIXED. Also found and FIXED additional bug: POST /api/country-visits 'upgrade' path was not saving share_diary field.",
+  "tested_endpoints": [
+    {"endpoint": "POST /api/auth/login", "status": "PASS", "note": "Returns access_token field (not 'token')"},
+    {"endpoint": "GET /api/auth/me", "status": "PASS"},
+    {"endpoint": "GET /api/users/{user_id}/profile", "status": "PASS", "note": "Returns comment_permission field"},
+    {"endpoint": "GET /api/country-visits", "status": "PASS", "note": "Returns share_diary field for visits that have it"},
+    {"endpoint": "POST /api/country-visits", "status": "PASS", "note": "Accepts share_diary field (including upgrade path - FIXED)"},
+    {"endpoint": "PUT /api/country-visits/{id}", "status": "PASS", "note": "share_diary only update works (previous bug FIXED)"},
+    {"endpoint": "GET /api/country-visits/{id}", "status": "PASS", "note": "Returns share_diary field"},
+    {"endpoint": "GET /api/visits/list", "status": "PASS"},
+    {"endpoint": "PUT /api/visits/{id}", "status": "PASS", "note": "Updates share_diary, visibility, diary_notes"},
+    {"endpoint": "GET /api/visits/{id}", "status": "PASS"},
+    {"endpoint": "GET /api/user-created-visits", "status": "PASS", "note": "No _id leak"},
+    {"endpoint": "POST /api/user-created-visits", "status": "PASS", "note": "Creates with share_diary"},
+    {"endpoint": "GET /api/user-created-visits/{id}", "status": "PASS"},
+    {"endpoint": "PUT /api/user-created-visits/{id}", "status": "PASS"},
+    {"endpoint": "DELETE /api/user-created-visits/{id}", "status": "PASS", "note": "Returns 404 on re-fetch"},
+    {"endpoint": "GET /api/stats", "status": "PASS"},
+    {"endpoint": "GET /api/progress", "status": "PASS"},
+    {"endpoint": "GET /api/landmarks", "status": "PASS"}
+  ],
+  "key_verifications": {
+    "auth_access_token": "VERIFIED - Login returns access_token field (not 'token')",
+    "user_profile_comment_permission": "VERIFIED - GET /api/users/{id}/profile returns comment_permission field",
+    "country_visits_share_diary_get": "VERIFIED - GET /api/country-visits returns share_diary for visits that have it",
+    "country_visits_share_diary_post": "VERIFIED - POST /api/country-visits accepts share_diary (both new and upgrade paths)",
+    "country_visits_share_diary_put": "VERIFIED - PUT /api/country-visits/{id} with share_diary only works (bug FIXED)",
+    "landmark_visits_put": "VERIFIED - PUT /api/visits/{id} works for share_diary, visibility, diary_notes",
+    "user_created_visits_crud": "VERIFIED - Full CRUD flow works with share_diary field",
+    "objectid_leak_fix": "VERIFIED - No _id field in GET /api/user-created-visits response"
+  },
+  "bugs_fixed": [
+    {
+      "file": "/app/backend/routes/country_visits.py",
+      "issue": "POST /api/country-visits 'upgrade' path was not saving share_diary field",
+      "fix": "Added share_diary to the $set update in the existing_visit block (line 84)",
+      "root_cause": "The update for existing visits was missing the share_diary field in the MongoDB $set operation"
+    }
+  ],
+  "rca_of_issues_found": {
+    "share_diary_not_saved_on_upgrade": {
+      "description": "When a user POSTs to /api/country-visits for a country they already visited (upgrade path), the share_diary field was not being saved",
+      "root_cause": "In country_visits.py create_country_visit(), the existing_visit update block (lines 79-89) did not include share_diary in the $set operation, even though it was included for new visits (line 136)",
+      "fix_applied": "Added 'share_diary': getattr(data, 'share_diary', True) to the $set operation in the upgrade block",
+      "verification": "Tested POST with share_diary=false on existing visit, then GET confirmed share_diary=False is returned"
+    }
+  }
+}

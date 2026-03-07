@@ -143,30 +143,26 @@ async def delete_visit(visit_id: str, current_user: User = Depends(get_current_u
     
     landmark_id = visit.get("landmark_id")
     points_earned = visit.get("points_earned", 0)
-    verified_points = visit.get("verified_points", 0)
+    is_verified = visit.get("verified", False)
     
-    # Delete the visit
-    await db.visits.delete_one({"visit_id": visit_id})
-    
-    # Delete associated activity
-    await db.activities.delete_many({"visit_id": visit_id})
-    
-    # Delete associated comments
+    # Find and delete associated activity + comments BEFORE deleting activity
     activity = await db.activities.find_one({"visit_id": visit_id}, {"_id": 0, "activity_id": 1})
     if activity:
         await db.comments.delete_many({"activity_id": activity["activity_id"]})
     
+    # Delete the visit and activity
+    await db.visits.delete_one({"visit_id": visit_id})
+    await db.activities.delete_many({"visit_id": visit_id})
+    
     # Deduct points from user
-    update_ops = {}
-    if points_earned > 0:
-        update_ops["points"] = -points_earned
-    if verified_points > 0:
-        update_ops["verified_points"] = -verified_points
-    if update_ops:
-        await db.users.update_one(
-            {"user_id": current_user.user_id},
-            {"$inc": update_ops}
-        )
+    decrement = {"points": -points_earned}
+    if is_verified:
+        decrement["leaderboard_points"] = -points_earned
+    
+    await db.users.update_one(
+        {"user_id": current_user.user_id},
+        {"$inc": decrement}
+    )
     
     return {"message": "Visit deleted successfully", "points_deducted": points_earned, "landmark_id": landmark_id}
 

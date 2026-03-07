@@ -9,7 +9,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
-import { successHaptic, lightHaptic } from '../utils/haptics';
+import { invalidateCacheGroup } from '../utils/apiCache';
+import { successHaptic } from '../utils/haptics';
 import { PrivacySelector } from './PrivacySelector';
 import { useSubscription } from '../hooks/useSubscription';
 
@@ -38,6 +39,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
   const [photos, setPhotos] = useState<string[]>([]);
   const [diary, setDiary] = useState('');
   const [privacy, setPrivacy] = useState<'public' | 'friends' | 'private'>('public');
+  const [shareDiary, setShareDiary] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -50,25 +52,44 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
   // Calculate safe area padding
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
-  const pickImages = async () => {
-    if (photos.length >= maxPhotos) {
-      if (!isProUser) {
-        Alert.alert(
-          'Photo Limit Reached',
-          `Free users can add up to ${maxPhotos} photo per visit. Upgrade to Pro for up to 10 photos!`,
-          [
-            { text: 'Maybe Later', style: 'cancel' },
-            { text: 'Upgrade to Pro', onPress: () => {
-              onClose();
-              router.push('/subscription');
-            }}
-          ]
-        );
-      } else {
-        Alert.alert('Limit Reached', `You can add up to ${maxPhotos} photos per visit`);
-      }
+  const canAddMore = photos.length < maxPhotos;
+
+  const showPhotoLimitAlert = () => {
+    if (!isProUser) {
+      Alert.alert(
+        'Photo Limit Reached',
+        `Free users can add up to ${maxPhotos} photo per visit. Upgrade to Pro for up to 10 photos!`,
+        [
+          { text: 'Maybe Later', style: 'cancel' },
+          { text: 'Upgrade to Pro', onPress: () => {
+            onClose();
+            router.push('/subscription');
+          }}
+        ]
+      );
+    } else {
+      Alert.alert('Limit Reached', `You can add up to ${maxPhotos} photos per visit`);
+    }
+  };
+
+  const takePhoto = async () => {
+    if (!canAddMore) { showPhotoLimitAlert(); return; }
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Camera Access', 'Please allow camera access in your device settings to take photos.');
       return;
     }
+    const result = await ImagePicker.launchCameraAsync({
+      quality: 0.7,
+      base64: true,
+    });
+    if (!result.canceled && result.assets?.[0]?.base64) {
+      setPhotos([...photos, `data:image/jpeg;base64,${result.assets[0].base64}`]);
+    }
+  };
+
+  const pickImages = async () => {
+    if (!canAddMore) { showPhotoLimitAlert(); return; }
 
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
@@ -78,7 +99,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: isProUser, // Only Pro users can select multiple
+      allowsMultipleSelection: isProUser,
       quality: 0.7,
       base64: true,
     });
@@ -126,18 +147,19 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
           photos,
           diary_notes: diary || undefined,
           visibility: privacy,
+          share_diary: shareDiary,
         }),
       });
 
       if (response.ok) {
         const result = await response.json();
+        invalidateCacheGroup('visit');
         await successHaptic();
         
-        // Show appropriate message based on whether photos were included
         if (photos.length > 0) {
-          Alert.alert('Success!', `${countryName} visit recorded! +${result.points_earned} points added to leaderboard! 🏆`);
+          Alert.alert('Success!', `${countryName} visit recorded! +${result.points_earned} points added to leaderboard!`);
         } else {
-          Alert.alert('Visit Recorded!', `${countryName} marked as visited! +${result.points_earned} personal points. Add photos anytime to earn leaderboard points! 📸`);
+          Alert.alert('Visit Recorded!', `${countryName} marked as visited! +${result.points_earned} personal points. Add photos anytime to earn leaderboard points!`);
         }
         
         setPhotos([]);
@@ -212,12 +234,19 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
                   </TouchableOpacity>
                 </View>
               ))}
-              {photos.length < maxPhotos ? (
-                <TouchableOpacity style={styles.addPhotoButton} onPress={pickImages}>
-                  <Ionicons name="add-circle" size={40} color={theme.colors.primary} />
-                  <Text style={styles.addPhotoText}>Add Photos</Text>
-                </TouchableOpacity>
-              ) : !isProUser ? (
+              {canAddMore && (
+                <View style={styles.photoButtonsColumn}>
+                  <TouchableOpacity style={styles.cameraButton} onPress={takePhoto} data-testid="take-photo-btn">
+                    <Ionicons name="camera" size={28} color="#fff" />
+                    <Text style={styles.cameraButtonText}>Take Photo</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.libraryButton} onPress={pickImages} data-testid="pick-photo-btn">
+                    <Ionicons name="images-outline" size={16} color={theme.colors.textSecondary} />
+                    <Text style={styles.libraryButtonText}>Choose from Library</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              {!canAddMore && !isProUser && (
                 <TouchableOpacity 
                   style={styles.addPhotoButtonLocked}
                   onPress={() => {
@@ -229,13 +258,28 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
                   <Text style={styles.addPhotoTextLocked}>Upgrade</Text>
                   <Text style={styles.addPhotoSubtext}>for more</Text>
                 </TouchableOpacity>
-              ) : null}
+              )}
             </ScrollView>
           </View>
 
           {/* Diary */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Travel Diary (Optional)</Text>
+            <View style={styles.diaryHeader}>
+              <Text style={styles.sectionTitle}>Travel Diary (Optional)</Text>
+              <TouchableOpacity
+                style={styles.shareDiaryToggle}
+                onPress={() => setShareDiary(!shareDiary)}
+              >
+                <Ionicons
+                  name={shareDiary ? 'eye' : 'eye-off'}
+                  size={18}
+                  color={shareDiary ? theme.colors.primary : theme.colors.textLight}
+                />
+                <Text style={[styles.shareDiaryLabel, shareDiary && { color: theme.colors.primary }]}>
+                  {shareDiary ? 'Shared' : 'Hidden'}
+                </Text>
+              </TouchableOpacity>
+            </View>
             <TextInput
               style={styles.diaryInput}
               placeholder={`Share your experience in ${countryName}...`}
@@ -400,6 +444,35 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     marginTop: 4,
   },
+  photoButtonsColumn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 6,
+  },
+  cameraButton: {
+    width: 100,
+    height: 72,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 2,
+  },
+  cameraButtonText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  libraryButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: 4,
+  },
+  libraryButtonText: {
+    fontSize: 11,
+    color: theme.colors.textSecondary,
+  },
   addPhotoButtonLocked: {
     width: 100,
     height: 100,
@@ -432,6 +505,23 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     borderWidth: 1,
     borderColor: theme.colors.border,
+  },
+  diaryHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  shareDiaryToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  shareDiaryLabel: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: theme.colors.textLight,
   },
   infoBox: {
     flexDirection: 'row',

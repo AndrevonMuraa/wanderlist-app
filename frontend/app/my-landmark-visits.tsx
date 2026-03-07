@@ -5,7 +5,6 @@ import {
   FlatList,
   TouchableOpacity,
   RefreshControl,
-  ActivityIndicator,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,6 +12,7 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Skeleton } from '../components/Skeleton';
 import { Platform } from 'react-native';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
@@ -130,8 +130,17 @@ export default function MyLandmarkVisits() {
           <Text style={styles.headerTitle}>My Landmark Visits</Text>
           <View style={{ width: 40 }} />
         </LinearGradient>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={theme.colors.primary} />
+        <View style={{ padding: 16, gap: 12 }}>
+          {[1, 2, 3, 4, 5].map(i => (
+            <View key={i} style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', padding: 14, borderRadius: 16 }}>
+              <Skeleton width={48} height={48} borderRadius={12} style={{ marginRight: 12 }} />
+              <View style={{ flex: 1 }}>
+                <Skeleton width="70%" height={16} style={{ marginBottom: 8 }} />
+                <Skeleton width="50%" height={12} />
+              </View>
+              <Skeleton width={32} height={16} borderRadius={8} />
+            </View>
+          ))}
         </View>
       </View>
     );

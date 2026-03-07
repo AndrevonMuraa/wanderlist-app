@@ -327,6 +327,7 @@ class CountryVisitCreate(BaseModel):
     photos: List[str] = []
     diary_notes: Optional[str] = None
     visibility: Optional[str] = "public"
+    share_diary: Optional[bool] = True
     visited_at: Optional[str] = None
 
 

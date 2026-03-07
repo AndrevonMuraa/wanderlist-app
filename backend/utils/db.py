@@ -3,6 +3,9 @@ from dotenv import load_dotenv
 from pathlib import Path
 import os
 import certifi
+import logging
+
+logger = logging.getLogger(__name__)
 
 ROOT_DIR = Path(__file__).parent.parent
 load_dotenv(ROOT_DIR / '.env')
@@ -85,6 +88,6 @@ async def create_indexes():
         # Notifications
         await db.notifications.create_index([("user_id", 1), ("created_at", -1)])
         
-        print("Database indexes created successfully")
+        logger.info("Database indexes created successfully")
     except Exception as e:
-        print(f"Index creation warning: {e}")
+        logger.warning(f"Index creation warning: {e}")

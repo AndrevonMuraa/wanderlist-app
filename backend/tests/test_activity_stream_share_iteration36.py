@@ -19,7 +19,7 @@ import os
 
 BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', '').rstrip('/')
 if not BASE_URL:
-    BASE_URL = "https://log-removal-pass.preview.emergentagent.com"
+    BASE_URL = "https://audit-phase1.preview.emergentagent.com"
 
 # Test credentials
 USER1_EMAIL = "test@wandermark.app"

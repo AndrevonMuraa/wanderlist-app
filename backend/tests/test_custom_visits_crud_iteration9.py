@@ -18,7 +18,7 @@ from datetime import datetime
 # Get BASE_URL from environment - API calls use the public URL with /api prefix
 BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', '').rstrip('/')
 if not BASE_URL:
-    BASE_URL = "https://log-removal-pass.preview.emergentagent.com"
+    BASE_URL = "https://audit-phase1.preview.emergentagent.com"
 
 # Test credentials
 TEST_EMAIL = "test@wandermark.app"

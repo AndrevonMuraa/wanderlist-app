@@ -47,6 +47,7 @@ export default function FriendsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [sending, setSending] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
+  const [friendsFilter, setFriendsFilter] = useState('');
   
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -62,6 +63,13 @@ export default function FriendsScreen() {
   };
   
   const isAtLimit = isAtFriendLimit;
+
+  const filteredFriends = friendsFilter.length > 0
+    ? friends.filter(f => 
+        f.name.toLowerCase().includes(friendsFilter.toLowerCase()) ||
+        (f.username && f.username.toLowerCase().includes(friendsFilter.toLowerCase()))
+      )
+    : friends;
 
   useEffect(() => {
     fetchData();
@@ -477,6 +485,27 @@ export default function FriendsScreen() {
           My Friends ({friends.length})
         </Text>
       </View>
+
+      {/* Friends Filter */}
+      {friends.length > 3 && (
+        <View style={styles.friendsFilterContainer} data-testid="friends-filter">
+          <Ionicons name="search-outline" size={16} color={theme.colors.textLight} />
+          <TextInput
+            placeholder="Filter friends..."
+            value={friendsFilter}
+            onChangeText={setFriendsFilter}
+            style={styles.friendsFilterInput}
+            autoCapitalize="none"
+            placeholderTextColor={theme.colors.textLight}
+            data-testid="friends-filter-input"
+          />
+          {friendsFilter.length > 0 && (
+            <TouchableOpacity onPress={() => setFriendsFilter('')}>
+              <Ionicons name="close-circle" size={16} color={theme.colors.textLight} />
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
     </>
   );
 
@@ -529,7 +558,7 @@ export default function FriendsScreen() {
       </LinearGradient>
 
       <FlatList
-        data={friends}
+        data={filteredFriends}
         renderItem={renderFriend}
         keyExtractor={(item) => item.user_id}
         ListHeaderComponent={renderHeader}
@@ -542,8 +571,10 @@ export default function FriendsScreen() {
             <View style={styles.emptyIconCircle}>
               <Ionicons name="people-outline" size={48} color={theme.colors.textLight} />
             </View>
-            <Text style={styles.emptyText}>No friends yet</Text>
-            <Text style={styles.emptySubtext}>Add friends to see their travel stats and compete on the leaderboard!</Text>
+            <Text style={styles.emptyText}>{friendsFilter ? 'No matching friends' : 'No friends yet'}</Text>
+            <Text style={styles.emptySubtext}>
+              {friendsFilter ? 'Try a different search term' : 'Add friends to see their travel stats and compete on the leaderboard!'}
+            </Text>
           </View>
         }
         showsVerticalScrollIndicator={false}
@@ -922,5 +953,20 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: '#2196F3',
+  },
+  friendsFilterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    height: 40,
+    marginBottom: 12,
+    gap: 8,
+  },
+  friendsFilterInput: {
+    flex: 1,
+    fontSize: 14,
+    color: theme.colors.text,
   },
 });
