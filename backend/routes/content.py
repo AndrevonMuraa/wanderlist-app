@@ -16,6 +16,9 @@ router = APIRouter()
 @router.get("/continent-stats")
 async def get_continent_stats(current_user: User = Depends(get_current_user)):
     """Get dynamic statistics for all continents - optimized with aggregation."""
+    # Map DB continent names to display names
+    # "Americas" is already standardized in DB, but keep North/South as fallback
+    # "Oceania" in DB displays as "Oceania & Island Paradises" in frontend
     CONTINENT_MAP = {
         "North America": "Americas",
         "South America": "Americas",
@@ -37,7 +40,7 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
         }},
         {"$sort": {"continent": 1}}
     ]
-    raw_stats = await db.landmarks.aggregate(pipeline).to_list(10)
+    raw_stats = await db.landmarks.aggregate(pipeline).to_list(20)
 
     # Merge continents
     merged: dict = {}

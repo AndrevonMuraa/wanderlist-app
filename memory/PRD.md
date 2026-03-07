@@ -8,159 +8,100 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - **Backend**: FastAPI with MongoDB Atlas
 - **Hosting**: Render (backend), EAS Build (mobile)
 
+## Current State (March 2026)
+- **100 countries** across 5 continents (20 per continent)
+- **1,364 landmarks** (1,000 official + 364 premium)
+- **19,100 total achievable points**
+
+### Continent Distribution
+| Continent | Countries | Landmarks | Points |
+|-----------|-----------|-----------|--------|
+| Europe | 20 | 278 | 3,950 |
+| Asia | 20 | 267 | 3,675 |
+| Africa | 20 | 282 | 4,050 |
+| Americas | 20 | 261 | 3,525 |
+| Oceania & Island Paradises | 20 | 276 | 3,900 |
+
+### Content Expansion (March 7, 2026)
+**Added 36 new countries** with 360 standard landmarks and 233 premium landmarks:
+- Europe: +4 (Turkey, Ireland, Hungary, Czech Republic)
+- Asia: +6 (Laos, Mongolia, Bhutan, Georgia, Uzbekistan, Kyrgyzstan) - UAE removed (conflict)
+- Africa: +12 (Ghana, Rwanda, Uganda, Ethiopia, Senegal, Zimbabwe, Zambia, Mozambique, Ivory Coast, Malawi, Lesotho, Eswatini) - Mauritius/Seychelles moved to Oceania
+- Americas: +4 (Uruguay, Bolivia, Belize, Saint Lucia)
+- Oceania: +10 (Hawaii, Madagascar, Cape Verde, Papua New Guinea, Palau, Solomon Islands, New Caledonia, Guam, Comoros, Reunion) + Maldives, Mauritius, Seychelles transferred in - Tonga removed (least popular)
+
+### DB/Architecture Notes for Future Agents
+- **ALWAYS check the actual DATABASE** for current state, not seed files
+- Use: `python3 scripts/seed_expansion.py` for content migrations
+- `countries_data.py` is the authoritative country list (100 countries)
+- DB continent "Oceania" displays as "Oceania & Island Paradises" via frontend apiName mapping
+- DB continent "Americas" is the standardized name (not "North America"/"South America")
+- Frontend uses `apiName` field on continent objects to match backend stats
+
 ## What's Been Implemented
 
-### Performance (Complete)
-- MongoDB aggregation pipelines for all read-heavy endpoints
-- N+1 query fix for community photos (batch upvote fetching)
-- Country/landmark pages: removed redundant /api/visits + /api/progress calls
-- New lightweight `GET /api/visits/check/{landmark_id}` endpoint
-
-### Hybrid Privacy Model (Complete)
-- Global default privacy (public/friends/private) with retroactive updates
-- Per-visit visibility override (AddVisitModal + Visit Detail)
-- Dedicated Privacy settings page (`/settings/privacy`)
-- Leaderboard integration (only public verified visits count)
-
-### Comment Permission System (Complete - March 5, 2026)
-- `comment_permission` field on users (everyone/friends/nobody)
-- Backend enforces permission on POST /api/activities/{id}/comment
-- UI control in Privacy settings page
-
-### Anti-Cheat / Photo Verification System (Complete - March 6, 2026)
-- Camera-first: Primary action is now "Take Photo" (camera), "Choose from Library" is secondary
-- Photo guidelines: Prominent banner in AddVisitModal
-- Admin strip-verified endpoint
-
-### Data Transfer Optimization (Complete - March 6, 2026)
-- Journey page data transfer reduced from ~60MB to ~10KB for users with many visits
-
-### Performance Optimizations v2 (Complete - March 6, 2026)
-- Parallel DB calls, in-memory caching, new DB indexes
-- All endpoints now respond under 200ms
-
-### Comments UI Integration (Complete - March 6, 2026)
-- Full CRUD: view, add, reply, like/unlike, delete comments
-- Threaded replies with parent/child organization
-
-### Report/Moderation System (Complete - March 5, 2026)
-- `ReportButton` component on visits, profiles
-- Backend POST /api/reports validates type and reason
-
-### Premium Differentiation (Complete - March 5, 2026)
-- Diary hybrid model: 3 entries/month (free), unlimited (pro)
-
-### Profile Improvements (Complete - March 5, 2026)
-- "View All Visits" page with pagination and privacy filtering
-
-### Social Features (Complete)
-- Friends, user profiles, unified feed, leaderboards
-
-### Custom Visits Feature Overhaul (Complete - Feb 2026)
-- Full CRUD: GET, POST, PUT, DELETE for custom visits
-- Dedicated detail page with photo carousel, diary, visibility toggle
-
-### Landmark Visits Feature Enhancement (Complete - Feb 2026)
-- Full edit/delete functionality
-- Visit detail page with editable diary, photo management
-
-### Country Visits Feature Enhancement (Complete - Feb 2026)
-- share_diary support in POST/PUT endpoints
-- Camera button alongside library button
-- Consistent UI patterns
-
-### App Audit Phase 1 - Critical Fixes (Complete - March 7, 2026)
-**AddCountryVisitModal Standardization:**
-- Added camera support (takePhoto function) matching AddVisitModal pattern
-- Wired share_diary toggle to POST request body
-- Added share_diary toggle UI in diary section
-- Replaced emoji characters in Alert messages with plain text
-- Added cache invalidation (invalidateCacheGroup) on successful submit
-- Added photo limit handling with upgrade prompts
-
-**Backend Bug Fix:**
-- Fixed share_diary not being saved in country-visits POST "upgrade" path (when user already has a visit)
-
-### App Audit Phase 3 - Backend Logging (Complete - March 7, 2026)
-- Converted print() statements in db.py to structured logging (logging module)
-
-### App Audit Phase 4 - UX Improvements (Complete - March 7, 2026)
-**Friends Filter:**
-- Added client-side filter for existing friends list (search by name or username)
-- Filter appears when user has > 3 friends
-- Empty state updates based on filter status
-
-**Loading Skeletons:**
-- Replaced ActivityIndicator spinners with skeleton loading states on:
-  - my-landmark-visits.tsx: Card-style skeleton rows
-  - my-country-visits.tsx: Grid-style skeleton layout
+### Content Expansion (Complete - March 7, 2026)
+- Expanded from 66 to 100 countries (20 per continent)
+- Added 360 new standard landmarks (10 per new country)
+- Added 233 new premium landmarks
+- Removed UAE and Tonga
+- Moved Maldives, Mauritius, Seychelles to Oceania
+- Added Hawaii as Oceania destination
+- Created authoritative `countries_data.py` with migration metadata
+- Updated frontend continent display with apiName for proper stats matching
+- Updated continent-stats API list capacity
 
 ### Admin Panel (Complete)
 - Full admin section with dashboard, user management, report moderation, analytics, notifications, and promo codes
-- Backend: `/backend/routes/admin.py` with admin-authenticated endpoints
-- Frontend: `/frontend/app/admin/` with 6 pages (index, users, reports, analytics, notifications, promo-codes)
 
 ### Quick Visit Feature (Complete - March 7, 2026)
-- Created `QuickVisitButton` component: camera-first, minimal-step visit recording
-- Integrated on **Landmarks List page**: Quick Visit FAB alongside country visit FAB
-- Integrated on **Landmark Detail page**: Quick Visit button next to "Mark as Visited" (only for unvisited landmarks)
-- Two modes: pre-selected landmark (detail page) or landmark picker (list page)
-- Dark gradient FAB with gold camera icon for premium feel
-- Bottom sheet confirmation with photo preview, retake option, and one-tap save
-- Uses existing `POST /api/visits` endpoint - no backend changes needed
+- Camera-first, minimal-step visit recording from Landmarks List and Landmark Detail pages
 
 ### Share My Journey Card (Complete - March 7, 2026)
-- Created premium `ShareJourneyCard` component with dark gradient background, gold accents, and elegant typography
-- Card displays: countries visited, landmarks, continents, points earned, rank badge, global rank, WanderMark branding
-- Integrated into Journey tab with a dark gradient "Share My Journey" button below stats card
-- Uses `react-native-view-shot` + `expo-sharing` for native share to Instagram, WhatsApp, Facebook etc.
-- Refined aspirational copy: "A life measured in destinations" / "The world awaits. Start your journey."
+- Premium shareable card with travel stats, rank badge, and branding
+
+### App Audit Phases 1-4 (Complete)
+- AddCountryVisitModal standardization, backend logging, UX improvements
+
+### Performance (Complete)
+- MongoDB aggregation pipelines, N+1 query fixes, caching
+
+### All Other Features (Complete)
+- Hybrid Privacy, Comments, Anti-Cheat, Social, Custom Visits, Landmark Visits, Country Visits
 
 ## Key API Endpoints
-- `GET /api/visits/check/{landmark_id}` - Lightweight visit status
-- `GET /api/visits/{visit_id}` - Visit details with activity_id + comments_count
-- `POST /api/visits` - Create visit with visibility + diary limit
-- `PUT /api/visits/{id}` - Edit landmark visit
-- `DELETE /api/visits/{id}` - Delete landmark visit
-- `PUT /api/visits/{id}/privacy` - Per-item privacy change
-- `PUT /api/auth/privacy` - Global default (retroactive)
-- `PUT /api/auth/comment-permission` - Comment permission control
-- `GET /api/activities/{id}/comments` - Get comments for activity
-- `POST /api/activities/{id}/comment` - Add comment (permission enforced)
-- `POST /api/country-visits` - Create country visit with share_diary
-- `PUT /api/country-visits/{id}` - Update country visit
-- `GET /api/user-created-visits/{id}` - Get single custom visit
-- `PUT /api/user-created-visits/{id}` - Edit custom visit
-- `POST /api/reports` - Submit report
+- `GET /api/continent-stats` - Dynamic continent statistics (returns 5 continents)
+- `GET /api/countries?continent=X` - Countries filtered by continent
+- `POST /api/visits` - Create visit
+- All other endpoints unchanged
 
 ## DB Schema (Key Fields)
+- **countries**: `country_id`, `name`, `continent` (Europe/Asia/Africa/Americas/Oceania)
+- **landmarks**: `landmark_id`, `country_id`, `continent`, `category` (official/premium)
 - **users**: `default_privacy`, `comment_permission`, `subscription_tier`
-- **visits**: `visibility`, `diary_notes`, `share_diary`
-- **country_visits**: `visibility`, `diary`, `share_diary`, `photos`
-- **user_created_visits**: `visibility`, `diary_notes`, `share_diary`, `landmarks`, `photos`
-- **activities**: `visibility`, `visit_id`, `comments_count`
-- **comments**: `comment_id`, `activity_id`, `user_id`, `content`, `parent_comment_id`, `likes_count`
-
-## Subscription Tiers
-| Feature | Free | Pro |
-|---|---|---|
-| Friends | Unlimited | Unlimited |
-| Photos/visit | 1 | 10 |
-| Diary entries/month | 3 | Unlimited |
-| Premium landmarks | No | Yes (150+) |
-| Custom visits | No | Yes |
-| Messaging | No | Yes |
 
 ## Test Credentials
 - Email: test@wandermark.app | Password: Test1234!
 - Email: test2@wandermark.app | Password: Test1234!
 
 ## Prioritized Backlog
-### P0 - None
+### P0 - Immediate
+- Fill remaining premium landmarks to 5 per country (many have 2-4)
+- Upgrade rank system with more ranks and badges (10 ranks, new badge categories)
+- Update rankSystem.ts and helpers.py thresholds for ~19K total points
+
 ### P1 - Upcoming
 - Deploy updated Privacy Policy / Terms to a live URL
 - Bump iOS build number and prepare TestFlight build
+
 ### P2 - Future
 - Rename GitHub repository (wanderlist-app -> wandermark-app)
 - Add pull-to-refresh to remaining pages
 - More comprehensive skeleton loading states
+
+## Scripts Reference
+- `backend/scripts/countries_data.py` - Authoritative 100-country list
+- `backend/scripts/seed_expansion.py` - Content expansion migration
+- `backend/scripts/expansion_landmarks_1.py` - Europe + Asia landmarks
+- `backend/scripts/expansion_landmarks_2.py` - Africa landmarks
+- `backend/scripts/expansion_landmarks_3.py` - Americas + Oceania landmarks

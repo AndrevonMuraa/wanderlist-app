@@ -20,60 +20,66 @@ const { width } = Dimensions.get('window');
 
 // Continent data - FALLBACK VALUES (will be updated by API)
 // These are shown briefly while loading, then replaced with real-time data from /api/continent-stats
+// IMPORTANT: apiName must match the DB continent field for stats matching
 const CONTINENTS = [
   {
     id: 'europe',
     name: 'Europe',
-    countries: 16,
-    landmarks: 196,
+    apiName: 'Europe',
+    countries: 20,
+    landmarks: 300,
     image: 'https://images.unsplash.com/photo-1683660107861-c555be9775b9?w=800',
     gradient: ['rgba(59,184,195,0.2)', 'rgba(59,184,195,0.7)'] as const,
-    totalPoints: 2620,
+    totalPoints: 4000,
     description: 'Historic castles and cultural heritage',
     accentColor: '#3BB8C3',
   },
   {
     id: 'asia',
     name: 'Asia',
-    countries: 16,
-    landmarks: 196,
+    apiName: 'Asia',
+    countries: 20,
+    landmarks: 300,
     image: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800',
     gradient: ['rgba(255,140,66,0.2)', 'rgba(255,140,66,0.7)'] as const,
-    totalPoints: 2550,
+    totalPoints: 4000,
     description: 'Ancient temples and modern wonders',
     accentColor: '#FF8C42',
   },
   {
     id: 'africa',
     name: 'Africa',
-    countries: 10,
-    landmarks: 121,
+    apiName: 'Africa',
+    countries: 20,
+    landmarks: 300,
     image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800',
     gradient: ['rgba(218,165,32,0.2)', 'rgba(218,165,32,0.7)'] as const,
-    totalPoints: 1525,
+    totalPoints: 4000,
     description: 'Wild savannas and ancient civilizations',
     accentColor: '#DAA520',
   },
   {
     id: 'americas',
     name: 'Americas',
-    countries: 16,
-    landmarks: 189,
+    apiName: 'Americas',
+    countries: 20,
+    landmarks: 300,
     image: 'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800',
     gradient: ['rgba(76,175,80,0.2)', 'rgba(76,175,80,0.7)'] as const,
-    totalPoints: 2475,
+    totalPoints: 4000,
     description: 'Rainforests to mountain peaks',
     accentColor: '#4CAF50',
   },
   {
     id: 'oceania',
-    name: 'Oceania',
-    countries: 8,
-    landmarks: 95,
+    name: 'Oceania & Island Paradises',
+    apiName: 'Oceania',
+    countries: 20,
+    landmarks: 300,
     image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800',
     gradient: ['rgba(33,150,243,0.2)', 'rgba(33,150,243,0.7)'] as const,
-    totalPoints: 855,
-    description: 'Island paradise and coral reefs',
+    totalPoints: 4000,
+    description: 'Tropical islands and coral reefs',
     accentColor: '#2196F3',
   },
 ];
@@ -81,6 +87,7 @@ const CONTINENTS = [
 interface Continent {
   id: string;
   name: string;
+  apiName: string;
   countries: number;
   landmarks: number;
   image: string;
@@ -162,7 +169,7 @@ export default function ContinentsScreen() {
           setContinents(prev => prev.map(continent => {
             // Find matching continent stats by name
             const stats = data.continents.find(
-              (s: any) => s.continent?.toLowerCase() === continent.name.toLowerCase()
+              (s: any) => s.continent?.toLowerCase() === continent.apiName.toLowerCase()
             );
             
             if (stats) {
@@ -189,7 +196,7 @@ export default function ContinentsScreen() {
   const handleContinentPress = (continentId: string) => {
     const continent = continents.find(c => c.id === continentId);
     if (continent) {
-      router.push(`/explore-countries?continent=${encodeURIComponent(continent.name)}`);
+      router.push(`/explore-countries?continent=${encodeURIComponent(continent.apiName)}`);
     }
   };
 
