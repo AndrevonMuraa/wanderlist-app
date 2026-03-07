@@ -624,14 +624,15 @@ const styles = StyleSheet.create({
   },
   progressBarContainer: {
     flex: 1,
-    height: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    height: 3,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
     borderRadius: 2,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
     borderRadius: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
   },
   progressLabel: {
     fontSize: 10,
