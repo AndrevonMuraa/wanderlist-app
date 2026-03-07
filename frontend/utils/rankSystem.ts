@@ -1,6 +1,6 @@
 // User Rank System Configuration
-// Total points available: ~19,000 (796 landmarks + bonuses + country visits)
-// 8 ranks with progressive thresholds
+// Total points available: ~30,000 (1500 landmarks + bonuses + country visits)
+// 10 ranks with progressive thresholds
 
 export interface Rank {
   name: string;
@@ -16,7 +16,7 @@ export const RANKS: Rank[] = [
   {
     name: 'Newcomer',
     minPoints: 0,
-    maxPoints: 199,
+    maxPoints: 249,
     color: '#CD7F32',
     icon: 'compass-outline',
     gradient: ['#CD7F32', '#A0522D'],
@@ -24,8 +24,8 @@ export const RANKS: Rank[] = [
   },
   {
     name: 'Wanderer',
-    minPoints: 200,
-    maxPoints: 749,
+    minPoints: 250,
+    maxPoints: 999,
     color: '#A8A8A8',
     icon: 'footsteps',
     gradient: ['#C0C0C0', '#A8A8A8'],
@@ -33,8 +33,8 @@ export const RANKS: Rank[] = [
   },
   {
     name: 'Explorer',
-    minPoints: 750,
-    maxPoints: 1999,
+    minPoints: 1000,
+    maxPoints: 2499,
     color: '#4CAF50',
     icon: 'map',
     gradient: ['#4CAF50', '#388E3C'],
@@ -42,8 +42,8 @@ export const RANKS: Rank[] = [
   },
   {
     name: 'Adventurer',
-    minPoints: 2000,
-    maxPoints: 4499,
+    minPoints: 2500,
+    maxPoints: 4999,
     color: '#2196F3',
     icon: 'airplane',
     gradient: ['#2196F3', '#1976D2'],
@@ -51,7 +51,7 @@ export const RANKS: Rank[] = [
   },
   {
     name: 'Trailblazer',
-    minPoints: 4500,
+    minPoints: 5000,
     maxPoints: 8499,
     color: '#FF6B35',
     icon: 'flame',
@@ -59,9 +59,18 @@ export const RANKS: Rank[] = [
     description: 'Blazing your own path',
   },
   {
-    name: 'Globetrotter',
+    name: 'Voyager',
     minPoints: 8500,
-    maxPoints: 13999,
+    maxPoints: 12999,
+    color: '#9C27B0',
+    icon: 'navigate',
+    gradient: ['#9C27B0', '#7B1FA2'],
+    description: 'Sailing uncharted waters',
+  },
+  {
+    name: 'Globetrotter',
+    minPoints: 13000,
+    maxPoints: 17999,
     color: '#20B2AA',
     icon: 'earth',
     gradient: ['#20B2AA', '#008B8B'],
@@ -69,8 +78,8 @@ export const RANKS: Rank[] = [
   },
   {
     name: 'Legend',
-    minPoints: 14000,
-    maxPoints: 17999,
+    minPoints: 18000,
+    maxPoints: 23999,
     color: '#FFD700',
     icon: 'star',
     gradient: ['#FFD700', '#FFA000'],
@@ -78,12 +87,21 @@ export const RANKS: Rank[] = [
   },
   {
     name: 'Titan',
-    minPoints: 18000,
-    maxPoints: Infinity,
+    minPoints: 24000,
+    maxPoints: 29999,
     color: '#E040FB',
     icon: 'diamond',
     gradient: ['#E040FB', '#AA00FF'],
     description: 'Master of all destinations',
+  },
+  {
+    name: 'Mythic',
+    minPoints: 30000,
+    maxPoints: Infinity,
+    color: '#FF1744',
+    icon: 'trophy',
+    gradient: ['#FF1744', '#D50000'],
+    description: 'Beyond legendary. Beyond mortal.',
   },
 ];
 

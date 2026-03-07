@@ -10,17 +10,19 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 
 ## Current State (March 2026)
 - **100 countries** across 5 continents (20 per continent)
-- **1,364 landmarks** (1,000 official + 364 premium)
-- **19,100 total achievable points**
+- **1,500 landmarks** (1,000 official + 500 premium)
+- **30,000 total achievable points** (22,500 landmarks + 1,500 country visits + 5,000 country bonuses + 1,000 continent bonuses)
+- **10 ranks**: Newcomer, Wanderer, Explorer, Adventurer, Trailblazer, Voyager, Globetrotter, Legend, Titan, Mythic
+- **30+ badge types**: Milestone (10), Points (6), Social (4), Country mastery (4+), Continent mastery
 
-### Continent Distribution
+### Continent Distribution (PERFECTLY BALANCED)
 | Continent | Countries | Landmarks | Points |
 |-----------|-----------|-----------|--------|
-| Europe | 20 | 278 | 3,950 |
-| Asia | 20 | 267 | 3,675 |
-| Africa | 20 | 282 | 4,050 |
-| Americas | 20 | 261 | 3,525 |
-| Oceania & Island Paradises | 20 | 276 | 3,900 |
+| Europe | 20 | 300 | 4,500 |
+| Asia | 20 | 300 | 4,500 |
+| Africa | 20 | 300 | 4,500 |
+| Americas | 20 | 300 | 4,500 |
+| Oceania & Island Paradises | 20 | 300 | 4,500 |
 
 ### Content Expansion (March 7, 2026)
 **Added 36 new countries** with 360 standard landmarks and 233 premium landmarks:
@@ -85,11 +87,7 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Email: test2@wandermark.app | Password: Test1234!
 
 ## Prioritized Backlog
-### P0 - Immediate
-- Fill remaining premium landmarks to 5 per country (many have 2-4)
-- Upgrade rank system with more ranks and badges (10 ranks, new badge categories)
-- Update rankSystem.ts and helpers.py thresholds for ~19K total points
-
+### P0 - None (all P0 items completed)
 ### P1 - Upcoming
 - Deploy updated Privacy Policy / Terms to a live URL
 - Bump iOS build number and prepare TestFlight build

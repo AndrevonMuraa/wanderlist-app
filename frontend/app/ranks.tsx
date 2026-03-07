@@ -181,7 +181,7 @@ export default function RanksScreen() {
           <Text style={styles.heroTitle}>Path to Legend</Text>
           <Text style={styles.heroSubtitle}>
             Earn points by visiting landmarks and exploring countries. 
-            Advance through 8 ranks to become a travel legend!
+            Advance through 10 ranks to become a travel legend!
           </Text>
 
           {/* Your Progress */}

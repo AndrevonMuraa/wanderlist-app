@@ -7,16 +7,19 @@ from datetime import datetime, timezone
 from utils.db import db
 
 
-# Rank thresholds matching frontend rankSystem.ts
+# Rank thresholds - 10 ranks for ~30,000 total achievable points
+# Updated March 2026 for 100 countries / 1500 landmarks expansion
 RANK_THRESHOLDS = [
     {"name": "Newcomer", "min_points": 0},
-    {"name": "Wanderer", "min_points": 200},
-    {"name": "Explorer", "min_points": 750},
-    {"name": "Adventurer", "min_points": 2000},
-    {"name": "Trailblazer", "min_points": 4500},
-    {"name": "Globetrotter", "min_points": 8500},
-    {"name": "Legend", "min_points": 14000},
-    {"name": "Titan", "min_points": 18000},
+    {"name": "Wanderer", "min_points": 250},
+    {"name": "Explorer", "min_points": 1000},
+    {"name": "Adventurer", "min_points": 2500},
+    {"name": "Trailblazer", "min_points": 5000},
+    {"name": "Voyager", "min_points": 8500},
+    {"name": "Globetrotter", "min_points": 13000},
+    {"name": "Legend", "min_points": 18000},
+    {"name": "Titan", "min_points": 24000},
+    {"name": "Mythic", "min_points": 30000},
 ]
 
 def get_rank_for_points(points: int) -> str:
@@ -50,90 +53,135 @@ async def create_notification(user_id: str, notif_type: str, title: str, message
 
 
 BADGE_DEFINITIONS = {
+    # Milestone badges (visit count)
     "first_visit": {
         "name": "First Steps",
-        "description": "Your journey begins! You\'ve taken the first step into a world of adventure",
-        "icon": "target"
+        "description": "Your journey begins! You've taken the first step into a world of adventure",
+        "icon": "footsteps"
     },
     "milestone_10": {
         "name": "Explorer",
-        "description": "10 landmarks conquered! You\'re building momentum - the world is watching!",
+        "description": "10 landmarks conquered! You're building momentum",
         "icon": "map"
     },
     "milestone_25": {
         "name": "Adventurer",
-        "description": "25 landmarks down! You\'re not just traveling - you\'re collecting memories",
-        "icon": "climbing"
+        "description": "25 landmarks down! You're collecting memories across the globe",
+        "icon": "compass"
     },
     "milestone_50": {
         "name": "Globetrotter",
-        "description": "50 landmarks explored! You\'ve officially caught the travel bug - there\'s no cure!",
+        "description": "50 landmarks explored! You've caught the travel bug",
         "icon": "globe"
     },
     "milestone_100": {
         "name": "World Traveler",
-        "description": "100 landmarks! Triple digits! You\'re unstoppable - the world is your playground!",
-        "icon": "plane"
+        "description": "100 landmarks! Triple digits - the world is your playground",
+        "icon": "airplane"
     },
     "milestone_200": {
         "name": "Seasoned Traveler",
-        "description": "200 landmarks explored! You\'ve seen corners of the world most only dream about!",
-        "icon": "compass"
-    },
-    "milestone_250": {
-        "name": "Elite Explorer",
-        "description": "250 landmarks?! Half the world knows your name. You\'re writing history!",
-        "icon": "medal"
+        "description": "200 landmarks! You've seen corners most only dream about",
+        "icon": "trail-sign"
     },
     "milestone_350": {
-        "name": "Legend",
-        "description": "350 landmarks conquered! You\'re living proof that dreams become reality. LEGENDARY status!",
-        "icon": "trophy"
+        "name": "Elite Explorer",
+        "description": "350 landmarks - you're writing history with every step",
+        "icon": "medal"
     },
     "milestone_500": {
+        "name": "Legend",
+        "description": "500 landmarks conquered! LEGENDARY status achieved",
+        "icon": "trophy"
+    },
+    "milestone_750": {
+        "name": "Titan",
+        "description": "750 landmarks! You've mastered the art of exploration",
+        "icon": "shield"
+    },
+    "milestone_1000": {
         "name": "Ultimate Explorer",
-        "description": "500 landmarks conquered! You\'ve seen what most only dream of. You ARE the legend!",
+        "description": "1,000 landmarks - every landmark conquered. You ARE the legend",
         "icon": "crown"
     },
-    "country_complete": {
-        "name": "Country Master",
-        "description": "All landmarks in one country! You don\'t just visit - you CONQUER!",
-        "icon": "flag"
-    },
+    # Points badges
     "points_100": {
         "name": "Point Starter",
-        "description": "Your first 100 points! Every journey starts with a single step - you\'re on your way!",
+        "description": "Your first 100 points! Every journey starts with a single step",
         "icon": "star"
     },
     "points_500": {
         "name": "Point Collector",
-        "description": "500 points earned! The points are adding up and so are your amazing memories!",
-        "icon": "bullseye"
+        "description": "500 points earned! The memories are adding up",
+        "icon": "star-half"
     },
     "points_1000": {
         "name": "Point Master",
-        "description": "1,000 points! Four digits! You\'re in the big leagues now - keep climbing!",
+        "description": "1,000 points! Four digits - you're in the big leagues",
         "icon": "sparkles"
     },
     "points_5000": {
         "name": "Point Legend",
-        "description": "5,000 points?! You\'re rewriting the leaderboard. Absolute LEGEND status!",
-        "icon": "sparkle"
+        "description": "5,000 points! You're rewriting the leaderboard",
+        "icon": "flash"
     },
+    "points_10000": {
+        "name": "Point Titan",
+        "description": "10,000 points! Halfway to perfection. Unstoppable",
+        "icon": "diamond"
+    },
+    "points_20000": {
+        "name": "Point Mythic",
+        "description": "20,000 points! Almost at the pinnacle of achievement",
+        "icon": "ribbon"
+    },
+    # Social badges
     "social_5": {
         "name": "Friendly",
-        "description": "5 travel buddies! Adventure is better with friends by your side!",
-        "icon": "wave"
+        "description": "5 travel buddies! Adventure is better with friends",
+        "icon": "people"
     },
     "social_10": {
         "name": "Popular",
-        "description": "10 friends in your crew! You\'re building a travel community - love it!",
-        "icon": "handshake"
+        "description": "10 friends in your crew! Building a travel community",
+        "icon": "hand-right"
     },
     "social_25": {
         "name": "Social Butterfly",
-        "description": "25 friends! You\'re not just exploring the world - you\'re bringing people together!",
-        "icon": "butterfly"
+        "description": "25 friends! You're bringing travelers together",
+        "icon": "heart"
+    },
+    "social_50": {
+        "name": "Community Leader",
+        "description": "50 friends! You're a pillar of the travel community",
+        "icon": "megaphone"
+    },
+    # Country mastery badges
+    "country_complete": {
+        "name": "Country Master",
+        "description": "All landmarks in one country! You don't just visit - you CONQUER",
+        "icon": "flag"
+    },
+    "countries_5": {
+        "name": "Five Nations",
+        "description": "5 countries fully explored! The world map is filling up",
+        "icon": "map"
+    },
+    "countries_10": {
+        "name": "Decade of Nations",
+        "description": "10 countries mastered! Double digits of pure dedication",
+        "icon": "earth"
+    },
+    "countries_25": {
+        "name": "Quarter Century",
+        "description": "25 countries completed! A quarter of the world is yours",
+        "icon": "planet"
+    },
+    # Continent mastery
+    "continent_complete": {
+        "name": "Continent Conqueror",
+        "description": "Every country in a continent explored! Absolute domination",
+        "icon": "globe"
     },
 }
 
@@ -162,7 +210,7 @@ async def check_and_award_badges(user_id: str):
     })
 
     # Check milestone badges
-    milestones = [1, 10, 25, 50, 100, 200, 250, 350, 500]
+    milestones = [1, 10, 25, 50, 100, 200, 350, 500, 750, 1000]
     for milestone in milestones:
         badge_type = f"milestone_{milestone}" if milestone > 1 else "first_visit"
         if visit_count >= milestone and badge_type not in existing_badge_types:
@@ -183,7 +231,7 @@ async def check_and_award_badges(user_id: str):
                 newly_awarded.append(badge_type)
 
     # Check points badges
-    point_milestones = [(100, "points_100"), (500, "points_500"), (1000, "points_1000"), (5000, "points_5000")]
+    point_milestones = [(100, "points_100"), (500, "points_500"), (1000, "points_1000"), (5000, "points_5000"), (10000, "points_10000"), (20000, "points_20000")]
     for points, badge_type in point_milestones:
         if total_points >= points and badge_type not in existing_badge_types:
             badge_def = BADGE_DEFINITIONS.get(badge_type)
@@ -203,7 +251,7 @@ async def check_and_award_badges(user_id: str):
                 newly_awarded.append(badge_type)
 
     # Check social badges
-    social_milestones = [(5, "social_5"), (10, "social_10"), (25, "social_25")]
+    social_milestones = [(5, "social_5"), (10, "social_10"), (25, "social_25"), (50, "social_50")]
     for count, badge_type in social_milestones:
         if friend_count >= count and badge_type not in existing_badge_types:
             badge_def = BADGE_DEFINITIONS.get(badge_type)
