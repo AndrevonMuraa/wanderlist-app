@@ -95,6 +95,11 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
   - my-landmark-visits.tsx: Card-style skeleton rows
   - my-country-visits.tsx: Grid-style skeleton layout
 
+### Admin Panel (Complete)
+- Full admin section with dashboard, user management, report moderation, analytics, notifications, and promo codes
+- Backend: `/backend/routes/admin.py` with admin-authenticated endpoints
+- Frontend: `/frontend/app/admin/` with 6 pages (index, users, reports, analytics, notifications, promo-codes)
+
 ### Quick Visit Feature (Complete - March 7, 2026)
 - Created `QuickVisitButton` component: camera-first, minimal-step visit recording
 - Integrated on **Landmarks List page**: Quick Visit FAB alongside country visit FAB
