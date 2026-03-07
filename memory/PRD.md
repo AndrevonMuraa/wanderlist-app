@@ -95,6 +95,13 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
   - my-landmark-visits.tsx: Card-style skeleton rows
   - my-country-visits.tsx: Grid-style skeleton layout
 
+### Share My Journey Card (Complete - March 7, 2026)
+- Created premium `ShareJourneyCard` component with dark gradient background, gold accents, and elegant typography
+- Card displays: countries visited, landmarks, continents, points earned, rank badge, global rank, WanderMark branding
+- Integrated into Journey tab with a dark gradient "Share My Journey" button below stats card
+- Uses `react-native-view-shot` + `expo-sharing` for native share to Instagram, WhatsApp, Facebook etc.
+- Refined aspirational copy: "A life measured in destinations" / "The world awaits. Start your journey."
+
 ## Key API Endpoints
 - `GET /api/visits/check/{landmark_id}` - Lightweight visit status
 - `GET /api/visits/{visit_id}` - Visit details with activity_id + comments_count
