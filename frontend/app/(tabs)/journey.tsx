@@ -23,6 +23,7 @@ import { BACKEND_URL } from '../../utils/config';
 import { cachedFetch } from '../../utils/apiCache';
 import { getUserRank, getProgressToNextRank } from '../../utils/rankSystem';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
+import ShareJourneyCard from '../../components/ShareJourneyCard';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -84,6 +85,7 @@ export default function JourneyScreen() {
   const [userCreatedVisits, setUserCreatedVisits] = useState<UserCreatedVisit[]>([]);
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
+  const [showShareJourney, setShowShareJourney] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isOfflineData, setIsOfflineData] = useState(false);
@@ -333,6 +335,32 @@ export default function JourneyScreen() {
               </View>
             </View>
           </Surface>
+        )}
+
+        {/* Share My Journey Button */}
+        {stats && progressStats && (
+          <TouchableOpacity
+            style={[styles.shareJourneyBtn, { backgroundColor: colors.surface }]}
+            onPress={() => setShowShareJourney(true)}
+            activeOpacity={0.8}
+            data-testid="share-journey-btn"
+          >
+            <LinearGradient
+              colors={['#0c1220', '#1a2840']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.shareJourneyInner}
+            >
+              <View style={styles.shareJourneyLeft}>
+                <Ionicons name="share-social-outline" size={20} color="#C9A961" />
+                <View>
+                  <Text style={styles.shareJourneyTitle}>Share My Journey</Text>
+                  <Text style={styles.shareJourneySubtitle}>Create a beautiful stats card</Text>
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color="rgba(255,255,255,0.4)" />
+            </LinearGradient>
+          </TouchableOpacity>
         )}
 
         {/* Overall Progress */}
@@ -675,6 +703,24 @@ export default function JourneyScreen() {
         onClose={() => setShowProLock(false)}
         feature="custom_visits"
       />
+
+      {/* Share Journey Card Modal */}
+      {stats && progressStats && (
+        <ShareJourneyCard
+          visible={showShareJourney}
+          onDismiss={() => setShowShareJourney(false)}
+          stats={{
+            landmarks: progressStats.overall.visited,
+            countries: Object.keys(progressStats.countries).filter(
+              cid => progressStats.countries[cid].visited > 0
+            ).length,
+            continents: Object.values(progressStats.continents).filter((c: any) => c.visited > 0).length,
+            points: progressStats.totalPoints || 0,
+            rank: stats.rank,
+          }}
+          userName={user?.name || 'Traveler'}
+        />
+      )}
     </View>
   );
 }
@@ -775,6 +821,37 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '600',
     color: theme.colors.textSecondary,
+  },
+  // Share Journey Button
+  shareJourneyBtn: {
+    marginHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    overflow: 'hidden',
+    ...theme.shadows.sm,
+  },
+  shareJourneyInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  shareJourneyLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  shareJourneyTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+    letterSpacing: -0.2,
+  },
+  shareJourneySubtitle: {
+    fontSize: 11,
+    color: 'rgba(255,255,255,0.45)',
+    marginTop: 1,
   },
   // Original stats (keeping for backward compatibility)
   statsGrid: {
