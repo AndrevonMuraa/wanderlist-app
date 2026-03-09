@@ -737,6 +737,7 @@ const styles = StyleSheet.create<any>({
   sectionHeaderLeft: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   },
   continentIconCircle: {
     width: 48,
