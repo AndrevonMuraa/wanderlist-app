@@ -271,7 +271,6 @@ export default function CountryVisitDetailScreen() {
 
       if (response.ok) {
         setShowDeleteDialog(false);
-        // Navigate back with success message
         if (Platform.OS === 'web') {
           alert('Visit deleted successfully');
         } else {
@@ -279,7 +278,13 @@ export default function CountryVisitDetailScreen() {
         }
         safeGoBack(router);
       } else {
-        throw new Error('Failed to delete');
+        const err = await response.json().catch(() => ({}));
+        const msg = err.detail || 'Failed to delete visit';
+        if (Platform.OS === 'web') {
+          alert(msg);
+        } else {
+          Alert.alert('Cannot Delete', msg);
+        }
       }
     } catch {
       if (Platform.OS === 'web') {
@@ -835,7 +840,7 @@ export default function CountryVisitDetailScreen() {
         <Dialog visible={showDeleteDialog} onDismiss={() => setShowDeleteDialog(false)}>
           <Dialog.Title>Delete Visit?</Dialog.Title>
           <Dialog.Content>
-            <Text>Are you sure you want to delete this country visit? This action cannot be undone and you will lose {visit.points_earned} points.</Text>
+            <Text>Are you sure? This will remove the country as visited and delete all associated photos, diary entries and points. This cannot be undone.</Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setShowDeleteDialog(false)} disabled={deleting}>Cancel</Button>

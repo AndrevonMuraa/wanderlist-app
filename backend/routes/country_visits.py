@@ -231,6 +231,19 @@ async def delete_country_visit(country_visit_id: str, current_user: User = Depen
     if not country_visit:
         raise HTTPException(status_code=404, detail="Country visit not found")
     
+    # Block deletion if user has landmark visits in this country
+    country_id = country_visit.get("country_id")
+    if country_id:
+        landmark_visits_in_country = await db.visits.count_documents({
+            "user_id": current_user.user_id,
+            "landmark_id": {"$regex": f"^{country_id}_"}
+        })
+        if landmark_visits_in_country > 0:
+            raise HTTPException(
+                status_code=409,
+                detail=f"Cannot remove country visit — you have {landmark_visits_in_country} landmark visit(s) in this country. Remove those first."
+            )
+    
     # Delete country visit
     await db.country_visits.delete_one({"country_visit_id": country_visit_id})
     
