@@ -1,8 +1,10 @@
 from fastapi import FastAPI, APIRouter
 from starlette.middleware.cors import CORSMiddleware
 import logging
+import os
 
 from utils.db import db, client, create_indexes
+from utils.rate_limit import RateLimitMiddleware
 from routes import (
     auth, content, community, visits, admin,
     leaderboard, friends, messages, stats, feed,
@@ -18,13 +20,18 @@ logging.basicConfig(
 
 app = FastAPI()
 
+ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", "").split(",") if os.environ.get("ALLOWED_ORIGINS") else ["*"]
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Rate limiting: 120 req/min general, 20 req/min for auth
+app.add_middleware(RateLimitMiddleware, default_rpm=120, auth_rpm=20)
 
 # Create the /api prefix router and include all sub-routers
 api_router = APIRouter(prefix="/api")

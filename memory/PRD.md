@@ -91,6 +91,13 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 
 ## Prioritized Backlog
 ### P0 - None (all P0 items completed)
+
+### App Store Hardening (Complete - March 9, 2026)
+- BuildNumber bumped: 69 → 70 for next TestFlight
+- CORS: Configurable via ALLOWED_ORIGINS env var (defaults to "*" for dev)
+- Rate limiting: 120 req/min general, 20 req/min for auth endpoints
+- Error boundary: Global ErrorBoundary wrapping entire app in _layout.tsx
+
 ### P1 - Upcoming
 - Deploy updated Privacy Policy / Terms to a live URL
 - Bump iOS build number and prepare TestFlight build
