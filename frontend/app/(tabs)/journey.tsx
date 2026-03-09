@@ -15,13 +15,12 @@ import { CircularProgress } from '../../components/CircularProgress';
 import { ProgressBar } from '../../components/ProgressBar';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import OfflineStatusBar from '../../components/OfflineStatusBar';
-import AddUserCreatedVisitModal from '../../components/AddUserCreatedVisitModal';
 import ProFeatureLock from '../../components/ProFeatureLock';
 import { useSubscription } from '../../hooks/useSubscription';
 import { useScrollRestore } from '../../hooks/useScrollRestore';
 import { BACKEND_URL } from '../../utils/config';
 import { cachedFetch } from '../../utils/apiCache';
-import { getUserRank, getProgressToNextRank } from '../../utils/rankSystem';
+import { getProgressToNextRank } from '../../utils/rankSystem';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import ShareJourneyCard from '../../components/ShareJourneyCard';
 
@@ -83,7 +82,6 @@ export default function JourneyScreen() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [progressStats, setProgressStats] = useState<ProgressStats | null>(null);
   const [userCreatedVisits, setUserCreatedVisits] = useState<UserCreatedVisit[]>([]);
-  const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
   const [showShareJourney, setShowShareJourney] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -557,11 +555,6 @@ export default function JourneyScreen() {
       </ScrollView>
 
       {/* Custom Visit Modal */}
-      <AddUserCreatedVisitModal
-        visible={showCustomVisitModal}
-        onClose={() => setShowCustomVisitModal(false)}
-        onSuccess={fetchAllData}
-      />
 
       {/* Pro Feature Lock Modal */}
       <ProFeatureLock
@@ -595,11 +588,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   scrollView: {
     flex: 1,
   },
@@ -628,16 +616,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-  },
-  brandingText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#fff',
-  },
-  brandingTextDark: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#2A2A2A',
   },
   greeting: {
     fontSize: 22,
@@ -691,36 +669,6 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
   },
   // Share Journey Button
-  shareJourneyBtn: {
-    marginHorizontal: theme.spacing.md,
-    marginBottom: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
-    overflow: 'hidden',
-    ...theme.shadows.sm,
-  },
-  shareJourneyInner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  shareJourneyLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  shareJourneyTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#fff',
-    letterSpacing: -0.2,
-  },
-  shareJourneySubtitle: {
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.45)',
-    marginTop: 1,
-  },
   // Original stats (keeping for backward compatibility)
   statsGrid: {
     flexDirection: 'row',
@@ -735,16 +683,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.backgroundSecondary,
     borderRadius: theme.borderRadius.lg,
   },
-  statIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: theme.colors.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-    ...theme.shadows.sm,
-  },
   statValue: {
     fontSize: 24,
     fontWeight: '800',
@@ -756,10 +694,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     marginBottom: 2,
-  },
-  statSubtext: {
-    fontSize: 10,
-    color: theme.colors.textSecondary,
   },
   progressCard: {
     margin: theme.spacing.md,
@@ -826,34 +760,6 @@ const styles = StyleSheet.create({
   milestoneProgressBar: {
     marginTop: theme.spacing.xs,
   },
-  topContinentCard: {
-    margin: theme.spacing.md,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
-  topContinentHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-    gap: theme.spacing.sm,
-  },
-  topContinentTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: theme.colors.text,
-  },
-  topContinentName: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: theme.colors.accent,
-    marginBottom: 4,
-  },
-  topContinentStats: {
-    fontSize: 14,
-    color: theme.colors.textSecondary,
-  },
   continentalCard: {
     margin: theme.spacing.md,
     padding: theme.spacing.lg,
@@ -887,87 +793,6 @@ const styles = StyleSheet.create({
   },
   continentProgressBar: {
     marginTop: theme.spacing.xs / 2,
-  },
-  recentBadgesCard: {
-    margin: theme.spacing.md,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
-  timelineContainer: {
-    marginTop: theme.spacing.md,
-  },
-  timelineItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: theme.spacing.md,
-    gap: theme.spacing.md,
-  },
-  timelineDot: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: theme.colors.backgroundSecondary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...theme.shadows.sm,
-  },
-  timelineEmoji: {
-    fontSize: 24,
-  },
-  timelineContent: {
-    flex: 1,
-  },
-  badgeName: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: theme.colors.text,
-    marginBottom: 2,
-  },
-  badgeDate: {
-    fontSize: 12,
-    color: theme.colors.textSecondary,
-  },
-  viewAllButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: theme.spacing.sm,
-    paddingVertical: theme.spacing.sm,
-    gap: 4,
-  },
-  viewAllText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: theme.colors.primary,
-  },
-  quickActionsCard: {
-    margin: theme.spacing.md,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
-  actionsGrid: {
-    flexDirection: 'row',
-    gap: theme.spacing.md,
-    marginTop: theme.spacing.md,
-  },
-  actionButton: {
-    flex: 1,
-  },
-  actionGradient: {
-    paddingVertical: theme.spacing.lg,
-    paddingHorizontal: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
-    alignItems: 'center',
-    gap: theme.spacing.xs,
-  },
-  actionText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#fff',
   },
   bottomSpacer: {
     height: theme.spacing.xl,
@@ -1037,123 +862,6 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   // Custom Visits Section Styles
-  customVisitsCard: {
-    margin: theme.spacing.md,
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.xl,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.card,
-  },
-  customVisitsHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing.xs,
-  },
-  customVisitsHeaderLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.sm,
-  },
-  addCustomButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: theme.colors.primaryLight + '20',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  addCustomButtonText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: theme.colors.primary,
-  },
-  customVisitsDescription: {
-    fontSize: 13,
-    color: theme.colors.textLight,
-    marginBottom: theme.spacing.md,
-  },
-  emptyCustomVisits: {
-    alignItems: 'center',
-    paddingVertical: theme.spacing.xl,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    borderStyle: 'dashed',
-    borderRadius: theme.borderRadius.lg,
-  },
-  emptyCustomText: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: theme.colors.textLight,
-    marginTop: theme.spacing.sm,
-  },
-  emptyCustomSubtext: {
-    fontSize: 13,
-    color: theme.colors.textLight,
-    marginTop: 4,
-  },
-  customVisitItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: theme.spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-  },
-  customVisitIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: theme.colors.accentLight + '20',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: theme.spacing.sm,
-  },
-  customVisitInfo: {
-    flex: 1,
-  },
-  customVisitName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: theme.colors.text,
-  },
-  customVisitCountry: {
-    fontSize: 12,
-    color: theme.colors.textLight,
-    marginTop: 2,
-  },
-  customVisitMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  photoCountBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 2,
-    backgroundColor: theme.colors.backgroundSecondary,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 10,
-  },
-  photoCountText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: theme.colors.textLight,
-  },
-  viewMoreText: {
-    fontSize: 13,
-    color: theme.colors.primary,
-    fontWeight: '500',
-  },
-  viewMoreBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-    paddingVertical: theme.spacing.sm,
-    marginTop: theme.spacing.xs,
-  },
   // Pro badge for locked features
   proBadge: {
     flexDirection: 'row',
@@ -1169,40 +877,5 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: '#1E8A8A',
-  },
-  addCustomButtonLocked: {
-    backgroundColor: 'rgba(118, 75, 162, 0.1)',
-  },
-  addCustomButtonTextLocked: {
-    color: '#1E8A8A',
-  },
-  emptyCustomVisitsLocked: {
-    alignItems: 'center',
-    paddingVertical: theme.spacing.xl,
-    borderWidth: 1,
-    borderColor: 'rgba(118, 75, 162, 0.3)',
-    borderStyle: 'dashed',
-    borderRadius: theme.borderRadius.lg,
-    backgroundColor: 'rgba(118, 75, 162, 0.05)',
-  },
-  lockIconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: 'rgba(118, 75, 162, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-  },
-  emptyCustomTextLocked: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#1E8A8A',
-    marginTop: theme.spacing.xs,
-  },
-  emptyCustomSubtextLocked: {
-    fontSize: 13,
-    color: theme.colors.textLight,
-    marginTop: 4,
   },
 });

@@ -221,13 +221,3 @@ async def notify_friend_request(requester_name: str, target_user_id: str):
     )
 
 
-async def notify_achievement(user_id: str, badge_name: str, badge_icon: str):
-    settings = await db.push_settings.find_one({"user_id": user_id})
-    if settings and not settings.get("achievements_enabled", True):
-        return
-    await send_push_notification(
-        user_id=user_id,
-        title=f"Badge Unlocked! {badge_icon}",
-        body=f"You earned: {badge_name}",
-        data={"type": "achievement"}
-    )

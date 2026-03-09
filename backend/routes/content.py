@@ -111,8 +111,11 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
     }
 
 @router.get("/countries", response_model=List[Country])
-async def get_countries(current_user: User = Depends(get_current_user)):
-    countries = await db.countries.find({}, {"_id": 0}).to_list(1000)
+async def get_countries(continent: str = None, current_user: User = Depends(get_current_user)):
+    query = {}
+    if continent:
+        query["continent"] = continent
+    countries = await db.countries.find(query, {"_id": 0}).to_list(1000)
     
     # Single aggregation to get landmark counts and total points per country
     pipeline = [
