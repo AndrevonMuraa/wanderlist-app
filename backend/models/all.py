@@ -40,6 +40,8 @@ class UserPublic(BaseModel):
     default_privacy: str = "public"
     comment_permission: str = "everyone"
     role: str = "user"
+    points: int = 0
+    leaderboard_points: int = 0
 
 
 class ProfileUpdate(BaseModel):

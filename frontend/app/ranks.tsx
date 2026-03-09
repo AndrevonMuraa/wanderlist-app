@@ -39,7 +39,7 @@ export default function RanksScreen() {
   const fetchUserData = async () => {
     try {
       const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/auth/me`, {
+      const response = await fetch(`${BACKEND_URL}/api/progress`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -47,7 +47,7 @@ export default function RanksScreen() {
 
       if (response.ok) {
         const data = await response.json();
-        const points = data.points || 0;
+        const points = data.totalPoints || 0;
         setUserPoints(points);
         setCurrentRank(getUserRank(points));
       }
