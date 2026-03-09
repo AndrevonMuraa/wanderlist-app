@@ -168,6 +168,9 @@ async def delete_visit(visit_id: str, current_user: User = Depends(get_current_u
         {"$inc": decrement}
     )
     
+    # Sync rank badges after points change
+    await check_and_award_badges(current_user.user_id)
+    
     return {"message": "Visit deleted successfully", "points_deducted": points_earned, "landmark_id": landmark_id}
 
 

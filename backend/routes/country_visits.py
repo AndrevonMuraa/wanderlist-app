@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 
 from utils.db import db
 from utils.auth import get_current_user, is_user_pro, get_user_limits
+from utils.helpers import check_and_award_badges
 from models.all import User, CountryVisitCreate, UserCreatedVisitCreate
 
 
@@ -253,6 +254,9 @@ async def delete_country_visit(country_visit_id: str, current_user: User = Depen
         {"user_id": current_user.user_id},
         {"$inc": decrement}
     )
+    
+    # Sync rank badges after points change
+    await check_and_award_badges(current_user.user_id)
     
     return {"message": "Country visit deleted"}
 

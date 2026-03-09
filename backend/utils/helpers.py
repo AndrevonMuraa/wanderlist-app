@@ -92,40 +92,49 @@ RANK_TO_BADGE = {r["name"]: f"rank_{r['name'].lower().replace(' ', '_')}" for r 
 
 
 async def check_and_award_badges(user_id: str):
-    """Award rank badges based on verified points (leaderboard_points).
-    Each rank = one badge. When user reaches a new rank threshold, they earn that badge permanently."""
+    """Sync rank badges to match current verified points (leaderboard_points).
+    Badges are DYNAMIC — added when rank is reached, removed when points drop below threshold.
+    This prevents users from keeping unearned badges after deleting verified visits."""
     newly_awarded = []
 
     existing_badges = await db.achievements.find({"user_id": user_id}).to_list(100)
-    existing_badge_types = {badge["badge_type"] for badge in existing_badges}
+    existing_badge_map = {badge["badge_type"]: badge for badge in existing_badges}
 
     # Get user's verified points
-    user = await db.users.find_one({"user_id": user_id}, {"_id": 0, "leaderboard_points": 1, "name": 1})
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0, "leaderboard_points": 1})
     if not user:
         return newly_awarded
     
     verified_points = user.get("leaderboard_points", 0)
 
-    # Check each rank threshold - award badge for every rank the user has reached
+    # Determine which rank badges the user SHOULD have
+    earned_badge_ids = set()
     for rank in RANK_THRESHOLDS:
         badge_id = RANK_TO_BADGE.get(rank["name"])
-        if not badge_id:
-            continue
-        
-        if verified_points >= rank["min_points"] and badge_id not in existing_badge_types:
+        if badge_id and verified_points >= rank["min_points"]:
+            earned_badge_ids.add(badge_id)
+
+    # Award missing badges
+    for badge_id in earned_badge_ids:
+        if badge_id not in existing_badge_map:
             badge_def = BADGE_DEFINITIONS.get(badge_id, {})
             achievement = {
                 "achievement_id": f"achievement_{uuid.uuid4().hex[:12]}",
                 "user_id": user_id,
                 "badge_type": badge_id,
-                "badge_name": badge_def.get("name", rank["name"]),
+                "badge_name": badge_def.get("name", ""),
                 "badge_description": badge_def.get("description", ""),
                 "badge_icon": badge_def.get("icon", "star"),
                 "earned_at": datetime.now(timezone.utc)
             }
             await db.achievements.insert_one(achievement)
             newly_awarded.append(badge_id)
-    
+
+    # Remove badges the user no longer qualifies for
+    for badge_type, badge_doc in existing_badge_map.items():
+        if badge_type.startswith("rank_") and badge_type not in earned_badge_ids:
+            await db.achievements.delete_one({"_id": badge_doc["_id"]})
+
     # Send notification for newly awarded badges
     for badge_type in newly_awarded:
         badge_def = BADGE_DEFINITIONS.get(badge_type, {})
