@@ -665,10 +665,9 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   cardSubtitle: {
-    fontSize: 11,
-    fontWeight: '500',
-    color: 'rgba(255, 255, 255, 0.7)',
-    fontStyle: 'italic',
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#fff',
     marginBottom: 2,
   },
   cardDescription: {

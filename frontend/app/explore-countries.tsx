@@ -176,7 +176,7 @@ const CONTINENT_ICON_NAMES: Record<string, string> = {
   'South America': 'leaf-outline',
   'Americas': 'leaf-outline',
   'Oceania': 'water-outline',
-  'Other Island Paradises': 'sparkles-outline',
+  'Oceania and other Island Paradises': 'water-outline',
 };
 
 export default function ExploreCountriesScreen() {
@@ -260,38 +260,26 @@ export default function ExploreCountriesScreen() {
         ]);
 
         // Create sections with rows (2 countries per row)
-        // For Oceania: split into geographic Oceania + Other Island Paradises
+        // For Oceania: sort geographic Oceania first, then island paradises, but keep as ONE section
         const sectionList: ContinentSection[] = [];
         
         Array.from(continentMap.entries()).forEach(([continentName, countries]) => {
+          let sortedCountries = countries;
+          let displayName = continentName;
+          
           if (continentName === 'Oceania' && continent) {
-            // Split Oceania into two sections
+            // Sort: geographic Oceania first, then other island paradises
             const oceaniaCountries = countries.filter(c => OCEANIA_GEOGRAPHIC.has(c.country_id));
             const islandParadises = countries.filter(c => !OCEANIA_GEOGRAPHIC.has(c.country_id));
-            
-            // Section 1: Geographic Oceania
-            const oceaniaRows: Country[][] = [];
-            for (let i = 0; i < oceaniaCountries.length; i += 2) {
-              oceaniaRows.push(oceaniaCountries.slice(i, i + 2));
-            }
-            sectionList.push({ continent: 'Oceania', data: oceaniaRows as any });
-            
-            // Section 2: Other Island Paradises
-            if (islandParadises.length > 0) {
-              const paradiseRows: Country[][] = [];
-              for (let i = 0; i < islandParadises.length; i += 2) {
-                paradiseRows.push(islandParadises.slice(i, i + 2));
-              }
-              sectionList.push({ continent: 'Other Island Paradises', data: paradiseRows as any });
-            }
-          } else {
-            // Normal continent - single section
-            const rows: Country[][] = [];
-            for (let i = 0; i < countries.length; i += 2) {
-              rows.push(countries.slice(i, i + 2));
-            }
-            sectionList.push({ continent: continentName, data: rows as any });
+            sortedCountries = [...oceaniaCountries, ...islandParadises];
+            displayName = 'Oceania and other Island Paradises';
           }
+          
+          const rows: Country[][] = [];
+          for (let i = 0; i < sortedCountries.length; i += 2) {
+            rows.push(sortedCountries.slice(i, i + 2));
+          }
+          sectionList.push({ continent: displayName, data: rows as any });
         });
 
         setSections(sectionList);
@@ -422,7 +410,7 @@ export default function ExploreCountriesScreen() {
       'South America': 'Rainforests, mountains, and ancient ruins',
       'Americas': 'Natural beauty and ancient civilizations',
       'Oceania': 'Pacific islands and coral reefs',
-      'Other Island Paradises': 'Tropical gems across the world\'s oceans',
+      'Oceania and other Island Paradises': 'Pacific islands, tropical gems and coral reefs',
     };
     
     return (
