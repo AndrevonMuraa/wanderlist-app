@@ -47,8 +47,6 @@ LANDMARKS_DATA = {
             "description": "A well-preserved fortified town with cobblestone streets and historic buildings.", 
             "image_url": "",
             "images": [],
-            "latitude": 59.2167,
-            "longitude": 10.9500,
             "facts": [
                 {
                     "title": "Historic Fortress City",
@@ -75,8 +73,6 @@ LANDMARKS_DATA = {
             "description": "A steep cliff that rises 604 meters above Lysefjorden, offering breathtaking views.", 
             "image_url": "",
             "images": [],
-            "latitude": 58.9863,
-            "longitude": 6.1909,
             "facts": [
                 {
                     "title": "Iconic Cliff Formation",
@@ -103,8 +99,6 @@ LANDMARKS_DATA = {
             "description": "Colorful wooden houses on the waterfront in Bergen, a UNESCO World Heritage site.", 
             "image_url": "",
             "images": [],
-            "latitude": 60.3975,
-            "longitude": 5.3245,
             "facts": [
                 {
                     "title": "UNESCO World Heritage",
@@ -131,8 +125,6 @@ LANDMARKS_DATA = {
             "description": "Norway's national sanctuary, built over the burial site of St. Olav.", 
             "image_url": "",
             "images": [],
-            "latitude": 63.4268,
-            "longitude": 10.3966,
             "facts": [
                 {
                     "title": "National Sanctuary",
@@ -159,8 +151,6 @@ LANDMARKS_DATA = {
             "description": "A stunning fjord known for its deep blue waters and majestic waterfalls.", 
             "image_url": "",
             "images": [],
-            "latitude": 62.1009,
-            "longitude": 7.0940,
             "facts": [
                 {
                     "title": "UNESCO Fjord",
@@ -187,8 +177,6 @@ LANDMARKS_DATA = {
             "description": "The world's largest sculpture park made by a single artist, Gustav Vigeland.", 
             "image_url": "",
             "images": [],
-            "latitude": 59.9270,
-            "longitude": 10.7007,
             "facts": [
                 {
                     "title": "World's Largest Sculpture Park",
@@ -215,8 +203,6 @@ LANDMARKS_DATA = {
             "description": "Natural light display in Arctic skies, best seen in Northern Norway.", 
             "image_url": "",
             "images": [],
-            "latitude": 69.6492,
-            "longitude": 18.9553,
             "facts": [
                 {
                     "title": "Aurora Borealis Magic",
@@ -243,8 +229,6 @@ LANDMARKS_DATA = {
             "description": "Dramatic peaks, open sea, and sheltered bays in Arctic waters.", 
             "image_url": "",
             "images": [],
-            "latitude": 68.2155,
-            "longitude": 13.6090,
             "facts": [
                 {
                     "title": "Arctic Archipelago",
@@ -271,8 +255,6 @@ LANDMARKS_DATA = {
             "description": "Medieval castle and fortress in Oslo, built to protect the capital.", 
             "image_url": "",
             "images": [],
-            "latitude": 59.9075,
-            "longitude": 10.7360,
             "facts": [
                 {
                     "title": "Medieval Stronghold",
@@ -299,8 +281,6 @@ LANDMARKS_DATA = {
             "description": "A rock formation jutting horizontally out of a mountain 700 meters above sea level.", 
             "image_url": "",
             "images": [],
-            "latitude": 60.1242,
-            "longitude": 6.7400,
             "facts": [
                 {
                     "title": "Dramatic Rock Formation",
@@ -328,71 +308,61 @@ LANDMARKS_DATA = {
             "name": "Eiffel Tower", 
             "description": "Iconic iron lattice tower in Paris, symbol of France.", 
             "image_url": "",
-            "images": [],
-            "latitude": 48.8584, "longitude": 2.2945
+            "images": []
         },
         {
             "name": "Louvre Museum", 
             "description": "World's largest art museum, home to the Mona Lisa.", 
             "image_url": "",
-            "images": [],
-            "latitude": 48.8606, "longitude": 2.3376
+            "images": []
         },
         {
             "name": "Notre-Dame Cathedral", 
             "description": "Medieval Catholic cathedral, masterpiece of French Gothic architecture.", 
             "image_url": "",
-            "images": [],
-            "latitude": 48.8530, "longitude": 2.3499
+            "images": []
         },
         {
             "name": "Mont Saint-Michel", 
             "description": "Island commune topped by medieval monastery.", 
             "image_url": "",
-            "images": [],
-            "latitude": 48.6361, "longitude": -1.5115
+            "images": []
         },
         {
             "name": "Palace of Versailles", 
             "description": "Opulent royal château with stunning gardens.", 
             "image_url": "",
-            "images": [],
-            "latitude": 48.8049, "longitude": 2.1204
+            "images": []
         },
         {
             "name": "Arc de Triomphe", 
             "description": "Monumental arch honoring those who fought for France.", 
             "image_url": "",
-            "images": [],
-            "latitude": 48.8738, "longitude": 2.2950
+            "images": []
         },
         {
             "name": "Pont du Gard", 
             "description": "Ancient Roman aqueduct bridge in southern France.", 
             "image_url": "",
-            "images": [],
-            "latitude": 43.9475, "longitude": 4.5353
+            "images": []
         },
         {
             "name": "Château de Chambord", 
             "description": "Distinctive French Renaissance château in Loire Valley.", 
             "image_url": "",
-            "images": [],
-            "latitude": 47.6163, "longitude": 1.5170
+            "images": []
         },
         {
             "name": "Sacré-Cœur", 
             "description": "Romano-Byzantine basilica on Montmartre hill.", 
             "image_url": "",
-            "images": [],
-            "latitude": 48.8867, "longitude": 2.3431
+            "images": []
         },
         {
             "name": "Carcassonne", 
             "description": "Medieval fortified city with impressive ramparts.", 
             "image_url": "",
-            "images": [],
-            "latitude": 43.2061, "longitude": 2.3632
+            "images": []
         },
     ],
     "italy": [
@@ -400,71 +370,61 @@ LANDMARKS_DATA = {
             "name": "Colosseum", 
             "description": "Ancient amphitheater in Rome, largest ever built.", 
             "image_url": "",
-            "images": [],
-            "latitude": 41.8902, "longitude": 12.4922
+            "images": []
         },
         {
             "name": "Leaning Tower of Pisa", 
             "description": "Freestanding bell tower known for its unintended tilt.", 
             "image_url": "",
-            "images": [],
-            "latitude": 43.7230, "longitude": 10.3966
+            "images": []
         },
         {
             "name": "Venice Canals", 
             "description": "Romantic waterways through historic Venice.", 
             "image_url": "",
-            "images": [],
-            "latitude": 45.4408, "longitude": 12.3155
+            "images": []
         },
         {
             "name": "Vatican City", 
             "description": "Smallest country, home to St. Peter's Basilica and the Pope.", 
             "image_url": "",
-            "images": [],
-            "latitude": 41.9029, "longitude": 12.4534
+            "images": []
         },
         {
             "name": "Trevi Fountain", 
             "description": "Baroque fountain, the largest in Rome.", 
             "image_url": "",
-            "images": [],
-            "latitude": 41.9009, "longitude": 12.4833
+            "images": []
         },
         {
             "name": "Florence Cathedral", 
             "description": "Gothic cathedral with iconic red-tiled dome.", 
             "image_url": "",
-            "images": [],
-            "latitude": 43.7731, "longitude": 11.2560
+            "images": []
         },
         {
             "name": "Cinque Terre", 
             "description": "Five colorful villages on rugged Italian Riviera coastline.", 
             "image_url": "",
-            "images": [],
-            "latitude": 44.1267, "longitude": 9.6967
+            "images": []
         },
         {
             "name": "Amalfi Coast", 
             "description": "Stunning coastline with cliffside villages.", 
             "image_url": "",
-            "images": [],
-            "latitude": 40.6340, "longitude": 14.6027
+            "images": []
         },
         {
             "name": "Pompeii", 
             "description": "Ancient city preserved by volcanic ash from Mt. Vesuvius.", 
             "image_url": "",
-            "images": [],
-            "latitude": 40.7489, "longitude": 14.4853
+            "images": []
         },
         {
             "name": "Milan Cathedral", 
             "description": "Magnificent Gothic cathedral in Milan's center.", 
             "image_url": "",
-            "images": [],
-            "latitude": 45.4642, "longitude": 9.1900
+            "images": []
         },
     ],
     "japan": [
@@ -472,71 +432,61 @@ LANDMARKS_DATA = {
             "name": "Mount Fuji", 
             "description": "Japan's highest mountain and iconic snow-capped volcano.", 
             "image_url": "",
-            "images": [],
-            "latitude": 35.3606, "longitude": 138.7274
+            "images": []
         },
         {
             "name": "Fushimi Inari Shrine", 
             "description": "Shrine famous for thousands of vermillion torii gates.", 
             "image_url": "",
-            "images": [],
-            "latitude": 34.9671, "longitude": 135.7727
+            "images": []
         },
         {
             "name": "Tokyo Tower", 
             "description": "Communications tower inspired by Eiffel Tower.", 
             "image_url": "",
-            "images": [],
-            "latitude": 35.6586, "longitude": 139.7454
+            "images": []
         },
         {
             "name": "Kinkaku-ji (Golden Pavilion)", 
             "description": "Zen temple covered in gold leaf in Kyoto.", 
             "image_url": "",
-            "images": [],
-            "latitude": 35.0394, "longitude": 135.7292
+            "images": []
         },
         {
             "name": "Hiroshima Peace Memorial", 
             "description": "Monument to the atomic bombing victims.", 
             "image_url": "",
-            "images": [],
-            "latitude": 34.3955, "longitude": 132.4536
+            "images": []
         },
         {
             "name": "Osaka Castle", 
             "description": "Historic castle that played a major role in Japanese unification.", 
             "image_url": "",
-            "images": [],
-            "latitude": 34.6873, "longitude": 135.5262
+            "images": []
         },
         {
             "name": "Arashiyama Bamboo Grove", 
             "description": "Serene bamboo forest in western Kyoto.", 
             "image_url": "",
-            "images": [],
-            "latitude": 35.0170, "longitude": 135.6726
+            "images": []
         },
         {
             "name": "Senso-ji Temple", 
             "description": "Tokyo's oldest temple, founded in 628 AD.", 
             "image_url": "",
-            "images": [],
-            "latitude": 35.7148, "longitude": 139.7967
+            "images": []
         },
         {
             "name": "Shibuya Crossing", 
             "description": "World's busiest pedestrian crossing in Tokyo.", 
             "image_url": "",
-            "images": [],
-            "latitude": 35.6595, "longitude": 139.7004
+            "images": []
         },
         {
             "name": "Nara Park", 
             "description": "Park where over 1,000 wild deer roam freely.", 
             "image_url": "",
-            "images": [],
-            "latitude": 34.6851, "longitude": 135.8048
+            "images": []
         },
     ],
     "egypt": [
@@ -544,71 +494,61 @@ LANDMARKS_DATA = {
             "name": "Great Pyramids of Giza", 
             "description": "Ancient pyramids, one of the Seven Wonders of the Ancient World.", 
             "image_url": "",
-            "images": [],
-            "latitude": 29.9792, "longitude": 31.1342
+            "images": []
         },
         {
             "name": "Sphinx", 
             "description": "Limestone statue of a reclining sphinx with human head.", 
             "image_url": "",
-            "images": [],
-            "latitude": 29.9753, "longitude": 31.1376
+            "images": []
         },
         {
             "name": "Karnak Temple", 
             "description": "Vast mix of temples, chapels, and other buildings in Luxor.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.7188, "longitude": 32.6573
+            "images": []
         },
         {
             "name": "Valley of the Kings", 
             "description": "Valley where tombs were constructed for pharaohs.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.7402, "longitude": 32.6014
+            "images": []
         },
         {
             "name": "Abu Simbel", 
             "description": "Massive rock temples built by Pharaoh Ramesses II.", 
             "image_url": "",
-            "images": [],
-            "latitude": 22.3372, "longitude": 31.6258
+            "images": []
         },
         {
             "name": "Egyptian Museum", 
             "description": "Home to extensive collection of ancient Egyptian antiquities.", 
             "image_url": "",
-            "images": [],
-            "latitude": 30.0478, "longitude": 31.2336
+            "images": []
         },
         {
             "name": "Luxor Temple", 
             "description": "Large Ancient Egyptian temple complex on the Nile's east bank.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.6989, "longitude": 32.6392
+            "images": []
         },
         {
             "name": "Khan el-Khalili", 
             "description": "Famous bazaar and souq in historic center of Cairo.", 
             "image_url": "",
-            "images": [],
-            "latitude": 30.0475, "longitude": 31.2628
+            "images": []
         },
         {
             "name": "Philae Temple", 
             "description": "Island temple dedicated to goddess Isis.", 
             "image_url": "",
-            "images": [],
-            "latitude": 24.0256, "longitude": 32.8848
+            "images": []
         },
         {
             "name": "Alexandria Library", 
             "description": "Modern library commemorating ancient Library of Alexandria.", 
             "image_url": "",
-            "images": [],
-            "latitude": 31.2084, "longitude": 29.9087
+            "images": []
         },
     ],
     "peru": [
@@ -616,71 +556,61 @@ LANDMARKS_DATA = {
             "name": "Machu Picchu", 
             "description": "15th-century Inca citadel set high in the Andes Mountains.", 
             "image_url": "",
-            "images": [],
-            "latitude": -13.1631, "longitude": -72.5450
+            "images": []
         },
         {
             "name": "Nazca Lines", 
             "description": "Ancient geoglyphs etched into desert sands.", 
             "image_url": "",
-            "images": [],
-            "latitude": -14.7390, "longitude": -75.1300
+            "images": []
         },
         {
             "name": "Sacred Valley", 
             "description": "Valley in Andes of Peru, close to Inca capital of Cusco.", 
             "image_url": "",
-            "images": [],
-            "latitude": -13.3211, "longitude": -72.1029
+            "images": []
         },
         {
             "name": "Lake Titicaca", 
             "description": "Highest navigable lake in world, on Peru-Bolivia border.", 
             "image_url": "",
-            "images": [],
-            "latitude": -15.8422, "longitude": -69.4917
+            "images": []
         },
         {
             "name": "Colca Canyon", 
             "description": "One of world's deepest canyons, home to Andean condors.", 
             "image_url": "",
-            "images": [],
-            "latitude": -15.6082, "longitude": -71.8869
+            "images": []
         },
         {
             "name": "Rainbow Mountain", 
             "description": "Mountain with naturally colorful layers of sediment.", 
             "image_url": "",
-            "images": [],
-            "latitude": -13.8689, "longitude": -71.3031
+            "images": []
         },
         {
             "name": "Sacsayhuamán", 
             "description": "Citadel on northern outskirts of Cusco.", 
             "image_url": "",
-            "images": [],
-            "latitude": -13.5088, "longitude": -71.9816
+            "images": []
         },
         {
             "name": "Lima Historic Center", 
             "description": "Colonial center with Plaza Mayor and Spanish architecture.", 
             "image_url": "",
-            "images": [],
-            "latitude": -12.0464, "longitude": -77.0428
+            "images": []
         },
         {
             "name": "Amazon Rainforest", 
             "description": "Peru's portion of the world's largest tropical rainforest.", 
             "image_url": "",
-            "images": [],
-            "latitude": -3.4653, "longitude": -62.2159
+            "images": []
         },
         {
             "name": "Huacachina Oasis", 
             "description": "Desert oasis surrounded by sand dunes.", 
             "image_url": "",
-            "images": [],
-            "latitude": -14.0877, "longitude": -75.7639
+            "images": []
         },
     ],
     "australia": [
@@ -688,71 +618,61 @@ LANDMARKS_DATA = {
             "name": "Sydney Opera House", 
             "description": "Multi-venue performing arts center with distinctive sail design.", 
             "image_url": "",
-            "images": [],
-            "latitude": -33.8568, "longitude": 151.2153
+            "images": []
         },
         {
             "name": "Great Barrier Reef", 
             "description": "World's largest coral reef system.", 
             "image_url": "",
-            "images": [],
-            "latitude": -18.2871, "longitude": 147.6992
+            "images": []
         },
         {
             "name": "Uluru (Ayers Rock)", 
             "description": "Massive sandstone monolith in the heart of Northern Territory.", 
             "image_url": "",
-            "images": [],
-            "latitude": -25.3444, "longitude": 131.0369
+            "images": []
         },
         {
             "name": "Twelve Apostles", 
             "description": "Collection of limestone stacks off the shore of Port Campbell.", 
             "image_url": "",
-            "images": [],
-            "latitude": -38.6656, "longitude": 143.1046
+            "images": []
         },
         {
             "name": "Sydney Harbour Bridge", 
             "description": "Steel through arch bridge across Sydney Harbour.", 
             "image_url": "",
-            "images": [],
-            "latitude": -33.8523, "longitude": 151.2108
+            "images": []
         },
         {
             "name": "Blue Mountains", 
             "description": "Mountainous region known for dramatic scenery.", 
             "image_url": "",
-            "images": [],
-            "latitude": -33.7320, "longitude": 150.3114
+            "images": []
         },
         {
             "name": "Bondi Beach", 
             "description": "Popular beach and surfing spot in Sydney.", 
             "image_url": "",
-            "images": [],
-            "latitude": -33.8908, "longitude": 151.2743
+            "images": []
         },
         {
             "name": "Great Ocean Road", 
             "description": "Scenic coastal drive with stunning ocean views.", 
             "image_url": "",
-            "images": [],
-            "latitude": -38.6814, "longitude": 143.3912
+            "images": []
         },
         {
             "name": "Kakadu National Park", 
             "description": "Vast natural and cultural landscape with Aboriginal rock art.", 
             "image_url": "",
-            "images": [],
-            "latitude": -12.6540, "longitude": 132.4315
+            "images": []
         },
         {
             "name": "Kangaroo Island", 
             "description": "Island sanctuary for Australian wildlife.", 
             "image_url": "",
-            "images": [],
-            "latitude": -35.7751, "longitude": 137.2142
+            "images": []
         },
     ],
     "usa": [
@@ -760,71 +680,61 @@ LANDMARKS_DATA = {
             "name": "Statue of Liberty", 
             "description": "Colossal neoclassical sculpture on Liberty Island, New York.", 
             "image_url": "",
-            "images": [],
-            "latitude": 40.6892, "longitude": -74.0445
+            "images": []
         },
         {
             "name": "Grand Canyon", 
             "description": "Steep-sided canyon carved by the Colorado River.", 
             "image_url": "",
-            "images": [],
-            "latitude": 36.1069, "longitude": -112.1129
+            "images": []
         },
         {
             "name": "Yellowstone National Park", 
             "description": "First national park, known for geothermal features.", 
             "image_url": "",
-            "images": [],
-            "latitude": 44.4280, "longitude": -110.5885
+            "images": []
         },
         {
             "name": "Golden Gate Bridge", 
             "description": "Iconic suspension bridge in San Francisco.", 
             "image_url": "",
-            "images": [],
-            "latitude": 37.8199, "longitude": -122.4783
+            "images": []
         },
         {
             "name": "Mount Rushmore", 
             "description": "Mountain sculpture featuring four U.S. presidents.", 
             "image_url": "",
-            "images": [],
-            "latitude": 43.8791, "longitude": -103.4591
+            "images": []
         },
         {
             "name": "Times Square", 
             "description": "Major commercial intersection in Midtown Manhattan.", 
             "image_url": "",
-            "images": [],
-            "latitude": 40.7580, "longitude": -73.9855
+            "images": []
         },
         {
             "name": "Las Vegas Strip", 
             "description": "Famous stretch of Las Vegas Boulevard with casinos and hotels.", 
             "image_url": "",
-            "images": [],
-            "latitude": 36.1147, "longitude": -115.1728
+            "images": []
         },
         {
             "name": "Niagara Falls", 
             "description": "Group of three waterfalls on US-Canada border.", 
             "image_url": "",
-            "images": [],
-            "latitude": 43.0779, "longitude": -79.0747
+            "images": []
         },
         {
             "name": "White House", 
             "description": "Official residence and workplace of U.S. President.", 
             "image_url": "",
-            "images": [],
-            "latitude": 38.8977, "longitude": -77.0365
+            "images": []
         },
         {
             "name": "Hollywood Sign", 
             "description": "Iconic landmark in Hollywood Hills, Los Angeles.", 
             "image_url": "",
-            "images": [],
-            "latitude": 34.1341, "longitude": -118.3215
+            "images": []
         },
     ],
     "uk": [
@@ -832,71 +742,61 @@ LANDMARKS_DATA = {
             "name": "Big Ben", 
             "description": "Great bell of the clock at Palace of Westminster in London.", 
             "image_url": "",
-            "images": [],
-            "latitude": 51.5007, "longitude": -0.1246
+            "images": []
         },
         {
             "name": "Tower of London", 
             "description": "Historic castle on the north bank of River Thames.", 
             "image_url": "",
-            "images": [],
-            "latitude": 51.5081, "longitude": -0.0759
+            "images": []
         },
         {
             "name": "Stonehenge", 
             "description": "Prehistoric monument consisting of ring of standing stones.", 
             "image_url": "",
-            "images": [],
-            "latitude": 51.1789, "longitude": -1.8262
+            "images": []
         },
         {
             "name": "Buckingham Palace", 
             "description": "London residence and administrative headquarters of monarch.", 
             "image_url": "",
-            "images": [],
-            "latitude": 51.5014, "longitude": -0.1419
+            "images": []
         },
         {
             "name": "Edinburgh Castle", 
             "description": "Historic fortress dominating skyline of Edinburgh.", 
             "image_url": "",
-            "images": [],
-            "latitude": 55.9486, "longitude": -3.1999
+            "images": []
         },
         {
             "name": "Tower Bridge", 
             "description": "Combined bascule and suspension bridge in London.", 
             "image_url": "",
-            "images": [],
-            "latitude": 51.5055, "longitude": -0.0754
+            "images": []
         },
         {
             "name": "Windsor Castle", 
             "description": "Royal residence and the oldest occupied castle in the world.", 
             "image_url": "",
-            "images": [],
-            "latitude": 51.4839, "longitude": -0.6044
+            "images": []
         },
         {
             "name": "British Museum", 
             "description": "Public museum dedicated to human history, art and culture.", 
             "image_url": "",
-            "images": [],
-            "latitude": 51.5194, "longitude": -0.1270
+            "images": []
         },
         {
             "name": "London Eye", 
             "description": "Giant Ferris wheel on the South Bank of River Thames.", 
             "image_url": "",
-            "images": [],
-            "latitude": 51.5033, "longitude": -0.1195
+            "images": []
         },
         {
             "name": "Westminster Abbey", 
             "description": "Gothic abbey church in City of Westminster, London.", 
             "image_url": "",
-            "images": [],
-            "latitude": 51.4993, "longitude": -0.1273
+            "images": []
         },
     ],
     "china": [
@@ -904,71 +804,61 @@ LANDMARKS_DATA = {
             "name": "Great Wall of China", 
             "description": "Ancient series of walls built across historical northern borders.", 
             "image_url": "",
-            "images": [],
-            "latitude": 40.4319, "longitude": 116.5704
+            "images": []
         },
         {
             "name": "Forbidden City", 
             "description": "Palace complex in central Beijing, home to Chinese emperors.", 
             "image_url": "",
-            "images": [],
-            "latitude": 39.9163, "longitude": 116.3972
+            "images": []
         },
         {
             "name": "Terracotta Army", 
             "description": "Collection of terracotta sculptures depicting armies of Qin Shi Huang.", 
             "image_url": "",
-            "images": [],
-            "latitude": 34.3848, "longitude": 109.2792
+            "images": []
         },
         {
             "name": "Temple of Heaven", 
             "description": "Imperial complex of religious buildings visited by emperors.", 
             "image_url": "",
-            "images": [],
-            "latitude": 39.8822, "longitude": 116.4067
+            "images": []
         },
         {
             "name": "Li River", 
             "description": "River in Guangxi famous for karst mountain scenery.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.2795, "longitude": 110.2950
+            "images": []
         },
         {
             "name": "Shanghai Bund", 
             "description": "Waterfront area with colonial-era buildings.", 
             "image_url": "",
-            "images": [],
-            "latitude": 31.2397, "longitude": 121.4909
+            "images": []
         },
         {
             "name": "Potala Palace", 
             "description": "Dzong fortress in Lhasa, Tibet, winter palace of Dalai Lamas.", 
             "image_url": "",
-            "images": [],
-            "latitude": 29.6578, "longitude": 91.1169
+            "images": []
         },
         {
             "name": "Summer Palace", 
             "description": "Vast ensemble of lakes, gardens and palaces in Beijing.", 
             "image_url": "",
-            "images": [],
-            "latitude": 39.9995, "longitude": 116.2753
+            "images": []
         },
         {
             "name": "Yellow Mountain", 
             "description": "Mountain range known for granite peaks and hot springs.", 
             "image_url": "",
-            "images": [],
-            "latitude": 30.1339, "longitude": 118.1565
+            "images": []
         },
         {
             "name": "West Lake", 
             "description": "Freshwater lake in Hangzhou, famous for scenic beauty.", 
             "image_url": "",
-            "images": [],
-            "latitude": 30.2430, "longitude": 120.1425
+            "images": []
         },
     ],
     "spain": [
@@ -976,71 +866,61 @@ LANDMARKS_DATA = {
             "name": "Sagrada Família", 
             "description": "Gaudí's unfinished basilica, Barcelona's most iconic landmark.", 
             "image_url": "",
-            "images": [],
-            "latitude": 41.4036, "longitude": 2.1744
+            "images": []
         },
         {
             "name": "Alhambra", 
             "description": "Moorish palace and fortress complex in Granada.", 
             "image_url": "",
-            "images": [],
-            "latitude": 37.1773, "longitude": -3.5886
+            "images": []
         },
         {
             "name": "Park Güell", 
             "description": "Colorful mosaic park designed by Antoni Gaudí.", 
             "image_url": "",
-            "images": [],
-            "latitude": 41.4145, "longitude": 2.1527
+            "images": []
         },
         {
             "name": "Prado Museum", 
             "description": "World-renowned art museum in Madrid.", 
             "image_url": "",
-            "images": [],
-            "latitude": 40.4138, "longitude": -3.6921
+            "images": []
         },
         {
             "name": "La Rambla", 
             "description": "Famous tree-lined pedestrian street in Barcelona.", 
             "image_url": "",
-            "images": [],
-            "latitude": 41.3808, "longitude": 2.1753
+            "images": []
         },
         {
             "name": "Seville Cathedral", 
             "description": "Largest Gothic cathedral in the world with Giralda tower.", 
             "image_url": "",
-            "images": [],
-            "latitude": 37.3859, "longitude": -5.9933
+            "images": []
         },
         {
             "name": "Plaza Mayor Madrid", 
             "description": "Central square in Madrid surrounded by historic buildings.", 
             "image_url": "",
-            "images": [],
-            "latitude": 40.4155, "longitude": -3.7074
+            "images": []
         },
         {
             "name": "Royal Palace Madrid", 
             "description": "Official residence of Spanish Royal Family.", 
             "image_url": "",
-            "images": [],
-            "latitude": 40.4180, "longitude": -3.7142
+            "images": []
         },
         {
             "name": "Mezquita Cordoba", 
             "description": "Former mosque converted to cathedral, architectural marvel.", 
             "image_url": "",
-            "images": [],
-            "latitude": 37.8790, "longitude": -4.7793
+            "images": []
         },
         {
             "name": "Casa Batlló", 
             "description": "Gaudí's surreal modernist building in Barcelona.", 
             "image_url": "",
-            "images": [],
-            "latitude": 41.3916, "longitude": 2.1649
+            "images": []
         },
     ],
     "greece": [
@@ -1048,71 +928,61 @@ LANDMARKS_DATA = {
             "name": "Acropolis & Parthenon", 
             "description": "Ancient citadel and temple overlooking Athens.", 
             "image_url": "",
-            "images": [],
-            "latitude": 37.9715, "longitude": 23.7257
+            "images": []
         },
         {
             "name": "Santorini", 
             "description": "Iconic white-washed villages with blue domes on volcanic cliffs.", 
             "image_url": "",
-            "images": [],
-            "latitude": 36.3932, "longitude": 25.4615
+            "images": []
         },
         {
             "name": "Meteora", 
             "description": "Monasteries built on top of towering rock pillars.", 
             "image_url": "",
-            "images": [],
-            "latitude": 39.7217, "longitude": 21.6306
+            "images": []
         },
         {
             "name": "Delphi", 
             "description": "Ancient sanctuary and archaeological site, once home to Oracle.", 
             "image_url": "",
-            "images": [],
-            "latitude": 38.4824, "longitude": 22.5009
+            "images": []
         },
         {
             "name": "Mykonos", 
             "description": "Cosmopolitan island with windmills, beaches and nightlife.", 
             "image_url": "",
-            "images": [],
-            "latitude": 37.4467, "longitude": 25.3289
+            "images": []
         },
         {
             "name": "Palace of Knossos", 
             "description": "Bronze Age archaeological site in Crete, Minoan civilization.", 
             "image_url": "",
-            "images": [],
-            "latitude": 35.2979, "longitude": 25.1631
+            "images": []
         },
         {
             "name": "Rhodes Old Town", 
             "description": "Medieval walled city, UNESCO World Heritage Site.", 
             "image_url": "",
-            "images": [],
-            "latitude": 36.4443, "longitude": 28.2253
+            "images": []
         },
         {
             "name": "Olympia", 
             "description": "Birthplace of the Olympic Games in ancient Greece.", 
             "image_url": "",
-            "images": [],
-            "latitude": 37.6379, "longitude": 21.6300
+            "images": []
         },
         {
             "name": "Corfu Old Town", 
             "description": "Venetian fortresses and elegant Italianate architecture.", 
             "image_url": "",
-            "images": [],
-            "latitude": 39.6242, "longitude": 19.9217
+            "images": []
         },
         {
             "name": "Temple of Poseidon", 
             "description": "Ancient Greek temple at Cape Sounion overlooking the sea.", 
             "image_url": "",
-            "images": [],
-            "latitude": 37.6531, "longitude": 24.0255
+            "images": []
         },
     ],
     "thailand": [
@@ -1120,71 +990,61 @@ LANDMARKS_DATA = {
             "name": "Grand Palace", 
             "description": "Complex of buildings in Bangkok, former home to Thai kings.", 
             "image_url": "",
-            "images": [],
-            "latitude": 13.7500, "longitude": 100.4913
+            "images": []
         },
         {
             "name": "Wat Pho", 
             "description": "Temple with giant 46-meter reclining Buddha in Bangkok.", 
             "image_url": "",
-            "images": [],
-            "latitude": 13.7465, "longitude": 100.4927
+            "images": []
         },
         {
             "name": "Phi Phi Islands", 
             "description": "Stunning limestone islands in the Andaman Sea.", 
             "image_url": "",
-            "images": [],
-            "latitude": 7.7407, "longitude": 98.7784
+            "images": []
         },
         {
             "name": "Wat Arun", 
             "description": "Temple of Dawn with iconic spires on Chao Phraya River.", 
             "image_url": "",
-            "images": [],
-            "latitude": 13.7437, "longitude": 100.4887
+            "images": []
         },
         {
             "name": "Ayutthaya", 
             "description": "Ancient city and archaeological site, UNESCO World Heritage.", 
             "image_url": "",
-            "images": [],
-            "latitude": 14.3532, "longitude": 100.5775
+            "images": []
         },
         {
             "name": "Chiang Mai Old City", 
             "description": "Historic walled city with hundreds of temples.", 
             "image_url": "",
-            "images": [],
-            "latitude": 18.7883, "longitude": 98.9853
+            "images": []
         },
         {
             "name": "Railay Beach", 
             "description": "Secluded beach accessible only by boat, limestone cliffs.", 
             "image_url": "",
-            "images": [],
-            "latitude": 8.0113, "longitude": 98.8396
+            "images": []
         },
         {
             "name": "Floating Markets", 
             "description": "Traditional markets on Bangkok's canals and waterways.", 
             "image_url": "",
-            "images": [],
-            "latitude": 13.5221, "longitude": 100.0121
+            "images": []
         },
         {
             "name": "Sukhothai Historical Park", 
             "description": "Ruins of the first capital of Siam in 13th century.", 
             "image_url": "",
-            "images": [],
-            "latitude": 17.0083, "longitude": 99.7078
+            "images": []
         },
         {
             "name": "James Bond Island", 
             "description": "Iconic limestone karst in Phang Nga Bay, featured in 007 film.", 
             "image_url": "",
-            "images": [],
-            "latitude": 8.2752, "longitude": 98.5004
+            "images": []
         },
     ],
     "india": [
@@ -1192,71 +1052,61 @@ LANDMARKS_DATA = {
             "name": "Taj Mahal", 
             "description": "White marble mausoleum, one of world's most beautiful buildings.", 
             "image_url": "",
-            "images": [],
-            "latitude": 27.1751, "longitude": 78.0421
+            "images": []
         },
         {
             "name": "Amber Fort", 
             "description": "Majestic hilltop fort palace in Jaipur, Rajasthan.", 
             "image_url": "",
-            "images": [],
-            "latitude": 26.9855, "longitude": 75.8513
+            "images": []
         },
         {
             "name": "Golden Temple", 
             "description": "Holiest Gurdwara of Sikhism in Amritsar, covered in gold.", 
             "image_url": "",
-            "images": [],
-            "latitude": 31.6200, "longitude": 74.8765
+            "images": []
         },
         {
             "name": "Red Fort", 
             "description": "Historic fortified palace in Old Delhi, Mughal architecture.", 
             "image_url": "",
-            "images": [],
-            "latitude": 28.6562, "longitude": 77.2410
+            "images": []
         },
         {
             "name": "Hawa Mahal", 
             "description": "Palace of Winds with iconic honeycomb facade in Jaipur.", 
             "image_url": "",
-            "images": [],
-            "latitude": 26.9239, "longitude": 75.8267
+            "images": []
         },
         {
             "name": "Gateway of India", 
             "description": "Iconic arch monument in Mumbai overlooking Arabian Sea.", 
             "image_url": "",
-            "images": [],
-            "latitude": 18.9220, "longitude": 72.8347
+            "images": []
         },
         {
             "name": "Varanasi Ghats", 
             "description": "Sacred steps along the Ganges River, holiest city in Hinduism.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.3176, "longitude": 83.0103
+            "images": []
         },
         {
             "name": "Backwaters of Kerala", 
             "description": "Network of lagoons, lakes and canals in southern India.", 
             "image_url": "",
-            "images": [],
-            "latitude": 9.4981, "longitude": 76.3388
+            "images": []
         },
         {
             "name": "Mysore Palace", 
             "description": "Indo-Saracenic palace, former seat of Wodeyar dynasty.", 
             "image_url": "",
-            "images": [],
-            "latitude": 12.3052, "longitude": 76.6552
+            "images": []
         },
         {
             "name": "Ajanta & Ellora Caves", 
             "description": "Ancient rock-cut cave temples with intricate carvings.", 
             "image_url": "",
-            "images": [],
-            "latitude": 20.5519, "longitude": 75.7033
+            "images": []
         },
     ],
     "brazil": [
@@ -1264,71 +1114,61 @@ LANDMARKS_DATA = {
             "name": "Christ the Redeemer", 
             "description": "Iconic 30-meter statue overlooking Rio de Janeiro.", 
             "image_url": "",
-            "images": [],
-            "latitude": -22.9519, "longitude": -43.2105
+            "images": []
         },
         {
             "name": "Sugarloaf Mountain", 
             "description": "Cable car to granite peak with panoramic Rio views.", 
             "image_url": "",
-            "images": [],
-            "latitude": -22.9486, "longitude": -43.1566
+            "images": []
         },
         {
             "name": "Iguazu Falls", 
             "description": "Massive waterfalls system on Argentina-Brazil border.", 
             "image_url": "",
-            "images": [],
-            "latitude": -25.6953, "longitude": -54.4367
+            "images": []
         },
         {
             "name": "Copacabana Beach", 
             "description": "Famous 4km beach in Rio de Janeiro.", 
             "image_url": "",
-            "images": [],
-            "latitude": -22.9711, "longitude": -43.1822
+            "images": []
         },
         {
             "name": "Amazon Rainforest", 
             "description": "World's largest tropical rainforest, biodiversity hotspot.", 
             "image_url": "",
-            "images": [],
-            "latitude": -3.4653, "longitude": -62.2159
+            "images": []
         },
         {
             "name": "Pelourinho", 
             "description": "Historic colonial center of Salvador with colorful buildings.", 
             "image_url": "",
-            "images": [],
-            "latitude": -12.9718, "longitude": -38.5108
+            "images": []
         },
         {
             "name": "Lençóis Maranhenses", 
             "description": "White sand dunes with crystal turquoise lagoons.", 
             "image_url": "",
-            "images": [],
-            "latitude": -2.4858, "longitude": -43.1289
+            "images": []
         },
         {
             "name": "Fernando de Noronha", 
             "description": "Remote archipelago with pristine beaches and marine life.", 
             "image_url": "",
-            "images": [],
-            "latitude": -3.8540, "longitude": -32.4268
+            "images": []
         },
         {
             "name": "Pantanal", 
             "description": "World's largest tropical wetland area, wildlife paradise.", 
             "image_url": "",
-            "images": [],
-            "latitude": -17.7304, "longitude": -57.4966
+            "images": []
         },
         {
             "name": "São Paulo Cathedral", 
             "description": "Neo-Gothic metropolitan cathedral in Brazil's largest city.", 
             "image_url": "",
-            "images": [],
-            "latitude": -23.5506, "longitude": -46.6333
+            "images": []
         },
     ],
     "mexico": [
@@ -1336,71 +1176,61 @@ LANDMARKS_DATA = {
             "name": "Chichen Itza", 
             "description": "Ancient Mayan city with iconic pyramid El Castillo.", 
             "image_url": "",
-            "images": [],
-            "latitude": 20.6843, "longitude": -88.5678
+            "images": []
         },
         {
             "name": "Teotihuacan", 
             "description": "Pyramid of the Sun and Moon near Mexico City.", 
             "image_url": "",
-            "images": [],
-            "latitude": 19.6925, "longitude": -98.8438
+            "images": []
         },
         {
             "name": "Tulum", 
             "description": "Mayan ruins on Caribbean cliffside with stunning beach.", 
             "image_url": "",
-            "images": [],
-            "latitude": 20.2114, "longitude": -87.4286
+            "images": []
         },
         {
             "name": "Palenque", 
             "description": "Ancient Mayan city in Chiapas jungle with pyramid temples.", 
             "image_url": "",
-            "images": [],
-            "latitude": 17.4840, "longitude": -92.0459
+            "images": []
         },
         {
             "name": "Frida Kahlo Museum", 
             "description": "Blue House in Mexico City, former home of iconic artist.", 
             "image_url": "",
-            "images": [],
-            "latitude": 19.3551, "longitude": -99.1622
+            "images": []
         },
         {
             "name": "Copper Canyon", 
             "description": "Series of canyons larger and deeper than Grand Canyon.", 
             "image_url": "",
-            "images": [],
-            "latitude": 27.4466, "longitude": -107.7263
+            "images": []
         },
         {
             "name": "Cabo San Lucas Arch", 
             "description": "Natural rock formation at Land's End where oceans meet.", 
             "image_url": "",
-            "images": [],
-            "latitude": 22.8733, "longitude": -109.8900
+            "images": []
         },
         {
             "name": "Cenotes of Yucatan", 
             "description": "Natural sinkholes with crystal-clear water for swimming.", 
             "image_url": "",
-            "images": [],
-            "latitude": 20.8440, "longitude": -87.7181
+            "images": []
         },
         {
             "name": "Zócalo", 
             "description": "Main square in Mexico City, one of world's largest plazas.", 
             "image_url": "",
-            "images": [],
-            "latitude": 19.4326, "longitude": -99.1332
+            "images": []
         },
         {
             "name": "Guadalajara Cathedral", 
             "description": "Twin-spired cathedral in historic center of Guadalajara.", 
             "image_url": "",
-            "images": [],
-            "latitude": 20.6797, "longitude": -103.3463
+            "images": []
         },
     ],
     "uae": [
@@ -1408,71 +1238,61 @@ LANDMARKS_DATA = {
             "name": "Burj Khalifa", 
             "description": "World's tallest building at 828 meters in Dubai.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.1972, "longitude": 55.2744
+            "images": []
         },
         {
             "name": "Sheikh Zayed Grand Mosque", 
             "description": "Stunning white marble mosque in Abu Dhabi, one of world's largest.", 
             "image_url": "",
-            "images": [],
-            "latitude": 24.4129, "longitude": 54.4747
+            "images": []
         },
         {
             "name": "Palm Jumeirah", 
             "description": "Artificial archipelago in shape of palm tree in Dubai.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.1124, "longitude": 55.1390
+            "images": []
         },
         {
             "name": "Burj Al Arab", 
             "description": "Luxury hotel on artificial island, iconic sail-shaped design.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.1413, "longitude": 55.1853
+            "images": []
         },
         {
             "name": "Dubai Mall", 
             "description": "World's largest shopping mall with aquarium and ice rink.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.1975, "longitude": 55.2796
+            "images": []
         },
         {
             "name": "Dubai Fountain", 
             "description": "World's largest choreographed fountain system.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.1952, "longitude": 55.2746
+            "images": []
         },
         {
             "name": "Desert Safari Dunes", 
             "description": "Red sand dunes of Arabian Desert, popular safari destination.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.0155, "longitude": 55.7215
+            "images": []
         },
         {
             "name": "Louvre Abu Dhabi", 
             "description": "Art and civilization museum with iconic dome architecture.", 
             "image_url": "",
-            "images": [],
-            "latitude": 24.5338, "longitude": 54.3984
+            "images": []
         },
         {
             "name": "Dubai Marina", 
             "description": "Canal city carved along Persian Gulf shoreline.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.0805, "longitude": 55.1400
+            "images": []
         },
         {
             "name": "Al Fahidi Historical District", 
             "description": "Heritage village with traditional wind-tower architecture.", 
             "image_url": "",
-            "images": [],
-            "latitude": 25.2631, "longitude": 55.2972
+            "images": []
         },
     ],
     "germany": [
@@ -1480,71 +1300,61 @@ LANDMARKS_DATA = {
             "name": "Neuschwanstein Castle", 
             "description": "Fairytale castle that inspired Disney's Sleeping Beauty Castle.", 
             "image_url": "",
-            "images": [],
-            "latitude": 47.5576, "longitude": 10.7498
+            "images": []
         },
         {
             "name": "Brandenburg Gate", 
             "description": "Iconic 18th-century neoclassical monument in Berlin.", 
             "image_url": "",
-            "images": [],
-            "latitude": 52.5163, "longitude": 13.3777
+            "images": []
         },
         {
             "name": "Cologne Cathedral", 
             "description": "Gothic masterpiece, tallest twin-spired church in world.", 
             "image_url": "",
-            "images": [],
-            "latitude": 50.9413, "longitude": 6.9582
+            "images": []
         },
         {
             "name": "Reichstag Building", 
             "description": "German parliament with modern glass dome offering city views.", 
             "image_url": "",
-            "images": [],
-            "latitude": 52.5186, "longitude": 13.3761
+            "images": []
         },
         {
             "name": "Heidelberg Castle", 
             "description": "Romantic castle ruins overlooking Neckar River and old town.", 
             "image_url": "",
-            "images": [],
-            "latitude": 49.4107, "longitude": 8.7157
+            "images": []
         },
         {
             "name": "Black Forest", 
             "description": "Scenic mountainous region with dense forests and cuckoo clocks.", 
             "image_url": "",
-            "images": [],
-            "latitude": 48.1363, "longitude": 8.2069
+            "images": []
         },
         {
             "name": "Romantic Road", 
             "description": "Scenic route through medieval towns and fairytale castles.", 
             "image_url": "",
-            "images": [],
-            "latitude": 49.0419, "longitude": 10.9010
+            "images": []
         },
         {
             "name": "Berlin Wall Memorial", 
             "description": "Preserved sections of the Cold War barrier dividing East and West.", 
             "image_url": "",
-            "images": [],
-            "latitude": 52.5351, "longitude": 13.3903
+            "images": []
         },
         {
             "name": "Oktoberfest Grounds", 
             "description": "World's largest folk festival held annually in Munich.", 
             "image_url": "",
-            "images": [],
-            "latitude": 48.1315, "longitude": 11.5497
+            "images": []
         },
         {
             "name": "Miniatur Wunderland", 
             "description": "World's largest model railway exhibition in Hamburg.", 
             "image_url": "",
-            "images": [],
-            "latitude": 53.5439, "longitude": 9.9886
+            "images": []
         },
     ],
     "canada": [
@@ -1552,71 +1362,61 @@ LANDMARKS_DATA = {
             "name": "Niagara Falls", 
             "description": "Powerful waterfalls on Canada-US border, boat tours available.", 
             "image_url": "",
-            "images": [],
-            "latitude": 43.0896, "longitude": -79.0849
+            "images": []
         },
         {
             "name": "Banff National Park", 
             "description": "Stunning Rocky Mountain scenery with turquoise lakes.", 
             "image_url": "",
-            "images": [],
-            "latitude": 51.4968, "longitude": -115.9281
+            "images": []
         },
         {
             "name": "CN Tower", 
             "description": "Iconic 553-meter communications tower in Toronto.", 
             "image_url": "",
-            "images": [],
-            "latitude": 43.6426, "longitude": -79.3871
+            "images": []
         },
         {
             "name": "Old Quebec City", 
             "description": "Historic fortified colonial city, UNESCO World Heritage.", 
             "image_url": "",
-            "images": [],
-            "latitude": 46.8139, "longitude": -71.2080
+            "images": []
         },
         {
             "name": "Moraine Lake", 
             "description": "Glacially-fed lake with vibrant turquoise waters in Rockies.", 
             "image_url": "",
-            "images": [],
-            "latitude": 51.3318, "longitude": -116.1834
+            "images": []
         },
         {
             "name": "Butchart Gardens", 
             "description": "World-famous 55-acre gardens in Victoria, BC.", 
             "image_url": "",
-            "images": [],
-            "latitude": 48.5643, "longitude": -123.4673
+            "images": []
         },
         {
             "name": "Parliament Hill", 
             "description": "Gothic Revival complex housing Canadian government in Ottawa.", 
             "image_url": "",
-            "images": [],
-            "latitude": 45.4236, "longitude": -75.7009
+            "images": []
         },
         {
             "name": "Whistler", 
             "description": "Premier ski resort in Coast Mountains of British Columbia.", 
             "image_url": "",
-            "images": [],
-            "latitude": 50.1163, "longitude": -122.9574
+            "images": []
         },
         {
             "name": "Bay of Fundy", 
             "description": "Home to the highest tides in the world, up to 16 meters.", 
             "image_url": "",
-            "images": [],
-            "latitude": 45.1367, "longitude": -66.0497
+            "images": []
         },
         {
             "name": "Northern Lights Yukon", 
             "description": "Prime aurora borealis viewing destination in northern Canada.", 
             "image_url": "",
-            "images": [],
-            "latitude": 64.2823, "longitude": -135.0000
+            "images": []
         },
     ],
     "south_africa": [
@@ -1624,71 +1424,61 @@ LANDMARKS_DATA = {
             "name": "Table Mountain", 
             "description": "Flat-topped mountain overlooking Cape Town, cable car access.", 
             "image_url": "",
-            "images": [],
-            "latitude": -33.9628, "longitude": 18.4098
+            "images": []
         },
         {
             "name": "Kruger National Park", 
             "description": "Premier safari destination for viewing Big Five wildlife.", 
             "image_url": "",
-            "images": [],
-            "latitude": -23.9884, "longitude": 31.5547
+            "images": []
         },
         {
             "name": "Robben Island", 
             "description": "Former prison where Nelson Mandela was held for 18 years.", 
             "image_url": "",
-            "images": [],
-            "latitude": -33.8070, "longitude": 18.3710
+            "images": []
         },
         {
             "name": "Cape of Good Hope", 
             "description": "Dramatic headland at Africa's southwestern tip.", 
             "image_url": "",
-            "images": [],
-            "latitude": -34.3567, "longitude": 18.4966
+            "images": []
         },
         {
             "name": "Victoria & Alfred Waterfront", 
             "description": "Historic harbor and shopping area in Cape Town.", 
             "image_url": "",
-            "images": [],
-            "latitude": -33.9025, "longitude": 18.4187
+            "images": []
         },
         {
             "name": "Garden Route", 
             "description": "Scenic 300km coastal stretch with forests and lagoons.", 
             "image_url": "",
-            "images": [],
-            "latitude": -33.9649, "longitude": 22.4577
+            "images": []
         },
         {
             "name": "Blyde River Canyon", 
             "description": "One of world's largest green canyons with dramatic views.", 
             "image_url": "",
-            "images": [],
-            "latitude": -24.5597, "longitude": 30.7975
+            "images": []
         },
         {
             "name": "Boulder's Beach", 
             "description": "Beach home to colony of endangered African penguins.", 
             "image_url": "",
-            "images": [],
-            "latitude": -34.1975, "longitude": 18.4503
+            "images": []
         },
         {
             "name": "Apartheid Museum", 
             "description": "Moving museum documenting South Africa's apartheid history.", 
             "image_url": "",
-            "images": [],
-            "latitude": -26.2353, "longitude": 27.9759
+            "images": []
         },
         {
             "name": "Drakensberg Mountains", 
             "description": "Highest mountain range in South Africa with hiking trails.", 
             "image_url": "",
-            "images": [],
-            "latitude": -28.7500, "longitude": 29.2500
+            "images": []
         },
     ],
 }
@@ -1728,8 +1518,8 @@ async def seed_database():
                 "best_time_to_visit": landmark.get("best_time_to_visit", "Year-round"),
                 "duration": landmark.get("duration", "2-3 hours"),
                 "difficulty": landmark.get("difficulty", "Easy"),
-                "latitude": landmark.get("latitude"),
-                "longitude": landmark.get("longitude"),
+                "latitude": None,
+                "longitude": None,
                 "points": 10,
                 "upvotes": 0,
                 "created_by": None,

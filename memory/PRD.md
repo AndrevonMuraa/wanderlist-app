@@ -29,6 +29,7 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 ### CRITICAL NOTES FOR FUTURE AGENTS
 - **ALWAYS check the actual DATABASE** for current state, not seed files
 - **NO pre-filled images**: Landmarks and countries do NOT have stock/placeholder images. All images come from user-uploaded visit photos. Do NOT add Unsplash or stock URLs.
+- **NO coordinates**: Landmarks do NOT have latitude/longitude. Do NOT add coordinates to seed data or DB.
 - **Continent naming**: DB stores "Oceania". Frontend displays "Oceania" with subtitle "& other island paradises" on the card. Explore-countries page shows "Oceania and other Island Paradises" as section header.
 - **Continent mapping**: DB "Americas" → frontend apiName "Americas". DB "Oceania" → frontend apiName "Oceania"
 - **Oceania sorting**: Geographic Oceania countries appear first (Australia, NZ, Fiji, etc.), followed by transferred island paradises (Maldives, Hawaii, Seychelles, etc.)
@@ -80,7 +81,7 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 
 ## DB Schema (Key Fields)
 - **countries**: `country_id`, `name`, `continent` (Europe/Asia/Africa/Americas/Oceania). No image_url.
-- **landmarks**: `landmark_id`, `country_id`, `continent`, `category` (official/premium), `points`. No pre-filled image_url.
+- **landmarks**: `landmark_id`, `country_id`, `continent`, `category` (official/premium), `points`. No pre-filled image_url. No coordinates.
 - **visits**: `user_id`, `landmark_id`, `points_earned`, `photo_url` (user-uploaded)
 - **country_visits**: `user_id`, `country_id`, `points_earned`
 - **users**: `points`, `leaderboard_points`, `default_privacy`, `subscription_tier`
