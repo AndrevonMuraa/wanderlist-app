@@ -220,17 +220,20 @@ async def get_landmark(landmark_id: str, current_user: User = Depends(get_curren
 
 @router.get("/landmarks/search/query")
 async def search_landmarks(q: str, limit: int = 50, current_user: User = Depends(get_current_user)):
-    """Search landmarks by name across all countries"""
+    """Search landmarks by name or country name across all countries and categories"""
     if not q or len(q.strip()) < 2:
         return []
     
-    # Search by name (case-insensitive, partial match)
+    # Search by landmark name OR country name (case-insensitive, partial match)
     landmarks = await db.landmarks.find(
         {
-            "name": {"$regex": q, "$options": "i"}
+            "$or": [
+                {"name": {"$regex": q, "$options": "i"}},
+                {"country_name": {"$regex": q, "$options": "i"}}
+            ]
         },
         {"_id": 0}
-    ).limit(limit).to_list(limit)
+    ).sort("category", 1).limit(limit).to_list(limit)
     
     return landmarks
 
