@@ -14,16 +14,12 @@ import theme, { gradients } from '../styles/theme';
 import { CountryCardSkeleton } from '../components/Skeleton';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
+import {
+  getFlagUrl, CONTINENT_ICON_NAMES, CONTINENT_DESCRIPTIONS,
+  OCEANIA_GEOGRAPHIC, Country, ContinentSection,
+} from '../utils/countryConfig';
 
 const { width } = Dimensions.get('window');
-// Responsive grid: mobile (2 cols), tablet (3 cols), desktop (4 cols)
-const getColumns = () => {
-  if (width >= 1200) return 4; // Desktop
-  if (width >= 768) return 3;  // Tablet
-  return 2; // Mobile
-};
-const COLUMNS = getColumns();
-const CARD_WIDTH = (width - (16 * (COLUMNS + 1))) / COLUMNS; // Dynamic width with spacing
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
@@ -34,151 +30,9 @@ const getToken = async (): Promise<string | null> => {
   }
 };
 
-interface Country {
-  country_id: string;
-  name: string;
-  continent: string;
-  landmark_count: number;
-  total_points: number; // Total available points (official*10 + premium*25)
-  visited?: number; // Progress data (landmarks visited)
-  percentage?: number;
-  countryVisited?: boolean; // Whether the country itself is marked as visited
-}
-
-interface ContinentSection {
-  continent: string;
-  data: Country[][];
-}
-
 // ISO 3166-1 alpha-2 country codes for flag CDN
-const COUNTRY_FLAG_CODES: Record<string, string> = {
-  // Europe (20)
-  'France': 'fr',
-  'Italy': 'it',
-  'Spain': 'es',
-  'United Kingdom': 'gb',
-  'Germany': 'de',
-  'Greece': 'gr',
-  'Norway': 'no',
-  'Switzerland': 'ch',
-  'Netherlands': 'nl',
-  'Portugal': 'pt',
-  'Sweden': 'se',
-  'Denmark': 'dk',
-  'Iceland': 'is',
-  'Croatia': 'hr',
-  'Austria': 'at',
-  'Finland': 'fi',
-  'Turkey': 'tr',
-  'Ireland': 'ie',
-  'Hungary': 'hu',
-  'Czech Republic': 'cz',
-  // Asia (20)
-  'Japan': 'jp',
-  'China': 'cn',
-  'Thailand': 'th',
-  'India': 'in',
-  'Singapore': 'sg',
-  'Indonesia': 'id',
-  'South Korea': 'kr',
-  'Vietnam': 'vn',
-  'Malaysia': 'my',
-  'Cambodia': 'kh',
-  'Nepal': 'np',
-  'Philippines': 'ph',
-  'Sri Lanka': 'lk',
-  'Taiwan': 'tw',
-  'Laos': 'la',
-  'Mongolia': 'mn',
-  'Bhutan': 'bt',
-  'Georgia': 'ge',
-  'Uzbekistan': 'uz',
-  'Kyrgyzstan': 'kg',
-  // Africa (20)
-  'Egypt': 'eg',
-  'Morocco': 'ma',
-  'South Africa': 'za',
-  'Kenya': 'ke',
-  'Tanzania': 'tz',
-  'Botswana': 'bw',
-  'Namibia': 'na',
-  'Tunisia': 'tn',
-  'Ghana': 'gh',
-  'Rwanda': 'rw',
-  'Uganda': 'ug',
-  'Ethiopia': 'et',
-  'Senegal': 'sn',
-  'Zimbabwe': 'zw',
-  'Zambia': 'zm',
-  'Mozambique': 'mz',
-  'Ivory Coast': 'ci',
-  'Malawi': 'mw',
-  'Lesotho': 'ls',
-  'Eswatini': 'sz',
-  // Americas (20)
-  'United States': 'us',
-  'Canada': 'ca',
-  'Mexico': 'mx',
-  'Brazil': 'br',
-  'Peru': 'pe',
-  'Argentina': 'ar',
-  'Chile': 'cl',
-  'Colombia': 'co',
-  'Ecuador': 'ec',
-  'Costa Rica': 'cr',
-  'Cuba': 'cu',
-  'Jamaica': 'jm',
-  'Bahamas': 'bs',
-  'Barbados': 'bb',
-  'Dominican Republic': 'do',
-  'Panama': 'pa',
-  'Uruguay': 'uy',
-  'Bolivia': 'bo',
-  'Belize': 'bz',
-  'Saint Lucia': 'lc',
-  // Oceania & Island Paradises (20)
-  'Australia': 'au',
-  'New Zealand': 'nz',
-  'Fiji': 'fj',
-  'French Polynesia': 'pf',
-  'Cook Islands': 'ck',
-  'Samoa': 'ws',
-  'Vanuatu': 'vu',
-  'Maldives': 'mv',
-  'Mauritius': 'mu',
-  'Seychelles': 'sc',
-  'Hawaii': 'us-hi',
-  'Madagascar': 'mg',
-  'Cape Verde': 'cv',
-  'Papua New Guinea': 'pg',
-  'Palau': 'pw',
-  'Solomon Islands': 'sb',
-  'New Caledonia': 'nc',
-  'Guam': 'gu',
-  'Comoros': 'km',
-  'Reunion': 're',
-};
-
 // Helper function to get flag URL
-const getFlagUrl = (countryName: string): string => {
-  const code = COUNTRY_FLAG_CODES[countryName];
-  if (!code) return '';
-  // Using flagcdn.com for high-quality flag images
-  return `https://flagcdn.com/w320/${code}.png`;
-};
-
 // Continent icons - using Ionicons names to match Journey page
-const CONTINENT_ICON_NAMES: Record<string, string> = {
-  'Africa': 'sunny-outline',
-  'Asia': 'earth-outline',
-  'Europe': 'business-outline',
-  'North America': 'leaf-outline',
-  'South America': 'leaf-outline',
-  'Americas': 'leaf-outline',
-  'Oceania': 'water-outline',
-  'Oceania and other Island Paradises': 'water-outline',
-};
-
 export default function ExploreCountriesScreen() {
   const { user } = useAuth();
   const { continent } = useLocalSearchParams();
@@ -251,13 +105,6 @@ export default function ExploreCountriesScreen() {
           }
           continentMap.get(country.continent)!.push(country);
         });
-
-        // Countries that are geographically in Oceania
-        const OCEANIA_GEOGRAPHIC = new Set([
-          'australia', 'new_zealand', 'fiji', 'french_polynesia', 
-          'cook_islands', 'samoa', 'vanuatu', 'papua_new_guinea', 
-          'palau', 'solomon_islands', 'new_caledonia',
-        ]);
 
         // Create sections with rows (2 countries per row)
         // For Oceania: sort geographic Oceania first, then island paradises, but keep as ONE section
@@ -409,21 +256,8 @@ export default function ExploreCountriesScreen() {
   };
 
   const renderSectionHeader = ({ section }: { section: ContinentSection }) => {
-    // Flatten rows to get all countries for calculations
     const allCountries = section.data.flat();
     const totalLandmarks = allCountries.reduce((sum, country) => sum + country.landmark_count, 0);
-    
-    // Continent descriptions for visual richness
-    const continentDescriptions: { [key: string]: string } = {
-      'Europe': 'Rich history and diverse cultures await',
-      'Asia': 'Ancient traditions meet modern wonders',
-      'Africa': 'Wildlife, deserts, and vibrant cultures',
-      'North America': 'Natural beauty and urban adventures',
-      'South America': 'Rainforests, mountains, and ancient ruins',
-      'Americas': 'Natural beauty and ancient civilizations',
-      'Oceania': 'Pacific islands and coral reefs',
-      'Oceania and other Island Paradises': 'Pacific islands, tropical gems and coral reefs',
-    };
     
     return (
       <View style={styles.sectionHeaderContainer}>
