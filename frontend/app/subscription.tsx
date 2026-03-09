@@ -305,21 +305,21 @@ export default function SubscriptionScreen() {
           
           <Surface style={styles.featuresCard}>
             <Text style={styles.tierLabel}>Free</Text>
-            <FeatureRow icon="flag" text="700+ Official Landmarks" included />
+            <FeatureRow icon="flag" text="1,000 Official Landmarks" included />
             <FeatureRow icon="camera" text="1 Photo per Visit" included />
             <FeatureRow icon="people" text="5 Friends Maximum" included />
             <FeatureRow icon="trophy" text="Leaderboard & Rankings" included />
             <FeatureRow icon="ribbon" text="Basic Badges (up to 100 visits)" included />
             <FeatureRow icon="images" text="Community Photo Preview" included />
             <FeatureRow icon="star" text="Photo of the Week" included />
+            <FeatureRow icon="heart" text="Photo Upvoting" included />
             <View style={styles.divider} />
             <Text style={[styles.tierLabel, styles.tierLabelPro]}>+ Pro Features</Text>
-            <FeatureRow icon="diamond" text="93 Premium Landmarks" included={isPro || false} highlight />
+            <FeatureRow icon="diamond" text="500 Premium Landmarks" included={isPro || false} highlight />
             <FeatureRow icon="images" text="10 Photos per Visit" included={isPro || false} highlight />
             <FeatureRow icon="people" text="Unlimited Friends" included={isPro || false} highlight />
             <FeatureRow icon="airplane" text="Custom Visits Feature" included={isPro || false} highlight />
             <FeatureRow icon="earth" text="Full Community Gallery" included={isPro || false} highlight />
-            <FeatureRow icon="heart" text="Photo Upvoting" included={isPro || false} highlight />
             <FeatureRow icon="book" text="Travel Diary Access" included={isPro || false} highlight />
             <FeatureRow icon="chatbubbles" text="Direct Messaging" included={isPro || false} highlight />
             <FeatureRow icon="share-social" text="Share in Community Feed" included={isPro || false} highlight />
