@@ -300,7 +300,7 @@ export default function AboutScreen() {
                     • Premium Landmarks: 25 pts{'\n'}
                     • Country Visit: 50 pts{'\n'}
                     • New Country Bonus: +20 pts{'\n'}
-                    • New Continent Bonus: +50 pts{'\n'}
+                    • Continent Completion Bonus: +200 pts{'\n'}
                     • Country Completion: +50 pts{'\n'}
                     • Continent Completion: +200 pts{'\n\n'}
                     <Text style={styles.bold}>Unverified Points</Text> (without photos):{'\n'}
@@ -388,7 +388,7 @@ export default function AboutScreen() {
 • Premium Landmarks: 25 points
 • Country Visit: 50 points
 • New Country Bonus: +20 points (first landmark)
-• New Continent Bonus: +50 points (first country)
+• Continent Completion Bonus: +200 points
 • Country Completion: +50 bonus points
 • Continent Completion: +200 bonus points
 

@@ -180,7 +180,7 @@ export default function AnalyticsScreen() {
               size={140}
               strokeWidth={12}
               label="Continents"
-              sublabel={`${analytics.continentsVisited}/5`}
+              sublabel={`${analytics.continentsVisited}`}
             />
           </View>
 
