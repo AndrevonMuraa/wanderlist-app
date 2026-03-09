@@ -518,11 +518,23 @@ export default function JourneyScreen() {
 
         <View style={styles.bottomSpacer} />
         <View ref={customVisitsRef}>
-        <Surface style={[styles.customVisitsCard, { backgroundColor: colors.surface }]}>
-          <View style={styles.customVisitsHeader}>
-            <View style={styles.customVisitsHeaderLeft}>
-              <Ionicons name="globe-outline" size={24} color={colors.accentTeal} />
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Custom Visits</Text>
+        <TouchableOpacity 
+          style={[styles.navRow, { backgroundColor: colors.surface }]}
+          onPress={() => {
+            if (canCreateCustomVisits) {
+              router.push('/custom-visits');
+            } else {
+              setShowProLock(true);
+            }
+          }}
+          activeOpacity={0.7}
+        >
+          <View style={[styles.navRowIcon, { backgroundColor: colors.accentTeal + '15' }]}>
+            <Ionicons name="globe-outline" size={22} color={colors.accentTeal} />
+          </View>
+          <View style={styles.navRowText}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Text style={[styles.navRowTitle, { color: colors.text }]}>Custom Visits</Text>
               {!canCreateCustomVisits && (
                 <View style={[styles.proBadge, { backgroundColor: colors.accentTeal + '15' }]}>
                   <Ionicons name="diamond" size={12} color={colors.accentTeal} />
@@ -530,143 +542,14 @@ export default function JourneyScreen() {
                 </View>
               )}
             </View>
-            <TouchableOpacity
-              style={[
-                styles.addCustomButton, 
-                { backgroundColor: colors.primaryLight + '20' },
-                !canCreateCustomVisits && { backgroundColor: colors.accentTeal + '15' }
-              ]}
-              onPress={() => {
-                if (canCreateCustomVisits) {
-                  setShowCustomVisitModal(true);
-                } else {
-                  setShowProLock(true);
-                }
-              }}
-              activeOpacity={0.8}
-            >
-              <Ionicons 
-                name={canCreateCustomVisits ? "add-circle" : "lock-closed"} 
-                size={20} 
-                color={canCreateCustomVisits ? colors.primary : colors.accentTeal} 
-              />
-              <Text style={[
-                styles.addCustomButtonText, 
-                { color: canCreateCustomVisits ? colors.primary : colors.accentTeal }
-              ]}>
-                {canCreateCustomVisits ? "Add Visit" : "Unlock"}
-              </Text>
-            </TouchableOpacity>
+            <Text style={[styles.navRowSubtitle, { color: colors.textLight }]}>
+              {userCreatedVisits.length > 0 
+                ? `${userCreatedVisits.length} custom visit${userCreatedVisits.length !== 1 ? 's' : ''} recorded`
+                : 'Record visits to places not in our database'}
+            </Text>
           </View>
-          
-          <Text style={[styles.customVisitsDescription, { color: colors.textLight }]}>
-            {canCreateCustomVisits 
-              ? "Record visits to places not in our database" 
-              : "Upgrade to Pro to record visits to any destination worldwide"}
-          </Text>
-
-          {!canCreateCustomVisits ? (
-            <TouchableOpacity 
-              style={[styles.emptyCustomVisitsLocked, { borderColor: colors.accentTeal + '40', backgroundColor: colors.accentTeal + '08' }]}
-              onPress={() => setShowProLock(true)}
-              activeOpacity={0.8}
-            >
-              <View style={[styles.lockIconContainer, { backgroundColor: colors.accentTeal + '15' }]}>
-                <Ionicons name="lock-closed" size={36} color={colors.accentTeal} />
-              </View>
-              <Text style={[styles.emptyCustomTextLocked, { color: colors.accentTeal }]}>Pro Feature</Text>
-              <Text style={[styles.emptyCustomSubtextLocked, { color: colors.textLight }]}>Tap to learn more about Custom Visits</Text>
-            </TouchableOpacity>
-          ) : userCreatedVisits.length === 0 ? (
-            <TouchableOpacity 
-              style={[styles.emptyCustomVisits, { borderColor: colors.border }]}
-              onPress={() => setShowCustomVisitModal(true)}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="airplane-outline" size={40} color={colors.textLight} />
-              <Text style={[styles.emptyCustomText, { color: colors.textLight }]}>No custom visits yet</Text>
-              <Text style={[styles.emptyCustomSubtext, { color: colors.textLight }]}>Tap to add your first custom visit!</Text>
-            </TouchableOpacity>
-          ) : (
-            <>
-              {userCreatedVisits.slice(0, 5).map((visit) => {
-                // Get landmarks info
-                const landmarkNames = visit.landmarks?.map(lm => 
-                  typeof lm === 'string' ? lm : lm.name
-                ).filter(Boolean) || [];
-                const hasLandmarks = landmarkNames.length > 0;
-                const landmarkPhotosCount = visit.landmarks?.filter(lm => 
-                  typeof lm === 'object' && lm.photo
-                ).length || 0;
-                const totalPhotos = (visit.photos?.length || 0) + landmarkPhotosCount;
-                
-                // Build display text
-                let displayName = visit.country_name;
-                let displaySubtext = '';
-                
-                if (hasLandmarks) {
-                  if (landmarkNames.length === 1) {
-                    displayName = landmarkNames[0];
-                    displaySubtext = visit.country_name;
-                  } else {
-                    displayName = `${landmarkNames.length} places in ${visit.country_name}`;
-                    displaySubtext = landmarkNames.slice(0, 2).join(', ') + (landmarkNames.length > 2 ? '...' : '');
-                  }
-                }
-                
-                return (
-                  <TouchableOpacity
-                    key={visit.user_created_visit_id}
-                    style={[styles.customVisitItem, { borderBottomColor: colors.border }]}
-                    onPress={() => router.push(`/custom-visit-detail/${visit.user_created_visit_id}`)}
-                    activeOpacity={0.7}
-                  >
-                    <View style={[styles.customVisitIcon, { backgroundColor: colors.accentTeal + '20' }]}>
-                      <Ionicons 
-                        name={hasLandmarks ? "location" : "flag"} 
-                        size={20} 
-                        color={colors.accentTeal} 
-                      />
-                    </View>
-                    <View style={styles.customVisitInfo}>
-                      <Text style={[styles.customVisitName, { color: colors.text }]} numberOfLines={1}>
-                        {displayName}
-                      </Text>
-                      <Text style={[styles.customVisitCountry, { color: colors.textLight }]} numberOfLines={1}>
-                        {displaySubtext ? `${displaySubtext} • ` : ''}
-                        {new Date(visit.visited_at).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric'
-                        })}
-                      </Text>
-                    </View>
-                    <View style={styles.customVisitMeta}>
-                      {totalPhotos > 0 && (
-                        <View style={[styles.photoCountBadge, { backgroundColor: colors.surfaceTinted }]}>
-                          <Ionicons name="images-outline" size={14} color={colors.textLight} />
-                          <Text style={[styles.photoCountText, { color: colors.textLight }]}>{totalPhotos}</Text>
-                        </View>
-                      )}
-                      <Ionicons name="chevron-forward" size={16} color={colors.textLight} />
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
-              {userCreatedVisits.length > 5 && (
-                <TouchableOpacity
-                  onPress={() => router.push({ pathname: '/(tabs)/journey', params: { scrollTo: 'custom-visits', showAll: 'true' } })}
-                  style={styles.viewMoreBtn}
-                >
-                  <Text style={[styles.viewMoreText, { color: colors.primary }]}>
-                    View all {userCreatedVisits.length} custom visits
-                  </Text>
-                  <Ionicons name="chevron-forward" size={16} color={colors.primary} />
-                </TouchableOpacity>
-              )}
-            </>
-          )}
-        </Surface>
+          <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
+        </TouchableOpacity>
         </View>
 
         <View style={styles.bottomSpacer} />
@@ -1095,6 +978,33 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
     overflow: 'hidden',
+  },
+  navRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.xl,
+    marginBottom: theme.spacing.md,
+    ...theme.shadows.sm,
+  },
+  navRowIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: theme.spacing.md,
+  },
+  navRowText: {
+    flex: 1,
+  },
+  navRowTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  navRowSubtitle: {
+    fontSize: 13,
+    marginTop: 2,
   },
   countryVisitsRow: {
     flexDirection: 'row',
