@@ -258,7 +258,8 @@ export default function JourneyScreen() {
         {stats && progressStats && (
           <Surface style={[styles.statsCard, { backgroundColor: colors.surface }]}>
             <View style={styles.statsHeader}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('journey.yourStats')}</Text>
+              <View style={{ width: 32 }} />
+              <Text style={[styles.sectionTitle, { color: colors.text, textAlign: 'center' }]}>{t('journey.yourStats')}</Text>
               <TouchableOpacity
                 onPress={() => setShowShareJourney(true)}
                 activeOpacity={0.7}
@@ -348,7 +349,7 @@ export default function JourneyScreen() {
         {/* Overall Progress */}
         {progressStats && (
           <Surface style={[styles.progressCard, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('journey.overallProgress')}</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text, textAlign: 'center' }]}>{t('journey.overallProgress')}</Text>
             <View style={styles.progressContainer}>
               <CircularProgress
                 percentage={progressStats.overall.percentage}
