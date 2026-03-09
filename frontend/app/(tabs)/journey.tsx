@@ -296,7 +296,7 @@ export default function JourneyScreen() {
               >
                 <Ionicons name="star" size={20} color={colors.accentYellow} />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.totalPoints || 0}</Text>
-                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.points')}</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Total Points</Text>
               </TouchableOpacity>
 
               <TouchableOpacity 
