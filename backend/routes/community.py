@@ -731,9 +731,7 @@ async def get_country_community_highlights(
 
 @router.post("/community-photos/{photo_id}/upvote")
 async def upvote_community_photo(photo_id: str, current_user: User = Depends(get_current_user)):
-    """Toggle upvote on a community photo. Premium only."""
-    if current_user.subscription_tier != "pro":
-        raise HTTPException(status_code=403, detail="Premium subscription required to upvote photos")
+    """Toggle upvote on a community photo. Available to all users."""
     
     existing = await db.photo_upvotes.find_one({
         "photo_id": photo_id,

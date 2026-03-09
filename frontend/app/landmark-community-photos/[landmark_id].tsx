@@ -73,10 +73,6 @@ export default function LandmarkCommunityPhotosScreen() {
   };
 
   const handleUpvote = async (photoId: string) => {
-    if (!isPremium) {
-      Alert.alert('Premium Feature', 'Upgrade to WanderMark Pro to upvote community photos!');
-      return;
-    }
     try {
       const token = await getToken();
       const response = await fetch(
@@ -173,7 +169,7 @@ export default function LandmarkCommunityPhotosScreen() {
             : 'Unlock Full Gallery'}
         </Text>
         <Text style={styles.upgradeSubtitle}>
-          Upgrade to Premium to see all community photos and upvote your favorites
+          Upgrade to Premium to see all community photos
         </Text>
         <TouchableOpacity style={styles.upgradeButton} data-testid="upgrade-button">
           <Text style={styles.upgradeButtonText}>Upgrade to Pro</Text>
