@@ -92,7 +92,7 @@ export default function UserLandmarksScreen() {
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#6200ee" />
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
   }
@@ -110,7 +110,7 @@ export default function UserLandmarksScreen() {
       </View>
 
       <View style={styles.infoCard}>
-        <Ionicons name="information-circle" size={20} color="#6200ee" />
+        <Ionicons name="information-circle" size={20} color={theme.colors.primary} />
         <Text style={styles.infoText}>
           These landmarks are suggested by the community. Upvote your favorites!
         </Text>
