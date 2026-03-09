@@ -521,7 +521,7 @@ export default function JourneyScreen() {
         <Surface style={[styles.customVisitsCard, { backgroundColor: colors.surface }]}>
           <View style={styles.customVisitsHeader}>
             <View style={styles.customVisitsHeaderLeft}>
-              <Ionicons name="globe-outline" size={24} color={colors.accent} />
+              <Ionicons name="globe-outline" size={24} color={colors.accentTeal} />
               <Text style={[styles.sectionTitle, { color: colors.text }]}>Custom Visits</Text>
               {!canCreateCustomVisits && (
                 <View style={[styles.proBadge, { backgroundColor: colors.accentTeal + '15' }]}>
@@ -621,11 +621,11 @@ export default function JourneyScreen() {
                     onPress={() => router.push(`/custom-visit-detail/${visit.user_created_visit_id}`)}
                     activeOpacity={0.7}
                   >
-                    <View style={[styles.customVisitIcon, { backgroundColor: colors.accent + '20' }]}>
+                    <View style={[styles.customVisitIcon, { backgroundColor: colors.accentTeal + '20' }]}>
                       <Ionicons 
                         name={hasLandmarks ? "location" : "flag"} 
                         size={20} 
-                        color={colors.accent} 
+                        color={colors.accentTeal} 
                       />
                     </View>
                     <View style={styles.customVisitInfo}>
