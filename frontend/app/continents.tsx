@@ -119,6 +119,7 @@ export default function ContinentsScreen() {
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
   const [photoOfTheWeek, setPhotoOfTheWeek] = useState<any>(null);
+  const [potwWeek, setPotwWeek] = useState<number>(0);
   
   // All hooks must be called in consistent order
   const subscriptionData = useSubscription();
@@ -145,6 +146,7 @@ export default function ContinentsScreen() {
         const data = await response.json();
         if (data.photo) {
           setPhotoOfTheWeek(data.photo);
+          setPotwWeek(data.week || 0);
         }
       }
     } catch (error) {
@@ -346,7 +348,7 @@ export default function ContinentsScreen() {
           >
             <View style={styles.potwBadge}>
               <Ionicons name="trophy" size={14} color="#FFD700" />
-              <Text style={styles.potwBadgeText}>Photo of the Week</Text>
+              <Text style={styles.potwBadgeText}>Photo of the Week{potwWeek > 0 ? ` — Week ${potwWeek}` : ''}</Text>
             </View>
             <Image source={{ uri: photoOfTheWeek.photo_url }} style={styles.potwImage} resizeMode="cover" />
             <LinearGradient

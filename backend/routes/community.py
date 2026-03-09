@@ -172,37 +172,65 @@ async def get_community_feed(
 
 @router.get("/community-photos/photo-of-the-week")
 async def get_photo_of_the_week(current_user: User = Depends(get_current_user)):
-    """Get the most upvoted community photo from the last 7 days."""
-    seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+    """Get the most upvoted community photo for the current ISO week.
+    Fallback chain: current week → previous week → newest photo with upvotes."""
     
-    # Get all photo_upvotes from last 7 days, grouped by photo_id
-    pipeline = [
-        {"$match": {"created_at": {"$gte": seven_days_ago}}},
-        {"$group": {"_id": "$photo_id", "count": {"$sum": 1}}},
-        {"$sort": {"count": -1}},
-        {"$limit": 1}
-    ]
-    top_photos = await db.photo_upvotes.aggregate(pipeline).to_list(1)
+    now = datetime.now(timezone.utc)
+    iso_year, iso_week, _ = now.isocalendar()
     
-    if not top_photos:
-        # Fallback: get most upvoted photo overall
-        pipeline_all = [
+    # Calculate ISO week boundaries (Monday 00:00 to Sunday 23:59)
+    # Monday of current week
+    week_start = datetime.fromisocalendar(iso_year, iso_week, 1).replace(tzinfo=timezone.utc)
+    week_end = week_start + timedelta(days=7)
+    
+    # Previous week boundaries
+    prev_week_start = week_start - timedelta(days=7)
+    prev_iso_year, prev_iso_week, _ = prev_week_start.isocalendar()
+    
+    # Try current week first, then previous week
+    winner = None
+    display_week = iso_week
+    display_year = iso_year
+    
+    for start, end, w_num, w_year in [
+        (week_start, week_end, iso_week, iso_year),
+        (prev_week_start, week_start, prev_iso_week, prev_iso_year),
+    ]:
+        pipeline = [
+            {"$match": {"created_at": {"$gte": start, "$lt": end}}},
             {"$group": {"_id": "$photo_id", "count": {"$sum": 1}}},
             {"$sort": {"count": -1}},
             {"$limit": 1}
         ]
-        top_photos = await db.photo_upvotes.aggregate(pipeline_all).to_list(1)
+        top = await db.photo_upvotes.aggregate(pipeline).to_list(1)
+        if top:
+            winner = top[0]
+            display_week = w_num
+            display_year = w_year
+            break
     
-    if not top_photos:
-        return {"photo": None}
+    # Final fallback: newest public visit with a photo (no upvotes needed)
+    if not winner:
+        newest = await db.visits.find_one(
+            {"photos": {"$exists": True, "$ne": []}, "visibility": "public"},
+            {"_id": 0, "visit_id": 1, "photos": {"$slice": 1}},
+            sort=[("visited_at", -1)]
+        )
+        if newest:
+            winner = {"_id": f"{newest['visit_id']}_0", "count": 0}
+            display_week = iso_week
+            display_year = iso_year
     
-    photo_id = top_photos[0]["_id"]
-    upvote_count = top_photos[0]["count"]
+    if not winner:
+        return {"photo": None, "week": iso_week, "year": iso_year}
     
-    # Parse visit_id from photo_id (format: "visit_xxx_idx" or "cv_xxx_idx")
+    photo_id = winner["_id"]
+    upvote_count = winner["count"]
+    
+    # Parse visit_id from photo_id (format: "visit_xxx_0")
     parts = photo_id.rsplit("_", 1)
     if len(parts) != 2:
-        return {"photo": None}
+        return {"photo": None, "week": display_week, "year": display_year}
     
     visit_id_part = parts[0]
     photo_idx = int(parts[1]) if parts[1].isdigit() else 0
@@ -210,11 +238,11 @@ async def get_photo_of_the_week(current_user: User = Depends(get_current_user)):
     # Find the visit
     visit = await db.visits.find_one({"visit_id": visit_id_part}, {"_id": 0})
     if not visit:
-        return {"photo": None}
+        return {"photo": None, "week": display_week, "year": display_year}
     
     photos = visit.get("photos", [])
     if photo_idx >= len(photos):
-        return {"photo": None}
+        return {"photo": None, "week": display_week, "year": display_year}
     
     # Get user info
     user_info = await db.users.find_one(
@@ -240,7 +268,9 @@ async def get_photo_of_the_week(current_user: User = Depends(get_current_user)):
             "landmark_id": visit.get("landmark_id"),
             "country_name": landmark.get("country_name") if landmark else None,
             "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
-        }
+        },
+        "week": display_week,
+        "year": display_year,
     }
 
 @router.get("/landmarks/{landmark_id}/community-photos")
