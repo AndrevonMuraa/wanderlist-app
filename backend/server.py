@@ -4,7 +4,8 @@ import logging
 
 from utils.db import db, client, create_indexes
 from routes import (
-    auth, content, community, visits, admin, social,
+    auth, content, community, visits, admin,
+    leaderboard, friends, messages, stats, feed,
     collections, notifications, country_visits, photos,
     achievements, subscription, reports, push, legal, promo,
 )
@@ -33,7 +34,11 @@ api_router.include_router(content.router)
 api_router.include_router(community.router)
 api_router.include_router(visits.router)
 api_router.include_router(admin.router)
-api_router.include_router(social.router)
+api_router.include_router(leaderboard.router)
+api_router.include_router(friends.router)
+api_router.include_router(messages.router)
+api_router.include_router(stats.router)
+api_router.include_router(feed.router)
 api_router.include_router(collections.router)
 api_router.include_router(notifications.router)
 api_router.include_router(country_visits.router)
