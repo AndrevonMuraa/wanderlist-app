@@ -19,6 +19,7 @@ interface ShareJourneyCardProps {
     countries: number;
     continents: number;
     points: number;
+    verifiedPoints: number;
     rank?: number;
   };
   userName: string;
@@ -29,7 +30,7 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
   const [sharing, setSharing] = useState(false);
   const cardRef = useRef<View>(null);
 
-  const userRank = getUserRank(stats.points);
+  const userRank = getUserRank(stats.verifiedPoints);
 
   const handleShare = async () => {
     if (!cardRef.current) return;

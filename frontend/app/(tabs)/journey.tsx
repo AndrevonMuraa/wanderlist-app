@@ -693,11 +693,10 @@ export default function JourneyScreen() {
           onDismiss={() => setShowShareJourney(false)}
           stats={{
             landmarks: progressStats.overall.visited,
-            countries: Object.keys(progressStats.countries).filter(
-              cid => progressStats.countries[cid].visited > 0
-            ).length,
-            continents: Object.values(progressStats.continents).filter((c: any) => c.visited > 0).length,
+            countries: stats.countries_visited,
+            continents: stats.continents_visited,
             points: progressStats.totalPoints || 0,
+            verifiedPoints: progressStats.verifiedPoints || 0,
             rank: stats.rank,
           }}
           userName={user?.name || 'Traveler'}
