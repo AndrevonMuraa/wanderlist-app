@@ -64,11 +64,6 @@ PREMIUM_LANDMARKS = {
         {"name": "Isla Holbox", "description": "Car-free island paradise with bioluminescent waters and whale sharks.", "image_url": "", "points": 25},
         {"name": "San Miguel de Allende", "description": "Colonial-era city with baroque architecture and vibrant art scene.", "image_url": "", "points": 25},
     ],
-    "uae": [
-        {"name": "Dubai Frame", "description": "150-meter high frame offering panoramic views of old and new Dubai.", "image_url": "", "points": 25},
-        {"name": "Al Ain Oasis", "description": "Ancient oasis with 147,000 date palms and traditional irrigation system.", "image_url": "", "points": 25},
-        {"name": "Hajar Mountains", "description": "Dramatic mountain range with traditional villages and scenic wadis.", "image_url": "", "points": 25},
-    ],
     "germany": [
         {"name": "Rhine Valley", "description": "UNESCO site with castles, vineyards, and charming riverside villages.", "image_url": "", "points": 25},
     ],
@@ -88,10 +83,6 @@ PREMIUM_LANDMARKS = {
     ],
     "samoa": [
         {"name": "Papaseea Sliding Rocks", "description": "Natural water slides carved by centuries of flowing water through volcanic rock.", "image_url": "", "points": 25},
-    ],
-    "tonga": [
-        {"name": "Ha'atafu Beach", "description": "Pristine beach with excellent snorkeling and traditional Tongan villages nearby.", "image_url": "", "points": 25},
-        {"name": "Humpback Whale Sanctuary", "description": "World-class whale watching where you can swim with humpback whales.", "image_url": "", "points": 25},
     ],
     "vanuatu": [
         {"name": "Blue Lagoon Espiritu Santo", "description": "Mesmerizing freshwater lagoon with impossibly blue waters in pristine jungle.", "image_url": "", "points": 25},
