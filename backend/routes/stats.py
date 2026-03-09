@@ -18,13 +18,13 @@ async def get_stats(current_user: User = Depends(get_current_user)):
             "localField": "landmark_id",
             "foreignField": "landmark_id",
             "as": "landmark",
-            "pipeline": [{"$project": {"country_name": 1, "continent": 1}}]
+            "pipeline": [{"$project": {"country_id": 1, "country_name": 1, "continent": 1}}]
         }},
         {"$unwind": {"path": "$landmark", "preserveNullAndEmptyArrays": True}},
         {"$group": {
             "_id": None,
             "total_visits": {"$sum": 1},
-            "countries": {"$addToSet": "$landmark.country_name"},
+            "country_ids": {"$addToSet": "$landmark.country_id"},
             "continents": {"$addToSet": "$landmark.continent"},
         }}
     ]
@@ -53,14 +53,21 @@ async def get_stats(current_user: User = Depends(get_current_user)):
         {"$group": {"_id": None, "with_photos": {"$sum": {"$cond": ["$has_photo", 1, 0]}}}}
     ]
     photos_task = db.visits.aggregate(photos_pipeline).to_list(1)
+    # Get country visits for accurate country count
+    country_visits_task = db.country_visits.distinct("country_id", {"user_id": current_user.user_id})
     
-    result, user, friend_count, photos_result = await asyncio.gather(
-        visits_task, user_task, friends_task, photos_task
+    result, user, friend_count, photos_result, cv_country_ids = await asyncio.gather(
+        visits_task, user_task, friends_task, photos_task, country_visits_task
     )
     
-    stats = result[0] if result else {"total_visits": 0, "countries": [], "continents": []}
+    stats = result[0] if result else {"total_visits": 0, "country_ids": [], "continents": []}
     user_lb_points = user.get("leaderboard_points", 0) if user else 0
     visits_with_photos = photos_result[0]["with_photos"] if photos_result else 0
+    
+    # Merge countries from landmark visits AND country visits (both use country_id)
+    landmark_country_ids = set(c for c in stats.get("country_ids", []) if c)
+    country_visit_ids = set(cv_country_ids) if cv_country_ids else set()
+    all_visited_countries = landmark_country_ids | country_visit_ids
     
     # Calculate rank
     users_above = await db.users.count_documents({
@@ -73,7 +80,7 @@ async def get_stats(current_user: User = Depends(get_current_user)):
     
     return {
         "total_visits": stats["total_visits"],
-        "countries_visited": len([c for c in stats.get("countries", []) if c]),
+        "countries_visited": len(all_visited_countries),
         "continents_visited": len([c for c in stats.get("continents", []) if c]),
         "friends_count": friend_count,
         "points": user.get("points", 0) if user else 0,
