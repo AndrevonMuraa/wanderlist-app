@@ -147,7 +147,7 @@ const COUNTRY_FLAG_CODES: Record<string, string> = {
   'Maldives': 'mv',
   'Mauritius': 'mu',
   'Seychelles': 'sc',
-  'Hawaii': 'us',
+  'Hawaii': 'us-hi',
   'Madagascar': 'mg',
   'Cape Verde': 'cv',
   'Papua New Guinea': 'pg',
@@ -176,6 +176,7 @@ const CONTINENT_ICON_NAMES: Record<string, string> = {
   'South America': 'leaf-outline',
   'Americas': 'leaf-outline',
   'Oceania': 'water-outline',
+  'Other Island Paradises': 'sparkles-outline',
 };
 
 export default function ExploreCountriesScreen() {
@@ -251,18 +252,46 @@ export default function ExploreCountriesScreen() {
           continentMap.get(country.continent)!.push(country);
         });
 
+        // Countries that are geographically in Oceania
+        const OCEANIA_GEOGRAPHIC = new Set([
+          'australia', 'new_zealand', 'fiji', 'french_polynesia', 
+          'cook_islands', 'samoa', 'vanuatu', 'papua_new_guinea', 
+          'palau', 'solomon_islands', 'new_caledonia',
+        ]);
+
         // Create sections with rows (2 countries per row)
-        const sectionList: ContinentSection[] = Array.from(continentMap.entries()).map(([continentName, countries]) => {
-          // Group countries into rows of 2
-          const rows: Country[][] = [];
-          for (let i = 0; i < countries.length; i += 2) {
-            rows.push(countries.slice(i, i + 2));
+        // For Oceania: split into geographic Oceania + Other Island Paradises
+        const sectionList: ContinentSection[] = [];
+        
+        Array.from(continentMap.entries()).forEach(([continentName, countries]) => {
+          if (continentName === 'Oceania' && continent) {
+            // Split Oceania into two sections
+            const oceaniaCountries = countries.filter(c => OCEANIA_GEOGRAPHIC.has(c.country_id));
+            const islandParadises = countries.filter(c => !OCEANIA_GEOGRAPHIC.has(c.country_id));
+            
+            // Section 1: Geographic Oceania
+            const oceaniaRows: Country[][] = [];
+            for (let i = 0; i < oceaniaCountries.length; i += 2) {
+              oceaniaRows.push(oceaniaCountries.slice(i, i + 2));
+            }
+            sectionList.push({ continent: 'Oceania', data: oceaniaRows as any });
+            
+            // Section 2: Other Island Paradises
+            if (islandParadises.length > 0) {
+              const paradiseRows: Country[][] = [];
+              for (let i = 0; i < islandParadises.length; i += 2) {
+                paradiseRows.push(islandParadises.slice(i, i + 2));
+              }
+              sectionList.push({ continent: 'Other Island Paradises', data: paradiseRows as any });
+            }
+          } else {
+            // Normal continent - single section
+            const rows: Country[][] = [];
+            for (let i = 0; i < countries.length; i += 2) {
+              rows.push(countries.slice(i, i + 2));
+            }
+            sectionList.push({ continent: continentName, data: rows as any });
           }
-          
-          return {
-            continent: continentName,
-            data: rows as any // Cast to satisfy TypeScript
-          };
         });
 
         setSections(sectionList);
@@ -391,7 +420,9 @@ export default function ExploreCountriesScreen() {
       'Africa': 'Wildlife, deserts, and vibrant cultures',
       'North America': 'Natural beauty and urban adventures',
       'South America': 'Rainforests, mountains, and ancient ruins',
-      'Oceania': 'Tropical islands, coral reefs and island paradises',
+      'Americas': 'Natural beauty and ancient civilizations',
+      'Oceania': 'Pacific islands and coral reefs',
+      'Other Island Paradises': 'Tropical gems across the world\'s oceans',
     };
     
     return (

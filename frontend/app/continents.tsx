@@ -72,7 +72,8 @@ const CONTINENTS = [
   },
   {
     id: 'oceania',
-    name: 'Oceania & Island Paradises',
+    name: 'Oceania',
+    subtitle: '& other island paradises',
     apiName: 'Oceania',
     countries: 20,
     landmarks: 300,
@@ -87,6 +88,7 @@ const CONTINENTS = [
 interface Continent {
   id: string;
   name: string;
+  subtitle?: string;
   apiName: string;
   countries: number;
   landmarks: number;
@@ -267,7 +269,12 @@ export default function ContinentsScreen() {
                   {/* Top Section: Title (left) + Points (right) */}
                   <View style={styles.cardTopSection}>
                     <View style={styles.cardTitleSection}>
-                      <Text style={styles.cardTitle}>{continent.name}</Text>
+                      <View style={{flexDirection: 'row', alignItems: 'baseline', flexWrap: 'wrap'}}>
+                        <Text style={styles.cardTitle}>{continent.name}</Text>
+                        {continent.subtitle && (
+                          <Text style={styles.cardSubtitle}> {continent.subtitle}</Text>
+                        )}
+                      </View>
                       <Text style={styles.cardDescription}>{continent.description}</Text>
                     </View>
                     <View style={styles.pointsBadge}>
@@ -655,6 +662,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '800',
     color: '#fff',
+    marginBottom: 2,
+  },
+  cardSubtitle: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: 'rgba(255, 255, 255, 0.7)',
+    fontStyle: 'italic',
     marginBottom: 2,
   },
   cardDescription: {
