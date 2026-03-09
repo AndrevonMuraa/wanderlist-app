@@ -269,12 +269,10 @@ export default function ContinentsScreen() {
                   {/* Top Section: Title (left) + Points (right) */}
                   <View style={styles.cardTopSection}>
                     <View style={styles.cardTitleSection}>
-                      <View style={{flexDirection: 'row', alignItems: 'baseline', flexWrap: 'wrap'}}>
-                        <Text style={styles.cardTitle}>{continent.name}</Text>
-                        {continent.subtitle && (
-                          <Text style={styles.cardSubtitle}> {continent.subtitle}</Text>
-                        )}
-                      </View>
+                      <Text style={styles.cardTitle}>{continent.name}</Text>
+                      {continent.subtitle && (
+                        <Text style={styles.cardSubtitle}>{continent.subtitle}</Text>
+                      )}
                       <Text style={styles.cardDescription}>{continent.description}</Text>
                     </View>
                     <View style={styles.pointsBadge}>
