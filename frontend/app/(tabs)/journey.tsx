@@ -271,76 +271,76 @@ export default function JourneyScreen() {
 
             <View style={styles.statsGridCompact}>
               <TouchableOpacity 
-                style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}
+                style={[styles.statBoxCompact, { backgroundColor: '#4DB8D810' }]}
                 onPress={() => router.push('/my-country-visits')}
                 activeOpacity={0.7}
                 data-testid="stat-countries"
               >
-                <Ionicons name="flag" size={20} color={colors.primary} />
+                <Ionicons name="flag" size={20} color="#4DB8D8" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
-                  {Object.keys(progressStats.countries).filter(
-                    countryId => progressStats.countries[countryId].visited > 0
-                  ).length}
+                  {stats.countries_visited || 0}
                 </Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.countries')}</Text>
               </TouchableOpacity>
 
               <TouchableOpacity 
-                style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}
+                style={[styles.statBoxCompact, { backgroundColor: '#E8785010' }]}
                 onPress={() => router.push('/my-landmark-visits')}
                 activeOpacity={0.7}
                 data-testid="stat-landmarks"
               >
-                <Ionicons name="location" size={20} color={colors.accent} />
+                <Ionicons name="location" size={20} color="#E87850" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.overall.visited}</Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>{t('journey.landmarks')}</Text>
               </TouchableOpacity>
 
               <TouchableOpacity 
-                style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}
+                style={[styles.statBoxCompact, { backgroundColor: '#FFD70010' }]}
                 onPress={() => router.push('/points-summary')}
                 activeOpacity={0.7}
                 data-testid="stat-points"
               >
-                <Ionicons name="star" size={20} color={colors.accentYellow} />
+                <Ionicons name="star" size={20} color="#FFD700" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.totalPoints || 0}</Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Total Points</Text>
               </TouchableOpacity>
 
               <TouchableOpacity 
-                style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}
+                style={[styles.statBoxCompact, { backgroundColor: '#4CAF5010' }]}
                 onPress={() => router.push('/continents')}
                 activeOpacity={0.7}
                 data-testid="stat-continents"
               >
-                <Ionicons name="earth" size={20} color={colors.accent} />
+                <Ionicons name="earth" size={20} color="#4CAF50" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
-                  {progressStats ? Object.values(progressStats.continents).filter((c: any) => c.visited > 0).length : 0}
+                  {stats.continents_visited || 0}
                 </Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Continents</Text>
               </TouchableOpacity>
 
               <TouchableOpacity 
-                style={[styles.statBoxCompact, { backgroundColor: colors.surfaceTinted }]}
+                style={[styles.statBoxCompact, { backgroundColor: '#B8956A10' }]}
                 onPress={() => router.push('/leaderboard')}
                 activeOpacity={0.7}
-                data-testid="stat-rank"
+                data-testid="stat-leaderboard"
               >
-                <Ionicons name="trophy" size={20} color={colors.accentBronze} />
+                <Ionicons name="trophy" size={20} color="#B8956A" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
                   {stats.rank && stats.rank > 0 ? `#${stats.rank}` : 'N/A'}
                 </Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Leaderboard</Text>
               </TouchableOpacity>
 
-              <View 
+              <TouchableOpacity 
                 style={[styles.statBoxCompact, { backgroundColor: rankProgress.currentRank.color + '15' }]}
+                onPress={() => router.push('/ranks')}
+                activeOpacity={0.7}
                 data-testid="stat-rank-level"
               >
                 <Ionicons name={rankProgress.currentRank.icon as any} size={32} color={rankProgress.currentRank.color} />
                 <Text style={[styles.statValueCompact, { color: colors.text, fontSize: 14 }]}>{rankProgress.currentRank.name}</Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Rank</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </Surface>
         )}
