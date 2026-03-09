@@ -307,7 +307,7 @@ export default function JourneyScreen() {
               >
                 <Ionicons name="earth" size={20} color={colors.accent} />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
-                  {progressStats ? Object.values(progressStats.continents).filter((c: any) => c.visited > 0).length : 0}/5
+                  {progressStats ? Object.values(progressStats.continents).filter((c: any) => c.visited > 0).length : 0}
                 </Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Continents</Text>
               </TouchableOpacity>
