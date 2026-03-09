@@ -7,6 +7,7 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - **Frontend**: React Native with Expo Router
 - **Backend**: FastAPI with MongoDB Atlas
 - **Hosting**: Render (backend), EAS Build (mobile)
+- **Backend routes**: Split into modular files (leaderboard, friends, messages, stats, feed + shared _social_common)
 
 ## Current State (March 2026)
 - **100 countries** across 5 continents (20 per continent)
@@ -14,6 +15,7 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - **30,000 total achievable points** (22,500 landmarks + 1,500 country visits + 5,000 country bonuses + 1,000 continent bonuses)
 - **20 ranks**: Newcomer, Wanderer, Scout, Explorer, Pathfinder, Adventurer, Voyager, Trailblazer, Navigator, Pioneer, Globetrotter, Nomad King, Horizon Chaser, Legend, Atlas, Titan, Sovereign, Mythic, Eternal, Transcendent
 - **30+ badge types**: Milestone (10), Points (6), Social (4), Country mastery (4+), Continent mastery
+- **BuildNumber**: 70 (ready for TestFlight)
 
 ### Continent Distribution (PERFECTLY BALANCED)
 | Continent | Countries | Landmarks | Points |
@@ -22,94 +24,86 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 | Asia | 20 | 300 | 4,500 |
 | Africa | 20 | 300 | 4,500 |
 | Americas | 20 | 300 | 4,500 |
-| Oceania & Island Paradises | 20 | 300 | 4,500 |
+| Oceania & other island paradises | 20 | 300 | 4,500 |
 
-### Content Expansion (March 7, 2026)
-**Expanded from 66 to 100 countries** with 1,500 landmarks (perfectly balanced):
-- Added 36 new countries, 360 standard landmarks, 500 premium landmarks
-- Removed: UAE (conflict), Tonga (least popular)
-- Moved: Maldives, Mauritius, Seychelles to Oceania. Added Hawaii to Oceania
-- Added: Saint Lucia to Americas
-- Duplicate cleanup: Removed 8 exact + 46 near-duplicate premium landmarks, replaced with unique ones
-- Added country images for all 54 new countries
-- Upgraded rank system: 8 → 20 ranks (Newcomer to Transcendent) for 30K points
-- Upgraded badge system: 17 → 30+ badges (milestone, points, social, country mastery, continent mastery)
-
-### DB/Architecture Notes for Future Agents
+### CRITICAL NOTES FOR FUTURE AGENTS
 - **ALWAYS check the actual DATABASE** for current state, not seed files
-- Use: `python3 scripts/seed_expansion.py` for content migrations
-- `countries_data.py` is the authoritative country list (100 countries)
-- DB continent "Oceania" displays as "Oceania & Island Paradises" via frontend apiName mapping
-- DB continent "Americas" is the standardized name (not "North America"/"South America")
-- Frontend uses `apiName` field on continent objects to match backend stats
+- **NO pre-filled images**: Landmarks and countries do NOT have stock/placeholder images. All images come from user-uploaded visit photos. Do NOT add Unsplash or stock URLs.
+- **Continent naming**: DB stores "Oceania". Frontend displays "Oceania" with subtitle "& other island paradises" on the card. Explore-countries page shows "Oceania and other Island Paradises" as section header.
+- **Continent mapping**: DB "Americas" → frontend apiName "Americas". DB "Oceania" → frontend apiName "Oceania"
+- **Oceania sorting**: Geographic Oceania countries appear first (Australia, NZ, Fiji, etc.), followed by transferred island paradises (Maldives, Hawaii, Seychelles, etc.)
+- **Hawaii flag**: Uses `us-hi` (state flag), not `us` (USA flag). Guam uses `gu`.
+- **Removed features**: QuickVisitButton was removed. Do not re-add.
+- **Removed countries**: UAE (conflict zone) and Tonga (least popular) were removed. Do not re-add.
+- **social.py was split**: Into leaderboard.py, friends.py, messages.py, stats.py, feed.py + _social_common.py. The old social.py no longer exists.
+- **Points consistency**: `/api/stats` (user.points) and `/api/progress` (visits sum + country_visits sum) must always match. The progress endpoint sums BOTH visits and country_visits collections.
 
 ## What's Been Implemented
 
 ### Content Expansion (Complete - March 7, 2026)
 - Expanded from 66 to 100 countries (20 per continent)
-- Added 360 new standard landmarks (10 per new country)
-- Added 233 new premium landmarks
-- Removed UAE and Tonga
-- Moved Maldives, Mauritius, Seychelles to Oceania
-- Added Hawaii as Oceania destination
-- Created authoritative `countries_data.py` with migration metadata
-- Updated frontend continent display with apiName for proper stats matching
-- Updated continent-stats API list capacity
+- 1,500 landmarks (1,000 official + 500 premium), zero duplicates
+- Removed: UAE (conflict), Tonga (least popular)
+- Moved: Maldives, Mauritius, Seychelles to Oceania. Added Hawaii, Guam to Oceania
+- Added: Saint Lucia to Americas
+
+### App Store Hardening (Complete - March 9, 2026)
+- BuildNumber 70, CORS configurable, rate limiting (120/20 rpm), Error boundary
+- All stock/placeholder images removed from DB and seed scripts
+- MongoDB indexes added: countries.country_id, countries.continent, landmarks.continent
+
+### Backend Refactoring (Complete - March 9, 2026)
+- social.py (1,390 lines) split into 5 focused modules
+- Old migration scripts cleaned up (10 one-time scripts deleted)
+- Archive folder removed, test files cleaned
 
 ### Admin Panel (Complete)
-- Full admin section with dashboard, user management, report moderation, analytics, notifications, and promo codes
+- Dashboard, user management, report moderation, analytics, notifications, promo codes
 
-### Quick Visit Feature (Removed - March 7, 2026)
-- QuickVisitButton removed from landmarks list and landmark detail pages
-
-### Share My Journey Card (Complete - March 7, 2026)
-- Premium shareable card with travel stats, rank badge, and branding
-
-### App Audit Phases 1-4 (Complete)
-- AddCountryVisitModal standardization, backend logging, UX improvements
-
-### Performance (Complete)
-- MongoDB aggregation pipelines, N+1 query fixes, caching
+### Rank System (Complete - 20 ranks)
+- Frontend: utils/rankSystem.ts (20 ranks synced with backend)
+- Backend: utils/helpers.py (20 rank thresholds + 30+ badge definitions)
 
 ### All Other Features (Complete)
 - Hybrid Privacy, Comments, Anti-Cheat, Social, Custom Visits, Landmark Visits, Country Visits
+- Share My Journey Card, RevenueCat subscriptions, Push notifications
+- Account deletion, Privacy Policy, Terms of Service
 
 ## Key API Endpoints
-- `GET /api/continent-stats` - Dynamic continent statistics (returns 5 continents)
+- `GET /api/continent-stats` - 5 continents with counts and points
 - `GET /api/countries?continent=X` - Countries filtered by continent
-- `POST /api/visits` - Create visit
-- All other endpoints unchanged
+- `GET /api/landmarks?country_id=X` - Landmarks for a country
+- `GET /api/progress` - User progress (points from visits + country_visits)
+- `GET /api/stats` - User stats (points from user document)
+- `POST /api/visits` - Create landmark visit
+- `POST /api/country-visits` - Create country visit
 
 ## DB Schema (Key Fields)
-- **countries**: `country_id`, `name`, `continent` (Europe/Asia/Africa/Americas/Oceania)
-- **landmarks**: `landmark_id`, `country_id`, `continent`, `category` (official/premium)
-- **users**: `default_privacy`, `comment_permission`, `subscription_tier`
+- **countries**: `country_id`, `name`, `continent` (Europe/Asia/Africa/Americas/Oceania). No image_url.
+- **landmarks**: `landmark_id`, `country_id`, `continent`, `category` (official/premium), `points`. No pre-filled image_url.
+- **visits**: `user_id`, `landmark_id`, `points_earned`, `photo_url` (user-uploaded)
+- **country_visits**: `user_id`, `country_id`, `points_earned`
+- **users**: `points`, `leaderboard_points`, `default_privacy`, `subscription_tier`
 
 ## Test Credentials
 - Email: test@wandermark.app | Password: Test1234!
 - Email: test2@wandermark.app | Password: Test1234!
 
 ## Prioritized Backlog
-### P0 - None (all P0 items completed)
-
-### App Store Hardening (Complete - March 9, 2026)
-- BuildNumber bumped: 69 → 70 for next TestFlight
-- CORS: Configurable via ALLOWED_ORIGINS env var (defaults to "*" for dev)
-- Rate limiting: 120 req/min general, 20 req/min for auth endpoints
-- Error boundary: Global ErrorBoundary wrapping entire app in _layout.tsx
-
 ### P1 - Upcoming
-- Deploy updated Privacy Policy / Terms to a live URL
-- Bump iOS build number and prepare TestFlight build
+- Deploy Privacy Policy / Terms to live URL
+- Build and submit to TestFlight (buildNumber 70)
 
 ### P2 - Future
 - Rename GitHub repository (wanderlist-app -> wandermark-app)
+- Sentry crash reporting (requires API key)
 - Add pull-to-refresh to remaining pages
-- More comprehensive skeleton loading states
 
 ## Scripts Reference
-- `backend/scripts/countries_data.py` - Authoritative 100-country list
-- `backend/scripts/seed_expansion.py` - Content expansion migration
-- `backend/scripts/expansion_landmarks_1.py` - Europe + Asia landmarks
-- `backend/scripts/expansion_landmarks_2.py` - Africa landmarks
-- `backend/scripts/expansion_landmarks_3.py` - Americas + Oceania landmarks
+- `backend/scripts/countries_data.py` - Authoritative 100-country list with migration metadata
+- `backend/scripts/seed_expansion.py` - Content expansion migration (imports from expansion files)
+- `backend/scripts/expansion_landmarks_1.py` - Europe + Asia landmark data (no images)
+- `backend/scripts/expansion_landmarks_2.py` - Africa landmark data (no images)
+- `backend/scripts/expansion_landmarks_3.py` - Americas + Oceania landmark data (no images)
+- `backend/scripts/seed_data.py` - Original seeder (historical, no images)
+- `backend/scripts/premium_landmarks.py` - Premium landmark data (no images)
