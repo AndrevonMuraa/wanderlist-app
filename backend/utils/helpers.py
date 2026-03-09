@@ -62,262 +62,81 @@ async def create_notification(user_id: str, notif_type: str, title: str, message
     return notification_id
 
 
+# Badge definitions - each rank IS a badge
+# When a user reaches a rank, they earn that rank's badge permanently
 BADGE_DEFINITIONS = {
-    # Milestone badges (visit count)
-    "first_visit": {
-        "name": "First Steps",
-        "description": "Your journey begins! You've taken the first step into a world of adventure",
-        "icon": "footsteps"
-    },
-    "milestone_10": {
-        "name": "Explorer",
-        "description": "10 landmarks conquered! You're building momentum",
-        "icon": "map"
-    },
-    "milestone_25": {
-        "name": "Adventurer",
-        "description": "25 landmarks down! You're collecting memories across the globe",
-        "icon": "compass"
-    },
-    "milestone_50": {
-        "name": "Globetrotter",
-        "description": "50 landmarks explored! You've caught the travel bug",
-        "icon": "globe"
-    },
-    "milestone_100": {
-        "name": "World Traveler",
-        "description": "100 landmarks! Triple digits - the world is your playground",
-        "icon": "airplane"
-    },
-    "milestone_200": {
-        "name": "Seasoned Traveler",
-        "description": "200 landmarks! You've seen corners most only dream about",
-        "icon": "trail-sign"
-    },
-    "milestone_350": {
-        "name": "Elite Explorer",
-        "description": "350 landmarks - you're writing history with every step",
-        "icon": "medal"
-    },
-    "milestone_500": {
-        "name": "Legend",
-        "description": "500 landmarks conquered! LEGENDARY status achieved",
-        "icon": "trophy"
-    },
-    "milestone_750": {
-        "name": "Titan",
-        "description": "750 landmarks! You've mastered the art of exploration",
-        "icon": "shield"
-    },
-    "milestone_1000": {
-        "name": "Ultimate Explorer",
-        "description": "1,000 landmarks - every landmark conquered. You ARE the legend",
-        "icon": "crown"
-    },
-    # Points badges
-    "points_100": {
-        "name": "Point Starter",
-        "description": "Your first 100 points! Every journey starts with a single step",
-        "icon": "star"
-    },
-    "points_500": {
-        "name": "Point Collector",
-        "description": "500 points earned! The memories are adding up",
-        "icon": "star-half"
-    },
-    "points_1000": {
-        "name": "Point Master",
-        "description": "1,000 points! Four digits - you're in the big leagues",
-        "icon": "sparkles"
-    },
-    "points_5000": {
-        "name": "Point Legend",
-        "description": "5,000 points! You're rewriting the leaderboard",
-        "icon": "flash"
-    },
-    "points_10000": {
-        "name": "Point Titan",
-        "description": "10,000 points! Halfway to perfection. Unstoppable",
-        "icon": "diamond"
-    },
-    "points_20000": {
-        "name": "Point Mythic",
-        "description": "20,000 points! Almost at the pinnacle of achievement",
-        "icon": "ribbon"
-    },
-    # Social badges
-    "social_5": {
-        "name": "Friendly",
-        "description": "5 travel buddies! Adventure is better with friends",
-        "icon": "people"
-    },
-    "social_10": {
-        "name": "Popular",
-        "description": "10 friends in your crew! Building a travel community",
-        "icon": "hand-right"
-    },
-    "social_25": {
-        "name": "Social Butterfly",
-        "description": "25 friends! You're bringing travelers together",
-        "icon": "heart"
-    },
-    "social_50": {
-        "name": "Community Leader",
-        "description": "50 friends! You're a pillar of the travel community",
-        "icon": "megaphone"
-    },
-    # Country mastery badges
-    "country_complete": {
-        "name": "Country Master",
-        "description": "All landmarks in one country! You don't just visit - you CONQUER",
-        "icon": "flag"
-    },
-    "countries_5": {
-        "name": "Five Nations",
-        "description": "5 countries fully explored! The world map is filling up",
-        "icon": "map"
-    },
-    "countries_10": {
-        "name": "Decade of Nations",
-        "description": "10 countries mastered! Double digits of pure dedication",
-        "icon": "earth"
-    },
-    "countries_25": {
-        "name": "Quarter Century",
-        "description": "25 countries completed! A quarter of the world is yours",
-        "icon": "planet"
-    },
-    # Continent mastery
-    "continent_complete": {
-        "name": "Continent Conqueror",
-        "description": "Every country in a continent explored! Absolute domination",
-        "icon": "globe"
-    },
+    "rank_newcomer": {"name": "Newcomer", "description": "Taking your first steps", "icon": "compass-outline"},
+    "rank_wanderer": {"name": "Wanderer", "description": "The world is calling", "icon": "footsteps"},
+    "rank_scout": {"name": "Scout", "description": "Eyes on the horizon", "icon": "eye"},
+    "rank_explorer": {"name": "Explorer", "description": "Charting new territory", "icon": "map"},
+    "rank_pathfinder": {"name": "Pathfinder", "description": "Finding hidden trails", "icon": "trail-sign"},
+    "rank_adventurer": {"name": "Adventurer", "description": "No border can stop you", "icon": "airplane"},
+    "rank_voyager": {"name": "Voyager", "description": "Sailing uncharted waters", "icon": "boat"},
+    "rank_trailblazer": {"name": "Trailblazer", "description": "Blazing your own path", "icon": "flame"},
+    "rank_navigator": {"name": "Navigator", "description": "Guided by the stars", "icon": "navigate"},
+    "rank_pioneer": {"name": "Pioneer", "description": "Breaking new ground", "icon": "flag"},
+    "rank_globetrotter": {"name": "Globetrotter", "description": "The world knows your name", "icon": "earth"},
+    "rank_nomad_king": {"name": "Nomad King", "description": "Ruler of the open road", "icon": "compass"},
+    "rank_horizon_chaser": {"name": "Horizon Chaser", "description": "Always chasing the next sunrise", "icon": "sunny"},
+    "rank_legend": {"name": "Legend", "description": "A true travel legend", "icon": "star"},
+    "rank_atlas": {"name": "Atlas", "description": "Carrying the world on your shoulders", "icon": "globe-outline"},
+    "rank_titan": {"name": "Titan", "description": "Forged in distant lands", "icon": "diamond"},
+    "rank_sovereign": {"name": "Sovereign", "description": "Master of every continent", "icon": "shield-checkmark"},
+    "rank_mythic": {"name": "Mythic", "description": "Stories told around campfires", "icon": "bonfire"},
+    "rank_eternal": {"name": "Eternal", "description": "Your legacy echoes forever", "icon": "infinite"},
+    "rank_transcendent": {"name": "Transcendent", "description": "Beyond mortal. Beyond legendary.", "icon": "trophy"},
 }
+
+# Map rank names to badge IDs
+RANK_TO_BADGE = {r["name"]: f"rank_{r['name'].lower().replace(' ', '_')}" for r in RANK_THRESHOLDS}
 
 
 async def check_and_award_badges(user_id: str):
-    """Check for new badges and award them"""
+    """Award rank badges based on verified points (leaderboard_points).
+    Each rank = one badge. When user reaches a new rank threshold, they earn that badge permanently."""
     newly_awarded = []
 
-    existing_badges = await db.achievements.find({"user_id": user_id}).to_list(1000)
+    existing_badges = await db.achievements.find({"user_id": user_id}).to_list(100)
     existing_badge_types = {badge["badge_type"] for badge in existing_badges}
 
-    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    # Get user's verified points
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0, "leaderboard_points": 1, "name": 1})
     if not user:
         return newly_awarded
+    
+    verified_points = user.get("leaderboard_points", 0)
 
-    total_points = user.get("points", 0)
-
-    visits = await db.visits.find({"user_id": user_id}).to_list(1000)
-    visit_count = len(visits)
-
-    friend_count = await db.friends.count_documents({
-        "$or": [
-            {"user_id": user_id, "status": "accepted"},
-            {"friend_id": user_id, "status": "accepted"}
-        ]
-    })
-
-    # Check milestone badges
-    milestones = [1, 10, 25, 50, 100, 200, 350, 500, 750, 1000]
-    for milestone in milestones:
-        badge_type = f"milestone_{milestone}" if milestone > 1 else "first_visit"
-        if visit_count >= milestone and badge_type not in existing_badge_types:
-            badge_def = BADGE_DEFINITIONS.get(badge_type if milestone > 1 else "first_visit")
-            if badge_def:
-                achievement_id = f"achievement_{uuid.uuid4().hex[:12]}"
-                achievement = {
-                    "achievement_id": achievement_id,
-                    "user_id": user_id,
-                    "badge_type": badge_type,
-                    "badge_name": badge_def["name"],
-                    "badge_description": badge_def["description"],
-                    "badge_icon": badge_def["icon"],
-                    "earned_at": datetime.now(timezone.utc),
-                    "is_featured": milestone >= 100
-                }
-                await db.achievements.insert_one(achievement)
-                newly_awarded.append(badge_type)
-
-    # Check points badges
-    point_milestones = [(100, "points_100"), (500, "points_500"), (1000, "points_1000"), (5000, "points_5000"), (10000, "points_10000"), (20000, "points_20000")]
-    for points, badge_type in point_milestones:
-        if total_points >= points and badge_type not in existing_badge_types:
-            badge_def = BADGE_DEFINITIONS.get(badge_type)
-            if badge_def:
-                achievement_id = f"achievement_{uuid.uuid4().hex[:12]}"
-                achievement = {
-                    "achievement_id": achievement_id,
-                    "user_id": user_id,
-                    "badge_type": badge_type,
-                    "badge_name": badge_def["name"],
-                    "badge_description": badge_def["description"],
-                    "badge_icon": badge_def["icon"],
-                    "earned_at": datetime.now(timezone.utc),
-                    "is_featured": points >= 1000
-                }
-                await db.achievements.insert_one(achievement)
-                newly_awarded.append(badge_type)
-
-    # Check social badges
-    social_milestones = [(5, "social_5"), (10, "social_10"), (25, "social_25"), (50, "social_50")]
-    for count, badge_type in social_milestones:
-        if friend_count >= count and badge_type not in existing_badge_types:
-            badge_def = BADGE_DEFINITIONS.get(badge_type)
-            if badge_def:
-                achievement_id = f"achievement_{uuid.uuid4().hex[:12]}"
-                achievement = {
-                    "achievement_id": achievement_id,
-                    "user_id": user_id,
-                    "badge_type": badge_type,
-                    "badge_name": badge_def["name"],
-                    "badge_description": badge_def["description"],
-                    "badge_icon": badge_def["icon"],
-                    "earned_at": datetime.now(timezone.utc),
-                    "is_featured": count >= 25
-                }
-                await db.achievements.insert_one(achievement)
-                newly_awarded.append(badge_type)
-
-    # Check country complete badges
-    if visits:
-        visited_by_country = {}
-        for visit in visits:
-            landmark = await db.landmarks.find_one({"landmark_id": visit["landmark_id"]})
-            if landmark:
-                country_id = landmark.get("country_id")
-                if country_id:
-                    if country_id not in visited_by_country:
-                        visited_by_country[country_id] = set()
-                    visited_by_country[country_id].add(visit["landmark_id"])
-
-        for country_id, visited_landmarks in visited_by_country.items():
-            all_country_landmarks = await db.landmarks.find({"country_id": country_id}).to_list(1000)
-            total_in_country = len(all_country_landmarks)
-
-            if len(visited_landmarks) >= total_in_country and total_in_country > 0:
-                badge_type = f"country_complete_{country_id}"
-                if badge_type not in existing_badge_types:
-                    country = await db.countries.find_one({"country_id": country_id})
-                    country_name = country.get("name", "Unknown") if country else "Unknown"
-
-                    achievement_id = f"achievement_{uuid.uuid4().hex[:12]}"
-                    achievement = {
-                        "achievement_id": achievement_id,
-                        "user_id": user_id,
-                        "badge_type": badge_type,
-                        "badge_name": f"{country_name} Master",
-                        "badge_description": f"Completed all landmarks in {country_name}",
-                        "badge_icon": "trophy",
-                        "earned_at": datetime.now(timezone.utc),
-                        "is_featured": True
-                    }
-                    await db.achievements.insert_one(achievement)
-                    newly_awarded.append(badge_type)
+    # Check each rank threshold - award badge for every rank the user has reached
+    for rank in RANK_THRESHOLDS:
+        badge_id = RANK_TO_BADGE.get(rank["name"])
+        if not badge_id:
+            continue
+        
+        if verified_points >= rank["min_points"] and badge_id not in existing_badge_types:
+            badge_def = BADGE_DEFINITIONS.get(badge_id, {})
+            achievement = {
+                "achievement_id": f"achievement_{uuid.uuid4().hex[:12]}",
+                "user_id": user_id,
+                "badge_type": badge_id,
+                "badge_name": badge_def.get("name", rank["name"]),
+                "badge_description": badge_def.get("description", ""),
+                "badge_icon": badge_def.get("icon", "star"),
+                "earned_at": datetime.now(timezone.utc)
+            }
+            await db.achievements.insert_one(achievement)
+            newly_awarded.append(badge_id)
+    
+    # Send notification for newly awarded badges
+    for badge_type in newly_awarded:
+        badge_def = BADGE_DEFINITIONS.get(badge_type, {})
+        await create_notification(
+            user_id=user_id,
+            notif_type="badge",
+            title=f"Rank Achieved: {badge_def.get('name', 'New Rank')}!",
+            message=badge_def.get("description", "You've reached a new rank!")
+        )
 
     return newly_awarded
-
 
 async def send_push_notification(user_id: str, title: str, body: str, data: dict = None):
     """Send a push notification to a user via Expo Push Service."""
