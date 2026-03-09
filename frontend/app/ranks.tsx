@@ -47,7 +47,7 @@ export default function RanksScreen() {
 
       if (response.ok) {
         const data = await response.json();
-        const points = data.totalPoints || 0;
+        const points = data.verifiedPoints || 0;
         setUserPoints(points);
         setCurrentRank(getUserRank(points));
       }

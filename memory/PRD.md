@@ -37,7 +37,8 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - **Removed features**: QuickVisitButton was removed. Do not re-add.
 - **Removed countries**: UAE (conflict zone) and Tonga (least popular) were removed. Do not re-add.
 - **social.py was split**: Into leaderboard.py, friends.py, messages.py, stats.py, feed.py + _social_common.py. The old social.py no longer exists.
-- **Points consistency**: `/api/stats` (user.points) and `/api/progress` (visits sum + country_visits sum) must always match. The progress endpoint sums BOTH visits and country_visits collections.
+- **Rank determination**: Based on **verified points** (leaderboard_points = photo-verified visits only). Consistent with leaderboard. Motivates photo uploads.
+- **Points display**: "Total Points" on Journey/Profile shows ALL points. Rank badge shows rank based on verified points only.
 
 ## What's Been Implemented
 

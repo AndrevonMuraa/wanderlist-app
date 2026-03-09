@@ -127,9 +127,11 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
     visits_task = db.visits.aggregate(visits_pipeline).to_list(1)
     country_visits_task = db.country_visits.aggregate(country_visits_pipeline).to_list(1)
     geo_task = _get_static_geo_data()
-    visits_result, cv_result, (all_countries, lm_map, total_landmarks) = await asyncio.gather(visits_task, country_visits_task, geo_task)
+    user_task = db.users.find_one({"user_id": current_user.user_id}, {"_id": 0, "leaderboard_points": 1})
+    visits_result, cv_result, (all_countries, lm_map, total_landmarks), user_doc = await asyncio.gather(visits_task, country_visits_task, geo_task, user_task)
     
     country_visit_points = cv_result[0]["total_points"] if cv_result else 0
+    verified_points = user_doc.get("leaderboard_points", 0) if user_doc else 0
     
     if not visits_result:
         # No visits — build empty progress from cached data
@@ -150,6 +152,7 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
         return {
             "overall": {"visited": 0, "total": total_landmarks, "percentage": 0},
             "totalPoints": country_visit_points,
+            "verifiedPoints": verified_points,
             "continents": continental_progress,
             "countries": country_progress
         }
@@ -198,6 +201,7 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
             "percentage": overall_percentage
         },
         "totalPoints": total_points,
+        "verifiedPoints": verified_points,
         "continents": continental_progress,
         "countries": country_progress
     }

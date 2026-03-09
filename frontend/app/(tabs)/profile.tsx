@@ -239,7 +239,7 @@ export default function ProfileScreen() {
             {/* Right: Rank Badge */}
             <View style={styles.rankSection}>
               <RankBadge 
-                rank={getUserRank(progressStats?.totalPoints || 0)} 
+                rank={getUserRank(progressStats?.verifiedPoints || 0)} 
                 size="medium"
                 showName={true}
               />

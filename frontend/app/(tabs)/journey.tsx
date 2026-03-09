@@ -210,7 +210,7 @@ export default function JourneyScreen() {
     return <LoadingSpinner message="Loading your journey..." />;
   }
 
-  const rankProgress = getProgressToNextRank(progressStats?.totalPoints || 0);
+  const rankProgress = getProgressToNextRank(progressStats?.verifiedPoints || 0);
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
   return (
