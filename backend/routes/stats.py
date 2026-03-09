@@ -69,6 +69,15 @@ async def get_stats(current_user: User = Depends(get_current_user)):
     country_visit_ids = set(cv_country_ids) if cv_country_ids else set()
     all_visited_countries = landmark_country_ids | country_visit_ids
     
+    # Merge continents from landmark visits AND country visits
+    landmark_continents = set(c for c in stats.get("continents", []) if c)
+    # Look up continents for country_visit countries not already covered by landmarks
+    extra_cv_ids = country_visit_ids - landmark_country_ids
+    if extra_cv_ids:
+        cv_continents = await db.countries.distinct("continent", {"country_id": {"$in": list(extra_cv_ids)}})
+        landmark_continents.update(cv_continents)
+    all_visited_continents = landmark_continents
+    
     # Calculate rank
     users_above = await db.users.count_documents({
         "leaderboard_points": {"$gt": user_lb_points},
@@ -81,7 +90,7 @@ async def get_stats(current_user: User = Depends(get_current_user)):
     return {
         "total_visits": stats["total_visits"],
         "countries_visited": len(all_visited_countries),
-        "continents_visited": len([c for c in stats.get("continents", []) if c]),
+        "continents_visited": len(all_visited_continents),
         "friends_count": friend_count,
         "points": user.get("points", 0) if user else 0,
         "leaderboard_points": user_lb_points,

@@ -196,7 +196,7 @@ export default function PointsSummary() {
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Continent Bonus</Text>
-                <Text style={styles.infoDesc}>+200 pts when all countries on a continent are completed</Text>
+                <Text style={styles.infoDesc}>+50 pts for first country on a new continent</Text>
               </View>
             </View>
 
