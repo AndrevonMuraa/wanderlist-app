@@ -529,7 +529,7 @@ export default function VisitDetailScreen() {
         <Dialog visible={showDeleteDialog} onDismiss={() => setShowDeleteDialog(false)}>
           <Dialog.Title>Delete Visit</Dialog.Title>
           <Dialog.Content>
-            <Text>Are you sure? This will remove the visit and deduct {visit?.points_earned || 0} points. This cannot be undone.</Text>
+            <Text>Are you sure? This will remove the landmark as visited and delete all associated photos, diary entries and points. This cannot be undone.</Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setShowDeleteDialog(false)}>Cancel</Button>

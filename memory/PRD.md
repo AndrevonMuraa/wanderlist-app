@@ -34,7 +34,7 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - **Continent mapping**: DB "Americas" → frontend apiName "Americas". DB "Oceania" → frontend apiName "Oceania"
 - **Oceania sorting**: Geographic Oceania countries appear first (Australia, NZ, Fiji, etc.), followed by transferred island paradises (Maldives, Hawaii, Seychelles, etc.)
 - **Hawaii flag**: Uses `us-hi` (state flag), not `us` (USA flag). Guam uses `gu`.
-- **Removed features**: QuickVisitButton was removed. Do not re-add.
+- **Visit logic**: ONE visit per landmark per user. Duplicate visits are prevented (HTTP 409). Users can add more photos to existing visits from the visit detail page. Deletion removes ALL associated content (photos, diary, activity, comments, likes, points).
 - **Removed countries**: UAE (conflict zone) and Tonga (least popular) were removed. Do not re-add.
 - **social.py was split**: Into leaderboard.py, friends.py, messages.py, stats.py, feed.py + _social_common.py. The old social.py no longer exists.
 - **Rank determination**: Based on **verified points** (leaderboard_points = photo-verified visits only). Consistent with leaderboard. Motivates photo uploads.

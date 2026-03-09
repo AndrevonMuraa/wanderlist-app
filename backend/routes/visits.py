@@ -251,6 +251,17 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     if not landmark:
         raise HTTPException(status_code=404, detail="Landmark not found")
     
+    # Prevent duplicate visits to the same landmark
+    existing = await db.visits.find_one({
+        "user_id": current_user.user_id,
+        "landmark_id": data.landmark_id
+    })
+    if existing:
+        raise HTTPException(
+            status_code=409, 
+            detail="You have already visited this landmark. You can add more photos from the visit detail page."
+        )
+    
     # Check if landmark is premium and user has access
     if landmark.get("category") == "premium" and not is_user_pro(current_user):
         raise HTTPException(
