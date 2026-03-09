@@ -86,76 +86,48 @@ export default function RanksScreen() {
           isCurrent && styles.rankCardCurrent,
         ]}
       >
-        {isCurrent && (
-          <View style={styles.currentBadge}>
-            <LinearGradient
-              colors={rank.gradient as any}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.currentBadgeGradient}
-            >
-              <Text style={styles.currentBadgeText}>YOUR RANK</Text>
-            </LinearGradient>
-          </View>
-        )}
-
-        <View style={styles.rankCardHeader}>
-          <View style={styles.rankNumber}>
-            <Text style={styles.rankNumberText}>{index + 1}</Text>
-          </View>
-          <View style={styles.rankBadgeContainer}>
-            <RankBadge rank={rank} size="large" showName={false} />
-          </View>
-        </View>
-
-        <View style={styles.rankCardContent}>
-          <Text style={[styles.rankName, { color: rank.color }]}>
-            {rank.name}
-          </Text>
-          <Text style={styles.rankDescription}>{rank.description}</Text>
-
-          <View style={styles.pointsRequirement}>
-            <Ionicons name="star" size={16} color={rank.color} />
-            <Text style={styles.pointsText}>
-              {rank.minPoints === 0 
-                ? '0+ points' 
-                : rank.maxPoints === Infinity
-                  ? `${rank.minPoints.toLocaleString()}+ points`
-                  : `${rank.minPoints.toLocaleString()} - ${rank.maxPoints.toLocaleString()} points`
-              }
-            </Text>
+        <View style={styles.rankRow}>
+          {/* Left: Number + Badge icon */}
+          <View style={styles.rankLeft}>
+            <Text style={[styles.rankNumberText, { color: rank.color }]}>{index + 1}</Text>
+            <View style={[styles.rankIconCircle, { backgroundColor: rank.gradient[0] + '20' }]}>
+              <Ionicons name={rank.icon as any} size={22} color={rank.color} />
+            </View>
           </View>
 
-          {!isUnlocked && progress > 0 && (
-            <View style={styles.progressSection}>
+          {/* Middle: Name, description, points */}
+          <View style={styles.rankMiddle}>
+            <View style={styles.rankNameRow}>
+              <Text style={[styles.rankName, { color: rank.color }]} numberOfLines={1}>
+                {rank.name}
+              </Text>
+              {isCurrent && (
+                <View style={[styles.currentTag, { backgroundColor: rank.color }]}>
+                  <Text style={styles.currentTagText}>YOU</Text>
+                </View>
+              )}
+              {isUnlocked && !isCurrent && (
+                <Ionicons name="checkmark-circle" size={16} color="#4CAF50" />
+              )}
+            </View>
+            <Text style={styles.rankDescription} numberOfLines={1}>{rank.description}</Text>
+            <View style={styles.rankPointsRow}>
+              <Ionicons name="star" size={12} color={rank.color} />
+              <Text style={styles.pointsText}>
+                {rank.minPoints === 0 
+                  ? '0+' 
+                  : rank.maxPoints === Infinity
+                    ? `${rank.minPoints.toLocaleString()}+`
+                    : `${rank.minPoints.toLocaleString()} - ${rank.maxPoints.toLocaleString()}`
+                } pts
+              </Text>
+            </View>
+            {isCurrent && progress < 100 && (
               <View style={styles.progressBar}>
-                <View 
-                  style={[
-                    styles.progressFill, 
-                    { width: `${progress}%`, backgroundColor: rank.color }
-                  ]} 
-                />
+                <View style={[styles.progressFill, { width: `${Math.min(progress, 100)}%`, backgroundColor: rank.color }]} />
               </View>
-              <Text style={styles.progressText}>
-                {Math.round(progress)}% to unlock
-              </Text>
-            </View>
-          )}
-
-          {isUnlocked && !isCurrent && (
-            <View style={styles.unlockedBadge}>
-              <Ionicons name="checkmark-circle" size={16} color="#4CAF50" />
-              <Text style={styles.unlockedText}>Unlocked!</Text>
-            </View>
-          )}
-
-          {isCurrent && (
-            <View style={styles.currentInfo}>
-              <Text style={styles.currentPoints}>
-                You have {userPoints.toLocaleString()} points
-              </Text>
-            </View>
-          )}
+            )}
+          </View>
         </View>
       </Surface>
     );
@@ -334,10 +306,9 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
   },
   rankCard: {
-    backgroundColor: theme.colors.surface,
     borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.lg,
-    marginBottom: theme.spacing.md,
+    padding: 12,
+    marginBottom: 8,
     ...theme.shadows.sm,
     position: 'relative',
   },
@@ -345,109 +316,77 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: theme.colors.primary,
   },
-  currentBadge: {
-    position: 'absolute',
-    top: -10,
-    right: theme.spacing.md,
-    borderRadius: theme.borderRadius.sm,
-    overflow: 'hidden',
-  },
-  currentBadgeGradient: {
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: 4,
-  },
-  currentBadgeText: {
-    ...theme.typography.caption,
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 10,
-    letterSpacing: 1,
-  },
-  rankCardHeader: {
+  rankRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: theme.spacing.md,
-    gap: theme.spacing.md,
   },
-  rankNumber: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: theme.colors.surfaceTinted,
+  rankLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginRight: 12,
+  },
+  rankNumberText: {
+    fontSize: 16,
+    fontWeight: '800',
+    width: 22,
+    textAlign: 'center',
+  },
+  rankIconCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  rankNumberText: {
-    ...theme.typography.h3,
-    color: theme.colors.text,
-    fontWeight: '700',
+  rankMiddle: {
+    flex: 1,
+    gap: 1,
   },
-  rankBadgeContainer: {
-    position: 'relative',
-  },
-  rankCardContent: {
-    gap: theme.spacing.sm,
-  },
-  rankName: {
-    ...theme.typography.h2,
-    fontWeight: '700',
-  },
-  rankDescription: {
-    ...theme.typography.body,
-    color: theme.colors.textSecondary,
-  },
-  pointsRequirement: {
+  rankNameRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.xs,
-    marginTop: theme.spacing.xs,
+    gap: 6,
+  },
+  rankName: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  currentTag: {
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 4,
+  },
+  currentTagText: {
+    color: '#fff',
+    fontSize: 9,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  rankDescription: {
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+  },
+  rankPointsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
   },
   pointsText: {
-    ...theme.typography.body,
-    color: theme.colors.text,
-    fontWeight: '600',
-  },
-  progressSection: {
-    marginTop: theme.spacing.sm,
+    fontSize: 12,
+    color: theme.colors.textLight,
+    fontWeight: '500',
   },
   progressBar: {
-    height: 8,
+    height: 4,
     backgroundColor: theme.colors.border,
-    borderRadius: 4,
+    borderRadius: 2,
     overflow: 'hidden',
-    marginBottom: theme.spacing.xs,
+    marginTop: 4,
   },
   progressFill: {
     height: '100%',
-    borderRadius: 4,
-  },
-  progressText: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
-    textAlign: 'center',
-  },
-  unlockedBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.xs,
-    marginTop: theme.spacing.xs,
-  },
-  unlockedText: {
-    ...theme.typography.caption,
-    color: '#4CAF50',
-    fontWeight: '700',
-  },
-  currentInfo: {
-    marginTop: theme.spacing.xs,
-    paddingTop: theme.spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
-  },
-  currentPoints: {
-    ...theme.typography.body,
-    color: theme.colors.primary,
-    fontWeight: '600',
-    textAlign: 'center',
+    borderRadius: 2,
   },
   // Info Card
   infoCard: {
