@@ -84,7 +84,7 @@ export default function AddVisitScreen() {
       if (response.ok) {
         const data = await response.json();
         setUserTier(data.subscription_tier || 'free');
-        setUserPoints(data.points || 0);
+        setUserPoints(data.leaderboard_points || 0);
         setDefaultPrivacy(data.default_privacy || 'public');
       }
     } catch (error: any) {
@@ -155,7 +155,7 @@ export default function AddVisitScreen() {
       
       if (userResponse.ok) {
         const userData = await userResponse.json();
-        newUserPoints = userData.points || 0;
+        newUserPoints = userData.leaderboard_points || 0;
         
         // Check for level-up
         newRank = checkLevelUp(userPoints, newUserPoints);

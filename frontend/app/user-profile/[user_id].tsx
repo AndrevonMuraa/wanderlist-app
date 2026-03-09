@@ -164,7 +164,7 @@ export default function UserProfileScreen() {
     );
   }
 
-  const rank = getUserRank(profile.points || 0);
+  const rank = getUserRank(profile.leaderboard_points || 0);
 
   return (
     <View style={styles.container}>
