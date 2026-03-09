@@ -902,9 +902,21 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
         }}
     ]
     
+    # Also sum country visit points
+    country_visits_pipeline = [
+        {"$match": {"user_id": current_user.user_id}},
+        {"$group": {
+            "_id": None,
+            "total_points": {"$sum": {"$ifNull": ["$points_earned", 15]}}
+        }}
+    ]
+    
     visits_task = db.visits.aggregate(visits_pipeline).to_list(1)
+    country_visits_task = db.country_visits.aggregate(country_visits_pipeline).to_list(1)
     geo_task = _get_static_geo_data()
-    visits_result, (all_countries, lm_map, total_landmarks) = await asyncio.gather(visits_task, geo_task)
+    visits_result, cv_result, (all_countries, lm_map, total_landmarks) = await asyncio.gather(visits_task, country_visits_task, geo_task)
+    
+    country_visit_points = cv_result[0]["total_points"] if cv_result else 0
     
     if not visits_result:
         # No visits — build empty progress from cached data
@@ -924,13 +936,13 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
             }
         return {
             "overall": {"visited": 0, "total": total_landmarks, "percentage": 0},
-            "totalPoints": 0,
+            "totalPoints": country_visit_points,
             "continents": continental_progress,
             "countries": country_progress
         }
     
     visited_landmark_ids = set(visits_result[0]["landmark_ids"])
-    total_points = visits_result[0]["total_points"]
+    total_points = visits_result[0]["total_points"] + country_visit_points
     visited_count = len(visited_landmark_ids)
     overall_percentage = round((visited_count / total_landmarks * 100) if total_landmarks > 0 else 0, 1)
     
