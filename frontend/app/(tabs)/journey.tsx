@@ -319,12 +319,12 @@ export default function JourneyScreen() {
               </TouchableOpacity>
 
               <TouchableOpacity 
-                style={[styles.statBoxCompact, { backgroundColor: '#B8956A10' }]}
+                style={[styles.statBoxCompact, { backgroundColor: '#FFD70010' }]}
                 onPress={() => router.push('/leaderboard')}
                 activeOpacity={0.7}
                 data-testid="stat-leaderboard"
               >
-                <Ionicons name="trophy" size={20} color="#B8956A" />
+                <Ionicons name="trophy" size={20} color="#FFD700" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
                   {stats.rank && stats.rank > 0 ? `#${stats.rank}` : 'N/A'}
                 </Text>
