@@ -259,6 +259,14 @@ export default function JourneyScreen() {
           <Surface style={[styles.statsCard, { backgroundColor: colors.surface }]}>
             <View style={styles.statsHeader}>
               <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('journey.yourStats')}</Text>
+              <TouchableOpacity
+                onPress={() => setShowShareJourney(true)}
+                activeOpacity={0.7}
+                data-testid="share-journey-btn"
+                style={styles.shareIconBtn}
+              >
+                <Ionicons name="share-outline" size={20} color={colors.primary} />
+              </TouchableOpacity>
             </View>
 
             <View style={styles.statsGridCompact}>
@@ -335,32 +343,6 @@ export default function JourneyScreen() {
               </View>
             </View>
           </Surface>
-        )}
-
-        {/* Share My Journey Button */}
-        {stats && progressStats && (
-          <TouchableOpacity
-            style={[styles.shareJourneyBtn, { backgroundColor: colors.surface }]}
-            onPress={() => setShowShareJourney(true)}
-            activeOpacity={0.8}
-            data-testid="share-journey-btn"
-          >
-            <LinearGradient
-              colors={['#0c1220', '#1a2840']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.shareJourneyInner}
-            >
-              <View style={styles.shareJourneyLeft}>
-                <Ionicons name="share-social-outline" size={20} color="#C9A961" />
-                <View>
-                  <Text style={styles.shareJourneyTitle}>Share My Journey</Text>
-                  <Text style={styles.shareJourneySubtitle}>Create a beautiful stats card</Text>
-                </View>
-              </View>
-              <Ionicons name="chevron-forward" size={18} color="rgba(255,255,255,0.4)" />
-            </LinearGradient>
-          </TouchableOpacity>
         )}
 
         {/* Overall Progress */}
@@ -791,6 +773,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: theme.spacing.md,
+  },
+  shareIconBtn: {
+    padding: 6,
   },
   sectionTitle: {
     fontSize: 16,
