@@ -38,6 +38,7 @@ export default function TabsLayout() {
         name="explore"
         options={{
           title: t('tabs.explore'),
+          tabBarAccessibilityLabel: 'Explore landmarks and countries',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="compass-outline" size={size} color={color} />
           ),
@@ -47,6 +48,7 @@ export default function TabsLayout() {
         name="journey"
         options={{
           title: t('tabs.journey'),
+          tabBarAccessibilityLabel: 'Your travel journey and stats',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="map-outline" size={size} color={color} />
           ),
@@ -56,6 +58,7 @@ export default function TabsLayout() {
         name="social"
         options={{
           title: t('tabs.social'),
+          tabBarAccessibilityLabel: 'Friends and social features',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="people-outline" size={size} color={color} />
           ),
@@ -65,6 +68,7 @@ export default function TabsLayout() {
         name="profile"
         options={{
           title: t('tabs.profile'),
+          tabBarAccessibilityLabel: 'Your profile and settings',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),

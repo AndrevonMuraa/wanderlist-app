@@ -96,8 +96,9 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Build and submit to TestFlight (buildNumber 70)
 
 ### P2 - Future
+- Deploy Privacy Policy / Terms HTML to live URL (GitHub Pages, Netlify, etc.)
+- Sentry crash reporting (requires Sentry account + DSN key)
 - Rename GitHub repository (wanderlist-app -> wandermark-app)
-- Sentry crash reporting (requires API key)
 - Add pull-to-refresh to remaining pages
 
 ## Scripts Reference

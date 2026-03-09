@@ -297,6 +297,8 @@ export default function ExploreCountriesScreen() {
     fetchData();
   };
 
+  const [flagErrors, setFlagErrors] = useState<Set<string>>(new Set());
+
   const renderCountryCard = ({ item }: { item: Country[] }) => {
     return (
       <View style={styles.rowContainer}>
@@ -305,6 +307,7 @@ export default function ExploreCountriesScreen() {
           const hasProgress = (country.visited || 0) > 0;
           const isCountryVisited = country.countryVisited || false; // Country marked as visited (manual or via landmarks)
           const flagUrl = getFlagUrl(country.name);
+          const flagFailed = flagErrors.has(country.country_id);
           const pointReward = country.total_points || (country.landmark_count * 10); // Use API points or fallback
           
           return (
@@ -312,16 +315,25 @@ export default function ExploreCountriesScreen() {
               <TouchableOpacity
                 onPress={() => router.push(`/landmarks/${country.country_id}?name=${encodeURIComponent(country.name)}`)}
                 activeOpacity={0.9}
+                accessibilityLabel={`${country.name}, ${country.landmark_count} landmarks, ${country.visited || 0} visited`}
+                accessibilityRole="button"
               >
                 <View style={styles.countryCard}>
                   {/* Full Flag - Top Section */}
                   <View style={styles.flagSectionFull}>
-                    {/* Base Flag Image */}
-                    <Image
-                      source={{ uri: flagUrl }}
-                      style={styles.flagImage}
-                      resizeMode="cover"
-                    />
+                    {/* Base Flag Image or Fallback */}
+                    {flagUrl && !flagFailed ? (
+                      <Image
+                        source={{ uri: flagUrl }}
+                        style={styles.flagImage}
+                        resizeMode="cover"
+                        onError={() => setFlagErrors(prev => new Set(prev).add(country.country_id))}
+                      />
+                    ) : (
+                      <View style={[styles.flagImage, styles.flagFallback]}>
+                        <Text style={styles.flagFallbackText}>{country.name.charAt(0)}</Text>
+                      </View>
+                    )}
                     
                     {/* Premium Texture Overlays */}
                     {/* 1. Glossy Shine Effect - Top highlight */}
@@ -1038,6 +1050,16 @@ const styles = StyleSheet.create<any>({
     position: 'absolute',
     top: 0,
     left: 0,
+  },
+  flagFallback: {
+    backgroundColor: 'rgba(32, 178, 170, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  flagFallbackText: {
+    fontSize: 40,
+    fontWeight: '800',
+    color: 'rgba(32, 178, 170, 0.6)',
   },
   // Premium texture overlays
   glossOverlay: {
