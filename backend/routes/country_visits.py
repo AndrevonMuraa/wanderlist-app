@@ -234,13 +234,24 @@ async def delete_country_visit(country_visit_id: str, current_user: User = Depen
     await db.country_visits.delete_one({"country_visit_id": country_visit_id})
     
     # Delete associated activity
+    activity = await db.activities.find_one({"country_visit_id": country_visit_id}, {"_id": 0, "activity_id": 1})
+    if activity:
+        await db.likes.delete_many({"activity_id": activity["activity_id"]})
+        await db.comments.delete_many({"activity_id": activity["activity_id"]})
     await db.activities.delete_many({"country_visit_id": country_visit_id})
     
-    # Deduct points (50 points for country visits)
+    # Deduct points
     points_to_deduct = country_visit.get("points_earned", 50)
+    decrement = {"points": -points_to_deduct}
+    
+    # Also deduct leaderboard_points if visit had photos
+    if country_visit.get("has_photos") or country_visit.get("leaderboard_points_earned", 0) > 0:
+        lb_deduct = country_visit.get("leaderboard_points_earned", points_to_deduct)
+        decrement["leaderboard_points"] = -lb_deduct
+    
     await db.users.update_one(
         {"user_id": current_user.user_id},
-        {"$inc": {"points": -points_to_deduct}}
+        {"$inc": decrement}
     )
     
     return {"message": "Country visit deleted"}

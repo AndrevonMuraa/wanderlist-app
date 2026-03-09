@@ -145,10 +145,14 @@ async def delete_visit(visit_id: str, current_user: User = Depends(get_current_u
     points_earned = visit.get("points_earned", 0)
     is_verified = visit.get("verified", False)
     
-    # Find and delete associated activity + comments BEFORE deleting activity
+    # Find and delete associated activity + comments + likes BEFORE deleting activity
     activity = await db.activities.find_one({"visit_id": visit_id}, {"_id": 0, "activity_id": 1})
     if activity:
         await db.comments.delete_many({"activity_id": activity["activity_id"]})
+        await db.likes.delete_many({"activity_id": activity["activity_id"]})
+    
+    # Clean up photo upvotes for this visit's photos
+    await db.photo_upvotes.delete_many({"visit_id": visit_id})
     
     # Delete the visit and activity
     await db.visits.delete_one({"visit_id": visit_id})
