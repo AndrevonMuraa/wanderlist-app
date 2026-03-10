@@ -18,12 +18,17 @@ export function useScrollRestore() {
   useFocusEffect(
     useCallback(() => {
       // Restore scroll position when screen comes back into focus
-      const timer = setTimeout(() => {
-        if (scrollRef.current && scrollY.current > 0) {
-          scrollRef.current.scrollTo?.({ y: scrollY.current, animated: false });
-        }
-      }, 50);
-      return () => clearTimeout(timer);
+      const savedY = scrollY.current;
+      if (savedY > 0) {
+        // Use multiple attempts with increasing delays to handle layout timing
+        const t1 = setTimeout(() => {
+          scrollRef.current?.scrollTo?.({ y: savedY, animated: false });
+        }, 50);
+        const t2 = setTimeout(() => {
+          scrollRef.current?.scrollTo?.({ y: savedY, animated: false });
+        }, 150);
+        return () => { clearTimeout(t1); clearTimeout(t2); };
+      }
     }, [])
   );
 

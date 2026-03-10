@@ -117,9 +117,9 @@ export default function PhotoCollectionScreen() {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [fullscreenVisible, setFullscreenVisible] = useState(false);
 
-  // Navigate back to journey tab explicitly
+  // Navigate back to journey tab
   const handleBack = () => {
-    router.push('/(tabs)/journey');
+    router.back();
   };
 
   useEffect(() => {

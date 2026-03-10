@@ -100,9 +100,9 @@ export default function MyCountryVisitsScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Navigate back to journey tab explicitly
+  // Navigate back to journey tab
   const handleBack = () => {
-    router.push('/(tabs)/journey');
+    router.back();
   };
 
   useEffect(() => {
