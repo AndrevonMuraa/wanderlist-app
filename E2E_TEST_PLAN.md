@@ -52,11 +52,19 @@
 - [ ] No latitude/longitude displayed
 
 ### 1.6 Landmark Search
-- [ ] Search "norway" → returns 15 results (10 official + 5 premium)
-- [ ] Search "eiffel" → returns Eiffel Tower
+- [ ] Search "norway" — returns 15 results (10 official + 5 premium)
+- [ ] Search "eiffel" — returns Eiffel Tower
 - [ ] Premium results show PREMIUM badge
 - [ ] Sort and filter options work
 - [ ] Tap result navigates to landmark detail
+
+### 1.7 Aktivitets-landemerker opprydding (NYTT)
+Verifiser at gamle aktivitets-navn er erstattet med ekte landemerker:
+- [ ] Egypt: Viser "Colossi of Memnon" og "Aswan Botanical Island" (IKKE "Luxor Hot Air Balloon" eller "Nile Cruise")
+- [ ] Switzerland: Viser "Gorner Gorge" (IKKE "Glacier Express")
+- [ ] Mongolia: Siste offisielle landmark er "Altai Tavan Bogd Mountains" (IKKE "Eagle Hunters")
+- [ ] Tanzania premiums inkluderer "Lake Natron" og "Ol Doinyo Lengai Volcano" (IKKE "Serengeti Balloon" eller "Safari")
+- [ ] Stikkprov 3-4 tilfeldige land: Ingen landemerke-navn inneholder ord som "cruise", "balloon", "safari", "diving", "rafting", "train", "festival", "swimming"
 
 ---
 
@@ -65,19 +73,19 @@
 ### 2.1 Stats Section
 - [ ] Header shows "Stats" (centered) with share icon (top-right)
 - [ ] 6 stat boxes with distinct icon colors:
-  - Countries (teal flag): correct count (4)
-  - Landmarks (coral pin): correct count (5)
-  - Total Points (gold star): correct count (110)
-  - Continents (green globe): correct count (1)
+  - Countries (teal flag): correct count
+  - Landmarks (coral pin): correct count
+  - Total Points (gold star): correct count
+  - Continents (green globe): correct count
   - Leaderboard (gold trophy): shows rank #
-  - Rank (dynamic icon): shows "Newcomer", tappable → /ranks
+  - Rank (dynamic icon): shows rank name, tappable — /ranks
 - [ ] All 6 stat boxes are tappable and navigate to correct pages
 - [ ] Share icon opens Share Journey Card modal
 
 ### 2.2 Share Journey Card
 - [ ] Countries, Landmarks, Continents use correct merged counts
-- [ ] Points shown = total points (110)
-- [ ] Rank badge shows rank based on VERIFIED points (0 = Newcomer)
+- [ ] Points shown = total points
+- [ ] Rank badge shows rank based on VERIFIED points
 - [ ] "Share to Social Media" button works
 
 ### 2.3 Overall Progress
@@ -86,11 +94,11 @@
 - [ ] Percentage is accurate
 
 ### 2.4 Navigation Rows
-- [ ] "My Country Visits" → navigates to country visits list
-- [ ] "My Landmark Visits" → navigates to landmark visits list
-- [ ] "Points Summary" → navigates to points breakdown
-- [ ] "My Photos" → navigates to photo collection
-- [ ] "Custom Visits" → navigates to /custom-visits (not inline list)
+- [ ] "My Country Visits" — navigates to country visits list
+- [ ] "My Landmark Visits" — navigates to landmark visits list
+- [ ] "Points Summary" — navigates to points breakdown
+- [ ] "My Photos" — navigates to photo collection
+- [ ] "Custom Visits" — navigates to /custom-visits (not inline list)
   - Shows PRO badge if not premium
   - Shows count of custom visits if any exist
 
@@ -121,10 +129,10 @@
 - [ ] Deletion removes activity, comments, likes, photo_upvotes
 
 ### 3.3 Create Country Visit
-- [ ] Navigate to country → "Mark Country as Visited"
+- [ ] Navigate to country — "Mark Country as Visited"
 - [ ] Can add photos and diary
 - [ ] Points awarded (50 pts)
-- [ ] If country already visited → upgrades with new photos/diary (no duplicate)
+- [ ] If country already visited — upgrades with new photos/diary (no duplicate)
 
 ### 3.4 Country Visit Detail
 - [ ] Photos and diary displayed
@@ -142,17 +150,100 @@
 
 ---
 
-## 4. POINTS & RANKING SYSTEM
+## 4. BRUKERINNHOLD-FLYT (NYTT — detaljert sporing)
 
-### 4.1 Points Summary Page
+Denne seksjonen tester at bruker-generert innhold (besok, bilder, dagbok) vises korrekt pa ALLE sider det skal dukke opp. Test med en ny visit som har bade bilde og dagbok.
+
+### 4.1 Opprett test-besok
+Velg et ubesokt landemerke (f.eks. "Eiffel Tower" i Frankrike).
+- [ ] Opprett besok MED bilde + dagboktekst + share_diary=ON + visibility=public
+
+### 4.2 Sjekk at besoket vises pa alle relevante sider:
+
+**A. Landmark Detail Page (det spesifikke landemerket)**
+- [ ] Viser "Visited" status (ikke "Mark as Visited")
+- [ ] Visit-info synlig (dato, poeng)
+- [ ] Bilde vises i Community Photos-seksjonen pa landemerket
+
+**B. My Landmark Visits (Journey > My Landmark Visits)**
+- [ ] Besoket vises i listen
+- [ ] Viser landmark-navn, land, dato
+- [ ] Tap — apner visit detail med bilde + dagbok
+
+**C. My Country Visits (Journey > My Country Visits)**
+- [ ] Frankrike (eller valgt land) vises som besokt
+- [ ] Auto-opprettet country visit (source: auto_landmark)
+- [ ] Viser "first landmark" info
+
+**D. My Photos (Journey > My Photos)**
+- [ ] Bildet fra besoket vises i fotogalleriet
+- [ ] Korrekt landmark-navn og land knyttet til bildet
+- [ ] Tap pa bilde — navigerer til visit detail
+
+**E. Activity Feed (Social tab)**
+- [ ] Besoket vises som en aktivitet i feeden
+- [ ] Viser brukerens navn, landmark-navn, land
+- [ ] Bilde-thumbnail synlig
+- [ ] Dagbok-indikator (has_diary) synlig
+
+**F. Stats (Journey tab)**
+- [ ] Landmarks-teller okt med 1
+- [ ] Total Points okt med riktig antall (10 for official)
+- [ ] Countries-teller okt (hvis forste besok i dette landet)
+- [ ] Leaderboard-posisjonen oppdatert (hvis bilde = verified)
+
+**G. Progress (Journey tab)**
+- [ ] Overall Progress viser oppdatert X/1500 og prosent
+
+**H. Leaderboard (Social tab)**
+- [ ] Leaderboard-poeng oppdatert (kun hvis bilde inkludert)
+
+### 4.3 Oppdater besoket
+- [ ] Legg til et ekstra bilde via visit detail (edit)
+- [ ] Sjekk at det nye bildet vises i My Photos
+- [ ] Sjekk at activity i feeden er oppdatert
+
+### 4.4 Sjekk dagbok-visning
+- [ ] Visit detail: Dagboktekst synlig
+- [ ] Activity feed: Dagbok-indikator synlig (ikon/flagg)
+- [ ] Hvis share_diary=ON: Dagboktekst synlig for venner i feed
+- [ ] Hvis share_diary=OFF: Dagboktekst IKKE synlig for andre
+
+### 4.5 Opprett country visit med bilde + dagbok
+- [ ] Ga til et land du har landmark-besok i
+- [ ] Legg til bilder og dagbok pa country visit (oppgradering)
+- [ ] Bilder vises i My Photos under "country"-type
+- [ ] Activity oppdatert i feed
+
+### 4.6 Slett-flyt (full opprydding)
+Slett landmark-besoket du opprettet:
+- [ ] Bilde forsvinner fra My Photos
+- [ ] Activity forsvinner fra feed
+- [ ] Landmark viser "Mark as Visited" igjen
+- [ ] Poeng trukket fra Stats + Leaderboard
+- [ ] Likes/comments pa aktiviteten er fjernet
+- [ ] Community Photos pa landemerket oppdatert
+
+### 4.7 Venners perspektiv (bruk test2@wandermark.app)
+Logg inn med test2 (som er venn med test1):
+- [ ] test1 sitt besok vises i test2 sin Activity Feed
+- [ ] Bilde synlig i feeden
+- [ ] Kan like og kommentere besoket
+- [ ] Community Photos pa landemerket viser test1 sitt bilde
+
+---
+
+## 5. POINTS & RANKING SYSTEM
+
+### 5.1 Points Summary Page
 - [ ] Total points = landmark visits + country visits + bonuses
 - [ ] Verified vs unverified breakdown correct
 - [ ] Country Bonus: "+20 pts for first landmark in new country"
-- [ ] Continent Bonus: "+50 pts for first country on new continent"  
+- [ ] Continent Bonus: "+50 pts for first country on new continent"
 - [ ] Completion: "+50 per country, +200 per continent"
 - [ ] Country Visit: "50 points for each country visited"
 
-### 4.2 Ranks Page
+### 5.2 Ranks Page
 - [ ] Shows all 20 ranks in compact horizontal layout
 - [ ] No lock overlay — all badge icons visible
 - [ ] Current rank highlighted with "YOU" tag
@@ -160,12 +251,12 @@
 - [ ] Title: "Path to Transcendent"
 - [ ] Subtitle: "Advance through 20 ranks"
 
-### 4.3 Badge System
+### 5.3 Badge System
 - [ ] Badges = rank achievements (20 total, one per rank)
 - [ ] Dynamically awarded/removed based on verified points
 - [ ] Newcomer badge awarded at 0 verified points
 
-### 4.4 Verified vs Unverified
+### 5.4 Verified vs Unverified
 - [ ] Visit WITH photo = verified (adds to leaderboard_points)
 - [ ] Visit WITHOUT photo = unverified (only total points)
 - [ ] Rank determined by verified points only
@@ -174,9 +265,9 @@
 
 ---
 
-## 5. SOCIAL TAB
+## 6. SOCIAL TAB
 
-### 5.1 Activity Feed
+### 6.1 Activity Feed
 - [ ] Shows activities from friends (visits, country visits)
 - [ ] Privacy filter works (public/friends/private)
 - [ ] Photo thumbnail visible for visits with photos
@@ -184,41 +275,41 @@
 - [ ] Comments visible and addable
 - [ ] Comment permission respected (everyone/friends/nobody)
 
-### 5.2 Friends
-- [ ] Search for users works
+### 6.2 Friends
+- [ ] Search for users works (username-basert, debounced)
 - [ ] Send friend request
 - [ ] Accept/reject pending requests
 - [ ] Remove friend
 - [ ] Friend count reflected in profile
 
-### 5.3 Leaderboard
+### 6.3 Leaderboard
 - [ ] Global leaderboard sorted by leaderboard_points (verified)
 - [ ] Friends-only filter works
 - [ ] User's rank displayed
 
-### 5.4 Messages (PRO only)
+### 6.4 Messages (PRO only)
 - [ ] Conversation list loads
 - [ ] Send/receive messages with friends
 - [ ] Non-pro users see upgrade prompt
 
 ---
 
-## 6. PROFILE TAB
+## 7. PROFILE TAB
 
-### 6.1 Profile Display
+### 7.1 Profile Display
 - [ ] Name, username, bio displayed
 - [ ] Rank badge shows correct rank (based on verified points)
 - [ ] Stats row: visits, friends count
 - [ ] Edit profile works (name, bio, picture)
 
-### 6.2 Settings
+### 7.2 Settings
 - [ ] Privacy settings (default visit privacy)
 - [ ] Comment permission settings
 - [ ] Notification settings
 - [ ] Change password
 - [ ] Delete account (with confirmation)
 
-### 6.3 About Page
+### 7.3 About Page
 - [ ] Shows "1,500 Landmarks" and "100 countries"
 - [ ] "30,000+ points" achievable
 - [ ] 20 ranks listed with correct thresholds
@@ -226,15 +317,15 @@
 
 ---
 
-## 7. COMMUNITY FEATURES
+## 8. COMMUNITY FEATURES
 
-### 7.1 Community Photos
+### 8.1 Community Photos
 - [ ] Landmark community photos load (public visits with photos)
 - [ ] Country community photos aggregate correctly
 - [ ] Upvoting works for ALL users (not premium-only)
 - [ ] Upvote count displayed
 
-### 7.2 Photo of the Week
+### 8.2 Photo of the Week
 - [ ] Displays on Explore tab
 - [ ] Shows "Week XX" badge with current ISO week number
 - [ ] Photo, user name, landmark name visible
@@ -242,14 +333,14 @@
 
 ---
 
-## 8. PREMIUM/SUBSCRIPTION
+## 9. PREMIUM/SUBSCRIPTION
 
-### 8.1 Subscription Page
+### 9.1 Subscription Page
 - [ ] Free features: 1,000 Official Landmarks, 1 Photo per Visit, 5 Friends, Leaderboard, Photo Upvoting, Photo of the Week
 - [ ] Pro features: 500 Premium Landmarks, 10 Photos, Unlimited Friends, Custom Visits, Full Gallery, Travel Diary, Direct Messaging
 - [ ] No mention of upvoting as premium
 
-### 8.2 Pro Feature Locks
+### 9.2 Pro Feature Locks
 - [ ] Premium landmarks locked for free users
 - [ ] Custom visits locked for free users
 - [ ] Messages locked for free users
@@ -257,9 +348,9 @@
 
 ---
 
-## 9. ADMIN PANEL
+## 10. ADMIN PANEL
 
-### 9.1 Admin Access
+### 10.1 Admin Access
 - [ ] Admin dashboard loads (test@wandermark.app has admin role)
 - [ ] User management: list, search, view details
 - [ ] Report moderation
@@ -269,7 +360,7 @@
 
 ---
 
-## 10. EDGE CASES & ERROR HANDLING
+## 11. EDGE CASES & ERROR HANDLING
 
 - [ ] Offline behavior: app shows cached data or friendly error
 - [ ] Error boundary catches crashes: "Something went wrong" with retry
@@ -280,7 +371,7 @@
 
 ---
 
-## 11. LEGAL & COMPLIANCE
+## 12. LEGAL & COMPLIANCE
 
 - [ ] Privacy Policy accessible from Profile > About
 - [ ] Terms of Service accessible from Profile > About
@@ -293,3 +384,5 @@
 - Preview environment connects to local/empty MongoDB — "Server Error" on web is expected
 - No pre-filled images on landmarks (user-content only)
 - No coordinates on landmarks (removed by design)
+- Aktivitets-landemerker er oppryddet i mars 2026 (50 stk erstattet med natur-landemerker)
+- Fingeravtrykk mellom lokal og produksjons-DB er forskjellige (ulike landmark_ids), men innholdet er ekvivalent
