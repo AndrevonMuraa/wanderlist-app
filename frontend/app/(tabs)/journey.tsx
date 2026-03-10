@@ -270,6 +270,19 @@ export default function JourneyScreen() {
 
             <View style={styles.statsGridCompact}>
               <TouchableOpacity 
+                style={[styles.statBoxCompact, { backgroundColor: '#4CAF5010' }]}
+                onPress={() => router.push('/continents')}
+                activeOpacity={0.7}
+                data-testid="stat-continents"
+              >
+                <Ionicons name="earth" size={20} color="#4CAF50" />
+                <Text style={[styles.statValueCompact, { color: colors.text }]}>
+                  {stats.continents_visited || 0}
+                </Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Continents</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity 
                 style={[styles.statBoxCompact, { backgroundColor: '#4DB8D810' }]}
                 onPress={() => router.push('/my-country-visits')}
                 activeOpacity={0.7}
@@ -302,19 +315,6 @@ export default function JourneyScreen() {
                 <Ionicons name="star" size={20} color="#FFD700" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.totalPoints || 0}</Text>
                 <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Total Points</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={[styles.statBoxCompact, { backgroundColor: '#4CAF5010' }]}
-                onPress={() => router.push('/continents')}
-                activeOpacity={0.7}
-                data-testid="stat-continents"
-              >
-                <Ionicons name="earth" size={20} color="#4CAF50" />
-                <Text style={[styles.statValueCompact, { color: colors.text }]}>
-                  {stats.continents_visited || 0}
-                </Text>
-                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Continents</Text>
               </TouchableOpacity>
 
               <TouchableOpacity 
