@@ -4,153 +4,148 @@
 # Secondary: test2@wandermark.app / Test1234!
 #
 # Legend:
-#   RETESTED  = Previously tested, bugs found AND fixed — verify fix in new build
-#   UNTESTED  = Not yet tested — first-time verification needed
+#   PASSED        = Tested in build 70 and passed — quick re-verify only
+#   FIX APPLIED   = Bug found in build 70, fix implemented — MUST verify in new build
+#   UNTESTED      = Not yet tested at all
 
 ---
 
 ## PRE-TEST: App Launch
-- [ ] App opens without crash
-- [ ] Welcome/onboarding screen shows "1,500 Landmarks" and "100 countries"
-- [ ] Login with test@wandermark.app / Test1234! succeeds
-- [ ] RETESTED: Loading indicator is teal/turquoise (was purple — fixed in index.tsx)
+- [ ] App opens without crash (PASSED)
+- [ ] Welcome/onboarding screen shows "1,500 Landmarks" and "100 countries" (PASSED)
+- [ ] Login with test@wandermark.app / Test1234! succeeds (PASSED)
+- [ ] FIX APPLIED: Loading indicator is teal/turquoise (was purple)
 
 ---
 
 ## 1. EXPLORE TAB
 
-### 1.1 Continents Page (RETESTED — passed in build 70)
+### 1.1 Continents Page (PASSED)
 - [ ] 5 continent cards visible: Europe, Asia, Africa, Americas, Oceania
 - [ ] Each card shows: 20 Countries | 300 Landmarks | 4,500 pts
 - [ ] Oceania card shows "Oceania" (large) + "& other island paradises" (smaller, below)
 - [ ] Photo of the Week displays with "Week XX" badge
 - [ ] Tapping a continent navigates to country list
 
-### 1.2 Explore Countries (RETESTED — sort row removed)
-- [ ] Shows exactly 20 countries with flag images
-- [ ] Flags are visible for ALL countries (no blank cards)
-- [ ] RETESTED: Sort row is removed (only search + filter remain)
-- [ ] Tap a country navigates to landmark list
+### 1.2 Explore Countries — bugs found, fixes applied
+- [ ] Shows exactly 20 countries with flag images (PASSED)
+- [ ] Flags are visible for ALL countries (PASSED)
+- [ ] FIX APPLIED: Sort row removed (was cluttered, sokefeltet er tilstrekkelig)
+- [ ] FIX APPLIED: Filter pills layout (all/visited/unvisited) — check om visuell bug under sokefeltet er fikset
+- [ ] FIX APPLIED: Header hvit stripe — check om den er borte
+- [ ] Tap a country navigates to landmark list (PASSED)
 
-### 1.3 Explore Countries — Oceania Special (RETESTED — passed)
+### 1.3 Explore Countries — Oceania Special (PASSED)
 - [ ] Section header: "Oceania and other Island Paradises"
-- [ ] Geographic Oceania countries appear first (Australia, NZ, Fiji...)
-- [ ] "Other" islands appear after (Maldives, Hawaii, Seychelles...)
-- [ ] Hawaii shows Hawaii state flag (not US flag)
-- [ ] Guam shows Guam flag
+- [ ] Geographic Oceania countries first, "other" islands after
+- [ ] Hawaii state flag, Guam flag correct
 
-### 1.4 Landmarks List (RETESTED)
-- [ ] Shows 15 landmarks: 10 official + 5 premium
-- [ ] Premium landmarks visible with diamond icon (also for free users, shown as locked)
-- [ ] No coordinates shown on any landmark
-- [ ] No pre-filled images on landmarks
-- [ ] Tap a landmark navigates to detail
-- [ ] RETESTED: Community Highlights section removed (cleaner design)
+### 1.4 Landmarks List — bugs found, fixes applied
+- [ ] Shows 15 landmarks: 10 official + 5 premium (PASSED for official, premium visibility needs re-check)
+- [ ] FIX APPLIED: Premium landmarks visible for all users (was reported as missing — verify)
+- [ ] FIX APPLIED: Community Highlights section removed (was cluttering design)
+- [ ] No coordinates, no pre-filled images (PASSED)
+- [ ] Tap a landmark navigates to detail (PASSED)
 
-### 1.5 Landmark Detail (RETESTED — Oceania fix)
-- [ ] Shows landmark name, description, country, continent
-- [ ] RETESTED: Oceania landmarks show "Oceania & Island Paradises" (not just "Oceania")
-- [ ] "Mark as Visited" button visible (if not visited)
-- [ ] If already visited: shows visit info, no duplicate visit button
-- [ ] Community Photos section visible
+### 1.5 Landmark Detail — bug found, fix applied
+- [ ] Shows landmark name, description, country, continent (PASSED)
+- [ ] FIX APPLIED: Oceania landmarks show "Oceania & Island Paradises" (was just "Oceania")
+- [ ] "Mark as Visited" button visible if not visited (PASSED)
+- [ ] If already visited: shows visit info (PASSED)
+- [ ] Community Photos section visible (PASSED)
 
-### 1.6 Landmark Search
-- [ ] Search "norway" — returns 15 results (10 official + 5 premium)
+### 1.6 Landmark Search (PASSED — quick re-verify)
+- [ ] Search "norway" — returns 15 results
 - [ ] Search "eiffel" — returns Eiffel Tower
 - [ ] Premium results show PREMIUM badge
-- [ ] Tap result navigates to landmark detail
 
-### 1.7 Landemerke-innhold verifisering (RETESTED — duplikater + aktiviteter fikset)
-Verifiser at innholdet er oppryddet:
-- [ ] Egypt: "Colossi of Memnon" og "Aswan Botanical Island" (IKKE "Luxor Hot Air Balloon")
-- [ ] Switzerland: "Gorner Gorge" (IKKE "Glacier Express")
-- [ ] Mongolia: "Altai Tavan Bogd Mountains" (IKKE "Eagle Hunters")
-- [ ] Greece: "Vikos Gorge" (IKKE "Zakynthos Shipwreck Beach" duplikat)
-- [ ] Finland: "Koli National Park" (IKKE "Northern Lights Lapland" duplikat)
-- [ ] Stikkprov 5+ land: Ingen duplikater eller aktivitets-ord (cruise, balloon, safari, diving, train, festival)
+### 1.7 Landemerke-innhold — fixes applied to production DB
+- [ ] FIX APPLIED: Egypt — "Colossi of Memnon", "Aswan Botanical Island" (was "Luxor Hot Air Balloon", "Nile Cruise")
+- [ ] FIX APPLIED: Switzerland — "Gorner Gorge" (was "Glacier Express")
+- [ ] FIX APPLIED: Mongolia — "Altai Tavan Bogd Mountains" (was "Eagle Hunters")
+- [ ] FIX APPLIED: Greece — "Vikos Gorge" (was duplicate "Zakynthos Shipwreck Beach")
+- [ ] FIX APPLIED: Finland — "Koli National Park" (was duplicate "Northern Lights Lapland")
+- [ ] FIX APPLIED: Tanzania — no "Kilimanjaro Summit" duplicate, no "Tree Lions"
+- [ ] Stikkprov 5+ land: ingen duplikater eller aktivitets-ord
 
 ---
 
-## 2. MY JOURNEY TAB (RETESTED — build 70)
+## 2. MY JOURNEY TAB — partially tested
 
-### 2.1 Stats Section
-- [ ] Header shows "Stats" (centered) with share icon (top-right)
-- [ ] 6 stat boxes with distinct icon colors, all tappable
-- [ ] Share icon opens Share Journey Card modal
+### 2.1 Stats Section (PASSED)
+- [ ] Header with share icon, 6 stat boxes, all tappable
 
-### 2.2 Share Journey Card (RETESTED — proportions fixed)
-- [ ] RETESTED: Card fills modal properly (no cut-off text at top/bottom)
-- [ ] RETESTED: No disproportionate decorative lines
-- [ ] Countries, Landmarks, Continents use correct merged counts
-- [ ] Points shown = total points
-- [ ] Rank badge shows rank based on VERIFIED points
-- [ ] "Share to Social Media" button works
+### 2.2 Share Journey Card — bugs found, fixes applied
+- [ ] FIX APPLIED: "Share Your Journey" tekst ikke avkuttet pa toppen
+- [ ] FIX APPLIED: "Instagram, WhatsApp..." tekst ikke avkuttet pa bunnen
+- [ ] FIX APPLIED: Dekorative linjer fjernet (var uproporsjonale)
+- [ ] FIX APPLIED: Kortet fyller modal bredden korrekt
+- [ ] Points, rank, stats korrekt (PASSED)
+- [ ] "Share to Social Media" fungerer (PASSED)
 
-### 2.3 Overall Progress
-- [ ] Circular progress shows correct: X/1500 landmarks
-- [ ] Percentage is accurate
+### 2.3 Overall Progress (PASSED)
+- [ ] Circular progress correct X/1500
 
-### 2.4 Navigation Rows
-- [ ] "My Country Visits" — navigates to country visits list
-- [ ] "My Landmark Visits" — navigates (RETESTED: now uses UniversalHeader with logo)
-- [ ] "Points Summary" — navigates (RETESTED: now uses UniversalHeader with logo)
-- [ ] "My Photos" — navigates to photo collection
-- [ ] "Custom Visits" — navigates to /custom-visits
+### 2.4 Navigation Rows — fixes applied
+- [ ] "My Country Visits" navigates (PASSED)
+- [ ] FIX APPLIED: "My Landmark Visits" — bruker UniversalHeader (var hvit stripe + mangler logo)
+- [ ] FIX APPLIED: "Points Summary" — bruker UniversalHeader (var hvit stripe + mangler logo)
+- [ ] "My Photos" navigates (PASSED)
+- [ ] "Custom Visits" navigates (PASSED)
 
-### 2.5 Next Rank Section
-- [ ] Shows next rank name with required points
-- [ ] RETESTED: Points deducted correctly after visit removal (was inconsistent)
+### 2.5 Next Rank Section — bug found
+- [ ] FIX APPLIED: Poeng oppdateres korrekt nar besok fjernes (var inkonsistent)
 
 ---
 
 ## 3. VISIT CREATION & MANAGEMENT
 
-### 3.1 Create Landmark Visit (RETESTED — multiple fixes)
-- [ ] "Mark as Visited" on unvisited landmark
-- [ ] RETESTED: "Add Photo" from library is now primary button (was camera)
-- [ ] "Take Photo Instead" is secondary option below
-- [ ] Can add diary notes
-- [ ] RETESTED: Diary keyboard has "Done" return key (was missing)
-- [ ] Share diary toggle works
-- [ ] Points awarded correctly (10 official / 25 premium)
-- [ ] Activity created in feed
-- [ ] RETESTED: "Record Without Photo?" dialog — "Add Photo" dismisses dialog correctly
+### 3.1 Create Landmark Visit — multiple bugs found, fixes applied
+- [ ] "Mark as Visited" on unvisited landmark (PASSED)
+- [ ] FIX APPLIED: "Add Photo" (library) er na primaerknapp (var kamera)
+- [ ] FIX APPLIED: "Take Photo Instead" er sekundaer lenke under
+- [ ] Can add diary notes (PASSED)
+- [ ] FIX APPLIED: Tastatur har "Done"-knapp for diary (var utilgjengelig)
+- [ ] Share diary toggle works (PASSED)
+- [ ] Points awarded correctly (PASSED)
+- [ ] Activity created in feed (PASSED)
+- [ ] FIX APPLIED: "Record Without Photo?" dialog — "Add Photo" fungerer korrekt
 
-### 3.2 Visit Detail (RETESTED — multiple fixes)
-- [ ] RETESTED: Photos display with proper proportions (was cut off/too tall)
-- [ ] RETESTED: Date field removed (was misleading for multi-photo visits)
-- [ ] Diary text visible
-- [ ] RETESTED: Delete warning mentions photos, diary, comments, likes, and points
-- [ ] Deletion properly deducts points + leaderboard_points
-- [ ] Deletion removes activity, comments, likes, photo_upvotes
+### 3.2 Visit Detail — multiple bugs found, fixes applied
+- [ ] FIX APPLIED: Foto vises med bedre proporsjoner (var avkuttet/forsvant i header)
+- [ ] FIX APPLIED: Dato-felt fjernet (var misvisende for besok med flere bilder)
+- [ ] FIX APPLIED: Header bruker UniversalHeader (var hvit stripe + feil dimensjoner)
+- [ ] Diary text visible (PASSED)
+- [ ] FIX APPLIED: Delete-advarsel nevner na ogsa kommentarer og likes (var ufullstendig)
+- [ ] Deletion deducts points (PASSED, men se 3.5 for fullstendig test)
 
-### 3.3 Create Country Visit (RETESTED — started in build 70)
-- [ ] Navigate to country — "Mark Country as Visited"
-- [ ] Can add photos and diary
-- [ ] Points awarded (50 pts)
-- [ ] If country already visited — upgrades with new photos/diary (no duplicate)
+### 3.3 Create Country Visit (testing startet, ikke fullfort)
+- [ ] Navigate to country — "Mark Country as Visited" (UNTESTED)
+- [ ] Can add photos and diary (UNTESTED)
+- [ ] Points awarded 50 pts (UNTESTED)
+- [ ] If already visited — upgrades with new photos/diary (UNTESTED)
 
 ### 3.4 Country Visit Detail (UNTESTED)
 - [ ] Photos and diary displayed
-- [ ] Delete blocked if landmark visits exist: "Cannot remove — you have X landmark visit(s)"
-- [ ] Delete warning if no landmarks: "This will remove the country as visited..."
-- [ ] Deletion properly deducts points + leaderboard_points
+- [ ] Delete blocked if landmark visits exist
+- [ ] Delete warning if no landmarks
+- [ ] Deletion deducts points
 
-### 3.5 Visit Deletion — Country Cleanup (RETESTED — critical backend fix)
-Denne testen verifiserer at sletting av siste landmark i et land rydder opp korrekt:
-- [ ] Opprett et besok i et nytt land (f.eks. Japan — "Mount Fuji")
-- [ ] Verifiser at Japan vises som besokt land (auto country visit)
+### 3.5 Visit Deletion — Country Cleanup (FIX APPLIED — critical backend bug)
+Siste landmark i et land slettes — verifiser full opprydding:
+- [ ] Opprett besok i nytt land (f.eks. Japan — "Mount Fuji")
+- [ ] Verifiser Japan vises som besokt land (auto country visit)
 - [ ] Slett landmark-besoket
-- [ ] RETESTED: Japan forsvinner fra "My Country Visits" (auto-opprettet country visit fjernet)
-- [ ] RETESTED: Continent-kortet viser korrekt antall besoke land (ikke +1 som for)
-- [ ] RETESTED: Flaggkort viser 0/15 progress (ikke 1/15 som for)
-- [ ] RETESTED: Bonuspoeng (20 country + 50 continent) trukket fra
+- [ ] FIX APPLIED: Japan forsvinner fra "My Country Visits" (auto country visit fjernet)
+- [ ] FIX APPLIED: Continent-kort viser korrekt antall (var +1 etter sletting)
+- [ ] FIX APPLIED: Flaggkort viser 0/15 progress (var 1/15 etter sletting)
+- [ ] FIX APPLIED: Bonuspoeng (20 country + 50 continent) trukket fra
 
 ### 3.6 Custom Visits — PRO only (UNTESTED)
 - [ ] /custom-visits page shows full list
 - [ ] "Add Custom Visit" button works
 - [ ] Can create visit with country name + landmarks + photos + diary
-- [ ] Edit and delete work from custom-visit-detail
+- [ ] Edit and delete work
 - [ ] Non-pro users see PRO lock
 
 ---
@@ -161,47 +156,31 @@ Test at bruker-generert innhold vises pa ALLE relevante sider.
 
 ### 4.1 Opprett test-besok
 Velg et ubesokt landemerke (f.eks. "Eiffel Tower" i Frankrike).
-- [ ] Opprett besok MED bilde (velg fra library) + dagboktekst + share_diary=ON + visibility=public
+- [ ] Opprett besok MED bilde (fra library) + dagboktekst + share_diary=ON + visibility=public
 
 ### 4.2 Sjekk at besoket vises overalt:
 
-**A. Landmark Detail Page**
-- [ ] Viser "Visited" status
-- [ ] Bilde vises i Community Photos
-
-**B. My Landmark Visits**
-- [ ] Besoket vises i listen med landmark-navn, land, dato
-- [ ] Tap apner visit detail med bilde + dagbok
-
-**C. My Country Visits**
-- [ ] Landet vises som besokt (auto-opprettet)
-
-**D. My Photos**
-- [ ] Bildet vises i fotogalleriet med korrekt landmark-info
-
-**E. Activity Feed (Social)**
-- [ ] Aktivitet synlig med bilde-thumbnail og dagbok-indikator
-
-**F. Stats + Progress**
-- [ ] Landmarks-teller, poeng og progress oppdatert
-
-**G. Leaderboard**
-- [ ] Leaderboard-poeng oppdatert (bilde = verified)
+**A. Landmark Detail** — "Visited" status + bilde i Community Photos
+**B. My Landmark Visits** — i listen med navn, land, dato
+**C. My Country Visits** — landet vises som besokt (auto)
+**D. My Photos** — bildet i galleriet med landmark-info
+**E. Activity Feed** — aktivitet med bilde + dagbok-indikator
+**F. Stats + Progress** — teller og poeng oppdatert
+**G. Leaderboard** — verified poeng oppdatert
 
 ### 4.3 Oppdater besoket
 - [ ] Legg til ekstra bilde via visit detail
 - [ ] Sjekk My Photos og feed oppdatert
 
 ### 4.4 Dagbok-synlighet
-- [ ] share_diary=ON: Dagbok synlig for venner
-- [ ] share_diary=OFF: Dagbok IKKE synlig for andre
+- [ ] share_diary=ON: synlig for venner
+- [ ] share_diary=OFF: IKKE synlig for andre
 
 ### 4.5 Country visit oppgradering
-- [ ] Legg til bilder og dagbok pa auto-opprettet country visit
+- [ ] Legg til bilder/dagbok pa auto country visit
 - [ ] Bilder i My Photos, activity oppdatert
 
 ### 4.6 Slett-flyt
-Slett landmark-besoket:
 - [ ] Bilde borte fra My Photos
 - [ ] Activity borte fra feed
 - [ ] Landmark viser "Mark as Visited" igjen
@@ -209,127 +188,103 @@ Slett landmark-besoket:
 - [ ] Auto country visit fjernet (backend-fix)
 
 ### 4.7 Venners perspektiv (test2@wandermark.app)
-- [ ] test1 sitt besok synlig i test2 sin feed
-- [ ] Kan like og kommentere
-- [ ] Community Photos viser test1 sitt bilde
+- [ ] Besok synlig i feed, kan like/kommentere
+- [ ] Community Photos viser bildet
 
 ---
 
 ## 5. POINTS & RANKING SYSTEM (UNTESTED)
 
 ### 5.1 Points Summary Page
-- [ ] RETESTED: Bruker UniversalHeader med WanderMark-logo
-- [ ] Total points = landmark visits + country visits + bonuses
+- [ ] FIX APPLIED: Bruker UniversalHeader med logo
+- [ ] Total points = landmark + country + bonuses
 - [ ] Verified vs unverified breakdown correct
-- [ ] Country Bonus: +20 pts, Continent Bonus: +50 pts
-- [ ] Completion: +50 per country, +200 per continent
 
-### 5.2 Ranks Page (RETESTED — verified points forklaring)
-- [ ] Shows all 20 ranks in compact layout
-- [ ] Current rank highlighted with "YOU" tag
-- [ ] RETESTED: Hero text forklarer at ranks er basert pa verified points
-- [ ] RETESTED: Progress viser "X verified points" (ikke bare "points earned")
+### 5.2 Ranks Page — fix applied
+- [ ] All 20 ranks visible, current rank highlighted
+- [ ] FIX APPLIED: Hero text forklarer at ranks baseres pa verified points
+- [ ] FIX APPLIED: Progress viser "X verified points" (var "points earned")
 
 ### 5.3 Verified vs Unverified
-- [ ] Visit WITH photo = verified (leaderboard_points)
-- [ ] Visit WITHOUT photo = unverified (only total points)
-- [ ] Deleting a verified visit removes from both
+- [ ] WITH photo = verified, WITHOUT = unverified
+- [ ] Deleting verified visit removes from both
 
 ---
 
 ## 6. SOCIAL TAB (UNTESTED)
 
 ### 6.1 Activity Feed
-- [ ] Shows activities from friends
-- [ ] Privacy filter works (public/friends/private)
-- [ ] Photo thumbnail visible, like/comment works
+- [ ] Activities from friends, privacy filter, like/comment
 
 ### 6.2 Friends
-- [ ] Search works (username-basert, debounced)
-- [ ] Send/accept/reject requests, remove friend
+- [ ] Search (debounced), send/accept/reject, remove
 
 ### 6.3 Leaderboard
-- [ ] Sorted by leaderboard_points (verified)
-- [ ] Friends-only filter works
+- [ ] Sorted by verified points, friends-only filter
 
 ### 6.4 Messages (PRO only)
-- [ ] Conversation list, send/receive messages
-- [ ] Non-pro: upgrade prompt
+- [ ] Send/receive, non-pro upgrade prompt
 
 ---
 
 ## 7. PROFILE TAB (UNTESTED)
 
-### 7.1 Profile Display
-- [ ] Name, username, bio, rank badge correct
-- [ ] Edit profile works
-
-### 7.2 Settings
-- [ ] Privacy, comment, notification settings
-- [ ] Change password, delete account
-
-### 7.3 About Page
-- [ ] Shows "1,500 Landmarks" and "100 countries"
-- [ ] 20 ranks listed with correct thresholds
+- [ ] Name, username, bio, rank badge
+- [ ] Edit profile, settings, change password
+- [ ] About: "1,500 Landmarks", "100 countries", 20 ranks
 
 ---
 
 ## 8. COMMUNITY FEATURES (UNTESTED)
 
-- [ ] Community photos load on landmarks and countries
-- [ ] Upvoting works for ALL users
-- [ ] Photo of the Week displays with "Week XX" badge
+- [ ] Community photos on landmarks and countries
+- [ ] Upvoting for ALL users
+- [ ] Photo of the Week with "Week XX" badge
 
 ---
 
 ## 9. PREMIUM/SUBSCRIPTION (UNTESTED)
 
-- [ ] Free vs Pro feature list correct on subscription page
-- [ ] Premium landmarks locked for free users
-- [ ] Custom visits and messages locked for free users
+- [ ] Free vs Pro feature list correct
+- [ ] Premium landmarks, custom visits, messages locked for free
 
 ---
 
 ## 10. ADMIN PANEL (UNTESTED)
 
-- [ ] Dashboard, user management, reports, analytics, notifications, promo codes
+- [ ] Dashboard, users, reports, analytics, notifications, promo codes
 
 ---
 
 ## 11. EDGE CASES (UNTESTED)
 
-- [ ] Offline behavior: cached data or friendly error
-- [ ] Error boundary: "Something went wrong" with retry
-- [ ] Empty states: no visits, no friends, no photos
-- [ ] Back navigation works from all detail pages
+- [ ] Offline, error boundary, empty states, back navigation
 
 ---
 
 ## 12. LEGAL & COMPLIANCE (UNTESTED)
 
-- [ ] Privacy Policy + Terms accessible from About
-- [ ] Account deletion works completely
+- [ ] Privacy Policy + Terms accessible, account deletion works
 
 ---
 
-## FIXES IN THIS BUILD (summary of changes since build 70):
+## FIXES IN THIS BUILD (changes since build 70):
 
-### Backend (live — no build needed):
-- Visit deletion now cleans up auto country visits + bonus points
-- ~90 landmark duplicates/activity names fixed on production DB
+### Backend (live now):
+- Visit deletion: auto country visit + bonus points cleanup
+- Production DB: ~90 activity/duplicate landmarks fixed
 
-### Frontend (requires new build):
+### Frontend (in new build):
 - Loading indicator: purple -> teal
 - My Landmark Visits + Points Summary: UniversalHeader with logo
-- Visit detail: date removed, photo height improved, delete warning updated, diary keyboard Done button
+- Visit detail: date removed, photo height improved, delete warning updated, diary Done key
 - Landmark list: Community Highlights removed
-- Photo picker: "Add Photo" (library) is now primary, camera secondary
-- Share Journey Card: proportions fixed, decorative line removed
-- Ranks page: verified points explanation improved
-- Landmark detail: Oceania shows "Oceania & Island Paradises"
+- Photo picker: library primary, camera secondary
+- Share Journey Card: proportions + decorative line fixed
+- Ranks page: verified points explanation
+- Landmark detail: Oceania -> "Oceania & Island Paradises"
 
 ### KNOWN ITEMS (not bugs):
-- Preview environment: "Server Error" on web is expected (local empty MongoDB)
-- No pre-filled images on landmarks (user-content only)
-- No coordinates on landmarks (by design)
-- Near-duplicate detection catches ~15 false positives (different parks sharing a word) — these are NOT duplicates
+- Preview environment: "Server Error" on web expected
+- No pre-filled images or coordinates on landmarks (by design)
+- ~15 near-duplicate detections are false positives (different parks sharing a word)
