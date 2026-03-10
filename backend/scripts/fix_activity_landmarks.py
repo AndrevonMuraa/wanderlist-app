@@ -60,8 +60,8 @@ FIXES = {
         "new_desc": "UNESCO wilderness area with dramatic sandstone formations, ancient San rock art, and the iconic Maltese Cross.",
     },
     "tanzania_premium_1": {
-        "new_name": "Ngorongoro Crater",
-        "new_desc": "World's largest unbroken volcanic caldera, a natural amphitheater sheltering extraordinary wildlife.",
+        "new_name": "Lake Natron",
+        "new_desc": "Eerie alkaline lake that turns animals to stone, breeding ground for millions of lesser flamingos.",
     },
     "tanzania_premium_2": {
         "new_name": "Ruaha River Gorge",
@@ -80,8 +80,8 @@ FIXES = {
         "new_desc": "Sacred waterfall where the Ssezibwa River cascades over ancient rocks, an important spiritual and cultural site.",
     },
     "zambia_premium_1": {
-        "new_name": "Bangweulu Wetlands",
-        "new_desc": "Vast pristine wetland ecosystem, one of Africa's most important bird habitats and natural flood plains.",
+        "new_name": "Lilayi Elephant Nursery",
+        "new_desc": "Rescue sanctuary caring for orphaned baby elephants before releasing them back into the wild.",
     },
     "zimbabwe_premium_1": {
         "new_name": "Zambezi River Gorge",
@@ -124,8 +124,8 @@ FIXES = {
 
     # =================== ASIA ===================
     "cambodia_premium_5": {
-        "new_name": "Kampot Pepper Plantations",
-        "new_desc": "World-renowned pepper growing region producing the finest Kampot pepper with protected GI status.",
+        "new_name": "Koh Ker Pyramid Temple",
+        "new_desc": "Remote 10th-century pyramid temple rising 36m from the jungle, a forgotten Khmer capital.",
     },
     "laos_premium_4": {
         "new_name": "Mekong River Vientiane",
@@ -182,8 +182,8 @@ FIXES = {
         "new_desc": "Stunning twin crater lakes of blue and green on São Miguel island in the volcanic Azores archipelago.",
     },
     "switzerland_glacier_express": {
-        "new_name": "Rhine Falls",
-        "new_desc": "Europe's largest plain waterfall, a thundering 150m-wide cascade near Schaffhausen.",
+        "new_name": "Gorner Gorge",
+        "new_desc": "Dramatic glacier-carved gorge near Zermatt with wooden walkways over thundering glacial meltwater.",
     },
 
     # =================== OCEANIA ===================
@@ -220,8 +220,8 @@ FIXES = {
         "new_desc": "Tiny coral island in the vast Marovo Lagoon with pristine reefs and lush tropical vegetation.",
     },
     "vanuatu_pentecost_land_diving": {
-        "new_name": "Millennium Cave",
-        "new_desc": "Spectacular cave system with underground rivers, waterfalls, and dramatic canyon passages through dense jungle.",
+        "new_name": "Mount Yasur Ash Plains",
+        "new_desc": "Otherworldly volcanic ash plains surrounding one of the world's most accessible active volcanoes.",
     },
 }
 

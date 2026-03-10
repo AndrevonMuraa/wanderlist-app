@@ -70,7 +70,7 @@ FILL_GAPS = {
         {"name": "Barro Colorado Island", "desc": "Tropical research island in Gatun Lake, one of the most studied patches of rainforest on Earth."},
     ],
     "samoa": [
-        {"name": "Togitogiga Waterfall", "desc": "Multi-tiered waterfall cascading into natural rock swimming pools in the O Le Pupu-Pue National Park."},
+        {"name": "Falealupo Rainforest Canopy Walk", "desc": "Treetop walkway through pristine rainforest at the westernmost point of Samoa, the last place to see each sunset."},
     ],
     "spain": [
         {"name": "Cies Islands", "desc": "Pristine Atlantic archipelago off Galicia with white sand beaches and crystal waters, part of a national park."},
