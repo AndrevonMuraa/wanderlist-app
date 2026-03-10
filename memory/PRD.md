@@ -49,6 +49,13 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Moved: Maldives, Mauritius, Seychelles to Oceania. Added Hawaii, Guam to Oceania
 - Added: Saint Lucia to Americas
 
+### Activity Landmark Cleanup (Complete - March 10, 2026)
+- Identified and fixed 50 landmarks named as tourist activities (cruises, balloons, safaris, diving, train rides, festivals)
+- Replaced with proper physical/nature landmarks (e.g., "Nile Felucca Cruise Aswan" → "Aswan Botanical Island", "Glacier Express" → "Rhine Falls")
+- Also cleaned 24 duplicate landmark_ids and filled 29 premium gaps
+- DB verified: 1,500 landmarks, 100 countries × 15 each, zero activity-based names
+- Migration scripts: `fix_activity_landmarks.py`, `fill_premium_gaps.py` (must be run on production Atlas via Render Shell)
+
 ### App Store Hardening (Complete - March 9, 2026)
 - BuildNumber 70, CORS configurable, rate limiting (120/20 rpm), Error boundary
 - All stock/placeholder images removed from DB and seed scripts
@@ -92,13 +99,17 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - Email: test2@wandermark.app | Password: Test1234!
 
 ## Prioritized Backlog
+### P0 - Immediate
+- Run production migration scripts on Atlas via Render Shell (`fix_activity_landmarks.py` + `fill_premium_gaps.py`)
+- Complete E2E testing on TestFlight
+
 ### P1 - Upcoming
 - Deploy Privacy Policy / Terms to live URL
-- Build and submit to TestFlight (buildNumber 70)
+- Build and submit next TestFlight build (post-migration)
 
 ### P2 - Future
-- Deploy Privacy Policy / Terms HTML to live URL (GitHub Pages, Netlify, etc.)
 - Sentry crash reporting (requires Sentry account + DSN key)
+- Server-side image compression/resizing
 - Rename GitHub repository (wanderlist-app -> wandermark-app)
 - Add pull-to-refresh to remaining pages
 

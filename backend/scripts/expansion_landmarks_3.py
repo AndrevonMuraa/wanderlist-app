@@ -95,7 +95,7 @@ EXPANSION_LANDMARKS_AO = {
         {"name": "Mount Wilhelm", "description": "PNG's highest peak at 4,509m with stunning sunrise views.", "image_url": "", "images": [], "best_time_to_visit": "May-Oct", "duration": "2-3 days", "difficulty": "Challenging"},
         {"name": "Rabaul Volcano", "description": "Twin volcanoes overlooking the submerged caldera harbor.", "image_url": "", "images": [], "best_time_to_visit": "May-Nov", "duration": "Full day", "difficulty": "Easy"},
         {"name": "Tufi Fjords", "description": "Tropical fjords with diving, snorkeling and indigenous villages.", "image_url": "", "images": [], "best_time_to_visit": "May-Nov", "duration": "2-3 days", "difficulty": "Easy"},
-        {"name": "Goroka Show", "description": "Annual cultural festival with 100+ tribes in traditional dress.", "image_url": "", "images": [], "best_time_to_visit": "Sep (festival)", "duration": "2-3 days", "difficulty": "Easy"},
+        {"name": "Goroka Highland Valley", "description": "Lush highland valley at 1,600m surrounded by rugged mountains, with traditional gardens and misty peaks.", "image_url": "", "images": [], "best_time_to_visit": "May-Nov", "duration": "Full day", "difficulty": "Easy"},
         {"name": "Kimbe Bay", "description": "World-class reef diving with 860 species of reef fish.", "image_url": "", "images": [], "best_time_to_visit": "Year-round", "duration": "2-3 days", "difficulty": "Easy"},
         {"name": "Tari Valley Huli Wigmen", "description": "Highlands valley home to the Huli tribe with ceremonial wigs.", "image_url": "", "images": [], "best_time_to_visit": "May-Nov", "duration": "Full day", "difficulty": "Easy"},
         {"name": "Milne Bay WWII Wrecks", "description": "Underwater WWII aircraft and ship wrecks for diving.", "image_url": "", "images": [], "best_time_to_visit": "May-Nov", "duration": "1-2 days", "difficulty": "Moderate"},
@@ -122,7 +122,7 @@ EXPANSION_LANDMARKS_AO = {
         {"name": "Kennedy Island", "description": "Island where JFK swam ashore after his PT boat was sunk.", "image_url": "", "images": [], "best_time_to_visit": "May-Nov", "duration": "Half day", "difficulty": "Easy"},
         {"name": "Rennell Island", "description": "UNESCO raised coral atoll with Lake Tegano, largest in Pacific.", "image_url": "", "images": [], "best_time_to_visit": "May-Nov", "duration": "2-3 days", "difficulty": "Moderate"},
         {"name": "Honiara Central Market", "description": "Bustling main market with betel nut, fish and local produce.", "image_url": "", "images": [], "best_time_to_visit": "Year-round", "duration": "1-2 hours", "difficulty": "Easy"},
-        {"name": "Uepi Island Diving", "description": "World-class dive resort with pristine drop-offs and coral gardens.", "image_url": "", "images": [], "best_time_to_visit": "Year-round", "duration": "2-3 days", "difficulty": "Easy"},
+        {"name": "Uepi Island", "description": "Tiny coral island in the vast Marovo Lagoon with pristine reefs and lush tropical vegetation.", "image_url": "", "images": [], "best_time_to_visit": "Year-round", "duration": "2-3 days", "difficulty": "Easy"},
         {"name": "Kolombangara Volcano", "description": "Dormant stratovolcano with hiking through pristine rainforest.", "image_url": "", "images": [], "best_time_to_visit": "May-Nov", "duration": "Full day", "difficulty": "Challenging"},
     ],
     "new_caledonia": [

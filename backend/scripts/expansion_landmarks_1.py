@@ -75,7 +75,7 @@ EXPANSION_LANDMARKS_EA = {
         {"name": "Orkhon Valley", "description": "UNESCO cultural landscape with ancient capital ruins and waterfalls.", "image_url": "", "images": [], "best_time_to_visit": "Jun-Sep", "duration": "2-3 days", "difficulty": "Moderate"},
         {"name": "Gandantegchinlen Monastery", "description": "Active Buddhist monastery in Ulaanbaatar with 26m Janraisig statue.", "image_url": "", "images": [], "best_time_to_visit": "Year-round", "duration": "1-2 hours", "difficulty": "Easy"},
         {"name": "Khongoryn Els Sand Dunes", "description": "Singing Dunes stretching 100km in the Gobi, up to 300m high.", "image_url": "", "images": [], "best_time_to_visit": "May-Sep", "duration": "Full day", "difficulty": "Moderate"},
-        {"name": "Eagle Hunters of Bayan-Olgii", "description": "Kazakh nomads who hunt with golden eagles in western Mongolia.", "image_url": "", "images": [], "best_time_to_visit": "Oct (Eagle Festival)", "duration": "2-3 days", "difficulty": "Moderate"},
+        {"name": "Altai Tavan Bogd Mountains", "description": "Five sacred peaks on the border of Mongolia, Russia, and China with glaciers and ancient Turkic petroglyphs.", "image_url": "", "images": [], "best_time_to_visit": "Jun-Sep", "duration": "2-3 days", "difficulty": "Moderate"},
     ],
     "bhutan": [
         {"name": "Tigers Nest Monastery", "description": "Sacred clifftop monastery perched 3,120m above the Paro Valley.", "image_url": "", "images": [], "best_time_to_visit": "Mar-May, Sep-Nov", "duration": "Full day", "difficulty": "Challenging"},

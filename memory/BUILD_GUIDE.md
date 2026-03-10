@@ -109,3 +109,35 @@ cd scripts && python3 mitt_script.py
 - Produksjons-DB (Atlas) endres KUN via Render Shell
 - Lag alltid et kjorbart .py-script for DB-migrering (ikke inline-kommandoer)
 - Backend-kode auto-deployes, men DB-innhold gjor det IKKE
+
+---
+
+## Del 4: Ventende produksjonsmigrering (Mars 2026)
+
+### Aktivitets-landemerker opprydding
+Scriptet fjerner turist-aktiviteter (cruise, ballong, safari, dykking osv.) og erstatter med ekte natur/fysiske landemerker. Kjor **alle tre** i rekkefolge:
+
+```bash
+cd scripts && python3 fix_activity_landmarks.py && python3 fill_premium_gaps.py
+```
+
+**Hva scriptet gjor:**
+1. `fix_activity_landmarks.py` — Oppdaterer 49 landemerker (navn + beskrivelse). Fjerner duplikater.
+2. `fill_premium_gaps.py` — Legger til 29 premium-landemerker for a fylle hull etter duplikat-rydding.
+
+**Forventet resultat:** 1500 landemerker (1000 official + 500 premium), 0 aktivitets-baserte.
+
+**Verifiser etter kjoring:**
+```bash
+python3 -c "
+import asyncio,os
+from motor.motor_asyncio import AsyncIOMotorClient
+async def v():
+    db=AsyncIOMotorClient(os.environ['MONGO_URL'])[os.environ.get('DB_NAME','wandermark')]
+    t=await db.landmarks.count_documents({})
+    o=await db.landmarks.count_documents({'category':'official'})
+    p=await db.landmarks.count_documents({'category':'premium'})
+    print(f'{t} landmarks ({o} official, {p} premium)')
+asyncio.run(v())
+"
+```

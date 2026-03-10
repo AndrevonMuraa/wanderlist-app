@@ -115,7 +115,7 @@ PREMIUM_LANDMARKS = {
         {"name": "Tortuguero National Park", "description": "Remote rainforest canals accessible only by boat, major sea turtle nesting site.", "image_url": "", "points": 25},
     ],
     "ecuador": [
-        {"name": "Nariz del Diablo Train", "description": "Thrilling train ride through dramatic switchbacks carved into sheer mountain faces.", "image_url": "", "points": 25},
+        {"name": "Nariz del Diablo Gorge", "description": "Dramatic mountain gorge with sheer switchback cliffs near Alausi.", "image_url": "", "points": 25},
     ],
     
     # AFRICA
@@ -190,7 +190,7 @@ PREMIUM_LANDMARKS = {
     ],
     "switzerland": [
         {"name": "Lauterbrunnen Valley", "description": "Valley of 72 waterfalls that inspired Tolkien's Rivendell.", "image_url": "", "points": 25},
-        {"name": "Glacier Express", "description": "Scenic train journey through 291 bridges and 91 tunnels in the Alps.", "image_url": "", "points": 25},
+        {"name": "Rhine Falls", "description": "Europe's largest plain waterfall, a thundering 150m-wide cascade near Schaffhausen.", "image_url": "", "points": 25},
         {"name": "Aletsch Glacier", "description": "Largest glacier in the Alps, a UNESCO World Heritage natural wonder.", "image_url": "", "points": 25},
     ],
 }
