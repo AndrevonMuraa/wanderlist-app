@@ -168,6 +168,65 @@ async def delete_visit(visit_id: str, current_user: User = Depends(get_current_u
         {"$inc": decrement}
     )
     
+    # Clean up auto-created country visit if no more landmarks in this country
+    country_id = None
+    if landmark_id:
+        landmark_doc = await db.landmarks.find_one({"landmark_id": landmark_id}, {"_id": 0, "country_id": 1, "continent": 1})
+        if landmark_doc:
+            country_id = landmark_doc.get("country_id")
+            continent = landmark_doc.get("continent")
+            
+            if country_id:
+                # Check remaining landmark visits in this country
+                remaining = await db.visits.count_documents({
+                    "user_id": current_user.user_id,
+                    "landmark_id": {"$regex": f"^{country_id}_"}
+                })
+                
+                if remaining == 0:
+                    # No more landmarks visited — clean up auto country visit
+                    auto_cv = await db.country_visits.find_one({
+                        "user_id": current_user.user_id,
+                        "country_id": country_id,
+                        "source": "auto_landmark"
+                    })
+                    if auto_cv:
+                        cv_points = auto_cv.get("points_earned", 0)
+                        cv_lb = auto_cv.get("leaderboard_points_earned", 0)
+                        
+                        # Delete the auto country visit + its activity
+                        await db.country_visits.delete_one({"country_visit_id": auto_cv["country_visit_id"]})
+                        await db.activities.delete_many({"country_visit_id": auto_cv["country_visit_id"]})
+                        
+                        # Deduct country bonus points (20 pts for first landmark in country)
+                        bonus_dec = {"points": -cv_points}
+                        if cv_lb > 0:
+                            bonus_dec["leaderboard_points"] = -cv_lb
+                        await db.users.update_one(
+                            {"user_id": current_user.user_id},
+                            {"$inc": bonus_dec}
+                        )
+                    
+                    # Also check continent bonus: if no countries left in this continent
+                    if continent:
+                        continent_countries = await db.countries.find({"continent": continent}).to_list(100)
+                        has_any_country = False
+                        for cc in continent_countries:
+                            cc_visits = await db.visits.count_documents({
+                                "user_id": current_user.user_id,
+                                "landmark_id": {"$regex": f"^{cc['country_id']}_"}
+                            })
+                            if cc_visits > 0:
+                                has_any_country = True
+                                break
+                        
+                        if not has_any_country:
+                            # Deduct continent bonus (50 pts for first country in continent)
+                            await db.users.update_one(
+                                {"user_id": current_user.user_id},
+                                {"$inc": {"points": -50, "leaderboard_points": -50}}
+                            )
+    
     # Sync rank badges after points change
     await check_and_award_badges(current_user.user_id)
     

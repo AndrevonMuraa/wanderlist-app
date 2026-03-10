@@ -56,6 +56,19 @@ Travel app for App Store submission. Evolved to include social features, hybrid 
 - DB verified: 1,500 landmarks, 100 countries × 15 each, zero activity-based names
 - Migration scripts: `fix_activity_landmarks.py`, `fill_premium_gaps.py` (must be run on production Atlas via Render Shell)
 
+### Near-Duplicate Cleanup (Complete - March 10, 2026)
+- Fixed ~30 near-duplicate landmark names (same place, different wording)
+- Examples: "Zakynthos Shipwreck Beach" + "Shipwreck Beach Zakynthos" → one renamed to "Vikos Gorge"
+- All exact duplicate names eliminated. DB verified clean.
+- Migration script: `fix_near_duplicates.py`
+
+### Visit Deletion Bug Fix (Complete - March 10, 2026)
+- Fixed critical bug: deleting last landmark visit in a country now properly cleans up:
+  - Auto-created country visit record
+  - Country exploration bonus points (20 pts)
+  - Continent bonus points (50 pts) if no countries remain in continent
+- File changed: `backend/routes/visits.py`
+
 ### App Store Hardening (Complete - March 9, 2026)
 - BuildNumber 70, CORS configurable, rate limiting (120/20 rpm), Error boundary
 - All stock/placeholder images removed from DB and seed scripts
