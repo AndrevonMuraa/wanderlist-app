@@ -117,13 +117,13 @@ export default function PhotoSection({
         ))}
         {canAddMore && (
           <View style={styles.photoButtonsColumn}>
-            <TouchableOpacity style={styles.cameraButton} onPress={takePhoto} data-testid="take-photo-btn">
-              <Ionicons name="camera" size={28} color="#fff" />
-              <Text style={styles.cameraButtonText}>Take Photo</Text>
+            <TouchableOpacity style={styles.libraryButtonPrimary} onPress={pickImages} data-testid="pick-photo-btn">
+              <Ionicons name="images" size={28} color="#fff" />
+              <Text style={styles.libraryButtonPrimaryText}>Add Photo</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.libraryButton} onPress={pickImages} data-testid="pick-photo-btn">
-              <Ionicons name="images-outline" size={16} color={theme.colors.textSecondary} />
-              <Text style={styles.libraryButtonText}>Choose from Library</Text>
+            <TouchableOpacity style={styles.cameraButtonSecondary} onPress={takePhoto} data-testid="take-photo-btn">
+              <Ionicons name="camera-outline" size={16} color={theme.colors.textSecondary} />
+              <Text style={styles.cameraButtonSecondaryText}>Take Photo Instead</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -243,6 +243,30 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   libraryButtonText: {
+    fontSize: 11,
+    color: theme.colors.textSecondary,
+  },
+  libraryButtonPrimary: {
+    width: 100,
+    height: 72,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 2,
+  },
+  libraryButtonPrimaryText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  cameraButtonSecondary: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: 4,
+  },
+  cameraButtonSecondaryText: {
     fontSize: 11,
     color: theme.colors.textSecondary,
   },

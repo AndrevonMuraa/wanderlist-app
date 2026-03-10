@@ -504,6 +504,8 @@ export default function VisitDetailScreen() {
               multiline
               numberOfLines={6}
               textAlignVertical="top"
+              returnKeyType="done"
+              blurOnSubmit={true}
             />
           </Dialog.Content>
           <Dialog.Actions>
@@ -518,7 +520,7 @@ export default function VisitDetailScreen() {
         <Dialog visible={showDeleteDialog} onDismiss={() => setShowDeleteDialog(false)}>
           <Dialog.Title>Delete Visit</Dialog.Title>
           <Dialog.Content>
-            <Text>Are you sure? This will remove the landmark as visited and delete all associated photos, diary entries and points. This cannot be undone.</Text>
+            <Text>Are you sure? This will remove the landmark as visited and permanently delete all associated photos, diary entries, comments, likes, and points. This cannot be undone.</Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setShowDeleteDialog(false)}>Cancel</Button>
@@ -594,7 +596,7 @@ const styles = StyleSheet.create({
   },
   mainPhoto: {
     width: width,
-    height: width * 0.75,
+    height: width * 0.65,
   },
   photoThumbnails: {
     padding: theme.spacing.sm,

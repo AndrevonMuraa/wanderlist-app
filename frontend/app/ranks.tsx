@@ -146,7 +146,7 @@ export default function RanksScreen() {
         <View style={styles.heroSection}>
           <Text style={styles.heroTitle}>Path to Transcendent</Text>
           <Text style={styles.heroSubtitle}>
-            Earn points by visiting landmarks and exploring countries. 
+            Ranks are based on verified points — earned by visiting landmarks with a personal photo. 
             Advance through 20 ranks to become a travel legend!
           </Text>
 
@@ -162,7 +162,7 @@ export default function RanksScreen() {
               </View>
             </View>
             <Text style={styles.progressPoints}>
-              {userPoints.toLocaleString()} points earned
+              {userPoints.toLocaleString()} verified points
             </Text>
           </Surface>
         </View>

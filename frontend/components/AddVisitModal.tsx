@@ -47,7 +47,7 @@ export default function AddVisitModal({
         'Record Without Photo?',
         'Visits without a personal photo will not earn verified points for the global leaderboard.\n\nTo earn verified points, add a photo of yourself at the landmark.',
         [
-          { text: 'Add Photo', style: 'cancel' },
+          { text: 'Add Photo', style: 'cancel', onPress: () => {} },
           { text: 'Record Anyway', onPress: () => submitVisit() },
         ]
       );
