@@ -107,37 +107,53 @@ cd scripts && python3 mitt_script.py
 ### VIKTIG for agenter:
 - Alle DB-endringer i Emergent preview pavirker KUN lokal MongoDB
 - Produksjons-DB (Atlas) endres KUN via Render Shell
-- Lag alltid et kjorbart .py-script for DB-migrering (ikke inline-kommandoer)
+- Lag alltid et kjorbart .py-fil for DB-migrering (ALDRI inline python-kommandoer — de bryter i Render Shell pga. terminal-escaping)
+- Bruk ALLTID navn-basert matching i migrerings-script (IKKE landmark_id) — IDene er forskjellige mellom lokal og produksjon
 - Backend-kode auto-deployes, men DB-innhold gjor det IKKE
+- Kjor `db_compare.py` etter ALLE migreringer for a verifisere at databasen er ren
 
 ---
 
-## Del 4: Ventende produksjonsmigrering (Mars 2026)
+## Del 4: Database-verifisering
 
-### Aktivitets-landemerker opprydding
-Scriptet fjerner turist-aktiviteter (cruise, ballong, safari, dykking osv.) og erstatter med ekte natur/fysiske landemerker. Kjor **alle tre** i rekkefolge:
+### db_compare.py — Standard verifikasjonsverktoy
+Etter enhver database-migrering, kjor dette i Render Shell:
 
 ```bash
-cd scripts && python3 fix_activity_landmarks.py && python3 fill_premium_gaps.py
+cd scripts && python3 db_compare.py
 ```
 
-**Hva scriptet gjor:**
-1. `fix_activity_landmarks.py` — Oppdaterer 49 landemerker (navn + beskrivelse). Fjerner duplikater.
-2. `fill_premium_gaps.py` — Legger til 29 premium-landemerker for a fylle hull etter duplikat-rydding.
-
-**Forventet resultat:** 1500 landemerker (1000 official + 500 premium), 0 aktivitets-baserte.
-
-**Verifiser etter kjoring:**
-```bash
-python3 -c "
-import asyncio,os
-from motor.motor_asyncio import AsyncIOMotorClient
-async def v():
-    db=AsyncIOMotorClient(os.environ['MONGO_URL'])[os.environ.get('DB_NAME','wandermark')]
-    t=await db.landmarks.count_documents({})
-    o=await db.landmarks.count_documents({'category':'official'})
-    p=await db.landmarks.count_documents({'category':'premium'})
-    print(f'{t} landmarks ({o} official, {p} premium)')
-asyncio.run(v())
-"
+**Forventet resultat (ren database):**
 ```
+Countries: 100
+Landmarks: 1500 (1000 official, 500 premium)
+Duplicate IDs: 0
+Duplicate names: 0
+Wrong counts: 0
+Activity names: 0
+```
+
+Hvis noe avviker, gi output til agenten for feilsoking.
+
+---
+
+## Del 5: Fullforte migreringer (logg)
+
+### Mars 2026: Aktivitets-landemerker opprydding (FULLFORT)
+- Fjernet 50 turist-aktiviteter (cruise, ballong, safari, dykking, tog, festival osv.)
+- Erstattet med ekte natur/fysiske landemerker
+- Ryddet duplikate landmark_ids og duplikate navn
+- Fylt premium-hull for 25 land
+- Scripts brukt (trenger IKKE kjores igjen):
+  - `fix_activity_landmarks.py` — ID-basert fix (lokal + delvis produksjon)
+  - `fix_production_sync.py` — Navn-basert fix for produksjon
+  - `fix_production_final.py` — Gjenstaende aktivitets-navn + premium-fill
+  - `fix_final_final.py` — Siste 2 fikser (Fiji duplikat + Australia gap)
+  - `fill_premium_gaps.py` — Fyller premium-hull etter duplikat-rydding
+
+### Laerdom fra denne migreringen:
+1. **Lokal DB og produksjons-DB har ULIKE landmark_ids** — ble populert fra forskjellige script-versjoner over tid
+2. **Aldri bruk landmark_id for migreringsscript** — bruk `name`-feltet for matching
+3. **Alltid sjekk for duplikate navn** etter omdoping — unnga a gi nytt navn til noe som allerede finnes
+4. **Kjor db_compare.py etter ALLE migreringer** — ikke stol pa at "det ble OK lokalt"
+5. **Aldri bruk inline python i Render Shell** — terminalen odelegger escaping. Lag alltid en .py-fil
