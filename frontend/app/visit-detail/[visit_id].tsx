@@ -342,17 +342,6 @@ export default function VisitDetailScreen() {
           )}
           <View style={styles.infoRow}>
             <View style={styles.infoItem}>
-              <Ionicons name="calendar" size={20} color={theme.colors.primary} />
-              <Text style={styles.infoLabel}>Date</Text>
-              <Text style={styles.infoValue}>
-                {new Date(visit.visited_at).toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric'
-                })}
-              </Text>
-            </View>
-            <View style={styles.infoItem}>
               <Ionicons name="star" size={20} color={theme.colors.accentYellow} />
               <Text style={styles.infoLabel}>Points</Text>
               <Text style={styles.infoValue}>+{visit.points_earned}</Text>

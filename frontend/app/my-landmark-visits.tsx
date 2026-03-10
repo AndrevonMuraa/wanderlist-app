@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Skeleton } from '../components/Skeleton';
 import { Platform } from 'react-native';
 import theme, { gradients } from '../styles/theme';
+import UniversalHeader from '../components/UniversalHeader';
 import { BACKEND_URL } from '../utils/config';
 
 interface LandmarkVisit {
@@ -148,13 +149,7 @@ export default function MyLandmarkVisits() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={gradients.oceanToSand} start={gradients.horizontal.start} end={gradients.horizontal.end} style={[styles.header, { paddingTop: insets.top + 8 }]}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>My Landmark Visits</Text>
-        <View style={{ width: 40 }} />
-      </LinearGradient>
+      <UniversalHeader title="My Landmark Visits" />
 
       {/* Stats Summary */}
       <View style={styles.statsRow}>
