@@ -374,12 +374,9 @@ export default function JourneyScreen() {
         {/* Next Rank */}
         {rankProgress.nextRank && (
           <Surface style={[styles.milestoneCard, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.sectionTitle, { color: colors.text, textAlign: 'center', marginBottom: theme.spacing.sm }]}>Next Rank</Text>
             <View style={styles.milestoneRow}>
               <View style={styles.milestoneContent}>
-                <View style={styles.milestoneHeader}>
-                  <Ionicons name="rocket" size={24} color={rankProgress.nextRank.color} />
-                  <Text style={[styles.milestoneTitle, { color: colors.text }]}>Next Rank</Text>
-                </View>
                 <Text style={[styles.milestoneName, { color: rankProgress.nextRank.color }]}>{rankProgress.nextRank.name}</Text>
                 <Text style={[styles.milestoneProgress, { color: colors.textSecondary }]}>
                   {rankProgress.pointsNeededForNext} more points needed
@@ -403,7 +400,7 @@ export default function JourneyScreen() {
         {/* Continental Progress */}
         {progressStats && (
           <Surface style={[styles.continentalCard, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('journey.continentalProgress')}</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text, textAlign: 'center' }]}>{t('journey.continentalProgress')}</Text>
             {Object.entries(progressStats.continents)
               .sort((a, b) => b[1].percentage - a[1].percentage)
               .map(([continent, data]) => (
@@ -479,6 +476,43 @@ export default function JourneyScreen() {
         <Surface style={[styles.countryVisitsCard, { backgroundColor: colors.surface }]}>
           <TouchableOpacity
             style={styles.countryVisitsRow}
+            onPress={() => {
+              if (canCreateCustomVisits) {
+                router.push('/custom-visits');
+              } else {
+                setShowProLock(true);
+              }
+            }}
+            activeOpacity={0.7}
+          >
+            <View style={styles.countryVisitsLeft}>
+              <View style={[styles.countryVisitsIcon, { backgroundColor: colors.accentTeal + '20' }]}>
+                <Ionicons name="globe-outline" size={22} color={colors.accentTeal} />
+              </View>
+              <View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>Custom Visits</Text>
+                  {!canCreateCustomVisits && (
+                    <View style={[styles.proBadge, { backgroundColor: colors.accentTeal + '15' }]}>
+                      <Ionicons name="diamond" size={12} color={colors.accentTeal} />
+                      <Text style={[styles.proBadgeText, { color: colors.accentTeal }]}>PRO</Text>
+                    </View>
+                  )}
+                </View>
+                <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>
+                  {userCreatedVisits.length > 0 
+                    ? `${userCreatedVisits.length} custom visit${userCreatedVisits.length !== 1 ? 's' : ''} recorded`
+                    : 'Record visits anywhere'}
+                </Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={22} color={colors.textLight} />
+          </TouchableOpacity>
+        </Surface>
+
+        <Surface style={[styles.countryVisitsCard, { backgroundColor: colors.surface }]}>
+          <TouchableOpacity
+            style={styles.countryVisitsRow}
             onPress={() => router.push('/points-summary')}
             activeOpacity={0.7}
             data-testid="nav-points-summary"
@@ -514,42 +548,6 @@ export default function JourneyScreen() {
             <Ionicons name="chevron-forward" size={22} color={colors.textLight} />
           </TouchableOpacity>
         </Surface>
-
-        <View style={styles.bottomSpacer} />
-        <View ref={customVisitsRef}>
-        <TouchableOpacity 
-          style={[styles.navRow, { backgroundColor: colors.surface }]}
-          onPress={() => {
-            if (canCreateCustomVisits) {
-              router.push('/custom-visits');
-            } else {
-              setShowProLock(true);
-            }
-          }}
-          activeOpacity={0.7}
-        >
-          <View style={[styles.navRowIcon, { backgroundColor: colors.accentTeal + '15' }]}>
-            <Ionicons name="globe-outline" size={22} color={colors.accentTeal} />
-          </View>
-          <View style={styles.navRowText}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Text style={[styles.navRowTitle, { color: colors.text }]}>Custom Visits</Text>
-              {!canCreateCustomVisits && (
-                <View style={[styles.proBadge, { backgroundColor: colors.accentTeal + '15' }]}>
-                  <Ionicons name="diamond" size={12} color={colors.accentTeal} />
-                  <Text style={[styles.proBadgeText, { color: colors.accentTeal }]}>PRO</Text>
-                </View>
-              )}
-            </View>
-            <Text style={[styles.navRowSubtitle, { color: colors.textLight }]}>
-              {userCreatedVisits.length > 0 
-                ? `${userCreatedVisits.length} custom visit${userCreatedVisits.length !== 1 ? 's' : ''} recorded`
-                : 'Record visits to places not in our database'}
-            </Text>
-          </View>
-          <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
-        </TouchableOpacity>
-        </View>
 
         <View style={styles.bottomSpacer} />
       </ScrollView>
