@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, StyleSheet, FlatList, Image, RefreshControl, Alert, TouchableOpacity, Platform, StatusBar, TextInput } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { useRouter } from 'expo-router';
@@ -226,19 +226,26 @@ export default function FriendsScreen() {
     ]);
   };
 
-  const handleSearchUsers = async (query: string) => {
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleSearchUsers = useCallback((query: string) => {
     setSearchUsername(query);
     if (query.length < 2) { setSearchResults([]); return; }
-    setSearching(true);
-    try {
-      const token = await getToken();
-      const res = await fetch(`${BACKEND_URL}/api/users/search?q=${encodeURIComponent(query)}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (res.ok) setSearchResults(await res.json());
-    } catch (e) { console.error(e); }
-    finally { setSearching(false); }
-  };
+    
+    // Debounce: wait 300ms after last keystroke before searching
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(async () => {
+      setSearching(true);
+      try {
+        const token = await getToken();
+        const res = await fetch(`${BACKEND_URL}/api/users/search?q=${encodeURIComponent(query)}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) setSearchResults(await res.json());
+      } catch (e) { console.error(e); }
+      finally { setSearching(false); }
+    }, 300);
+  }, []);
 
   const handleSendRequestToUser = async (username: string) => {
     if (isAtLimit && !isPro) { setShowProLock(true); return; }
@@ -337,28 +344,21 @@ export default function FriendsScreen() {
       <View style={styles.addFriendCard}>
         <View style={styles.sectionHeader}>
           <View style={[styles.sectionIconCircle, { backgroundColor: 'rgba(77, 184, 216, 0.1)' }]}>
-            <Ionicons name="search" size={22} color={theme.colors.primary} />
+            <Ionicons name="people" size={22} color={theme.colors.primary} />
           </View>
           <View style={styles.sectionHeaderText}>
             <Text style={styles.sectionTitle}>Find Friends</Text>
             <Text style={styles.sectionSubtitle}>
-              {isPro ? 'Unlimited friends' : `${friendsRemaining} slot${friendsRemaining !== 1 ? 's' : ''} remaining`}
+              {isPro ? 'Unlimited friends' : `${friends.length} of ${maxFriends} friends`}
             </Text>
           </View>
-          {!isPro && (
-            <View style={[styles.limitBadge, isAtLimit && styles.limitBadgeError]}>
-              <Text style={[styles.limitBadgeText, isAtLimit && styles.limitBadgeTextError]}>
-                {friends.length}/{maxFriends}
-              </Text>
-            </View>
-          )}
         </View>
 
         <View style={styles.searchRow}>
           <View style={styles.searchInputContainer}>
             <Ionicons name="person-outline" size={18} color={theme.colors.textLight} style={styles.searchIcon} />
             <TextInput
-              placeholder="Search by name or username"
+              placeholder="Search by username"
               value={searchUsername}
               onChangeText={handleSearchUsers}
               style={styles.searchInput}

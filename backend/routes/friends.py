@@ -179,14 +179,11 @@ async def remove_friend(friendship_id: str, current_user: User = Depends(get_cur
 
 @router.get("/users/search")
 async def search_users(q: str, current_user: User = Depends(get_current_user)):
-    """Search users by name or username"""
+    """Search users by username only (privacy)"""
     if len(q) < 2:
         return []
     results = await db.users.find(
-        {"$or": [
-            {"username": {"$regex": q, "$options": "i"}},
-            {"name": {"$regex": q, "$options": "i"}}
-        ]},
+        {"username": {"$regex": q, "$options": "i"}},
         {"_id": 0, "password_hash": 0}
     ).limit(20).to_list(20)
     # Exclude self, return public fields
