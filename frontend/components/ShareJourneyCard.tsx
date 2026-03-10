@@ -86,7 +86,6 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
             {/* Subtle decorative elements */}
             <View style={styles.decorCircle1} />
             <View style={styles.decorCircle2} />
-            <View style={styles.decorLine} />
 
             {/* Brand */}
             <View style={styles.brandRow}>
@@ -225,8 +224,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   card: {
-    width: CARD_W,
-    padding: 28,
+    width: '100%',
+    padding: 24,
     alignItems: 'center',
     overflow: 'hidden',
   },

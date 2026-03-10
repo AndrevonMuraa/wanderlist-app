@@ -302,7 +302,7 @@ export default function LandmarkDetailScreen() {
             <View style={styles.locationRow}>
               <Ionicons name="location" size={16} color={theme.colors.primary} />
               <Text style={styles.locationText}>
-                {landmark.country_name} • {landmark.continent}
+                {landmark.country_name} • {landmark.continent === 'Oceania' ? 'Oceania & Island Paradises' : landmark.continent}
               </Text>
             </View>
 
