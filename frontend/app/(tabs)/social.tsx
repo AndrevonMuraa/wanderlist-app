@@ -264,13 +264,6 @@ export default function SocialHubScreen() {
             {leaderboard.length > 0 ? (
               <>
                 {leaderboard.map((entry, index) => renderLeaderboardItem(entry, index))}
-                <TouchableOpacity 
-                  style={styles.viewAllButton}
-                  onPress={() => router.push('/leaderboard')}
-                >
-                  <Text style={styles.viewAllText}>View Full Leaderboard</Text>
-                  <Ionicons name="arrow-forward" size={16} color={theme.colors.primary} />
-                </TouchableOpacity>
               </>
             ) : (
               <View style={styles.emptyState}>
@@ -331,15 +324,6 @@ export default function SocialHubScreen() {
                 </TouchableOpacity>
               ))}
             </View>
-            <Surface style={[styles.card, { marginTop: theme.spacing.sm }]}>
-              <TouchableOpacity 
-                style={styles.viewAllButton}
-                onPress={() => router.push('/feed')}
-              >
-                <Text style={styles.viewAllText}>View All Activity</Text>
-                <Ionicons name="arrow-forward" size={16} color={theme.colors.primary} />
-              </TouchableOpacity>
-            </Surface>
             </>
           ) : (
             <Surface style={styles.card}>
@@ -348,13 +332,6 @@ export default function SocialHubScreen() {
                 <Text style={styles.emptyText}>No activity yet</Text>
                 <Text style={styles.emptySubtext}>Visit landmarks and share your adventures to see them here!</Text>
               </View>
-              <TouchableOpacity 
-                style={styles.viewAllButton}
-                onPress={() => router.push('/feed')}
-              >
-                <Text style={styles.viewAllText}>View All Activity</Text>
-                <Ionicons name="arrow-forward" size={16} color={theme.colors.primary} />
-              </TouchableOpacity>
             </Surface>
           )}
         </View>
