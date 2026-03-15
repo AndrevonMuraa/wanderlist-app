@@ -95,7 +95,9 @@ async def get_stats(current_user: User = Depends(get_current_user)):
         "points": user.get("points", 0) if user else 0,
         "leaderboard_points": user_lb_points,
         "rank": users_above + 1,
-        "visits_with_photos": visits_with_photos
+        "visits_with_photos": visits_with_photos,
+        "countries_with_landmarks": len(landmark_country_ids),
+        "continents_with_landmarks": len(landmark_continents),
     }
 
 # ============= PROGRESS STATISTICS ENDPOINT =============

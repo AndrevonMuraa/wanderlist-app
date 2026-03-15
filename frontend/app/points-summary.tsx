@@ -43,18 +43,22 @@ export default function PointsSummary() {
     const fetchStats = async () => {
       try {
         const token = await getToken();
-        const statsRes = await fetch(`${BACKEND_URL}/api/stats`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // Fetch both stats and progress in parallel — progress has calculated points
+        const [statsRes, progressRes] = await Promise.all([
+          fetch(`${BACKEND_URL}/api/stats`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`${BACKEND_URL}/api/progress`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
         
-        if (statsRes.ok) {
+        if (statsRes.ok && progressRes.ok) {
           const statsData = await statsRes.json();
+          const progressData = await progressRes.json();
           const withPhotos = statsData.visits_with_photos || 0;
           const totalVisits = statsData.total_visits || 0;
           
+          // Use CALCULATED values from progress (single source of truth)
           setStats({
-            total_points: statsData.points || 0,
-            leaderboard_points: statsData.leaderboard_points || 0,
+            total_points: progressData.totalPoints || 0,
+            leaderboard_points: progressData.verifiedPoints || 0,
             landmarks_visited: totalVisits,
             countries_visited: statsData.countries_visited || 0,
             visits_with_photos: withPhotos,
