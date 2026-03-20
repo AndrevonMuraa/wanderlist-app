@@ -12,6 +12,7 @@
 
 ## PRE-TEST: App Launch
 - [ ] App opens without crash (PASSED)
+- [ ] FIX APPLIED: Splash screen shows "WanderMark" with app-ikon (was "Wanderlist")
 - [ ] Welcome/onboarding screen shows "1,500 Landmarks" and "100 countries" (PASSED)
 - [ ] Login with test@wandermark.app / Test1234! succeeds (PASSED)
 - [ ] FIX APPLIED: Loading indicator is teal/turquoise (was purple)
@@ -72,8 +73,9 @@
 
 ## 2. MY JOURNEY TAB — partially tested
 
-### 2.1 Stats Section (PASSED)
+### 2.1 Stats Section (PASSED — layout updated)
 - [ ] Header with share icon, 6 stat boxes, all tappable
+- [ ] FIX APPLIED: Rank-boks er na rad 2 venstre, Leaderboard rad 2 hoyre (var byttet — bedre visuell variasjon)
 
 ### 2.2 Share Journey Card — bugs found, fixes applied
 - [ ] FIX APPLIED: "Share Your Journey" tekst ikke avkuttet pa toppen
@@ -197,8 +199,10 @@ Velg et ubesokt landemerke (f.eks. "Eiffel Tower" i Frankrike).
 
 ### 5.1 Points Summary Page
 - [ ] FIX APPLIED: Bruker UniversalHeader med logo
-- [ ] Total points = landmark + country + bonuses
+- [ ] FIX APPLIED: Henter na kalkulerte verdier fra /api/progress (ikke lagret user.points)
+- [ ] Total points = landmark visits + country visits + bonuses
 - [ ] Verified vs unverified breakdown correct
+- [ ] FIX APPLIED: Alle poeng-tall matcher pa tvers av Stats, Points Summary og Ranks (felles datakilde)
 
 ### 5.2 Ranks Page — fix applied
 - [ ] All 20 ranks visible, current rank highlighted
@@ -273,9 +277,13 @@ Velg et ubesokt landemerke (f.eks. "Eiffel Tower" i Frankrike).
 ### Backend (live now):
 - Visit deletion: auto country visit + bonus points cleanup
 - Production DB: ~90 activity/duplicate landmarks fixed
+- Points recalculation script: cleans stale country visits + syncs user.points
 
 ### Frontend (in new build):
+- Splash screen: "Wanderlist" -> "WanderMark" with correct app icon
 - Loading indicator: purple -> teal
+- Stats boxes: Rank and Leaderboard swapped for visual balance
+- Points Summary: now uses calculated values from /api/progress (single source of truth)
 - My Landmark Visits + Points Summary: UniversalHeader with logo
 - Visit detail: date removed, photo height improved, delete warning updated, diary Done key
 - Landmark list: Community Highlights removed
@@ -283,6 +291,11 @@ Velg et ubesokt landemerke (f.eks. "Eiffel Tower" i Frankrike).
 - Share Journey Card: proportions + decorative line fixed
 - Ranks page: verified points explanation
 - Landmark detail: Oceania -> "Oceania & Island Paradises"
+
+### Production migration (run after deploy):
+```
+cd scripts && python3 recalculate_points.py
+```
 
 ### KNOWN ITEMS (not bugs):
 - Preview environment: "Server Error" on web expected
