@@ -281,6 +281,7 @@ async def recalculate_user_points(user_id: str):
             verified_country_points += cv.get("leaderboard_points_earned", 0)
 
     # 5. Calculate continent bonuses
+    # Continents with landmarks
     continents_visited = set()
     verified_continents = set()
     for cid in countries_with_landmarks:
@@ -292,6 +293,17 @@ async def recalculate_user_points(user_id: str):
                 if v["landmark_id"].startswith(f"{cid}_")
             )
             if has_verified:
+                verified_continents.add(country_doc["continent"])
+
+    # Also check continents from manual country visits (no landmarks needed)
+    async for cv in db.country_visits.find(
+        {"user_id": user_id, "source": {"$ne": "auto_landmark"}},
+        {"_id": 0, "country_id": 1, "has_photos": 1}
+    ):
+        country_doc = await db.countries.find_one({"country_id": cv["country_id"]}, {"_id": 0, "continent": 1})
+        if country_doc:
+            continents_visited.add(country_doc["continent"])
+            if cv.get("has_photos"):
                 verified_continents.add(country_doc["continent"])
 
     continent_bonus = len(continents_visited) * 50
