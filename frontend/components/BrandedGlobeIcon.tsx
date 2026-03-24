@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, Ellipse, Line, Path } from 'react-native-svg';
 import theme, { gradients } from '../styles/theme';
@@ -199,33 +199,14 @@ export function HeaderBranding({
   textColor?: string;
   showText?: boolean;
 }) {
+  const iconSize = size * 1.3;
   return (
     <View style={styles.headerBranding}>
-      <View style={[styles.miniGlobeContainer, { width: size, height: size }]}>
-        <Svg width={size} height={size} viewBox="0 0 100 100">
-          {/* Mini globe with gradient fill simulation */}
-          <Circle cx="50" cy="50" r="46" fill="#4DB8D8" />
-          {/* Equator */}
-          <Line x1="8" y1="50" x2="92" y2="50" stroke="rgba(255,255,255,0.7)" strokeWidth="4" />
-          {/* Meridian */}
-          <Ellipse cx="50" cy="50" rx="22" ry="44" stroke="rgba(255,255,255,0.5)" strokeWidth="3" fill="none" />
-          {/* Top latitude */}
-          <Line x1="18" y1="32" x2="82" y2="32" stroke="rgba(255,255,255,0.4)" strokeWidth="2.5" />
-          {/* Bottom latitude */}
-          <Line x1="18" y1="68" x2="82" y2="68" stroke="rgba(255,255,255,0.4)" strokeWidth="2.5" />
-        </Svg>
-        {/* Mini W */}
-        <Text style={[styles.miniW, { fontSize: size * 0.5 }]}>W</Text>
-        {/* Mini Pin */}
-        <View style={[styles.miniPin, { 
-          width: size * 0.35, 
-          height: size * 0.35,
-          top: -size * 0.08,
-          right: -size * 0.08,
-        }]}>
-          <View style={styles.miniPinInner} />
-        </View>
-      </View>
+      <Image 
+        source={require('../assets/images/icon.png')} 
+        style={{ width: iconSize, height: iconSize, borderRadius: iconSize * 0.22 }}
+        resizeMode="contain"
+      />
       {showText && (
         <Text style={[styles.brandText, { color: textColor, fontSize: size * 0.8 }]}>
           WanderMark
