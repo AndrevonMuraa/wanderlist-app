@@ -318,39 +318,79 @@ export default function ExploreCountriesScreen() {
     const totalVisited = sections.reduce((sum, section) => 
       sum + section.data.flat().reduce((visitedSum, country) => visitedSum + (country.visited || 0), 0), 0);
 
+    // User progress stats
+    const totalVisitedCountries = allCountries.filter(c => (c.visited || 0) > 0).length;
+    const totalEarnedPoints = allCountries.reduce((sum, country) => {
+      const visitedLandmarks = country.visited || 0;
+      // Approximate: official = 10pts, premium = 25pts. Most are official.
+      return sum + (visitedLandmarks * 10);
+    }, 0);
+
     return (
       <View>
 
         {/* Visual Stats Section */}
         <View style={styles.statsContainerNew}>
           <Surface style={styles.statsCard}>
+            {/* Row 1: Total available */}
             <View style={styles.statBoxRow}>
               <View style={styles.statItem}>
                 <View style={[styles.statIconCircle, { backgroundColor: theme.colors.primary + '20' }]}>
-                  <Ionicons name="flag" size={24} color={theme.colors.primary} />
+                  <Ionicons name="flag" size={20} color={theme.colors.primary} />
                 </View>
-                <Text style={styles.statNumberLarge}>{totalCountries}</Text>
-                <Text style={styles.statLabelNew}>Countries</Text>
+                <Text style={styles.statNumberCompact}>{totalCountries}</Text>
+                <Text style={styles.statLabelCompact}>Destinations</Text>
               </View>
               
               <View style={styles.statDividerNew} />
               
               <View style={styles.statItem}>
                 <View style={[styles.statIconCircle, { backgroundColor: theme.colors.accent + '20' }]}>
-                  <Ionicons name="location" size={24} color={theme.colors.accent} />
+                  <Ionicons name="location" size={20} color={theme.colors.accent} />
                 </View>
-                <Text style={styles.statNumberLarge}>{totalLandmarks}</Text>
-                <Text style={styles.statLabelNew}>Landmarks</Text>
+                <Text style={styles.statNumberCompact}>{totalLandmarks}</Text>
+                <Text style={styles.statLabelCompact}>Landmarks</Text>
               </View>
               
               <View style={styles.statDividerNew} />
               
               <View style={styles.statItem}>
                 <View style={[styles.statIconCircle, { backgroundColor: theme.colors.accentYellow + '20' }]}>
-                  <Ionicons name="star" size={24} color={theme.colors.accentYellow} />
+                  <Ionicons name="star" size={20} color={theme.colors.accentYellow} />
                 </View>
-                <Text style={styles.statNumberLarge}>{totalAvailablePoints}</Text>
-                <Text style={styles.statLabelNew}>Points</Text>
+                <Text style={styles.statNumberCompact}>{totalAvailablePoints}</Text>
+                <Text style={styles.statLabelCompact}>Points</Text>
+              </View>
+            </View>
+
+            {/* Divider */}
+            <View style={{ height: 1, backgroundColor: theme.colors.border, marginVertical: 8, marginHorizontal: 8 }} />
+
+            {/* Row 2: User progress */}
+            <View style={styles.statBoxRow}>
+              <View style={styles.statItem}>
+                <Text style={[styles.statNumberProgress, { color: totalVisitedCountries > 0 ? theme.colors.primary : theme.colors.textLight }]}>
+                  {totalVisitedCountries}/{totalCountries}
+                </Text>
+                <Text style={styles.statLabelProgress}>Visited</Text>
+              </View>
+              
+              <View style={styles.statDividerNew} />
+              
+              <View style={styles.statItem}>
+                <Text style={[styles.statNumberProgress, { color: totalVisited > 0 ? theme.colors.accent : theme.colors.textLight }]}>
+                  {totalVisited}/{totalLandmarks}
+                </Text>
+                <Text style={styles.statLabelProgress}>Explored</Text>
+              </View>
+              
+              <View style={styles.statDividerNew} />
+              
+              <View style={styles.statItem}>
+                <Text style={[styles.statNumberProgress, { color: totalEarnedPoints > 0 ? theme.colors.accentYellow : theme.colors.textLight }]}>
+                  {totalEarnedPoints}
+                </Text>
+                <Text style={styles.statLabelProgress}>Earned</Text>
               </View>
             </View>
           </Surface>
@@ -596,12 +636,12 @@ const styles = StyleSheet.create<any>({
     flex: 1,
   },
   statIconCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: theme.spacing.sm,
+    marginBottom: 4,
   },
   statNumberLarge: {
     fontSize: 24,
@@ -613,6 +653,27 @@ const styles = StyleSheet.create<any>({
     fontSize: 12,
     fontWeight: '600',
     color: theme.colors.textSecondary,
+  },
+  statNumberCompact: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: theme.colors.text,
+    marginBottom: 2,
+  },
+  statLabelCompact: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  statNumberProgress: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  statLabelProgress: {
+    fontSize: 10,
+    fontWeight: '500',
+    color: theme.colors.textLight,
+    marginTop: 2,
   },
   statDividerNew: {
     width: 1,
