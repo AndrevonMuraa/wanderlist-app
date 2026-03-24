@@ -60,7 +60,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
     if (photos.length === 0) {
       Alert.alert(
         'Record Without Photo?',
-        'Country visits without photos will not earn verified points for the global leaderboard.\n\nAdd a photo to earn verified points.',
+        'Without photos, this visit earns total points only — visible on the friends leaderboard, but not the global leaderboard.\n\nAdd a photo to also earn verified (global) points.',
         [
           { text: 'Add Photo', style: 'cancel', onPress: handleAddPhotoFromAlert },
           { text: 'Record Anyway', onPress: () => submitVisit() },

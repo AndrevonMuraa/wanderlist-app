@@ -63,7 +63,7 @@ export default function AddVisitModal({
     if (photos.length === 0) {
       Alert.alert(
         'Record Without Photo?',
-        'Visits without a personal photo will not earn verified points for the global leaderboard.\n\nTo earn verified points, add a photo of yourself at the landmark.',
+        'Without photos, this visit earns total points only — visible on the friends leaderboard, but not the global leaderboard.\n\nAdd a photo to also earn verified (global) points.',
         [
           { text: 'Add Photo', style: 'cancel', onPress: handleAddPhotoFromAlert },
           { text: 'Record Anyway', onPress: () => submitVisit() },
