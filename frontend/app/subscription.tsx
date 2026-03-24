@@ -309,7 +309,7 @@ export default function SubscriptionScreen() {
             <FeatureRow icon="camera" text="1 Photo per Visit" included />
             <FeatureRow icon="people" text="5 Friends Maximum" included />
             <FeatureRow icon="trophy" text="Leaderboard & Rankings" included />
-            <FeatureRow icon="ribbon" text="Basic Badges (up to 100 visits)" included />
+            <FeatureRow icon="ribbon" text="Rank Badges (20 ranks)" included />
             <FeatureRow icon="images" text="Community Photo Preview" included />
             <FeatureRow icon="star" text="Photo of the Week" included />
             <FeatureRow icon="heart" text="Photo Upvoting" included />
@@ -323,7 +323,7 @@ export default function SubscriptionScreen() {
             <FeatureRow icon="book" text="Travel Diary Access" included={isPro || false} highlight />
             <FeatureRow icon="chatbubbles" text="Direct Messaging" included={isPro || false} highlight />
             <FeatureRow icon="share-social" text="Share in Community Feed" included={isPro || false} highlight />
-            <FeatureRow icon="medal" text="All Badges Achievable" included={isPro || false} highlight />
+            <FeatureRow icon="medal" text="All Rank Badges Achievable" included={isPro || false} highlight />
           </Surface>
         </View>
 
