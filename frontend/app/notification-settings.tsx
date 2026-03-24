@@ -136,45 +136,23 @@ export default function NotificationSettingsScreen() {
           </View>
         </View>
 
-        {/* Weekly Digest */}
+        {/* Social Notifications */}
         <View style={[styles.section, { backgroundColor: colors.surface }]}>
           <View style={styles.sectionHeader}>
-            <View style={[styles.iconContainer, { backgroundColor: '#8b5cf620' }]}>
-              <Ionicons name="calendar" size={22} color="#8b5cf6" />
+            <View style={[styles.iconContainer, { backgroundColor: '#3b82f620' }]}>
+              <Ionicons name="people" size={22} color="#3b82f6" />
             </View>
             <View style={styles.sectionHeaderText}>
               <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                Weekly Digest
+                Social Activity
               </Text>
               <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
-                Summary of your progress
+                Friend requests & interactions
               </Text>
             </View>
             <Switch
               value={settings.weeklyDigest}
               onValueChange={() => handleToggle('weeklyDigest')}
-              color={theme.colors.primary}
-            />
-          </View>
-        </View>
-
-        {/* Daily Reminders */}
-        <View style={[styles.section, { backgroundColor: colors.surface }]}>
-          <View style={styles.sectionHeader}>
-            <View style={[styles.iconContainer, { backgroundColor: '#10b98120' }]}>
-              <Ionicons name="notifications" size={22} color="#10b981" />
-            </View>
-            <View style={styles.sectionHeaderText}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                Daily Reminders
-              </Text>
-              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
-                Explore new landmarks
-              </Text>
-            </View>
-            <Switch
-              value={settings.dailyReminders}
-              onValueChange={() => handleToggle('dailyReminders')}
               color={theme.colors.primary}
             />
           </View>
