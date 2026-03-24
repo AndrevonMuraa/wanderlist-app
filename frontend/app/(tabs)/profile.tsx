@@ -223,8 +223,8 @@ export default function ProfileScreen() {
                 <View style={styles.tierBadge}>
                   {user?.subscription_tier === 'pro' || user?.subscription_tier === 'premium' ? (
                     <>
-                      <Ionicons name="diamond" size={12} color={colors.accent} />
-                      <Text style={[styles.tierText, { color: colors.accent }]}>{t('profile.proUser')}</Text>
+                      <Ionicons name="diamond" size={14} color="#C9A961" />
+                      <Text style={[styles.tierText, { color: '#C9A961' }]}>{t('profile.proUser')}</Text>
                     </>
                   ) : (
                     <>
@@ -313,7 +313,7 @@ export default function ProfileScreen() {
           <List.Item
             title={t('profile.wanderMarkPro')}
             description={t('profile.upgradeForPremium')}
-            left={props => <List.Icon {...props} icon="diamond" color={colors.accentTeal} />}
+            left={props => <List.Icon {...props} icon="diamond" color="#C9A961" />}
             right={props => <List.Icon {...props} icon="chevron-right" color={colors.textLight} />}
             onPress={() => router.push('/subscription')}
             titleStyle={[styles.listItemTitle, { color: colors.text }]}
