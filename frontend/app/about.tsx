@@ -161,8 +161,8 @@ export default function AboutScreen() {
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>66</Text>
-                <Text style={styles.statLabel}>Countries</Text>
+                <Text style={styles.statNumber}>100</Text>
+                <Text style={styles.statLabel}>Destinations</Text>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
@@ -189,7 +189,7 @@ export default function AboutScreen() {
               number={1}
               icon="compass"
               title="Explore Landmarks"
-              description="Browse 1,500 landmarks across 100 countries and 5 continents."
+              description="Browse 1,500 landmarks across 100 destinations and 5 continents."
             />
             <HowItWorksStep
               number={2}
@@ -222,7 +222,7 @@ export default function AboutScreen() {
           <FeatureCard
             icon="earth"
             title="Explore Continents"
-            description="Discover countries across 5 continents"
+            description="Discover destinations across 5 continents"
             color="#3BB8C3"
             onPress={() => router.push('/continents')}
           />
@@ -495,7 +495,7 @@ You can filter by country, year, or type.`}
             <View style={styles.infoDivider} />
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Database</Text>
-              <Text style={styles.infoValue}>1,500 landmarks, 100 countries</Text>
+              <Text style={styles.infoValue}>1,500 landmarks, 100 destinations</Text>
             </View>
           </Surface>
         </View>
