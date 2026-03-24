@@ -102,7 +102,7 @@ export default function SuggestLandmarkScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
-        <ScrollView contentContainerStyle={styles.scrollContent}>
+        <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
           <Surface style={styles.formCard}>
             <Text style={styles.infoText}>
               Suggest a landmark that you think should be added to WanderMark!

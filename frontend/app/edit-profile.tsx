@@ -201,6 +201,7 @@ export default function EditProfileScreen() {
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         >
           {/* Profile Picture */}
           <Surface style={styles.pictureSection}>

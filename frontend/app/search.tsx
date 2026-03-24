@@ -240,6 +240,7 @@ export default function SearchScreen() {
             onChangeText={handleSearch}
             autoCapitalize="none"
             autoCorrect={false}
+            returnKeyType="search"
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => handleSearch('')}>
@@ -284,6 +285,7 @@ export default function SearchScreen() {
             renderItem={renderLandmarkItem}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
             }
