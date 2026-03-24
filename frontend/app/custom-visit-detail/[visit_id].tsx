@@ -98,7 +98,7 @@ export default function CustomVisitDetailScreen() {
       });
       if (res.ok) {
         Alert.alert('Deleted', 'Custom visit has been removed.', [
-          { text: 'OK', onPress: () => safeGoBack(router) },
+          { text: 'OK', onPress: () => router.replace('/(tabs)/journey') },
         ]);
       }
     } catch {
@@ -271,7 +271,7 @@ export default function CustomVisitDetailScreen() {
     <View style={styles.container}>
       <UniversalHeader title="Custom Visit" onBack={() => safeGoBack(router)} />
 
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
         {/* Hero / Photo carousel */}
         {allPhotos.length > 0 ? (
           <View style={styles.photoSection}>
@@ -382,31 +382,37 @@ export default function CustomVisitDetailScreen() {
           </Surface>
         )}
 
-        {/* Owner actions */}
-        {isOwner && (
-          <Surface style={styles.card}>
-            <Text style={styles.cardTitle}>Actions</Text>
-            <View style={styles.actionsRow}>
-              <TouchableOpacity onPress={handleTakePhoto} style={styles.actionBtn} disabled={uploadingPhotos}>
-                <Ionicons name="camera" size={22} color={theme.colors.primary} />
-                <Text style={styles.actionBtnText}>Take Photo</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleAddPhotos} style={styles.actionBtn} disabled={uploadingPhotos}>
-                <Ionicons name="images" size={22} color="#4CAF50" />
-                <Text style={styles.actionBtnText}>Add Photos</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setShowDeleteDialog(true)} style={styles.actionBtn}>
-                <Ionicons name="trash" size={22} color="#E53935" />
-                <Text style={[styles.actionBtnText, { color: '#E53935' }]}>Delete</Text>
-              </TouchableOpacity>
-            </View>
-            {uploadingPhotos && (
-              <View style={styles.uploadingRow}>
-                <ActivityIndicator size="small" color={theme.colors.primary} />
-                <Text style={styles.uploadingText}>Uploading photos...</Text>
-              </View>
+        {/* Owner actions — inline add photo + separate delete */}
+        {isOwner && allPhotos.length > 0 && (
+          <TouchableOpacity onPress={handleAddPhotos} style={styles.addPhotoButton} disabled={uploadingPhotos}>
+            {uploadingPhotos ? (
+              <ActivityIndicator size="small" color={theme.colors.primary} />
+            ) : (
+              <>
+                <Ionicons name="add-circle-outline" size={20} color={theme.colors.primary} />
+                <Text style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '600' }}>Add Photos</Text>
+              </>
             )}
-          </Surface>
+          </TouchableOpacity>
+        )}
+
+        {isOwner && allPhotos.length === 0 && (
+          <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 16, marginHorizontal: 16, marginBottom: 8 }}>
+            <TouchableOpacity onPress={handleAddPhotos} style={styles.addPhotoButton} disabled={uploadingPhotos}>
+              <Ionicons name="images-outline" size={20} color={theme.colors.primary} />
+              <Text style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '600' }}>Add Photos</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {isOwner && (
+          <TouchableOpacity
+            onPress={() => setShowDeleteDialog(true)}
+            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 12, marginTop: 16 }}
+          >
+            <Ionicons name="trash-outline" size={16} color="#E53935" />
+            <Text style={{ fontSize: 13, color: '#E53935' }}>Delete Visit</Text>
+          </TouchableOpacity>
         )}
 
         <View style={{ height: 40 }} />
@@ -439,6 +445,8 @@ export default function CustomVisitDetailScreen() {
               multiline
               numberOfLines={6}
               textAlignVertical="top"
+              returnKeyType="done"
+              blurOnSubmit={true}
             />
           </Dialog.Content>
           <Dialog.Actions>
@@ -496,6 +504,7 @@ const styles = StyleSheet.create({
   editBtn: { padding: 4 },
   diaryText: { fontSize: 15, color: theme.colors.text, lineHeight: 22 },
   diaryPlaceholder: { fontSize: 15, color: theme.colors.textLight, fontStyle: 'italic' },
+  addPhotoButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, paddingVertical: 12, marginHorizontal: theme.spacing.md, marginBottom: theme.spacing.sm },
   actionsRow: { flexDirection: 'row', justifyContent: 'space-around', paddingTop: 4 },
   actionBtn: { alignItems: 'center', padding: 12 },
   actionBtnText: { fontSize: 12, fontWeight: '500', color: theme.colors.text, marginTop: 4 },
