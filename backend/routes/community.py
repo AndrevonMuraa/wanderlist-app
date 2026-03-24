@@ -351,12 +351,12 @@ async def get_landmark_community_photos(
         upvote_results = await db.photo_upvotes.aggregate(upvote_pipeline).to_list(len(all_photo_ids))
         upvote_counts = {r["_id"]: r["count"] for r in upvote_results}
         
-        if is_premium:
-            user_upvote_docs = await db.photo_upvotes.find(
-                {"photo_id": {"$in": all_photo_ids}, "user_id": current_user.user_id},
-                {"_id": 0, "photo_id": 1}
-            ).to_list(len(all_photo_ids))
-            user_upvotes = {d["photo_id"] for d in user_upvote_docs}
+        # Check user upvotes (for all users — upvoting is free)
+        user_upvote_docs = await db.photo_upvotes.find(
+            {"photo_id": {"$in": all_photo_ids}, "user_id": current_user.user_id},
+            {"_id": 0, "photo_id": 1}
+        ).to_list(len(all_photo_ids))
+        user_upvotes = {d["photo_id"] for d in user_upvote_docs}
     
     for photo_id, photo, visit in photo_visit_map:
         photos.append({
@@ -549,12 +549,12 @@ async def get_country_community_photos(
         upvote_results = await db.photo_upvotes.aggregate(upvote_pipeline).to_list(len(all_photo_ids))
         upvote_counts = {r["_id"]: r["count"] for r in upvote_results}
         
-        if is_premium:
-            user_upvote_docs = await db.photo_upvotes.find(
-                {"photo_id": {"$in": all_photo_ids}, "user_id": current_user.user_id},
-                {"_id": 0, "photo_id": 1}
-            ).to_list(len(all_photo_ids))
-            user_upvotes = {d["photo_id"] for d in user_upvote_docs}
+        # Check user upvotes (for all users — upvoting is free)
+        user_upvote_docs = await db.photo_upvotes.find(
+            {"photo_id": {"$in": all_photo_ids}, "user_id": current_user.user_id},
+            {"_id": 0, "photo_id": 1}
+        ).to_list(len(all_photo_ids))
+        user_upvotes = {d["photo_id"] for d in user_upvote_docs}
     
     for entry in photo_entries:
         entry["upvotes"] = upvote_counts.get(entry["photo_id"], 0)
