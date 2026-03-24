@@ -363,6 +363,8 @@ export default function FriendsScreen() {
               onChangeText={handleSearchUsers}
               style={styles.searchInput}
               autoCapitalize="none"
+              autoCorrect={false}
+              returnKeyType="search"
               placeholderTextColor={theme.colors.textLight}
               data-testid="user-search-input"
             />
@@ -563,6 +565,7 @@ export default function FriendsScreen() {
         keyExtractor={(item) => item.user_id}
         ListHeaderComponent={renderHeader}
         contentContainerStyle={styles.listContent}
+        keyboardShouldPersistTaps="handled"
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
