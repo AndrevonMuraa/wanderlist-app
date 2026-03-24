@@ -274,32 +274,6 @@ export default function EditProfileScreen() {
             />
           </Surface>
 
-          {/* Banner Image */}
-          <Surface style={styles.pictureSection}>
-            <Text style={styles.sectionTitle}>Profile Banner</Text>
-            <TouchableOpacity 
-              style={styles.bannerContainer}
-              onPress={handlePickBanner}
-              activeOpacity={0.7}
-            >
-              {bannerImage ? (
-                <Image
-                  source={{ uri: bannerImage }}
-                  style={styles.bannerImage}
-                />
-              ) : (
-                <View style={styles.bannerPlaceholder}>
-                  <Ionicons name="image-outline" size={36} color={theme.colors.textLight} />
-                  <Text style={styles.bannerPlaceholderText}>Tap to add a banner</Text>
-                </View>
-              )}
-              <View style={styles.bannerEditIcon}>
-                <Ionicons name="camera" size={18} color="#fff" />
-              </View>
-            </TouchableOpacity>
-            <Text style={styles.pictureHint}>Recommended: 3:1 aspect ratio</Text>
-          </Surface>
-
           {/* Save Button */}
           <TouchableOpacity
             onPress={handleSave}
