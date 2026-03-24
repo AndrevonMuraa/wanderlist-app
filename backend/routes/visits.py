@@ -393,8 +393,8 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         })
         
         if country_visit_count == 1:  # First landmark in this country
-            # Award country exploration bonus
-            country_bonus_points = 20
+            # Award country visit points (same as manual country visit: 50 pts)
+            country_bonus_points = 50
             # Country bonus: only award leaderboard points if visit has photos
             bonus_increment = {"points": country_bonus_points}
             if has_photos:

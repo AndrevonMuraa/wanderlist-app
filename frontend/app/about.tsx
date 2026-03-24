@@ -386,8 +386,7 @@ export default function AboutScreen() {
 
 • Official Landmarks: 10 points
 • Premium Landmarks: 25 points
-• Country Visit: 50 points
-• New Country Bonus: +20 points (first landmark in a new country)
+• Country Visit: 50 points (auto or manual)
 • New Continent Bonus: +50 points (first country on a new continent)
 • Country Completion: +50 bonus points (all landmarks in a country)
 • Continent Completion: +200 bonus points (all countries on a continent)

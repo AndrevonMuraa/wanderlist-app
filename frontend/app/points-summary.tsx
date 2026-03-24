@@ -184,8 +184,8 @@ export default function PointsSummary() {
                 <Ionicons name="flag" size={18} color="#FF9800" />
               </View>
               <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Country Bonus</Text>
-                <Text style={styles.infoDesc}>+20 pts for first landmark in a new country</Text>
+                <Text style={styles.infoLabel}>Country Visit</Text>
+                <Text style={styles.infoDesc}>+50 pts for each country visited (auto or manual)</Text>
               </View>
             </View>
 

@@ -199,7 +199,7 @@ export default function RanksScreen() {
           <View style={styles.infoItem}>
             <Ionicons name="flag" size={20} color="#4CAF50" />
             <Text style={styles.infoText}>
-              <Text style={styles.infoBold}>New Country Bonus:</Text> +20 points for first landmark in a new country
+              <Text style={styles.infoBold}>Country Visit:</Text> +50 points (auto or manual)
             </Text>
           </View>
           <View style={styles.infoItem}>
