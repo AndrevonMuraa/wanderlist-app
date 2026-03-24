@@ -289,5 +289,5 @@ async def recalculate_user_points(user_id: str):
 
     await db.users.update_one(
         {"user_id": user_id},
-        {"$set": {"points": total_points, "leaderboard_points": total_verified}}
+        {"$set": {"points": max(0, total_points), "leaderboard_points": max(0, total_verified)}}
     )
