@@ -383,6 +383,7 @@ export default function JourneyScreen() {
 
         {/* Next Rank */}
         {rankProgress.nextRank && (
+          <TouchableOpacity activeOpacity={0.7} onPress={() => router.push('/ranks')}>
           <Surface style={[styles.milestoneCard, { backgroundColor: colors.surface }]}>
             <Text style={[styles.sectionTitle, { color: colors.text, textAlign: 'center', marginBottom: theme.spacing.sm }]}>Next Rank</Text>
             <View style={styles.milestoneRow}>
@@ -405,6 +406,7 @@ export default function JourneyScreen() {
               </View>
             </View>
           </Surface>
+          </TouchableOpacity>
         )}
 
         {/* Continental Progress */}
