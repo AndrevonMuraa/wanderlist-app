@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 
 from utils.db import db
 from utils.auth import get_current_user, is_user_pro, get_user_limits
-from utils.helpers import check_and_award_badges
+from utils.helpers import check_and_award_badges, recalculate_user_points
 from models.all import User, CountryVisitCreate, UserCreatedVisitCreate
 
 
@@ -254,19 +254,8 @@ async def delete_country_visit(country_visit_id: str, current_user: User = Depen
         await db.comments.delete_many({"activity_id": activity["activity_id"]})
     await db.activities.delete_many({"country_visit_id": country_visit_id})
     
-    # Deduct points
-    points_to_deduct = country_visit.get("points_earned", 50)
-    decrement = {"points": -points_to_deduct}
-    
-    # Also deduct leaderboard_points if visit had photos
-    if country_visit.get("has_photos") or country_visit.get("leaderboard_points_earned", 0) > 0:
-        lb_deduct = country_visit.get("leaderboard_points_earned", points_to_deduct)
-        decrement["leaderboard_points"] = -lb_deduct
-    
-    await db.users.update_one(
-        {"user_id": current_user.user_id},
-        {"$inc": decrement}
-    )
+    # Full recalculation of user points from actual data (robust, no drift)
+    await recalculate_user_points(current_user.user_id)
     
     # Sync rank badges after points change
     await check_and_award_badges(current_user.user_id)

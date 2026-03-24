@@ -276,7 +276,7 @@ export default function CountryVisitDetailScreen() {
         } else {
           Alert.alert('Success', 'Visit deleted successfully');
         }
-        safeGoBack(router);
+        router.replace('/(tabs)/journey');
       } else {
         const err = await response.json().catch(() => ({}));
         const msg = err.detail || 'Failed to delete visit';
