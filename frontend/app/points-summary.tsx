@@ -93,7 +93,7 @@ export default function PointsSummary() {
 
   const totalPoints = stats?.total_points || 0;
   const verifiedPoints = stats?.leaderboard_points || 0;
-  const unverifiedPoints = totalPoints - verifiedPoints;
+  const unverifiedPoints = Math.max(0, totalPoints - verifiedPoints);
 
   return (
     <View style={styles.container}>
@@ -124,9 +124,9 @@ export default function PointsSummary() {
               </View>
               <View style={styles.breakdownContent}>
                 <Text style={styles.breakdownLabel}>Verified Points</Text>
-                <Text style={styles.breakdownDesc}>From visits with personal photos (counts for global leaderboard)</Text>
+                <Text style={styles.breakdownDesc}>From visits with photos — counts for leaderboard and rank</Text>
               </View>
-              <Text style={styles.breakdownValue}>{verifiedPoints.toLocaleString()}</Text>
+              <Text style={[styles.breakdownValue, { color: '#4CAF50' }]}>{verifiedPoints.toLocaleString()}</Text>
             </View>
             
             <View style={styles.divider} />
@@ -137,7 +137,7 @@ export default function PointsSummary() {
               </View>
               <View style={styles.breakdownContent}>
                 <Text style={styles.breakdownLabel}>Unverified Points</Text>
-                <Text style={styles.breakdownDesc}>From visits without photos (counts for friends leaderboard)</Text>
+                <Text style={styles.breakdownDesc}>From visits without photos — personal total only</Text>
               </View>
               <Text style={styles.breakdownValue}>{unverifiedPoints.toLocaleString()}</Text>
             </View>
