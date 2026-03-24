@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Dimensions, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Dimensions, Alert, ScrollView } from 'react-native';
 import { Text, ActivityIndicator, Modal, Portal } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -67,6 +67,7 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
         onDismiss={onDismiss}
         contentContainerStyle={[styles.modalContainer, { backgroundColor: colors.background }]}
       >
+        <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
         {/* Modal Header */}
         <View style={styles.modalHeader}>
           <Text style={[styles.modalTitle, { color: colors.text }]}>Share Your Journey</Text>
@@ -193,6 +194,7 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
         <Text style={[styles.hint, { color: colors.textSecondary }]}>
           Instagram, WhatsApp, Facebook & more
         </Text>
+        </ScrollView>
       </Modal>
     </Portal>
   );
