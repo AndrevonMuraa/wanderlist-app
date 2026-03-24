@@ -382,19 +382,19 @@ export default function AboutScreen() {
             <FAQItem
               id="points"
               question="How do I earn points?"
-              answer={`You earn points for visiting landmarks and exploring countries:
+              answer={`You earn points for visiting landmarks and exploring destinations:
 
 • Official Landmarks: 10 points
 • Premium Landmarks: 25 points
 • Country Visit: 50 points
-• New Country Bonus: +20 points (first landmark)
-• Continent Completion Bonus: +200 points
-• Country Completion: +50 bonus points
-• Continent Completion: +200 bonus points
+• New Country Bonus: +20 points (first landmark in a new country)
+• New Continent Bonus: +50 points (first country on a new continent)
+• Country Completion: +50 bonus points (all landmarks in a country)
+• Continent Completion: +200 bonus points (all countries on a continent)
 
 There are two types of points:
-• Verified Points: Earned when you upload a personal photo of yourself at the landmark. These count for the global leaderboard.
-• Unverified Points: Earned for visits without personal photos. These count for the friends leaderboard.
+• Verified Points: Earned when you upload a personal photo of yourself at the landmark. These count for the global leaderboard and your rank.
+• Unverified Points: Earned for visits without personal photos. These count toward your total points but not the leaderboard or rank.
 
 Photos must show you personally at the landmark. Uploads that don't meet this requirement may have their verified status revoked by moderators.`}
             />

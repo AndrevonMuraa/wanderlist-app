@@ -199,13 +199,19 @@ export default function RanksScreen() {
           <View style={styles.infoItem}>
             <Ionicons name="flag" size={20} color="#4CAF50" />
             <Text style={styles.infoText}>
-              <Text style={styles.infoBold}>Complete a Country:</Text> +50 bonus points
+              <Text style={styles.infoBold}>New Country Bonus:</Text> +20 points for first landmark in a new country
             </Text>
           </View>
           <View style={styles.infoItem}>
             <Ionicons name="earth" size={20} color="#1E8A8A" />
             <Text style={styles.infoText}>
-              <Text style={styles.infoBold}>Complete a Continent:</Text> +200 bonus points
+              <Text style={styles.infoBold}>New Continent Bonus:</Text> +50 points for first country on a new continent
+            </Text>
+          </View>
+          <View style={styles.infoItem}>
+            <Ionicons name="trophy" size={20} color="#FFA726" />
+            <Text style={styles.infoText}>
+              <Text style={styles.infoBold}>Completion:</Text> +50 per country, +200 per continent completed
             </Text>
           </View>
         </Surface>
