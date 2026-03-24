@@ -17,7 +17,7 @@ import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
 import Constants from 'expo-constants';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
-import ShareStatsCard from '../../components/ShareStatsCard';
+import ShareJourneyCard from '../../components/ShareJourneyCard';
 
 // Helper to get token (works on both web and native)
 const getToken = async (): Promise<string | null> => {
@@ -372,15 +372,15 @@ export default function ProfileScreen() {
       />
 
       {/* Share Stats Modal */}
-      <ShareStatsCard
+      <ShareJourneyCard
         visible={showShareModal}
         onDismiss={() => setShowShareModal(false)}
         stats={{
-          totalVisits: progressStats?.overall?.visited || stats?.total_visits || 0,
-          countriesVisited: stats?.countries_visited || 0,
-          continentsVisited: stats?.continents_visited || 0,
+          landmarks: progressStats?.overall?.visited || stats?.total_visits || 0,
+          countries: stats?.countries_visited || 0,
+          continents: stats?.continents_visited || 0,
           points: progressStats?.totalPoints || 0,
-          achievements: 0,
+          verifiedPoints: progressStats?.verifiedPoints || 0,
         }}
         userName={user?.name || 'Traveler'}
       />
