@@ -207,12 +207,18 @@ export default function EditProfileScreen() {
           <Surface style={styles.pictureSection}>
             <Text style={styles.sectionTitle}>Profile Picture</Text>
             <View style={styles.pictureContainer}>
-              <Image
-                source={{
-                  uri: picture || 'https://via.placeholder.com/150',
-                }}
-                style={styles.profilePicture}
-              />
+              {picture ? (
+                <Image
+                  source={{ uri: picture }}
+                  style={styles.profilePicture}
+                />
+              ) : (
+                <View style={[styles.profilePicture, { backgroundColor: theme.colors.primary, justifyContent: 'center', alignItems: 'center' }]}>
+                  <Text style={{ fontSize: 48, fontWeight: '700', color: '#fff' }}>
+                    {(name || 'U').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase()}
+                  </Text>
+                </View>
+              )}
               <TouchableOpacity
                 style={styles.changePictureButton}
                 onPress={handlePickImage}
