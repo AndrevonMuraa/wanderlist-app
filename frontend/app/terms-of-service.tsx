@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   Platform,
   StatusBar,
+  Alert,
 } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 import { Text, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -326,10 +328,18 @@ export default function TermsOfServiceScreen() {
             <Text style={styles.paragraph}>
               If you have questions about these Terms, please contact us:
             </Text>
-            <View style={styles.contactBox}>
+            <TouchableOpacity 
+              style={styles.contactBox}
+              onPress={async () => {
+                await Clipboard.setStringAsync('support@wandermark.app');
+                Alert.alert('Copied', 'Email address copied to clipboard');
+              }}
+              activeOpacity={0.7}
+            >
               <Ionicons name="mail" size={20} color={theme.colors.primary} />
               <Text style={styles.contactText}>support@wandermark.app</Text>
-            </View>
+              <Ionicons name="copy-outline" size={16} color={theme.colors.textLight} />
+            </TouchableOpacity>
           </Section>
         </Surface>
 
