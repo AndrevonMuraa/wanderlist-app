@@ -305,32 +305,47 @@ export default function VisitDetailScreen() {
                 </View>
               )}
             </TouchableOpacity>
-            {photos.length > 1 && (
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={styles.photoThumbnails}
-              >
-                {photos.map((photo, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={async () => {
-                      await lightHaptic();
-                      setSelectedPhoto(index);
-                    }}
-                  >
-                    <Image
-                      source={{ uri: photo }}
-                      style={[
-                        styles.thumbnail,
-                        selectedPhoto === index && styles.thumbnailActive
-                      ]}
-                      resizeMode="cover"
-                    />
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            )}
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.photoThumbnails}
+            >
+              {photos.map((photo, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={async () => {
+                    await lightHaptic();
+                    setSelectedPhoto(index);
+                  }}
+                >
+                  <Image
+                    source={{ uri: photo }}
+                    style={[
+                      styles.thumbnail,
+                      selectedPhoto === index && styles.thumbnailActive
+                    ]}
+                    resizeMode="cover"
+                  />
+                </TouchableOpacity>
+              ))}
+              {isOwner && (
+                <TouchableOpacity
+                  onPress={handleAddPhotos}
+                  style={styles.addPhotoThumbnail}
+                  disabled={uploadingPhotos}
+                  data-testid="add-photo-inline-btn"
+                >
+                  {uploadingPhotos ? (
+                    <ActivityIndicator size="small" color={theme.colors.primary} />
+                  ) : (
+                    <>
+                      <Ionicons name="add-circle" size={24} color={theme.colors.primary} />
+                      <Text style={{ fontSize: 10, color: theme.colors.primary, marginTop: 2 }}>Add</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              )}
+            </ScrollView>
           </View>
         )}
 
@@ -456,37 +471,17 @@ export default function VisitDetailScreen() {
           <Text style={styles.shareVisitText}>Share This Visit</Text>
         </TouchableOpacity>
 
-        {/* Report */}
-        <View style={styles.reportRow}>
-          <ReportButton contentType="activity" contentId={visit_id as string} size={16} />
-          <Text style={styles.reportLabel}>Report this visit</Text>
-        </View>
-
-        {/* Owner Actions */}
+        {/* Delete Visit */}
         {isOwner && (
-          <Surface style={styles.actionsCard}>
-            <Text style={styles.actionCardTitle}>Manage Visit</Text>
-            <View style={styles.actionsRow}>
-              <TouchableOpacity onPress={handleTakePhoto} style={styles.actionBtn} disabled={uploadingPhotos}>
-                <Ionicons name="camera" size={22} color={theme.colors.primary} />
-                <Text style={styles.actionBtnText}>Camera</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleAddPhotos} style={styles.actionBtn} disabled={uploadingPhotos}>
-                <Ionicons name="images" size={22} color="#4CAF50" />
-                <Text style={styles.actionBtnText}>Library</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setShowDeleteDialog(true)} style={styles.actionBtn}>
-                <Ionicons name="trash" size={22} color="#E53935" />
-                <Text style={[styles.actionBtnText, { color: '#E53935' }]}>Delete</Text>
-              </TouchableOpacity>
-            </View>
-            {uploadingPhotos && (
-              <View style={styles.uploadingRow}>
-                <ActivityIndicator size="small" color={theme.colors.primary} />
-                <Text style={styles.uploadingText}>Uploading photos...</Text>
-              </View>
-            )}
-          </Surface>
+          <TouchableOpacity
+            onPress={() => setShowDeleteDialog(true)}
+            style={styles.deleteVisitButton}
+            activeOpacity={0.7}
+            data-testid="delete-visit-button"
+          >
+            <Ionicons name="trash-outline" size={16} color="#E53935" />
+            <Text style={styles.deleteVisitText}>Delete Visit</Text>
+          </TouchableOpacity>
         )}
 
         <View style={styles.bottomSpacer} />
@@ -733,18 +728,29 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.primary,
   },
-  reportRow: {
+  deleteVisitButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    margin: theme.spacing.md,
-    marginTop: 0,
-    padding: 12,
+    paddingVertical: 12,
+    marginHorizontal: theme.spacing.xl * 2,
+    marginTop: theme.spacing.md,
   },
-  reportLabel: {
+  deleteVisitText: {
     fontSize: 13,
-    color: theme.colors.textLight,
+    color: '#E53935',
+  },
+  addPhotoThumbnail: {
+    width: 60,
+    height: 60,
+    borderRadius: theme.borderRadius.md,
+    borderWidth: 1.5,
+    borderColor: theme.colors.primary,
+    borderStyle: 'dashed',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: theme.spacing.sm,
   },
   photoCountBadge: {
     position: 'absolute',
