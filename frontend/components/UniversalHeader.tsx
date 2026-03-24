@@ -70,7 +70,7 @@ export const UniversalHeader: React.FC<UniversalHeaderProps> = ({
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.sm,
+    paddingBottom: 8,
   },
   headerRow: {
     flexDirection: 'row',

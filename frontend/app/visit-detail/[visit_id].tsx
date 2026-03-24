@@ -276,7 +276,7 @@ export default function VisitDetailScreen() {
   const photos = visit.photos || (visit.photo_base64 ? [visit.photo_base64] : []);
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <UniversalHeader 
         title={visit.landmark_name || 'Visit Details'}
       />
@@ -536,7 +536,7 @@ export default function VisitDetailScreen() {
         initialIndex={selectedPhoto}
         onClose={() => setShowGallery(false)}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
