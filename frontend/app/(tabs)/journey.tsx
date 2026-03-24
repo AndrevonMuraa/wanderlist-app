@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Platform, RefreshControl, StatusBar } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -107,6 +108,15 @@ export default function JourneyScreen() {
       fetchAllData();
     }
   }, [user]);
+
+  // Refetch data every time the tab gains focus (e.g. after deleting a visit)
+  useFocusEffect(
+    useCallback(() => {
+      if (user) {
+        fetchAllData();
+      }
+    }, [user])
+  );
 
   useEffect(() => {
     if (params.scrollTo === 'custom-visits' && !loading && customVisitsRef.current) {

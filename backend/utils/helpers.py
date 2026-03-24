@@ -221,3 +221,73 @@ async def notify_friend_request(requester_name: str, target_user_id: str):
     )
 
 
+
+
+async def recalculate_user_points(user_id: str):
+    """Recalculate user points from actual visit data. Cleans stale auto country visits."""
+    # 1. Get all landmark visits
+    visits = await db.visits.find(
+        {"user_id": user_id},
+        {"_id": 0, "landmark_id": 1, "points_earned": 1, "verified": 1}
+    ).to_list(10000)
+
+    landmark_points = sum(v.get("points_earned", 0) for v in visits)
+    verified_landmark_points = sum(
+        v.get("points_earned", 0) for v in visits if v.get("verified")
+    )
+
+    # 2. Find countries with landmark visits
+    visited_landmark_ids = [v["landmark_id"] for v in visits]
+    countries_with_landmarks = set()
+    if visited_landmark_ids:
+        landmarks = await db.landmarks.find(
+            {"landmark_id": {"$in": visited_landmark_ids}},
+            {"_id": 0, "country_id": 1}
+        ).to_list(10000)
+        for lm in landmarks:
+            countries_with_landmarks.add(lm["country_id"])
+
+    # 3. Clean stale auto country visits
+    async for cv in db.country_visits.find(
+        {"user_id": user_id, "source": "auto_landmark"},
+        {"_id": 0, "country_visit_id": 1, "country_id": 1}
+    ):
+        if cv["country_id"] not in countries_with_landmarks:
+            await db.country_visits.delete_one({"country_visit_id": cv["country_visit_id"]})
+            await db.activities.delete_many({"country_visit_id": cv["country_visit_id"]})
+
+    # 4. Sum remaining country visit points
+    country_points = 0
+    verified_country_points = 0
+    async for cv in db.country_visits.find(
+        {"user_id": user_id},
+        {"_id": 0, "points_earned": 1, "leaderboard_points_earned": 1}
+    ):
+        country_points += cv.get("points_earned", 0)
+        verified_country_points += cv.get("leaderboard_points_earned", 0)
+
+    # 5. Calculate continent bonuses
+    continents_visited = set()
+    verified_continents = set()
+    for cid in countries_with_landmarks:
+        country_doc = await db.countries.find_one({"country_id": cid}, {"_id": 0, "continent": 1})
+        if country_doc:
+            continents_visited.add(country_doc["continent"])
+            has_verified = any(
+                v.get("verified") for v in visits
+                if v["landmark_id"].startswith(f"{cid}_")
+            )
+            if has_verified:
+                verified_continents.add(country_doc["continent"])
+
+    continent_bonus = len(continents_visited) * 50
+    verified_continent_bonus = len(verified_continents) * 50
+
+    # 6. Update user
+    total_points = landmark_points + country_points + continent_bonus
+    total_verified = verified_landmark_points + verified_country_points + verified_continent_bonus
+
+    await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": {"points": total_points, "leaderboard_points": total_verified}}
+    )

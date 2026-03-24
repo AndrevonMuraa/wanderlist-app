@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions, Platform, StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -135,6 +136,15 @@ export default function ContinentsScreen() {
       fetchPhotoOfTheWeek();
     }
   }, [user]);
+
+  // Refetch when tab gains focus (e.g. after deleting a visit)
+  useFocusEffect(
+    useCallback(() => {
+      if (user) {
+        fetchContinentStats();
+      }
+    }, [user])
+  );
 
   const fetchPhotoOfTheWeek = async () => {
     try {
