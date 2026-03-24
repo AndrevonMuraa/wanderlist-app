@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router';
 import { safeGoBack } from '../../utils/navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import UniversalHeader from '../../components/UniversalHeader';
 import { BACKEND_URL } from '../../utils/config';
 import theme from '../../styles/theme';
 import { useAuth } from '../../contexts/AuthContext';
@@ -44,7 +45,9 @@ export default function MessagesScreen() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user?.subscription_tier === 'free') {
+    if (!user) return; // Wait for auth to load
+    if (user.subscription_tier === 'free') {
+      setLoading(false);
       setShowUpgradeModal(true);
     } else {
       fetchConversations();
@@ -158,17 +161,8 @@ export default function MessagesScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <LinearGradient
-        colors={['#3BB8C3', '#2AA8B3']}
-        style={styles.header}
-      >
-        <TouchableOpacity onPress={() => safeGoBack(router)} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Messages</Text>
-        <View style={styles.headerSpacer} />
-      </LinearGradient>
+    <View style={styles.container}>
+      <UniversalHeader title="Messages" />
 
       {user?.subscription_tier === 'free' ? (
         <View style={styles.lockedContainer}>
@@ -221,7 +215,7 @@ export default function MessagesScreen() {
           }
         }}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
