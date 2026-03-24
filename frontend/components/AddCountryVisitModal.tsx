@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert, Platform } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { Text } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
@@ -38,14 +39,31 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
   const [shareDiary, setShareDiary] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
+  const handleAddPhotoFromAlert = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', 'Please allow access to your photo library');
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: false,
+      quality: 0.7,
+      base64: true,
+    });
+    if (!result.canceled && result.assets?.[0]?.base64) {
+      setPhotos(prev => [...prev, `data:image/jpeg;base64,${result.assets[0].base64}`]);
+    }
+  };
+
   const handleSubmit = async () => {
     if (photos.length === 0) {
       Alert.alert(
-        'No Photos',
-        'Without photos, this visit will only count towards your personal stats, not the public leaderboard. Continue anyway?',
+        'Record Without Photo?',
+        'Country visits without photos will not earn verified points for the global leaderboard.\n\nAdd a photo to earn verified points.',
         [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Continue', onPress: () => submitVisit() },
+          { text: 'Add Photo', style: 'cancel', onPress: handleAddPhotoFromAlert },
+          { text: 'Record Anyway', onPress: () => submitVisit() },
         ]
       );
       return;
