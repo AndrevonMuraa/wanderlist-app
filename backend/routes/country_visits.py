@@ -91,12 +91,10 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
             }}
         )
         
-        # If adding photos for first time, award leaderboard points
+        # If adding photos for first time, recalculate points
         if leaderboard_points_to_add > 0:
-            await db.users.update_one(
-                {"user_id": current_user.user_id},
-                {"$inc": {"leaderboard_points": leaderboard_points_to_add}}
-            )
+            await recalculate_user_points(current_user.user_id)
+            await check_and_award_badges(current_user.user_id)
         
         # Update activity if exists
         await db.activities.update_one(
