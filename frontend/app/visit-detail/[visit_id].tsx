@@ -291,6 +291,7 @@ export default function VisitDetailScreen() {
                 setShowGallery(true);
               }}
               activeOpacity={0.9}
+              style={{ marginHorizontal: 16, marginTop: 16, borderRadius: 16, overflow: 'hidden' }}
             >
               <Image
                 source={{ uri: photos[selectedPhoto] }}
@@ -595,8 +596,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
   },
   mainPhoto: {
-    width: width,
-    height: width * 0.65,
+    width: width - 32,
+    height: (width - 32) * 0.65,
+    borderRadius: 16,
   },
   photoThumbnails: {
     padding: theme.spacing.sm,
