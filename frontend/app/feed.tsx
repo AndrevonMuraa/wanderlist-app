@@ -343,10 +343,17 @@ export default function FeedScreen() {
         )}
       </View>
       <View style={styles.activityActions}>
-        <View style={styles.likeButton}>
-          <Ionicons name="heart" size={18} color="#FF6B6B" />
-          <Text style={styles.likeCount}>{item.upvotes}</Text>
-        </View>
+        <TouchableOpacity 
+          style={styles.likeButton}
+          onPress={() => {
+            if (item.landmark_id) {
+              router.push(`/landmark-community-photos/${item.landmark_id}?name=${encodeURIComponent(item.landmark_name)}`);
+            }
+          }}
+        >
+          <Ionicons name="heart" size={18} color={item.upvotes > 0 ? "#FF6B6B" : theme.colors.textSecondary} />
+          <Text style={[styles.likeCount, item.upvotes > 0 && { color: '#FF6B6B' }]}>{item.upvotes}</Text>
+        </TouchableOpacity>
         {item.has_diary && (
           <View style={styles.richBadge}>
             <Ionicons name="journal" size={12} color={theme.colors.primary} />
