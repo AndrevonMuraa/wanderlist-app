@@ -257,14 +257,28 @@ async def recalculate_user_points(user_id: str):
             await db.activities.delete_many({"country_visit_id": cv["country_visit_id"]})
 
     # 4. Sum remaining country visit points
+    # For auto country visits: if the country has verified landmark visits, count as verified
     country_points = 0
     verified_country_points = 0
     async for cv in db.country_visits.find(
         {"user_id": user_id},
-        {"_id": 0, "points_earned": 1, "leaderboard_points_earned": 1}
+        {"_id": 0, "points_earned": 1, "leaderboard_points_earned": 1, "source": 1, "country_id": 1}
     ):
-        country_points += cv.get("points_earned", 0)
-        verified_country_points += cv.get("leaderboard_points_earned", 0)
+        cv_points = cv.get("points_earned", 0)
+        country_points += cv_points
+        
+        if cv.get("source") == "auto_landmark":
+            # Auto country visit: verified if any landmark in this country is verified
+            country_id = cv.get("country_id", "")
+            has_verified_in_country = any(
+                v.get("verified") for v in visits
+                if v["landmark_id"].startswith(f"{country_id}_")
+            )
+            if has_verified_in_country:
+                verified_country_points += cv_points
+        else:
+            # Manual country visit: use stored leaderboard_points_earned
+            verified_country_points += cv.get("leaderboard_points_earned", 0)
 
     # 5. Calculate continent bonuses
     continents_visited = set()
