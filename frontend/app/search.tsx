@@ -216,7 +216,7 @@ export default function SearchScreen() {
       {/* Header */}
       <UniversalHeader title="Search Landmarks" />
 
-      {/* Search Bar */}
+      {/* Search Bar + Filters */}
       <View style={[styles.searchContainer, { backgroundColor: colors.surface }]}>
         <View style={[styles.searchInputContainer, { backgroundColor: colors.background }]}>
           <Ionicons name="search" size={20} color={colors.textSecondary} />
@@ -237,15 +237,13 @@ export default function SearchScreen() {
           )}
           {searching && <ActivityIndicator size="small" color={colors.primary} />}
         </View>
-      </View>
 
-      {/* Filters */}
-      <View style={styles.filtersContainer}>
         <View style={styles.filterRow}>
           <FilterChip label="All" value="all" active={filter === 'all'} />
           <FilterChip label={`Visited (${visitedIds.size})`} value="visited" active={filter === 'visited'} />
           <FilterChip label="Unvisited" value="unvisited" active={filter === 'unvisited'} />
         </View>
+      </View>
         <View style={[styles.sortRow, { borderTopColor: colors.border }]}>
           <Text style={[styles.sortLabel, { color: colors.textSecondary }]}>Sort:</Text>
           <SortChip label="Name" value="name" icon="text-outline" />
@@ -321,6 +319,10 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     padding: 12,
+    paddingBottom: 4,
+    marginHorizontal: 12,
+    marginTop: 8,
+    borderRadius: 16,
   },
   searchInputContainer: {
     flexDirection: 'row',
@@ -340,7 +342,8 @@ const styles = StyleSheet.create({
   filterRow: {
     flexDirection: 'row',
     gap: 8,
-    marginBottom: 10,
+    marginTop: 10,
+    marginBottom: 6,
   },
   filterChip: {
     paddingHorizontal: 14,
