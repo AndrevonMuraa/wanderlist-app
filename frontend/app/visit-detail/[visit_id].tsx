@@ -16,6 +16,7 @@ import ReportButton from '../../components/ReportButton';
 import CommentsSection from '../../components/CommentsSection';
 import { useAuth } from '../../contexts/AuthContext';
 
+import { KeyboardDoneBar } from '../../components/KeyboardDoneBar';
 import UniversalHeader from '../../components/UniversalHeader';
 
 const { width } = Dimensions.get('window');
@@ -486,6 +487,8 @@ export default function VisitDetailScreen() {
 
         <View style={styles.bottomSpacer} />
       </ScrollView>
+
+      <KeyboardDoneBar />
       
       {/* Edit Diary Dialog */}
       <Portal>
@@ -500,8 +503,7 @@ export default function VisitDetailScreen() {
               multiline
               numberOfLines={6}
               textAlignVertical="top"
-              returnKeyType="done"
-              blurOnSubmit={true}
+              inputAccessoryViewID="keyboard-done-bar"
             />
           </Dialog.Content>
           <Dialog.Actions>

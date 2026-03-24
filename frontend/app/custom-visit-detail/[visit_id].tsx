@@ -445,8 +445,7 @@ export default function CustomVisitDetailScreen() {
               multiline
               numberOfLines={6}
               textAlignVertical="top"
-              returnKeyType="done"
-              blurOnSubmit={true}
+              inputAccessoryViewID="keyboard-done-bar"
             />
           </Dialog.Content>
           <Dialog.Actions>

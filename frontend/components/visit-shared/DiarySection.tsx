@@ -50,6 +50,7 @@ export default function DiarySection({
         onChangeText={onDiaryChange}
         multiline
         numberOfLines={6}
+        inputAccessoryViewID="keyboard-done-bar"
         maxLength={maxLength}
       />
       {showCharCount && (

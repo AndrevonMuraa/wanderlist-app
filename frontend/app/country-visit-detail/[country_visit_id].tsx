@@ -660,12 +660,6 @@ export default function CountryVisitDetailScreen() {
         <Surface style={styles.infoCard}>
           <View style={styles.infoRow}>
             <View style={styles.infoItem}>
-              <Ionicons name="calendar" size={20} color={theme.colors.primary} />
-              <Text style={styles.infoLabel}>Visited</Text>
-              <Text style={styles.infoValue}>{formatDate(visit.visited_at || visit.created_at)}</Text>
-            </View>
-            <View style={styles.infoDivider} />
-            <View style={styles.infoItem}>
               <Ionicons name="star" size={20} color="#FFD700" />
               <Text style={styles.infoLabel}>Points Earned</Text>
               <Text style={styles.infoValue}>{visit.points_earned}</Text>
@@ -870,6 +864,7 @@ export default function CountryVisitDetailScreen() {
               multiline
               numberOfLines={6}
               textAlignVertical="top"
+              inputAccessoryViewID="keyboard-done-bar"
             />
           </Dialog.Content>
           <Dialog.Actions>
