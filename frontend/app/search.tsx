@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router';
 import { safeGoBack } from '../utils/navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import UniversalHeader from '../components/UniversalHeader';
 import * as SecureStore from 'expo-secure-store';
 import theme, { gradients } from '../styles/theme';
 import { useTheme } from '../contexts/ThemeContext';
@@ -55,7 +56,7 @@ export default function SearchScreen() {
       
       // Fetch all landmarks and visits in parallel
       const [landmarksRes, visitsRes] = await Promise.all([
-        fetch(`${BACKEND_URL}/api/landmarks?limit=1000`, {
+        fetch(`${BACKEND_URL}/api/landmarks?limit=1500`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
         fetch(`${BACKEND_URL}/api/visits`, {
@@ -213,20 +214,7 @@ export default function SearchScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       {/* Header */}
-      <LinearGradient
-        colors={gradientColors}
-        start={gradients.horizontal.start}
-        end={gradients.horizontal.end}
-        style={styles.header}
-      >
-        <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => safeGoBack(router)} style={styles.headerBackButton}>
-            <Ionicons name="arrow-back" size={24} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Search Landmarks</Text>
-          <View style={{ width: 40 }} />
-        </View>
-      </LinearGradient>
+      <UniversalHeader title="Search Landmarks" />
 
       {/* Search Bar */}
       <View style={[styles.searchContainer, { backgroundColor: colors.surface }]}>
