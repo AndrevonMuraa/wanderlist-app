@@ -241,7 +241,7 @@ export default function VisitDetailScreen() {
       });
       if (res.ok) {
         Alert.alert('Deleted', 'Visit has been removed.', [
-          { text: 'OK', onPress: () => safeGoBack(router) },
+          { text: 'OK', onPress: () => router.replace('/(tabs)/journey') },
         ]);
       }
     } catch {
