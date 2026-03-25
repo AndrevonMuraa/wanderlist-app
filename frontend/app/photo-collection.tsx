@@ -351,12 +351,7 @@ export default function PhotoCollectionScreen() {
                     <View style={styles.statDivider} />
                     <View style={styles.statItem}>
                       <Text style={styles.statNumber}>{collection.countries_count}</Text>
-                      <Text style={styles.statLabel}>Countries</Text>
-                    </View>
-                    <View style={styles.statDivider} />
-                    <View style={styles.statItem}>
-                      <Text style={styles.statNumber}>{collection.years.length}</Text>
-                      <Text style={styles.statLabel}>Years</Text>
+                      <Text style={styles.statLabel}>Destinations</Text>
                     </View>
                   </View>
                 </LinearGradient>
@@ -365,14 +360,14 @@ export default function PhotoCollectionScreen() {
 
             {/* Filter Tabs */}
             <View style={styles.tabsContainer}>
-              {(['all', 'country', 'year', 'type'] as FilterTab[]).map((tab) => (
+              {(['all', 'country', 'type'] as FilterTab[]).map((tab) => (
                 <TouchableOpacity
                   key={tab}
                   style={[styles.tab, activeTab === tab && styles.tabActive]}
                   onPress={() => setActiveTab(tab)}
                 >
                   <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
-                    {tab === 'all' ? 'All' : tab === 'country' ? 'By Country' : tab === 'year' ? 'By Year' : 'By Type'}
+                    {tab === 'all' ? 'All' : tab === 'country' ? 'By Country' : 'By Type'}
                   </Text>
                 </TouchableOpacity>
               ))}
