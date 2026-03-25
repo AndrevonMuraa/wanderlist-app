@@ -236,47 +236,47 @@ export default function ProfileScreen() {
               </View>
             </View>
             
-            {/* Right: Rank Badge */}
-            <View style={styles.rankSection}>
+            {/* Right: Rank Badge — tappable */}
+            <TouchableOpacity style={styles.rankSection} onPress={() => router.push('/ranks')} activeOpacity={0.7}>
               <RankBadge 
                 rank={getUserRank(progressStats?.verifiedPoints || 0)} 
                 size="medium"
                 showName={true}
               />
-            </View>
+            </TouchableOpacity>
           </View>
           
-          {/* Stats Row */}
+          {/* Stats Row — tappable icons, reordered: Continents > Countries > Landmarks > Points */}
           {stats && progressStats && (
             <View style={[styles.statsRow, { borderTopColor: colors.border }]}>
-              <View style={styles.statItem}>
-                <Ionicons name="location" size={16} color="#E87850" />
-                <Text style={[styles.statValue, { color: colors.text }]}>
-                  {progressStats.overall?.visited || stats.total_visits || 0}
-                </Text>
-                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Landmarks</Text>
-              </View>
-              <View style={styles.statItem}>
-                <Ionicons name="flag" size={16} color="#4DB8D8" />
-                <Text style={[styles.statValue, { color: colors.text }]}>
-                  {stats.countries_visited || 0}
-                </Text>
-                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('journey.countries')}</Text>
-              </View>
-              <View style={styles.statItem}>
+              <TouchableOpacity style={styles.statItem} onPress={() => router.push('/continents')} activeOpacity={0.7}>
                 <Ionicons name="earth" size={16} color="#66BB6A" />
                 <Text style={[styles.statValue, { color: colors.text }]}>
                   {stats.continents_visited || 0}
                 </Text>
                 <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('profile.continents')}</Text>
-              </View>
-              <View style={styles.statItem}>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.statItem} onPress={() => router.push('/my-country-visits')} activeOpacity={0.7}>
+                <Ionicons name="flag" size={16} color="#4DB8D8" />
+                <Text style={[styles.statValue, { color: colors.text }]}>
+                  {stats.countries_visited || 0}
+                </Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('journey.countries')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.statItem} onPress={() => router.push('/my-landmark-visits')} activeOpacity={0.7}>
+                <Ionicons name="location" size={16} color="#E87850" />
+                <Text style={[styles.statValue, { color: colors.text }]}>
+                  {progressStats.overall?.visited || stats.total_visits || 0}
+                </Text>
+                <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Landmarks</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.statItem} onPress={() => router.push('/points-summary')} activeOpacity={0.7}>
                 <Ionicons name="star" size={16} color="#FFD700" />
                 <Text style={[styles.statValue, { color: colors.accent }]}>
                   {progressStats.totalPoints || 0}
                 </Text>
                 <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('journey.points')}</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           )}
           
