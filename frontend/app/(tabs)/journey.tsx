@@ -425,9 +425,12 @@ export default function JourneyScreen() {
         {progressStats && (
           <Surface style={[styles.continentalCard, { backgroundColor: colors.surface }]}>
             <Text style={[styles.sectionTitle, { color: colors.text, textAlign: 'center' }]}>{t('journey.continentalProgress')}</Text>
-            {Object.entries(progressStats.continents)
-              .sort((a, b) => b[1].percentage - a[1].percentage)
-              .map(([continent, data]) => (
+            {['Europe', 'Asia', 'Africa', 'Americas', 'Oceania']
+              .filter(continent => progressStats.continents[continent])
+              .map((continent) => {
+                const data = progressStats.continents[continent];
+                const displayName = continent === 'Oceania' ? 'Oceania++' : continent;
+                return (
                 <View key={continent} style={styles.continentItem}>
                   <View style={styles.continentHeader}>
                     <View style={styles.continentNameRow}>
@@ -442,7 +445,7 @@ export default function JourneyScreen() {
                         size={20}
                         color={colors.primary}
                       />
-                      <Text style={[styles.continentName, { color: colors.text }]}>{continent}</Text>
+                      <Text style={[styles.continentName, { color: colors.text }]}>{displayName}</Text>
                     </View>
                     <Text style={[styles.continentCount, { color: colors.textSecondary }]}>
                       {data.visited}/{data.total}
@@ -453,7 +456,7 @@ export default function JourneyScreen() {
                     style={styles.continentProgressBar}
                   />
                 </View>
-              ))}
+              );})}
           </Surface>
         )}
 
