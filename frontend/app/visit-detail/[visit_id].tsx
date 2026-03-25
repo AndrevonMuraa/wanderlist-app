@@ -11,7 +11,6 @@ import { BACKEND_URL } from '../../utils/config';
 import { lightHaptic } from '../../utils/haptics';
 import { PhotoGalleryModal } from '../../components/PhotoGalleryModal';
 import { shareVisit } from '../../utils/shareUtils';
-import { safeGoBack } from '../../utils/navigation';
 import ReportButton from '../../components/ReportButton';
 import CommentsSection from '../../components/CommentsSection';
 import { useAuth } from '../../contexts/AuthContext';

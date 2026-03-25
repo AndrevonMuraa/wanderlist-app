@@ -3,7 +3,6 @@ import { View, StyleSheet, FlatList, TouchableOpacity, RefreshControl, Platform 
 import { Text, Surface, ActivityIndicator, Avatar, Badge } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { safeGoBack } from '../../utils/navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import UniversalHeader from '../../components/UniversalHeader';

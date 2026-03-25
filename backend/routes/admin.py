@@ -584,8 +584,8 @@ async def recalculate_leaderboard_points(admin_user: User = Depends(get_admin_us
             if bool(cv.get("photos")):
                 verified_points += cv.get("points_earned", 50)
         
-        # Add country exploration bonuses (20pts per first country with photo-verified visits)
-        verified_points += len(visited_countries) * 20
+        # Add country visit bonuses (50pts per country visited)
+        verified_points += len(visited_countries) * 50
         
         # Add continent exploration bonuses (50pts per first continent with photo-verified visits)
         verified_points += len(visited_continents) * 50

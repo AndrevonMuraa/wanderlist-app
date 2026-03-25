@@ -121,9 +121,9 @@ export default function WelcomeScreen() {
                 <Text style={styles.pointValue}>+50 pts</Text>
               </View>
               <View style={styles.pointRow}>
-                <Ionicons name="flag" size={16} color="#ef4444" />
-                <Text style={styles.pointText}>New country bonus</Text>
-                <Text style={styles.pointValue}>+20 pts</Text>
+                <Ionicons name="flag" size={16} color="#4DB8D8" />
+                <Text style={styles.pointText}>Country visit</Text>
+                <Text style={styles.pointValue}>+50 pts</Text>
               </View>
             </View>
           </LinearGradient>
