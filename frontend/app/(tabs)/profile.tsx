@@ -250,14 +250,14 @@ export default function ProfileScreen() {
           {stats && progressStats && (
             <View style={[styles.statsRow, { borderTopColor: colors.border }]}>
               <View style={styles.statItem}>
-                <Ionicons name="location" size={16} color="#4DB8D8" />
+                <Ionicons name="location" size={16} color="#E87850" />
                 <Text style={[styles.statValue, { color: colors.text }]}>
                   {progressStats.overall?.visited || stats.total_visits || 0}
                 </Text>
                 <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Landmarks</Text>
               </View>
               <View style={styles.statItem}>
-                <Ionicons name="flag" size={16} color="#FF6B6B" />
+                <Ionicons name="flag" size={16} color="#4DB8D8" />
                 <Text style={[styles.statValue, { color: colors.text }]}>
                   {stats.countries_visited || 0}
                 </Text>
