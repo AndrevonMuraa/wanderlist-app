@@ -1,77 +1,77 @@
-<analysis>**original_problem_statement**: The user's primary goal is to bring the WanderMark application to a production-ready state. This session focused on a massive content expansion, followed by multiple rounds of deep-dive analysis, bug fixing, UI/UX refinement, and code health improvements to prepare the app for a new TestFlight release. The user has now initiated the build process and is preparing for E2E testing.
+<analysis>**original_problem_statement**: The user's primary goal is to bring the WanderMark application to a production-ready state. The session began with the user identifying that many landmarks were actually tourist activities (e.g., cruises, balloon rides). This triggered a massive data integrity review, which revealed significant inconsistencies between the local and production databases.
 
-**User's preferred language**: Norwegian. The next agent **MUST** respond in Norwegian. All UI text, API responses, and other application content **MUST** remain in English.
+After a thorough data cleanup, the user conducted an extensive E2E testing session, reporting numerous critical bugs related to the points system, UI layout, keyboard handling, and data synchronization. The agent's work then pivoted to addressing this comprehensive list of issues, culminating in a major refactoring of the points system, numerous UI/UX fixes, and a final code audit to prepare for a new, stable TestFlight build (build 73).
+
+PRODUCT REQUIREMENTS:
+- Replace all activity-based landmarks with real geographical or historical landmarks.
+- Ensure the production database is 100% clean of data duplicates and inconsistencies.
+- Fix all reported E2E bugs, with a special focus on the points system's logical coherence.
+- The app's UI/UX must be consistent, intuitive, and visually polished across all screens.
+- Prepare the app for a new TestFlight build (Build 73) and a subsequent handoff to a new agent for the next phase of testing.
+
+**User's preferred language**: Norwegian
 
 **what currently exists?**
-The application is a mature, feature-complete full-stack app (React Native/Expo frontend, FastAPI/MongoDB backend). It has undergone a massive content and logic overhaul.
+The application is in a pre-release state, having just undergone a massive bug-fixing and refactoring session. All backend code changes are deployed, and all database migrations have been run on the production environment. The frontend code contains numerous fixes that are awaiting compilation into a new TestFlight build.
 
-Key states:
--   **Content Expansion:** The app's content has been expanded from 66 to 100 countries, with a perfectly balanced structure of 20 countries per continent and 15 landmarks per country (10 official, 5 premium), for a total of 1,500 landmarks.
--   **Logic Overhaul:** Core logic for points, ranks, and visits has been refactored. Ranks are now based exclusively on verified points (from visits with photos). The visit system now enforces a one visit per landmark rule to prevent duplicates.
--   **Code Health:** Major refactoring was completed, including splitting the monolithic  into five smaller modules and centralizing country configuration in  into a dedicated . Numerous dead code paths and unused files have been removed.
--   **Production Readiness:** Key production features like API rate limiting, a global frontend error boundary, and stricter CORS policies have been implemented. A detailed build guide () has been created.
--   **Database Sync:** The production MongoDB Atlas database has been fully migrated and cleaned to match the state of the preview environment, resolving all content and data inconsistencies for the new TestFlight build.
+- **Data Integrity**: The production and local databases are now synchronized. All ~50 activity-based landmarks and ~30 near-duplicates have been replaced with unique, valid landmarks.
+- **Points System Overhaul**: The point calculation logic has been centralized into a single, robust function () in the backend. This function is now called upon any visit creation, update, or deletion, ensuring data is always consistent and eliminating the previous data drift issues caused by faulty incremental updates. The confusing +20 New Country Bonus has been removed and replaced with a standard 50-point Country Visit bonus.
+- **E2E Bug Fixes**: A large number of UI, UX, and logic bugs have been addressed in the codebase. This includes fixing keyboard dismissal issues, redesigning components (Share Card, Points Summary, Feed tabs, Overall Progress), standardizing all page headers, and fixing navigation flows.
+- **Code Health**: A comprehensive code audit was performed. 6 unused frontend pages and the corresponding backend  route were removed to reduce clutter and future confusion.
 
 **Last working item**:
-    - Last item agent was working: The agent created a comprehensive  document to streamline future TestFlight/production builds, including instructions for local commands and necessary database migration steps on the Render platform. The user approved the guide.
+    - Last item agent was working: The agent completed a final grand cleanup session. This included fixing minor outdated hardcoded values (e.g., an old +20 pts reference on the Welcome screen), removing unused code imports, updating the  with all the latest changes, and bumping the app's  to 73 in preparation for the new build. An  dependency, which was found to be missing, was also installed.
     - Status: FINISHED
-    - Agent Testing Done: Y
-    - Which testing method agent to use? NA
+    - Agent Testing Done: N
+    - Which testing method agent to use? NA (The next step is for the user to create a new build and perform E2E testing).
     - User Testing Done: N
 
 **All Pending/In progress Issue list**:
-  There are no pending or in-progress issues. The app is pending full E2E testing by the user on the new TestFlight build.
+  - **Issue 1: Verify all implemented fixes in Build 73** (P0)
+    - **Description**: A massive number of backend and frontend fixes have been implemented in the codebase but have not been verified by the user in a new app build. The primary pending task is for the user to build version 73, install it on a device, and conduct a full E2E test using the updated test plan.
+    - **Status**: USER VERIFICATION PENDING
+    - **Next debug checklist**: The new agent must guide the user through the build process and then assist in interpreting the results of the E2E test. The test plan is located at .
+    - **Why fix this issue**: This will validate that all the extensive work done in this session (data cleanup, points system refactor, UI fixes) works as intended and moves the app significantly closer to a public release.
 
 **In progress Task List**:
-  - **Task 1: E2E User Testing**
-     - Where to resume: The user has initiated a new build for TestFlight and has been provided with a comprehensive test plan (). The next step is for the user to complete the build, install the app on a physical device, and perform E2E testing based on the plan.
-     - What will be achieved with this? Verification that all recent features, fixes, and refactoring work as expected in a production-like environment, identifying any final bugs before a potential App Store launch.
-     - Status: USER VERIFICATION PENDING
-     - Should Test frontend/backend/both after fix? NA
-     - Blocked on something: User to complete the EAS build and submission process.
+  - **Task 1: Guide user through building and testing Build 73** (P0)
+     - **Where to resume**: The previous agent has prepared everything for Build 73 and provided the final commands. The new agent should confirm with the user that they are ready and reiterate the build steps.
+     - **What will be achieved with this?**: A stable, verified build that incorporates dozens of critical bug fixes and improvements, laying the groundwork for a potential App Store launch.
+     - **Status**: NOT STARTED
+     - **Blocked on something**: User needs to run the build commands on their local machine.
 
 **Upcoming and Future Tasks**
-- **Upcoming Tasks:**
-    - **P0: Address feedback from E2E testing:** After the user completes testing, the agent must be prepared to fix any bugs or address any feedback that arises.
+- **Upcoming Tasks**:
+  - **P0: Address feedback from E2E testing of Build 73:** After the user completes testing, the agent must be prepared to fix any bugs or address any feedback that arises.
 - **Future Tasks:**
-    - **P1: Deploy Website Legal Pages:** The static HTML files for the Privacy Policy (, ) are updated but not yet deployed.
-    - **P2: Sentry Integration:** As suggested by the agent and approved by the user for the backlog, integrate Sentry for production error monitoring.
-    - **P3: Image Upload Optimization:** As suggested by the agent and approved by the user for the backlog, implement server-side image compression/resizing to reduce storage costs and improve performance.
-    - **P4: Rename GitHub Repository:** A low-priority task to rename the repository from  to .
+  - **P1: Deploy Website Legal Pages:** The static HTML files for the Privacy Policy and Terms of Service () are updated but not yet deployed.
+  - **P2: Sentry Integration:** As suggested by a previous agent and approved by the user for the backlog, integrate Sentry for production error monitoring.
+  - **P3: Image Upload Optimization:** As suggested by a previous agent and approved by the user for the backlog, implement server-side image compression/resizing to reduce storage costs and improve performance.
+  - **P4: Rename GitHub Repository:** A low-priority task to rename the repository from  to .
 
 **Completed work in this session**
-- **Massive Content Expansion & Migration (DONE)**
-  - Expanded app content from 66 countries/797 landmarks to 100 countries/1,500 landmarks.
-  - Ensured a perfect balance: 5 continents, 20 countries each, with 10 official and 5 premium landmarks per country.
-  - Created and executed multiple migration scripts (, , ) directly on the production MongoDB Atlas via the Render shell to sync the data for the TestFlight build.
-- **Core Logic Refactoring (DONE)**
-  - **Visit Uniqueness:** Changed logic to allow only one visit record per landmark per user, preventing duplicates. Added backend validation and frontend confirmation dialogs.
-  - **Rank System:** Ranks are now based solely on  (verified points from photo visits), making the system more robust and cheat-resistant.
-  - **Badge System:** Merged the badge and rank systems. Badges are now awarded dynamically based on the user's current rank and are updated if the user's verified points change.
-  - **Point & Stat Consistency:** Fixed numerous bugs where different pages showed conflicting numbers for points, countries visited, and landmark counts. All stats are now consistently calculated and displayed.
-- **Code Health & Major Refactoring (DONE)**
-  - ** Split:** Refactored the 1,390-line  into five focused modules (, , , , ).
-  - ** Refactor:** Centralized constants, interfaces, and configurations into a new .
-  - **Dead Code Removal:** Performed multiple audits and removed significant dead code, including unused components, styles, and functions from , , and other files.
-  - **Data Cleanup:** Removed all static  and coordinate data from seed scripts and the database to prevent future agent confusion.
-- **UI/UX Enhancements (DONE)**
-  - Redesigned the Find Friends page with debounced search to fix keyboard issues and a cleaner UI.
-  - Redesigned the Ranks page to be a compact, space-efficient horizontal list.
-  - Redesigned the Share My Journey button into a subtle icon.
-  - Re-ordered and re-styled multiple sections on the Journey and Social pages for better UX and visual consistency.
-  - Fixed all hardcoded theme colors (e.g., loading spinners) to use the app's central theme.
-- **Production Readiness & Documentation (DONE)**
-  - Created a comprehensive  detailing the end-to-end process for creating and submitting a new build, including critical database migration steps via the Render shell.
-  - Implemented backend API rate-limiting and a global frontend Error Boundary.
-  - Created a detailed  for the user.
-- **Community Features (DONE)**
-  - Made upvoting on community photos a free feature for all users to encourage engagement.
-  - Updated all related subscription pages and text to reflect this change.
-  - Improved the Photo of the Week logic to be based on ISO week numbers, making it a recurring time-based competition.
+- **Data Integrity & Synchronization (DONE)**
+  - Identified and replaced over 50 activity-based landmarks (cruises, safaris) with valid geographical landmarks across both local and production databases.
+  - Found and resolved over 30 near-duplicate landmarks in the production database.
+  - Created and ran multiple iterative database scripts (, , etc.) to bring the production database content in sync with the clean local database.
+- **Points System Overhaul (DONE)**
+  - Refactored the entire points calculation system to use a single, robust helper function () as the source of truth, eliminating data drift.
+  - Standardized country visit points to a consistent 50 points, removing the confusing +20 New Country Bonus.
+  - Corrected the logic for awarding verified continent bonuses to include both verified landmark visits and country visits with photos.
+- **E2E Bug Fixing & UX Improvements (DONE)**
+  - **Headers**: Standardized all page headers to use a single  component, fixing inconsistent heights and white bars.
+  - **Keyboards**: Fixed keyboard dismissal bugs on  and . Added a Done button toolbar to all multiline diary inputs for better usability on iOS.
+  - **Data Caching**: Implemented  on  and  to ensure data is always re-fetched and up-to-date when the user navigates to the tab.
+  - **Navigation**: Corrected post-delete navigation flows to prevent users from seeing stale data.
+  - **Component Redesigns**: Redesigned several key components for better UX and visual consistency, including the Overall Progress card (now shows 3 progress wheels), Points Summary (clearer breakdown), Feed tabs, and Edit Diary modal.
+  - **Like/Upvote Logic**: Fixed a critical bug where the liked status of a photo was only being checked for premium users, preventing free users from seeing their own upvotes reflected.
+- **Code Health & Cleanup (DONE)**
+  - Performed a code audit and deleted 6 unused frontend pages/components (e.g., , ).
+  - Deactivated the unused  backend route in .
+  - Updated the splash screen image to use the correct WanderMark name and app icon.
 
 **Earlier issues found/mentioned but not fixed**
-   - **Issue 1: Server Error in Preview Environment**
-     - This is a known artifact of the web preview environment, likely due to its connection to a local/empty MongoDB instance. It does not affect the TestFlight/production build and should be ignored.
+   - None.
 
 **Known issue recurrence from previous fork**
   - None.
@@ -79,66 +79,80 @@ Key states:
 **Code Architecture**
 - **Frontend**: React Native with Expo Router. State management via  and local state.
 - **Backend**: FastAPI & MongoDB.
-- **Key Architectural Patterns**:
-    - **Backend Module Splitting**: The large  monolith was broken down into five smaller, domain-focused routers (, , , , ) registered in .
-    - **Frontend Config Centralization**: Large, reusable constants and types (e.g., for countries and continents) have been extracted from component files into a central  directory (e.g., ).
-    - **Debounced Search**: Implemented a  hook to optimize the user search functionality, preventing API calls on every keystroke.
-    - **Dynamic Badge/Rank System**: Backend logic in  now dynamically calculates and syncs user achievements based on their current  upon visit creation or deletion.
+- **Key Architectural Changes**:
+    - **Centralized Points Logic**: All point calculation logic has been consolidated into  in . All data mutation endpoints (visit creation/deletion) now call this function, creating a single source of truth and preventing data drift.
+    - **State Refresh on Focus**: Key screens now use the  hook to re-fetch data whenever they come into view, solving a class of stale data bugs.
+    - **Dead Code Removal**: Several unused frontend pages and a backend route have been removed, making the codebase cleaner.
 
 **Key Technical Concepts**
-- **Database Migration:** Writing and executing idempotent Python scripts (, , etc.) to perform complex data transformations on a live database (MongoDB Atlas) via a remote shell (Render).
-- **Debouncing:** Using a custom hook in React Native to delay function execution (API calls) until a user has stopped typing, significantly improving performance and UX.
-- **Defensive Programming:** Adding backend constraints (e.g., preventing duplicate visits, blocking deletion of a country visit if landmarks exist) and corresponding frontend user-facing alerts.
+- **Database Synchronization**: The process of writing and executing iterative Python scripts against a live production database (MongoDB Atlas) to fix data inconsistencies discovered by comparing it to a local/preview database state.
+- **Robust Data Recalculation**: The architectural decision to replace fragile, incremental point updates () with a full recalculation from source visit data () to ensure data integrity.
+- **React Native State Management**: Using  as a strategy to solve stale data issues within a tab-based navigation architecture (Expo Router).
+- **Programmatic Image Generation (PIL/Pillow)**: Using a Python library to procedurally generate a complex gradient-based image asset when AI image generation tools failed to meet specific design constraints (recreating the exact app icon and gradient).
 
 **key DB schema**
-- **visits**: Enforced a logical uniqueness constraint on . Duplicates have been cleaned from the database.
-- **achievements**: Schema is now simplified. Only  type badges are used, which are dynamically synced with the user's current rank. All other badge types have been deprecated and removed.
+- **users**: The  and  fields are now authoritative, consistently updated by the  helper function.
+- **country_visits**: The  field for visits with  is now consistently 50.  boolean is critical for determining verified status.
+- **photo_upvotes**: This collection tracks upvotes on community photos. The logic to read from it is now correctly applied to both free and premium users.
+- **likes**: This collection tracks likes on feed activities, and is distinct from .
 
 **All files of reference**
-- **Created Files**:
-  - : A step-by-step guide for creating new iOS builds and running necessary database migrations.
-  - : A comprehensive test plan for the user to validate the new TestFlight build.
-  - , , , , , : New modules from the refactoring of .
-  - : Centralized configuration for countries and continents.
-  - : A new dedicated page for managing custom visits.
-  - , , : Scripts created specifically for migrating the production database.
-- **Updated Files**:
-  - : Major updates to  logic.
-  - : Added logic to prevent duplicate visits.
-  - : Added logic to block deletion of country visits if landmark visits exist.
-  - : Heavily refactored UI and logic for Stats, Custom Visits, etc.
-  - : Removed redundant UI elements.
-  - : Implemented debounced search and UI cleanup.
-  - : Redesigned to a compact layout.
-  - : Updated to include rate limiting middleware and new social routers.
-  - : Added global PaperProvider theme and Error Boundary.
+- **Key New/Refactored Files**:
+  - : Contains the new source-of-truth function .
+  - : Refactored to be a simple wrapper around the  helper.
+  -  & : Now call  on delete/update operations.
+  -  & : Added  to ensure data is always fresh.
+  - : A new reusable component to add a Done button to multiline text inputs on iOS.
+- **Key Updated Documentation**:
+  - : Extensively updated to reflect all the fixes made and to guide the next testing session. It now uses a clear status system (, , ).
+- **Deleted Files**:
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
 
 **Critical Info for New Agent**
-- **App is in User Testing Phase:** The user has triggered a new TestFlight build and will be conducting E2E testing based on the . Your primary task will be to address any bugs or feedback that comes from this testing.
-- **Production DB is Migrated:** All content and data changes have been manually applied to the production MongoDB Atlas database via scripts run in the Render shell. The production environment is now in sync with the preview environment.
-- **Build Guide Exists:** Refer to  for any future questions about the build or deployment process. It contains the exact commands and workflow approved by the user. Do not improvise.
-- **Logic is Interconnected:** Be aware that many systems are now tightly coupled (e.g., deleting a visit triggers a rank/badge recalculation). When fixing a bug, carefully consider the downstream effects on points, ranks, and achievements.
+- **The app is ready for Build 73.** The user needs to be guided through the build process. All backend changes and necessary database migrations are already live on the production Render environment.
+- **The primary task is E2E testing.** The user will perform the testing based on the updated . The new agent's job is to assist, interpret feedback, and fix any new bugs found. The test plan is the source of truth for what needs to be verified.
+- **A premium test user exists:**  / . This is critical for testing premium-only features.
+- **The points system has been completely overhauled.** Do not trust old code patterns that use incremental  for points. The single source of truth is now  in .
+- **Many UI/UX fixes have been implemented but not visually verified by the user.** The user will be seeing these for the first time in Build 73. Be prepared for feedback on these changes.
 
 **documents and test reports created in this job**
+-  (extensively updated)
+-  (updated)
+-  (updated)
 - 
 - 
 - 
--  (Continuously updated)
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **User (1567):** Approves the updated  but asks to remove a point about 2FA issues, as it's been resolved. (COMPLETED)
-2.  **User (1558):** Asks the agent to review and update the process for creating new builds, aiming for a guide that a non-technical user can follow to prevent repeated errors, and to consider the auto-deploy setup. (COMPLETED)
-3.  **User (1533):** Confirms the friend search logic (username only, not email) and asks to remove a non-functional search icon. (COMPLETED)
-4.  **User (1512):** Reports major usability issues on the Find Friends page (keyboard closing on every keypress) and a confusing UI element (999999 slots). Asks for an investigation. (COMPLETED)
-5.  **User (1510):** Asks to wait for their next comment regarding a screenshot. (ACKNOWLEDGED)
-6.  **User (1497):** Requests removing redundant View full... buttons on the Social page. (COMPLETED)
-7.  **User (1470):** Reports a scroll-restoration bug on the My Journey page and asks for a fix. (COMPLETED)
-8.  **User (1453):** Requests multiple UI changes on the My Journey page, including centering headers, adding color to icons, and changing the layout/position of the Custom Visits section. (COMPLETED)
-9.  **User (1446):** Requests reordering the stats items on the My Journey page. (COMPLETED)
-10. **User (1437):** Asks to remove the blue pro icon from premium landmark list items. (COMPLETED)
+1. **User (1257):** Confirms the plan for the final cleanup and build prep is good to go.
+2. **User (1236):** Approves the agent's proposed plan for the final audit and build preparation.
+3. **User (1234):** Asks the agent to perform a final, comprehensive audit of the entire app (code, logic, docs) to catch any remaining issues before creating the new build, and to prepare for a handoff.
+4. **User (1197):** Approves the redesign of the Your Activity section on the Points Summary page.
+5. **User (1196):** Requests that the icons in the redesigned Your Activity section match the icons used on the My Journey page for consistency.
+6. **User (1182):** Approves the plan to reorder and make the profile stats icons clickable.
+7. **User (1181):** Asks to improve the layout and functionality of the stats section on the main profile page, suggesting a more logical order and clickable icons.
+8. **User (1177):** Confirms that the fix for the Visited button on the landmark list page should be implemented.
+9. **User (1176):** Reports that the green Visited banner on a country page doesn't allow viewing the visit details and asks for a fix.
+10. **User (1168):** Reports an issue with the By Year filter on the My Photos page, stating it's not a logical filter and should be removed.
 
 **Project Health Check:**
-- **Broken**: None.
+- **Broken**: None. All known critical bugs have been addressed in the codebase.
 - **Mocked**: None.
 
 **3rd Party Integrations**
@@ -149,17 +163,19 @@ Key states:
 - Resend (Transactional Emails)
 -  (Screenshots)
 -  (Share functionality)
+-  (Newly added for copy-to-clipboard functionality)
 
 **Testing status**
-  - Testing agent used after significant changes: YES, a full E2E test was run and passed.
+  - Testing agent used after significant changes: NO (The session focused on fixing bugs found by the user's manual E2E testing).
   - Troubleshoot agent used after agent stuck in loop: NO
-  - Test files created: 
-  - Known regressions: None.
+  - Test files created: None.  was heavily updated.
+  - Known regressions: None known, but a new build is required to verify all fixes.
 
 **Credentials to test flow:**
-- **E-post:** 
-- **Passord:** 
-- **Other user:**  / 
+- **Standard User:**  / 
+- **Premium User:**  / 
+- **Secondary User:**  / 
 
 **What agent forgot to execute**
-- Initially, the agent forgot that database migrations performed in the preview environment needed to be manually run on the production MongoDB Atlas instance. This was identified and corrected after the user reported issues with the TestFlight build. The process is now documented in .</analysis>
+- The agent initially missed that  script had its own outdated logic and wasn't using the new central helper function. This was caught and fixed.
+- The agent missed installing the  dependency when implementing the copy-to-clipboard feature, which caused a Metro bundler error. This was caught and fixed.</analysis>
