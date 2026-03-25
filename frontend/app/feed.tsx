@@ -10,6 +10,7 @@ import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
+import UniversalHeader from '../components/UniversalHeader';
 
 interface Activity {
   activity_id: string;
@@ -378,41 +379,27 @@ export default function FeedScreen() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={gradients.oceanToSand}
-        start={gradients.horizontal.start}
-        end={gradients.horizontal.end}
-        style={[styles.header, { paddingTop: topPadding }]}
-      >
-        <View style={styles.headerRow}>
-          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Feed</Text>
-          <TouchableOpacity style={styles.brandingContainer} onPress={() => router.push('/about')} activeOpacity={0.7}>
-            <HeaderBranding size={18} textColor="#2A2A2A" />
-          </TouchableOpacity>
-        </View>
-        {/* Tabs */}
-        <View style={styles.tabRow}>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'friends' && styles.tabActive]}
-            onPress={() => setActiveTab('friends')}
-            data-testid="tab-friends"
-          >
-            <Ionicons name="people-outline" size={16} color={activeTab === 'friends' ? '#fff' : 'rgba(255,255,255,0.6)'} />
-            <Text style={[styles.tabText, activeTab === 'friends' && styles.tabTextActive]}>Friends</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'community' && styles.tabActive]}
-            onPress={() => setActiveTab('community')}
-            data-testid="tab-community"
-          >
-            <Ionicons name="earth-outline" size={16} color={activeTab === 'community' ? '#fff' : 'rgba(255,255,255,0.6)'} />
-            <Text style={[styles.tabText, activeTab === 'community' && styles.tabTextActive]}>Community</Text>
-          </TouchableOpacity>
-        </View>
-      </LinearGradient>
+      <UniversalHeader title="Feed" />
+      
+      {/* Tabs — below header */}
+      <View style={styles.tabRow}>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'friends' && styles.tabActive]}
+          onPress={() => setActiveTab('friends')}
+          data-testid="tab-friends"
+        >
+          <Ionicons name="people-outline" size={16} color={activeTab === 'friends' ? '#fff' : theme.colors.textSecondary} />
+          <Text style={[styles.tabText, activeTab === 'friends' && styles.tabTextActive]}>Friends</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'community' && styles.tabActive]}
+          onPress={() => setActiveTab('community')}
+          data-testid="tab-community"
+        >
+          <Ionicons name="earth-outline" size={16} color={activeTab === 'community' ? '#fff' : theme.colors.textSecondary} />
+          <Text style={[styles.tabText, activeTab === 'community' && styles.tabTextActive]}>Community</Text>
+        </TouchableOpacity>
+      </View>
 
       {activeTab === 'friends' ? (
         <FlatList
@@ -609,8 +596,10 @@ const styles = StyleSheet.create({
   },
   tabRow: {
     flexDirection: 'row',
-    marginTop: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     gap: 8,
+    backgroundColor: theme.colors.background,
   },
   tab: {
     flex: 1,
@@ -620,15 +609,18 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: 10,
     borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   tabActive: {
-    backgroundColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
   },
   tabText: {
     fontSize: 14,
     fontWeight: '600',
-    color: 'rgba(255,255,255,0.6)',
+    color: theme.colors.textSecondary,
   },
   tabTextActive: {
     color: '#fff',
