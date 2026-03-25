@@ -14,6 +14,7 @@ import {
   Alert,
   TextInput,
   KeyboardAvoidingView,
+  Modal as RNModal,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -25,6 +26,7 @@ import * as ImagePicker from 'expo-image-picker';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import PhotoViewer from '../../components/PhotoViewer';
+import { KeyboardDoneBar } from '../../components/KeyboardDoneBar';
 import UniversalHeader from '../../components/UniversalHeader';
 
 const { width, height } = Dimensions.get('window');
@@ -850,35 +852,53 @@ export default function CountryVisitDetailScreen() {
         </Dialog>
       </Portal>
 
-      {/* Edit Diary Dialog */}
-      <Portal>
-        <Dialog visible={showEditDialog} onDismiss={() => setShowEditDialog(false)}>
-          <Dialog.Title>Edit Travel Diary</Dialog.Title>
-          <Dialog.Content>
+      {/* Edit Diary Modal */}
+      <RNModal
+        visible={showEditDialog}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowEditDialog(false)}
+      >
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', padding: 20 }}>
+          <View style={{ backgroundColor: theme.colors.surface, borderRadius: 20, padding: 20, maxHeight: '80%' }}>
+            <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, marginBottom: 16, textAlign: 'center' }}>Edit Travel Diary</Text>
             <TextInput
-              style={styles.diaryInput}
+              style={{
+                borderWidth: 1,
+                borderColor: theme.colors.border,
+                borderRadius: 12,
+                padding: 14,
+                fontSize: 15,
+                minHeight: 150,
+                color: theme.colors.text,
+                textAlignVertical: 'top',
+                backgroundColor: theme.colors.background,
+              }}
               value={editDiary}
               onChangeText={setEditDiary}
               placeholder="Write about your experience..."
               placeholderTextColor={theme.colors.textLight}
               multiline
-              numberOfLines={6}
+              numberOfLines={8}
               textAlignVertical="top"
               inputAccessoryViewID="keyboard-done-bar"
             />
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => setShowEditDialog(false)} disabled={saving}>Cancel</Button>
-            <Button 
-              onPress={handleSaveDiary}
-              loading={saving}
-              disabled={saving}
-            >
-              Save
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 12, marginTop: 16 }}>
+              <TouchableOpacity onPress={() => setShowEditDialog(false)} style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
+                <Text style={{ fontSize: 15, color: theme.colors.textSecondary }}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                onPress={handleSaveDiary}
+                disabled={saving}
+                style={{ backgroundColor: theme.colors.primary, paddingHorizontal: 24, paddingVertical: 10, borderRadius: 10 }}
+              >
+                <Text style={{ fontSize: 15, fontWeight: '600', color: '#fff' }}>{saving ? 'Saving...' : 'Save'}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </RNModal>
+      <KeyboardDoneBar />
     </View>
   );
 }
