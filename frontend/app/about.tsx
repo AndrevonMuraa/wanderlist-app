@@ -298,14 +298,14 @@ export default function AboutScreen() {
                     <Text style={styles.bold}>Verified Points</Text> (with personal photos):{'\n'}
                     • Official Landmarks: 10 pts{'\n'}
                     • Premium Landmarks: 25 pts{'\n'}
-                    • Country Visit: 50 pts{'\n'}
-                    • New Country Bonus: +20 pts{'\n'}
-                    • Continent Completion Bonus: +200 pts{'\n'}
+                    • Country Visit: 50 pts (auto or manual){'\n'}
+                    • New Continent Bonus: +50 pts{'\n'}
                     • Country Completion: +50 pts{'\n'}
                     • Continent Completion: +200 pts{'\n\n'}
                     <Text style={styles.bold}>Unverified Points</Text> (without photos):{'\n'}
                     • Same values, but without personal photo verification{'\n'}
-                    • Count for friends leaderboard only{'\n\n'}
+                    • Count for total points and friends leaderboard{'\n'}
+                    • Do not count for global leaderboard or rank{'\n\n'}
                     Photos must show you personally at the landmark to earn verified points. Non-compliant uploads may have their verified status revoked.
                   </Text>
                 </View>
