@@ -160,8 +160,8 @@ export default function PointsSummary() {
             </View>
 
             <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#E3F2FD' }]}>
-                <Ionicons name="location" size={18} color={theme.colors.primary} />
+              <View style={[styles.infoIcon, { backgroundColor: '#FDEAE4' }]}>
+                <Ionicons name="location" size={18} color="#E87850" />
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Landmark Visit</Text>
@@ -170,18 +170,8 @@ export default function PointsSummary() {
             </View>
             
             <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#E8F5E9' }]}>
-                <Ionicons name="earth" size={18} color="#4CAF50" />
-              </View>
-              <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Country Visit</Text>
-                <Text style={styles.infoDesc}>50 points for each country visited</Text>
-              </View>
-            </View>
-            
-            <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#FFF3E0' }]}>
-                <Ionicons name="flag" size={18} color="#FF9800" />
+              <View style={[styles.infoIcon, { backgroundColor: '#E0F4F4' }]}>
+                <Ionicons name="flag" size={18} color="#4DB8D8" />
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Country Visit</Text>
@@ -190,8 +180,8 @@ export default function PointsSummary() {
             </View>
 
             <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#F3E5F5' }]}>
-                <Ionicons name="globe" size={18} color="#9C27B0" />
+              <View style={[styles.infoIcon, { backgroundColor: '#E8F5E9' }]}>
+                <Ionicons name="globe-outline" size={18} color="#66BB6A" />
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Continent Bonus</Text>
@@ -200,8 +190,8 @@ export default function PointsSummary() {
             </View>
 
             <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#E0F7FA' }]}>
-                <Ionicons name="checkmark-circle" size={18} color="#00BCD4" />
+              <View style={[styles.infoIcon, { backgroundColor: '#FFF8E1' }]}>
+                <Ionicons name="star" size={18} color="#FFD700" />
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Completion Bonuses</Text>
@@ -211,32 +201,55 @@ export default function PointsSummary() {
           </Surface>
         </View>
 
-        {/* Visit Stats */}
+        {/* Your Journey */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Your Activity</Text>
+          <Text style={styles.sectionTitle}>Your Journey</Text>
           
-          <View style={styles.statsGrid}>
-            <Surface style={styles.statCard}>
-              <Ionicons name="location" size={24} color={theme.colors.primary} />
-              <Text style={styles.statNumber}>{stats?.landmarks_visited || 0}</Text>
-              <Text style={styles.statLabel}>Landmarks</Text>
-            </Surface>
-            <Surface style={styles.statCard}>
-              <Ionicons name="earth" size={24} color="#4CAF50" />
-              <Text style={styles.statNumber}>{stats?.countries_visited || 0}</Text>
-              <Text style={styles.statLabel}>Countries</Text>
-            </Surface>
-            <Surface style={styles.statCard}>
-              <Ionicons name="camera" size={24} color="#E91E63" />
-              <Text style={styles.statNumber}>{stats?.visits_with_photos || 0}</Text>
-              <Text style={styles.statLabel}>With Photos</Text>
-            </Surface>
-            <Surface style={styles.statCard}>
-              <Ionicons name="eye-off" size={24} color="#999" />
-              <Text style={styles.statNumber}>{stats?.visits_without_photos || 0}</Text>
-              <Text style={styles.statLabel}>No Photos</Text>
-            </Surface>
-          </View>
+          <Surface style={styles.card}>
+            <View style={styles.journeyRow}>
+              <Ionicons name="globe-outline" size={20} color="#66BB6A" />
+              <View style={styles.journeyContent}>
+                <Text style={styles.journeyLabel}>Continents</Text>
+                <View style={styles.journeyBarContainer}>
+                  <View style={[styles.journeyBar, { width: `${Math.min(100, ((stats?.countries_visited ? Math.min(5, Math.ceil(stats.countries_visited / 20)) : 0) / 5) * 100)}%`, backgroundColor: '#66BB6A' }]} />
+                </View>
+              </View>
+              <Text style={[styles.journeyValue, { color: '#66BB6A' }]}>{stats?.countries_visited ? Math.min(5, Math.ceil(stats.countries_visited / 20)) : 0}/5</Text>
+            </View>
+
+            <View style={styles.journeyRow}>
+              <Ionicons name="flag" size={20} color="#4DB8D8" />
+              <View style={styles.journeyContent}>
+                <Text style={styles.journeyLabel}>Destinations</Text>
+                <View style={styles.journeyBarContainer}>
+                  <View style={[styles.journeyBar, { width: `${Math.min(100, ((stats?.countries_visited || 0) / 100) * 100)}%`, backgroundColor: '#4DB8D8' }]} />
+                </View>
+              </View>
+              <Text style={[styles.journeyValue, { color: '#4DB8D8' }]}>{stats?.countries_visited || 0}/100</Text>
+            </View>
+
+            <View style={styles.journeyRow}>
+              <Ionicons name="location" size={20} color="#E87850" />
+              <View style={styles.journeyContent}>
+                <Text style={styles.journeyLabel}>Landmarks</Text>
+                <View style={styles.journeyBarContainer}>
+                  <View style={[styles.journeyBar, { width: `${Math.min(100, ((stats?.landmarks_visited || 0) / 1500) * 100)}%`, backgroundColor: '#E87850' }]} />
+                </View>
+              </View>
+              <Text style={[styles.journeyValue, { color: '#E87850' }]}>{stats?.landmarks_visited || 0}/1500</Text>
+            </View>
+
+            <View style={styles.journeyRow}>
+              <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
+              <View style={styles.journeyContent}>
+                <Text style={styles.journeyLabel}>Verified Visits</Text>
+                <View style={styles.journeyBarContainer}>
+                  <View style={[styles.journeyBar, { width: `${stats?.landmarks_visited ? Math.min(100, ((stats?.visits_with_photos || 0) / stats.landmarks_visited) * 100) : 0}%`, backgroundColor: '#4CAF50' }]} />
+                </View>
+              </View>
+              <Text style={[styles.journeyValue, { color: '#4CAF50' }]}>{stats?.visits_with_photos || 0}/{stats?.landmarks_visited || 0}</Text>
+            </View>
+          </Surface>
         </View>
 
         {/* CTA */}
@@ -423,6 +436,38 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginTop: 2,
+  },
+  journeyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    gap: 12,
+  },
+  journeyContent: {
+    flex: 1,
+  },
+  journeyLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.colors.text,
+    marginBottom: 4,
+  },
+  journeyBarContainer: {
+    height: 6,
+    backgroundColor: theme.colors.border,
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  journeyBar: {
+    height: '100%',
+    borderRadius: 3,
+    minWidth: 2,
+  },
+  journeyValue: {
+    fontSize: 13,
+    fontWeight: '700',
+    minWidth: 55,
+    textAlign: 'right',
   },
   ctaButton: {
     marginHorizontal: 16,
