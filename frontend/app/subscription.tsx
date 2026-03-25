@@ -479,12 +479,12 @@ export default function SubscriptionScreen() {
           <Surface style={styles.previewCard}>
             <View style={styles.previewGrid}>
               {[
-                { name: 'Blue Lagoon', country: 'Iceland 🇮🇸' },
-                { name: 'Zhangjiajie', country: 'China 🇨🇳' },
-                { name: 'Antelope Canyon', country: 'USA 🇺🇸' },
-                { name: 'Hallstatt', country: 'Austria 🇦🇹' },
-                { name: 'Bora Bora', country: 'French Polynesia 🇵🇫' },
-                { name: '+ 88 more', country: 'worldwide' },
+                { name: 'Gorner Gorge', country: 'Switzerland 🇨🇭' },
+                { name: 'Lake Natron', country: 'Tanzania 🇹🇿' },
+                { name: 'Vikos Gorge', country: 'Greece 🇬🇷' },
+                { name: 'Colossi of Memnon', country: 'Egypt 🇪🇬' },
+                { name: 'Sete Cidades', country: 'Portugal 🇵🇹' },
+                { name: '+ 495 more', country: 'worldwide' },
               ].map((item, idx) => (
                 <View key={idx} style={styles.previewItem}>
                   <Text style={styles.previewName}>{item.name}</Text>
