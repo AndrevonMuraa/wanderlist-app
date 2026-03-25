@@ -184,30 +184,19 @@ export default function LandmarksScreen() {
   };
 
   const handleCountryVisitAction = () => {
-    // Determine if user has landmark visits in this country
-    const hasLandmarkVisits = visitedLandmarkIds.size > 0;
-    
     if (!isCountryVisited) {
       // Not visited — open modal to create new country visit
       setShowCountryVisitModal(true);
-    } else if (hasLandmarkVisits && !countryVisitHasPhotos) {
-      // Auto-visited via landmarks but no photos/diary — open modal to add content
-      setShowCountryVisitModal(true);
-    } else if (countryVisitHasPhotos && countryVisitId) {
-      // Has content — navigate to view/edit
+    } else if (countryVisitId) {
+      // Visited — always navigate to view/edit visit details
       router.push(`/country-visit-detail/${countryVisitId}`);
-    } else if (!hasLandmarkVisits && countryVisitId) {
-      // Standalone visit, no landmarks — allow removal
-      handleRemoveCountryVisit();
     } else {
-      // Fallback: open modal to add/edit
+      // Fallback: open modal to add content
       setShowCountryVisitModal(true);
     }
   };
 
   const getFabConfig = () => {
-    const hasLandmarkVisits = visitedLandmarkIds.size > 0;
-    
     if (!isCountryVisited) {
       return { 
         text: 'Mark as Visited', 
@@ -217,21 +206,11 @@ export default function LandmarksScreen() {
       };
     }
     
-    if (countryVisitHasPhotos) {
-      return { 
-        text: 'Visited', 
-        colors: ['#4CAF50', '#66BB6A'],
-        icon: 'checkmark-circle',
-        subText: 'View details' 
-      };
-    }
-    
-    // Visited but no photos — prompt to add content
     return { 
       text: 'Visited', 
       colors: ['#4CAF50', '#66BB6A'],
       icon: 'checkmark-circle',
-      subText: hasLandmarkVisits ? 'Add photos & diary' : 'Tap to remove'
+      subText: 'View visit' 
     };
   };
 
