@@ -243,7 +243,6 @@ export default function SearchScreen() {
           <FilterChip label={`Visited (${visitedIds.size})`} value="visited" active={filter === 'visited'} />
           <FilterChip label="Unvisited" value="unvisited" active={filter === 'unvisited'} />
         </View>
-      </View>
         <View style={[styles.sortRow, { borderTopColor: colors.border }]}>
           <Text style={[styles.sortLabel, { color: colors.textSecondary }]}>Sort:</Text>
           <SortChip label="Name" value="name" icon="text-outline" />
