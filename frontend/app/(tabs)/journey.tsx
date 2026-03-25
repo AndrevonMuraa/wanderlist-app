@@ -355,28 +355,40 @@ export default function JourneyScreen() {
         )}
 
         {/* Overall Progress */}
-        {progressStats && (
+        {progressStats && stats && (
           <Surface style={[styles.progressCard, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.sectionTitle, { color: colors.text, textAlign: 'center' }]}>{t('journey.overallProgress')}</Text>
-            <View style={styles.progressContainer}>
-              <CircularProgress
-                percentage={progressStats.overall.percentage}
-                size={140}
-                strokeWidth={12}
-                label={t('journey.complete')}
-                sublabel={`${progressStats.overall.visited}/${progressStats.overall.total}`}
-              />
-              <Text style={[styles.progressDescription, { color: colors.textSecondary }]}>
-                {progressStats.overall.percentage < 10
-                  ? t('journey.progressMsg1')
-                  : progressStats.overall.percentage < 30
-                  ? t('journey.progressMsg2')
-                  : progressStats.overall.percentage < 60
-                  ? t('journey.progressMsg3')
-                  : progressStats.overall.percentage < 90
-                  ? t('journey.progressMsg4')
-                  : t('journey.progressMsg5')}
-              </Text>
+            <Text style={[styles.sectionTitle, { color: colors.text, textAlign: 'center' }]}>Overall Progress</Text>
+            <View style={styles.tripleProgressRow}>
+              <View style={styles.progressItem}>
+                <CircularProgress
+                  percentage={Math.round(((stats.continents_visited || 0) / 5) * 100)}
+                  size={85}
+                  strokeWidth={7}
+                  color="#66BB6A"
+                  label={`${stats.continents_visited || 0}/5`}
+                />
+                <Text style={[styles.progressItemLabel, { color: colors.textSecondary }]}>Continents</Text>
+              </View>
+              <View style={styles.progressItem}>
+                <CircularProgress
+                  percentage={Math.round(((stats.countries_visited || 0) / 100) * 100)}
+                  size={85}
+                  strokeWidth={7}
+                  color="#4DB8D8"
+                  label={`${stats.countries_visited || 0}/100`}
+                />
+                <Text style={[styles.progressItemLabel, { color: colors.textSecondary }]}>Destinations</Text>
+              </View>
+              <View style={styles.progressItem}>
+                <CircularProgress
+                  percentage={progressStats.overall.percentage}
+                  size={85}
+                  strokeWidth={7}
+                  color="#E87850"
+                  label={`${progressStats.overall.visited}/${progressStats.overall.total}`}
+                />
+                <Text style={[styles.progressItemLabel, { color: colors.textSecondary }]}>Landmarks</Text>
+              </View>
             </View>
           </Surface>
         )}
@@ -715,6 +727,22 @@ const styles = StyleSheet.create({
   progressContainer: {
     alignItems: 'center',
     marginTop: theme.spacing.md,
+  },
+  tripleProgressRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 4,
+  },
+  progressItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  progressItemLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: 6,
   },
   progressDescription: {
     fontSize: 14,
