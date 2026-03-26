@@ -63,6 +63,8 @@ export default function LeaderboardScreen() {
   const [showShareRank, setShowShareRank] = useState(false);
   const [userValue, setUserValue] = useState(0);
   const [userName, setUserName] = useState('');
+  const [expanded, setExpanded] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState('');
 
   // Navigate back to social tab explicitly
   const handleBack = () => {
@@ -74,6 +76,7 @@ export default function LeaderboardScreen() {
   };
 
   useEffect(() => {
+    setExpanded(false);
     loadLeaderboard();
   }, [timePeriod, category, friendsOnly]);
 
@@ -105,6 +108,7 @@ export default function LeaderboardScreen() {
           if (meRes.ok) {
             const me = await meRes.json();
             setUserName(me.name || me.username || 'Traveler');
+            setCurrentUserId(me.user_id || '');
           }
         } catch {}
         
@@ -161,9 +165,10 @@ export default function LeaderboardScreen() {
     const medal = getMedalEmoji(entry.rank);
     const rankInfo = getUserRank(Math.max(entry.verified_points || 0, 0));
     const showDualPoints = category === 'points' && !friendsOnly && entry.total_points !== undefined;
+    const isMe = entry.user_id === currentUserId;
 
     return (
-      <Surface key={entry.user_id} style={styles.entryCard} elevation={1}>
+      <Surface key={entry.user_id} style={[styles.entryCard, isMe && styles.entryCardHighlight]} elevation={1}>
         <View style={styles.entryContent}>
           {/* Rank */}
           <View style={styles.rankContainer}>
@@ -207,6 +212,46 @@ export default function LeaderboardScreen() {
             <Text style={styles.valueLabel}>{getCategoryLabel()}</Text>
             {showDualPoints && entry.total_points !== entry.value && (
               <Text style={styles.totalPointsLabel}>{entry.total_points?.toLocaleString()} total</Text>
+            )}
+          </View>
+        </View>
+      </Surface>
+    );
+  };
+
+  const renderCompactEntry = (entry: LeaderboardEntry) => {
+    const isMe = entry.user_id === currentUserId;
+    return (
+      <View key={entry.user_id} style={[styles.compactEntry, isMe && styles.compactEntryHighlight]}>
+        <Text style={[styles.compactRank, isMe && styles.compactTextBold]}>#{entry.rank}</Text>
+        {entry.picture ? (
+          <Avatar.Image size={28} source={{ uri: entry.picture }} style={styles.compactAvatar} />
+        ) : (
+          <Avatar.Text size={28} label={entry.name.substring(0, 2).toUpperCase()} style={styles.compactAvatar} />
+        )}
+        <Text style={[styles.compactName, isMe && styles.compactTextBold]} numberOfLines={1}>{entry.name}</Text>
+        <Text style={[styles.compactValue, isMe && styles.compactTextBold]}>{entry.value.toLocaleString()}</Text>
+      </View>
+    );
+  };
+
+  const renderYourPositionCard = () => {
+    if (!userRank || userRank <= 10) return null;
+    const userEntry = leaderboard.find(e => e.user_id === currentUserId);
+    const top10Value = leaderboard.length >= 10 ? leaderboard[9].value : 0;
+    const gap = top10Value - (userEntry?.value || userValue);
+
+    return (
+      <Surface style={styles.yourPositionCard} elevation={1}>
+        <View style={styles.yourPositionContent}>
+          <View style={styles.yourPositionLeft}>
+            <Text style={styles.yourPositionLabel}>Your Position</Text>
+            <Text style={styles.yourPositionRank}>#{userRank}</Text>
+          </View>
+          <View style={styles.yourPositionRight}>
+            <Text style={styles.yourPositionValue}>{userEntry?.value?.toLocaleString() || userValue.toLocaleString()} {getCategoryLabel()}</Text>
+            {gap > 0 && (
+              <Text style={styles.yourPositionGap}>{gap.toLocaleString()} behind #10</Text>
             )}
           </View>
         </View>
@@ -441,8 +486,35 @@ export default function LeaderboardScreen() {
                   : 'Be the first to start your journey!'}
               </Text>
             </Surface>
+          ) : expanded ? (
+            <>
+              {leaderboard.map((entry) => renderCompactEntry(entry))}
+              <TouchableOpacity
+                style={styles.expandButton}
+                onPress={() => setExpanded(false)}
+                activeOpacity={0.7}
+                data-testid="show-less-btn"
+              >
+                <Ionicons name="chevron-up" size={16} color={theme.colors.primary} />
+                <Text style={styles.expandButtonText}>Show Less</Text>
+              </TouchableOpacity>
+            </>
           ) : (
-            leaderboard.map((entry, index) => renderLeaderboardEntry(entry, index))
+            <>
+              {leaderboard.slice(0, 10).map((entry, index) => renderLeaderboardEntry(entry, index))}
+              {renderYourPositionCard()}
+              {leaderboard.length > 10 && (
+                <TouchableOpacity
+                  style={styles.expandButton}
+                  onPress={() => setExpanded(true)}
+                  activeOpacity={0.7}
+                  data-testid="show-full-rankings-btn"
+                >
+                  <Ionicons name="list-outline" size={16} color={theme.colors.primary} />
+                  <Text style={styles.expandButtonText}>Show Full Rankings ({leaderboard.length})</Text>
+                </TouchableOpacity>
+              )}
+            </>
           )}
         </View>
       </ScrollView>
@@ -810,5 +882,108 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#999',
     marginTop: 1,
+  },
+  entryCardHighlight: {
+    borderWidth: 2,
+    borderColor: theme.colors.primary,
+  },
+  // Compact entries (expanded mode)
+  compactEntry: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+  },
+  compactEntryHighlight: {
+    backgroundColor: '#E3F6FC',
+  },
+  compactRank: {
+    width: 36,
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.colors.textSecondary,
+  },
+  compactAvatar: {
+    marginRight: 8,
+  },
+  compactName: {
+    flex: 1,
+    fontSize: 14,
+    color: theme.colors.text,
+  },
+  compactValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: theme.colors.primary,
+    marginLeft: 8,
+  },
+  compactTextBold: {
+    fontWeight: '800',
+    color: theme.colors.text,
+  },
+  // Expand button
+  expandButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 14,
+    marginTop: 8,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  expandButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: theme.colors.primary,
+  },
+  // Your Position card
+  yourPositionCard: {
+    marginTop: 8,
+    marginBottom: 4,
+    borderRadius: 12,
+    backgroundColor: '#fff',
+    borderWidth: 1.5,
+    borderColor: theme.colors.primary,
+    borderStyle: 'dashed',
+  },
+  yourPositionContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 14,
+  },
+  yourPositionLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  yourPositionLabel: {
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+    fontWeight: '500',
+  },
+  yourPositionRank: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: theme.colors.primary,
+  },
+  yourPositionRight: {
+    alignItems: 'flex-end',
+  },
+  yourPositionValue: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  yourPositionGap: {
+    fontSize: 11,
+    color: theme.colors.textSecondary,
+    marginTop: 2,
   },
 });
