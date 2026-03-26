@@ -408,8 +408,14 @@ export default function SocialHubScreen() {
                 <Badge size={20} style={styles.unreadBadge}>{unreadMessages}</Badge>
               )}
             </View>
-            <TouchableOpacity onPress={() => router.push('/messages')}>
-              <Text style={styles.seeAllButton}>View All →</Text>
+            <TouchableOpacity onPress={() => {
+              if (user?.subscription_tier === 'free') {
+                router.push('/subscription');
+              } else {
+                router.push('/messages');
+              }
+            }}>
+              <Text style={styles.seeAllButton}>View All</Text>
             </TouchableOpacity>
           </View>
 

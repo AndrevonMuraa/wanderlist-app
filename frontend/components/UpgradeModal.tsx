@@ -38,7 +38,7 @@ export default function UpgradeModal({ visible, onClose, onUpgrade }: UpgradeMod
             {/* Current Tier */}
             <View style={styles.currentTier}>
               <Text style={styles.currentTierLabel}>Your Current Plan</Text>
-              <Text style={styles.currentTierName}>Free Traveler</Text>
+              <Text style={styles.currentTierName}>Basic Traveler</Text>
               <Text style={styles.currentTierDesc}>5 friends max • Friends leaderboard only</Text>
             </View>
 

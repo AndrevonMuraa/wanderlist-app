@@ -45,7 +45,7 @@ const FEATURE_INFO = {
   },
   unlimited_friends: {
     title: 'Unlimited Friends',
-    description: 'Connect with all your travel companions. Free users are limited to 5 friends.',
+    description: 'Connect with all your travel companions. Basic travelers are limited to 5 friends.',
     icon: 'people' as const,
     benefits: [
       'Unlimited friends',

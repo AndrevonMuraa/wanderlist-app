@@ -33,7 +33,7 @@ export default function PhotoSection({
     if (!isPro && !maxOverride) {
       Alert.alert(
         'Photo Limit Reached',
-        `Free users can add up to ${maxPhotos} photo per visit. Upgrade to Pro for up to 10 photos!`,
+        `Basic travelers can add up to ${maxPhotos} photo per visit. Upgrade to Pro for up to 10 photos!`,
         [
           { text: 'Maybe Later', style: 'cancel' },
           { text: 'Upgrade to Pro', onPress: () => { onClose(); router.push('/subscription'); } },
