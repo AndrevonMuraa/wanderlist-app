@@ -1,29 +1,23 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
+  FlatList,
   Image,
   TouchableOpacity,
   Platform,
   RefreshControl,
-  Dimensions,
+  Animated,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Surface } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
 import { Skeleton } from '../components/Skeleton';
-
-import { HeaderBranding } from '../components/BrandedGlobeIcon';
-const { width } = Dimensions.get('window');
-const CARD_WIDTH = (width - theme.spacing.md * 3) / 2;
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -38,41 +32,36 @@ interface CountryVisit {
   country_name: string;
   continent?: string;
   photos: string[];
-  diary?: string;
-  visibility: string;
   points_earned: number;
   visited_at: string;
   created_at: string;
+  has_photos?: boolean;
 }
 
-// Country flag mapping - all 100 countries
+type SortType = 'recent' | 'continent' | 'points';
+
 const countryFlags: Record<string, string> = {
-  // Europe (20)
   france: '🇫🇷', spain: '🇪🇸', italy: '🇮🇹', germany: '🇩🇪',
   'united kingdom': '🇬🇧', greece: '🇬🇷', norway: '🇳🇴', portugal: '🇵🇹',
   netherlands: '🇳🇱', switzerland: '🇨🇭', austria: '🇦🇹', sweden: '🇸🇪',
   denmark: '🇩🇰', iceland: '🇮🇸', croatia: '🇭🇷', finland: '🇫🇮',
   turkey: '🇹🇷', ireland: '🇮🇪', hungary: '🇭🇺', 'czech republic': '🇨🇿',
-  // Asia (20)
   japan: '🇯🇵', china: '🇨🇳', thailand: '🇹🇭', india: '🇮🇳',
   vietnam: '🇻🇳', 'south korea': '🇰🇷', indonesia: '🇮🇩', malaysia: '🇲🇾',
   singapore: '🇸🇬', philippines: '🇵🇭', cambodia: '🇰🇭', nepal: '🇳🇵',
   'sri lanka': '🇱🇰', taiwan: '🇹🇼', laos: '🇱🇦', mongolia: '🇲🇳',
   bhutan: '🇧🇹', georgia: '🇬🇪', uzbekistan: '🇺🇿', kyrgyzstan: '🇰🇬',
-  // Africa (20)
   egypt: '🇪🇬', 'south africa': '🇿🇦', morocco: '🇲🇦', kenya: '🇰🇪',
   tanzania: '🇹🇿', botswana: '🇧🇼', namibia: '🇳🇦', tunisia: '🇹🇳',
   ghana: '🇬🇭', rwanda: '🇷🇼', uganda: '🇺🇬', ethiopia: '🇪🇹',
   senegal: '🇸🇳', zimbabwe: '🇿🇼', zambia: '🇿🇲', mozambique: '🇲🇿',
   'ivory coast': '🇨🇮', malawi: '🇲🇼', lesotho: '🇱🇸', eswatini: '🇸🇿',
-  // Americas (20)
   usa: '🇺🇸', 'united states': '🇺🇸', canada: '🇨🇦', mexico: '🇲🇽',
   brazil: '🇧🇷', peru: '🇵🇪', argentina: '🇦🇷', chile: '🇨🇱',
   colombia: '🇨🇴', ecuador: '🇪🇨', 'costa rica': '🇨🇷', cuba: '🇨🇺',
   jamaica: '🇯🇲', 'dominican republic': '🇩🇴', panama: '🇵🇦', bahamas: '🇧🇸',
   barbados: '🇧🇧', uruguay: '🇺🇾', bolivia: '🇧🇴', belize: '🇧🇿',
   'saint lucia': '🇱🇨',
-  // Oceania & Island Paradises (20)
   australia: '🇦🇺', 'new zealand': '🇳🇿', fiji: '🇫🇯', 'french polynesia': '🇵🇫',
   maldives: '🇲🇻', mauritius: '🇲🇺', seychelles: '🇸🇨',
   'cook islands': '🇨🇰', samoa: '🇼🇸', vanuatu: '🇻🇺',
@@ -81,18 +70,86 @@ const countryFlags: Record<string, string> = {
   'new caledonia': '🇳🇨', guam: '🇬🇺', comoros: '🇰🇲', reunion: '🇷🇪',
 };
 
-const getCountryFlag = (countryName: string): string => {
-  const key = countryName.toLowerCase();
-  return countryFlags[key] || '🏳️';
-};
+const getFlag = (name: string) => countryFlags[name.toLowerCase()] || '🏳️';
 
-const getVisibilityIcon = (visibility: string) => {
-  switch (visibility) {
-    case 'public': return { icon: 'globe-outline', label: '🌐' };
-    case 'friends': return { icon: 'people-outline', label: '👥' };
-    case 'private': return { icon: 'lock-closed-outline', label: '🔒' };
-    default: return { icon: 'globe-outline', label: '🌐' };
-  }
+const AnimatedCard = ({ item, index, onPress, formatDate }: {
+  item: CountryVisit;
+  index: number;
+  onPress: () => void;
+  formatDate: (d: string) => string;
+}) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(20)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1, duration: 400, delay: index * 80, useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0, duration: 400, delay: index * 80, useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
+  const hasPhoto = item.photos && item.photos.length > 0;
+  const thumbnail = hasPhoto ? item.photos[0] : null;
+
+  return (
+    <Animated.View style={{ opacity: fadeAnim, transform: [{ translateY: slideAnim }] }}>
+      <TouchableOpacity
+        style={styles.visitCard}
+        onPress={onPress}
+        activeOpacity={0.7}
+        data-testid={`country-visit-${item.country_visit_id}`}
+      >
+        <View style={styles.visitSurface}>
+          <View style={styles.visitImageContainer}>
+            {thumbnail ? (
+              <Image source={{ uri: thumbnail }} style={styles.visitImage} resizeMode="cover" />
+            ) : (
+              <View style={styles.visitFlagPlaceholder}>
+                <Text style={styles.flagLarge}>{getFlag(item.country_name)}</Text>
+              </View>
+            )}
+            {hasPhoto && item.photos.length > 1 && (
+              <View style={styles.photoCountOverlay}>
+                <Ionicons name="images" size={10} color="#fff" />
+                <Text style={styles.photoCountText}>{item.photos.length}</Text>
+              </View>
+            )}
+          </View>
+          <View style={styles.visitContent}>
+            <View style={styles.visitNameRow}>
+              <Text style={styles.flagSmall}>{getFlag(item.country_name)}</Text>
+              <Text style={styles.visitName} numberOfLines={1}>{item.country_name}</Text>
+            </View>
+            {item.continent && (
+              <View style={styles.visitContinentRow}>
+                <Ionicons name="earth-outline" size={11} color={theme.colors.textSecondary} />
+                <Text style={styles.visitContinent}>{item.continent}</Text>
+              </View>
+            )}
+            <Text style={styles.visitDate}>{formatDate(item.visited_at || item.created_at)}</Text>
+            <View style={styles.visitFooter}>
+              <View style={styles.visitBadges}>
+                {hasPhoto && (
+                  <View style={styles.photoBadge}>
+                    <Ionicons name="camera-outline" size={10} color={theme.colors.primary} />
+                    <Text style={styles.photoBadgeText}>{item.photos.length}</Text>
+                  </View>
+                )}
+              </View>
+              <View style={styles.visitPoints}>
+                <Ionicons name="star" size={12} color="#FFA726" />
+                <Text style={styles.visitPointsText}>+{item.points_earned} pts</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </Animated.View>
+  );
 };
 
 export default function MyCountryVisitsScreen() {
@@ -100,37 +157,14 @@ export default function MyCountryVisitsScreen() {
   const [visits, setVisits] = useState<CountryVisit[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-
-  // Navigate back to journey tab
-  const handleBack = () => {
-    router.back();
-  };
-
-  useEffect(() => {
-    fetchCountryVisits();
-  }, []);
-
-  // Refetch when screen gains focus (e.g. after deleting a visit)
-  useFocusEffect(
-    useCallback(() => {
-      fetchCountryVisits();
-    }, [])
-  );
+  const [sortBy, setSortBy] = useState<SortType>('recent');
 
   const fetchCountryVisits = async () => {
     try {
       const token = await getToken();
-      
-      // Run migration to clean auto-created visit photos (idempotent)
-      await fetch(`${BACKEND_URL}/api/country-visits/migrate-photos`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-      }).catch(() => {});
-      
       const response = await fetch(`${BACKEND_URL}/api/country-visits`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       if (response.ok) {
         const data = await response.json();
         setVisits(data);
@@ -143,36 +177,73 @@ export default function MyCountryVisitsScreen() {
     }
   };
 
+  useEffect(() => { fetchCountryVisits(); }, []);
+
+  useFocusEffect(
+    useCallback(() => { fetchCountryVisits(); }, [])
+  );
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchCountryVisits();
   }, []);
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   };
 
+  const sortedVisits = React.useMemo(() => {
+    const sorted = [...visits];
+    switch (sortBy) {
+      case 'continent':
+        return sorted.sort((a, b) => (a.continent || '').localeCompare(b.continent || ''));
+      case 'points':
+        return sorted.sort((a, b) => (b.points_earned || 0) - (a.points_earned || 0));
+      case 'recent':
+      default:
+        return sorted.sort((a, b) => new Date(b.visited_at).getTime() - new Date(a.visited_at).getTime());
+    }
+  }, [visits, sortBy]);
+
   const totalPoints = visits.reduce((sum, v) => sum + (v.points_earned || 0), 0);
+  const totalPhotos = visits.reduce((sum, v) => sum + (v.photos?.length || 0), 0);
+
+  const SortChip = ({ label, value, icon }: { label: string; value: SortType; icon: keyof typeof Ionicons.glyphMap }) => (
+    <TouchableOpacity
+      style={[styles.sortChip, sortBy === value && styles.sortChipActive]}
+      onPress={() => setSortBy(value)}
+      data-testid={`sort-${value}`}
+    >
+      <Ionicons name={icon} size={13} color={sortBy === value ? '#fff' : theme.colors.textSecondary} />
+      <Text style={[styles.sortChipText, sortBy === value && styles.sortChipTextActive]}>{label}</Text>
+    </TouchableOpacity>
+  );
 
   if (loading) {
     return (
       <View style={styles.container}>
-        <UniversalHeader title="My Country Visits" onBack={handleBack} />
+        <UniversalHeader title="Destinations" />
         <View style={{ padding: 16, gap: 12 }}>
-          <Skeleton height={80} borderRadius={16} />
-          <View style={{ flexDirection: 'row', gap: 12 }}>
-            <Skeleton height={180} borderRadius={16} style={{ flex: 1 }} />
-            <Skeleton height={180} borderRadius={16} style={{ flex: 1 }} />
+          <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 16, borderRadius: 16, gap: 8 }}>
+            {[1, 2, 3].map(i => (
+              <View key={i} style={{ flex: 1, alignItems: 'center' }}>
+                <Skeleton width={36} height={36} borderRadius={18} style={{ marginBottom: 6 }} />
+                <Skeleton width={30} height={18} style={{ marginBottom: 4 }} />
+                <Skeleton width={50} height={10} />
+              </View>
+            ))}
           </View>
-          <View style={{ flexDirection: 'row', gap: 12 }}>
-            <Skeleton height={180} borderRadius={16} style={{ flex: 1 }} />
-            <Skeleton height={180} borderRadius={16} style={{ flex: 1 }} />
-          </View>
+          {[1, 2, 3, 4].map(i => (
+            <View key={i} style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 16, overflow: 'hidden' }}>
+              <Skeleton width={90} height={90} borderRadius={0} />
+              <View style={{ flex: 1, padding: 12, gap: 6 }}>
+                <Skeleton width="75%" height={16} />
+                <Skeleton width="50%" height={12} />
+                <Skeleton width="30%" height={10} />
+              </View>
+            </View>
+          ))}
         </View>
       </View>
     );
@@ -180,126 +251,81 @@ export default function MyCountryVisitsScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="My Country Visits" onBack={handleBack} />
+      <UniversalHeader title="Destinations" />
 
-      <ScrollView
-        style={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Stats Summary */}
-        {visits.length > 0 && (
-          <Surface style={styles.statsCard}>
-            <View style={styles.statsRow}>
-              <View style={styles.statItem}>
-                <Ionicons name="flag" size={24} color={theme.colors.primary} />
-                <Text style={styles.statValue}>{visits.length}</Text>
-                <Text style={styles.statLabel}>Visits</Text>
-              </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statItem}>
-                <Ionicons name="images" size={24} color="#FF6B6B" />
-                <Text style={styles.statValue}>
-                  {visits.reduce((sum, v) => sum + (v.photos?.length || 0), 0)}
-                </Text>
-                <Text style={styles.statLabel}>Photos</Text>
-              </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statItem}>
-                <Ionicons name="star" size={24} color="#FFD700" />
-                <Text style={styles.statValue}>{totalPoints}</Text>
-                <Text style={styles.statLabel}>Points</Text>
-              </View>
-            </View>
-          </Surface>
-        )}
-
-        {/* Visits Grid */}
-        {visits.length > 0 ? (
-          <View style={styles.grid}>
-            {visits.map((visit) => (
-              <TouchableOpacity
-                key={visit.country_visit_id}
-                style={styles.visitCard}
-                onPress={() => router.push(`/country-visit-detail/${visit.country_visit_id}`)}
-                activeOpacity={0.8}
-              >
-                {/* Photo Preview */}
-                <View style={styles.photoContainer}>
-                  {visit.photos && visit.photos.length > 0 ? (
-                    <Image
-                      source={{ uri: visit.photos[0] }}
-                      style={styles.cardPhoto}
-                      resizeMode="cover"
-                    />
-                  ) : (
-                    <View style={styles.noPhoto}>
-                      <Text style={styles.flagEmoji}>{getCountryFlag(visit.country_name)}</Text>
-                    </View>
-                  )}
-                  
-                  {/* Photo count badge */}
-                  {visit.photos && visit.photos.length > 1 && (
-                    <View style={styles.photoBadge}>
-                      <Ionicons name="images" size={12} color="#fff" />
-                      <Text style={styles.photoBadgeText}>{visit.photos.length}</Text>
-                    </View>
-                  )}
-                  
-                  {/* Privacy badge */}
-                  <View style={styles.privacyBadge}>
-                    <Text style={styles.privacyText}>
-                      {getVisibilityIcon(visit.visibility).label}
-                    </Text>
-                  </View>
-                </View>
-
-                {/* Card Info */}
-                <View style={styles.cardInfo}>
-                  <View style={styles.countryRow}>
-                    <Text style={styles.flagSmall}>{getCountryFlag(visit.country_name)}</Text>
-                    <Text style={styles.countryName} numberOfLines={1}>
-                      {visit.country_name}
-                    </Text>
-                  </View>
-                  <Text style={styles.visitDate}>{formatDate(visit.visited_at || visit.created_at)}</Text>
-                  <View style={styles.pointsRow}>
-                    <Ionicons name="star" size={12} color="#FFD700" />
-                    <Text style={styles.pointsText}>+{visit.points_earned} pts</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))}
+      {/* Stats Summary */}
+      <View style={styles.statsRow}>
+        <View style={styles.statItem}>
+          <View style={[styles.statIconWrap, { backgroundColor: '#E3F6FC' }]}>
+            <Ionicons name="flag" size={16} color={theme.colors.primary} />
           </View>
-        ) : (
-          /* Empty State */
+          <Text style={styles.statNumber}>{visits.length}</Text>
+          <Text style={styles.statLabel}>Visited</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statItem}>
+          <View style={[styles.statIconWrap, { backgroundColor: '#FCE4EC' }]}>
+            <Ionicons name="images" size={16} color="#E87850" />
+          </View>
+          <Text style={[styles.statNumber, { color: '#E87850' }]}>{totalPhotos}</Text>
+          <Text style={styles.statLabel}>Photos</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statItem}>
+          <View style={[styles.statIconWrap, { backgroundColor: '#FFF3E0' }]}>
+            <Ionicons name="star" size={16} color="#FFA726" />
+          </View>
+          <Text style={[styles.statNumber, { color: '#FFA726' }]}>{totalPoints}</Text>
+          <Text style={styles.statLabel}>Points</Text>
+        </View>
+      </View>
+
+      {/* Sort Row */}
+      {visits.length > 1 && (
+        <View style={styles.sortRow}>
+          <SortChip label="Recent" value="recent" icon="time-outline" />
+          <SortChip label="Continent" value="continent" icon="earth-outline" />
+          <SortChip label="Points" value="points" icon="star-outline" />
+        </View>
+      )}
+
+      <FlatList
+        data={sortedVisits}
+        renderItem={({ item, index }) => (
+          <AnimatedCard
+            item={item}
+            index={index}
+            onPress={() => router.push(`/country-visit-detail/${item.country_visit_id}`)}
+            formatDate={formatDate}
+          />
+        )}
+        keyExtractor={(item) => item.country_visit_id}
+        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.colors.primary} />
+        }
+        ListEmptyComponent={
           <View style={styles.emptyState}>
-            <View style={styles.emptyIconContainer}>
-              <Ionicons name="camera-outline" size={48} color={theme.colors.textLight} />
+            <View style={styles.emptyIconWrap}>
+              <Ionicons name="flag-outline" size={48} color={theme.colors.primary} />
             </View>
-            <Text style={styles.emptyTitle}>No Country Visits Yet</Text>
-            <Text style={styles.emptyDescription}>
-              Start documenting your travels! Visit a country page and tap the camera icon to create a visit with photos and diary entries.
+            <Text style={styles.emptyTitle}>No destinations visited yet</Text>
+            <Text style={styles.emptySubtitle}>
+              Explore the world and record your first destination visit to start building your collection!
             </Text>
             <TouchableOpacity
-              style={styles.exploreButton}
-              onPress={() => router.push('/(tabs)/explore')}
+              style={styles.emptyCta}
+              onPress={() => router.push('/(tabs)/explore' as any)}
+              data-testid="explore-destinations-btn"
             >
-              <LinearGradient
-                colors={[theme.colors.primary, '#2AA8B3']}
-                style={styles.exploreGradient}
-              >
-                <Ionicons name="earth" size={20} color="#fff" />
-                <Text style={styles.exploreText}>Explore Countries</Text>
-              </LinearGradient>
+              <Ionicons name="earth" size={18} color="#fff" />
+              <Text style={styles.emptyCtaText}>Explore Destinations</Text>
             </TouchableOpacity>
           </View>
-        )}
-
-        <View style={styles.bottomSpacer} />
-      </ScrollView>
+        }
+      />
     </View>
   );
 }
@@ -309,194 +335,243 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: theme.spacing.md,
-    color: theme.colors.textSecondary,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  // Stats Card
-  statsCard: {
-    margin: theme.spacing.md,
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.lg,
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
-  },
+  // Stats
   statsRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    backgroundColor: '#fff',
+    marginHorizontal: 16,
+    marginTop: 12,
+    marginBottom: 4,
+    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 8,
+    ...theme.shadows.card,
   },
   statItem: {
-    alignItems: 'center',
     flex: 1,
+    alignItems: 'center',
   },
-  statDivider: {
-    width: 1,
-    height: 40,
-    backgroundColor: theme.colors.border,
+  statIconWrap: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
   },
-  statValue: {
-    fontSize: 22,
+  statNumber: {
+    fontSize: 20,
     fontWeight: '800',
     color: theme.colors.text,
-    marginTop: theme.spacing.xs,
   },
   statLabel: {
     fontSize: 11,
-    fontWeight: '600',
     color: theme.colors.textSecondary,
-    textTransform: 'uppercase',
-    marginTop: 2,
+    marginTop: 1,
+    fontWeight: '500',
   },
-  // Grid
-  grid: {
+  statDivider: {
+    width: 1,
+    backgroundColor: theme.colors.border,
+    marginVertical: 8,
+  },
+  // Sort
+  sortRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: theme.spacing.md,
-    gap: theme.spacing.md,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    gap: 8,
   },
-  visitCard: {
-    width: CARD_WIDTH,
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.lg,
-    overflow: 'hidden',
-    ...theme.shadows.sm,
-  },
-  photoContainer: {
-    width: '100%',
-    height: CARD_WIDTH * 0.8,
-    position: 'relative',
-  },
-  cardPhoto: {
-    width: '100%',
-    height: '100%',
-  },
-  noPhoto: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: theme.colors.surfaceTinted,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  flagEmoji: {
-    fontSize: 48,
-  },
-  photoBadge: {
-    position: 'absolute',
-    top: theme.spacing.sm,
-    right: theme.spacing.sm,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+  sortChip: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
-  photoBadgeText: {
-    color: '#fff',
-    fontSize: 11,
+  sortChipActive: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
+  },
+  sortChipText: {
+    fontSize: 12,
     fontWeight: '600',
+    color: theme.colors.textSecondary,
   },
-  privacyBadge: {
+  sortChipTextActive: {
+    color: '#fff',
+  },
+  // List
+  listContent: {
+    paddingHorizontal: 16,
+    paddingTop: 4,
+    paddingBottom: 24,
+  },
+  // Visit Card
+  visitCard: {
+    marginBottom: 10,
+  },
+  visitSurface: {
+    flexDirection: 'row',
+    borderRadius: 14,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+    ...theme.shadows.card,
+  },
+  visitImageContainer: {
+    width: 90,
+    minHeight: 90,
+    position: 'relative',
+  },
+  visitImage: {
+    width: '100%',
+    height: '100%',
+    minHeight: 90,
+  },
+  visitFlagPlaceholder: {
+    width: '100%',
+    height: '100%',
+    minHeight: 90,
+    backgroundColor: theme.colors.backgroundSecondary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  flagLarge: {
+    fontSize: 36,
+  },
+  photoCountOverlay: {
     position: 'absolute',
-    top: theme.spacing.sm,
-    left: theme.spacing.sm,
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    top: 6,
+    right: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: 'rgba(0,0,0,0.6)',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 10,
+    borderRadius: 8,
   },
-  privacyText: {
-    fontSize: 12,
+  photoCountText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#fff',
   },
-  cardInfo: {
-    padding: theme.spacing.sm,
+  visitContent: {
+    flex: 1,
+    padding: 10,
+    paddingLeft: 12,
+    justifyContent: 'center',
   },
-  countryRow: {
+  visitNameRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginBottom: 4,
   },
   flagSmall: {
     fontSize: 16,
   },
-  countryName: {
-    fontSize: 14,
+  visitName: {
+    fontSize: 15,
     fontWeight: '700',
     color: theme.colors.text,
     flex: 1,
+    letterSpacing: -0.2,
+  },
+  visitContinentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    marginTop: 2,
+  },
+  visitContinent: {
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+    fontWeight: '500',
   },
   visitDate: {
     fontSize: 11,
-    color: theme.colors.textSecondary,
-    marginBottom: 4,
+    color: theme.colors.textLight,
+    marginTop: 3,
   },
-  pointsRow: {
+  visitFooter: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    justifyContent: 'space-between',
+    marginTop: 6,
   },
-  pointsText: {
+  visitBadges: {
+    flexDirection: 'row',
+    gap: 6,
+  },
+  photoBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: '#E3F6FC',
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  photoBadgeText: {
+    fontSize: 10,
+    color: theme.colors.primary,
+    fontWeight: '700',
+  },
+  visitPoints: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+  },
+  visitPointsText: {
     fontSize: 12,
-    fontWeight: '600',
-    color: '#C9A961',
+    fontWeight: '700',
+    color: '#FFA726',
   },
   // Empty State
   emptyState: {
     alignItems: 'center',
-    padding: theme.spacing.xl,
-    marginTop: theme.spacing.xl,
-  },
-  emptyIconContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: theme.colors.surfaceTinted,
     justifyContent: 'center',
+    paddingTop: 60,
+    paddingHorizontal: 32,
+  },
+  emptyIconWrap: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#E3F6FC',
     alignItems: 'center',
-    marginBottom: theme.spacing.lg,
+    justifyContent: 'center',
+    marginBottom: 20,
   },
   emptyTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '700',
     color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
   },
-  emptyDescription: {
+  emptySubtitle: {
     fontSize: 14,
     color: theme.colors.textSecondary,
+    marginTop: 8,
     textAlign: 'center',
-    lineHeight: 22,
-    marginBottom: theme.spacing.xl,
-    maxWidth: '90%',
+    lineHeight: 20,
   },
-  exploreButton: {
-    borderRadius: theme.borderRadius.lg,
-    overflow: 'hidden',
-  },
-  exploreGradient: {
+  emptyCta: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: theme.spacing.md,
-    paddingHorizontal: theme.spacing.xl,
-    gap: theme.spacing.sm,
+    gap: 8,
+    backgroundColor: theme.colors.primary,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 24,
+    marginTop: 24,
   },
-  exploreText: {
-    color: '#fff',
-    fontSize: 16,
+  emptyCtaText: {
+    fontSize: 15,
     fontWeight: '700',
-  },
-  bottomSpacer: {
-    height: theme.spacing.xl,
+    color: '#fff',
   },
 });
