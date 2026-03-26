@@ -328,7 +328,7 @@ export default function VisitDetailScreen() {
                   />
                 </TouchableOpacity>
               ))}
-              {isOwner && (
+              {isOwner && (visit.photos.length < (user?.subscription_tier === 'pro' || user?.subscription_tier === 'premium' ? 10 : 1)) && (
                 <TouchableOpacity
                   onPress={handleAddPhotos}
                   style={styles.addPhotoThumbnail}
