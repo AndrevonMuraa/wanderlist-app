@@ -1,5 +1,6 @@
 """Stats and progress endpoints."""
 from ._social_common import *
+from utils.helpers import recalculate_user_points
 
 router = APIRouter()
 
@@ -9,6 +10,9 @@ router = APIRouter()
 async def get_stats(current_user: User = Depends(get_current_user)):
     """Optimized stats: runs all DB queries in parallel."""
     import asyncio
+    
+    # Ensure points are fresh before returning stats
+    await recalculate_user_points(current_user.user_id)
     
     # Single aggregation: visits → lookup landmarks → get unique countries/continents
     pipeline = [
@@ -112,7 +116,7 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
         {"$group": {
             "_id": None,
             "landmark_ids": {"$addToSet": "$landmark_id"},
-            "total_points": {"$sum": {"$ifNull": ["$points_earned", 10]}},
+            "total_points": {"$sum": {"$ifNull": ["$points_earned", 0]}},
             "visited_count": {"$sum": 1}
         }}
     ]
@@ -122,7 +126,7 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
         {"$match": {"user_id": current_user.user_id}},
         {"$group": {
             "_id": None,
-            "total_points": {"$sum": {"$ifNull": ["$points_earned", 15]}}
+            "total_points": {"$sum": {"$ifNull": ["$points_earned", 0]}}
         }}
     ]
     
@@ -195,6 +199,11 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
             continent_data["percentage"] = round(
                 continent_data["visited"] / continent_data["total"] * 100, 1
             )
+    
+    # Add continent bonuses (50 pts for first country visited per continent)
+    continents_with_visits = sum(1 for c in continental_progress.values() if c["visited"] > 0)
+    continent_bonus = continents_with_visits * 50
+    total_points += continent_bonus
     
     return {
         "overall": {
