@@ -469,8 +469,8 @@ export default function JourneyScreen() {
             data-testid="nav-my-landmark-visits"
           >
             <View style={styles.countryVisitsLeft}>
-              <View style={[styles.countryVisitsIcon, { backgroundColor: colors.accent + '20' }]}>
-                <Ionicons name="location" size={22} color={colors.accent} />
+              <View style={[styles.countryVisitsIcon, { backgroundColor: '#E8785015' }]}>
+                <Ionicons name="location" size={22} color="#E87850" />
               </View>
               <View>
                 <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>My Landmark Visits</Text>
