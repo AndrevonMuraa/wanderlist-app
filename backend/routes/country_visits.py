@@ -501,6 +501,12 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
     if not data.country_name or len(data.country_name.strip()) < 2:
         raise HTTPException(status_code=400, detail="Country name is required (at least 2 characters)")
     
+    # Try to match country_name to a DB country for linking
+    matched_country = await db.countries.find_one(
+        {"name": {"$regex": f"^{data.country_name.strip()}$", "$options": "i"}},
+        {"_id": 0, "country_id": 1, "name": 1, "continent": 1}
+    )
+    
     # Validate general photos (max 10)
     if len(data.photos) > 10:
         raise HTTPException(status_code=400, detail="Maximum 10 general photos allowed")
@@ -547,9 +553,12 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
         "user_id": current_user.user_id,
         "user_name": current_user.name,
         "user_picture": current_user.picture,
-        "country_name": data.country_name.strip(),
-        "landmarks": processed_landmarks,  # Array of {name, photo} objects
-        "photos": data.photos,  # General country photos
+        "country_name": matched_country["name"] if matched_country else data.country_name.strip(),
+        "country_id": matched_country["country_id"] if matched_country else None,
+        "continent": matched_country["continent"] if matched_country else None,
+        "matched_country": bool(matched_country),
+        "landmarks": processed_landmarks,
+        "photos": data.photos,
         "diary": data.diary_notes,
         "share_diary": getattr(data, 'share_diary', True),
         "visibility": visibility,
@@ -600,6 +609,38 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
         "landmarks_count": len(processed_landmarks),
         "total_photos": total_photos
     }
+
+
+@router.get("/user-created-visits/by-country/{country_id}")
+async def get_custom_visits_by_country(country_id: str, current_user: User = Depends(get_current_user)):
+    """Get custom visit landmarks linked to a specific DB country for the current user."""
+    visits = await db.user_created_visits.find(
+        {"user_id": current_user.user_id, "country_id": country_id},
+        {"_id": 0}
+    ).sort("visited_at", -1).to_list(100)
+    
+    # Flatten landmarks from all matching custom visits
+    custom_landmarks = []
+    for v in visits:
+        for lm in v.get("landmarks", []):
+            custom_landmarks.append({
+                "name": lm.get("name", ""),
+                "photo": lm.get("photo"),
+                "visited_at": v.get("visited_at"),
+                "user_created_visit_id": v.get("user_created_visit_id"),
+            })
+    
+    return {"custom_landmarks": custom_landmarks, "custom_visits_count": len(visits)}
+
+
+@router.get("/countries/names")
+async def get_country_names():
+    """Lightweight endpoint: return just country names + IDs for autocomplete."""
+    countries = await db.countries.find(
+        {}, {"_id": 0, "country_id": 1, "name": 1, "continent": 1}
+    ).sort("name", 1).to_list(200)
+    return countries
+
 
 
 @router.get("/user-created-visits")

@@ -41,6 +41,10 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
   const [privacy, setPrivacy] = useState<'public' | 'friends' | 'private'>('public');
   const [shareDiary, setShareDiary] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [dbCountries, setDbCountries] = useState<{country_id: string; name: string; continent: string}[]>([]);
+  const [suggestions, setSuggestions] = useState<{country_id: string; name: string; continent: string}[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedDbCountry, setSelectedDbCountry] = useState<string | null>(null);
 
   const landmarkPhotosCount = landmarks.filter(lm => lm.photo).length;
   const totalPhotos = photos.length + landmarkPhotosCount;
@@ -51,6 +55,46 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
     setPhotos([]);
     setDiary('');
     setPrivacy('public');
+    setSelectedDbCountry(null);
+    setSuggestions([]);
+    setShowSuggestions(false);
+  };
+
+  // Fetch DB country names for autocomplete
+  React.useEffect(() => {
+    if (visible && dbCountries.length === 0) {
+      (async () => {
+        try {
+          const token = await getToken();
+          const res = await fetch(`${BACKEND_URL}/api/countries/names`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (res.ok) setDbCountries(await res.json());
+        } catch {}
+      })();
+    }
+  }, [visible]);
+
+  const handleCountryInput = (text: string) => {
+    setCountryName(text);
+    setSelectedDbCountry(null);
+    if (text.length >= 2 && dbCountries.length > 0) {
+      const filtered = dbCountries.filter(c =>
+        c.name.toLowerCase().startsWith(text.toLowerCase())
+      ).slice(0, 5);
+      setSuggestions(filtered);
+      setShowSuggestions(filtered.length > 0);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  const selectCountry = (country: { country_id: string; name: string; continent: string }) => {
+    setCountryName(country.name);
+    setSelectedDbCountry(country.country_id);
+    setShowSuggestions(false);
+    setSuggestions([]);
   };
 
   const handleClose = () => { resetForm(); onClose(); };
@@ -162,22 +206,43 @@ export const AddUserCreatedVisitModal: React.FC<AddUserCreatedVisitModalProps> =
       subtitle="Add places not in our database"
       keyboardPersist
     >
-      {/* Country Name Input */}
+      {/* Country Name Input with Autocomplete */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Country Name</Text>
+          <Text style={styles.sectionTitle}>Destination</Text>
           <View style={styles.requiredBadge}>
             <Text style={styles.requiredText}>Required</Text>
           </View>
         </View>
         <TextInput
           style={styles.textInput}
-          placeholder="e.g., Monaco, Liechtenstein, Vatican City..."
+          placeholder="e.g., Spain, Monaco, Vatican City..."
           placeholderTextColor={theme.colors.textLight}
           value={countryName}
-          onChangeText={setCountryName}
+          onChangeText={handleCountryInput}
           autoCapitalize="words"
         />
+        {selectedDbCountry && (
+          <View style={styles.matchBadge}>
+            <Ionicons name="checkmark-circle" size={14} color="#4CAF50" />
+            <Text style={styles.matchBadgeText}>Linked to {countryName}</Text>
+          </View>
+        )}
+        {showSuggestions && suggestions.length > 0 && (
+          <View style={styles.suggestionsContainer}>
+            {suggestions.map((s) => (
+              <TouchableOpacity
+                key={s.country_id}
+                style={styles.suggestionItem}
+                onPress={() => selectCountry(s)}
+              >
+                <Ionicons name="flag-outline" size={14} color={theme.colors.primary} />
+                <Text style={styles.suggestionName}>{s.name}</Text>
+                <Text style={styles.suggestionContinent}>{s.continent}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
       </View>
 
       {/* Landmarks Section */}
@@ -453,5 +518,44 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#3949AB',
     lineHeight: 18,
+  },
+  matchBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 6,
+    marginLeft: 4,
+  },
+  matchBadgeText: {
+    fontSize: 12,
+    color: '#4CAF50',
+    fontWeight: '600',
+  },
+  suggestionsContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    marginTop: 6,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    overflow: 'hidden',
+  },
+  suggestionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    gap: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+  },
+  suggestionName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: theme.colors.text,
+    flex: 1,
+  },
+  suggestionContinent: {
+    fontSize: 11,
+    color: theme.colors.textSecondary,
   },
 });

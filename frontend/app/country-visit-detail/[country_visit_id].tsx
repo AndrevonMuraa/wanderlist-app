@@ -108,6 +108,7 @@ export default function CountryVisitDetailScreen() {
   const [deleting, setDeleting] = useState(false);
   const [saving, setSaving] = useState(false);
   const [visitedLandmarks, setVisitedLandmarks] = useState<any[]>([]);
+  const [customLandmarks, setCustomLandmarks] = useState<any[]>([]);
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
   
   const flatListRef = useRef<FlatList>(null);
@@ -120,8 +121,24 @@ export default function CountryVisitDetailScreen() {
   useEffect(() => {
     if (visit?.country_visit_id) {
       fetchVisitedLandmarks();
+      fetchCustomLandmarks();
     }
   }, [visit?.country_visit_id]);
+
+  const fetchCustomLandmarks = async () => {
+    if (!visit?.country_id) return;
+    try {
+      const token = await getToken();
+      const response = await fetch(
+        `${BACKEND_URL}/api/user-created-visits/by-country/${visit.country_id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setCustomLandmarks(data.custom_landmarks || []);
+      }
+    } catch {}
+  };
 
   const fetchVisitedLandmarks = async () => {
     try {
@@ -815,6 +832,64 @@ export default function CountryVisitDetailScreen() {
             </View>
           )}
         </Surface>
+
+        {/* Custom Landmarks (from Custom Visits — PRO) */}
+        {customLandmarks.length > 0 && (
+          <Surface style={styles.diaryCard}>
+            <View style={styles.diaryHeader}>
+              <View style={styles.diaryTitleRow}>
+                <Ionicons name="diamond" size={20} color="#1E8A8A" />
+                <Text style={styles.diaryTitle}>Your Custom Landmarks</Text>
+              </View>
+              <View style={{ backgroundColor: '#E3F6FC', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8 }}>
+                <Text style={{ fontSize: 10, fontWeight: '700', color: '#1E8A8A' }}>PRO</Text>
+              </View>
+            </View>
+            <View>
+              {customLandmarks.map((lm, index) => (
+                <TouchableOpacity
+                  key={`custom-${index}`}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingVertical: 12,
+                    borderBottomWidth: index < customLandmarks.length - 1 ? 1 : 0,
+                    borderBottomColor: theme.colors.border,
+                  }}
+                  onPress={() => lm.user_created_visit_id && router.push(`/custom-visit-detail/${lm.user_created_visit_id}`)}
+                  activeOpacity={0.7}
+                  data-testid={`custom-landmark-${index}`}
+                >
+                  {lm.photo ? (
+                    <Image
+                      source={{ uri: lm.photo }}
+                      style={{ width: 40, height: 40, borderRadius: 10, marginRight: 12 }}
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <View style={{
+                      width: 40, height: 40, borderRadius: 10,
+                      backgroundColor: '#1E8A8A' + '15',
+                      justifyContent: 'center', alignItems: 'center',
+                      marginRight: 12,
+                    }}>
+                      <Ionicons name="diamond" size={18} color="#1E8A8A" />
+                    </View>
+                  )}
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ fontSize: 15, fontWeight: '600', color: theme.colors.text }}>{lm.name}</Text>
+                    {lm.visited_at && (
+                      <Text style={{ fontSize: 12, color: theme.colors.textSecondary, marginTop: 2 }}>
+                        {new Date(lm.visited_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </Text>
+                    )}
+                  </View>
+                  <Ionicons name="chevron-forward" size={18} color={theme.colors.textLight} style={{ marginLeft: 8 }} />
+                </TouchableOpacity>
+              ))}
+            </View>
+          </Surface>
+        )}
 
         <View style={styles.bottomSpacer} />
       </ScrollView>
