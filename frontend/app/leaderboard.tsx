@@ -159,7 +159,7 @@ export default function LeaderboardScreen() {
 
   const renderLeaderboardEntry = (entry: LeaderboardEntry, index: number) => {
     const medal = getMedalEmoji(entry.rank);
-    const rankInfo = getUserRank(Math.max(entry.value || 0, 0));
+    const rankInfo = getUserRank(Math.max(entry.verified_points || 0, 0));
     const showDualPoints = category === 'points' && !friendsOnly && entry.total_points !== undefined;
 
     return (
