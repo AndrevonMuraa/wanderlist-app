@@ -80,7 +80,7 @@ interface CommunityFeedItem {
 }
 
 export default function FeedScreen() {
-  const [activeTab, setActiveTab] = useState<'friends' | 'community'>('friends');
+  const [activeTab, setActiveTab] = useState<'friends' | 'community'>('community');
   const [activities, setActivities] = useState<Activity[]>([]);
   const [communityItems, setCommunityItems] = useState<CommunityFeedItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -384,20 +384,20 @@ export default function FeedScreen() {
       {/* Tabs — below header */}
       <View style={styles.tabRow}>
         <TouchableOpacity
-          style={[styles.tab, activeTab === 'friends' && styles.tabActive]}
-          onPress={() => setActiveTab('friends')}
-          data-testid="tab-friends"
-        >
-          <Ionicons name="people-outline" size={16} color={activeTab === 'friends' ? '#fff' : theme.colors.textSecondary} />
-          <Text style={[styles.tabText, activeTab === 'friends' && styles.tabTextActive]}>Friends</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
           style={[styles.tab, activeTab === 'community' && styles.tabActive]}
           onPress={() => setActiveTab('community')}
           data-testid="tab-community"
         >
           <Ionicons name="earth-outline" size={16} color={activeTab === 'community' ? '#fff' : theme.colors.textSecondary} />
           <Text style={[styles.tabText, activeTab === 'community' && styles.tabTextActive]}>Community</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'friends' && styles.tabActive]}
+          onPress={() => setActiveTab('friends')}
+          data-testid="tab-friends"
+        >
+          <Ionicons name="people-outline" size={16} color={activeTab === 'friends' ? '#fff' : theme.colors.textSecondary} />
+          <Text style={[styles.tabText, activeTab === 'friends' && styles.tabTextActive]}>Friends</Text>
         </TouchableOpacity>
       </View>
 
