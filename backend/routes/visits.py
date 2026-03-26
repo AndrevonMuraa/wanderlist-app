@@ -38,7 +38,12 @@ async def get_visits_list(current_user: User = Depends(get_current_user), limit:
                 {"$and": [{"$ne": ["$photo_base64", None]}, {"$ne": ["$photo_base64", ""]}]}
             ]},
             "photo_count": {"$size": {"$ifNull": ["$photos", []]}},
+            "thumbnail_url": {"$arrayElemAt": [{"$ifNull": ["$photos", []]}, 0]},
             "has_diary": {"$and": [{"$ne": ["$diary_notes", None]}, {"$ne": ["$diary_notes", ""]}]},
+            "verified": {"$or": [
+                {"$gt": [{"$size": {"$ifNull": ["$photos", []]}}, 0]},
+                {"$and": [{"$ne": ["$photo_base64", None]}, {"$ne": ["$photo_base64", ""]}]}
+            ]},
         }},
         {"$project": {
             "_id": 0, "_lm": 0,
@@ -104,6 +109,7 @@ async def update_visit(visit_id: str, body: dict = Body(...), current_user: User
         update_fields["photos"] = body["photos"][:10]
         update_fields["has_photo"] = len(body["photos"]) > 0
         update_fields["photo_count"] = len(body["photos"][:10])
+        update_fields["verified"] = len(body["photos"]) > 0
     
     if "diary_notes" in body:
         update_fields["diary"] = body["diary_notes"]

@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   RefreshControl,
+  Image,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,9 +27,12 @@ interface LandmarkVisit {
   visited_at: string;
   photos: string[];
   has_photos: boolean;
+  has_photo: boolean;
+  thumbnail_url?: string;
   points_earned: number;
   verified: boolean;
   diary_notes?: string;
+  photo_count?: number;
 }
 
 export default function MyLandmarkVisits() {
@@ -86,7 +90,9 @@ export default function MyLandmarkVisits() {
     >
       <Surface style={styles.visitSurface}>
         <View style={styles.visitImagePlaceholder}>
-          {item.has_photo ? (
+          {item.thumbnail_url ? (
+            <Image source={{ uri: item.thumbnail_url }} style={styles.visitImage} resizeMode="cover" />
+          ) : item.has_photo ? (
             <Ionicons name="camera" size={28} color={theme.colors.primary} />
           ) : (
             <Ionicons name="location" size={32} color={theme.colors.textLight} />
