@@ -138,7 +138,7 @@ export default function LeaderboardScreen() {
     switch (category) {
       case 'points': return friendsOnly ? 'Points' : 'Verified';
       case 'visits': return 'Visits';
-      case 'countries': return 'Countries';
+      case 'countries': return 'Destinations';
     }
   };
 
@@ -297,7 +297,7 @@ export default function LeaderboardScreen() {
             {[
               { value: 'points', label: 'Points', icon: 'star' },
               { value: 'visits', label: 'Visits', icon: 'location' },
-              { value: 'countries', label: 'Countries', icon: 'earth' },
+              { value: 'countries', label: 'Destinations', icon: 'earth' },
             ].map((item) => (
               <TouchableOpacity
                 key={item.value}

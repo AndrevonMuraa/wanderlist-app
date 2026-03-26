@@ -217,7 +217,7 @@ export default function UserProfileScreen() {
         <View style={styles.statsRow} data-testid="profile-stats">
           {[
             { label: 'Visits', value: profile.stats.total_visits, icon: 'pin' },
-            { label: 'Countries', value: profile.stats.countries_visited, icon: 'flag' },
+            { label: 'Destinations', value: profile.stats.countries_visited, icon: 'flag' },
             { label: 'Continents', value: profile.stats.continents_visited, icon: 'earth' },
             { label: 'Friends', value: profile.stats.friends_count, icon: 'people' },
           ].map((s) => (

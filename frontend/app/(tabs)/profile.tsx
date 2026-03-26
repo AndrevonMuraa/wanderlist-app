@@ -246,7 +246,7 @@ export default function ProfileScreen() {
             </TouchableOpacity>
           </View>
           
-          {/* Stats Row — tappable icons, reordered: Continents > Countries > Landmarks > Points */}
+          {/* Stats Row — tappable icons, reordered: Continents > Destinations > Landmarks > Points */}
           {stats && progressStats && (
             <View style={[styles.statsRow, { borderTopColor: colors.border }]}>
               <TouchableOpacity style={styles.statItem} onPress={() => router.push('/continents')} activeOpacity={0.7}>
