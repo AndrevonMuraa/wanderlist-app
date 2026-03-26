@@ -151,6 +151,7 @@ export default function RanksScreen() {
           </Text>
 
           {/* Your Progress */}
+          {!loading && (
           <Surface style={styles.progressCard}>
             <View style={styles.progressHeader}>
               <RankBadge rank={currentRank} size="medium" showName={false} />
@@ -165,6 +166,7 @@ export default function RanksScreen() {
               {userPoints.toLocaleString()} verified points
             </Text>
           </Surface>
+          )}
         </View>
 
         {/* All Ranks */}
