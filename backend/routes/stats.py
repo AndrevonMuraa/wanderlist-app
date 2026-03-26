@@ -1,6 +1,5 @@
 """Stats and progress endpoints."""
 from ._social_common import *
-from utils.helpers import recalculate_user_points
 
 router = APIRouter()
 
@@ -10,9 +9,6 @@ router = APIRouter()
 async def get_stats(current_user: User = Depends(get_current_user)):
     """Optimized stats: runs all DB queries in parallel."""
     import asyncio
-    
-    # Ensure points are fresh before returning stats
-    await recalculate_user_points(current_user.user_id)
     
     # Single aggregation: visits → lookup landmarks → get unique countries/continents
     pipeline = [
