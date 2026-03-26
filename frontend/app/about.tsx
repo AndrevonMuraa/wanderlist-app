@@ -616,18 +616,19 @@ const styles = StyleSheet.create({
   statsCard: {
     backgroundColor: theme.colors.surface,
     borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.md,
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
     marginHorizontal: theme.spacing.lg,
     ...theme.shadows.sm,
   },
   statsGrid: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
   },
   statItem: {
     alignItems: 'center',
-    paddingHorizontal: 4,
+    flex: 1,
   },
   statNumber: {
     fontSize: 16,
