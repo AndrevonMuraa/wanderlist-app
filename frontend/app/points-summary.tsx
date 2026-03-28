@@ -46,9 +46,10 @@ export default function PointsSummary() {
       try {
         const token = await getToken();
         // Fetch both stats and progress in parallel — progress has calculated points
-        const [statsRes, progressRes] = await Promise.all([
+        const [statsRes, progressRes, breakdownRes] = await Promise.all([
           fetch(`${BACKEND_URL}/api/stats`, { headers: { Authorization: `Bearer ${token}` } }),
           fetch(`${BACKEND_URL}/api/progress`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`${BACKEND_URL}/api/points/breakdown`, { headers: { Authorization: `Bearer ${token}` } }),
         ]);
         
         if (statsRes.ok && progressRes.ok) {
@@ -66,6 +67,9 @@ export default function PointsSummary() {
             visits_with_photos: withPhotos,
             visits_without_photos: totalVisits - withPhotos,
           });
+        }
+        if (breakdownRes.ok) {
+          setBreakdown(await breakdownRes.json());
         }
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -297,56 +301,95 @@ export default function PointsSummary() {
           </Surface>
         </View>
 
-        {/* Your Journey */}
+        {/* Earning Potential */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Your Journey</Text>
+          <Text style={styles.sectionTitle}>Earning Potential</Text>
           
           <Surface style={styles.card}>
-            <View style={styles.journeyRow}>
-              <Ionicons name="globe-outline" size={20} color="#66BB6A" />
-              <View style={styles.journeyContent}>
-                <Text style={styles.journeyLabel}>Continents</Text>
-                <View style={styles.journeyBarContainer}>
-                  <View style={[styles.journeyBar, { width: `${Math.min(100, ((stats?.countries_visited ? Math.min(5, Math.ceil(stats.countries_visited / 20)) : 0) / 5) * 100)}%`, backgroundColor: '#66BB6A' }]} />
+            <Text style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center', marginBottom: 12 }}>
+              You've earned {totalPoints > 0 ? ((totalPoints / 27750) * 100).toFixed(1) : '0'}% of all possible points
+            </Text>
+
+            <TouchableOpacity style={styles.potentialRow} onPress={() => router.push('/my-landmark-visits')} activeOpacity={0.7}>
+              <View style={[styles.potentialIcon, { backgroundColor: '#FDEAE4' }]}>
+                <Ionicons name="location" size={16} color="#E87850" />
+              </View>
+              <View style={styles.potentialContent}>
+                <View style={styles.potentialLabelRow}>
+                  <Text style={styles.potentialLabel}>Landmarks</Text>
+                  <Text style={styles.potentialValue}>{breakdown?.summary?.landmark_total || 0} <Text style={styles.potentialMax}>/ 22,500</Text></Text>
+                </View>
+                <View style={styles.potentialBarBg}>
+                  <View style={[styles.potentialBar, { width: `${Math.min(100, ((breakdown?.summary?.landmark_total || 0) / 22500) * 100)}%`, backgroundColor: '#E87850' }]} />
                 </View>
               </View>
-              <Text style={[styles.journeyValue, { color: '#66BB6A' }]}>{stats?.countries_visited ? Math.min(5, Math.ceil(stats.countries_visited / 20)) : 0}/5</Text>
+              <Ionicons name="chevron-forward" size={16} color={theme.colors.textLight} />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.potentialRow} onPress={() => router.push('/my-country-visits')} activeOpacity={0.7}>
+              <View style={[styles.potentialIcon, { backgroundColor: '#E0F4F4' }]}>
+                <Ionicons name="flag" size={16} color="#4DB8D8" />
+              </View>
+              <View style={styles.potentialContent}>
+                <View style={styles.potentialLabelRow}>
+                  <Text style={styles.potentialLabel}>Destination Visits</Text>
+                  <Text style={styles.potentialValue}>{breakdown?.summary?.country_total || 0} <Text style={styles.potentialMax}>/ 5,000</Text></Text>
+                </View>
+                <View style={styles.potentialBarBg}>
+                  <View style={[styles.potentialBar, { width: `${Math.min(100, ((breakdown?.summary?.country_total || 0) / 5000) * 100)}%`, backgroundColor: '#4DB8D8' }]} />
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={16} color={theme.colors.textLight} />
+            </TouchableOpacity>
+
+            <View style={styles.potentialRow}>
+              <View style={[styles.potentialIcon, { backgroundColor: '#E8F5E9' }]}>
+                <Ionicons name="globe-outline" size={16} color="#66BB6A" />
+              </View>
+              <View style={styles.potentialContent}>
+                <View style={styles.potentialLabelRow}>
+                  <Text style={styles.potentialLabel}>Continent Bonuses</Text>
+                  <Text style={styles.potentialValue}>{breakdown?.summary?.continent_total || 0} <Text style={styles.potentialMax}>/ 250</Text></Text>
+                </View>
+                <View style={styles.potentialBarBg}>
+                  <View style={[styles.potentialBar, { width: `${Math.min(100, ((breakdown?.summary?.continent_total || 0) / 250) * 100)}%`, backgroundColor: '#66BB6A' }]} />
+                </View>
+              </View>
             </View>
 
-            <View style={styles.journeyRow}>
-              <Ionicons name="flag" size={20} color="#4DB8D8" />
-              <View style={styles.journeyContent}>
-                <Text style={styles.journeyLabel}>Destinations</Text>
-                <View style={styles.journeyBarContainer}>
-                  <View style={[styles.journeyBar, { width: `${Math.min(100, ((stats?.countries_visited || 0) / 100) * 100)}%`, backgroundColor: '#4DB8D8' }]} />
-                </View>
-              </View>
-              <Text style={[styles.journeyValue, { color: '#4DB8D8' }]}>{stats?.countries_visited || 0}/100</Text>
-            </View>
-
-            <View style={styles.journeyRow}>
-              <Ionicons name="location" size={20} color="#E87850" />
-              <View style={styles.journeyContent}>
-                <Text style={styles.journeyLabel}>Landmarks</Text>
-                <View style={styles.journeyBarContainer}>
-                  <View style={[styles.journeyBar, { width: `${Math.min(100, ((stats?.landmarks_visited || 0) / 1500) * 100)}%`, backgroundColor: '#E87850' }]} />
-                </View>
-              </View>
-              <Text style={[styles.journeyValue, { color: '#E87850' }]}>{stats?.landmarks_visited || 0}/1500</Text>
-            </View>
-
-            <View style={styles.journeyRow}>
-              <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
-              <View style={styles.journeyContent}>
-                <Text style={styles.journeyLabel}>Verified Visits</Text>
-                <View style={styles.journeyBarContainer}>
-                  <View style={[styles.journeyBar, { width: `${stats?.landmarks_visited ? Math.min(100, ((stats?.visits_with_photos || 0) / stats.landmarks_visited) * 100) : 0}%`, backgroundColor: '#4CAF50' }]} />
-                </View>
-              </View>
-              <Text style={[styles.journeyValue, { color: '#4CAF50' }]}>{stats?.visits_with_photos || 0}/{stats?.landmarks_visited || 0}</Text>
+            <View style={[styles.divider, { marginTop: 8 }]} />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 8 }}>
+              <Text style={{ fontSize: 14, fontWeight: '700', color: theme.colors.text }}>Total Earned</Text>
+              <Text style={{ fontSize: 14, fontWeight: '800', color: theme.colors.primary }}>{totalPoints.toLocaleString()} <Text style={styles.potentialMax}>/ 27,750</Text></Text>
             </View>
           </Surface>
         </View>
+
+        {/* Next Milestone */}
+        {(() => {
+          const { getUserRank, RANKS } = require('../utils/rankSystem');
+          const currentRank = getUserRank(verifiedPoints);
+          const currentIdx = RANKS.indexOf(currentRank);
+          const nextRank = currentIdx < RANKS.length - 1 ? RANKS[currentIdx + 1] : null;
+          if (!nextRank) return null;
+          const needed = nextRank.minPoints - verifiedPoints;
+          return (
+            <View style={styles.section}>
+              <Surface style={[styles.card, { borderLeftWidth: 3, borderLeftColor: nextRank.color }]}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                  <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: nextRank.color + '20', alignItems: 'center', justifyContent: 'center' }}>
+                    <Ionicons name="trophy" size={22} color={nextRank.color} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ fontSize: 12, color: theme.colors.textSecondary }}>Next Rank</Text>
+                    <Text style={{ fontSize: 16, fontWeight: '700', color: nextRank.color }}>{nextRank.name}</Text>
+                    <Text style={{ fontSize: 12, color: theme.colors.textLight, marginTop: 2 }}>{needed.toLocaleString()} more verified points needed</Text>
+                  </View>
+                </View>
+              </Surface>
+            </View>
+          );
+        })()}
 
         {/* CTA */}
         <TouchableOpacity 
@@ -533,38 +576,6 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     marginTop: 2,
   },
-  journeyRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    gap: 12,
-  },
-  journeyContent: {
-    flex: 1,
-  },
-  journeyLabel: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: theme.colors.text,
-    marginBottom: 4,
-  },
-  journeyBarContainer: {
-    height: 6,
-    backgroundColor: theme.colors.border,
-    borderRadius: 3,
-    overflow: 'hidden',
-  },
-  journeyBar: {
-    height: '100%',
-    borderRadius: 3,
-    minWidth: 2,
-  },
-  journeyValue: {
-    fontSize: 13,
-    fontWeight: '700',
-    minWidth: 55,
-    textAlign: 'right',
-  },
   ctaButton: {
     marginHorizontal: 16,
     marginTop: 8,
@@ -631,5 +642,54 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     textAlign: 'center',
     paddingVertical: 12,
+  },
+  // Earning Potential
+  potentialRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    gap: 10,
+  },
+  potentialIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  potentialContent: {
+    flex: 1,
+  },
+  potentialLabelRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  potentialLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+  potentialValue: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  potentialMax: {
+    fontSize: 11,
+    fontWeight: '400',
+    color: theme.colors.textLight,
+  },
+  potentialBarBg: {
+    height: 6,
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  potentialBar: {
+    height: 6,
+    borderRadius: 3,
+    minWidth: 2,
   },
 });
