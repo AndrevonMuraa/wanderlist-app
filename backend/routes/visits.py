@@ -222,6 +222,23 @@ async def get_visit_details(visit_id: str, current_user: User = Depends(get_curr
     if not visit:
         raise HTTPException(status_code=404, detail="Visit not found")
     
+    is_owner = visit.get("user_id") == current_user.user_id
+    
+    # Enforce visibility for non-owners
+    if not is_owner:
+        visibility = visit.get("visibility", "public")
+        if visibility == "private":
+            raise HTTPException(status_code=404, detail="Visit not found")
+        if visibility == "friends":
+            are_friends = await db.friends.find_one({
+                "$or": [
+                    {"user_id": current_user.user_id, "friend_id": visit["user_id"], "status": "accepted"},
+                    {"user_id": visit["user_id"], "friend_id": current_user.user_id, "status": "accepted"}
+                ]
+            })
+            if not are_friends:
+                raise HTTPException(status_code=404, detail="Visit not found")
+    
     # Get landmark details
     landmark = await db.landmarks.find_one(
         {"landmark_id": visit["landmark_id"]}, 
@@ -240,7 +257,7 @@ async def get_visit_details(visit_id: str, current_user: User = Depends(get_curr
         {"_id": 0, "activity_id": 1, "comments_count": 1}
     )
     
-    return {
+    result = {
         **visit,
         "landmark_name": landmark.get("name") if landmark else None,
         "country_name": landmark.get("country_name") if landmark else None,
@@ -251,6 +268,13 @@ async def get_visit_details(visit_id: str, current_user: User = Depends(get_curr
         "activity_id": activity.get("activity_id") if activity else None,
         "comments_count": activity.get("comments_count", 0) if activity else 0,
     }
+    
+    # Strip diary for non-owners when share_diary is False
+    if not is_owner and not visit.get("share_diary", True):
+        result.pop("diary_notes", None)
+        result.pop("diary", None)
+    
+    return result
 
 @router.post("/visits", response_model=Visit)
 async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_user)):

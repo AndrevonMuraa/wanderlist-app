@@ -206,7 +206,7 @@ async def get_country_visits(current_user: User = Depends(get_current_user)):
 
 @router.get("/country-visits/{country_visit_id}")
 async def get_country_visit_details(country_visit_id: str, current_user: User = Depends(get_current_user)):
-    """Get country visit details"""
+    """Get country visit details with privacy enforcement"""
     country_visit = await db.country_visits.find_one(
         {"country_visit_id": country_visit_id},
         {"_id": 0}
@@ -215,7 +215,31 @@ async def get_country_visit_details(country_visit_id: str, current_user: User = 
     if not country_visit:
         raise HTTPException(status_code=404, detail="Country visit not found")
     
-    return country_visit
+    is_owner = country_visit.get("user_id") == current_user.user_id
+    
+    # Enforce visibility for non-owners
+    if not is_owner:
+        visibility = country_visit.get("visibility", "public")
+        if visibility == "private":
+            raise HTTPException(status_code=404, detail="Country visit not found")
+        if visibility == "friends":
+            are_friends = await db.friends.find_one({
+                "$or": [
+                    {"user_id": current_user.user_id, "friend_id": country_visit["user_id"], "status": "accepted"},
+                    {"user_id": country_visit["user_id"], "friend_id": current_user.user_id, "status": "accepted"}
+                ]
+            })
+            if not are_friends:
+                raise HTTPException(status_code=404, detail="Country visit not found")
+    
+    result = {**country_visit}
+    
+    # Strip diary for non-owners when share_diary is False
+    if not is_owner and not country_visit.get("share_diary", True):
+        result.pop("diary", None)
+        result.pop("diary_notes", None)
+    
+    return result
 
 @router.delete("/country-visits/{country_visit_id}")
 async def delete_country_visit(country_visit_id: str, current_user: User = Depends(get_current_user)):
