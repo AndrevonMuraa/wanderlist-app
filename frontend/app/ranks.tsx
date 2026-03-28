@@ -127,6 +127,16 @@ export default function RanksScreen() {
                 <View style={[styles.progressFill, { width: `${Math.min(progress, 100)}%`, backgroundColor: rank.color }]} />
               </View>
             )}
+            {!isUnlocked && !isCurrent && index === RANKS.indexOf(currentRank) + 1 && (
+              <>
+                <View style={styles.progressBar}>
+                  <View style={[styles.progressFill, { width: `${Math.min(progress, 100)}%`, backgroundColor: rank.color }]} />
+                </View>
+                <Text style={{ fontSize: 10, color: theme.colors.textLight, marginTop: 2 }}>
+                  {rank.minPoints - userPoints} pts to unlock • {Math.round(progress)}%
+                </Text>
+              </>
+            )}
           </View>
         </View>
       </Surface>

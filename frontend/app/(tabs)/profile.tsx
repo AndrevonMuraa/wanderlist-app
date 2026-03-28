@@ -243,6 +243,15 @@ export default function ProfileScreen() {
                 size="medium"
                 showName={true}
               />
+              {(() => {
+                const rank = getUserRank(progressStats?.verifiedPoints || 0);
+                const { RANKS } = require('../../utils/rankSystem');
+                const idx = RANKS.indexOf(rank);
+                const next = idx < RANKS.length - 1 ? RANKS[idx + 1] : null;
+                if (!next) return null;
+                const needed = next.minPoints - (progressStats?.verifiedPoints || 0);
+                return <Text style={{ fontSize: 10, color: colors.textLight, marginTop: 2 }}>{needed} pts to {next.name}</Text>;
+              })()}
             </TouchableOpacity>
           </View>
           

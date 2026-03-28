@@ -402,7 +402,7 @@ export default function JourneyScreen() {
               <View style={styles.milestoneContent}>
                 <Text style={[styles.milestoneName, { color: rankProgress.nextRank.color }]}>{rankProgress.nextRank.name}</Text>
                 <Text style={[styles.milestoneProgress, { color: colors.textSecondary }]}>
-                  {rankProgress.pointsNeededForNext} more points needed
+                  {rankProgress.pointsNeededForNext} more verified points needed
                 </Text>
                 <ProgressBar 
                   percentage={rankProgress.progressPercentage}

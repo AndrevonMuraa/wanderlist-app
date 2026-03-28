@@ -315,7 +315,7 @@ export default function SubscriptionScreen() {
             <FeatureRow icon="heart" text="Photo Upvoting" included />
             <View style={styles.divider} />
             <Text style={[styles.tierLabel, styles.tierLabelPro]}>+ Pro Features</Text>
-            <FeatureRow icon="diamond" text="500 Premium Landmarks" included={isPro || false} highlight />
+            <FeatureRow icon="diamond" text="500 Premium Landmarks (12,500 extra pts)" included={isPro || false} highlight />
             <FeatureRow icon="images" text="10 Photos per Visit" included={isPro || false} highlight />
             <FeatureRow icon="people" text="Unlimited Friends" included={isPro || false} highlight />
             <FeatureRow icon="airplane" text="Custom Visits Feature" included={isPro || false} highlight />
