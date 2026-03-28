@@ -31,6 +31,8 @@ export default function PointsSummary() {
   const insets = useSafeAreaInsets();
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [expandedSection, setExpandedSection] = useState<'verified' | 'unverified' | null>(null);
+  const [breakdown, setBreakdown] = useState<any>(null);
 
   const getToken = async () => {
     if (Platform.OS === 'web') {
@@ -73,6 +75,25 @@ export default function PointsSummary() {
     };
     fetchStats();
   }, []);
+
+  const fetchBreakdown = async () => {
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/points/breakdown`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) setBreakdown(await res.json());
+    } catch {}
+  };
+
+  const handleToggleSection = (section: 'verified' | 'unverified') => {
+    if (expandedSection === section) {
+      setExpandedSection(null);
+    } else {
+      setExpandedSection(section);
+      if (!breakdown) fetchBreakdown();
+    }
+  };
 
   if (loading) {
     return (
@@ -118,29 +139,104 @@ export default function PointsSummary() {
           <Text style={styles.sectionTitle}>Points Breakdown</Text>
           
           <Surface style={styles.card}>
-            <View style={styles.breakdownRow}>
-              <View style={styles.breakdownIcon}>
-                <Ionicons name="shield-checkmark" size={20} color="#4CAF50" />
+            <TouchableOpacity onPress={() => handleToggleSection('verified')} activeOpacity={0.7}>
+              <View style={styles.breakdownRow}>
+                <View style={styles.breakdownIcon}>
+                  <Ionicons name="shield-checkmark" size={20} color="#4CAF50" />
+                </View>
+                <View style={styles.breakdownContent}>
+                  <Text style={styles.breakdownLabel}>Verified Points</Text>
+                  <Text style={styles.breakdownDesc}>From visits with photos — counts for leaderboard and rank</Text>
+                </View>
+                <Text style={[styles.breakdownValue, { color: '#4CAF50' }]}>{verifiedPoints.toLocaleString()}</Text>
+                <Ionicons name={expandedSection === 'verified' ? 'chevron-up' : 'chevron-down'} size={18} color={theme.colors.textLight} style={{ marginLeft: 6 }} />
               </View>
-              <View style={styles.breakdownContent}>
-                <Text style={styles.breakdownLabel}>Verified Points</Text>
-                <Text style={styles.breakdownDesc}>From visits with photos — counts for leaderboard and rank</Text>
+            </TouchableOpacity>
+            
+            {expandedSection === 'verified' && breakdown && (
+              <View style={styles.detailSection}>
+                {breakdown.landmarks.filter((l: any) => l.verified).length > 0 && (
+                  <>
+                    <Text style={styles.detailGroupTitle}>Landmarks ({breakdown.summary.landmark_verified} pts)</Text>
+                    {breakdown.landmarks.filter((l: any) => l.verified).map((l: any) => (
+                      <TouchableOpacity key={l.visit_id} style={styles.detailRow} onPress={() => router.push(`/visit-detail/${l.visit_id}`)} activeOpacity={0.7}>
+                        <Ionicons name="location" size={14} color="#E87850" />
+                        <Text style={styles.detailName} numberOfLines={1}>{l.name}</Text>
+                        <Text style={styles.detailCountry}>{l.country}</Text>
+                        <Text style={styles.detailPts}>+{l.points}</Text>
+                        <Ionicons name="chevron-forward" size={14} color={theme.colors.textLight} />
+                      </TouchableOpacity>
+                    ))}
+                  </>
+                )}
+                {breakdown.continent_bonuses.length > 0 && (
+                  <>
+                    <Text style={styles.detailGroupTitle}>Continent Bonuses ({breakdown.summary.continent_total} pts)</Text>
+                    {breakdown.continent_bonuses.map((b: any) => (
+                      <View key={b.continent} style={styles.detailRow}>
+                        <Ionicons name="globe-outline" size={14} color="#66BB6A" />
+                        <Text style={styles.detailName}>{b.continent}</Text>
+                        <Text style={styles.detailPts}>+{b.points}</Text>
+                      </View>
+                    ))}
+                  </>
+                )}
+                {verifiedPoints === 0 && (
+                  <Text style={styles.detailEmpty}>Add photos to your visits to earn verified points</Text>
+                )}
               </View>
-              <Text style={[styles.breakdownValue, { color: '#4CAF50' }]}>{verifiedPoints.toLocaleString()}</Text>
-            </View>
+            )}
             
             <View style={styles.divider} />
             
-            <View style={styles.breakdownRow}>
-              <View style={styles.breakdownIcon}>
-                <Ionicons name="star" size={20} color="#FFA726" />
+            <TouchableOpacity onPress={() => handleToggleSection('unverified')} activeOpacity={0.7}>
+              <View style={styles.breakdownRow}>
+                <View style={styles.breakdownIcon}>
+                  <Ionicons name="star" size={20} color="#FFA726" />
+                </View>
+                <View style={styles.breakdownContent}>
+                  <Text style={styles.breakdownLabel}>Unverified Points</Text>
+                  <Text style={styles.breakdownDesc}>From visits without photos — personal total only</Text>
+                </View>
+                <Text style={styles.breakdownValue}>{unverifiedPoints.toLocaleString()}</Text>
+                <Ionicons name={expandedSection === 'unverified' ? 'chevron-up' : 'chevron-down'} size={18} color={theme.colors.textLight} style={{ marginLeft: 6 }} />
               </View>
-              <View style={styles.breakdownContent}>
-                <Text style={styles.breakdownLabel}>Unverified Points</Text>
-                <Text style={styles.breakdownDesc}>From visits without photos — personal total only</Text>
+            </TouchableOpacity>
+            
+            {expandedSection === 'unverified' && breakdown && (
+              <View style={styles.detailSection}>
+                {breakdown.landmarks.filter((l: any) => !l.verified && l.points > 0).length > 0 && (
+                  <>
+                    <Text style={styles.detailGroupTitle}>Landmarks ({breakdown.summary.landmark_total - breakdown.summary.landmark_verified} pts)</Text>
+                    {breakdown.landmarks.filter((l: any) => !l.verified && l.points > 0).map((l: any) => (
+                      <TouchableOpacity key={l.visit_id} style={styles.detailRow} onPress={() => router.push(`/visit-detail/${l.visit_id}`)} activeOpacity={0.7}>
+                        <Ionicons name="location" size={14} color="#E87850" />
+                        <Text style={styles.detailName} numberOfLines={1}>{l.name}</Text>
+                        <Text style={styles.detailCountry}>{l.country}</Text>
+                        <Text style={styles.detailPts}>+{l.points}</Text>
+                        <Ionicons name="chevron-forward" size={14} color={theme.colors.textLight} />
+                      </TouchableOpacity>
+                    ))}
+                  </>
+                )}
+                {breakdown.country_visits.length > 0 && (
+                  <>
+                    <Text style={styles.detailGroupTitle}>Destination Visits ({breakdown.summary.country_total} pts)</Text>
+                    {breakdown.country_visits.map((c: any) => (
+                      <TouchableOpacity key={c.country_visit_id} style={styles.detailRow} onPress={() => router.push(`/country-visit-detail/${c.country_visit_id}`)} activeOpacity={0.7}>
+                        <Ionicons name="flag" size={14} color="#4DB8D8" />
+                        <Text style={styles.detailName}>{c.name}</Text>
+                        <Text style={styles.detailPts}>+{c.points}</Text>
+                        <Ionicons name="chevron-forward" size={14} color={theme.colors.textLight} />
+                      </TouchableOpacity>
+                    ))}
+                  </>
+                )}
+                {unverifiedPoints === 0 && (
+                  <Text style={styles.detailEmpty}>No unverified points</Text>
+                )}
               </View>
-              <Text style={styles.breakdownValue}>{unverifiedPoints.toLocaleString()}</Text>
-            </View>
+            )}
           </Surface>
         </View>
 
@@ -486,5 +582,54 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#fff',
+  },
+  detailSection: {
+    paddingTop: 4,
+    paddingBottom: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+    marginTop: 8,
+  },
+  detailGroupTitle: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: theme.colors.textSecondary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginTop: 10,
+    marginBottom: 6,
+    paddingLeft: 4,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 7,
+    paddingHorizontal: 4,
+    gap: 6,
+  },
+  detailName: {
+    flex: 1,
+    fontSize: 13,
+    color: theme.colors.text,
+    fontWeight: '500',
+  },
+  detailCountry: {
+    fontSize: 11,
+    color: theme.colors.textLight,
+    marginRight: 4,
+  },
+  detailPts: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: theme.colors.primary,
+    minWidth: 30,
+    textAlign: 'right',
+  },
+  detailEmpty: {
+    fontSize: 13,
+    color: theme.colors.textLight,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    paddingVertical: 12,
   },
 });

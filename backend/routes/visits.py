@@ -609,6 +609,86 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     
     # Check for milestones and create activity if reached
     # Milestones adjusted for 520 total landmarks
+
+
+@router.get("/points/breakdown")
+async def get_points_breakdown(current_user: User = Depends(get_current_user)):
+    """Detailed points breakdown with individual items for the Points Summary page."""
+    import asyncio
+    
+    visits_task = db.visits.find(
+        {"user_id": current_user.user_id},
+        {"_id": 0, "visit_id": 1, "landmark_id": 1, "landmark_name": 1, "country_name": 1, "points_earned": 1, "verified": 1}
+    ).sort("visited_at", -1).to_list(10000)
+    
+    cv_task = db.country_visits.find(
+        {"user_id": current_user.user_id},
+        {"_id": 0, "country_visit_id": 1, "country_id": 1, "country_name": 1, "points_earned": 1, "source": 1}
+    ).sort("visited_at", -1).to_list(1000)
+    
+    visits, country_visits = await asyncio.gather(visits_task, cv_task)
+    
+    landmarks = []
+    for v in visits:
+        landmarks.append({
+            "visit_id": v.get("visit_id"),
+            "name": v.get("landmark_name", "Unknown"),
+            "country": v.get("country_name", ""),
+            "points": v.get("points_earned", 0),
+            "verified": v.get("verified", False),
+        })
+    
+    countries = []
+    for cv in country_visits:
+        countries.append({
+            "country_visit_id": cv.get("country_visit_id"),
+            "name": cv.get("country_name", "Unknown"),
+            "points": cv.get("points_earned", 0),
+            "source": cv.get("source", "manual"),
+        })
+    
+    # Calculate continent bonuses from visited countries
+    country_ids_from_landmarks = set()
+    for v in visits:
+        lid = v.get("landmark_id", "")
+        parts = lid.rsplit("_", 1)
+        if len(parts) > 1:
+            country_ids_from_landmarks.add(parts[0])
+    
+    country_ids_from_cv = set(cv.get("country_id", "") for cv in country_visits if cv.get("country_id"))
+    all_country_ids = country_ids_from_landmarks | country_ids_from_cv
+    
+    continents_visited = {}
+    if all_country_ids:
+        country_docs = await db.countries.find(
+            {"country_id": {"$in": list(all_country_ids)}},
+            {"_id": 0, "country_id": 1, "continent": 1}
+        ).to_list(200)
+        for doc in country_docs:
+            cont = doc["continent"]
+            if cont not in continents_visited:
+                continents_visited[cont] = True
+    
+    continent_bonuses = [{"continent": c, "points": 50} for c in sorted(continents_visited.keys())]
+    
+    lm_total = sum(l["points"] for l in landmarks)
+    lm_verified = sum(l["points"] for l in landmarks if l["verified"])
+    cv_total = sum(c["points"] for c in countries)
+    cont_total = len(continent_bonuses) * 50
+    
+    return {
+        "landmarks": landmarks,
+        "country_visits": countries,
+        "continent_bonuses": continent_bonuses,
+        "summary": {
+            "landmark_total": lm_total,
+            "landmark_verified": lm_verified,
+            "country_total": cv_total,
+            "continent_total": cont_total,
+            "grand_total": lm_total + cv_total + cont_total,
+        }
+    }
+
     visit_count = await db.visits.count_documents({"user_id": current_user.user_id})
     if visit_count in [10, 25, 50, 100, 200, 350, 500]:
         milestone_activity_id = f"activity_{uuid.uuid4().hex[:12]}"
