@@ -278,7 +278,7 @@ export default function ExploreCountriesScreen() {
                 <View style={styles.sectionHeaderTextContainer}>
                   <Text style={styles.sectionTitle}>{section.continent}</Text>
                   <Text style={styles.sectionSubtitle}>
-                    {allCountries.length} countries • {totalLandmarks} landmarks
+                    {allCountries.length} destinations • {totalLandmarks} landmarks • {allCountries.reduce((s, c) => s + (c.total_points || c.landmark_count * 10), 0).toLocaleString()} pts
                   </Text>
                 </View>
               </View>
@@ -329,68 +329,53 @@ export default function ExploreCountriesScreen() {
     return (
       <View>
 
-        {/* Visual Stats Section */}
+        {/* Your Progress Dashboard */}
         <View style={styles.statsContainerNew}>
           <Surface style={styles.statsCard}>
-            {/* Row 1: Total available */}
-            <View style={styles.statBoxRow}>
-              <View style={styles.statItem}>
-                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.primary + '20' }]}>
-                  <Ionicons name="flag" size={20} color={theme.colors.primary} />
-                </View>
-                <Text style={styles.statNumberCompact}>{totalCountries}</Text>
-                <Text style={styles.statLabelCompact}>Destinations</Text>
-              </View>
-              
-              <View style={styles.statDividerNew} />
-              
-              <View style={styles.statItem}>
-                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.accent + '20' }]}>
-                  <Ionicons name="location" size={20} color={theme.colors.accent} />
-                </View>
-                <Text style={styles.statNumberCompact}>{totalLandmarks}</Text>
-                <Text style={styles.statLabelCompact}>Landmarks</Text>
-              </View>
-              
-              <View style={styles.statDividerNew} />
-              
-              <View style={styles.statItem}>
-                <View style={[styles.statIconCircle, { backgroundColor: theme.colors.accentYellow + '20' }]}>
-                  <Ionicons name="star" size={20} color={theme.colors.accentYellow} />
-                </View>
-                <Text style={styles.statNumberCompact}>{totalAvailablePoints}</Text>
-                <Text style={styles.statLabelCompact}>Points</Text>
+            <View style={styles.progressHeader}>
+              <Text style={styles.progressHeaderTitle}>Your Progress</Text>
+              <View style={styles.progressPointsBadge}>
+                <Ionicons name="star" size={14} color="#FFD700" />
+                <Text style={styles.progressPointsText}>{totalEarnedPoints} pts</Text>
               </View>
             </View>
 
-            {/* Divider */}
-            <View style={{ height: 1, backgroundColor: theme.colors.border, marginVertical: 8, marginHorizontal: 8 }} />
+            <View style={styles.progressRow}>
+              <Ionicons name="flag" size={16} color="#4DB8D8" />
+              <View style={styles.progressBarContent}>
+                <View style={styles.progressLabelRow}>
+                  <Text style={styles.progressLabel}>{totalVisitedCountries}/{totalCountries} Destinations</Text>
+                  <Text style={styles.progressPct}>{totalCountries > 0 ? Math.round((totalVisitedCountries / totalCountries) * 100) : 0}%</Text>
+                </View>
+                <View style={styles.progressBarBg}>
+                  <View style={[styles.progressBarFill, { width: `${Math.min(100, (totalVisitedCountries / totalCountries) * 100)}%`, backgroundColor: '#4DB8D8' }]} />
+                </View>
+              </View>
+            </View>
 
-            {/* Row 2: User progress */}
-            <View style={styles.statBoxRow}>
-              <View style={styles.statItem}>
-                <Text style={[styles.statNumberProgress, { color: totalVisitedCountries > 0 ? theme.colors.primary : theme.colors.textLight }]}>
-                  {totalVisitedCountries}/{totalCountries}
-                </Text>
-                <Text style={styles.statLabelProgress}>Visited</Text>
+            <View style={styles.progressRow}>
+              <Ionicons name="location" size={16} color="#E87850" />
+              <View style={styles.progressBarContent}>
+                <View style={styles.progressLabelRow}>
+                  <Text style={styles.progressLabel}>{totalVisited}/{totalLandmarks} Landmarks</Text>
+                  <Text style={styles.progressPct}>{totalLandmarks > 0 ? ((totalVisited / totalLandmarks) * 100).toFixed(1) : 0}%</Text>
+                </View>
+                <View style={styles.progressBarBg}>
+                  <View style={[styles.progressBarFill, { width: `${Math.min(100, (totalVisited / totalLandmarks) * 100)}%`, backgroundColor: '#E87850' }]} />
+                </View>
               </View>
-              
-              <View style={styles.statDividerNew} />
-              
-              <View style={styles.statItem}>
-                <Text style={[styles.statNumberProgress, { color: totalVisited > 0 ? theme.colors.accent : theme.colors.textLight }]}>
-                  {totalVisited}/{totalLandmarks}
-                </Text>
-                <Text style={styles.statLabelProgress}>Explored</Text>
-              </View>
-              
-              <View style={styles.statDividerNew} />
-              
-              <View style={styles.statItem}>
-                <Text style={[styles.statNumberProgress, { color: totalEarnedPoints > 0 ? theme.colors.accentYellow : theme.colors.textLight }]}>
-                  {totalEarnedPoints}
-                </Text>
-                <Text style={styles.statLabelProgress}>Earned</Text>
+            </View>
+
+            <View style={styles.progressRow}>
+              <Ionicons name="star" size={16} color="#FFA726" />
+              <View style={styles.progressBarContent}>
+                <View style={styles.progressLabelRow}>
+                  <Text style={styles.progressLabel}>{totalEarnedPoints}/{totalAvailablePoints.toLocaleString()} Points</Text>
+                  <Text style={styles.progressPct}>{totalAvailablePoints > 0 ? ((totalEarnedPoints / totalAvailablePoints) * 100).toFixed(1) : 0}%</Text>
+                </View>
+                <View style={styles.progressBarBg}>
+                  <View style={[styles.progressBarFill, { width: `${Math.min(100, (totalEarnedPoints / totalAvailablePoints) * 100)}%`, backgroundColor: '#FFA726' }]} />
+                </View>
               </View>
             </View>
           </Surface>
@@ -470,7 +455,7 @@ export default function ExploreCountriesScreen() {
               </TouchableOpacity>
             )}
             <Text style={styles.headerTitle}>
-              {continent ? `${(continent as string).charAt(0).toUpperCase() + (continent as string).slice(1)}` : 'Explore Countries'}
+              {continent ? `${(continent as string).charAt(0).toUpperCase() + (continent as string).slice(1)}` : 'Explore Destinations'}
             </Text>
           </View>
           <TouchableOpacity 
@@ -680,6 +665,68 @@ const styles = StyleSheet.create<any>({
     height: 40,
     backgroundColor: theme.colors.border,
     marginHorizontal: theme.spacing.sm,
+  },
+  // Progress Dashboard
+  progressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  progressHeaderTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  progressPointsBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#FFF8E1',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  progressPointsText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#FFA726',
+  },
+  progressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingVertical: 6,
+  },
+  progressBarContent: {
+    flex: 1,
+  },
+  progressLabelRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  progressLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+  progressPct: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: theme.colors.textLight,
+  },
+  progressBarBg: {
+    height: 6,
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: 6,
+    borderRadius: 3,
+    minWidth: 2,
   },
 
   welcomeSection: {
