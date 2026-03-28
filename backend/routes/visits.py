@@ -126,6 +126,11 @@ async def update_visit(visit_id: str, body: dict = Body(...), current_user: User
     
     await db.visits.update_one({"visit_id": visit_id}, {"$set": update_fields})
     
+    # Recalculate points if photos changed (verified status may have changed)
+    if "photos" in update_fields:
+        await recalculate_user_points(current_user.user_id)
+        await check_and_award_badges(current_user.user_id)
+    
     # Sync relevant fields to activities
     activity_update = {}
     if "visibility" in update_fields:

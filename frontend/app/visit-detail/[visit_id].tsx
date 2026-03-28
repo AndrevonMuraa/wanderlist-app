@@ -282,8 +282,8 @@ export default function VisitDetailScreen() {
       />
       <ScrollView style={styles.scrollView}>
 
-        {/* Photo Gallery */}
-        {photos.length > 0 && (
+        {/* Photo Gallery or Add Photo CTA */}
+        {photos.length > 0 ? (
           <View style={styles.photoSection}>
             <TouchableOpacity
               onPress={async () => {
@@ -317,6 +317,36 @@ export default function VisitDetailScreen() {
                     await lightHaptic();
                     setSelectedPhoto(index);
                   }}
+                  onLongPress={() => {
+                    if (!isOwner) return;
+                    const isLastPhoto = photos.length === 1;
+                    Alert.alert(
+                      isLastPhoto ? 'Remove Last Photo?' : 'Remove Photo?',
+                      isLastPhoto
+                        ? 'This will change your visit status to unverified and remove verified points.'
+                        : 'This photo will be removed from your visit.',
+                      [
+                        { text: 'Cancel', style: 'cancel' },
+                        {
+                          text: 'Remove',
+                          style: 'destructive',
+                          onPress: async () => {
+                            const updated = photos.filter((_, i) => i !== index);
+                            const token = await getToken();
+                            const res = await fetch(`${BACKEND_URL}/api/visits/${visit_id}`, {
+                              method: 'PUT',
+                              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                              body: JSON.stringify({ photos: updated }),
+                            });
+                            if (res.ok) {
+                              setVisit(prev => prev ? { ...prev, photos: updated, verified: updated.length > 0 } : prev);
+                              setSelectedPhoto(0);
+                            }
+                          },
+                        },
+                      ]
+                    );
+                  }}
                 >
                   <Image
                     source={{ uri: photo }}
@@ -328,7 +358,7 @@ export default function VisitDetailScreen() {
                   />
                 </TouchableOpacity>
               ))}
-              {isOwner && (visit.photos.length < (user?.subscription_tier === 'pro' || user?.subscription_tier === 'premium' ? 10 : 1)) && (
+              {isOwner && (photos.length < (user?.subscription_tier === 'pro' || user?.subscription_tier === 'premium' ? 10 : 1)) && (
                 <TouchableOpacity
                   onPress={handleAddPhotos}
                   style={styles.addPhotoThumbnail}
@@ -346,8 +376,37 @@ export default function VisitDetailScreen() {
                 </TouchableOpacity>
               )}
             </ScrollView>
+            {isOwner && photos.length > 0 && (
+              <Text style={{ fontSize: 11, color: theme.colors.textLight, textAlign: 'center', marginTop: 4 }}>
+                Long-press a photo to remove it
+              </Text>
+            )}
           </View>
-        )}
+        ) : isOwner ? (
+          <TouchableOpacity
+            onPress={handleAddPhotos}
+            activeOpacity={0.7}
+            style={{
+              marginHorizontal: 16, marginTop: 16, borderRadius: 16, overflow: 'hidden',
+              backgroundColor: '#E3F6FC', padding: 28, alignItems: 'center', gap: 10,
+              borderWidth: 2, borderColor: theme.colors.primary, borderStyle: 'dashed',
+            }}
+            disabled={uploadingPhotos}
+            data-testid="add-photo-empty-btn"
+          >
+            {uploadingPhotos ? (
+              <ActivityIndicator size="large" color={theme.colors.primary} />
+            ) : (
+              <>
+                <Ionicons name="camera-outline" size={40} color={theme.colors.primary} />
+                <Text style={{ fontSize: 16, fontWeight: '700', color: theme.colors.primary }}>Add Photo to Verify</Text>
+                <Text style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center', lineHeight: 18 }}>
+                  Add a personal photo to earn verified points for the global leaderboard
+                </Text>
+              </>
+            )}
+          </TouchableOpacity>
+        ) : null}
 
         {/* Visit Info */}
         <View style={styles.infoCard}>
@@ -364,14 +423,21 @@ export default function VisitDetailScreen() {
             </View>
             <View style={styles.infoItem}>
               <Ionicons 
-                name={visit.verified ? "checkmark-circle" : "alert-circle"} 
+                name={visit.verified ? "shield-checkmark" : "shield-outline"} 
                 size={20} 
-                color={visit.verified ? theme.colors.success : theme.colors.textLight} 
+                color={visit.verified ? '#4CAF50' : '#FFA726'} 
               />
               <Text style={styles.infoLabel}>Status</Text>
-              <Text style={styles.infoValue}>{visit.verified ? 'Verified' : 'Unverified'}</Text>
+              <Text style={[styles.infoValue, { color: visit.verified ? '#4CAF50' : '#FFA726' }]}>
+                {visit.verified ? 'Verified' : 'Unverified'}
+              </Text>
             </View>
           </View>
+          {!visit.verified && isOwner && photos.length === 0 && (
+            <Text style={{ fontSize: 11, color: '#FFA726', textAlign: 'center', marginTop: 8 }}>
+              Add a photo to earn verified points
+            </Text>
+          )}
         </View>
 
         {/* Travel Diary */}
