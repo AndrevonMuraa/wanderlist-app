@@ -649,15 +649,20 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
     
     # Calculate continent bonuses from visited countries
     country_ids_from_landmarks = set()
+    verified_country_ids = set()
     for v in visits:
         lid = v.get("landmark_id", "")
         parts = lid.rsplit("_", 1)
         if len(parts) > 1:
-            country_ids_from_landmarks.add(parts[0])
+            country_id = parts[0]
+            country_ids_from_landmarks.add(country_id)
+            if v.get("verified", False):
+                verified_country_ids.add(country_id)
     
     country_ids_from_cv = set(cv.get("country_id", "") for cv in country_visits if cv.get("country_id"))
     all_country_ids = country_ids_from_landmarks | country_ids_from_cv
     
+    # Map continents and track if any country in that continent has a verified visit
     continents_visited = {}
     if all_country_ids:
         country_docs = await db.countries.find(
@@ -666,15 +671,22 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
         ).to_list(200)
         for doc in country_docs:
             cont = doc["continent"]
+            has_verified = doc["country_id"] in verified_country_ids
             if cont not in continents_visited:
+                continents_visited[cont] = has_verified
+            elif has_verified:
                 continents_visited[cont] = True
     
-    continent_bonuses = [{"continent": c, "points": 50} for c in sorted(continents_visited.keys())]
+    continent_bonuses = [
+        {"continent": c, "points": 50, "verified": v}
+        for c, v in sorted(continents_visited.items())
+    ]
     
     lm_total = sum(l["points"] for l in landmarks)
     lm_verified = sum(l["points"] for l in landmarks if l["verified"])
     cv_total = sum(c["points"] for c in countries)
     cont_total = len(continent_bonuses) * 50
+    cont_verified = sum(50 for b in continent_bonuses if b["verified"])
     
     return {
         "landmarks": landmarks,
@@ -685,6 +697,7 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
             "landmark_verified": lm_verified,
             "country_total": cv_total,
             "continent_total": cont_total,
+            "continent_verified": cont_verified,
             "grand_total": lm_total + cv_total + cont_total,
         }
     }

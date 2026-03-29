@@ -173,10 +173,10 @@ export default function PointsSummary() {
                     ))}
                   </>
                 )}
-                {breakdown.continent_bonuses.length > 0 && (
+                {breakdown.continent_bonuses.filter((b: any) => b.verified).length > 0 && (
                   <>
-                    <Text style={styles.detailGroupTitle}>Continent Bonuses ({breakdown.summary.continent_total} pts)</Text>
-                    {breakdown.continent_bonuses.map((b: any) => (
+                    <Text style={styles.detailGroupTitle}>Continent Bonuses ({breakdown.summary.continent_verified} pts)</Text>
+                    {breakdown.continent_bonuses.filter((b: any) => b.verified).map((b: any) => (
                       <View key={b.continent} style={styles.detailRow}>
                         <Ionicons name="globe-outline" size={14} color="#66BB6A" />
                         <Text style={styles.detailName}>{b.continent}</Text>
@@ -233,6 +233,18 @@ export default function PointsSummary() {
                         <Text style={styles.detailPts}>+{c.points}</Text>
                         <Ionicons name="chevron-forward" size={14} color={theme.colors.textLight} />
                       </TouchableOpacity>
+                    ))}
+                  </>
+                )}
+                {breakdown.continent_bonuses.filter((b: any) => !b.verified).length > 0 && (
+                  <>
+                    <Text style={styles.detailGroupTitle}>Continent Bonuses ({breakdown.summary.continent_total - (breakdown.summary.continent_verified || 0)} pts)</Text>
+                    {breakdown.continent_bonuses.filter((b: any) => !b.verified).map((b: any) => (
+                      <View key={b.continent} style={styles.detailRow}>
+                        <Ionicons name="globe-outline" size={14} color="#66BB6A" />
+                        <Text style={styles.detailName}>{b.continent}</Text>
+                        <Text style={styles.detailPts}>+{b.points}</Text>
+                      </View>
                     ))}
                   </>
                 )}
