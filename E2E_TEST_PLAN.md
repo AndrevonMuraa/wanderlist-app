@@ -1,17 +1,17 @@
-# WanderMark E2E Test Plan — Build 73
+# WanderMark E2E Test Plan — Build 74
 # Test credentials: test@wandermark.app / Test1234!
 # Premium test: testpro@wandermark.app / Test1234!
 #
 # Legend:
 #   PASSED        = Tested and passed in previous build
 #   FIX APPLIED   = Bug found, fix in code — MUST verify in new build
+#   NEW           = New feature, never tested
 #   UNTESTED      = Not yet tested
 
 ---
 
 ## PRE-TEST: App Launch
-- [ ] FIX APPLIED: Splash screen shows "WanderMark" with correct app icon (was "Wanderlist")
-- [ ] FIX APPLIED: Loading indicator is teal (was purple)
+- [ ] PASSED: Splash screen shows "WanderMark" with correct app icon
 - [ ] App opens without crash
 - [ ] Login with test@wandermark.app / Test1234!
 
@@ -20,197 +20,172 @@
 ## 1. EXPLORE TAB
 
 ### 1.1 Continents Page
-- [ ] 5 continent cards, Oceania shows "& other island paradises"
-- [ ] Photo of the Week with "Week XX" badge
-- [ ] FIX APPLIED: Continent stats box now has two rows — totals + user progress
+- [ ] PASSED: 5 continent cards, Oceania shows "& other island paradises"
 
-### 1.2 Explore Countries
-- [ ] 20 countries per continent with flags
-- [ ] FIX APPLIED: "destinations" terminology (was "countries")
+### 1.2 Explore Destinations (was "Explore Countries")
+- [ ] FIX APPLIED: Header says "Explore Destinations" (was "Explore Countries")
+- [ ] NEW: "Your Progress" dashboard with 3 progress bars (Destinations/Landmarks/Points) + earned pts badge
+- [ ] NEW: Section subtitles show points ("20 destinations • 300 landmarks • 4,500 pts")
+- [ ] Progress dashboard updates dynamically after visits change
 
 ### 1.3 Landmarks List
-- [ ] 15 landmarks per country (10 official + 5 premium)
-- [ ] FIX APPLIED: Community Highlights removed
-- [ ] FIX APPLIED: Search shows 1500 landmarks (was 1000)
-- [ ] FIX APPLIED: Search filter pills inside card (was floating)
+- [ ] PASSED: 15 landmarks per country (10 official + 5 premium)
+- [ ] PASSED: Search shows 1500 landmarks
 
 ### 1.4 Landmark Detail
-- [ ] FIX APPLIED: Oceania shows "Oceania & Island Paradises"
-- [ ] Community Photos section visible
-- [ ] FIX APPLIED: Upvote heart turns red for all users (was premium-only)
-
-### 1.5 Landmark Content Verification
-- [ ] FIX APPLIED: No activity names (cruise, balloon, safari, diving)
-- [ ] FIX APPLIED: No near-duplicates (Kilimanjaro Summit, Shipwreck Beach x2)
-- [ ] FIX APPLIED: "Northern Lights" (was "Northern Lights in Lapland")
+- [ ] PASSED: Community Photos section visible
+- [ ] PASSED: Upvote heart turns red for all users
 
 ---
 
 ## 2. MY JOURNEY TAB
 
 ### 2.1 Stats Section
-- [ ] FIX APPLIED: Rank and Leaderboard boxes swapped (visual balance)
-- [ ] All 6 stat boxes tappable, correct icons (globe-outline/flag/location/star)
+- [ ] All 6 stat boxes tappable, correct icons
+- [ ] FIX APPLIED: Landmark icon is coral (#E87850) — matches stats box
 
-### 2.2 Share Journey Card
-- [ ] FIX APPLIED: Text not cut off (ScrollView added)
-- [ ] FIX APPLIED: No decorative border lines
-- [ ] FIX APPLIED: Profile page uses same ShareJourneyCard (was crashing with ShareStatsCard)
+### 2.2 My Landmark Visits (redesigned)
+- [ ] NEW: List layout with thumbnails (was grid with camera icons)
+- [ ] NEW: Stats box with colored icons (Visits/Verified/Points) — dynamically calculated
+- [ ] NEW: Sort chips: Recent | Country | Points
+- [ ] NEW: Animated card fade-in
+- [ ] NEW: Verified badge overlay on thumbnail
+- [ ] NEW: "Start Exploring" CTA on empty state
+- [ ] Header says "Landmarks" (was "My Landmark Vi...")
+- [ ] FIX APPLIED: Thumbnail shows actual photo (was always camera icon)
+- [ ] FIX APPLIED: Verified count is dynamic (was showing stale stored value)
 
-### 2.3 Overall Progress
-- [ ] FIX APPLIED: Three progress wheels — Continents (X/5), Destinations (X/100), Landmarks (X/1500)
+### 2.3 My Country Visits → "Destinations" (redesigned)
+- [ ] NEW: List layout with flag thumbnails (was broken grid)
+- [ ] NEW: Stats box with colored icons (Visited/Photos/Points)
+- [ ] NEW: Sort chips: Recent | Continent | Points
+- [ ] NEW: Animated card fade-in
+- [ ] Header says "Destinations"
 
-### 2.4 Continental Progress
-- [ ] FIX APPLIED: Fixed order — Europe, Asia, Africa, Americas, Oceania++
-- [ ] FIX APPLIED: "Oceania++" label
+### 2.4 Overall Progress
+- [ ] PASSED: Three progress wheels — Continents, Destinations, Landmarks
 
-### 2.5 Navigation Rows
-- [ ] FIX APPLIED: My Landmark Visits + Points Summary use UniversalHeader with logo
-- [ ] Next Rank tappable → /ranks
+### 2.5 Next Rank
+- [ ] FIX APPLIED: Says "more verified points needed" (was "more points needed")
+- [ ] Tappable → navigates to /ranks
 
-### 2.6 Points Consistency (CRITICAL)
-- [ ] FIX APPLIED: All pages show same total points (was inconsistent across Journey/Profile/Leaderboard)
-- [ ] FIX APPLIED: Points recalculated from actual data (single source of truth)
-- [ ] FIX APPLIED: Country visits all worth 50 pts (was 20 for auto, 50 for manual)
+### 2.6 Points Summary (major upgrade)
+- [ ] NEW: Tappable Verified/Unverified rows with chevron → expand to show itemized breakdown
+- [ ] NEW: Each landmark in breakdown is tappable → navigates to visit-detail
+- [ ] NEW: Each destination visit is tappable → navigates to country-visit-detail
+- [ ] NEW: Continent bonuses shown in verified breakdown
+- [ ] NEW: "Earning Potential" section replacing "Your Journey" — shows pts/max with progress bars
+- [ ] NEW: Landmarks row tappable → my-landmark-visits
+- [ ] NEW: Destinations row tappable → my-country-visits
+- [ ] NEW: "Next Milestone" card with next rank + pts needed
+- [ ] Back navigation from visit-detail returns to Points Summary
+
+### 2.7 Points Consistency (CRITICAL)
+- [ ] FIX APPLIED: All pages show same total points
+- [ ] FIX APPLIED: /api/progress includes continent bonuses
+- [ ] FIX APPLIED: Default values synced (0, not 10/15)
+- [ ] Run recalculate_points.py on Render Shell before testing
+
+### 2.8 Custom Visits
+- [ ] Custom Visits page loads without crash
+- [ ] NEW: Country name autocomplete with 100 DB destinations
+- [ ] NEW: Green "Linked to X" badge when DB country matched
+- [ ] Free text still works for non-DB countries
 
 ---
 
 ## 3. VISIT CREATION & MANAGEMENT
 
 ### 3.1 Create Landmark Visit
-- [ ] FIX APPLIED: "Add Photo" (library) is primary, "Take Photo" secondary
-- [ ] FIX APPLIED: "Add Photo" in dialog opens photo picker (was no-op)
-- [ ] FIX APPLIED: "Record Without Photo?" mentions friends vs global leaderboard
-- [ ] FIX APPLIED: Keyboard Done bar on diary (iOS InputAccessoryView)
+- [ ] PASSED: "Add Photo" is primary, "Take Photo" secondary
+- [ ] PASSED: Keyboard Done bar on diary
 
-### 3.2 Visit Detail
-- [ ] FIX APPLIED: Photo with rounded corners + margin (not bleeding into header)
-- [ ] FIX APPLIED: Date field removed
-- [ ] FIX APPLIED: Manage Visit replaced with inline [+ Add] thumbnail + separate Delete button
-- [ ] FIX APPLIED: Edit Diary uses custom modal (was purple Paper Dialog)
-- [ ] FIX APPLIED: Delete navigates to Journey tab (was stale safeGoBack)
-- [ ] FIX APPLIED: Delete warning mentions comments, likes
+### 3.2 Visit Detail (major upgrade)
+- [ ] NEW: "Add Photo to Verify" CTA for visits without photos (teal dashed box)
+- [ ] NEW: Long-press thumbnail to remove individual photo
+- [ ] NEW: Warning when removing last photo ("will change to unverified")
+- [ ] NEW: Info card shows shield icon — orange "Unverified" / green "Verified"
+- [ ] NEW: "Add a photo to earn verified points" hint for unverified
+- [ ] FIX APPLIED: "+Add" button hidden for basic users at photo limit (1)
+- [ ] FIX APPLIED: Backend recalculates points after photo changes
+- [ ] Verified↔Unverified transitions correctly when photos added/removed
 
-### 3.3 Create Country Visit
-- [ ] FIX APPLIED: "Record Without Photo?" dialog with "Add Photo" picker
-- [ ] Country visit detail: Date field removed
-- [ ] FIX APPLIED: Edit Diary uses custom modal (was purple Paper Dialog)
+### 3.3 Country Visit Detail
+- [ ] NEW: "Your Custom Landmarks" section (PRO) — shows linked custom visit landmarks
+- [ ] Custom landmarks tappable → custom-visit-detail
+- [ ] Section only appears when custom landmarks exist for this country
 
-### 3.4 Country Visit Detail (UNTESTED)
-- [ ] FIX APPLIED: "Visited" button → navigates to visit detail (was "Tap to remove")
-- [ ] Delete blocked if landmark visits exist
-- [ ] FIX APPLIED: Delete uses recalculate_user_points (was incremental)
-
-### 3.5 Visit Deletion — Country Cleanup (CRITICAL)
-- [ ] FIX APPLIED: Deleting last landmark removes auto country visit
-- [ ] FIX APPLIED: Continent card shows correct count after deletion
-- [ ] FIX APPLIED: Journey + Explore refresh via useFocusEffect
-
-### 3.6 Custom Visits — PRO (test with testpro@wandermark.app)
-- [ ] FIX APPLIED: Manage Visit redesigned (inline add + separate delete)
-- [ ] FIX APPLIED: Delete navigates to Journey (was safeGoBack)
-- [ ] FIX APPLIED: Keyboard Done bar + keyboardShouldPersistTaps
+### 3.4 Privacy (CRITICAL)
+- [ ] FIX APPLIED: Private visits return 404 for non-owners
+- [ ] FIX APPLIED: Friends-only visits check friendship status
+- [ ] FIX APPLIED: Diary hidden from non-owners when share_diary=false
+- [ ] Test with test2@wandermark.app viewing test@wandermark.app's private visit
 
 ---
 
-## 4. CONTENT FLOW (UNTESTED)
+## 4. SOCIAL TAB
 
-### 4.1-4.7 Full chain test
-- [ ] Create visit with photo + diary → verify on all pages
-- [ ] Update visit → verify changes propagate
-- [ ] Delete visit → verify full cleanup
-- [ ] Test from second user perspective (test2@wandermark.app)
+### 4.1 Feed
+- [ ] FIX APPLIED: Community tab is default (was Friends)
+- [ ] FIX APPLIED: Community tab placed first (left)
+
+### 4.2 Messages
+- [ ] FIX APPLIED: "View All" sends basic users to /subscription (was showing old upgrade modal)
+
+### 4.3 Leaderboard (major upgrade)
+- [ ] NEW: Top 10 shown in standard view (was showing all 100)
+- [ ] NEW: "Your Position" card for users ranked #11+ with gap to #10
+- [ ] NEW: "Show Full Rankings" button expands to compact Top 100
+- [ ] NEW: Compact mode: half-height rows, no rank badges
+- [ ] NEW: User's own row highlighted with teal background
+- [ ] NEW: "Show Less" collapses back to Top 10
+- [ ] NEW: Expanded state resets when switching Global/Friends/category
+- [ ] FIX APPLIED: Rank always based on verified_points (was using total on Friends)
+- [ ] FIX APPLIED: "Destinations" label (was "Countries")
 
 ---
 
-## 5. POINTS & RANKING
+## 5. PROFILE TAB
 
-### 5.1 Points Summary
-- [ ] FIX APPLIED: Uses calculated values (single source of truth)
-- [ ] FIX APPLIED: "How Points Work" — correct icons, no duplicates
-- [ ] FIX APPLIED: "Your Journey" section with progress bars (was "Your Activity" with 4 boxes)
-- [ ] FIX APPLIED: Unverified desc: "personal total only" (was "friends leaderboard only")
+### 5.1 Profile
+- [ ] FIX APPLIED: "Basic Traveler" (was "Free user")
+- [ ] FIX APPLIED: "Premium Traveler" (was "Pro user")
+- [ ] FIX APPLIED: Diamond icon teal #1E8A8A (was gold #C9A961)
+- [ ] NEW: Rank badge shows "X pts to {NextRank}" undertekst
+- [ ] Points stat tappable → Points Summary
+- [ ] Rank badge tappable → Ranks page
 
 ### 5.2 Ranks Page
-- [ ] FIX APPLIED: Hero text explains verified points
-- [ ] FIX APPLIED: Progress shows "X verified points"
-- [ ] FIX APPLIED: "Country Visit: +50 pts" (was "New Country Bonus: +20")
+- [ ] FIX APPLIED: No flash of "Newcomer" badge (hidden until loaded)
+- [ ] NEW: Next unlockable rank shows progress bar + "X pts to unlock • Y%"
 
-### 5.3 About Page
-- [ ] FIX APPLIED: "100 Destinations" (was "66 Countries")
-- [ ] FIX APPLIED: FAQ points system updated (no duplicates, correct values)
-- [ ] FIX APPLIED: "Dual Points System" section updated
-- [ ] FIX APPLIED: "destinations" throughout (was "countries")
+### 5.3 Subscription
+- [ ] NEW: "500 Premium Landmarks (12,500 extra pts)" — shows point value
 
----
-
-## 6. SOCIAL TAB (UNTESTED)
-
-### 6.1 Feed
-- [ ] FIX APPLIED: UniversalHeader + tabs below (was inside gradient)
-- [ ] FIX APPLIED: Community heart is tappable (was static View)
-- [ ] FIX APPLIED: Heart color: grey=0 likes, red=1+ likes
-
-### 6.2 Friends
-- [ ] FIX APPLIED: Keyboard stays open during search (keyboardShouldPersistTaps)
-- [ ] FIX APPLIED: returnKeyType="search"
-
-### 6.3 Leaderboard
-- [ ] Global: sorted by verified points
-- [ ] Friends: sorted by total points
-
-### 6.4 Messages
-- [ ] FIX APPLIED: No infinite loading (was stuck when user=null)
-- [ ] FIX APPLIED: UniversalHeader (was custom gradient)
+### 5.4 About
+- [ ] FIX APPLIED: Stats box spacing fixed (30,000+ not cut off)
 
 ---
 
-## 7. PROFILE TAB
-
-### 7.1 Profile
-- [ ] FIX APPLIED: Stats reordered — Continents > Countries > Landmarks > Points
-- [ ] FIX APPLIED: All 5 elements tappable (4 stats + rank badge)
-- [ ] FIX APPLIED: Icons consistent with Journey (coral landmarks, teal countries)
-- [ ] FIX APPLIED: Diamond icon gold (#C9A961) for Pro
-- [ ] FIX APPLIED: Edit Profile shows initials when no photo (was placeholder URL)
-- [ ] FIX APPLIED: Profile Banner removed
-
-### 7.2 Settings
-- [ ] FIX APPLIED: Clear Cache removed
-- [ ] FIX APPLIED: Weekly Digest + Daily Reminders removed, replaced with Social Activity
-- [ ] Change password works
-- [ ] Privacy controls intact
-
-### 7.3 About
-- [ ] FIX APPLIED: Copy email to clipboard (Privacy Policy + Terms of Service)
+## 6. TERMINOLOGY CONSISTENCY
+- [ ] FIX APPLIED: "Countries" → "Destinations" everywhere (i18n + hardcoded)
+- [ ] FIX APPLIED: "Free user" → "Basic Traveler"
+- [ ] FIX APPLIED: "Pro user" → "Premium Traveler"
+- [ ] Check: Leaderboard, Profile, Journey, Explore, About, Subscription
 
 ---
 
-## 8. SUBSCRIPTION (test with testpro@wandermark.app)
-- [ ] FIX APPLIED: "Rank Badges (20 ranks)" (was "Basic Badges up to 100 visits")
-- [ ] FIX APPLIED: Promo code box uses app theme colors (was dark navy/orange)
-- [ ] FIX APPLIED: Premium landmarks list shows "+ 495 more" with current examples
+## 7. BACKEND (auto-deployed via Render)
+- [ ] FIX APPLIED: /api/visits/{id} enforces visibility + strips diary
+- [ ] FIX APPLIED: /api/country-visits/{id} enforces visibility + strips diary
+- [ ] FIX APPLIED: /api/visits PUT recalculates points after photo changes
+- [ ] NEW: /api/points/breakdown returns itemized point sources
+- [ ] NEW: /api/user-created-visits/by-country/{id} returns linked custom landmarks
+- [ ] NEW: /api/countries/names returns lightweight autocomplete data
+- [ ] Custom visit creation auto-matches country_name to DB countries
 
 ---
-
-## 9. PHOTOS
-- [ ] FIX APPLIED: "By Year" tab removed from My Photos
-- [ ] FIX APPLIED: "Years" stat removed, replaced with "Photos | Destinations"
-
----
-
-## 10-12. ADMIN, EDGE CASES, LEGAL (UNTESTED)
-- [ ] Admin panel functions
-- [ ] Offline/error handling
-- [ ] Privacy Policy + Terms accessible with copy-to-clipboard email
-
----
-
-## PRODUCTION MIGRATION (after deploy):
-```
-cd scripts && python3 recalculate_points.py
-```
 
 ## BUILD INFO:
-- buildNumber: 73
-- No Render Shell commands needed (recalculate already run)
+- buildNumber: 74 (bump before build!)
+- Run on Render Shell: `cd scripts && python3 recalculate_points.py`
