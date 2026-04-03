@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from typing import List, Optional
 import os
 import uuid
+import asyncio
 from datetime import datetime, timezone
 
 from utils.db import db
@@ -70,7 +71,26 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
             "visited_countries": {"$addToSet": "$lm.country_name"}
         }}
     ]
-    visited_results = await db.visits.aggregate(visited_pipeline).to_list(10)
+    # Also fetch country visits and look up their continent
+    cv_pipeline = [
+        {"$match": {"user_id": current_user.user_id}},
+        {"$lookup": {
+            "from": "countries",
+            "localField": "country_id",
+            "foreignField": "country_id",
+            "as": "c",
+            "pipeline": [{"$project": {"_id": 0, "continent": 1, "name": 1}}]
+        }},
+        {"$unwind": {"path": "$c", "preserveNullAndEmptyArrays": False}},
+        {"$group": {
+            "_id": "$c.continent",
+            "visited_countries": {"$addToSet": "$c.name"}
+        }}
+    ]
+    visited_results, cv_results = await asyncio.gather(
+        db.visits.aggregate(visited_pipeline).to_list(10),
+        db.country_visits.aggregate(cv_pipeline).to_list(10)
+    )
 
     visited_by_continent: dict = {}
     for v in visited_results:
@@ -80,6 +100,13 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
         visited_by_continent[name]["visited_count"] += v["visited_count"]
         visited_by_continent[name]["visited_points"] += v["visited_points"]
         visited_by_continent[name]["visited_countries"].update(v["visited_countries"])
+    
+    # Merge country visits into continent stats
+    for cv in cv_results:
+        name = CONTINENT_MAP.get(cv["_id"], cv["_id"])
+        if name not in visited_by_continent:
+            visited_by_continent[name] = {"visited_count": 0, "visited_points": 0, "visited_countries": set()}
+        visited_by_continent[name]["visited_countries"].update(cv["visited_countries"])
 
     # Build result
     result = []

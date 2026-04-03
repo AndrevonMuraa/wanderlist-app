@@ -318,11 +318,10 @@ export default function ExploreCountriesScreen() {
     const totalVisited = sections.reduce((sum, section) => 
       sum + section.data.flat().reduce((visitedSum, country) => visitedSum + (country.visited || 0), 0), 0);
 
-    // User progress stats
-    const totalVisitedCountries = allCountries.filter(c => (c.visited || 0) > 0).length;
+    // User progress stats — count countries visited via landmarks OR country visits
+    const totalVisitedCountries = allCountries.filter(c => c.countryVisited).length;
     const totalEarnedPoints = allCountries.reduce((sum, country) => {
       const visitedLandmarks = country.visited || 0;
-      // Approximate: official = 10pts, premium = 25pts. Most are official.
       return sum + (visitedLandmarks * 10);
     }, 0);
 
