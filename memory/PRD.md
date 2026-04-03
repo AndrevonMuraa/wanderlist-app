@@ -26,6 +26,9 @@ Travel app for App Store. Social features, hybrid privacy, premium differentiati
 - Fixed Custom Visits crash: ProFeatureLock was imported as named export but is a default export (gave undefined → React crash)
 - Fixed Custom Visits onDismiss→onClose prop mismatch for ProFeatureLock
 
+### UI Improvements
+- Landmarks/[country] page: Upgraded stats box from simple "Your Progress X/15" to full Visited/Verified/Points design matching My Landmark Visits
+
 ## Key Changes (March 28-29, 2026)
 
 ### New Features

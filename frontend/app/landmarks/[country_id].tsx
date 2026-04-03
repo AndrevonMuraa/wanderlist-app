@@ -49,7 +49,7 @@ export default function LandmarksScreen() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
   const [showCountryVisitModal, setShowCountryVisitModal] = useState(false);
-  const [countryProgress, setCountryProgress] = useState<{visited: number; total: number; percentage: number} | null>(null);
+  const [countryProgress, setCountryProgress] = useState<{visited: number; total: number; percentage: number; verified: number; points: number} | null>(null);
   const [visitedLandmarkIds, setVisitedLandmarkIds] = useState<Set<string>>(new Set());
   const [isCountryVisited, setIsCountryVisited] = useState(false);
   const [countryVisitId, setCountryVisitId] = useState<string | null>(null);
@@ -127,11 +127,20 @@ export default function LandmarksScreen() {
     try {
       const token = await getToken();
       
-      const [landmarksResponse] = await Promise.all([
+      const [landmarksResponse, visitsResponse] = await Promise.all([
         fetch(`${BACKEND_URL}/api/landmarks?country_id=${country_id}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
+        fetch(`${BACKEND_URL}/api/visits`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
       ]);
+
+      let countryVisits: any[] = [];
+      if (visitsResponse.ok) {
+        const allVisits = await visitsResponse.json();
+        countryVisits = allVisits.filter((v: any) => v.landmark_id?.startsWith(country_id + '_'));
+      }
 
       if (landmarksResponse.ok) {
         const data = await landmarksResponse.json();
@@ -143,14 +152,19 @@ export default function LandmarksScreen() {
         );
         setVisitedLandmarkIds(visitedIds);
         
-        // Compute country progress locally from landmarks data
+        // Compute country progress with verified/points from visits data
         const totalLandmarks = data.length;
-        const visitedCount = data.filter((l: any) => l.is_visited).length;
+        const visitedCount = visitedIds.size;
+        const verifiedCount = countryVisits.filter((v: any) => v.verified).length;
+        const totalPoints = countryVisits.reduce((sum: number, v: any) => sum + (v.points_earned || 0), 0);
+        
         if (totalLandmarks > 0) {
           setCountryProgress({
             visited: visitedCount,
             total: totalLandmarks,
-            percentage: Math.round((visitedCount / totalLandmarks) * 1000) / 10
+            percentage: Math.round((visitedCount / totalLandmarks) * 1000) / 10,
+            verified: verifiedCount,
+            points: totalPoints,
           });
         }
       }
@@ -412,29 +426,43 @@ export default function LandmarksScreen() {
           <>
             {countryProgress ? (
               <Surface style={styles.progressHeader}>
-                <View style={styles.progressHeaderContent}>
-                  <View style={styles.progressHeaderTextRow}>
-                    <Text style={styles.progressHeaderTitle}>Your Progress</Text>
-                    <View style={styles.progressStatsRow}>
-                      <Text style={styles.progressStatsText}>
-                        {countryProgress.visited}/{countryProgress.total} landmarks
-                      </Text>
-                      {countryProgress.percentage === 100 && (
-                        <Ionicons name="checkmark-circle" size={20} color="#4CAF50" style={{ marginLeft: 6 }} />
-                      )}
+                {/* Stats Row */}
+                <View style={styles.countryStatsRow}>
+                  <View style={styles.countryStatItem}>
+                    <View style={[styles.countryStatIconWrap, { backgroundColor: '#E3F6FC' }]}>
+                      <Ionicons name="location" size={16} color={theme.colors.primary} />
                     </View>
+                    <Text style={styles.countryStatNumber}>{countryProgress.visited}<Text style={styles.countryStatMax}>/{countryProgress.total}</Text></Text>
+                    <Text style={styles.countryStatLabel}>Visited</Text>
                   </View>
-                  <ProgressBar
-                    percentage={countryProgress.percentage}
-                    height={8}
-                    showPercentage={false}
-                    color={countryProgress.percentage === 100 ? '#4CAF50' : theme.colors.primary}
-                    style={{ marginTop: theme.spacing.sm }}
-                  />
-                  {countryProgress.percentage === 100 && (
-                    <Text style={styles.congratsText}>All landmarks visited!</Text>
-                  )}
+                  <View style={styles.countryStatDivider} />
+                  <View style={styles.countryStatItem}>
+                    <View style={[styles.countryStatIconWrap, { backgroundColor: '#E8F5E9' }]}>
+                      <Ionicons name="shield-checkmark" size={16} color="#4CAF50" />
+                    </View>
+                    <Text style={[styles.countryStatNumber, { color: '#4CAF50' }]}>{countryProgress.verified}</Text>
+                    <Text style={styles.countryStatLabel}>Verified</Text>
+                  </View>
+                  <View style={styles.countryStatDivider} />
+                  <View style={styles.countryStatItem}>
+                    <View style={[styles.countryStatIconWrap, { backgroundColor: '#FFF3E0' }]}>
+                      <Ionicons name="star" size={16} color="#FFA726" />
+                    </View>
+                    <Text style={[styles.countryStatNumber, { color: '#FFA726' }]}>{countryProgress.points}</Text>
+                    <Text style={styles.countryStatLabel}>Points</Text>
+                  </View>
                 </View>
+                {/* Progress Bar */}
+                <ProgressBar
+                  percentage={countryProgress.percentage}
+                  height={8}
+                  showPercentage={false}
+                  color={countryProgress.percentage === 100 ? '#4CAF50' : theme.colors.primary}
+                  style={{ marginTop: theme.spacing.sm }}
+                />
+                {countryProgress.percentage === 100 && (
+                  <Text style={styles.congratsText}>All landmarks visited!</Text>
+                )}
               </Surface>
             ) : null}
 
@@ -712,28 +740,43 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
-  progressHeaderContent: {
-    width: '100%',
-  },
-  progressHeaderTextRow: {
+  countryStatsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacing.xs,
+    justifyContent: 'space-around',
   },
-  progressHeaderTitle: {
-    ...theme.typography.h3,
+  countryStatItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  countryStatIconWrap: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
+  },
+  countryStatNumber: {
+    fontSize: 18,
+    fontWeight: '800',
     color: theme.colors.text,
-    fontWeight: '700',
   },
-  progressStatsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  countryStatMax: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: theme.colors.textLight,
   },
-  progressStatsText: {
-    ...theme.typography.body,
+  countryStatLabel: {
+    fontSize: 11,
     color: theme.colors.textSecondary,
-    fontWeight: '600',
+    fontWeight: '500',
+    marginTop: 1,
+  },
+  countryStatDivider: {
+    width: 1,
+    height: 36,
+    backgroundColor: theme.colors.border,
   },
   congratsText: {
     ...theme.typography.body,
