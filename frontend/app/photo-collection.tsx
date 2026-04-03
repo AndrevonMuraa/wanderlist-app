@@ -56,7 +56,7 @@ interface PhotoCollection {
   };
 }
 
-type FilterTab = 'all' | 'country' | 'year' | 'type';
+type FilterTab = 'all' | 'country';
 
 // Country flag mapping - all 100 countries
 const countryFlags: Record<string, string> = {
@@ -163,14 +163,6 @@ export default function PhotoCollectionScreen() {
     }
   };
 
-  const getYear = (dateString: string) => {
-    try {
-      return new Date(dateString).getFullYear().toString();
-    } catch {
-      return '';
-    }
-  };
-
   const handlePhotoPress = (photo: Photo) => {
     setSelectedPhoto(photo);
     setFullscreenVisible(true);
@@ -193,7 +185,7 @@ export default function PhotoCollectionScreen() {
 
   // Group photos based on active tab
   const getGroupedPhotos = () => {
-    if (!collection) return [];
+    if (!collection || collection.photos.length === 0) return [];
 
     switch (activeTab) {
       case 'country':
@@ -209,44 +201,6 @@ export default function PhotoCollectionScreen() {
           icon: getCountryFlag(country),
           photos,
         }));
-
-      case 'year':
-        const byYear: { [key: string]: Photo[] } = {};
-        collection.photos.forEach(photo => {
-          const year = getYear(photo.visited_at || photo.created_at) || 'Unknown';
-          if (!byYear[year]) byYear[year] = [];
-          byYear[year].push(photo);
-        });
-        return Object.entries(byYear)
-          .sort(([a], [b]) => b.localeCompare(a))
-          .map(([year, photos]) => ({
-            title: year,
-            subtitle: `${photos.length} photo${photos.length > 1 ? 's' : ''}`,
-            icon: '📅',
-            photos,
-          }));
-
-      case 'type':
-        return [
-          {
-            title: 'Landmark Visits',
-            subtitle: `${collection.by_type.landmark} photos`,
-            icon: '🏛️',
-            photos: collection.photos.filter(p => p.visit_type === 'landmark'),
-          },
-          {
-            title: 'Country Visits',
-            subtitle: `${collection.by_type.country} photos`,
-            icon: '🌍',
-            photos: collection.photos.filter(p => p.visit_type === 'country'),
-          },
-          {
-            title: 'Custom Visits',
-            subtitle: `${collection.by_type.custom} photos`,
-            icon: '✨',
-            photos: collection.photos.filter(p => p.visit_type === 'custom'),
-          },
-        ].filter(group => group.photos.length > 0);
 
       default:
         return [{ title: '', subtitle: '', icon: '', photos: collection.photos }];
@@ -360,14 +314,14 @@ export default function PhotoCollectionScreen() {
 
             {/* Filter Tabs */}
             <View style={styles.tabsContainer}>
-              {(['all', 'country', 'type'] as FilterTab[]).map((tab) => (
+              {(['all', 'country'] as FilterTab[]).map((tab) => (
                 <TouchableOpacity
                   key={tab}
                   style={[styles.tab, activeTab === tab && styles.tabActive]}
                   onPress={() => setActiveTab(tab)}
                 >
                   <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
-                    {tab === 'all' ? 'All' : tab === 'country' ? 'By Country' : 'By Type'}
+                    {tab === 'all' ? 'All' : 'By Country'}
                   </Text>
                 </TouchableOpacity>
               ))}
