@@ -117,12 +117,13 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
         }}
     ]
     
-    # Also sum country visit points
+    # Also sum country visit points and get visited country_ids
     country_visits_pipeline = [
         {"$match": {"user_id": current_user.user_id}},
         {"$group": {
             "_id": None,
-            "total_points": {"$sum": {"$ifNull": ["$points_earned", 0]}}
+            "total_points": {"$sum": {"$ifNull": ["$points_earned", 0]}},
+            "country_ids": {"$addToSet": "$country_id"}
         }}
     ]
     
@@ -133,27 +134,39 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
     visits_result, cv_result, (all_countries, lm_map, total_landmarks), user_doc = await asyncio.gather(visits_task, country_visits_task, geo_task, user_task)
     
     country_visit_points = cv_result[0]["total_points"] if cv_result else 0
+    country_visit_ids = set(cv_result[0].get("country_ids", [])) if cv_result else set()
     verified_points = user_doc.get("leaderboard_points", 0) if user_doc else 0
     
     if not visits_result:
-        # No visits — build empty progress from cached data
+        # No landmark visits — build progress from cached data + country visits
         continental_progress = {}
         country_progress = {}
         for country in all_countries:
             continent = country["continent"]
+            country_id = country["country_id"]
+            has_country_visit = country_id in country_visit_ids
             if continent not in continental_progress:
                 continental_progress[continent] = {"visited": 0, "total": 0, "percentage": 0}
             continental_progress[continent]["total"] += 1
-            country_progress[country["country_id"]] = {
+            if has_country_visit:
+                continental_progress[continent]["visited"] += 1
+            country_progress[country_id] = {
                 "country_name": country["name"],
                 "continent": continent,
                 "visited": 0,
-                "total": lm_map.get(country["country_id"], {}).get("count", 0),
+                "total": lm_map.get(country_id, {}).get("count", 0),
                 "percentage": 0
             }
+        for continent_data in continental_progress.values():
+            if continent_data["total"] > 0:
+                continent_data["percentage"] = round(
+                    continent_data["visited"] / continent_data["total"] * 100, 1
+                )
+        continents_with_visits = sum(1 for c in continental_progress.values() if c["visited"] > 0)
+        total_with_bonus = country_visit_points + (continents_with_visits * 50)
         return {
             "overall": {"visited": 0, "total": total_landmarks, "percentage": 0},
-            "totalPoints": country_visit_points,
+            "totalPoints": total_with_bonus,
             "verifiedPoints": verified_points,
             "continents": continental_progress,
             "countries": country_progress
@@ -174,6 +187,9 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
         
         total = stats["count"]
         visited = sum(1 for lid in stats.get("landmark_ids", []) if lid in visited_landmark_ids)
+        # Country is "visited" if user has landmarks there OR a country_visit
+        has_country_visit = country_id in country_visit_ids
+        is_visited = visited > 0 or has_country_visit
         percentage = round((visited / total * 100) if total > 0 else 0, 1)
         
         country_progress[country_id] = {
@@ -187,7 +203,7 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
         if continent not in continental_progress:
             continental_progress[continent] = {"visited": 0, "total": 0, "percentage": 0}
         continental_progress[continent]["total"] += 1
-        if visited > 0:
+        if is_visited:
             continental_progress[continent]["visited"] += 1
     
     for continent_data in continental_progress.values():
