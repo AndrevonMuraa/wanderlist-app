@@ -12,7 +12,7 @@ import { useAuth } from '../contexts/AuthContext';
 import theme from '../styles/theme';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 import AddUserCreatedVisitModal from '../components/AddUserCreatedVisitModal';
-import { ProFeatureLock } from '../components/ProFeatureLock';
+import ProFeatureLock from '../components/ProFeatureLock';
 
 const { colors } = theme;
 
@@ -179,7 +179,7 @@ export default function CustomVisitsScreen() {
 
       <ProFeatureLock
         visible={showProLock}
-        onDismiss={() => setShowProLock(false)}
+        onClose={() => setShowProLock(false)}
         feature="custom_visits"
       />
     </View>

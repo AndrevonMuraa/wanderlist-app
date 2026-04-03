@@ -8,7 +8,7 @@ Travel app for App Store. Social features, hybrid privacy, premium differentiati
 - **Backend**: FastAPI / MongoDB Atlas
 - **Hosting**: Render (backend), EAS Build (mobile)
 
-## Current State (March 2026)
+## Current State (April 2026)
 - 100 destinations, 1,500 landmarks, 20 ranks, 30+ badges
 - BuildNumber: 74
 
@@ -18,6 +18,13 @@ Travel app for App Store. Social features, hybrid privacy, premium differentiati
 - Diamond: teal #1E8A8A. Landmark: coral #E87850
 - Custom visits: 0 points, optional country_id linking
 - Privacy: visit detail enforces visibility + strips diary for non-owners
+
+## Key Changes (April 3, 2026)
+
+### Bug Fixes
+- Continent bonuses now show under correct section (Verified/Unverified) in Points Summary based on actual verification status
+- Fixed Custom Visits crash: ProFeatureLock was imported as named export but is a default export (gave undefined → React crash)
+- Fixed Custom Visits onDismiss→onClose prop mismatch for ProFeatureLock
 
 ## Key Changes (March 28-29, 2026)
 
