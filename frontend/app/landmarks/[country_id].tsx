@@ -14,7 +14,6 @@ import UpgradeModal from '../../components/UpgradeModal';
 import ProFeatureLock from '../../components/ProFeatureLock';
 import { useSubscription } from '../../hooks/useSubscription';
 import { BACKEND_URL } from '../../utils/config';
-import { ProgressBar } from '../../components/ProgressBar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
 import { AddCountryVisitModal } from '../../components/AddCountryVisitModal';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
@@ -426,40 +425,53 @@ export default function LandmarksScreen() {
           <>
             {countryProgress ? (
               <Surface style={styles.progressHeader}>
-                {/* Stats Row */}
-                <View style={styles.countryStatsRow}>
-                  <View style={styles.countryStatItem}>
-                    <View style={[styles.countryStatIconWrap, { backgroundColor: '#E3F6FC' }]}>
-                      <Ionicons name="location" size={16} color={theme.colors.primary} />
-                    </View>
-                    <Text style={styles.countryStatNumber}>{countryProgress.visited}<Text style={styles.countryStatMax}>/{countryProgress.total}</Text></Text>
-                    <Text style={styles.countryStatLabel}>Visited</Text>
-                  </View>
-                  <View style={styles.countryStatDivider} />
-                  <View style={styles.countryStatItem}>
-                    <View style={[styles.countryStatIconWrap, { backgroundColor: '#E8F5E9' }]}>
-                      <Ionicons name="shield-checkmark" size={16} color="#4CAF50" />
-                    </View>
-                    <Text style={[styles.countryStatNumber, { color: '#4CAF50' }]}>{countryProgress.verified}</Text>
-                    <Text style={styles.countryStatLabel}>Verified</Text>
-                  </View>
-                  <View style={styles.countryStatDivider} />
-                  <View style={styles.countryStatItem}>
-                    <View style={[styles.countryStatIconWrap, { backgroundColor: '#FFF3E0' }]}>
-                      <Ionicons name="star" size={16} color="#FFA726" />
-                    </View>
-                    <Text style={[styles.countryStatNumber, { color: '#FFA726' }]}>{countryProgress.points}</Text>
-                    <Text style={styles.countryStatLabel}>Points</Text>
+                <View style={styles.progressTitleRow}>
+                  <Text style={styles.progressTitle}>Your Progress</Text>
+                  <View style={styles.progressPointsBadge}>
+                    <Ionicons name="star" size={14} color="#FFD700" />
+                    <Text style={styles.progressPointsText}>{countryProgress.points} pts</Text>
                   </View>
                 </View>
-                {/* Progress Bar */}
-                <ProgressBar
-                  percentage={countryProgress.percentage}
-                  height={8}
-                  showPercentage={false}
-                  color={countryProgress.percentage === 100 ? '#4CAF50' : theme.colors.primary}
-                  style={{ marginTop: theme.spacing.sm }}
-                />
+
+                <View style={styles.progressRow}>
+                  <Ionicons name="location" size={16} color="#E87850" />
+                  <View style={styles.progressBarContent}>
+                    <View style={styles.progressLabelRow}>
+                      <Text style={styles.progressLabel}>{countryProgress.visited}/{countryProgress.total} Landmarks</Text>
+                      <Text style={styles.progressPct}>{countryProgress.percentage}%</Text>
+                    </View>
+                    <View style={styles.progressBarBg}>
+                      <View style={[styles.progressBarFill, { width: `${Math.min(100, countryProgress.percentage)}%`, backgroundColor: '#E87850' }]} />
+                    </View>
+                  </View>
+                </View>
+
+                <View style={styles.progressRow}>
+                  <Ionicons name="shield-checkmark" size={16} color="#4CAF50" />
+                  <View style={styles.progressBarContent}>
+                    <View style={styles.progressLabelRow}>
+                      <Text style={styles.progressLabel}>{countryProgress.verified}/{countryProgress.visited} Verified</Text>
+                      <Text style={styles.progressPct}>{countryProgress.visited > 0 ? Math.round((countryProgress.verified / countryProgress.visited) * 100) : 0}%</Text>
+                    </View>
+                    <View style={styles.progressBarBg}>
+                      <View style={[styles.progressBarFill, { width: `${countryProgress.visited > 0 ? Math.min(100, (countryProgress.verified / countryProgress.visited) * 100) : 0}%`, backgroundColor: '#4CAF50' }]} />
+                    </View>
+                  </View>
+                </View>
+
+                <View style={styles.progressRow}>
+                  <Ionicons name="star" size={16} color="#FFA726" />
+                  <View style={styles.progressBarContent}>
+                    <View style={styles.progressLabelRow}>
+                      <Text style={styles.progressLabel}>{countryProgress.points}/{countryProgress.total * 10} Points</Text>
+                      <Text style={styles.progressPct}>{countryProgress.total > 0 ? ((countryProgress.points / (countryProgress.total * 10)) * 100).toFixed(1) : 0}%</Text>
+                    </View>
+                    <View style={styles.progressBarBg}>
+                      <View style={[styles.progressBarFill, { width: `${countryProgress.total > 0 ? Math.min(100, (countryProgress.points / (countryProgress.total * 10)) * 100) : 0}%`, backgroundColor: '#FFA726' }]} />
+                    </View>
+                  </View>
+                </View>
+
                 {countryProgress.percentage === 100 && (
                   <Text style={styles.congratsText}>All landmarks visited!</Text>
                 )}
@@ -740,43 +752,66 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
   },
-  countryStatsRow: {
+  progressTitleRow: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    marginBottom: theme.spacing.sm,
   },
-  countryStatItem: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  countryStatIconWrap: {
-    width: 32,
-    height: 32,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 4,
-  },
-  countryStatNumber: {
-    fontSize: 18,
-    fontWeight: '800',
+  progressTitle: {
+    fontSize: 17,
+    fontWeight: '700',
     color: theme.colors.text,
   },
-  countryStatMax: {
+  progressPointsBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#FFF8E1',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  progressPointsText: {
     fontSize: 13,
-    fontWeight: '500',
+    fontWeight: '700',
+    color: '#FFA726',
+  },
+  progressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingVertical: 6,
+  },
+  progressBarContent: {
+    flex: 1,
+  },
+  progressLabelRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  progressLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+  progressPct: {
+    fontSize: 11,
+    fontWeight: '600',
     color: theme.colors.textLight,
   },
-  countryStatLabel: {
-    fontSize: 11,
-    color: theme.colors.textSecondary,
-    fontWeight: '500',
-    marginTop: 1,
+  progressBarBg: {
+    height: 6,
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: 3,
+    overflow: 'hidden',
   },
-  countryStatDivider: {
-    width: 1,
-    height: 36,
-    backgroundColor: theme.colors.border,
+  progressBarFill: {
+    height: 6,
+    borderRadius: 3,
+    minWidth: 2,
   },
   congratsText: {
     ...theme.typography.body,
