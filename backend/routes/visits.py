@@ -666,7 +666,17 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
     ).sort("visited_at", -1).to_list(1000)
     
     visits, country_visits = await asyncio.gather(visits_task, cv_task)
-    
+
+    # Look up actual country_ids from landmarks collection first (needed everywhere)
+    all_lm_ids = [v.get("landmark_id") for v in visits if v.get("landmark_id")]
+    landmark_country_map = {}
+    if all_lm_ids:
+        lm_docs = await db.landmarks.find(
+            {"landmark_id": {"$in": all_lm_ids}},
+            {"_id": 0, "landmark_id": 1, "country_id": 1}
+        ).to_list(10000)
+        landmark_country_map = {doc["landmark_id"]: doc["country_id"] for doc in lm_docs}
+
     landmarks = []
     for v in visits:
         landmarks.append({
@@ -677,28 +687,28 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
             "verified": v.get("verified", False),
         })
     
+    # Build set of country_ids with verified landmarks
+    verified_lm_by_country = set()
+    for v in visits:
+        if v.get("verified"):
+            cid = landmark_country_map.get(v.get("landmark_id"))
+            if cid:
+                verified_lm_by_country.add(cid)
+    
     countries = []
     for cv in country_visits:
         has_photos = len(cv.get("photos", []) or []) > 0
+        cv_country_id = cv.get("country_id", "")
+        has_verified_landmark = cv_country_id in verified_lm_by_country
         countries.append({
             "country_visit_id": cv.get("country_visit_id"),
             "name": cv.get("country_name", "Unknown"),
             "points": cv.get("points_earned", 0),
             "source": cv.get("source", "manual"),
-            "verified": has_photos,
+            "verified": has_photos or has_verified_landmark,
         })
     
     # Calculate continent bonuses from visited countries
-    # Look up actual country_ids from landmarks collection (don't parse from landmark_id string)
-    landmark_ids = [v.get("landmark_id") for v in visits if v.get("landmark_id")]
-    landmark_country_map = {}
-    if landmark_ids:
-        lm_docs = await db.landmarks.find(
-            {"landmark_id": {"$in": landmark_ids}},
-            {"_id": 0, "landmark_id": 1, "country_id": 1}
-        ).to_list(10000)
-        landmark_country_map = {doc["landmark_id"]: doc["country_id"] for doc in lm_docs}
-    
     country_ids_from_landmarks = set()
     verified_country_ids = set()
     for v in visits:
