@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Image, Dimensions, Platform, TouchableOpacity, Alert, TextInput, ActivityIndicator, Modal as RNModal } from 'react-native';
+import { View, StyleSheet, ScrollView, Image, Dimensions, Platform, TouchableOpacity, Alert, TextInput, ActivityIndicator, Modal as RNModal, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { Text, Surface, Portal, Dialog, Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -562,43 +562,53 @@ export default function VisitDetailScreen() {
         transparent={true}
         onRequestClose={() => setShowEditDiaryDialog(false)}
       >
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', padding: 20 }}>
-          <View style={{ backgroundColor: theme.colors.surface, borderRadius: 20, padding: 20, maxHeight: '80%' }}>
-            <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, marginBottom: 16, textAlign: 'center' }}>Edit Diary</Text>
-            <TextInput
-              style={{
-                borderWidth: 1,
-                borderColor: theme.colors.border,
-                borderRadius: 12,
-                padding: 14,
-                fontSize: 15,
-                minHeight: 150,
-                color: theme.colors.text,
-                textAlignVertical: 'top',
-                backgroundColor: theme.colors.background,
-              }}
-              value={editDiary}
-              onChangeText={setEditDiary}
-              placeholder="Write about your experience..."
-              multiline
-              numberOfLines={8}
-              textAlignVertical="top"
-              inputAccessoryViewID="keyboard-done-bar"
-            />
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 12, marginTop: 16 }}>
-              <TouchableOpacity onPress={() => setShowEditDiaryDialog(false)} style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
-                <Text style={{ fontSize: 15, color: theme.colors.textSecondary }}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                onPress={handleSaveDiary}
-                disabled={saving}
-                style={{ backgroundColor: theme.colors.primary, paddingHorizontal: 24, paddingVertical: 10, borderRadius: 10 }}
-              >
-                <Text style={{ fontSize: 15, fontWeight: '600', color: '#fff' }}>{saving ? 'Saving...' : 'Save'}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <TouchableOpacity 
+            style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}
+            activeOpacity={1}
+            onPress={() => Keyboard.dismiss()}
+          >
+            <TouchableOpacity activeOpacity={1} onPress={() => {}}>
+              <View style={{ backgroundColor: theme.colors.surface, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, paddingBottom: Platform.OS === 'ios' ? 34 : 20 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                  <TouchableOpacity onPress={() => { Keyboard.dismiss(); setShowEditDiaryDialog(false); }}>
+                    <Text style={{ fontSize: 15, color: theme.colors.textSecondary }}>Cancel</Text>
+                  </TouchableOpacity>
+                  <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text }}>Edit Diary</Text>
+                  <TouchableOpacity 
+                    onPress={() => { Keyboard.dismiss(); handleSaveDiary(); }}
+                    disabled={saving}
+                  >
+                    <Text style={{ fontSize: 15, fontWeight: '600', color: theme.colors.primary }}>{saving ? 'Saving...' : 'Save'}</Text>
+                  </TouchableOpacity>
+                </View>
+                <TextInput
+                  style={{
+                    borderWidth: 1,
+                    borderColor: theme.colors.border,
+                    borderRadius: 12,
+                    padding: 14,
+                    fontSize: 15,
+                    minHeight: 150,
+                    maxHeight: 250,
+                    color: theme.colors.text,
+                    textAlignVertical: 'top',
+                    backgroundColor: theme.colors.background,
+                  }}
+                  value={editDiary}
+                  onChangeText={setEditDiary}
+                  placeholder="Write about your experience..."
+                  multiline
+                  numberOfLines={8}
+                  textAlignVertical="top"
+                />
+              </View>
+            </TouchableOpacity>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
       </RNModal>
 
       {/* Delete Dialog */}

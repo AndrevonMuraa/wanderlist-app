@@ -207,7 +207,7 @@ export default function MyCountryVisitsScreen() {
   }, [visits, sortBy]);
 
   const totalPoints = visits.reduce((sum, v) => sum + (v.points_earned || 0), 0);
-  const totalPhotos = visits.reduce((sum, v) => sum + (v.photos?.length || 0), 0);
+  const verifiedCount = visits.filter(v => (v.photos?.length || 0) > 0).length;
 
   const SortChip = ({ label, value, icon }: { label: string; value: SortType; icon: keyof typeof Ionicons.glyphMap }) => (
     <TouchableOpacity
@@ -264,11 +264,11 @@ export default function MyCountryVisitsScreen() {
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
-          <View style={[styles.statIconWrap, { backgroundColor: '#FCE4EC' }]}>
-            <Ionicons name="images" size={16} color="#E87850" />
+          <View style={[styles.statIconWrap, { backgroundColor: '#E8F5E9' }]}>
+            <Ionicons name="shield-checkmark" size={16} color="#4CAF50" />
           </View>
-          <Text style={[styles.statNumber, { color: '#E87850' }]}>{totalPhotos}</Text>
-          <Text style={styles.statLabel}>Photos</Text>
+          <Text style={[styles.statNumber, { color: '#4CAF50' }]}>{verifiedCount}</Text>
+          <Text style={styles.statLabel}>Verified</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>

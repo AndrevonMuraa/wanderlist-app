@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, Image, TouchableOpacity,
   Dimensions, Platform, ActivityIndicator, FlatList, Animated,
-  Alert, TextInput, KeyboardAvoidingView,
+  Alert, TextInput, KeyboardAvoidingView, Keyboard, Modal as RNModal,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -433,27 +433,49 @@ export default function CustomVisitDetailScreen() {
       </Portal>
 
       {/* Edit diary dialog */}
-      <Portal>
-        <Dialog visible={showEditDiaryDialog} onDismiss={() => setShowEditDiaryDialog(false)}>
-          <Dialog.Title>Edit Diary</Dialog.Title>
-          <Dialog.Content>
-            <TextInput
-              style={styles.diaryInput}
-              value={editDiary}
-              onChangeText={setEditDiary}
-              placeholder="Write about your experience..."
-              multiline
-              numberOfLines={6}
-              textAlignVertical="top"
-              inputAccessoryViewID="keyboard-done-bar"
-            />
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => setShowEditDiaryDialog(false)}>Cancel</Button>
-            <Button onPress={handleSaveDiary} loading={saving}>Save</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <RNModal
+        visible={showEditDiaryDialog}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowEditDiaryDialog(false)}
+      >
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <TouchableOpacity 
+            style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}
+            activeOpacity={1}
+            onPress={() => Keyboard.dismiss()}
+          >
+            <TouchableOpacity activeOpacity={1} onPress={() => {}}>
+              <View style={{ backgroundColor: theme.colors.surface, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, paddingBottom: Platform.OS === 'ios' ? 34 : 20 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                  <TouchableOpacity onPress={() => { Keyboard.dismiss(); setShowEditDiaryDialog(false); }}>
+                    <Text style={{ fontSize: 15, color: theme.colors.textSecondary }}>Cancel</Text>
+                  </TouchableOpacity>
+                  <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text }}>Edit Diary</Text>
+                  <TouchableOpacity 
+                    onPress={() => { Keyboard.dismiss(); handleSaveDiary(); }}
+                    disabled={saving}
+                  >
+                    <Text style={{ fontSize: 15, fontWeight: '600', color: theme.colors.primary }}>{saving ? 'Saving...' : 'Save'}</Text>
+                  </TouchableOpacity>
+                </View>
+                <TextInput
+                  style={[styles.diaryInput, { maxHeight: 250 }]}
+                  value={editDiary}
+                  onChangeText={setEditDiary}
+                  placeholder="Write about your experience..."
+                  multiline
+                  numberOfLines={6}
+                  textAlignVertical="top"
+                />
+              </View>
+            </TouchableOpacity>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </RNModal>
 
       {/* Fullscreen photo viewer */}
       {showFullscreen && (

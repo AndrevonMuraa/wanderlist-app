@@ -233,7 +233,7 @@ export default function MyLandmarkVisits() {
             <Ionicons name="location" size={16} color={theme.colors.primary} />
           </View>
           <Text style={styles.statNumber}>{visits.length}</Text>
-          <Text style={styles.statLabel}>Visits</Text>
+          <Text style={styles.statLabel}>Visited</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
