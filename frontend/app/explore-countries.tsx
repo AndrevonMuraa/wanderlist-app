@@ -79,9 +79,11 @@ export default function ExploreCountriesScreen() {
         
         // Get country visits (set of country_ids that have been visited)
         let visitedCountryIds = new Set<string>();
+        let verifiedCountryIds = new Set<string>();
         if (countryVisitsResult.status === 'fulfilled' && countryVisitsResult.value.ok) {
           const countryVisits = await countryVisitsResult.value.json();
           visitedCountryIds = new Set(countryVisits.map((v: any) => v.country_id));
+          verifiedCountryIds = new Set(countryVisits.filter((v: any) => v.photos && v.photos.length > 0).map((v: any) => v.country_id));
         }
         
         // Filter by continent if specified
@@ -98,6 +100,7 @@ export default function ExploreCountriesScreen() {
           visited: progress.countries[country.country_id]?.visited || 0,
           percentage: progress.countries[country.country_id]?.percentage || 0,
           countryVisited: visitedCountryIds.has(country.country_id) || (progress.countries[country.country_id]?.visited || 0) > 0,
+          countryVerified: verifiedCountryIds.has(country.country_id) || (progress.countries[country.country_id]?.visited || 0) > 0,
         }));
         
         // Group countries by continent
@@ -323,20 +326,22 @@ export default function ExploreCountriesScreen() {
 
     // User progress stats — count countries visited via landmarks OR country visits
     const totalVisitedCountries = allCountries.filter(c => c.countryVisited).length;
+    const totalVerifiedCountries = allCountries.filter(c => c.countryVerified).length;
     const totalEarnedPoints = allCountries.reduce((sum, country) => {
       const visitedLandmarks = country.visited || 0;
       const countryVisitPoints = country.countryVisited ? 50 : 0;
       return sum + (visitedLandmarks * 10) + countryVisitPoints;
     }, 0);
+    const totalMaxPoints = totalCountries * 50;
 
     return (
       <View>
 
-        {/* Your Progress Dashboard */}
+        {/* Destination Progress Dashboard */}
         <View style={styles.statsContainerNew}>
           <Surface style={styles.statsCard}>
             <View style={styles.progressHeader}>
-              <Text style={styles.progressHeaderTitle}>Your Progress</Text>
+              <Text style={styles.progressHeaderTitle}>Destination Progress</Text>
               <View style={styles.progressPointsBadge}>
                 <Ionicons name="star" size={14} color="#FFD700" />
                 <Text style={styles.progressPointsText}>{totalEarnedPoints} pts</Text>
@@ -357,14 +362,14 @@ export default function ExploreCountriesScreen() {
             </View>
 
             <View style={styles.progressRow}>
-              <Ionicons name="location" size={16} color="#E87850" />
+              <Ionicons name="shield-checkmark" size={16} color="#4CAF50" />
               <View style={styles.progressBarContent}>
                 <View style={styles.progressLabelRow}>
-                  <Text style={styles.progressLabel}>{totalVisited}/{totalLandmarks} Landmarks</Text>
-                  <Text style={styles.progressPct}>{totalLandmarks > 0 ? ((totalVisited / totalLandmarks) * 100).toFixed(1) : 0}%</Text>
+                  <Text style={styles.progressLabel}>{totalVerifiedCountries}/{totalVisitedCountries} Verified</Text>
+                  <Text style={styles.progressPct}>{totalVisitedCountries > 0 ? Math.round((totalVerifiedCountries / totalVisitedCountries) * 100) : 0}%</Text>
                 </View>
                 <View style={styles.progressBarBg}>
-                  <View style={[styles.progressBarFill, { width: `${Math.min(100, (totalVisited / totalLandmarks) * 100)}%`, backgroundColor: '#E87850' }]} />
+                  <View style={[styles.progressBarFill, { width: `${totalVisitedCountries > 0 ? Math.min(100, (totalVerifiedCountries / totalVisitedCountries) * 100) : 0}%`, backgroundColor: '#4CAF50' }]} />
                 </View>
               </View>
             </View>
@@ -373,11 +378,11 @@ export default function ExploreCountriesScreen() {
               <Ionicons name="star" size={16} color="#FFA726" />
               <View style={styles.progressBarContent}>
                 <View style={styles.progressLabelRow}>
-                  <Text style={styles.progressLabel}>{totalEarnedPoints}/{totalAvailablePoints.toLocaleString()} Points</Text>
-                  <Text style={styles.progressPct}>{totalAvailablePoints > 0 ? ((totalEarnedPoints / totalAvailablePoints) * 100).toFixed(1) : 0}%</Text>
+                  <Text style={styles.progressLabel}>{totalEarnedPoints}/{totalMaxPoints.toLocaleString()} Points</Text>
+                  <Text style={styles.progressPct}>{totalMaxPoints > 0 ? ((totalEarnedPoints / totalMaxPoints) * 100).toFixed(1) : 0}%</Text>
                 </View>
                 <View style={styles.progressBarBg}>
-                  <View style={[styles.progressBarFill, { width: `${Math.min(100, (totalEarnedPoints / totalAvailablePoints) * 100)}%`, backgroundColor: '#FFA726' }]} />
+                  <View style={[styles.progressBarFill, { width: `${Math.min(100, (totalEarnedPoints / totalMaxPoints) * 100)}%`, backgroundColor: '#FFA726' }]} />
                 </View>
               </View>
             </View>
