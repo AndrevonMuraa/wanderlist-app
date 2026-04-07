@@ -39,7 +39,7 @@ const FEATURE_INFO = {
     icon: 'images' as const,
     benefits: [
       '10 photos per landmark visit',
-      '10 photos per country visit',
+      '10 photos per destination visit',
       '20 photos for custom visits',
     ],
   },

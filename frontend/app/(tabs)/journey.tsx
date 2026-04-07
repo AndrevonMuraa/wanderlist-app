@@ -838,7 +838,7 @@ const styles = StyleSheet.create({
   bottomSpacer: {
     height: theme.spacing.xl,
   },
-  // My Country Visits Section Styles
+  // My Destination Visits Section Styles
   countryVisitsCard: {
     margin: theme.spacing.md,
     borderRadius: theme.borderRadius.xl,

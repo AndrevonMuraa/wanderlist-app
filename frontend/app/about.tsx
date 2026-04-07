@@ -237,7 +237,7 @@ export default function AboutScreen() {
 
           <FeatureCard
             icon="flag"
-            title="Country Visits"
+            title="Destination Visits"
             description="Record entire country experiences with photos & diaries"
             color={theme.colors.primary}
             onPress={() => router.push('/my-country-visits')}
@@ -298,7 +298,7 @@ export default function AboutScreen() {
                     <Text style={styles.bold}>Verified Points</Text> (with personal photos):{'\n'}
                     • Official Landmarks: 10 pts{'\n'}
                     • Premium Landmarks: 25 pts{'\n'}
-                    • Country Visit: 50 pts (auto or manual){'\n'}
+                    • Destination Visit: 50 pts (auto or manual){'\n'}
                     • New Continent Bonus: +50 pts{'\n'}
                     • Country Completion: +50 pts{'\n'}
                     • Continent Completion: +200 pts{'\n\n'}
@@ -386,7 +386,7 @@ export default function AboutScreen() {
 
 • Official Landmarks: 10 points
 • Premium Landmarks: 25 points
-• Country Visit: 50 points (auto or manual)
+• Destination Visit: 50 points (auto or manual)
 • New Continent Bonus: +50 points (first country on a new continent)
 • Country Completion: +50 bonus points (all landmarks in a country)
 • Continent Completion: +200 bonus points (all countries on a continent)

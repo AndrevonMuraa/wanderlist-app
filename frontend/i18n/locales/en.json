@@ -150,7 +150,7 @@
     "landmarkCategories": "Landmark Categories",
     "funFacts": "Fun Facts",
     "worldPercentage": "You've visited {{percent}}% of all destinations in the world!",
-    "landmarksPerCountry": "Average: {{count}} landmarks per country",
+    "landmarksPerCountry": "Average: {{count}} landmarks per destination",
     "pointsPerLandmark": "{{count}} points per landmark on average"
   },
   "notifications": {
