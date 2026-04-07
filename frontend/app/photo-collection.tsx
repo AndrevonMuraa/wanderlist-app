@@ -321,7 +321,7 @@ export default function PhotoCollectionScreen() {
                   onPress={() => setActiveTab(tab)}
                 >
                   <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
-                    {tab === 'all' ? 'All' : 'By Country'}
+                    {tab === 'all' ? 'All' : 'By Destination'}
                   </Text>
                 </TouchableOpacity>
               ))}
