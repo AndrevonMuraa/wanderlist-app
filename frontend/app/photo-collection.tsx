@@ -402,9 +402,6 @@ export default function PhotoCollectionScreen() {
                         </Text>
                       )}
                     </View>
-                    <Text style={styles.photoInfoDate}>
-                      {formatDate(selectedPhoto.visited_at || selectedPhoto.created_at)}
-                    </Text>
                   </View>
                 </View>
 
