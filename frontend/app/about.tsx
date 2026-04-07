@@ -438,10 +438,9 @@ All privacy settings can be changed at any time from Settings > Privacy.`}
               answer={`Visit the 'My Photos' section on your Journey page! It shows all photos from:
 
 • Landmark visits
-• Country visits
-• Custom visits
+• Destination visits
 
-You can filter by country, year, or type.`}
+You can filter by destination.`}
             />
             
             <FAQItem
