@@ -521,13 +521,24 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
         
         # If user just completed the country
         if user_visits_in_country == total_landmarks_in_country:
-            country_completion_bonus = 50  # Bonus points for completing a country
+            country_completion_bonus = 50
             country_completed = True
             completed_country_name = landmark.get("country_name")
             
-            # Award bonus points to user (leaderboard_points only if visit has photos)
+            # Verified only if ALL landmarks in this country are verified
+            all_landmarks_verified = True
+            country_landmark_ids = [lm["landmark_id"] for lm in await db.landmarks.find({"country_id": country_id}).to_list(1000)]
+            for lid in country_landmark_ids:
+                visit_doc = await db.visits.find_one(
+                    {"user_id": current_user.user_id, "landmark_id": lid},
+                    {"_id": 0, "verified": 1}
+                )
+                if not visit_doc or not visit_doc.get("verified"):
+                    all_landmarks_verified = False
+                    break
+            
             completion_increment = {"points": country_completion_bonus}
-            if has_photos:
+            if all_landmarks_verified:
                 completion_increment["leaderboard_points"] = country_completion_bonus
             await db.users.update_one(
                 {"user_id": current_user.user_id},
@@ -555,41 +566,49 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
             await db.activities.insert_one(country_completion_activity)
             
             # Check for continent completion bonus
+            # Triggered when ALL destinations in the continent have been visited
             continent = landmark.get("continent")
             if continent:
-                # Get all countries in this continent
                 countries_in_continent = await db.countries.find({"continent": continent}).to_list(1000)
                 country_ids_in_continent = [c["country_id"] for c in countries_in_continent]
                 
-                # Check if user completed all countries in this continent
-                completed_countries = 0
+                # Check if all destinations in this continent are visited (have a country_visit)
+                all_destinations_visited = True
+                all_destinations_verified = True
                 for cid in country_ids_in_continent:
-                    total_landmarks = await db.landmarks.count_documents({"country_id": cid})
-                    user_visits = await db.visits.count_documents({
-                        "user_id": current_user.user_id,
-                        "landmark_id": {"$in": [
-                            lm["landmark_id"] for lm in await db.landmarks.find({"country_id": cid}).to_list(1000)
-                        ]}
-                    })
-                    if user_visits == total_landmarks:
-                        completed_countries += 1
+                    cv = await db.country_visits.find_one(
+                        {"user_id": current_user.user_id, "country_id": cid},
+                        {"_id": 0, "photos": 1}
+                    )
+                    has_landmark_visit = await db.visits.count_documents(
+                        {"user_id": current_user.user_id, "landmark_id": {"$regex": f"^{cid}_"}}
+                    ) > 0
+                    
+                    if not cv and not has_landmark_visit:
+                        all_destinations_visited = False
+                        break
+                    
+                    # Check verification: destination has photo OR at least one verified landmark
+                    cv_has_photos = cv and len(cv.get("photos", []) or []) > 0 if cv else False
+                    has_verified_landmark = await db.visits.count_documents(
+                        {"user_id": current_user.user_id, "landmark_id": {"$regex": f"^{cid}_"}, "verified": True}
+                    ) > 0
+                    if not cv_has_photos and not has_verified_landmark:
+                        all_destinations_verified = False
                 
-                # If user just completed the continent
-                if completed_countries == len(country_ids_in_continent):
-                    continent_completion_bonus = 200  # Bonus points for completing a continent
+                if all_destinations_visited:
+                    continent_completion_bonus = 200
                     continent_completed = True
                     completed_continent = continent
                     
-                    # Award bonus points to user (leaderboard_points only if visit has photos)
                     cont_completion_increment = {"points": continent_completion_bonus}
-                    if has_photos:
+                    if all_destinations_verified:
                         cont_completion_increment["leaderboard_points"] = continent_completion_bonus
                     await db.users.update_one(
                         {"user_id": current_user.user_id},
                         {"$inc": cont_completion_increment}
                     )
                     
-                    # Create continent completion activity
                     continent_completion_activity_id = f"activity_{uuid.uuid4().hex[:12]}"
                     continent_completion_activity = {
                         "activity_id": continent_completion_activity_id,
@@ -710,10 +729,63 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
     cont_total = len(continent_bonuses) * 50
     cont_verified = sum(50 for b in continent_bonuses if b["verified"])
     
+    # Calculate completion bonuses
+    # Destination completion: all landmarks in a country visited
+    all_db_countries = await db.countries.find({}, {"_id": 0, "country_id": 1, "continent": 1}).to_list(200)
+    dest_completions = []
+    for country in all_db_countries:
+        cid = country["country_id"]
+        total_lm = await db.landmarks.count_documents({"country_id": cid})
+        if total_lm == 0:
+            continue
+        user_visits_in_c = [v for v in visits if landmark_country_map.get(v.get("landmark_id")) == cid]
+        if len(user_visits_in_c) >= total_lm:
+            all_v = all(v.get("verified") for v in user_visits_in_c)
+            dest_completions.append({"name": cid, "points": 50, "verified": all_v})
+    
+    # Continent completion: all destinations in a continent visited
+    user_cv_ids = set(cv.get("country_id") for cv in country_visits if cv.get("country_id"))
+    lm_country_ids = set(landmark_country_map.values())
+    all_visited_ids = user_cv_ids | lm_country_ids
+    
+    cont_completions = []
+    continent_groups = {}
+    for c in all_db_countries:
+        cont = c["continent"]
+        if cont not in continent_groups:
+            continent_groups[cont] = []
+        continent_groups[cont].append(c["country_id"])
+    
+    for cont, cids in continent_groups.items():
+        if all(cid in all_visited_ids for cid in cids):
+            # Check verification: each destination has photo OR verified landmark
+            all_v = True
+            for cid in cids:
+                cv_photos = any(
+                    len(cv.get("photos", []) or []) > 0
+                    for cv in country_visits if cv.get("country_id") == cid
+                )
+                has_v_lm = any(
+                    v.get("verified") for v in visits if landmark_country_map.get(v.get("landmark_id")) == cid
+                )
+                if not cv_photos and not has_v_lm:
+                    all_v = False
+                    break
+            cont_completions.append({"name": cont, "points": 200, "verified": all_v})
+    
+    dest_comp_total = sum(d["points"] for d in dest_completions)
+    dest_comp_verified = sum(d["points"] for d in dest_completions if d["verified"])
+    cont_comp_total = sum(c["points"] for c in cont_completions)
+    cont_comp_verified = sum(c["points"] for c in cont_completions if c["verified"])
+    
     return {
         "landmarks": landmarks,
         "country_visits": countries,
         "continent_bonuses": continent_bonuses,
+        "completion_bonuses": {
+            "destinations": dest_completions,
+            "continents": cont_completions,
+        },
         "summary": {
             "landmark_total": lm_total,
             "landmark_verified": lm_verified,
@@ -721,7 +793,9 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
             "country_verified": cv_verified,
             "continent_total": cont_total,
             "continent_verified": cont_verified,
-            "grand_total": lm_total + cv_total + cont_total,
+            "completion_total": dest_comp_total + cont_comp_total,
+            "completion_verified": dest_comp_verified + cont_comp_verified,
+            "grand_total": lm_total + cv_total + cont_total + dest_comp_total + cont_comp_total,
         }
     }
 

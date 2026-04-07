@@ -332,7 +332,7 @@ export default function PointsSummary() {
           
           <Surface style={styles.card}>
             <Text style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center', marginBottom: 12 }}>
-              You've earned {totalPoints > 0 ? ((totalPoints / 27750) * 100).toFixed(1) : '0'}% of all possible points
+              You've earned {totalPoints > 0 ? ((totalPoints / 33750) * 100).toFixed(1) : '0'}% of all possible points
             </Text>
 
             <TouchableOpacity style={styles.potentialRow} onPress={() => router.push('/my-landmark-visits')} activeOpacity={0.7}>
@@ -382,10 +382,25 @@ export default function PointsSummary() {
               </View>
             </View>
 
+            <View style={styles.potentialRow}>
+              <View style={[styles.potentialIcon, { backgroundColor: '#FFF8E1' }]}>
+                <Ionicons name="star" size={16} color="#FFD700" />
+              </View>
+              <View style={styles.potentialContent}>
+                <View style={styles.potentialLabelRow}>
+                  <Text style={styles.potentialLabel}>Completion Bonuses</Text>
+                  <Text style={styles.potentialValue}>{breakdown?.summary?.completion_total || 0} <Text style={styles.potentialMax}>/ 6,000</Text></Text>
+                </View>
+                <View style={styles.potentialBarBg}>
+                  <View style={[styles.potentialBar, { width: `${Math.min(100, ((breakdown?.summary?.completion_total || 0) / 6000) * 100)}%`, backgroundColor: '#FFD700' }]} />
+                </View>
+              </View>
+            </View>
+
             <View style={[styles.divider, { marginTop: 8 }]} />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 8 }}>
               <Text style={{ fontSize: 14, fontWeight: '700', color: theme.colors.text }}>Total Earned</Text>
-              <Text style={{ fontSize: 14, fontWeight: '800', color: theme.colors.primary }}>{totalPoints.toLocaleString()} <Text style={styles.potentialMax}>/ 27,750</Text></Text>
+              <Text style={{ fontSize: 14, fontWeight: '800', color: theme.colors.primary }}>{totalPoints.toLocaleString()} <Text style={styles.potentialMax}>/ 33,750</Text></Text>
             </View>
           </Surface>
         </View>
