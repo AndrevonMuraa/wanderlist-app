@@ -222,13 +222,13 @@ export default function ProfileScreen() {
                 </View>
                 <View style={styles.tierBadge}>
                   {user?.subscription_tier === 'pro' || user?.subscription_tier === 'premium' ? (
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: '#1E8A8A' + '15', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 14 }}>
-                      <Ionicons name="diamond" size={14} color="#1E8A8A" />
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: '#1E8A8A' + '15', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 }}>
+                      <Ionicons name="diamond" size={12} color="#1E8A8A" />
                       <Text style={[styles.tierText, { color: '#1E8A8A' }]}>{t('profile.proUser')}</Text>
                     </View>
                   ) : (
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(107,107,107,0.1)', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 14 }}>
-                      <Ionicons name="person-outline" size={12} color={colors.textSecondary} />
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'rgba(107,107,107,0.1)', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 }}>
+                      <Ionicons name="person-outline" size={11} color={colors.textSecondary} />
                       <Text style={[styles.tierText, { color: colors.textSecondary }]}>{t('profile.freeUser')}</Text>
                     </View>
                   )}
