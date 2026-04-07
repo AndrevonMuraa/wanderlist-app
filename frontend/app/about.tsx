@@ -298,9 +298,9 @@ export default function AboutScreen() {
                     <Text style={styles.bold}>Verified Points</Text> (with personal photos):{'\n'}
                     • Official Landmarks: 10 pts{'\n'}
                     • Premium Landmarks: 25 pts{'\n'}
-                    • Destination Visit: 50 pts (auto or manual){'\n'}
+                    • Destination Visit: 50 pts{'\n'}
                     • New Continent Bonus: +50 pts{'\n'}
-                    • Country Completion: +50 pts{'\n'}
+                    • Destination Completion: +50 pts{'\n'}
                     • Continent Completion: +200 pts{'\n\n'}
                     <Text style={styles.bold}>Unverified Points</Text> (without photos):{'\n'}
                     • Same values, but without personal photo verification{'\n'}
@@ -386,9 +386,9 @@ export default function AboutScreen() {
 
 • Official Landmarks: 10 points
 • Premium Landmarks: 25 points
-• Destination Visit: 50 points (auto or manual)
+• Destination Visit: 50 points
 • New Continent Bonus: +50 points (first country on a new continent)
-• Country Completion: +50 bonus points (all landmarks in a country)
+• Destination Completion: +50 bonus points (all landmarks in a destination)
 • Continent Completion: +200 bonus points (all countries on a continent)
 
 There are two types of points:
