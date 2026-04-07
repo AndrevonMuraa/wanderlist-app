@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   Modal,
+  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -369,11 +370,21 @@ export default function PhotoCollectionScreen() {
 
           {selectedPhoto && (
             <>
-              <Image
-                source={{ uri: selectedPhoto.photo_url }}
-                style={styles.fullscreenImage}
-                resizeMode="contain"
-              />
+              <ScrollView
+                contentContainerStyle={styles.fullscreenScrollContent}
+                maximumZoomScale={4}
+                minimumZoomScale={1}
+                bouncesZoom={true}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                centerContent={true}
+              >
+                <Image
+                  source={{ uri: selectedPhoto.photo_url }}
+                  style={styles.fullscreenImage}
+                  resizeMode="contain"
+                />
+              </ScrollView>
               
               <View style={styles.photoInfoOverlay}>
                 <View style={styles.photoInfoContent}>
@@ -381,7 +392,7 @@ export default function PhotoCollectionScreen() {
                     <Text style={styles.photoInfoEmoji}>
                       {getCountryFlag(selectedPhoto.country_name)}
                     </Text>
-                    <View>
+                    <View style={{ flex: 1 }}>
                       <Text style={styles.photoInfoLocation}>
                         {selectedPhoto.landmark_name || selectedPhoto.country_name}
                       </Text>
@@ -391,10 +402,10 @@ export default function PhotoCollectionScreen() {
                         </Text>
                       )}
                     </View>
+                    <Text style={styles.photoInfoDate}>
+                      {formatDate(selectedPhoto.visited_at || selectedPhoto.created_at)}
+                    </Text>
                   </View>
-                  <Text style={styles.photoInfoDate}>
-                    {formatDate(selectedPhoto.visited_at || selectedPhoto.created_at)}
-                  </Text>
                 </View>
 
                 {selectedPhoto.visit_type !== 'custom' && (
@@ -581,8 +592,6 @@ const styles = StyleSheet.create({
   fullscreenContainer: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.95)',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   fullscreenClose: {
     position: 'absolute',
@@ -591,9 +600,14 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: theme.spacing.sm,
   },
+  fullscreenScrollContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   fullscreenImage: {
     width: width,
-    height: width,
+    height: width * 1.2,
   },
   photoInfoOverlay: {
     position: 'absolute',
