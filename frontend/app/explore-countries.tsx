@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, SectionList, TouchableOpacity, RefreshControl, Image, ImageBackground, Dimensions, Platform, StatusBar } from 'react-native';
 import { Text, ActivityIndicator, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { safeGoBack } from '../utils/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import { BACKEND_URL } from '../utils/config';
@@ -46,11 +47,13 @@ export default function ExploreCountriesScreen() {
   // Calculate safe area padding - same as continents.tsx (golden standard)
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
-  useEffect(() => {
-    if (user) {
-      fetchData();
-    }
-  }, [continent, user]);
+  useFocusEffect(
+    useCallback(() => {
+      if (user) {
+        fetchData();
+      }
+    }, [continent, user])
+  );
 
   const fetchData = async () => {
     try {
