@@ -258,13 +258,13 @@ export default function LandmarksScreen() {
               if (response.ok) {
                 // Re-check status because they might still be "visited" via landmarks
                 await checkCountryVisitStatus();
-                Alert.alert('Success', 'Country visit removed successfully');
+                Alert.alert('Success', 'Destination visit removed successfully');
               } else {
-                Alert.alert('Error', 'Failed to remove country visit');
+                Alert.alert('Error', 'Failed to remove destination visit');
               }
             } catch (error) {
-              console.error('Error removing country visit:', error);
-              Alert.alert('Error', 'Failed to remove country visit');
+              console.error('Error removing destination visit:', error);
+              Alert.alert('Error', 'Failed to remove destination visit');
             }
           },
         },
@@ -510,7 +510,7 @@ export default function LandmarksScreen() {
 
       {/* Floating Action Buttons */}
       <View style={styles.fabContainer}>
-        {/* Country Visit FAB */}
+        {/* Destination Visit FAB */}
         <TouchableOpacity 
           style={styles.fab}
           onPress={handleCountryVisitAction}
@@ -549,7 +549,7 @@ export default function LandmarksScreen() {
         feature="premium_landmarks"
       />
       
-      {/* Country Visit Modal */}
+      {/* Destination Visit Modal */}
       <AddCountryVisitModal
         visible={showCountryVisitModal}
         countryId={country_id as string}
