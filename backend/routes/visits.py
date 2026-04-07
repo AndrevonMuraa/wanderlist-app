@@ -483,17 +483,33 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
                 user_continent_visits = 0
                 continent_countries = await db.countries.find({"continent": continent}).to_list(1000)
                 for cont_country in continent_countries:
-                    count = await db.visits.count_documents({
+                    cid = cont_country['country_id']
+                    lm_count = await db.visits.count_documents({
                         "user_id": current_user.user_id,
-                        "landmark_id": {"$regex": f"^{cont_country['country_id']}_"}
+                        "landmark_id": {"$regex": f"^{cid}_"}
                     })
-                    if count > 0:
+                    cv_count = await db.country_visits.count_documents({
+                        "user_id": current_user.user_id,
+                        "country_id": cid
+                    })
+                    if lm_count > 0 or cv_count > 0:
                         user_continent_visits += 1
                 
                 if user_continent_visits == 1:  # First country in this continent
                     continent_bonus_points = 50
+                    # Verified if this visit has photos OR any country_visit in continent has photos
+                    is_verified = has_photos
+                    if not is_verified:
+                        for cont_country in continent_countries:
+                            cv = await db.country_visits.find_one(
+                                {"user_id": current_user.user_id, "country_id": cont_country['country_id']},
+                                {"_id": 0, "photos": 1}
+                            )
+                            if cv and len(cv.get("photos", []) or []) > 0:
+                                is_verified = True
+                                break
                     continent_bonus_increment = {"points": continent_bonus_points}
-                    if has_photos:
+                    if is_verified:
                         continent_bonus_increment["leaderboard_points"] = continent_bonus_points
                     await db.users.update_one(
                         {"user_id": current_user.user_id},
