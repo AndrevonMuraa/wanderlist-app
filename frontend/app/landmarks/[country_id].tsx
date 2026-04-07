@@ -48,7 +48,7 @@ export default function LandmarksScreen() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
   const [showCountryVisitModal, setShowCountryVisitModal] = useState(false);
-  const [countryProgress, setCountryProgress] = useState<{visited: number; total: number; percentage: number; verified: number; points: number} | null>(null);
+  const [countryProgress, setCountryProgress] = useState<{visited: number; total: number; percentage: number; verified: number; points: number; maxPoints: number} | null>(null);
   const [visitedLandmarkIds, setVisitedLandmarkIds] = useState<Set<string>>(new Set());
   const [isCountryVisited, setIsCountryVisited] = useState(false);
   const [countryVisitId, setCountryVisitId] = useState<string | null>(null);
@@ -156,6 +156,7 @@ export default function LandmarksScreen() {
         const visitedCount = visitedIds.size;
         const verifiedCount = countryVisits.filter((v: any) => v.verified).length;
         const totalPoints = countryVisits.reduce((sum: number, v: any) => sum + (v.points_earned || 0), 0);
+        const maxPoints = data.reduce((sum: number, lm: any) => sum + (lm.points || 10), 0);
         
         if (totalLandmarks > 0) {
           setCountryProgress({
@@ -164,6 +165,7 @@ export default function LandmarksScreen() {
             percentage: Math.round((visitedCount / totalLandmarks) * 1000) / 10,
             verified: verifiedCount,
             points: totalPoints,
+            maxPoints: maxPoints,
           });
         }
       }
@@ -463,11 +465,11 @@ export default function LandmarksScreen() {
                   <Ionicons name="star" size={16} color="#FFA726" />
                   <View style={styles.progressBarContent}>
                     <View style={styles.progressLabelRow}>
-                      <Text style={styles.progressLabel}>{countryProgress.points}/{countryProgress.total * 10} Points</Text>
-                      <Text style={styles.progressPct}>{countryProgress.total > 0 ? ((countryProgress.points / (countryProgress.total * 10)) * 100).toFixed(1) : 0}%</Text>
+                      <Text style={styles.progressLabel}>{countryProgress.points}/{countryProgress.maxPoints} Points</Text>
+                      <Text style={styles.progressPct}>{countryProgress.maxPoints > 0 ? ((countryProgress.points / countryProgress.maxPoints) * 100).toFixed(1) : 0}%</Text>
                     </View>
                     <View style={styles.progressBarBg}>
-                      <View style={[styles.progressBarFill, { width: `${countryProgress.total > 0 ? Math.min(100, (countryProgress.points / (countryProgress.total * 10)) * 100) : 0}%`, backgroundColor: '#FFA726' }]} />
+                      <View style={[styles.progressBarFill, { width: `${countryProgress.maxPoints > 0 ? Math.min(100, (countryProgress.points / countryProgress.maxPoints) * 100) : 0}%`, backgroundColor: '#FFA726' }]} />
                     </View>
                   </View>
                 </View>
