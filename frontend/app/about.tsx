@@ -616,8 +616,8 @@ const styles = StyleSheet.create({
   statsCard: {
     backgroundColor: theme.colors.surface,
     borderRadius: theme.borderRadius.lg,
-    paddingVertical: theme.spacing.md,
-    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.sm,
     marginHorizontal: theme.spacing.lg,
     ...theme.shadows.sm,
   },
@@ -631,14 +631,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   statNumber: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 15,
+    fontWeight: '800',
     color: theme.colors.primary,
   },
   statLabel: {
-    fontSize: 11,
+    fontSize: 10,
     color: theme.colors.textLight,
     marginTop: 2,
+    textAlign: 'center',
   },
   statDivider: {
     width: 1,
