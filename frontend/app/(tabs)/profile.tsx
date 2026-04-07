@@ -322,7 +322,11 @@ export default function ProfileScreen() {
           <List.Item
             title={t('profile.wanderMarkPro')}
             description={t('profile.upgradeForPremium')}
-            left={props => <List.Icon {...props} icon="diamond" color="#1E8A8A" />}
+            left={() => (
+              <View style={{ justifyContent: 'center', alignItems: 'center', width: 40, marginLeft: 8 }}>
+                <Ionicons name="diamond" size={24} color="#1E8A8A" />
+              </View>
+            )}
             right={props => <List.Icon {...props} icon="chevron-right" color={colors.textLight} />}
             onPress={() => router.push('/subscription')}
             titleStyle={[styles.listItemTitle, { color: colors.text }]}
