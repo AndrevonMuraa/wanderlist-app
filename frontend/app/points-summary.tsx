@@ -149,7 +149,7 @@ export default function PointsSummary() {
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Photo Verification</Text>
-                <Text style={styles.infoDesc}>Take a personal photo of yourself at the landmark to earn verified points for the leaderboard</Text>
+                <Text style={styles.infoDesc}>Add a photo to earn verified points. Verified points count for the global leaderboard and rank. Without photos, points only count for the friends leaderboard.</Text>
               </View>
             </View>
 
@@ -169,7 +169,7 @@ export default function PointsSummary() {
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Destination Visit</Text>
-                <Text style={styles.infoDesc}>+50 pts for each destination visited (auto or manual)</Text>
+                <Text style={styles.infoDesc}>+50 pts for each destination visited</Text>
               </View>
             </View>
 
@@ -179,7 +179,7 @@ export default function PointsSummary() {
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Continent Bonus</Text>
-                <Text style={styles.infoDesc}>+50 pts for first country on a new continent</Text>
+                <Text style={styles.infoDesc}>+50 pts for first destination on a new continent</Text>
               </View>
             </View>
 
@@ -189,7 +189,7 @@ export default function PointsSummary() {
               </View>
               <View style={styles.infoContent}>
                 <Text style={styles.infoLabel}>Completion Bonuses</Text>
-                <Text style={styles.infoDesc}>+50 pts per country, +200 pts per continent completed</Text>
+                <Text style={styles.infoDesc}>+50 pts per destination, +200 pts per continent completed</Text>
               </View>
             </View>
           </Surface>
