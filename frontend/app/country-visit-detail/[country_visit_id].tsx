@@ -27,6 +27,8 @@ import * as ImagePicker from 'expo-image-picker';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import { invalidateCacheGroup } from '../../utils/apiCache';
+import { useAuth } from '../../contexts/AuthContext';
+import ProFeatureLock from '../../components/ProFeatureLock';
 import PhotoViewer from '../../components/PhotoViewer';
 import { KeyboardDoneBar } from '../../components/KeyboardDoneBar';
 import UniversalHeader from '../../components/UniversalHeader';
@@ -103,6 +105,10 @@ export default function CountryVisitDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showProLock, setShowProLock] = useState(false);
+  const { user } = useAuth();
+  const isPro = user?.subscription_tier === 'pro' || user?.subscription_tier === 'basic_plus';
+  const photoLimit = isPro ? 10 : 1;
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showFullscreen, setShowFullscreen] = useState(false);
   const [fullscreenIndex, setFullscreenIndex] = useState(0);
@@ -576,75 +582,77 @@ export default function CountryVisitDetailScreen() {
               </ScrollView>
             )}
 
-            {/* Photo Management Buttons */}
-            <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 12, paddingVertical: 12, paddingHorizontal: 16 }}>
-              <TouchableOpacity
-                style={{
-                  flexDirection: 'row', alignItems: 'center', gap: 6,
-                  backgroundColor: '#E91E63' + '15',
-                  paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
-                }}
-                onPress={async () => {
-                  const { status } = await ImagePicker.requestCameraPermissionsAsync();
-                  if (status !== 'granted') {
-                    Alert.alert('Permission Required', 'Please allow camera access.');
-                    return;
-                  }
-                  const result = await ImagePicker.launchCameraAsync({ quality: 0.7, base64: true });
-                  if (!result.canceled && result.assets?.[0]?.base64) {
-                    setUploadingPhotos(true);
-                    try {
-                      const newPhoto = `data:image/jpeg;base64,${result.assets[0].base64}`;
-                      const existing = visit.photos || [];
-                      const all = [...existing, newPhoto];
-                      const token = await getToken();
-                      await fetch(`${BACKEND_URL}/api/country-visits/${country_visit_id}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                        body: JSON.stringify({ photos: all }),
-                      });
-                      setVisit((prev: any) => prev ? { ...prev, photos: all } : prev);
-                    } catch {
-                      Alert.alert('Error', 'Could not take photo');
-                    } finally {
-                      setUploadingPhotos(false);
-                    }
-                  }
-                }}
-                disabled={uploadingPhotos}
-              >
-                <Ionicons name="camera" size={18} color="#E91E63" />
-                <Text style={{ color: '#E91E63', fontWeight: '600', fontSize: 13 }}>Camera</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  flexDirection: 'row', alignItems: 'center', gap: 6,
-                  backgroundColor: theme.colors.primary + '15',
-                  paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
-                }}
-                onPress={handleAddPhotos}
-                disabled={uploadingPhotos}
-              >
-                {uploadingPhotos ? (
-                  <ActivityIndicator size="small" color={theme.colors.primary} />
-                ) : (
-                  <Ionicons name="images" size={18} color={theme.colors.primary} />
-                )}
-                <Text style={{ color: theme.colors.primary, fontWeight: '600', fontSize: 13 }}>
-                  {uploadingPhotos ? 'Uploading...' : 'Library'}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  flexDirection: 'row', alignItems: 'center', gap: 6,
-                  backgroundColor: theme.colors.error + '12',
-                  paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
-                }}
-                onPress={() => handleRemovePhoto(selectedPhotoIndex)}
-              >
-                <Ionicons name="trash-outline" size={16} color={theme.colors.error} />
-                <Text style={{ color: theme.colors.error, fontWeight: '600', fontSize: 13 }}>Remove</Text>
-              </TouchableOpacity>
+            {/* Photo Action Button */}
+            <View style={{ alignItems: 'center', paddingVertical: 12, paddingHorizontal: 16, gap: 8 }}>
+              {(visit.photos?.length || 0) < photoLimit ? (
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row', alignItems: 'center', gap: 8,
+                    backgroundColor: theme.colors.primary + '15',
+                    paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20,
+                  }}
+                  onPress={() => {
+                    Alert.alert('Add Photo', 'Choose a source', [
+                      { text: 'Take Photo', onPress: async () => {
+                        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+                        if (status !== 'granted') { Alert.alert('Permission Required', 'Please allow camera access.'); return; }
+                        const result = await ImagePicker.launchCameraAsync({ quality: 0.7, base64: true });
+                        if (!result.canceled && result.assets?.[0]?.base64) {
+                          setUploadingPhotos(true);
+                          try {
+                            const newPhoto = `data:image/jpeg;base64,${result.assets[0].base64}`;
+                            const all = [...(visit.photos || []), newPhoto];
+                            const token = await getToken();
+                            await fetch(`${BACKEND_URL}/api/country-visits/${country_visit_id}`, {
+                              method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                              body: JSON.stringify({ photos: all }),
+                            });
+                            setVisit((prev: any) => prev ? { ...prev, photos: all } : prev);
+                          } catch { Alert.alert('Error', 'Could not take photo'); }
+                          finally { setUploadingPhotos(false); }
+                        }
+                      }},
+                      { text: 'Choose from Library', onPress: handleAddPhotos },
+                      { text: 'Cancel', style: 'cancel' },
+                    ]);
+                  }}
+                  disabled={uploadingPhotos}
+                >
+                  {uploadingPhotos ? (
+                    <ActivityIndicator size="small" color={theme.colors.primary} />
+                  ) : (
+                    <Ionicons name="camera" size={18} color={theme.colors.primary} />
+                  )}
+                  <Text style={{ color: theme.colors.primary, fontWeight: '600', fontSize: 14 }}>
+                    {uploadingPhotos ? 'Uploading...' : 'Add Photo'}
+                  </Text>
+                </TouchableOpacity>
+              ) : !isPro ? (
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row', alignItems: 'center', gap: 8,
+                    backgroundColor: theme.colors.accentTeal + '15',
+                    paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20,
+                  }}
+                  onPress={() => setShowProLock(true)}
+                >
+                  <Ionicons name="camera" size={18} color={theme.colors.accentTeal} />
+                  <Text style={{ color: theme.colors.accentTeal, fontWeight: '600', fontSize: 14 }}>Add More Photos</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: theme.colors.accentTeal + '15', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 }}>
+                    <Ionicons name="diamond" size={12} color={theme.colors.accentTeal} />
+                    <Text style={{ color: theme.colors.accentTeal, fontSize: 11, fontWeight: '700' }}>PRO</Text>
+                  </View>
+                </TouchableOpacity>
+              ) : null}
+              {(visit.photos?.length || 0) > 0 && (
+                <TouchableOpacity
+                  style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingVertical: 4 }}
+                  onPress={() => handleRemovePhoto(selectedPhotoIndex)}
+                >
+                  <Ionicons name="trash-outline" size={14} color={theme.colors.error} />
+                  <Text style={{ color: theme.colors.error, fontWeight: '500', fontSize: 12 }}>Remove Photo</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         ) : (
@@ -929,6 +937,12 @@ export default function CountryVisitDetailScreen() {
           </Dialog.Actions>
         </Dialog>
       </Portal>
+
+      <ProFeatureLock
+        visible={showProLock}
+        onClose={() => setShowProLock(false)}
+        feature="multiple_photos"
+      />
 
       {/* Edit Diary Modal */}
       <RNModal
