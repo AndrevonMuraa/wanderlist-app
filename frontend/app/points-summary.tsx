@@ -256,63 +256,6 @@ export default function PointsSummary() {
           </Surface>
         </View>
 
-        {/* How Points Work */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>How Points Work</Text>
-          
-          <Surface style={styles.card}>
-            <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#FCE4EC' }]}>
-                <Ionicons name="camera" size={18} color="#E91E63" />
-              </View>
-              <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Photo Verification</Text>
-                <Text style={styles.infoDesc}>Take a personal photo of yourself at the landmark to earn verified points for the leaderboard</Text>
-              </View>
-            </View>
-
-            <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#FDEAE4' }]}>
-                <Ionicons name="location" size={18} color="#E87850" />
-              </View>
-              <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Landmark Visit</Text>
-                <Text style={styles.infoDesc}>10 pts (official) or 25 pts (premium)</Text>
-              </View>
-            </View>
-            
-            <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#E0F4F4' }]}>
-                <Ionicons name="flag" size={18} color="#4DB8D8" />
-              </View>
-              <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Country Visit</Text>
-                <Text style={styles.infoDesc}>+50 pts for each country visited (auto or manual)</Text>
-              </View>
-            </View>
-
-            <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#E8F5E9' }]}>
-                <Ionicons name="globe-outline" size={18} color="#66BB6A" />
-              </View>
-              <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Continent Bonus</Text>
-                <Text style={styles.infoDesc}>+50 pts for first country on a new continent</Text>
-              </View>
-            </View>
-
-            <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#FFF8E1' }]}>
-                <Ionicons name="star" size={18} color="#FFD700" />
-              </View>
-              <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Completion Bonuses</Text>
-                <Text style={styles.infoDesc}>+50 pts per country, +200 pts per continent completed</Text>
-              </View>
-            </View>
-          </Surface>
-        </View>
-
         {/* Earning Potential */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Earning Potential</Text>
@@ -373,6 +316,63 @@ export default function PointsSummary() {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 8 }}>
               <Text style={{ fontSize: 14, fontWeight: '700', color: theme.colors.text }}>Total Earned</Text>
               <Text style={{ fontSize: 14, fontWeight: '800', color: theme.colors.primary }}>{totalPoints.toLocaleString()} <Text style={styles.potentialMax}>/ 27,750</Text></Text>
+            </View>
+          </Surface>
+        </View>
+
+        {/* How Points Work */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>How Points Work</Text>
+          
+          <Surface style={styles.card}>
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#FCE4EC' }]}>
+                <Ionicons name="camera" size={18} color="#E91E63" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Photo Verification</Text>
+                <Text style={styles.infoDesc}>Take a personal photo of yourself at the landmark to earn verified points for the leaderboard</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#FDEAE4' }]}>
+                <Ionicons name="location" size={18} color="#E87850" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Landmark Visit</Text>
+                <Text style={styles.infoDesc}>10 pts (official) or 25 pts (premium)</Text>
+              </View>
+            </View>
+            
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#E0F4F4' }]}>
+                <Ionicons name="flag" size={18} color="#4DB8D8" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Country Visit</Text>
+                <Text style={styles.infoDesc}>+50 pts for each country visited (auto or manual)</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#E8F5E9' }]}>
+                <Ionicons name="globe-outline" size={18} color="#66BB6A" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Continent Bonus</Text>
+                <Text style={styles.infoDesc}>+50 pts for first country on a new continent</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#FFF8E1' }]}>
+                <Ionicons name="star" size={18} color="#FFD700" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Completion Bonuses</Text>
+                <Text style={styles.infoDesc}>+50 pts per country, +200 pts per continent completed</Text>
+              </View>
             </View>
           </Surface>
         </View>
