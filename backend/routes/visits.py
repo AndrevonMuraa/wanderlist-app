@@ -610,6 +610,10 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     # Check for milestones and create activity if reached
     # Milestones adjusted for 520 total landmarks
 
+    # Return the created visit (exclude MongoDB _id)
+    visit.pop("_id", None)
+    return visit
+
 
 @router.get("/points/breakdown")
 async def get_points_breakdown(current_user: User = Depends(get_current_user)):
