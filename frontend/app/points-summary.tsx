@@ -270,7 +270,7 @@ export default function PointsSummary() {
                 </View>
                 <View style={styles.breakdownContent}>
                   <Text style={styles.breakdownLabel}>Unverified Points</Text>
-                  <Text style={styles.breakdownDesc}>From visits without photos — personal total only</Text>
+                  <Text style={styles.breakdownDesc}>From visits without photos — counts for friends leaderboard only</Text>
                 </View>
                 <Text style={styles.breakdownValue}>{unverifiedPoints.toLocaleString()}</Text>
                 <Ionicons name={expandedSection === 'unverified' ? 'chevron-up' : 'chevron-down'} size={18} color={theme.colors.textLight} style={{ marginLeft: 6 }} />
