@@ -138,9 +138,9 @@ export default function PointsSummary() {
           </LinearGradient>
         </View>
 
-        {/* How Points Work */}
+        {/* Points Breakdown */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>How Points Work</Text>
+          <Text style={styles.sectionTitle}>Points Breakdown</Text>
           
           <Surface style={styles.card}>
             <View style={styles.infoRow}>
@@ -195,9 +195,9 @@ export default function PointsSummary() {
           </Surface>
         </View>
 
-        {/* Points Breakdown */}
+        {/* How Points Work */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Points Breakdown</Text>
+          <Text style={styles.sectionTitle}>How Points Work</Text>
           
           <Surface style={styles.card}>
             <TouchableOpacity onPress={() => handleToggleSection('verified')} activeOpacity={0.7}>
@@ -373,7 +373,7 @@ export default function PointsSummary() {
               You've earned {totalPoints > 0 ? ((totalPoints / 33750) * 100).toFixed(1) : '0'}% of all possible points
             </Text>
 
-            <TouchableOpacity style={styles.potentialRow} onPress={() => router.push('/my-landmark-visits')} activeOpacity={0.7}>
+            <View style={styles.potentialRow}>
               <View style={[styles.potentialIcon, { backgroundColor: '#FDEAE4' }]}>
                 <Ionicons name="location" size={16} color="#E87850" />
               </View>
@@ -386,24 +386,22 @@ export default function PointsSummary() {
                   <View style={[styles.potentialBar, { width: `${Math.min(100, ((breakdown?.summary?.landmark_total || 0) / 22500) * 100)}%`, backgroundColor: '#E87850' }]} />
                 </View>
               </View>
-              <Ionicons name="chevron-forward" size={16} color={theme.colors.textLight} />
-            </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity style={styles.potentialRow} onPress={() => router.push('/my-country-visits')} activeOpacity={0.7}>
+            <View style={styles.potentialRow}>
               <View style={[styles.potentialIcon, { backgroundColor: '#E0F4F4' }]}>
                 <Ionicons name="flag" size={16} color="#4DB8D8" />
               </View>
               <View style={styles.potentialContent}>
                 <View style={styles.potentialLabelRow}>
-                  <Text style={styles.potentialLabel}>Destination Visits</Text>
+                  <Text style={styles.potentialLabel}>Destinations</Text>
                   <Text style={styles.potentialValue}>{breakdown?.summary?.country_total || 0} <Text style={styles.potentialMax}>/ 5,000</Text></Text>
                 </View>
                 <View style={styles.potentialBarBg}>
                   <View style={[styles.potentialBar, { width: `${Math.min(100, ((breakdown?.summary?.country_total || 0) / 5000) * 100)}%`, backgroundColor: '#4DB8D8' }]} />
                 </View>
               </View>
-              <Ionicons name="chevron-forward" size={16} color={theme.colors.textLight} />
-            </TouchableOpacity>
+            </View>
 
             <View style={styles.potentialRow}>
               <View style={[styles.potentialIcon, { backgroundColor: '#E8F5E9' }]}>
