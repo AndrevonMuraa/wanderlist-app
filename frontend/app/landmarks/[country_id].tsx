@@ -428,7 +428,7 @@ export default function LandmarksScreen() {
             {countryProgress ? (
               <Surface style={styles.progressHeader}>
                 <View style={styles.progressTitleRow}>
-                  <Text style={styles.progressTitle}>Your Progress</Text>
+                  <Text style={styles.progressTitle}>Landmark Progress</Text>
                   <View style={styles.progressPointsBadge}>
                     <Ionicons name="star" size={14} color="#FFD700" />
                     <Text style={styles.progressPointsText}>{countryProgress.points} pts</Text>
