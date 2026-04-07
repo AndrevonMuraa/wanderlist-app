@@ -255,6 +255,25 @@ export default function PointsSummary() {
                     ))}
                   </>
                 )}
+                {breakdown.completion_bonuses?.destinations?.filter((d: any) => d.verified).length > 0 && (
+                  <>
+                    <Text style={styles.detailGroupTitle}>Completion Bonuses ({breakdown.summary.completion_verified || 0} pts)</Text>
+                    {breakdown.completion_bonuses.destinations.filter((d: any) => d.verified).map((d: any) => (
+                      <View key={d.name} style={styles.detailRow}>
+                        <Ionicons name="star" size={14} color="#FFD700" />
+                        <Text style={styles.detailName}>{d.name} completed</Text>
+                        <Text style={styles.detailPts}>+{d.points}</Text>
+                      </View>
+                    ))}
+                    {breakdown.completion_bonuses.continents.filter((c: any) => c.verified).map((c: any) => (
+                      <View key={c.name} style={styles.detailRow}>
+                        <Ionicons name="star" size={14} color="#FFD700" />
+                        <Text style={styles.detailName}>{c.name} completed</Text>
+                        <Text style={styles.detailPts}>+{c.points}</Text>
+                      </View>
+                    ))}
+                  </>
+                )}
                 {verifiedPoints === 0 && (
                   <Text style={styles.detailEmpty}>Add photos to your visits to earn verified points</Text>
                 )}
@@ -314,6 +333,25 @@ export default function PointsSummary() {
                         <Ionicons name="globe-outline" size={14} color="#66BB6A" />
                         <Text style={styles.detailName}>{b.continent}</Text>
                         <Text style={styles.detailPts}>+{b.points}</Text>
+                      </View>
+                    ))}
+                  </>
+                )}
+                {((breakdown.completion_bonuses?.destinations?.filter((d: any) => !d.verified).length || 0) + (breakdown.completion_bonuses?.continents?.filter((c: any) => !c.verified).length || 0)) > 0 && (
+                  <>
+                    <Text style={styles.detailGroupTitle}>Completion Bonuses ({(breakdown.summary.completion_total || 0) - (breakdown.summary.completion_verified || 0)} pts)</Text>
+                    {(breakdown.completion_bonuses?.destinations || []).filter((d: any) => !d.verified).map((d: any) => (
+                      <View key={d.name} style={styles.detailRow}>
+                        <Ionicons name="star" size={14} color="#FFD700" />
+                        <Text style={styles.detailName}>{d.name} completed</Text>
+                        <Text style={styles.detailPts}>+{d.points}</Text>
+                      </View>
+                    ))}
+                    {(breakdown.completion_bonuses?.continents || []).filter((c: any) => !c.verified).map((c: any) => (
+                      <View key={c.name} style={styles.detailRow}>
+                        <Ionicons name="star" size={14} color="#FFD700" />
+                        <Text style={styles.detailName}>{c.name} completed</Text>
+                        <Text style={styles.detailPts}>+{c.points}</Text>
                       </View>
                     ))}
                   </>
