@@ -453,18 +453,21 @@ export default function PointsSummary() {
           const needed = nextRank.minPoints - verifiedPoints;
           return (
             <View style={styles.section}>
-              <Surface style={[styles.card, { borderLeftWidth: 3, borderLeftColor: nextRank.color }]}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                  <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: nextRank.color + '20', alignItems: 'center', justifyContent: 'center' }}>
-                    <Ionicons name="trophy" size={22} color={nextRank.color} />
+              <TouchableOpacity onPress={() => router.push('/leaderboard')} activeOpacity={0.7}>
+                <Surface style={[styles.card, { borderLeftWidth: 3, borderLeftColor: nextRank.color }]}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                    <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: nextRank.color + '20', alignItems: 'center', justifyContent: 'center' }}>
+                      <Ionicons name="trophy" size={22} color={nextRank.color} />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={{ fontSize: 12, color: theme.colors.textSecondary }}>Next Rank</Text>
+                      <Text style={{ fontSize: 16, fontWeight: '700', color: nextRank.color }}>{nextRank.name}</Text>
+                      <Text style={{ fontSize: 12, color: theme.colors.textLight, marginTop: 2 }}>{needed.toLocaleString()} more verified points needed</Text>
+                    </View>
+                    <Ionicons name="chevron-forward" size={18} color={theme.colors.textLight} />
                   </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 12, color: theme.colors.textSecondary }}>Next Rank</Text>
-                    <Text style={{ fontSize: 16, fontWeight: '700', color: nextRank.color }}>{nextRank.name}</Text>
-                    <Text style={{ fontSize: 12, color: theme.colors.textLight, marginTop: 2 }}>{needed.toLocaleString()} more verified points needed</Text>
-                  </View>
-                </View>
-              </Surface>
+                </Surface>
+              </TouchableOpacity>
             </View>
           );
         })()}
