@@ -26,6 +26,7 @@ import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
+import { invalidateCacheGroup } from '../../utils/apiCache';
 import PhotoViewer from '../../components/PhotoViewer';
 import { KeyboardDoneBar } from '../../components/KeyboardDoneBar';
 import UniversalHeader from '../../components/UniversalHeader';
@@ -290,6 +291,7 @@ export default function CountryVisitDetailScreen() {
       );
 
       if (response.ok) {
+        invalidateCacheGroup('visit');
         setShowDeleteDialog(false);
         if (Platform.OS === 'web') {
           alert('Visit deleted successfully');

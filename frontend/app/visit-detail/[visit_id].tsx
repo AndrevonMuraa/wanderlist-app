@@ -9,6 +9,7 @@ import * as ImagePicker from 'expo-image-picker';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import { lightHaptic } from '../../utils/haptics';
+import { invalidateCacheGroup } from '../../utils/apiCache';
 import { PhotoGalleryModal } from '../../components/PhotoGalleryModal';
 import { shareVisit } from '../../utils/shareUtils';
 import ReportButton from '../../components/ReportButton';
@@ -240,6 +241,7 @@ export default function VisitDetailScreen() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
+        invalidateCacheGroup('visit');
         Alert.alert('Deleted', 'Visit has been removed.', [
           { text: 'OK', onPress: () => router.replace('/(tabs)/journey') },
         ]);
