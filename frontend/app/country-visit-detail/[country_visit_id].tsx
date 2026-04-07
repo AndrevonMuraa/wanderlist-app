@@ -757,30 +757,8 @@ export default function CountryVisitDetailScreen() {
           )}
         </Surface>
 
-        {/* Action Buttons */}
-        <View style={styles.actionButtons}>
-          <TouchableOpacity style={styles.shareCard} onPress={handleShare} activeOpacity={0.8}>
-            <LinearGradient
-              colors={[theme.colors.primary, '#2AA8B3']}
-              style={styles.shareGradient}
-            >
-              <Ionicons name="share-social" size={22} color="#fff" />
-              <Text style={styles.shareText}>Share This Memory</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.deleteButton} 
-            onPress={() => setShowDeleteDialog(true)}
-            activeOpacity={0.8}
-          >
-            <Ionicons name="trash-outline" size={20} color={theme.colors.error} />
-            <Text style={styles.deleteText}>Delete Visit</Text>
-          </TouchableOpacity>
-        </View>
-
         {/* Visited Landmarks in This Country */}
-        <Surface style={styles.diaryCard}>
+        <Surface style={[styles.diaryCard, { marginTop: theme.spacing.md }]}>
           <View style={styles.diaryHeader}>
             <View style={styles.diaryTitleRow}>
               <Ionicons name="location" size={22} color={theme.colors.accent} />
@@ -833,6 +811,28 @@ export default function CountryVisitDetailScreen() {
             </View>
           )}
         </Surface>
+
+        {/* Action Buttons */}
+        <View style={styles.actionButtons}>
+          <TouchableOpacity style={styles.shareCard} onPress={handleShare} activeOpacity={0.8}>
+            <LinearGradient
+              colors={[theme.colors.primary, '#2AA8B3']}
+              style={styles.shareGradient}
+            >
+              <Ionicons name="share-social" size={22} color="#fff" />
+              <Text style={styles.shareText}>Share This Memory</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.deleteButton} 
+            onPress={() => setShowDeleteDialog(true)}
+            activeOpacity={0.8}
+          >
+            <Ionicons name="trash-outline" size={20} color={theme.colors.error} />
+            <Text style={styles.deleteText}>Delete Visit</Text>
+          </TouchableOpacity>
+        </View>
 
         {/* Custom Landmarks (from Custom Visits — PRO) */}
         {customLandmarks.length > 0 && (
