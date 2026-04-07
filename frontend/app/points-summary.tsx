@@ -230,6 +230,19 @@ export default function PointsSummary() {
                     ))}
                   </>
                 )}
+                {breakdown.country_visits.filter((c: any) => c.verified).length > 0 && (
+                  <>
+                    <Text style={styles.detailGroupTitle}>Destination Visits ({breakdown.summary.country_verified || 0} pts)</Text>
+                    {breakdown.country_visits.filter((c: any) => c.verified).map((c: any) => (
+                      <TouchableOpacity key={c.country_visit_id} style={styles.detailRow} onPress={() => router.push(`/country-visit-detail/${c.country_visit_id}`)} activeOpacity={0.7}>
+                        <Ionicons name="flag" size={14} color="#4DB8D8" />
+                        <Text style={styles.detailName}>{c.name}</Text>
+                        <Text style={styles.detailPts}>+{c.points}</Text>
+                        <Ionicons name="chevron-forward" size={14} color={theme.colors.textLight} />
+                      </TouchableOpacity>
+                    ))}
+                  </>
+                )}
                 {breakdown.continent_bonuses.filter((b: any) => b.verified).length > 0 && (
                   <>
                     <Text style={styles.detailGroupTitle}>Continent Bonuses ({breakdown.summary.continent_verified} pts)</Text>
@@ -280,10 +293,10 @@ export default function PointsSummary() {
                     ))}
                   </>
                 )}
-                {breakdown.country_visits.length > 0 && (
+                {breakdown.country_visits.filter((c: any) => !c.verified).length > 0 && (
                   <>
-                    <Text style={styles.detailGroupTitle}>Destination Visits ({breakdown.summary.country_total} pts)</Text>
-                    {breakdown.country_visits.map((c: any) => (
+                    <Text style={styles.detailGroupTitle}>Destination Visits ({breakdown.summary.country_total - (breakdown.summary.country_verified || 0)} pts)</Text>
+                    {breakdown.country_visits.filter((c: any) => !c.verified).map((c: any) => (
                       <TouchableOpacity key={c.country_visit_id} style={styles.detailRow} onPress={() => router.push(`/country-visit-detail/${c.country_visit_id}`)} activeOpacity={0.7}>
                         <Ionicons name="flag" size={14} color="#4DB8D8" />
                         <Text style={styles.detailName}>{c.name}</Text>

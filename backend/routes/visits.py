@@ -623,7 +623,7 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
     
     cv_task = db.country_visits.find(
         {"user_id": current_user.user_id},
-        {"_id": 0, "country_visit_id": 1, "country_id": 1, "country_name": 1, "points_earned": 1, "source": 1}
+        {"_id": 0, "country_visit_id": 1, "country_id": 1, "country_name": 1, "points_earned": 1, "source": 1, "photos": 1}
     ).sort("visited_at", -1).to_list(1000)
     
     visits, country_visits = await asyncio.gather(visits_task, cv_task)
@@ -640,11 +640,13 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
     
     countries = []
     for cv in country_visits:
+        has_photos = len(cv.get("photos", []) or []) > 0
         countries.append({
             "country_visit_id": cv.get("country_visit_id"),
             "name": cv.get("country_name", "Unknown"),
             "points": cv.get("points_earned", 0),
             "source": cv.get("source", "manual"),
+            "verified": has_photos,
         })
     
     # Calculate continent bonuses from visited countries
@@ -685,6 +687,7 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
     lm_total = sum(l["points"] for l in landmarks)
     lm_verified = sum(l["points"] for l in landmarks if l["verified"])
     cv_total = sum(c["points"] for c in countries)
+    cv_verified = sum(c["points"] for c in countries if c["verified"])
     cont_total = len(continent_bonuses) * 50
     cont_verified = sum(50 for b in continent_bonuses if b["verified"])
     
@@ -696,6 +699,7 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
             "landmark_total": lm_total,
             "landmark_verified": lm_verified,
             "country_total": cv_total,
+            "country_verified": cv_verified,
             "continent_total": cont_total,
             "continent_verified": cont_verified,
             "grand_total": lm_total + cv_total + cont_total,
