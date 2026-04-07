@@ -424,18 +424,15 @@ const styles = StyleSheet.create({
   },
   visitImageContainer: {
     width: 90,
-    minHeight: 90,
-    position: 'relative',
+    height: 90,
   },
   visitImage: {
-    width: '100%',
-    height: '100%',
-    minHeight: 90,
+    width: 90,
+    height: 90,
   },
   visitFlagPlaceholder: {
-    width: '100%',
-    height: '100%',
-    minHeight: 90,
+    width: 90,
+    height: 90,
     backgroundColor: theme.colors.backgroundSecondary,
     alignItems: 'center',
     justifyContent: 'center',
