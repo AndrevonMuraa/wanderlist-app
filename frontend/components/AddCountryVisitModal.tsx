@@ -154,7 +154,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
       <VisitSubmitButton
         onPress={handleSubmit}
         loading={submitting}
-        label={photos.length > 0 ? 'Record Visit (+50 points)' : 'Mark as Visited (personal only)'}
+        label={photos.length > 0 ? 'Record Visit (+50 points)' : 'Mark as Visited'}
         active={photos.length > 0}
       />
     </VisitModalShell>
