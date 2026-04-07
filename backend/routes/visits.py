@@ -654,19 +654,34 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
         })
     
     # Calculate continent bonuses from visited countries
+    # Look up actual country_ids from landmarks collection (don't parse from landmark_id string)
+    landmark_ids = [v.get("landmark_id") for v in visits if v.get("landmark_id")]
+    landmark_country_map = {}
+    if landmark_ids:
+        lm_docs = await db.landmarks.find(
+            {"landmark_id": {"$in": landmark_ids}},
+            {"_id": 0, "landmark_id": 1, "country_id": 1}
+        ).to_list(10000)
+        landmark_country_map = {doc["landmark_id"]: doc["country_id"] for doc in lm_docs}
+    
     country_ids_from_landmarks = set()
     verified_country_ids = set()
     for v in visits:
-        lid = v.get("landmark_id", "")
-        parts = lid.rsplit("_", 1)
-        if len(parts) > 1:
-            country_id = parts[0]
-            country_ids_from_landmarks.add(country_id)
+        cid = landmark_country_map.get(v.get("landmark_id"))
+        if cid:
+            country_ids_from_landmarks.add(cid)
             if v.get("verified", False):
-                verified_country_ids.add(country_id)
+                verified_country_ids.add(cid)
+    
+    # Also track verified country_visits (have photos)
+    verified_cv_country_ids = set(
+        cv.get("country_id") for cv in country_visits
+        if cv.get("country_id") and len(cv.get("photos", []) or []) > 0
+    )
     
     country_ids_from_cv = set(cv.get("country_id", "") for cv in country_visits if cv.get("country_id"))
     all_country_ids = country_ids_from_landmarks | country_ids_from_cv
+    all_verified_country_ids = verified_country_ids | verified_cv_country_ids
     
     # Map continents and track if any country in that continent has a verified visit
     continents_visited = {}
@@ -677,7 +692,7 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
         ).to_list(200)
         for doc in country_docs:
             cont = doc["continent"]
-            has_verified = doc["country_id"] in verified_country_ids
+            has_verified = doc["country_id"] in all_verified_country_ids
             if cont not in continents_visited:
                 continents_visited[cont] = has_verified
             elif has_verified:
