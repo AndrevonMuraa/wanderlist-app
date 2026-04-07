@@ -227,7 +227,7 @@ export default function ProfileScreen() {
                       <Text style={[styles.tierText, { color: '#1E8A8A' }]}>{t('profile.proUser')}</Text>
                     </View>
                   ) : (
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: colors.textSecondary + '12', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 14 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(107,107,107,0.1)', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 14 }}>
                       <Ionicons name="person-outline" size={12} color={colors.textSecondary} />
                       <Text style={[styles.tierText, { color: colors.textSecondary }]}>{t('profile.freeUser')}</Text>
                     </View>
@@ -529,12 +529,6 @@ const styles = StyleSheet.create({
 
   // ============ TIER BADGE ============
   tierBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 14,
     alignSelf: 'flex-start',
   },
   tierText: {
