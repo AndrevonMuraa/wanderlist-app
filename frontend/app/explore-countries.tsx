@@ -325,7 +325,8 @@ export default function ExploreCountriesScreen() {
     const totalVisitedCountries = allCountries.filter(c => c.countryVisited).length;
     const totalEarnedPoints = allCountries.reduce((sum, country) => {
       const visitedLandmarks = country.visited || 0;
-      return sum + (visitedLandmarks * 10);
+      const countryVisitPoints = country.countryVisited ? 50 : 0;
+      return sum + (visitedLandmarks * 10) + countryVisitPoints;
     }, 0);
 
     return (
