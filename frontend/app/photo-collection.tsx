@@ -101,8 +101,8 @@ const getCountryFlag = (countryName: string): string => {
 
 const getVisitTypeIcon = (type: string) => {
   switch (type) {
-    case 'landmark': return { icon: 'location', color: theme.colors.primary };
-    case 'country': return { icon: 'flag', color: theme.colors.accent };
+    case 'landmark': return { icon: 'location', color: '#E87850' };
+    case 'country': return { icon: 'flag', color: '#4DB8D8' };
     case 'custom': return { icon: 'star', color: '#FFD700' };
     default: return { icon: 'image', color: theme.colors.textLight };
   }
