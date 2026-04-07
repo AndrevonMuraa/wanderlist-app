@@ -146,7 +146,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
         <View style={styles.infoBox}>
           <Ionicons name="information-circle-outline" size={20} color="#FFA726" />
           <Text style={styles.infoText}>
-            Add photos to earn leaderboard points! Without photos, points count for personal stats only.
+            Add photos to earn verified points for the leaderboard.
           </Text>
         </View>
       )}
@@ -154,7 +154,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
       <VisitSubmitButton
         onPress={handleSubmit}
         loading={submitting}
-        label={photos.length > 0 ? 'Record Visit (+50 points)' : 'Mark as Visited'}
+        label="Record Visit"
         active={photos.length > 0}
       />
     </VisitModalShell>
