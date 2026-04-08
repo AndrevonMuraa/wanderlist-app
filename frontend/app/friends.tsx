@@ -563,9 +563,9 @@ export default function FriendsScreen() {
         data={filteredFriends}
         renderItem={renderFriend}
         keyExtractor={(item) => item.user_id}
-        ListHeaderComponent={renderHeader}
+        ListHeaderComponent={renderHeader()}
         contentContainerStyle={styles.listContent}
-        keyboardShouldPersistTaps="handled"
+        keyboardShouldPersistTaps="always"
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
