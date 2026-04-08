@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform, Alert, StatusBar, Share } from 'react-native';
-import { Text, ActivityIndicator } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform, Alert, StatusBar } from 'react-native';
+import { Text, ActivityIndicator, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,7 +14,6 @@ import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
 import ReportButton from '../../components/ReportButton';
-import { shareProfile } from '../../utils/shareUtils';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') return localStorage.getItem('auth_token');
@@ -35,7 +34,7 @@ interface UserProfile {
   friendship_id?: string;
   is_own_profile: boolean;
   stats: { total_visits: number; countries_visited: number; continents_visited: number; friends_count: number };
-  recent_visits: { visit_id: string; landmark_id: string; landmark_name: string; visited_at: string; photo_url?: string }[];
+  recent_visits: { visit_id: string; landmark_id: string; landmark_name: string; visited_at: string; photo_url?: string; country_name?: string; has_diary?: boolean }[];
 }
 
 export default function UserProfileScreen() {
@@ -43,15 +42,12 @@ export default function UserProfileScreen() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
-  const [activities, setActivities] = useState<any[]>([]);
-  const [activitiesLoading, setActivitiesLoading] = useState(false);
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 24);
 
   useEffect(() => { loadProfile(); }, [user_id]);
-  useEffect(() => { if (profile) loadActivity(); }, [profile]);
 
   const loadProfile = async () => {
     try {
@@ -62,34 +58,6 @@ export default function UserProfileScreen() {
       if (res.ok) setProfile(await res.json());
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
-  };
-
-  const loadActivity = async () => {
-    setActivitiesLoading(true);
-    try {
-      const token = await getToken();
-      const res = await fetch(`${BACKEND_URL}/api/users/${user_id}/activity?limit=5`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setActivities(data.activities || []);
-      }
-    } catch (e) {
-      console.error('Error loading activity:', e);
-    } finally {
-      setActivitiesLoading(false);
-    }
-  };
-
-  const handleShareProfile = async () => {
-    if (!profile) return;
-    await shareProfile(
-      profile.name,
-      profile.stats.total_visits,
-      profile.stats.countries_visited,
-      profile.points || 0
-    );
   };
 
   const handleFriendAction = async () => {
@@ -125,23 +93,13 @@ export default function UserProfileScreen() {
     finally { setActionLoading(false); }
   };
 
-  const friendButtonLabel = () => {
-    if (!profile) return '';
+  const friendButtonConfig = () => {
+    if (!profile) return { label: '', icon: 'person-add' as any, style: 'primary' };
     switch (profile.friendship_status) {
-      case 'none': return 'Add Friend';
-      case 'pending_sent': return 'Request Sent';
-      case 'pending_received': return 'Accept Request';
-      case 'friends': return 'Friends';
-    }
-  };
-
-  const friendButtonIcon = (): any => {
-    if (!profile) return 'person-add';
-    switch (profile.friendship_status) {
-      case 'none': return 'person-add-outline';
-      case 'pending_sent': return 'time-outline';
-      case 'pending_received': return 'checkmark-circle-outline';
-      case 'friends': return 'people';
+      case 'none': return { label: 'Add Friend', icon: 'person-add-outline' as any, style: 'primary' };
+      case 'pending_sent': return { label: 'Request Sent', icon: 'time-outline' as any, style: 'pending' };
+      case 'pending_received': return { label: 'Accept Request', icon: 'checkmark-circle-outline' as any, style: 'accept' };
+      case 'friends': return { label: 'Friends', icon: 'people' as any, style: 'friends' };
     }
   };
 
@@ -165,6 +123,7 @@ export default function UserProfileScreen() {
   }
 
   const rank = getUserRank(profile.leaderboard_points || 0);
+  const btn = friendButtonConfig();
 
   return (
     <View style={styles.container}>
@@ -177,78 +136,104 @@ export default function UserProfileScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} data-testid="profile-back-btn">
           <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Profile</Text>
+        <Text style={styles.headerTitle}>{profile.name}</Text>
         <View style={{ width: 36 }} />
       </LinearGradient>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Avatar + Name */}
-        <View style={styles.profileCard}>
+        {/* Profile Header */}
+        <Surface style={styles.profileCard}>
           <View style={styles.avatarRow}>
             {profile.picture ? (
               <Image source={{ uri: profile.picture }} style={styles.avatar} />
             ) : (
-              <DefaultAvatar name={profile.name} size={80} />
+              <DefaultAvatar name={profile.name} size={72} />
             )}
             <View style={styles.nameCol}>
-              <View style={styles.nameRow}>
-                <Text style={styles.name} data-testid="profile-name">{profile.name}</Text>
-                {profile.is_premium && <Ionicons name="diamond" size={16} color="#1E8A8A" />}
-              </View>
+              <Text style={styles.name} data-testid="profile-name">{profile.name}</Text>
               {profile.username && <Text style={styles.username}>@{profile.username}</Text>}
-              {profile.bio && <Text style={styles.bio} numberOfLines={2}>{profile.bio}</Text>}
-              {profile.location && (
-                <View style={styles.locationRow}>
-                  <Ionicons name="location-outline" size={14} color={theme.colors.textSecondary} />
-                  <Text style={styles.location}>{profile.location}</Text>
-                </View>
-              )}
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                {profile.is_premium && (
+                  <View style={styles.proBadge}>
+                    <Ionicons name="diamond" size={12} color="#1E8A8A" />
+                    <Text style={styles.proBadgeText}>PRO</Text>
+                  </View>
+                )}
+                <TouchableOpacity onPress={() => router.push('/ranks')} activeOpacity={0.7}>
+                  <View style={[styles.rankPill, { backgroundColor: rank.color + '15' }]}>
+                    <View style={{ width: 18, height: 18 }}>
+                      <RankBadge rank={rank} size="tiny" />
+                    </View>
+                    <Text style={[styles.rankPillText, { color: rank.color }]}>{rank.name}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-
-          {/* Rank */}
-          <View style={styles.rankRow}>
-            <RankBadge rank={rank} size="medium" />
-            <Text style={styles.pointsText}>{profile.points?.toLocaleString() || 0} points</Text>
-          </View>
-        </View>
+          {profile.bio && <Text style={styles.bio}>{profile.bio}</Text>}
+          {profile.location && (
+            <View style={styles.locationRow}>
+              <Ionicons name="location-outline" size={13} color={theme.colors.textSecondary} />
+              <Text style={styles.location}>{profile.location}</Text>
+            </View>
+          )}
+        </Surface>
 
         {/* Stats */}
-        <View style={styles.statsRow} data-testid="profile-stats">
-          {[
-            { label: 'Visits', value: profile.stats.total_visits, icon: 'pin' },
-            { label: 'Destinations', value: profile.stats.countries_visited, icon: 'flag' },
-            { label: 'Continents', value: profile.stats.continents_visited, icon: 'earth' },
-            { label: 'Friends', value: profile.stats.friends_count, icon: 'people' },
-          ].map((s) => (
-            <View key={s.label} style={styles.statBox}>
-              <Ionicons name={s.icon as any} size={18} color={theme.colors.primary} />
-              <Text style={styles.statValue}>{s.value}</Text>
-              <Text style={styles.statLabel}>{s.label}</Text>
+        <Surface style={styles.statsCard} data-testid="profile-stats">
+          <View style={styles.statsRow}>
+            <View style={styles.statItem}>
+              <View style={[styles.statIconWrap, { backgroundColor: '#FDEAE4' }]}>
+                <Ionicons name="location" size={16} color="#E87850" />
+              </View>
+              <Text style={styles.statValue}>{profile.stats.total_visits}</Text>
+              <Text style={styles.statLabel}>Landmarks</Text>
             </View>
-          ))}
-        </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <View style={[styles.statIconWrap, { backgroundColor: '#E0F4F4' }]}>
+                <Ionicons name="flag" size={16} color="#4DB8D8" />
+              </View>
+              <Text style={styles.statValue}>{profile.stats.countries_visited}</Text>
+              <Text style={styles.statLabel}>Destinations</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <View style={[styles.statIconWrap, { backgroundColor: '#E8F5E9' }]}>
+                <Ionicons name="globe-outline" size={16} color="#66BB6A" />
+              </View>
+              <Text style={styles.statValue}>{profile.stats.continents_visited}</Text>
+              <Text style={styles.statLabel}>Continents</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <View style={[styles.statIconWrap, { backgroundColor: '#FFF3E0' }]}>
+                <Ionicons name="star" size={16} color="#FFA726" />
+              </View>
+              <Text style={styles.statValue}>{(profile.leaderboard_points || 0).toLocaleString()}</Text>
+              <Text style={styles.statLabel}>Verified</Text>
+            </View>
+          </View>
+        </Surface>
 
-        {/* Action Buttons */}
+        {/* Actions */}
         {!profile.is_own_profile && (
           <View style={styles.actionRow}>
             <TouchableOpacity
               style={[
                 styles.actionBtn,
-                profile.friendship_status === 'friends' && styles.actionBtnFriends,
-                profile.friendship_status === 'pending_sent' && styles.actionBtnPending,
+                btn.style === 'friends' && styles.actionBtnFriends,
+                btn.style === 'pending' && styles.actionBtnPending,
+                btn.style === 'accept' && styles.actionBtnAccept,
               ]}
               onPress={handleFriendAction}
               disabled={actionLoading || profile.friendship_status === 'pending_sent'}
               data-testid="friend-action-btn"
             >
-              <Ionicons name={friendButtonIcon()} size={18} color={
-                profile.friendship_status === 'friends' ? theme.colors.primary : '#fff'
-              } />
-              <Text style={[
-                styles.actionBtnText,
-                profile.friendship_status === 'friends' && styles.actionBtnTextFriends,
-              ]}>{friendButtonLabel()}</Text>
+              <Ionicons name={btn.icon} size={18} color={btn.style === 'friends' ? theme.colors.primary : '#fff'} />
+              <Text style={[styles.actionBtnText, btn.style === 'friends' && { color: theme.colors.primary }]}>
+                {btn.label}
+              </Text>
             </TouchableOpacity>
 
             {profile.friendship_status === 'friends' && (
@@ -258,26 +243,22 @@ export default function UserProfileScreen() {
                 data-testid="message-btn"
               >
                 <Ionicons name="chatbubble-outline" size={18} color="#fff" />
-                <Text style={styles.messageBtnText}>Message</Text>
               </TouchableOpacity>
             )}
             <ReportButton contentType="user" contentId={profile.user_id} size={18} color={theme.colors.textLight} />
-            <TouchableOpacity onPress={handleShareProfile} style={{ padding: 4 }} data-testid="share-profile-btn">
-              <Ionicons name="share-outline" size={18} color={theme.colors.textLight} />
-            </TouchableOpacity>
           </View>
         )}
 
         {/* Recent Visits */}
         {profile.recent_visits.length > 0 && (
           <View style={styles.section}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Recent Visits</Text>
               <TouchableOpacity
                 onPress={() => router.push(`/user-visits/${profile.user_id}?user_name=${encodeURIComponent(profile.name)}`)}
                 data-testid="view-all-visits-btn"
               >
-                <Text style={{ fontSize: 14, fontWeight: '600', color: theme.colors.primary }}>View All</Text>
+                <Text style={styles.viewAllText}>View All</Text>
               </TouchableOpacity>
             </View>
             {profile.recent_visits.map((v: any) => (
@@ -291,64 +272,20 @@ export default function UserProfileScreen() {
                   <Image source={{ uri: v.photo_url }} style={styles.visitThumb} />
                 ) : (
                   <View style={[styles.visitThumb, styles.visitThumbPlaceholder]}>
-                    <Ionicons name="image-outline" size={20} color={theme.colors.textLight} />
+                    <Ionicons name="location" size={20} color={theme.colors.textLight} />
                   </View>
                 )}
                 <View style={styles.visitInfo}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                    <Text style={styles.visitName} numberOfLines={1}>{v.landmark_name}</Text>
-                    {v.has_diary && <Ionicons name="journal" size={14} color={theme.colors.primary} />}
-                  </View>
-                  <Text style={styles.visitDate}>
-                    {v.country_name ? `${v.country_name} · ` : ''}{v.visited_at ? new Date(v.visited_at).toLocaleDateString() : ''}
+                  <Text style={styles.visitName} numberOfLines={1}>{v.landmark_name}</Text>
+                  <Text style={styles.visitMeta}>
+                    {v.country_name ? `${v.country_name} · ` : ''}{v.visited_at ? new Date(v.visited_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
                   </Text>
                 </View>
-                <Ionicons name="chevron-forward" size={18} color={theme.colors.textLight} />
+                <Ionicons name="chevron-forward" size={16} color={theme.colors.textLight} />
               </TouchableOpacity>
             ))}
           </View>
         )}
-
-        {/* Activity Stream */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Recent Activity</Text>
-          {activitiesLoading ? (
-            <ActivityIndicator size="small" color={theme.colors.primary} style={{ marginVertical: 16 }} />
-          ) : activities.length > 0 ? (
-            activities.map((act: any) => (
-              <View key={act.activity_id} style={styles.activityCard} data-testid={`activity-${act.activity_id}`}>
-                <View style={styles.activityIconCol}>
-                  <View style={[styles.activityDot, { backgroundColor: theme.colors.primary + '20' }]}>
-                    <Ionicons
-                      name={act.activity_type === 'visit' ? 'location' : act.activity_type === 'country_visit' ? 'flag' : 'star'}
-                      size={16} color={theme.colors.primary}
-                    />
-                  </View>
-                </View>
-                <View style={styles.activityContent}>
-                  <Text style={styles.activityDesc} numberOfLines={2}>{act.description}</Text>
-                  <View style={styles.activityMeta}>
-                    <Text style={styles.activityDate}>
-                      {act.created_at ? new Date(act.created_at).toLocaleDateString() : ''}
-                    </Text>
-                    {act.has_diary && <Ionicons name="journal" size={12} color={theme.colors.primary} style={{ marginLeft: 6 }} />}
-                    {act.has_photos && <Ionicons name="camera" size={12} color={theme.colors.textSecondary} style={{ marginLeft: 6 }} />}
-                    <View style={styles.activityStats}>
-                      <Ionicons name="heart" size={12} color={act.is_liked ? '#e74c3c' : theme.colors.textLight} />
-                      <Text style={styles.activityStatNum}>{act.like_count || 0}</Text>
-                      <Ionicons name="chatbubble-outline" size={12} color={theme.colors.textLight} style={{ marginLeft: 6 }} />
-                      <Text style={styles.activityStatNum}>{act.comments_count || 0}</Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            ))
-          ) : (
-            <Text style={{ fontSize: 14, color: theme.colors.textSecondary, textAlign: 'center', paddingVertical: 20 }}>
-              No visible activity yet
-            </Text>
-          )}
-        </View>
 
         <View style={{ height: 120 }} />
       </ScrollView>
@@ -365,45 +302,69 @@ const styles = StyleSheet.create({
   backBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.2)', justifyContent: 'center', alignItems: 'center' },
   headerTitle: { fontSize: 18, fontWeight: '700', color: '#fff' },
   content: { padding: 16 },
-  profileCard: { backgroundColor: '#fff', borderRadius: 20, padding: 20, marginBottom: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 3 },
-  avatarRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
-  avatar: { width: 80, height: 80, borderRadius: 40, marginRight: 16 },
+  profileCard: {
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 12,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
+  avatarRow: { flexDirection: 'row', alignItems: 'center' },
+  avatar: { width: 72, height: 72, borderRadius: 36, marginRight: 16 },
   nameCol: { flex: 1 },
-  nameRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  name: { fontSize: 20, fontWeight: '700', color: theme.colors.text },
-  username: { fontSize: 14, color: theme.colors.textSecondary, marginTop: 2 },
-  bio: { fontSize: 13, color: theme.colors.textSecondary, marginTop: 6, lineHeight: 18 },
-  locationRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
-  location: { fontSize: 13, color: theme.colors.textSecondary },
-  rankRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: '#f0f0f0' },
-  pointsText: { fontSize: 14, fontWeight: '600', color: theme.colors.text },
-  statsRow: { flexDirection: 'row', backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 16, justifyContent: 'space-around', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.04, shadowRadius: 6, elevation: 2 },
-  statBox: { alignItems: 'center', gap: 4 },
-  statValue: { fontSize: 18, fontWeight: '700', color: theme.colors.text },
-  statLabel: { fontSize: 11, color: theme.colors.textSecondary },
-  actionRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
-  actionBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: theme.colors.primary, paddingVertical: 12, borderRadius: 14 },
-  actionBtnFriends: { backgroundColor: `${theme.colors.primary}15`, borderWidth: 1.5, borderColor: theme.colors.primary },
+  name: { fontSize: 20, fontWeight: '800', color: theme.colors.text },
+  username: { fontSize: 13, color: theme.colors.textSecondary, marginTop: 1 },
+  proBadge: {
+    flexDirection: 'row', alignItems: 'center', gap: 4,
+    backgroundColor: '#1E8A8A15', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10,
+  },
+  proBadgeText: { fontSize: 11, fontWeight: '700', color: '#1E8A8A' },
+  rankPill: {
+    flexDirection: 'row', alignItems: 'center', gap: 4,
+    paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10,
+  },
+  rankPillText: { fontSize: 11, fontWeight: '700' },
+  bio: { fontSize: 13, color: theme.colors.textSecondary, marginTop: 12, lineHeight: 18 },
+  locationRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 6 },
+  location: { fontSize: 12, color: theme.colors.textSecondary },
+  statsCard: {
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.card,
+  },
+  statsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' },
+  statItem: { alignItems: 'center', flex: 1 },
+  statIconWrap: { width: 32, height: 32, borderRadius: 10, alignItems: 'center', justifyContent: 'center', marginBottom: 4 },
+  statValue: { fontSize: 17, fontWeight: '800', color: theme.colors.text },
+  statLabel: { fontSize: 10, color: theme.colors.textSecondary, fontWeight: '500', marginTop: 1 },
+  statDivider: { width: 1, height: 36, backgroundColor: theme.colors.border },
+  actionRow: { flexDirection: 'row', gap: 10, marginBottom: 16, alignItems: 'center' },
+  actionBtn: {
+    flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+    backgroundColor: theme.colors.primary, paddingVertical: 12, borderRadius: 14,
+  },
+  actionBtnFriends: { backgroundColor: theme.colors.primary + '15', borderWidth: 1.5, borderColor: theme.colors.primary },
   actionBtnPending: { backgroundColor: theme.colors.textLight, opacity: 0.7 },
+  actionBtnAccept: { backgroundColor: '#4CAF50' },
   actionBtnText: { fontSize: 15, fontWeight: '600', color: '#fff' },
-  actionBtnTextFriends: { color: theme.colors.primary },
-  messageBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: theme.colors.secondary || '#2AA8B3', paddingVertical: 12, borderRadius: 14 },
-  messageBtnText: { fontSize: 15, fontWeight: '600', color: '#fff' },
+  messageBtn: {
+    width: 48, height: 48, borderRadius: 14,
+    backgroundColor: '#2AA8B3', justifyContent: 'center', alignItems: 'center',
+  },
   section: { marginBottom: 16 },
-  sectionTitle: { fontSize: 16, fontWeight: '700', color: theme.colors.text, marginBottom: 12 },
-  visitCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', padding: 12, borderRadius: 14, marginBottom: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 1 },
-  visitThumb: { width: 48, height: 48, borderRadius: 10, marginRight: 12 },
-  visitThumbPlaceholder: { backgroundColor: theme.colors.background, justifyContent: 'center', alignItems: 'center' },
+  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
+  sectionTitle: { fontSize: 16, fontWeight: '700', color: theme.colors.text },
+  viewAllText: { fontSize: 13, fontWeight: '600', color: theme.colors.primary },
+  visitCard: {
+    flexDirection: 'row', alignItems: 'center',
+    backgroundColor: theme.colors.surface, padding: 12, borderRadius: 14, marginBottom: 8,
+    ...theme.shadows.sm,
+  },
+  visitThumb: { width: 48, height: 48, borderRadius: 12, marginRight: 12 },
+  visitThumbPlaceholder: { backgroundColor: theme.colors.backgroundSecondary, justifyContent: 'center', alignItems: 'center' },
   visitInfo: { flex: 1 },
   visitName: { fontSize: 14, fontWeight: '600', color: theme.colors.text },
-  visitDate: { fontSize: 12, color: theme.colors.textSecondary, marginTop: 2 },
-  activityCard: { flexDirection: 'row', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#f5f5f5' },
-  activityIconCol: { marginRight: 12, paddingTop: 2 },
-  activityDot: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
-  activityContent: { flex: 1 },
-  activityDesc: { fontSize: 14, color: theme.colors.text, lineHeight: 20 },
-  activityMeta: { flexDirection: 'row', alignItems: 'center', marginTop: 6 },
-  activityDate: { fontSize: 12, color: theme.colors.textSecondary },
-  activityStats: { flexDirection: 'row', alignItems: 'center', marginLeft: 'auto' },
-  activityStatNum: { fontSize: 12, color: theme.colors.textLight, marginLeft: 3 },
+  visitMeta: { fontSize: 12, color: theme.colors.textSecondary, marginTop: 2 },
 });
