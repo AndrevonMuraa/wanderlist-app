@@ -17,42 +17,18 @@ Travel app (React Native + Expo + FastAPI + MongoDB Atlas) for tracking landmark
 - Country visit verified = has photos OR has verified landmark in that country
 - Completion bonuses: destination (+50, all landmarks visited, verified if all have photos), continent (+200, all destinations visited, verified if each has photo/verified landmark)
 
-## Key Changes (April 7-8, 2026)
-
-### Points System Overhaul
-- Completion bonuses implemented (destination +50, continent +200) with verified/unverified logic
-- Continent completion trigger: all destinations visited (not all landmarks)
-- Breakdown endpoint synced with recalculate (verified country visits consider landmarks)
-- New continent bonus from create_country_visit endpoint
-- Earning Potential: 33,750 max (22,500 landmarks + 5,000 destinations + 250 continents + 6,000 completion)
-
-### UX Improvements
-- Edit Diary: bottom-sheet with KeyboardAvoidingView (all 3 detail pages)
-- Photo buttons: single "Add Photo" action sheet, "Add More Photos" PRO upsell for Basic users
-- PhotoViewer: minimalist redesign (blur background, no rotate/controls, pinch-to-zoom improved)
-- User Profile: total makeover (Destinations Explored, consistent stat icons, no share/activity)
-- Explore: removed search icon from header
-- My Photos: "By Destination" filter, matching icon colors
-- Visit cards: fixed 90px height on landmark/destination lists
-- Cache invalidation on delete (both visit types)
-- useFocusEffect on explore-countries for live data refresh
-- Points Summary: reordered sections, "Destinations" in Earning Potential, Next Rank links to /ranks
-- Friends search: keyboard stays open (renderHeader fix + keyboardShouldPersistTaps)
-- Profile: PRO badge pill, Ionicons diamond for WanderMark Pro menu item
-- About: compact stats box, "Destination Completion" terminology
-- Consistent alert text (friends vs global leaderboard)
-
-### Bug Fixes
-- Custom Visits crash (ProFeatureLock import)
-- Add visit 500 error (missing return statement)
-- Continent bonus rsplit bug (DB lookup instead)
-- Country visits not counted in progress/continent-stats
-- Points breakdown verified/unverified mismatch
-
 ## Upcoming Tasks
-- P0: Build 78 + test all changes
-- P1: Implement "Add Photo" action sheet on visit-detail (landmark visits) matching country-visit-detail
+- P0: Build 79 - test all changes (includes landmark visit photo action sheet)
 - P1: Deploy juridiske sider (Privacy/Terms)
 - P2: Sentry integration
 - P3: Image optimization (server-side compression)
 - P4: Rename GitHub repo to wandermark-app
+
+## Completed (April 8, 2026 - Session 2)
+- P1: "Add Photo" action sheet on visit-detail (landmark visits) matching country-visit-detail
+  - Action sheet: Take Photo / Choose from Library / Cancel
+  - ProFeatureLock for Basic users at photo limit ("Add More Photos" + PRO badge)
+  - PhotoViewer (pinch-to-zoom, blur background) replaces old PhotoGalleryModal
+  - Zoom hint overlay ("Tap to zoom")
+  - Fixed ProFeatureLock feature prop: `multiple_photos` -> `unlimited_photos` on country-visit-detail
+- Backend Visit CRUD: All endpoints tested and passing (16/16 tests passed)
