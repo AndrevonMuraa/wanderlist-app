@@ -10,11 +10,12 @@ import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import { lightHaptic } from '../../utils/haptics';
 import { invalidateCacheGroup } from '../../utils/apiCache';
-import { PhotoGalleryModal } from '../../components/PhotoGalleryModal';
 import { shareVisit } from '../../utils/shareUtils';
 import ReportButton from '../../components/ReportButton';
 import CommentsSection from '../../components/CommentsSection';
 import { useAuth } from '../../contexts/AuthContext';
+import ProFeatureLock from '../../components/ProFeatureLock';
+import PhotoViewer from '../../components/PhotoViewer';
 
 import { KeyboardDoneBar } from '../../components/KeyboardDoneBar';
 import UniversalHeader from '../../components/UniversalHeader';
@@ -61,7 +62,6 @@ export default function VisitDetailScreen() {
   const [visit, setVisit] = useState<VisitDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState(0);
-  const [showGallery, setShowGallery] = useState(false);
   const [currentVisibility, setCurrentVisibility] = useState<string>('public');
   const [commentsCount, setCommentsCount] = useState(0);
   const [showEditDiaryDialog, setShowEditDiaryDialog] = useState(false);
@@ -70,8 +70,13 @@ export default function VisitDetailScreen() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
+  const [showProLock, setShowProLock] = useState(false);
+  const [showFullscreen, setShowFullscreen] = useState(false);
+  const [fullscreenIndex, setFullscreenIndex] = useState(0);
   const router = useRouter();
   const isOwner = user?.user_id === visit?.user_id;
+  const isPro = user?.subscription_tier === 'pro' || user?.subscription_tier === 'basic_plus';
+  const photoLimit = isPro ? 10 : 1;
 
   useEffect(() => {
     fetchVisitDetails();
@@ -290,16 +295,22 @@ export default function VisitDetailScreen() {
             <TouchableOpacity
               onPress={async () => {
                 await lightHaptic();
-                setShowGallery(true);
+                setFullscreenIndex(selectedPhoto);
+                setShowFullscreen(true);
               }}
               activeOpacity={0.9}
-              style={{ marginHorizontal: 16, marginTop: 16, borderRadius: 16, overflow: 'hidden' }}
+              style={{ marginHorizontal: 16, marginTop: 16, borderRadius: 16, overflow: 'hidden', position: 'relative' }}
             >
               <Image
                 source={{ uri: photos[selectedPhoto] }}
                 style={styles.mainPhoto}
                 resizeMode="cover"
               />
+              {/* Tap to zoom hint */}
+              <View style={styles.zoomHint}>
+                <Ionicons name="expand-outline" size={16} color="#fff" />
+                <Text style={styles.zoomHintText}>Tap to zoom</Text>
+              </View>
               {photos.length > 1 && (
                 <View style={styles.photoCountBadge}>
                   <Ionicons name="images" size={16} color="#fff" />
@@ -360,42 +371,68 @@ export default function VisitDetailScreen() {
                   />
                 </TouchableOpacity>
               ))}
-              {isOwner && (photos.length < (user?.subscription_tier === 'pro' || user?.subscription_tier === 'premium' ? 10 : 1)) && (
-                <TouchableOpacity
-                  onPress={handleAddPhotos}
-                  style={styles.addPhotoThumbnail}
-                  disabled={uploadingPhotos}
-                  data-testid="add-photo-inline-btn"
-                >
-                  {uploadingPhotos ? (
-                    <ActivityIndicator size="small" color={theme.colors.primary} />
-                  ) : (
-                    <>
-                      <Ionicons name="add-circle" size={24} color={theme.colors.primary} />
-                      <Text style={{ fontSize: 10, color: theme.colors.primary, marginTop: 2 }}>Add</Text>
-                    </>
-                  )}
-                </TouchableOpacity>
-              )}
             </ScrollView>
             {isOwner && photos.length > 0 && (
               <Text style={{ fontSize: 11, color: theme.colors.textLight, textAlign: 'center', marginTop: 4 }}>
                 Long-press a photo to remove it
               </Text>
             )}
+            {/* Photo Action Button - matching country-visit-detail pattern */}
+            {isOwner && (
+              <View style={{ alignItems: 'center', paddingVertical: 12, paddingHorizontal: 16, gap: 8 }}>
+                {photos.length < photoLimit ? (
+                  <TouchableOpacity
+                    style={{
+                      flexDirection: 'row', alignItems: 'center', gap: 8,
+                      backgroundColor: theme.colors.primary + '15',
+                      paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20,
+                    }}
+                    onPress={() => {
+                      Alert.alert('Add Photo', 'Choose a source', [
+                        { text: 'Take Photo', onPress: handleTakePhoto },
+                        { text: 'Choose from Library', onPress: handleAddPhotos },
+                        { text: 'Cancel', style: 'cancel' },
+                      ]);
+                    }}
+                    disabled={uploadingPhotos}
+                    data-testid="add-photo-action-btn"
+                  >
+                    {uploadingPhotos ? (
+                      <ActivityIndicator size="small" color={theme.colors.primary} />
+                    ) : (
+                      <Ionicons name="camera" size={18} color={theme.colors.primary} />
+                    )}
+                    <Text style={{ color: theme.colors.primary, fontWeight: '600', fontSize: 14 }}>
+                      {uploadingPhotos ? 'Uploading...' : 'Add Photo'}
+                    </Text>
+                  </TouchableOpacity>
+                ) : !isPro ? (
+                  <TouchableOpacity
+                    style={{
+                      flexDirection: 'row', alignItems: 'center', gap: 8,
+                      backgroundColor: theme.colors.accentTeal + '15',
+                      paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20,
+                    }}
+                    onPress={() => setShowProLock(true)}
+                    data-testid="add-more-photos-pro-btn"
+                  >
+                    <Ionicons name="camera" size={18} color={theme.colors.accentTeal} />
+                    <Text style={{ color: theme.colors.accentTeal, fontWeight: '600', fontSize: 14 }}>Add More Photos</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: theme.colors.accentTeal + '15', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 }}>
+                      <Ionicons name="diamond" size={12} color={theme.colors.accentTeal} />
+                      <Text style={{ color: theme.colors.accentTeal, fontSize: 11, fontWeight: '700' }}>PRO</Text>
+                    </View>
+                  </TouchableOpacity>
+                ) : null}
+              </View>
+            )}
           </View>
         ) : isOwner ? (
-          <TouchableOpacity
-            onPress={handleAddPhotos}
-            activeOpacity={0.7}
-            style={{
-              marginHorizontal: 16, marginTop: 16, borderRadius: 16, overflow: 'hidden',
-              backgroundColor: '#E3F6FC', padding: 28, alignItems: 'center', gap: 10,
-              borderWidth: 2, borderColor: theme.colors.primary, borderStyle: 'dashed',
-            }}
-            disabled={uploadingPhotos}
-            data-testid="add-photo-empty-btn"
-          >
+          <View style={{
+            marginHorizontal: 16, marginTop: 16, borderRadius: 16, overflow: 'hidden',
+            backgroundColor: '#E3F6FC', padding: 28, alignItems: 'center', gap: 10,
+            borderWidth: 2, borderColor: theme.colors.primary, borderStyle: 'dashed',
+          }}>
             {uploadingPhotos ? (
               <ActivityIndicator size="large" color={theme.colors.primary} />
             ) : (
@@ -407,7 +444,32 @@ export default function VisitDetailScreen() {
                 </Text>
               </>
             )}
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert('Add Photo', 'Choose a source', [
+                  { text: 'Take Photo', onPress: handleTakePhoto },
+                  { text: 'Choose from Library', onPress: handleAddPhotos },
+                  { text: 'Cancel', style: 'cancel' },
+                ]);
+              }}
+              disabled={uploadingPhotos}
+              activeOpacity={0.7}
+              style={{
+                marginTop: 8,
+                backgroundColor: theme.colors.primary,
+                paddingHorizontal: 24,
+                paddingVertical: 10,
+                borderRadius: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 6,
+              }}
+              data-testid="add-photo-empty-btn"
+            >
+              <Ionicons name="add-circle" size={18} color="#fff" />
+              <Text style={{ color: '#fff', fontWeight: '600', fontSize: 14 }}>Add Photo</Text>
+            </TouchableOpacity>
+          </View>
         ) : null}
 
         {/* Visit Info */}
@@ -627,11 +689,21 @@ export default function VisitDetailScreen() {
         </Dialog>
       </Portal>
 
-      <PhotoGalleryModal
-        visible={showGallery}
+      <PhotoViewer
+        visible={showFullscreen}
         photos={photos}
-        initialIndex={selectedPhoto}
-        onClose={() => setShowGallery(false)}
+        initialIndex={fullscreenIndex}
+        onClose={() => setShowFullscreen(false)}
+        onPhotosUpdate={(newPhotos) => {
+          setVisit(prev => prev ? { ...prev, photos: newPhotos } : null);
+        }}
+        editable={isOwner}
+      />
+
+      <ProFeatureLock
+        visible={showProLock}
+        onClose={() => setShowProLock(false)}
+        feature="unlimited_photos"
       />
     </View>
   );
@@ -696,6 +768,23 @@ const styles = StyleSheet.create({
     width: width - 32,
     height: (width - 32) * 0.65,
     borderRadius: 16,
+  },
+  zoomHint: {
+    position: 'absolute',
+    bottom: 12,
+    left: 12,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  zoomHintText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '500',
   },
   photoThumbnails: {
     padding: theme.spacing.sm,

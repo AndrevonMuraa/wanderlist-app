@@ -941,7 +941,7 @@ export default function CountryVisitDetailScreen() {
       <ProFeatureLock
         visible={showProLock}
         onClose={() => setShowProLock(false)}
-        feature="multiple_photos"
+        feature="unlimited_photos"
       />
 
       {/* Edit Diary Modal */}
