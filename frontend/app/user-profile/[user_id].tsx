@@ -34,7 +34,7 @@ interface UserProfile {
   friendship_id?: string;
   is_own_profile: boolean;
   stats: { total_visits: number; countries_visited: number; continents_visited: number; friends_count: number };
-  recent_visits: { visit_id: string; landmark_id: string; landmark_name: string; visited_at: string; photo_url?: string; country_name?: string; has_diary?: boolean }[];
+  destinations_explored?: { country_id: string; country_name: string; landmarks_visited: number }[];
 }
 
 export default function UserProfileScreen() {
@@ -183,35 +183,27 @@ export default function UserProfileScreen() {
         <Surface style={styles.statsCard} data-testid="profile-stats">
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
-              <View style={[styles.statIconWrap, { backgroundColor: '#FDEAE4' }]}>
-                <Ionicons name="location" size={16} color="#E87850" />
-              </View>
+              <Ionicons name="location" size={20} color="#E87850" />
               <Text style={styles.statValue}>{profile.stats.total_visits}</Text>
               <Text style={styles.statLabel}>Landmarks</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <View style={[styles.statIconWrap, { backgroundColor: '#E0F4F4' }]}>
-                <Ionicons name="flag" size={16} color="#4DB8D8" />
-              </View>
+              <Ionicons name="flag" size={20} color="#4DB8D8" />
               <Text style={styles.statValue}>{profile.stats.countries_visited}</Text>
               <Text style={styles.statLabel}>Destinations</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <View style={[styles.statIconWrap, { backgroundColor: '#E8F5E9' }]}>
-                <Ionicons name="globe-outline" size={16} color="#66BB6A" />
-              </View>
+              <Ionicons name="earth" size={20} color="#4CAF50" />
               <Text style={styles.statValue}>{profile.stats.continents_visited}</Text>
               <Text style={styles.statLabel}>Continents</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <View style={[styles.statIconWrap, { backgroundColor: '#FFF3E0' }]}>
-                <Ionicons name="star" size={16} color="#FFA726" />
-              </View>
-              <Text style={styles.statValue}>{(profile.leaderboard_points || 0).toLocaleString()}</Text>
-              <Text style={styles.statLabel}>Verified</Text>
+              <Ionicons name="star" size={20} color="#FFD700" />
+              <Text style={styles.statValue}>{(profile.points || 0).toLocaleString()}</Text>
+              <Text style={styles.statLabel}>Points</Text>
             </View>
           </View>
         </Surface>
@@ -249,37 +241,25 @@ export default function UserProfileScreen() {
           </View>
         )}
 
-        {/* Recent Visits */}
-        {profile.recent_visits.length > 0 && (
+        {/* Destinations Explored */}
+        {(profile.destinations_explored || []).length > 0 && (
           <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Recent Visits</Text>
+            <Text style={styles.sectionTitle}>Destinations Explored</Text>
+            {(profile.destinations_explored || []).map((d: any) => (
               <TouchableOpacity
-                onPress={() => router.push(`/user-visits/${profile.user_id}?user_name=${encodeURIComponent(profile.name)}`)}
-                data-testid="view-all-visits-btn"
+                key={d.country_id}
+                style={styles.destCard}
+                onPress={() => router.push(`/landmarks/${d.country_id}?name=${encodeURIComponent(d.country_name)}`)}
+                activeOpacity={0.7}
               >
-                <Text style={styles.viewAllText}>View All</Text>
-              </TouchableOpacity>
-            </View>
-            {profile.recent_visits.map((v: any) => (
-              <TouchableOpacity
-                key={v.visit_id}
-                style={styles.visitCard}
-                onPress={() => router.push(`/visit-detail/${v.visit_id}`)}
-                data-testid={`visit-${v.visit_id}`}
-              >
-                {v.photo_url ? (
-                  <Image source={{ uri: v.photo_url }} style={styles.visitThumb} />
-                ) : (
-                  <View style={[styles.visitThumb, styles.visitThumbPlaceholder]}>
-                    <Ionicons name="location" size={20} color={theme.colors.textLight} />
-                  </View>
-                )}
-                <View style={styles.visitInfo}>
-                  <Text style={styles.visitName} numberOfLines={1}>{v.landmark_name}</Text>
-                  <Text style={styles.visitMeta}>
-                    {v.country_name ? `${v.country_name} · ` : ''}{v.visited_at ? new Date(v.visited_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
-                  </Text>
+                <View style={styles.destIconWrap}>
+                  <Ionicons name="flag" size={18} color="#4DB8D8" />
+                </View>
+                <View style={styles.destInfo}>
+                  <Text style={styles.destName}>{d.country_name}</Text>
+                  {d.landmarks_visited > 0 && (
+                    <Text style={styles.destMeta}>{d.landmarks_visited} landmark{d.landmarks_visited !== 1 ? 's' : ''} visited</Text>
+                  )}
                 </View>
                 <Ionicons name="chevron-forward" size={16} color={theme.colors.textLight} />
               </TouchableOpacity>
@@ -336,8 +316,7 @@ const styles = StyleSheet.create({
   },
   statsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' },
   statItem: { alignItems: 'center', flex: 1 },
-  statIconWrap: { width: 32, height: 32, borderRadius: 10, alignItems: 'center', justifyContent: 'center', marginBottom: 4 },
-  statValue: { fontSize: 17, fontWeight: '800', color: theme.colors.text },
+  statValue: { fontSize: 17, fontWeight: '800', color: theme.colors.text, marginTop: 4 },
   statLabel: { fontSize: 10, color: theme.colors.textSecondary, fontWeight: '500', marginTop: 1 },
   statDivider: { width: 1, height: 36, backgroundColor: theme.colors.border },
   actionRow: { flexDirection: 'row', gap: 10, marginBottom: 16, alignItems: 'center' },
@@ -354,17 +333,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#2AA8B3', justifyContent: 'center', alignItems: 'center',
   },
   section: { marginBottom: 16 },
-  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-  sectionTitle: { fontSize: 16, fontWeight: '700', color: theme.colors.text },
-  viewAllText: { fontSize: 13, fontWeight: '600', color: theme.colors.primary },
-  visitCard: {
+  sectionTitle: { fontSize: 16, fontWeight: '700', color: theme.colors.text, marginBottom: 10 },
+  destCard: {
     flexDirection: 'row', alignItems: 'center',
     backgroundColor: theme.colors.surface, padding: 12, borderRadius: 14, marginBottom: 8,
     ...theme.shadows.sm,
   },
-  visitThumb: { width: 48, height: 48, borderRadius: 12, marginRight: 12 },
-  visitThumbPlaceholder: { backgroundColor: theme.colors.backgroundSecondary, justifyContent: 'center', alignItems: 'center' },
-  visitInfo: { flex: 1 },
-  visitName: { fontSize: 14, fontWeight: '600', color: theme.colors.text },
-  visitMeta: { fontSize: 12, color: theme.colors.textSecondary, marginTop: 2 },
+  destIconWrap: {
+    width: 40, height: 40, borderRadius: 12,
+    backgroundColor: '#E0F4F4',
+    justifyContent: 'center', alignItems: 'center', marginRight: 12,
+  },
+  destInfo: { flex: 1 },
+  destName: { fontSize: 14, fontWeight: '600', color: theme.colors.text },
+  destMeta: { fontSize: 12, color: theme.colors.textSecondary, marginTop: 2 },
 });

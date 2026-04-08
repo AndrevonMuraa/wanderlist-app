@@ -255,6 +255,26 @@ async def get_user_profile(user_id: str, current_user: User = Depends(get_curren
         ]
     })
 
+    # Get destinations explored (country visits with landmark counts)
+    country_visits = await db.country_visits.find(
+        {"user_id": user_id},
+        {"_id": 0, "country_id": 1, "country_name": 1}
+    ).sort("visited_at", -1).to_list(100)
+    
+    destinations_explored = []
+    seen_countries = set()
+    for cv in country_visits:
+        cid = cv.get("country_id", "")
+        if cid in seen_countries:
+            continue
+        seen_countries.add(cid)
+        lm_count = await db.visits.count_documents({"user_id": user_id, "landmark_id": {"$regex": f"^{cid}_"}})
+        destinations_explored.append({
+            "country_id": cid,
+            "country_name": cv.get("country_name", "Unknown"),
+            "landmarks_visited": lm_count,
+        })
+
     return {
         "user_id": user["user_id"],
         "name": user.get("name", "Unknown"),
@@ -283,6 +303,7 @@ async def get_user_profile(user_id: str, current_user: User = Depends(get_curren
             for v in recent_visits
         ],
         "comment_permission": user.get("comment_permission", "everyone"),
+        "destinations_explored": destinations_explored,
     }
 
 @router.get("/users/{user_id}/visits")
