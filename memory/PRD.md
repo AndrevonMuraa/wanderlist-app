@@ -1,72 +1,58 @@
-# WanderMark - Product Requirements Document
+# WanderMark PRD
 
-## Original Problem Statement
-Travel app for App Store. Social features, hybrid privacy, premium differentiation, 100 destinations, 1,500 landmarks.
+## Product
+Travel app (React Native + Expo + FastAPI + MongoDB Atlas) for tracking landmark/destination visits with a gamified points system.
 
-## Architecture
-- **Frontend**: React Native / Expo Router
-- **Backend**: FastAPI / MongoDB Atlas
-- **Hosting**: Render (backend), EAS Build (mobile)
-
-## Current State (April 2026)
+## Current State (April 8, 2026)
 - 100 destinations, 1,500 landmarks, 20 ranks, 30+ badges
-- BuildNumber: 74
+- BuildNumber: 78
+- Backend: Render (auto-deploy from GitHub)
+- Database: MongoDB Atlas
 
 ### CRITICAL NOTES
-- "Destinations" not "Countries", "Basic Traveler" not "Free user", "Premium Traveler" not "Pro user"
+- "Destinations" not "Countries", "Basic Traveler" not "Free user", "Pro Traveler" not "Pro user"
 - `recalculate_user_points()` is SINGLE SOURCE OF TRUTH for points
-- Diamond: teal #1E8A8A. Landmark: coral #E87850
-- Custom visits: 0 points, optional country_id linking
-- Privacy: visit detail enforces visibility + strips diary for non-owners
+- Diamond: teal #1E8A8A. Landmark: coral #E87850. Destination: turkis #4DB8D8. Continent: green #4CAF50. Points: gold #FFD700
+- Continent bonus verified = country_visit has photo OR at least one verified landmark
+- Country visit verified = has photos OR has verified landmark in that country
+- Completion bonuses: destination (+50, all landmarks visited, verified if all have photos), continent (+200, all destinations visited, verified if each has photo/verified landmark)
 
-## Key Changes (April 3, 2026)
+## Key Changes (April 7-8, 2026)
+
+### Points System Overhaul
+- Completion bonuses implemented (destination +50, continent +200) with verified/unverified logic
+- Continent completion trigger: all destinations visited (not all landmarks)
+- Breakdown endpoint synced with recalculate (verified country visits consider landmarks)
+- New continent bonus from create_country_visit endpoint
+- Earning Potential: 33,750 max (22,500 landmarks + 5,000 destinations + 250 continents + 6,000 completion)
+
+### UX Improvements
+- Edit Diary: bottom-sheet with KeyboardAvoidingView (all 3 detail pages)
+- Photo buttons: single "Add Photo" action sheet, "Add More Photos" PRO upsell for Basic users
+- PhotoViewer: minimalist redesign (blur background, no rotate/controls, pinch-to-zoom improved)
+- User Profile: total makeover (Destinations Explored, consistent stat icons, no share/activity)
+- Explore: removed search icon from header
+- My Photos: "By Destination" filter, matching icon colors
+- Visit cards: fixed 90px height on landmark/destination lists
+- Cache invalidation on delete (both visit types)
+- useFocusEffect on explore-countries for live data refresh
+- Points Summary: reordered sections, "Destinations" in Earning Potential, Next Rank links to /ranks
+- Friends search: keyboard stays open (renderHeader fix + keyboardShouldPersistTaps)
+- Profile: PRO badge pill, Ionicons diamond for WanderMark Pro menu item
+- About: compact stats box, "Destination Completion" terminology
+- Consistent alert text (friends vs global leaderboard)
 
 ### Bug Fixes
-- Continent bonuses now show under correct section (Verified/Unverified) in Points Summary based on actual verification status
-- Fixed Custom Visits crash: ProFeatureLock was imported as named export but is a default export (gave undefined → React crash)
-- Fixed Custom Visits onDismiss→onClose prop mismatch for ProFeatureLock
+- Custom Visits crash (ProFeatureLock import)
+- Add visit 500 error (missing return statement)
+- Continent bonus rsplit bug (DB lookup instead)
+- Country visits not counted in progress/continent-stats
+- Points breakdown verified/unverified mismatch
 
-### UI Improvements
-- Landmarks/[country] page: Upgraded stats box from simple "Your Progress X/15" to full Visited/Verified/Points design matching My Landmark Visits
-
-## Key Changes (March 28-29, 2026)
-
-### New Features
-- Custom Visits ↔ Destinations linking (autocomplete, country_id, "Your Custom Landmarks" section)
-- Leaderboard: Top 10 + "Your Position" + Expand to compact Top 100
-- Points Breakdown: Tappable Verified/Unverified → itemized list with navigation to visits
-- Earning Potential section on Points Summary (replaces "Your Journey")
-- Next Milestone card on Points Summary
-- Explore "Your Progress" dashboard with 3 progress bars
-- Visit Detail: "Add Photo to Verify" CTA + long-press to delete photos
-- Ranks: Next rank shows progress bar + "X pts to unlock"
-- Profile: "X pts to {NextRank}" under rank badge
-- Subscription: "12,500 extra pts" value shown
-
-### Bug Fixes
-- Points consistency (continent bonuses in /api/progress, default values synced)
-- Privacy enforcement on visit/country-visit detail endpoints
-- Backend recalculates points after photo changes
-- Rank always based on verified_points on leaderboard
-- No flash of "Newcomer" on ranks page
-- Photo limit enforced visually for basic users
-- Messages "View All" respects subscription tier
-
-### UI/UX
-- My Landmark Visits + Destinations: Full redesign (list, thumbnails, sort, animations)
-- "Countries" → "Destinations" throughout app
-- "Free user" → "Basic Traveler" / "Pro user" → "Premium Traveler"
-- Feed: Community tab default + first
-- Diamond teal, Landmark coral consistency
-- About stats box spacing
-- Explore header: "Explore Destinations"
-- Section subtitles with points
-
-## Test Credentials
-- test@wandermark.app / Test1234!
-- testpro@wandermark.app / Test1234!
-
-## Prioritized Backlog
-### P0: Build 74 E2E testing, run recalculate_points.py on Render
-### P1: Migration script for existing custom visits, Deploy legal pages
-### P2: Sentry, Image optimization, Rename GitHub repo
+## Upcoming Tasks
+- P0: Build 78 + test all changes
+- P1: Implement "Add Photo" action sheet on visit-detail (landmark visits) matching country-visit-detail
+- P1: Deploy juridiske sider (Privacy/Terms)
+- P2: Sentry integration
+- P3: Image optimization (server-side compression)
+- P4: Rename GitHub repo to wandermark-app
