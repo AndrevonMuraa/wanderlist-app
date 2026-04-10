@@ -24,11 +24,18 @@ Travel app (React Native + Expo + FastAPI + MongoDB Atlas) for tracking landmark
 - P3: Image optimization (server-side compression)
 - P4: Rename GitHub repo to wandermark-app
 
-## Completed (April 8, 2026 - Session 2)
-- P1: "Add Photo" action sheet on visit-detail (landmark visits) matching country-visit-detail
-  - Action sheet: Take Photo / Choose from Library / Cancel
-  - ProFeatureLock for Basic users at photo limit ("Add More Photos" + PRO badge)
-  - PhotoViewer (pinch-to-zoom, blur background) replaces old PhotoGalleryModal
-  - Zoom hint overlay ("Tap to zoom")
-  - Fixed ProFeatureLock feature prop: `multiple_photos` -> `unlimited_photos` on country-visit-detail
-- Backend Visit CRUD: All endpoints tested and passing (16/16 tests passed)
+## Completed (April 10, 2026 - Session 2 continued)
+### Community Features Overhaul
+- **A: Photo of the Week backend** — Forbedret fallback: nåværende uke → forrige uke → tilfeldig fra oppstemte → tilfeldig populært → country_visits
+- **B: Community Photos åpnet** — Alle brukere ser alle bilder (ikke bare 3). Premium-verdi: dagbok-tilgang (diary_locked for Basic)
+- **C: Trending Landmarks** — Erstattet Photo of the Week på Explore-siden med horisontal karusell av mest fotograferte landemerker globalt
+- Nytt backend-endepunkt: `GET /api/community-highlights` (global, topp 5 trender)
+- Frontend: Landmark/Country community photos viser diary lock-ikon for Basic-brukere
+- Backend testing: **39/39 tester bestått**
+
+### Add Photo Action Sheet (Build 79)
+- Action sheet (Take Photo / Choose from Library / Cancel) på landmark visit-detail
+- ProFeatureLock for Basic-brukere ved fotogrense
+- PhotoViewer (pinch-to-zoom) erstatter gammel PhotoGalleryModal
+- Fikset ProFeatureLock feature-prop på country-visit-detail
+- Backend testing: **16/16 tester bestått**
