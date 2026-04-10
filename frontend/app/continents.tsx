@@ -119,8 +119,7 @@ export default function ContinentsScreen() {
   const [loading, setLoading] = useState(true);
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
-  const [photoOfTheWeek, setPhotoOfTheWeek] = useState<any>(null);
-  const [potwWeek, setPotwWeek] = useState<number>(0);
+  const [trendingLandmarks, setTrendingLandmarks] = useState<any[]>([]);
   
   // All hooks must be called in consistent order
   const subscriptionData = useSubscription();
@@ -133,7 +132,7 @@ export default function ContinentsScreen() {
   useEffect(() => {
     if (user) {
       fetchContinentStats();
-      fetchPhotoOfTheWeek();
+      fetchTrendingLandmarks();
     }
   }, [user]);
 
@@ -146,21 +145,18 @@ export default function ContinentsScreen() {
     }, [user])
   );
 
-  const fetchPhotoOfTheWeek = async () => {
+  const fetchTrendingLandmarks = async () => {
     try {
       const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/community-photos/photo-of-the-week`, {
+      const response = await fetch(`${BACKEND_URL}/api/community-highlights`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
         const data = await response.json();
-        if (data.photo) {
-          setPhotoOfTheWeek(data.photo);
-          setPotwWeek(data.week || 0);
-        }
+        setTrendingLandmarks(data.highlights || []);
       }
     } catch (error) {
-      console.error('Error fetching photo of the week:', error);
+      console.error('Error fetching trending landmarks:', error);
     }
   };
 
@@ -341,35 +337,48 @@ export default function ContinentsScreen() {
           />
         </TouchableOpacity>
 
-        {/* Photo of the Week */}
-        {photoOfTheWeek && (
-          <TouchableOpacity
-            style={styles.potwContainer}
-            data-testid="photo-of-the-week"
-            onPress={() => router.push(`/landmark-community-photos/${photoOfTheWeek.landmark_id}?name=${encodeURIComponent(photoOfTheWeek.landmark_name)}&country=${encodeURIComponent(photoOfTheWeek.country_name || '')}`)}
-            activeOpacity={0.9}
-          >
-            <View style={styles.potwBadge}>
-              <Ionicons name="trophy" size={14} color="#FFD700" />
-              <Text style={styles.potwBadgeText}>Photo of the Week{potwWeek > 0 ? ` — Week ${potwWeek}` : ''}</Text>
+        {/* Trending Landmarks */}
+        {trendingLandmarks.length > 0 && (
+          <View style={styles.trendingSection}>
+            <View style={styles.trendingSectionHeader}>
+              <Ionicons name="flame" size={18} color="#E87850" />
+              <Text style={styles.trendingSectionTitle}>Trending Landmarks</Text>
             </View>
-            <Image source={{ uri: photoOfTheWeek.photo_url }} style={styles.potwImage} resizeMode="cover" />
-            <LinearGradient
-              colors={['transparent', 'rgba(0,0,0,0.75)']}
-              style={styles.potwOverlay}
+            <ScrollView 
+              horizontal 
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.trendingScroll}
             >
-              <View style={styles.potwInfo}>
-                <View style={styles.potwTextWrap}>
-                  <Text style={styles.potwLandmark} numberOfLines={1}>{photoOfTheWeek.landmark_name}</Text>
-                  <Text style={styles.potwUser} numberOfLines={1}>by {photoOfTheWeek.user_name}</Text>
-                </View>
-                <View style={styles.potwHeart}>
-                  <Ionicons name="heart" size={16} color="#FF6B6B" />
-                  <Text style={styles.potwHeartCount}>{photoOfTheWeek.upvotes}</Text>
-                </View>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
+              {trendingLandmarks.map((lm, index) => (
+                <TouchableOpacity
+                  key={lm.landmark_id || index}
+                  style={styles.trendingCard}
+                  data-testid={`trending-landmark-${index}`}
+                  onPress={() => lm.landmark_id && router.push(`/landmark-community-photos/${lm.landmark_id}?name=${encodeURIComponent(lm.landmark_name)}&country=${encodeURIComponent(lm.country_name || '')}`)}
+                  activeOpacity={0.85}
+                >
+                  <Image source={{ uri: lm.sample_photo }} style={styles.trendingImage} resizeMode="cover" />
+                  <LinearGradient
+                    colors={['transparent', 'rgba(0,0,0,0.8)']}
+                    style={styles.trendingOverlay}
+                  >
+                    <Text style={styles.trendingName} numberOfLines={1}>{lm.landmark_name}</Text>
+                    <Text style={styles.trendingCountry} numberOfLines={1}>{lm.country_name}</Text>
+                    <View style={styles.trendingStats}>
+                      <View style={styles.trendingStat}>
+                        <Ionicons name="people" size={12} color="rgba(255,255,255,0.8)" />
+                        <Text style={styles.trendingStatText}>{lm.visitor_count}</Text>
+                      </View>
+                      <View style={styles.trendingStat}>
+                        <Ionicons name="images" size={12} color="rgba(255,255,255,0.8)" />
+                        <Text style={styles.trendingStatText}>{lm.total_photos}</Text>
+                      </View>
+                    </View>
+                  </LinearGradient>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
         )}
       </ScrollView>
 
@@ -480,74 +489,72 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: theme.colors.primary,
   },
-  // Photo of the Week
-  potwContainer: {
+  // Trending Landmarks
+  trendingSection: {
     marginHorizontal: theme.spacing.md,
     marginTop: theme.spacing.md,
-    borderRadius: theme.borderRadius.xl,
-    overflow: 'hidden',
-    height: 180,
-    ...theme.shadows.card,
   },
-  potwBadge: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    zIndex: 2,
+  trendingSectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
+    gap: 6,
+    marginBottom: 10,
   },
-  potwBadgeText: {
-    color: '#FFD700',
-    fontSize: 12,
+  trendingSectionTitle: {
+    fontSize: 16,
     fontWeight: '700',
+    color: theme.colors.text,
   },
-  potwImage: {
+  trendingScroll: {
+    gap: 12,
+    paddingRight: theme.spacing.md,
+  },
+  trendingCard: {
+    width: 160,
+    height: 200,
+    borderRadius: theme.borderRadius.xl,
+    overflow: 'hidden',
+    ...theme.shadows.card,
+  },
+  trendingImage: {
     width: '100%',
     height: '100%',
   },
-  potwOverlay: {
+  trendingOverlay: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    paddingTop: 40,
-    paddingBottom: 12,
-    paddingHorizontal: 14,
+    paddingTop: 50,
+    paddingBottom: 10,
+    paddingHorizontal: 10,
   },
-  potwInfo: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-  },
-  potwTextWrap: {
-    flex: 1,
-    marginRight: 10,
-  },
-  potwLandmark: {
+  trendingName: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '700',
   },
-  potwUser: {
-    color: 'rgba(255,255,255,0.8)',
-    fontSize: 12,
-    marginTop: 2,
+  trendingCountry: {
+    color: 'rgba(255,255,255,0.75)',
+    fontSize: 11,
+    marginTop: 1,
   },
-  potwHeart: {
+  trendingStats: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 10,
+    marginTop: 5,
   },
-  potwHeartCount: {
-    color: '#fff',
-    fontSize: 13,
+  trendingStat: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+  },
+  trendingStatText: {
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: 11,
     fontWeight: '600',
+  },
   },
   // Cards
   cardsContainer: {

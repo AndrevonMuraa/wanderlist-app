@@ -1,0 +1,48 @@
+{
+  "summary": "Iteration 17: Backend-only testing of Community Features overhaul. All 39 tests PASSED. Verified: global community-highlights returns top 5 trending landmarks with all required fields, POTW with fallback works, landmark/country community-photos return ALL photos (no 3-photo limit) with diary_locked field, upvote toggle works for any user, community-feed returns items correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "note": "Frontend testing skipped per request - React Native app not suitable for browser testing"
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_community_features_iteration17.py",
+    "/app/test_reports/pytest/pytest_iteration17.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "community.py: Index creation warning persists for visits collection (user_id_1_landmark_id_1) - not blocking, cosmetic issue"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_community_features_iteration17.py"
+  ],
+  "success_rate": {
+    "backend": "100% (39/39 passed)"
+  },
+  "test_credentials": "test@wandermark.app / Test1234! (working, tier: pro)",
+  "seed_data_creation": "None - used existing test user data",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Community features fully tested and working. Key findings: (1) GET /api/community-highlights returns top 5 trending landmarks globally with landmark_name, country_name, sample_photo, visitor_count, total_photos, upvotes fields, (2) GET /api/community-photos/photo-of-the-week works with fallback chain (returns week/year even if no photo), (3) GET /api/landmarks/{id}/community-photos returns ALL photos (no 3-photo limit), has diary_locked field (false for pro users), is_preview=false, (4) GET /api/countries/{id}/community-photos same behavior - returns ALL photos with diary_locked field, (5) POST /api/community-photos/{photo_id}/upvote toggles upvote for any user, returns upvoted boolean and upvotes count, (6) GET /api/community-feed returns items with visit_id, type, source, user_name, landmark_name fields. Test user test@wandermark.app has subscription_tier='pro' so diary_locked=false.",
+  "tested_endpoints": [
+    {"endpoint": "GET /api/community-highlights", "status": "PASS", "note": "Returns top 5 trending landmarks with all required fields"},
+    {"endpoint": "GET /api/community-photos/photo-of-the-week", "status": "PASS", "note": "Returns photo object with week/year, fallback works"},
+    {"endpoint": "GET /api/landmarks/{id}/community-photos", "status": "PASS", "note": "Returns ALL photos, diary_locked=false for pro user, is_preview=false"},
+    {"endpoint": "GET /api/countries/{id}/community-photos", "status": "PASS", "note": "Returns ALL photos (30 for France), diary_locked=false for pro user"},
+    {"endpoint": "POST /api/community-photos/{photo_id}/upvote", "status": "PASS", "note": "Toggles upvote, returns upvoted boolean and count"},
+    {"endpoint": "GET /api/community-feed", "status": "PASS", "note": "Returns items with all required fields"}
+  ],
+  "verified_features": [
+    "Global community-highlights endpoint returns top 5 trending landmarks",
+    "Photo of the Week has improved fallback chain (random rotation)",
+    "Landmark community-photos removed 3-photo limit, added diary_locked field",
+    "Country community-photos removed 3-photo limit, added diary_locked field",
+    "Upvote toggle works for any user (not just premium)",
+    "Community feed returns unified feed items"
+  ]
+}

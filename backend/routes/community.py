@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 import os
+import random
 from datetime import datetime, timezone, timedelta
 
 from utils.db import db
@@ -173,25 +174,22 @@ async def get_community_feed(
 @router.get("/community-photos/photo-of-the-week")
 async def get_photo_of_the_week(current_user: User = Depends(get_current_user)):
     """Get the most upvoted community photo for the current ISO week.
-    Fallback chain: current week → previous week → newest photo with upvotes."""
+    Fallback chain: current week → previous week → random upvoted photo → random popular photo.
+    Also considers country_visits photos."""
     
     now = datetime.now(timezone.utc)
     iso_year, iso_week, _ = now.isocalendar()
     
-    # Calculate ISO week boundaries (Monday 00:00 to Sunday 23:59)
-    # Monday of current week
     week_start = datetime.fromisocalendar(iso_year, iso_week, 1).replace(tzinfo=timezone.utc)
     week_end = week_start + timedelta(days=7)
-    
-    # Previous week boundaries
     prev_week_start = week_start - timedelta(days=7)
     prev_iso_year, prev_iso_week, _ = prev_week_start.isocalendar()
     
-    # Try current week first, then previous week
     winner = None
     display_week = iso_week
     display_year = iso_year
     
+    # 1. Try current week, then previous week (upvote-based)
     for start, end, w_num, w_year in [
         (week_start, week_end, iso_week, iso_year),
         (prev_week_start, week_start, prev_iso_week, prev_iso_year),
@@ -209,17 +207,58 @@ async def get_photo_of_the_week(current_user: User = Depends(get_current_user)):
             display_year = w_year
             break
     
-    # Final fallback: newest public visit with a photo (no upvotes needed)
+    # 2. Fallback: random photo from all upvoted photos
     if not winner:
-        newest = await db.visits.find_one(
-            {"photos": {"$exists": True, "$ne": []}, "visibility": "public"},
-            {"_id": 0, "visit_id": 1, "photos": {"$slice": 1}},
-            sort=[("visited_at", -1)]
-        )
-        if newest:
-            winner = {"_id": f"{newest['visit_id']}_0", "count": 0}
+        all_upvoted = await db.photo_upvotes.aggregate([
+            {"$group": {"_id": "$photo_id", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 20}
+        ]).to_list(20)
+        if all_upvoted:
+            winner = random.choice(all_upvoted)
             display_week = iso_week
             display_year = iso_year
+    
+    # 3. Fallback: random public landmark visit with photo
+    if not winner:
+        public_with_photos = await db.visits.find(
+            {"photos": {"$exists": True, "$ne": []}, "visibility": "public"},
+            {"_id": 0, "visit_id": 1}
+        ).to_list(50)
+        if public_with_photos:
+            chosen = random.choice(public_with_photos)
+            winner = {"_id": f"{chosen['visit_id']}_0", "count": 0}
+            display_week = iso_week
+            display_year = iso_year
+    
+    # 4. Fallback: random country_visit with photo
+    if not winner:
+        cv_with_photos = await db.country_visits.find(
+            {"photos": {"$exists": True, "$ne": []}},
+            {"_id": 0, "country_visit_id": 1, "photos": {"$slice": 1}, "user_id": 1, "country_name": 1, "visited_at": 1}
+        ).to_list(50)
+        if cv_with_photos:
+            chosen = random.choice(cv_with_photos)
+            user_info = await db.users.find_one(
+                {"user_id": chosen["user_id"]},
+                {"_id": 0, "name": 1, "username": 1, "picture": 1}
+            )
+            return {
+                "photo": {
+                    "photo_id": f"cv_{chosen['country_visit_id']}_0",
+                    "photo_url": chosen["photos"][0],
+                    "upvotes": 0,
+                    "user_name": user_info.get("name", "Anonymous") if user_info else "Anonymous",
+                    "username": user_info.get("username") if user_info else None,
+                    "user_picture": user_info.get("picture") if user_info else None,
+                    "landmark_name": chosen.get("country_name", "Unknown"),
+                    "landmark_id": None,
+                    "country_name": chosen.get("country_name"),
+                    "visited_at": chosen.get("visited_at").isoformat() if chosen.get("visited_at") else None,
+                },
+                "week": iso_week,
+                "year": iso_year,
+            }
     
     if not winner:
         return {"photo": None, "week": iso_week, "year": iso_year}
@@ -227,7 +266,6 @@ async def get_photo_of_the_week(current_user: User = Depends(get_current_user)):
     photo_id = winner["_id"]
     upvote_count = winner["count"]
     
-    # Parse visit_id from photo_id (format: "visit_xxx_0")
     parts = photo_id.rsplit("_", 1)
     if len(parts) != 2:
         return {"photo": None, "week": display_week, "year": display_year}
@@ -235,7 +273,6 @@ async def get_photo_of_the_week(current_user: User = Depends(get_current_user)):
     visit_id_part = parts[0]
     photo_idx = int(parts[1]) if parts[1].isdigit() else 0
     
-    # Find the visit
     visit = await db.visits.find_one({"visit_id": visit_id_part}, {"_id": 0})
     if not visit:
         return {"photo": None, "week": display_week, "year": display_year}
@@ -244,13 +281,11 @@ async def get_photo_of_the_week(current_user: User = Depends(get_current_user)):
     if photo_idx >= len(photos):
         return {"photo": None, "week": display_week, "year": display_year}
     
-    # Get user info
     user_info = await db.users.find_one(
         {"user_id": visit["user_id"]},
         {"_id": 0, "name": 1, "username": 1, "picture": 1}
     )
     
-    # Get landmark info
     landmark = await db.landmarks.find_one(
         {"landmark_id": visit.get("landmark_id")},
         {"_id": 0, "name": 1, "country_name": 1, "country_id": 1}
@@ -383,19 +418,18 @@ async def get_landmark_community_photos(
     
     total_count = len(photos)
     
-    if not is_premium:
-        # Free users only see top 3
-        return {
-            "photos": photos[:3],
-            "total_count": total_count,
-            "is_preview": True,
-            "landmark_id": landmark_id
-        }
+    # All users see all photos. Premium value: diary access
+    hide_diaries = not is_premium
+    if hide_diaries:
+        for p in photos:
+            p["diary_notes"] = None
+            p["has_diary"] = False
     
     return {
         "photos": photos,
         "total_count": total_count,
         "is_preview": False,
+        "diary_locked": hide_diaries,
         "landmark_id": landmark_id
     }
 
@@ -568,19 +602,18 @@ async def get_country_community_photos(
     
     total_count = len(photos)
     
-    if not is_premium:
-        return {
-            "photos": photos[:3],
-            "total_count": total_count,
-            "is_preview": True,
-            "country_id": country_id,
-            "country_name": country_name
-        }
+    # All users see all photos. Premium value: diary access
+    hide_diaries = not is_premium
+    if hide_diaries:
+        for p in photos:
+            p.pop("diary_notes", None)
+            p["has_diary"] = False
     
     return {
         "photos": photos,
         "total_count": total_count,
         "is_preview": False,
+        "diary_locked": hide_diaries,
         "country_id": country_id,
         "country_name": country_name
     }
@@ -724,6 +757,73 @@ async def get_country_community_highlights(
             "total_photos": r["total_photos"],
             "visitor_count": r["visitor_count"],
             "sample_photo": r.get("sample_photo"),
+        })
+    
+    return {"highlights": highlights}
+
+
+@router.get("/community-highlights")
+async def get_global_community_highlights(
+    current_user: User = Depends(get_current_user)
+):
+    """Get top trending landmarks globally — most photographed across all countries."""
+    
+    # Aggregate: top landmarks by photo count from public visits
+    pipeline = [
+        {"$match": {
+            "visibility": "public",
+            "photos": {"$exists": True, "$ne": []}
+        }},
+        {"$project": {
+            "landmark_id": 1,
+            "photo_count": {"$size": "$photos"},
+            "photos": {"$slice": ["$photos", 1]}
+        }},
+        {"$group": {
+            "_id": "$landmark_id",
+            "total_photos": {"$sum": "$photo_count"},
+            "visitor_count": {"$sum": 1},
+            "sample_photo": {"$first": {"$arrayElemAt": ["$photos", 0]}}
+        }},
+        {"$sort": {"visitor_count": -1, "total_photos": -1}},
+        {"$limit": 5}
+    ]
+    
+    results = await db.visits.aggregate(pipeline).to_list(5)
+    
+    if not results:
+        return {"highlights": []}
+    
+    # Batch-fetch landmark info
+    landmark_ids = [r["_id"] for r in results]
+    landmarks = await db.landmarks.find(
+        {"landmark_id": {"$in": landmark_ids}},
+        {"_id": 0, "landmark_id": 1, "name": 1, "country_name": 1, "country_id": 1}
+    ).to_list(len(landmark_ids))
+    lm_map = {l["landmark_id"]: l for l in landmarks}
+    
+    # Batch-fetch upvote counts for sample photos
+    photo_ids = [f"{r['_id']}_0" for r in results]
+    upvote_pipeline = [
+        {"$match": {"photo_id": {"$in": photo_ids}}},
+        {"$group": {"_id": "$photo_id", "count": {"$sum": 1}}}
+    ]
+    upvote_results = await db.photo_upvotes.aggregate(upvote_pipeline).to_list(len(photo_ids))
+    upvote_map = {u["_id"]: u["count"] for u in upvote_results}
+    
+    highlights = []
+    for r in results:
+        lm_id = r["_id"]
+        lm_info = lm_map.get(lm_id, {})
+        highlights.append({
+            "landmark_id": lm_id,
+            "landmark_name": lm_info.get("name", "Unknown"),
+            "country_name": lm_info.get("country_name", ""),
+            "country_id": lm_info.get("country_id", ""),
+            "total_photos": r["total_photos"],
+            "visitor_count": r["visitor_count"],
+            "sample_photo": r.get("sample_photo"),
+            "upvotes": upvote_map.get(f"{lm_id}_0", 0),
         })
     
     return {"highlights": highlights}

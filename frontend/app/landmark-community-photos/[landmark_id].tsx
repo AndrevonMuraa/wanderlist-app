@@ -40,7 +40,7 @@ export default function LandmarkCommunityPhotosScreen() {
   const { landmark_id, name, country } = useLocalSearchParams();
   const [photos, setPhotos] = useState<CommunityPhoto[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [isPreview, setIsPreview] = useState(true);
+  const [diaryLocked, setDiaryLocked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'popular' | 'newest'>('popular');
   const [diaryModal, setDiaryModal] = useState<{ visible: boolean; text: string; userName: string }>({ visible: false, text: '', userName: '' });
@@ -63,7 +63,7 @@ export default function LandmarkCommunityPhotosScreen() {
         const data = await response.json();
         setPhotos(data.photos);
         setTotalCount(data.total_count);
-        setIsPreview(data.is_preview);
+        setDiaryLocked(data.diary_locked || false);
       }
     } catch (error) {
       console.error('Error fetching community photos:', error);
@@ -134,7 +134,7 @@ export default function LandmarkCommunityPhotosScreen() {
                 {item.upvotes}
               </Text>
             </TouchableOpacity>
-            {item.has_diary && (
+            {item.has_diary && !diaryLocked && (
               <TouchableOpacity
                 onPress={() => setDiaryModal({ visible: true, text: item.diary_notes || '', userName: item.user_name })}
                 style={styles.diaryButton}
@@ -142,6 +142,11 @@ export default function LandmarkCommunityPhotosScreen() {
               >
                 <Ionicons name="book-outline" size={16} color={theme.colors.primary} />
               </TouchableOpacity>
+            )}
+            {item.has_diary && diaryLocked && (
+              <View style={[styles.diaryButton, { opacity: 0.5 }]}>
+                <Ionicons name="lock-closed" size={14} color={theme.colors.textLight} />
+              </View>
             )}
           </View>
           {item.visited_at && (
@@ -229,9 +234,7 @@ export default function LandmarkCommunityPhotosScreen() {
             </View>
           </View>
         }
-        ListFooterComponent={
-          isPreview && totalCount > 3 ? renderUpgradePrompt() : null
-        }
+        ListFooterComponent={null}
         ListEmptyComponent={
           <View style={styles.emptyContainer} data-testid="empty-state">
             <Ionicons name="camera-outline" size={64} color={theme.colors.textSecondary} />
