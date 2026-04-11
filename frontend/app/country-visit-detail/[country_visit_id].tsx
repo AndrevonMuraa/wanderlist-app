@@ -179,6 +179,7 @@ export default function DestinationVisitDetailScreen() {
         if (response.ok) {
           const updated = await response.json();
           setVisit(updated);
+          invalidateCacheGroup('visit');
           Alert.alert('Success', 'Photos added successfully!');
         } else {
           const err = await response.json().catch(() => null);
@@ -222,6 +223,7 @@ export default function DestinationVisitDetailScreen() {
               if (response.ok) {
                 const updated = await response.json();
                 setVisit(updated);
+                invalidateCacheGroup('visit');
                 if (selectedPhotoIndex >= currentPhotos.length && currentPhotos.length > 0) {
                   setSelectedPhotoIndex(currentPhotos.length - 1);
                 }
@@ -561,6 +563,7 @@ export default function DestinationVisitDetailScreen() {
                               body: JSON.stringify({ photos: all }),
                             });
                             setVisit((prev: any) => prev ? { ...prev, photos: all } : prev);
+                            invalidateCacheGroup('visit');
                           } catch { Alert.alert('Error', 'Could not take photo'); }
                           finally { setUploadingPhotos(false); }
                         }

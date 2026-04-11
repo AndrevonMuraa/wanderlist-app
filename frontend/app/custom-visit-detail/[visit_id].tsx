@@ -12,6 +12,7 @@ import { Surface, Portal, Dialog, Button } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
+import { invalidateCacheGroup } from '../../utils/apiCache';
 import PhotoViewer from '../../components/PhotoViewer';
 import UniversalHeader from '../../components/UniversalHeader';
 import { useAuth } from '../../contexts/AuthContext';
@@ -91,6 +92,7 @@ export default function CustomVisitDetailScreen() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
+        invalidateCacheGroup('visit');
         Alert.alert('Deleted', 'Custom visit has been removed.', [
           { text: 'OK', onPress: () => router.replace('/(tabs)/journey') },
         ]);

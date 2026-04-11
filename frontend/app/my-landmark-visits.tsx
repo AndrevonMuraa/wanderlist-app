@@ -12,6 +12,7 @@ import {
 import { Text, Surface } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Skeleton } from '../components/Skeleton';
 import theme, { gradients } from '../styles/theme';
@@ -148,6 +149,12 @@ export default function MyLandmarkVisits() {
   useEffect(() => {
     fetchVisits();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchVisits();
+    }, [])
+  );
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);

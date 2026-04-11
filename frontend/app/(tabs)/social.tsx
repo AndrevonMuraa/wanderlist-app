@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   View, 
   StyleSheet, 
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Text, Surface, Avatar, Badge } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -75,6 +76,14 @@ export default function SocialHubScreen() {
       loadAllData();
     }
   }, [user]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (user) {
+        loadAllData();
+      }
+    }, [user])
+  );
 
   const loadAllData = async () => {
     await Promise.all([

@@ -191,6 +191,7 @@ export default function VisitDetailScreen() {
         });
         if (res.ok) {
           setVisit(prev => prev ? { ...prev, photos: all } : prev);
+          invalidateCacheGroup('visit');
         }
       }
     } catch {
@@ -221,6 +222,7 @@ export default function VisitDetailScreen() {
         });
         if (res.ok) {
           setVisit(prev => prev ? { ...prev, photos: all } : prev);
+          invalidateCacheGroup('visit');
         }
       }
     } catch {
@@ -347,6 +349,7 @@ export default function VisitDetailScreen() {
                             if (res.ok) {
                               setVisit(prev => prev ? { ...prev, photos: updated, verified: updated.length > 0 } : prev);
                               setSelectedPhoto(0);
+                              invalidateCacheGroup('visit');
                             }
                           },
                         },
