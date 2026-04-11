@@ -172,7 +172,8 @@ export default function VisitDetailScreen() {
       }
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsMultipleSelection: true,
+        allowsMultipleSelection: isPro,
+        selectionLimit: isPro ? 10 - (visit?.photos?.length || 0) : 1,
         quality: 0.6,
         base64: true,
       });
