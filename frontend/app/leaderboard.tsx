@@ -169,7 +169,8 @@ export default function LeaderboardScreen() {
     const isMe = entry.user_id === currentUserId;
 
     return (
-      <Surface key={entry.user_id} style={[styles.entryCard, isMe && styles.entryCardHighlight]} elevation={1}>
+      <TouchableOpacity key={entry.user_id} onPress={() => router.push(`/user-profile/${entry.user_id}`)} activeOpacity={0.7}>
+      <Surface style={[styles.entryCard, isMe && styles.entryCardHighlight]} elevation={1}>
         <View style={styles.entryContent}>
           {/* Rank */}
           <View style={styles.rankContainer}>
@@ -217,6 +218,7 @@ export default function LeaderboardScreen() {
           </View>
         </View>
       </Surface>
+      </TouchableOpacity>
     );
   };
 

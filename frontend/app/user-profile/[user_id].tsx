@@ -90,9 +90,9 @@ export default function UserProfileScreen() {
   const friendButtonConfig = () => {
     if (!profile) return { label: '', icon: 'person-add' as any, style: 'primary' };
     switch (profile.friendship_status) {
-      case 'none': return { label: 'Add Friend', icon: 'person-add-outline' as any, style: 'primary' };
-      case 'pending_sent': return { label: 'Request Sent', icon: 'time-outline' as any, style: 'pending' };
-      case 'pending_received': return { label: 'Accept Request', icon: 'checkmark-circle-outline' as any, style: 'accept' };
+      case 'none': return { label: 'Add friend', icon: 'person-add-outline' as any, style: 'primary' };
+      case 'pending_sent': return { label: 'Request sent', icon: 'time-outline' as any, style: 'pending' };
+      case 'pending_received': return { label: 'Accept request', icon: 'checkmark-circle-outline' as any, style: 'accept' };
       case 'friends': return { label: 'Friends', icon: 'people' as any, style: 'friends' };
     }
   };
@@ -238,7 +238,7 @@ export default function UserProfileScreen() {
         {/* Destinations Explored */}
         {(profile.destinations_explored || []).length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Destinations Explored</Text>
+            <Text style={styles.sectionTitle}>Destinations explored</Text>
             {(profile.destinations_explored || []).map((d: any) => (
               <TouchableOpacity
                 key={d.country_id}

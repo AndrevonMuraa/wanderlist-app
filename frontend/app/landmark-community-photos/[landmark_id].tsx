@@ -90,7 +90,7 @@ export default function LandmarkCommunityPhotosScreen() {
     <Surface style={styles.photoCard} data-testid={`community-photo-${item.photo_id}`}>
       <Image source={{ uri: item.photo_url }} style={styles.photoImage} resizeMode="cover" />
       <View style={styles.photoInfo}>
-        <View style={styles.userRow}>
+        <TouchableOpacity style={styles.userRow} onPress={() => router.push(`/user-profile/${item.user_id}`)} activeOpacity={0.7}>
           {item.user_picture ? (
             <Image source={{ uri: item.user_picture }} style={styles.userAvatar} />
           ) : (
@@ -106,7 +106,7 @@ export default function LandmarkCommunityPhotosScreen() {
               <Text style={styles.userHandle} numberOfLines={1}>@{item.username}</Text>
             )}
           </View>
-        </View>
+        </TouchableOpacity>
         {item.comments && (
           <Text style={styles.comment} numberOfLines={2}>{item.comments}</Text>
         )}

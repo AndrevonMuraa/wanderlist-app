@@ -165,7 +165,7 @@ export default function FeedScreen() {
 
     return (
       <Surface style={styles.activityCard}>
-        <View style={styles.activityHeader}>
+        <TouchableOpacity style={styles.activityHeader} onPress={() => router.push(`/user-profile/${activity.user_id}`)} activeOpacity={0.7}>
           {activity.user_picture ? (
             <Avatar.Image size={44} source={{ uri: activity.user_picture }} />
           ) : (
@@ -185,7 +185,7 @@ export default function FeedScreen() {
             </View>
             <Text style={styles.activityTime}>{formatTimeAgo(activity.created_at)}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
 
         {/* Photo Preview */}
         {activity.photo_url && (
@@ -307,7 +307,7 @@ export default function FeedScreen() {
 
   const renderCommunityItem = ({ item }: { item: CommunityFeedItem }) => (
     <Surface style={styles.activityCard}>
-      <View style={styles.activityHeader}>
+      <TouchableOpacity style={styles.activityHeader} onPress={() => router.push(`/user-profile/${item.user_id}`)} activeOpacity={0.7}>
         {item.user_picture ? (
           <Avatar.Image size={44} source={{ uri: item.user_picture }} />
         ) : (
@@ -319,7 +319,7 @@ export default function FeedScreen() {
           <Text style={styles.activityUser}>{item.user_name}</Text>
           <Text style={styles.activityTime}>{item.visited_at ? formatTimeAgo(item.visited_at) : ''}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
       {item.photo_url && (
         <TouchableOpacity onPress={() => item.landmark_id ? router.push(`/landmark-community-photos/${item.landmark_id}?name=${encodeURIComponent(item.landmark_name)}`) : null} activeOpacity={0.9}>
           <Image source={{ uri: item.photo_url }} style={styles.activityPhoto} resizeMode="cover" />
