@@ -27,6 +27,7 @@ interface UserProfile {
   friendship_status: 'none' | 'friends' | 'pending_sent' | 'pending_received';
   friendship_id?: string;
   is_own_profile: boolean;
+  is_blocked_by_me?: boolean;
   stats: { total_visits: number; countries_visited: number; continents_visited: number; friends_count: number };
   destinations_explored?: { country_id: string; country_name: string; landmarks_visited: number }[];
 }
@@ -85,6 +86,27 @@ export default function UserProfileScreen() {
       }
     } catch (e) { }
     finally { setActionLoading(false); }
+  };
+
+  const handleBlockUser = async () => {
+    if (!profile) return;
+    const action = profile.is_blocked_by_me ? 'unblock' : 'block';
+    const title = action === 'block' ? `Block ${profile.name}?` : `Unblock ${profile.name}?`;
+    const msg = action === 'block'
+      ? 'They will not be able to find you, send friend requests, or see your content.'
+      : 'They will be able to find you and send friend requests again.';
+    
+    Alert.alert(title, msg, [
+      { text: 'Cancel', style: 'cancel' },
+      { text: action === 'block' ? 'Block' : 'Unblock', style: action === 'block' ? 'destructive' : 'default', onPress: async () => {
+        const token = await getToken();
+        const method = action === 'block' ? 'POST' : 'DELETE';
+        await fetch(`${BACKEND_URL}/api/users/${profile.user_id}/block`, {
+          method, headers: { Authorization: `Bearer ${token}` },
+        });
+        loadProfile();
+      }},
+    ]);
   };
 
   const friendButtonConfig = () => {
@@ -205,24 +227,26 @@ export default function UserProfileScreen() {
         {/* Actions */}
         {!profile.is_own_profile && (
           <View style={styles.actionRow}>
-            <TouchableOpacity
-              style={[
-                styles.actionBtn,
-                btn.style === 'friends' && styles.actionBtnFriends,
-                btn.style === 'pending' && styles.actionBtnPending,
-                btn.style === 'accept' && styles.actionBtnAccept,
-              ]}
-              onPress={handleFriendAction}
-              disabled={actionLoading || profile.friendship_status === 'pending_sent'}
-              data-testid="friend-action-btn"
-            >
-              <Ionicons name={btn.icon} size={18} color={btn.style === 'friends' ? theme.colors.primary : '#fff'} />
-              <Text style={[styles.actionBtnText, btn.style === 'friends' && { color: theme.colors.primary }]}>
-                {btn.label}
-              </Text>
-            </TouchableOpacity>
+            {!profile.is_blocked_by_me && (
+              <TouchableOpacity
+                style={[
+                  styles.actionBtn,
+                  btn.style === 'friends' && styles.actionBtnFriends,
+                  btn.style === 'pending' && styles.actionBtnPending,
+                  btn.style === 'accept' && styles.actionBtnAccept,
+                ]}
+                onPress={handleFriendAction}
+                disabled={actionLoading || profile.friendship_status === 'pending_sent'}
+                data-testid="friend-action-btn"
+              >
+                <Ionicons name={btn.icon} size={18} color={btn.style === 'friends' ? theme.colors.primary : '#fff'} />
+                <Text style={[styles.actionBtnText, btn.style === 'friends' && { color: theme.colors.primary }]}>
+                  {btn.label}
+                </Text>
+              </TouchableOpacity>
+            )}
 
-            {profile.friendship_status === 'friends' && (
+            {!profile.is_blocked_by_me && profile.friendship_status === 'friends' && (
               <TouchableOpacity
                 style={styles.messageBtn}
                 onPress={() => router.push(`/messages/${profile.user_id}?name=${encodeURIComponent(profile.name)}`)}
@@ -231,6 +255,17 @@ export default function UserProfileScreen() {
                 <Ionicons name="chatbubble-outline" size={18} color="#fff" />
               </TouchableOpacity>
             )}
+            <TouchableOpacity
+              onPress={handleBlockUser}
+              style={{ width: 36, height: 36, borderRadius: 12, justifyContent: 'center', alignItems: 'center' }}
+              data-testid="block-user-btn"
+            >
+              <Ionicons
+                name={profile.is_blocked_by_me ? 'ban' : 'ban-outline'}
+                size={18}
+                color={profile.is_blocked_by_me ? '#E53935' : theme.colors.textLight}
+              />
+            </TouchableOpacity>
             <ReportButton contentType="user" contentId={profile.user_id} size={18} color={theme.colors.textLight} />
           </View>
         )}

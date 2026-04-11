@@ -59,6 +59,16 @@ async def send_friend_request(data: FriendRequest, current_user: User = Depends(
     if friend["user_id"] == current_user.user_id:
         raise HTTPException(status_code=400, detail="Cannot add yourself as friend")
     
+    # Check if either user has blocked the other
+    block = await db.blocks.find_one({
+        "$or": [
+            {"blocker_id": current_user.user_id, "blocked_id": friend["user_id"]},
+            {"blocker_id": friend["user_id"], "blocked_id": current_user.user_id}
+        ]
+    })
+    if block:
+        raise HTTPException(status_code=403, detail="Unable to send friend request")
+    
     # Check if friendship already exists
     existing = await db.friends.find_one({
         "$or": [
@@ -177,20 +187,92 @@ async def remove_friend(friendship_id: str, current_user: User = Depends(get_cur
     await db.friends.delete_one({"friendship_id": friendship_id})
     return {"message": "Friend removed"}
 
+
+# ============= BLOCK ENDPOINTS =============
+
+@router.post("/users/{user_id}/block")
+async def block_user(user_id: str, current_user: User = Depends(get_current_user)):
+    """Block a user — removes any friendship and prevents future requests"""
+    if user_id == current_user.user_id:
+        raise HTTPException(status_code=400, detail="Cannot block yourself")
+    
+    existing = await db.blocks.find_one({
+        "blocker_id": current_user.user_id, "blocked_id": user_id
+    }, {"_id": 0})
+    if existing:
+        return {"message": "User already blocked"}
+    
+    # Remove any existing friendship
+    await db.friends.delete_many({
+        "$or": [
+            {"user_id": current_user.user_id, "friend_id": user_id},
+            {"user_id": user_id, "friend_id": current_user.user_id}
+        ]
+    })
+    
+    await db.blocks.insert_one({
+        "blocker_id": current_user.user_id,
+        "blocked_id": user_id,
+        "created_at": datetime.now(timezone.utc),
+    })
+    return {"message": "User blocked"}
+
+@router.delete("/users/{user_id}/block")
+async def unblock_user(user_id: str, current_user: User = Depends(get_current_user)):
+    """Unblock a user"""
+    result = await db.blocks.delete_one({
+        "blocker_id": current_user.user_id, "blocked_id": user_id
+    })
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="User not blocked")
+    return {"message": "User unblocked"}
+
+@router.get("/blocked-users")
+async def get_blocked_users(current_user: User = Depends(get_current_user)):
+    """Get list of blocked users"""
+    blocks = await db.blocks.find(
+        {"blocker_id": current_user.user_id}, {"_id": 0}
+    ).to_list(200)
+    
+    if not blocks:
+        return []
+    
+    blocked_ids = [b["blocked_id"] for b in blocks]
+    users = await db.users.find(
+        {"user_id": {"$in": blocked_ids}},
+        {"_id": 0, "user_id": 1, "name": 1, "username": 1, "picture": 1}
+    ).to_list(200)
+    
+    return users
+
+
 @router.get("/users/search")
 async def search_users(q: str, current_user: User = Depends(get_current_user)):
     """Search users by username only (privacy)"""
     if len(q) < 2:
         return []
+    
+    # Get blocked user IDs (both directions)
+    blocks = await db.blocks.find({
+        "$or": [
+            {"blocker_id": current_user.user_id},
+            {"blocked_id": current_user.user_id}
+        ]
+    }, {"_id": 0, "blocker_id": 1, "blocked_id": 1}).to_list(200)
+    blocked_ids = set()
+    for b in blocks:
+        blocked_ids.add(b["blocker_id"])
+        blocked_ids.add(b["blocked_id"])
+    blocked_ids.discard(current_user.user_id)
+    
     results = await db.users.find(
         {"username": {"$regex": q, "$options": "i"}},
         {"_id": 0, "password_hash": 0}
     ).limit(20).to_list(20)
-    # Exclude self, return public fields
     return [
         {"user_id": u["user_id"], "name": u["name"], "username": u.get("username"),
          "picture": u.get("picture"), "bio": u.get("bio")}
-        for u in results if u["user_id"] != current_user.user_id
+        for u in results if u["user_id"] != current_user.user_id and u["user_id"] not in blocked_ids
     ]
 
 @router.get("/users/{user_id}/profile")
@@ -218,6 +300,33 @@ async def get_user_profile(user_id: str, current_user: User = Depends(get_curren
             friendship_status = "pending_sent" if friendship["user_id"] == current_user.user_id else "pending_received"
 
     is_own = user_id == current_user.user_id
+
+    # Check block status
+    is_blocked_by_me = False
+    is_blocked_by_them = False
+    if not is_own:
+        my_block = await db.blocks.find_one({"blocker_id": current_user.user_id, "blocked_id": user_id}, {"_id": 0})
+        their_block = await db.blocks.find_one({"blocker_id": user_id, "blocked_id": current_user.user_id}, {"_id": 0})
+        is_blocked_by_me = my_block is not None
+        is_blocked_by_them = their_block is not None
+    
+    # If blocked by them, show minimal profile
+    if is_blocked_by_them:
+        return {
+            "user_id": user["user_id"],
+            "name": user.get("name", "Unknown"),
+            "username": user.get("username"),
+            "picture": user.get("picture"),
+            "is_premium": False,
+            "points": 0,
+            "leaderboard_points": 0,
+            "friendship_status": "none",
+            "is_own_profile": False,
+            "is_blocked_by_me": is_blocked_by_me,
+            "stats": {"total_visits": 0, "countries_visited": 0, "continents_visited": 0, "friends_count": 0},
+            "recent_visits": [],
+            "destinations_explored": [],
+        }
 
     # Stats: visits, countries, continents (via aggregation)
     stats_pipeline = [
@@ -290,6 +399,7 @@ async def get_user_profile(user_id: str, current_user: User = Depends(get_curren
         "friendship_status": friendship_status,
         "friendship_id": friendship_id,
         "is_own_profile": is_own,
+        "is_blocked_by_me": is_blocked_by_me,
         "stats": {
             "total_visits": stats["total_visits"],
             "countries_visited": len([c for c in stats["countries"] if c]),
