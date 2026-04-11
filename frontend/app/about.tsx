@@ -323,26 +323,6 @@ export default function AboutScreen() {
 
           <TouchableOpacity
             style={styles.expandableCard}
-            onPress={() => router.push('/ranks')}
-            activeOpacity={0.8}
-          >
-            <Surface style={styles.card}>
-              <View style={styles.expandableHeader}>
-                <View style={styles.expandableHeaderLeft}>
-                  <Ionicons name="trophy" size={22} color="#FFD700" />
-                  <Text style={styles.expandableTitle}>Rank System</Text>
-                </View>
-                <Ionicons
-                  name="chevron-forward"
-                  size={22}
-                  color={theme.colors.textLight}
-                />
-              </View>
-            </Surface>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.expandableCard}
             onPress={() => toggleSection('privacy')}
             activeOpacity={0.8}
           >
