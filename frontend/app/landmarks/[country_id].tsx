@@ -17,15 +17,9 @@ import { BACKEND_URL } from '../../utils/config';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
 import { AddCountryVisitModal } from '../../components/AddCountryVisitModal';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
+import { getToken } from '../utils/token';
 
 // Helper to get token (works on both web and native)
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
 
 interface Landmark {
   landmark_id: string;

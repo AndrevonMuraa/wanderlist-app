@@ -18,16 +18,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 import UniversalHeader from '../../components/UniversalHeader';
 import { BACKEND_URL } from '../../utils/config';
+import { getToken } from '../utils/token';
 
 const { width } = Dimensions.get('window');
 
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
 
 interface LandmarkFact {
   title: string;

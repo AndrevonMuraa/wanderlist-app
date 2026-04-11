@@ -5,18 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as SecureStore from 'expo-secure-store';
 import theme, { gradients } from '../../styles/theme';
 import { useTheme } from '../../contexts/ThemeContext';
 import { BACKEND_URL } from '../../utils/config';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import UniversalHeader from '../../components/UniversalHeader';
-
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') return localStorage.getItem('auth_token');
-  return await SecureStore.getItemAsync('auth_token');
-};
-
+import { getToken } from '../utils/token';
 interface Visit {
   visit_id: string;
   landmark_id: string;

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends
 import os
 import random
 from datetime import datetime, timezone, timedelta

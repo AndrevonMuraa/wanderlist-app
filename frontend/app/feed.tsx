@@ -11,6 +11,7 @@ import { BACKEND_URL } from '../utils/config';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 import UniversalHeader from '../components/UniversalHeader';
+import { getToken } from '../../utils/token';
 
 interface Activity {
   activity_id: string;
@@ -34,12 +35,6 @@ interface Activity {
   visit_id?: string;
 }
 
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  }
-  return await SecureStore.getItemAsync('auth_token');
-};
 
 const formatTimeAgo = (dateString: string): string => {
   const date = new Date(dateString);

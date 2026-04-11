@@ -9,16 +9,11 @@ import theme from '../../styles/theme';
 import { useSubscription } from '../../hooks/useSubscription';
 import { BACKEND_URL } from '../../utils/config';
 import UniversalHeader from '../../components/UniversalHeader';
+import { getToken } from '../utils/token';
 
 const { width } = Dimensions.get('window');
 const PHOTO_SIZE = (width - theme.spacing.lg * 3) / 2;
 
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  }
-  return await SecureStore.getItemAsync('auth_token');
-};
 
 interface CommunityPhoto {
   photo_id: string;

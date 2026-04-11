@@ -20,13 +20,7 @@ import { BACKEND_URL } from '../utils/config';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
+import { getToken } from '../../utils/token';
 
 interface BucketListItem {
   bucket_list_id: string;

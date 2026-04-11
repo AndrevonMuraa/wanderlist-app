@@ -1,8 +1,7 @@
-from fastapi import APIRouter, HTTPException, Depends, Request, Response, Cookie, Body
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import HTMLResponse
-from typing import List, Optional
+
 import os
-import logging
 import uuid
 from datetime import datetime, timezone, timedelta
 

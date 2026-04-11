@@ -13,6 +13,7 @@ import { PersistentTabBar } from '../components/PersistentTabBar';
 import UniversalHeader from '../components/UniversalHeader';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
+import { getToken } from '../../utils/token';
 const { width } = Dimensions.get('window');
 
 interface AnalyticsData {
@@ -38,14 +39,6 @@ export default function AnalyticsScreen() {
   useEffect(() => {
     loadAnalytics();
   }, []);
-
-  const getToken = async (): Promise<string | null> => {
-    if (Platform.OS === 'web') {
-      return localStorage.getItem('auth_token');
-    } else {
-      return await SecureStore.getItemAsync('auth_token');
-    }
-  };
 
   const loadAnalytics = async () => {
     try {

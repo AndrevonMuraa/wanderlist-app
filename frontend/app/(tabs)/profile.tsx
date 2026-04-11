@@ -18,15 +18,9 @@ import { DefaultAvatar } from '../../components/DefaultAvatar';
 import Constants from 'expo-constants';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import ShareJourneyCard from '../../components/ShareJourneyCard';
+import { getToken } from '../utils/token';
 
 // Helper to get token (works on both web and native)
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
 
 interface UserStats {
   total_visits: number;

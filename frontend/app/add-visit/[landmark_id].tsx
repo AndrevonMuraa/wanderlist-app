@@ -17,17 +17,10 @@ import CelebrationEffect from '../../components/CelebrationEffect';
 import { checkLevelUp } from '../../utils/rankSystem';
 import UniversalHeader from '../../components/UniversalHeader';
 import { trackVisitForReview, maybePromptForReview } from '../../utils/appReview';
+import { getToken } from '../utils/token';
 
 
 // Helper to get token (works on both web and native)
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    const SecureStore = await import('expo-secure-store');
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
 
 export default function AddVisitScreen() {
   const { landmark_id, name } = useLocalSearchParams();

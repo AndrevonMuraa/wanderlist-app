@@ -10,13 +10,8 @@ import theme, { gradients } from '../../styles/theme';
 import { useTheme } from '../../contexts/ThemeContext';
 import { BACKEND_URL } from '../../utils/config';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
+import { getToken } from '../utils/token';
 
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  }
-  return await SecureStore.getItemAsync('auth_token');
-};
 
 interface PrivacyOption {
   value: 'public' | 'friends' | 'private';

@@ -16,6 +16,7 @@ import { CountryCardSkeleton } from '../components/Skeleton';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 import {
+import { getToken } from '../../utils/token';
   getFlagUrl, CONTINENT_ICON_NAMES, CONTINENT_DESCRIPTIONS,
   OCEANIA_GEOGRAPHIC, Country, ContinentSection,
 } from '../utils/countryConfig';
@@ -23,13 +24,6 @@ import {
 const { width } = Dimensions.get('window');
 
 // Helper to get token (works on both web and native)
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
 
 // ISO 3166-1 alpha-2 country codes for flag CDN
 // Helper function to get flag URL

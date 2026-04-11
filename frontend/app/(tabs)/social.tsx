@@ -26,14 +26,8 @@ import ReportModal from '../../components/ReportModal';
 import { getUserRank } from '../../utils/rankSystem';
 import { BACKEND_URL } from '../../utils/config';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
+import { getToken } from '../utils/token';
 
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
 
 interface Friend {
   user_id: string;

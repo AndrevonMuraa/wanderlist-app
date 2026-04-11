@@ -5,7 +5,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as SecureStore from 'expo-secure-store';
 import theme, { gradients } from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import { useAuth } from '../../contexts/AuthContext';
@@ -14,12 +13,7 @@ import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
 import ReportButton from '../../components/ReportButton';
-
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') return localStorage.getItem('auth_token');
-  return await SecureStore.getItemAsync('auth_token');
-};
-
+import { getToken } from '../utils/token';
 interface UserProfile {
   user_id: string;
   name: string;

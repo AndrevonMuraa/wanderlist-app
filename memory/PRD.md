@@ -33,7 +33,14 @@ Travel app (React Native + Expo + FastAPI + MongoDB Atlas) for tracking landmark
   - Andre: search, ranks, analytics, about, photo-collection, community photos
   - Beholdt egennavn: WanderMark, Pro
 
-### Community Features Overhaul
+### Codebase cleanup (April 11, 2026)
+- **Loading gates**: Added to leaderboard.tsx (prevents stale data flash)
+- **Deleted 3 unused components**: PhotoGalleryModal, CommentItem, PrivacySelector
+- **Deleted 6 unused utils**: accessibility, community, errorMessages, offline, performance, toast
+- **Consolidated getToken()**: Moved to `utils/token.ts`, removed 35 duplicate definitions
+- **Consolidated countryFlags**: Moved to `utils/countryFlags.ts`, removed 3 duplicate maps (~100 lines each)
+- **Removed 4 unused styles** in points-summary.tsx (statsGrid, statCard, statNumber, statLabel)
+- **Cleaned backend imports**: visits.py, subscription.py, community.py, admin.py (removed unused Request, Response, Cookie, etc.)
 - **A: Photo of the Week backend** — Forbedret fallback: nåværende uke → forrige uke → tilfeldig fra oppstemte → tilfeldig populært → country_visits
 - **B: Community Photos åpnet** — Alle brukere ser alle bilder (ikke bare 3). Premium-verdi: dagbok-tilgang (diary_locked for Basic)
 - **C: Trending Landmarks** — Erstattet Photo of the Week på Explore-siden med horisontal karusell av mest fotograferte landemerker globalt

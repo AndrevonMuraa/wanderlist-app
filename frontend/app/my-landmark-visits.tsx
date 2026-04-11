@@ -18,6 +18,7 @@ import { Skeleton } from '../components/Skeleton';
 import theme, { gradients } from '../styles/theme';
 import UniversalHeader from '../components/UniversalHeader';
 import { BACKEND_URL } from '../utils/config';
+import { getToken } from '../../utils/token';
 
 interface LandmarkVisit {
   visit_id: string;
@@ -127,12 +128,6 @@ export default function MyLandmarkVisits() {
   const [refreshing, setRefreshing] = useState(false);
   const [sortBy, setSortBy] = useState<SortType>('recent');
 
-  const getToken = async () => {
-    if (Platform.OS === 'web') {
-      return localStorage.getItem('auth_token');
-    }
-    return await SecureStore.getItemAsync('auth_token');
-  };
 
   const fetchVisits = async () => {
     try {

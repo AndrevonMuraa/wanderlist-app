@@ -6,21 +6,15 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as SecureStore from 'expo-secure-store';
 import { BACKEND_URL } from '../utils/config';
 import { useAuth } from '../contexts/AuthContext';
 import theme from '../styles/theme';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 import AddUserCreatedVisitModal from '../components/AddUserCreatedVisitModal';
 import ProFeatureLock from '../components/ProFeatureLock';
+import { getToken } from '../../utils/token';
 
 const { colors } = theme;
-
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') return localStorage.getItem('auth_token');
-  return await SecureStore.getItemAsync('auth_token');
-};
-
 interface UserCreatedVisit {
   user_created_visit_id: string;
   country_name: string;

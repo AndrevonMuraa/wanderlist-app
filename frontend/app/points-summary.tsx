@@ -16,6 +16,7 @@ import { Platform } from 'react-native';
 import theme, { gradients } from '../styles/theme';
 import UniversalHeader from '../components/UniversalHeader';
 import { BACKEND_URL } from '../utils/config';
+import { getToken } from '../../utils/token';
 
 interface UserStats {
   total_points: number;
@@ -34,12 +35,6 @@ export default function PointsSummary() {
   const [expandedSection, setExpandedSection] = useState<'verified' | 'unverified' | null>(null);
   const [breakdown, setBreakdown] = useState<any>(null);
 
-  const getToken = async () => {
-    if (Platform.OS === 'web') {
-      return localStorage.getItem('auth_token');
-    }
-    return await SecureStore.getItemAsync('auth_token');
-  };
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -630,30 +625,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginTop: 1,
-  },
-  statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-  },
-  statCard: {
-    width: '47%',
-    borderRadius: 16,
-    padding: 16,
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    ...theme.shadows.card,
-  },
-  statNumber: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: theme.colors.text,
-    marginTop: 8,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: theme.colors.textSecondary,
-    marginTop: 2,
   },
   ctaButton: {
     marginHorizontal: 16,

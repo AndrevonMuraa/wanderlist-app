@@ -10,16 +10,9 @@ import { BACKEND_URL } from '../../utils/config';
 import theme from '../../styles/theme';
 import { useAuth } from '../../contexts/AuthContext';
 import UpgradeModal from '../../components/UpgradeModal';
+import { getToken } from '../utils/token';
 
 // Helper to get token
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    const SecureStore = await import('expo-secure-store');
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
 
 interface Friend {
   user_id: string;

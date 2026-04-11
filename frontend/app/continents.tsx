@@ -16,6 +16,7 @@ import AddUserCreatedVisitModal from '../components/AddUserCreatedVisitModal';
 import ProFeatureLock from '../components/ProFeatureLock';
 import { useSubscription } from '../hooks/useSubscription';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
+import { getToken } from '../../utils/token';
 
 const { width } = Dimensions.get('window');
 
@@ -102,13 +103,6 @@ interface Continent {
   percentage?: number;
 }
 
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
 
 export default function ContinentsScreen() {
   const router = useRouter();

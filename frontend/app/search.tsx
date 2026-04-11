@@ -12,13 +12,8 @@ import theme, { gradients } from '../styles/theme';
 import { useTheme } from '../contexts/ThemeContext';
 import { BACKEND_URL } from '../utils/config';
 import debounce from 'lodash.debounce';
+import { getToken } from '../../utils/token';
 
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  }
-  return await SecureStore.getItemAsync('auth_token');
-};
 
 interface Landmark {
   landmark_id: string;

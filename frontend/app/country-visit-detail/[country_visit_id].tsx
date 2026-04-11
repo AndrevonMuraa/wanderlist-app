@@ -32,15 +32,11 @@ import ProFeatureLock from '../../components/ProFeatureLock';
 import PhotoViewer from '../../components/PhotoViewer';
 import { KeyboardDoneBar } from '../../components/KeyboardDoneBar';
 import UniversalHeader from '../../components/UniversalHeader';
+import { getToken } from '../utils/token';
+import { getCountryFlag } from '../utils/countryFlags';
 
 const { width, height } = Dimensions.get('window');
 
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  }
-  return await SecureStore.getItemAsync('auth_token');
-};
 
 interface CountryVisit {
   country_visit_id: string;
@@ -56,48 +52,6 @@ interface CountryVisit {
   visited_at?: string;
   created_at: string;
 }
-
-// Country flag mapping - all 100 countries
-const countryFlags: Record<string, string> = {
-  // Europe (20)
-  france: '🇫🇷', spain: '🇪🇸', italy: '🇮🇹', germany: '🇩🇪',
-  'united kingdom': '🇬🇧', greece: '🇬🇷', norway: '🇳🇴', portugal: '🇵🇹',
-  netherlands: '🇳🇱', switzerland: '🇨🇭', austria: '🇦🇹', sweden: '🇸🇪',
-  denmark: '🇩🇰', iceland: '🇮🇸', croatia: '🇭🇷', finland: '🇫🇮',
-  turkey: '🇹🇷', ireland: '🇮🇪', hungary: '🇭🇺', 'czech republic': '🇨🇿',
-  // Asia (20)
-  japan: '🇯🇵', china: '🇨🇳', thailand: '🇹🇭', india: '🇮🇳',
-  vietnam: '🇻🇳', 'south korea': '🇰🇷', indonesia: '🇮🇩', malaysia: '🇲🇾',
-  singapore: '🇸🇬', philippines: '🇵🇭', cambodia: '🇰🇭', nepal: '🇳🇵',
-  'sri lanka': '🇱🇰', taiwan: '🇹🇼', laos: '🇱🇦', mongolia: '🇲🇳',
-  bhutan: '🇧🇹', georgia: '🇬🇪', uzbekistan: '🇺🇿', kyrgyzstan: '🇰🇬',
-  // Africa (20)
-  egypt: '🇪🇬', 'south africa': '🇿🇦', morocco: '🇲🇦', kenya: '🇰🇪',
-  tanzania: '🇹🇿', botswana: '🇧🇼', namibia: '🇳🇦', tunisia: '🇹🇳',
-  ghana: '🇬🇭', rwanda: '🇷🇼', uganda: '🇺🇬', ethiopia: '🇪🇹',
-  senegal: '🇸🇳', zimbabwe: '🇿🇼', zambia: '🇿🇲', mozambique: '🇲🇿',
-  'ivory coast': '🇨🇮', malawi: '🇲🇼', lesotho: '🇱🇸', eswatini: '🇸🇿',
-  // Americas (20)
-  usa: '🇺🇸', 'united states': '🇺🇸', canada: '🇨🇦', mexico: '🇲🇽',
-  brazil: '🇧🇷', peru: '🇵🇪', argentina: '🇦🇷', chile: '🇨🇱',
-  colombia: '🇨🇴', ecuador: '🇪🇨', 'costa rica': '🇨🇷', cuba: '🇨🇺',
-  jamaica: '🇯🇲', 'dominican republic': '🇩🇴', panama: '🇵🇦', bahamas: '🇧🇸',
-  barbados: '🇧🇧', uruguay: '🇺🇾', bolivia: '🇧🇴', belize: '🇧🇿',
-  'saint lucia': '🇱🇨',
-  // Oceania & Island Paradises (20)
-  australia: '🇦🇺', 'new zealand': '🇳🇿', fiji: '🇫🇯', 'french polynesia': '🇵🇫',
-  maldives: '🇲🇻', mauritius: '🇲🇺', seychelles: '🇸🇨',
-  'cook islands': '🇨🇰', samoa: '🇼🇸', vanuatu: '🇻🇺',
-  hawaii: '🇺🇸', madagascar: '🇲🇬', 'cape verde': '🇨🇻',
-  'papua new guinea': '🇵🇬', palau: '🇵🇼', 'solomon islands': '🇸🇧',
-  'new caledonia': '🇳🇨', guam: '🇬🇺', comoros: '🇰🇲', reunion: '🇷🇪',
-};
-
-const getCountryFlag = (countryName: string): string => {
-  const key = countryName.toLowerCase();
-  return countryFlags[key] || '🏳️';
-};
-
 export default function CountryVisitDetailScreen() {
   const router = useRouter();
   const { country_visit_id } = useLocalSearchParams();

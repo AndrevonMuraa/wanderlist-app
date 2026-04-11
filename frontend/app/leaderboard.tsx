@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Platform,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import { Text, Surface, Avatar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,13 +21,7 @@ import ShareRankCard from '../components/ShareRankCard';
 import { BACKEND_URL } from '../utils/config';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
+import { getToken } from '../../utils/token';
 
 interface LeaderboardEntry {
   user_id: string;
@@ -299,6 +294,11 @@ export default function LeaderboardScreen() {
     <View style={styles.container}>
       <UniversalHeader title="Leaderboard" onBack={handleBack} />
 
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        </View>
+      ) : (
       <ScrollView
         style={styles.content}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -518,6 +518,7 @@ export default function LeaderboardScreen() {
           )}
         </View>
       </ScrollView>
+      )}
 
       {/* Share Rank Card Modal */}
       <ShareRankCard

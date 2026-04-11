@@ -13,15 +13,8 @@ import { useSubscription } from '../hooks/useSubscription';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
+import { getToken } from '../../utils/token';
 // Helper to get token (works on both web and native)
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    const SecureStore = await import('expo-secure-store');
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
 
 interface User {
   user_id: string;

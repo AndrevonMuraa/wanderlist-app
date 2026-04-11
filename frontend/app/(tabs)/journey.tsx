@@ -24,14 +24,8 @@ import { cachedFetch } from '../../utils/apiCache';
 import { getProgressToNextRank } from '../../utils/rankSystem';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import ShareJourneyCard from '../../components/ShareJourneyCard';
+import { getToken } from '../utils/token';
 
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
 
 interface Stats {
   total_visits: number;

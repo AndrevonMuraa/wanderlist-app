@@ -19,6 +19,7 @@ import PhotoViewer from '../../components/PhotoViewer';
 
 import { KeyboardDoneBar } from '../../components/KeyboardDoneBar';
 import UniversalHeader from '../../components/UniversalHeader';
+import { getToken } from '../utils/token';
 
 const { width } = Dimensions.get('window');
 
@@ -28,13 +29,6 @@ const VISIBILITY_META: Record<string, { icon: string; label: string; color: stri
   private: { icon: 'lock-closed-outline', label: 'Private', color: '#e74c3c' },
 };
 
-const getToken = async (): Promise<string | null> => {
-  if (Platform.OS === 'web') {
-    return localStorage.getItem('auth_token');
-  } else {
-    return await SecureStore.getItemAsync('auth_token');
-  }
-};
 
 interface VisitDetail {
   visit_id: string;
