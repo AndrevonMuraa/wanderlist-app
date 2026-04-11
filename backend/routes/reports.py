@@ -71,5 +71,29 @@ async def get_my_reports(current_user: User = Depends(get_current_user)):
     
     return {"reports": reports}
 
+@router.post("/bug-reports")
+async def submit_bug_report(body: dict, current_user: User = Depends(get_current_user)):
+    """Submit a bug report — delivered to the main admin"""
+    description = body.get("description", "").strip()
+    screenshots = body.get("screenshots", [])
+    
+    if not description:
+        raise HTTPException(status_code=400, detail="Please describe the issue")
+    
+    report = {
+        "report_id": f"bug_{uuid.uuid4().hex[:12]}",
+        "user_id": current_user.user_id,
+        "user_name": current_user.name,
+        "user_email": current_user.email,
+        "description": description,
+        "screenshots": screenshots[:5],
+        "status": "open",
+        "created_at": datetime.now(timezone.utc),
+    }
+    
+    await db.bug_reports.insert_one(report)
+    return {"message": "Bug report submitted. Thank you!", "report_id": report["report_id"]}
+
+
 # ============= END REPORT/MODERATION ENDPOINTS =============
 

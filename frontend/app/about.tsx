@@ -8,8 +8,15 @@ import {
   Dimensions,
   StatusBar,
   Linking,
+  Modal,
+  TextInput,
+  Image,
+  Alert,
+  ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
+import * as ImagePicker from 'expo-image-picker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -24,9 +31,54 @@ export default function AboutScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [showBugReport, setShowBugReport] = useState(false);
+  const [bugDescription, setBugDescription] = useState('');
+  const [bugScreenshots, setBugScreenshots] = useState<string[]>([]);
+  const [submittingBug, setSubmittingBug] = useState(false);
   const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null);
 
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
+
+  const handlePickScreenshot = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.6,
+      base64: true,
+    });
+    if (!result.canceled && result.assets[0]?.base64) {
+      const uri = `data:image/jpeg;base64,${result.assets[0].base64}`;
+      setBugScreenshots(prev => [...prev.slice(0, 4), uri]);
+    }
+  };
+
+  const handleSubmitBug = async () => {
+    if (!bugDescription.trim()) {
+      Alert.alert('Please describe the issue');
+      return;
+    }
+    setSubmittingBug(true);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/bug-reports`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ description: bugDescription.trim(), screenshots: bugScreenshots }),
+      });
+      if (res.ok) {
+        Alert.alert('Thank you!', 'Your bug report has been submitted.');
+        setShowBugReport(false);
+        setBugDescription('');
+        setBugScreenshots([]);
+      } else {
+        const err = await res.json();
+        Alert.alert('Error', err.detail || 'Could not submit report');
+      }
+    } catch {
+      Alert.alert('Error', 'Could not submit report');
+    } finally {
+      setSubmittingBug(false);
+    }
+  };
 
   const toggleSection = (section: string) => {
     setExpandedSection(expandedSection === section ? null : section);
@@ -488,11 +540,19 @@ You can filter by destination.`}
           </Surface>
         </View>
 
-        {/* Contact Support - placed at the bottom, discreet */}
+        {/* Contact Support */}
         <View style={[styles.section, { opacity: 0.7 }]}>
           <Surface style={styles.card}>
-            <Text style={[styles.cardTitle, { fontSize: 14 }]}>Need Help?</Text>
+            <Text style={[styles.cardTitle, { fontSize: 14 }]}>Need help?</Text>
             <Text style={styles.contactSubtitle}>Reach out to us at support@wandermark.app</Text>
+            <TouchableOpacity
+              onPress={() => setShowBugReport(true)}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 12 }}
+              data-testid="report-bug-link"
+            >
+              <Ionicons name="bug-outline" size={16} color={theme.colors.primary} />
+              <Text style={{ fontSize: 13, fontWeight: '600', color: theme.colors.primary }}>Report an issue or bug</Text>
+            </TouchableOpacity>
           </Surface>
         </View>
 
@@ -517,6 +577,98 @@ You can filter by destination.`}
 
         <View style={{ height: 40 }} />
       </ScrollView>
+
+      {/* Bug Report Modal */}
+      <Modal visible={showBugReport} animationType="slide" transparent>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}>
+            <View style={{ backgroundColor: theme.colors.background, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20, maxHeight: '80%' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text }}>Report an issue</Text>
+                <TouchableOpacity onPress={() => { setShowBugReport(false); setBugDescription(''); setBugScreenshots([]); }}>
+                  <Ionicons name="close" size={24} color={theme.colors.textSecondary} />
+                </TouchableOpacity>
+              </View>
+
+              <Text style={{ fontSize: 13, color: theme.colors.textSecondary, marginBottom: 12 }}>
+                Describe the issue or bug you encountered. Screenshots help us fix it faster!
+              </Text>
+
+              <TextInput
+                style={{
+                  backgroundColor: theme.colors.surface, borderRadius: 12, padding: 14,
+                  fontSize: 14, color: theme.colors.text, minHeight: 100, textAlignVertical: 'top',
+                  borderWidth: 1, borderColor: theme.colors.border,
+                }}
+                placeholder="What went wrong? Please be as specific as possible..."
+                placeholderTextColor={theme.colors.textLight}
+                value={bugDescription}
+                onChangeText={setBugDescription}
+                multiline
+                maxLength={1000}
+              />
+              <Text style={{ fontSize: 11, color: theme.colors.textLight, textAlign: 'right', marginTop: 4 }}>
+                {bugDescription.length}/1000
+              </Text>
+
+              {/* Screenshot section */}
+              <TouchableOpacity
+                onPress={handlePickScreenshot}
+                style={{
+                  flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 12,
+                  padding: 12, borderRadius: 12, borderWidth: 1, borderStyle: 'dashed',
+                  borderColor: theme.colors.primary, backgroundColor: theme.colors.primary + '08',
+                }}
+              >
+                <Ionicons name="camera-outline" size={20} color={theme.colors.primary} />
+                <Text style={{ fontSize: 13, color: theme.colors.primary, fontWeight: '600' }}>
+                  Add screenshot {bugScreenshots.length > 0 ? `(${bugScreenshots.length}/5)` : ''}
+                </Text>
+              </TouchableOpacity>
+
+              {bugScreenshots.length > 0 && (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 10 }} contentContainerStyle={{ gap: 8 }}>
+                  {bugScreenshots.map((uri, i) => (
+                    <View key={i} style={{ position: 'relative' }}>
+                      <Image source={{ uri }} style={{ width: 60, height: 60, borderRadius: 8 }} />
+                      <TouchableOpacity
+                        onPress={() => setBugScreenshots(prev => prev.filter((_, idx) => idx !== i))}
+                        style={{ position: 'absolute', top: -6, right: -6, backgroundColor: '#E53935', borderRadius: 10, width: 20, height: 20, alignItems: 'center', justifyContent: 'center' }}
+                      >
+                        <Ionicons name="close" size={12} color="#fff" />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </ScrollView>
+              )}
+
+              {/* Submit */}
+              <View style={{ flexDirection: 'row', gap: 12, marginTop: 20 }}>
+                <TouchableOpacity
+                  onPress={() => { setShowBugReport(false); setBugDescription(''); setBugScreenshots([]); }}
+                  style={{ flex: 1, paddingVertical: 12, borderRadius: 12, borderWidth: 1, borderColor: theme.colors.border, alignItems: 'center' }}
+                >
+                  <Text style={{ fontSize: 14, fontWeight: '600', color: theme.colors.textSecondary }}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleSubmitBug}
+                  disabled={submittingBug || !bugDescription.trim()}
+                  style={{
+                    flex: 2, paddingVertical: 12, borderRadius: 12, alignItems: 'center',
+                    backgroundColor: bugDescription.trim() ? theme.colors.primary : theme.colors.border,
+                  }}
+                >
+                  {submittingBug ? (
+                    <ActivityIndicator color="#fff" />
+                  ) : (
+                    <Text style={{ fontSize: 14, fontWeight: '700', color: '#fff' }}>Submit report</Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 }
