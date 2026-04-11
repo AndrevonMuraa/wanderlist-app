@@ -18,7 +18,7 @@ import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
 import { Skeleton } from '../components/Skeleton';
 import { getToken } from '../utils/token';
-import { getCountryFlag } from '../utils/countryFlags';
+import { getCountryFlag, countryFlags } from '../utils/countryFlags';
 
 
 interface CountryVisit {
