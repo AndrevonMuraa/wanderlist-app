@@ -9,7 +9,6 @@ import { useTheme } from '../contexts/ThemeContext';
 import { getUserRank } from '../utils/rankSystem';
 
 const { width: screenWidth } = Dimensions.get('window');
-const CARD_W = screenWidth - 64;
 
 interface ShareJourneyCardProps {
   visible: boolean;
