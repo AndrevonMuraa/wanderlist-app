@@ -252,10 +252,10 @@ export default function AboutScreen() {
           />
 
           <FeatureCard
-            icon="trophy"
+            icon="ribbon"
             title="Rank system"
             description="Progress through 20 ranks as you earn points"
-            color="#FFD700"
+            color="#9C27B0"
             onPress={() => router.push('/ranks')}
           />
 
@@ -268,10 +268,10 @@ export default function AboutScreen() {
           />
 
           <FeatureCard
-            icon="podium"
+            icon="trophy"
             title="Leaderboard"
             description="Compete with friends and travelers worldwide"
-            color="#00BCD4"
+            color="#FFD700"
             onPress={() => router.push('/leaderboard')}
           />
         </View>
