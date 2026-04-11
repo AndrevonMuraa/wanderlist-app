@@ -51,6 +51,7 @@ class ProfileUpdate(BaseModel):
     bio: Optional[str] = None
     location: Optional[str] = None
     banner_image: Optional[str] = None
+    featured_badges: Optional[list] = None
 
 
 class RegisterRequest(BaseModel):
