@@ -670,14 +670,14 @@ async def strip_verified_points(user_id: str, admin_user: User = Depends(get_adm
 # ============= BUG REPORTS ADMIN =============
 
 @router.get("/admin/bug-reports")
-async def get_bug_reports(admin_user: User = Depends(get_admin_user)):
+async def get_bug_reports(admin_user: User = Depends(get_super_admin_user)):
     reports = await db.bug_reports.find(
         {}, {"_id": 0}
     ).sort("created_at", -1).to_list(100)
     return reports
 
 @router.put("/admin/bug-reports/{report_id}")
-async def update_bug_report(report_id: str, body: dict, admin_user: User = Depends(get_admin_user)):
+async def update_bug_report(report_id: str, body: dict, admin_user: User = Depends(get_super_admin_user)):
     status = body.get("status", "open")
     admin_notes = body.get("admin_notes", "")
     await db.bug_reports.update_one(
