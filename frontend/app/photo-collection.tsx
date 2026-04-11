@@ -345,7 +345,7 @@ export default function PhotoCollectionScreen() {
                       {getCountryFlag(selectedPhoto.country_name)}
                     </Text>
                     <View style={{ flex: 1 }}>
-                      <Text style={styles.photoInfoLocation}>
+                      <Text style={styles.photoInfoLocation} numberOfLines={1}>
                         {selectedPhoto.landmark_name || selectedPhoto.country_name}
                       </Text>
                       {selectedPhoto.landmark_name && (
@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
   },
   fullscreenImage: {
     width: width,
-    height: width * 1.2,
+    height: height * 0.85,
   },
   photoInfoOverlay: {
     position: 'absolute',
@@ -564,9 +564,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: 'rgba(255,255,255,0.95)',
-    borderTopLeftRadius: theme.borderRadius.xl,
-    borderTopRightRadius: theme.borderRadius.xl,
-    padding: theme.spacing.lg,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    paddingHorizontal: theme.spacing.md,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 28 : 12,
   },
   photoInfoContent: {
     flexDirection: 'row',
@@ -576,18 +578,19 @@ const styles = StyleSheet.create({
   photoInfoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.sm,
+    gap: 8,
+    flex: 1,
   },
   photoInfoEmoji: {
-    fontSize: 32,
+    fontSize: 24,
   },
   photoInfoLocation: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
     color: theme.colors.text,
   },
   photoInfoCountry: {
-    fontSize: 13,
+    fontSize: 12,
     color: theme.colors.textLight,
   },
   photoInfoDate: {
@@ -598,14 +601,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
+    marginTop: 8,
+    paddingVertical: 8,
     backgroundColor: theme.colors.primaryLight + '20',
     borderRadius: theme.borderRadius.md,
     gap: 4,
   },
   viewVisitText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     color: theme.colors.primary,
   },

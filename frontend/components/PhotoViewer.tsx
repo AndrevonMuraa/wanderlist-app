@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,16 +12,6 @@ import {
   Text,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-} from 'react-native-reanimated';
-import {
-  GestureDetector,
-  Gesture,
-  GestureHandlerRootView,
-} from 'react-native-gesture-handler';
 import theme from '../styles/theme';
 
 const { width, height } = Dimensions.get('window');
@@ -40,130 +30,14 @@ export default function PhotoViewer({
   photos,
   initialIndex,
   onClose,
-  onPhotosUpdate,
-  editable = true,
 }: PhotoViewerProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const flatListRef = useRef<FlatList>(null);
-
-  // Animation values for pinch-to-zoom
-  const scale = useSharedValue(1);
-  const savedScale = useSharedValue(1);
-  const translateX = useSharedValue(0);
-  const translateY = useSharedValue(0);
-  const savedTranslateX = useSharedValue(0);
-  const savedTranslateY = useSharedValue(0);
-  const focalX = useSharedValue(0);
-  const focalY = useSharedValue(0);
-
-  // Reset zoom when changing photos
-  const resetZoom = useCallback(() => {
-    scale.value = withSpring(1, { damping: 15 });
-    savedScale.value = 1;
-    translateX.value = withSpring(0, { damping: 15 });
-    translateY.value = withSpring(0, { damping: 15 });
-    savedTranslateX.value = 0;
-    savedTranslateY.value = 0;
-  }, []);
-
-  // Pinch gesture for zooming
-  const pinchGesture = Gesture.Pinch()
-    .onStart((event) => {
-      focalX.value = event.focalX;
-      focalY.value = event.focalY;
-    })
-    .onUpdate((event) => {
-      const newScale = Math.max(0.5, Math.min(6, savedScale.value * event.scale));
-      scale.value = newScale;
-    })
-    .onEnd(() => {
-      if (scale.value < 1) {
-        scale.value = withSpring(1, { damping: 15 });
-        savedScale.value = 1;
-        translateX.value = withSpring(0, { damping: 15 });
-        translateY.value = withSpring(0, { damping: 15 });
-        savedTranslateX.value = 0;
-        savedTranslateY.value = 0;
-      } else if (scale.value > 5) {
-        scale.value = withSpring(5, { damping: 15 });
-        savedScale.value = 5;
-      } else {
-        savedScale.value = scale.value;
-      }
-    });
-
-  // Pan gesture for moving zoomed image
-  const panGesture = Gesture.Pan()
-    .onUpdate((event) => {
-      if (savedScale.value > 1) {
-        translateX.value = savedTranslateX.value + event.translationX / savedScale.value;
-        translateY.value = savedTranslateY.value + event.translationY / savedScale.value;
-      }
-    })
-    .onEnd(() => {
-      savedTranslateX.value = translateX.value;
-      savedTranslateY.value = translateY.value;
-      
-      // Snap back if dragged too far
-      const maxX = (width * (savedScale.value - 1)) / (2 * savedScale.value);
-      const maxY = (height * 0.7 * (savedScale.value - 1)) / (2 * savedScale.value);
-      
-      if (Math.abs(translateX.value) > maxX) {
-        translateX.value = withSpring(Math.sign(translateX.value) * maxX, { damping: 15 });
-        savedTranslateX.value = Math.sign(translateX.value) * maxX;
-      }
-      if (Math.abs(translateY.value) > maxY) {
-        translateY.value = withSpring(Math.sign(translateY.value) * maxY, { damping: 15 });
-        savedTranslateY.value = Math.sign(translateY.value) * maxY;
-      }
-    });
-
-  // Double tap to zoom in/out
-  const doubleTapGesture = Gesture.Tap()
-    .numberOfTaps(2)
-    .onStart((event) => {
-      if (scale.value > 1.5) {
-        scale.value = withSpring(1, { damping: 15 });
-        savedScale.value = 1;
-        translateX.value = withSpring(0, { damping: 15 });
-        translateY.value = withSpring(0, { damping: 15 });
-        savedTranslateX.value = 0;
-        savedTranslateY.value = 0;
-      } else {
-        const targetScale = 3;
-        // Zoom toward tap point
-        const offsetX = (width / 2 - event.x) / targetScale;
-        const offsetY = (height / 2 - event.y) / targetScale;
-        scale.value = withSpring(targetScale, { damping: 15 });
-        savedScale.value = targetScale;
-        translateX.value = withSpring(offsetX, { damping: 15 });
-        translateY.value = withSpring(offsetY, { damping: 15 });
-        savedTranslateX.value = offsetX;
-        savedTranslateY.value = offsetY;
-      }
-    });
-
-  // Combine gestures
-  const composedGestures = Gesture.Simultaneous(
-    pinchGesture,
-    Gesture.Race(doubleTapGesture, Gesture.Tap()),
-    panGesture
-  );
-
-  // Animated style for the image
-  const animatedImageStyle = useAnimatedStyle(() => ({
-    transform: [
-      { scale: scale.value },
-      { translateX: translateX.value },
-      { translateY: translateY.value },
-    ],
-  }));
 
   const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
     if (viewableItems.length > 0) {
       const newIndex = viewableItems[0].index || 0;
       setCurrentIndex(newIndex);
-      resetZoom();
     }
   }).current;
 
@@ -173,7 +47,6 @@ export default function PhotoViewer({
 
   const goToPhoto = (index: number) => {
     flatListRef.current?.scrollToIndex({ index, animated: true });
-    resetZoom();
   };
 
   const goToPrev = () => {
@@ -197,14 +70,14 @@ export default function PhotoViewer({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <GestureHandlerRootView style={styles.container}>
-        {/* Blurred background layer */}
+      <View style={styles.container}>
+        {/* Blurred background */}
         <Image
           source={{ uri: photos[currentIndex] }}
           style={StyleSheet.absoluteFill}
           blurRadius={40}
         />
-        <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.6)' }]} />
+        <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.7)' }]} />
 
         {/* Close button */}
         <View style={styles.header}>
@@ -222,7 +95,7 @@ export default function PhotoViewer({
           <View style={{ width: 44 }} />
         </View>
 
-        {/* Photo Gallery */}
+        {/* Photo Gallery — ScrollView zoom per photo */}
         <FlatList
           ref={flatListRef}
           data={photos}
@@ -238,25 +111,23 @@ export default function PhotoViewer({
             index,
           })}
           keyExtractor={(_, index) => `photo-${index}`}
-          renderItem={({ item, index }) => (
-            <View style={styles.photoContainer}>
-              {index === currentIndex ? (
-                <GestureDetector gesture={composedGestures}>
-                  <Animated.View style={[styles.imageWrapper, animatedImageStyle]}>
-                    <Image
-                      source={{ uri: item }}
-                      style={styles.photo}
-                      resizeMode="contain"
-                    />
-                  </Animated.View>
-                </GestureDetector>
-              ) : (
+          renderItem={({ item }) => (
+            <View style={styles.photoPage}>
+              <ScrollView
+                contentContainerStyle={styles.scrollContent}
+                maximumZoomScale={5}
+                minimumZoomScale={1}
+                bouncesZoom={true}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                centerContent={true}
+              >
                 <Image
                   source={{ uri: item }}
                   style={styles.photo}
                   resizeMode="contain"
                 />
-              )}
+              </ScrollView>
             </View>
           )}
         />
@@ -297,7 +168,7 @@ export default function PhotoViewer({
             </ScrollView>
           </View>
         )}
-      </GestureHandlerRootView>
+      </View>
     </Modal>
   );
 }
@@ -339,19 +210,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  photoContainer: {
+  photoPage: {
     width: width,
     height: height,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  imageWrapper: {
-    width: width,
-    height: height * 0.75,
+  scrollContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   photo: {
-    width: '100%',
-    height: '100%',
+    width: width,
+    height: height * 0.85,
   },
   navArrow: {
     position: 'absolute',
