@@ -79,7 +79,7 @@ async def get_photo_collection(current_user: User = Depends(get_current_user)):
                            v.get("landmark_name", "Unknown Landmark"), v.get("country_name", "Unknown"),
                            v.get("country_id"), v.get("visited_at"), v.get("created_at"), i)
 
-    # Process country visit photos
+    # Process destination visit photos
     for v in country_visits:
         for i, p in enumerate(v.get("photos", [])):
             if p:

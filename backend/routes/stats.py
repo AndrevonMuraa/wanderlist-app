@@ -53,7 +53,7 @@ async def get_stats(current_user: User = Depends(get_current_user)):
         {"$group": {"_id": None, "with_photos": {"$sum": {"$cond": ["$has_photo", 1, 0]}}}}
     ]
     photos_task = db.visits.aggregate(photos_pipeline).to_list(1)
-    # Get country visits for accurate country count
+    # Get destination visits for accurate country count
     country_visits_task = db.country_visits.distinct("country_id", {"user_id": current_user.user_id})
     
     result, user, friend_count, photos_result, cv_country_ids = await asyncio.gather(
@@ -64,12 +64,12 @@ async def get_stats(current_user: User = Depends(get_current_user)):
     user_lb_points = user.get("leaderboard_points", 0) if user else 0
     visits_with_photos = photos_result[0]["with_photos"] if photos_result else 0
     
-    # Merge countries from landmark visits AND country visits (both use country_id)
+    # Merge countries from landmark visits AND destination visits (both use country_id)
     landmark_country_ids = set(c for c in stats.get("country_ids", []) if c)
     country_visit_ids = set(cv_country_ids) if cv_country_ids else set()
     all_visited_countries = landmark_country_ids | country_visit_ids
     
-    # Merge continents from landmark visits AND country visits
+    # Merge continents from landmark visits AND destination visits
     landmark_continents = set(c for c in stats.get("continents", []) if c)
     # Look up continents for country_visit countries not already covered by landmarks
     extra_cv_ids = country_visit_ids - landmark_country_ids
@@ -117,7 +117,7 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
         }}
     ]
     
-    # Also sum country visit points and get visited country_ids
+    # destination visit points and get visited country_ids
     country_visits_pipeline = [
         {"$match": {"user_id": current_user.user_id}},
         {"$group": {
@@ -138,7 +138,7 @@ async def get_progress_stats(current_user: User = Depends(get_current_user)):
     verified_points = user_doc.get("leaderboard_points", 0) if user_doc else 0
     
     if not visits_result:
-        # No landmark visits — build progress from cached data + country visits
+        # No landmark visits — build from destination visits
         continental_progress = {}
         country_progress = {}
         for country in all_countries:

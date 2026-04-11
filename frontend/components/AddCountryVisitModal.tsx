@@ -11,7 +11,7 @@ import { BACKEND_URL } from '../utils/config';
 import { invalidateCacheGroup } from '../utils/apiCache';
 import { successHaptic } from '../utils/haptics';
 
-interface AddCountryVisitModalProps {
+interface AddDestinationVisitModalProps {
   visible: boolean;
   countryId: string;
   countryName: string;
@@ -26,7 +26,7 @@ const getToken = async (): Promise<string | null> => {
   return await SecureStore.getItemAsync('auth_token');
 };
 
-export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
+export const AddDestinationVisitModal: React.FC<AddDestinationVisitModalProps> = ({
   visible,
   countryId,
   countryName,
@@ -160,7 +160,7 @@ export const AddCountryVisitModal: React.FC<AddCountryVisitModalProps> = ({
     </VisitModalShell>
   );
 };
-export default AddCountryVisitModal;
+export default AddDestinationVisitModal;
 
 const styles = StyleSheet.create({
   section: {

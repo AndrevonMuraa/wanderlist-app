@@ -57,7 +57,7 @@ export const shareCollection = async (collectionName: string, landmarkCount: num
   }
 };
 
-export const shareCountryVisit = async (countryName: string, photoCount: number, points: number, diary?: string) => {
+export const shareDestinationVisit = async (countryName: string, photoCount: number, points: number, diary?: string) => {
   try {
     await successHaptic();
     

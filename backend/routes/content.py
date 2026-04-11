@@ -71,7 +71,7 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
             "visited_countries": {"$addToSet": "$lm.country_name"}
         }}
     ]
-    # Also fetch country visits and look up their continent
+    # Also fetch destination visits and look up their continent
     cv_pipeline = [
         {"$match": {"user_id": current_user.user_id}},
         {"$lookup": {
@@ -101,7 +101,7 @@ async def get_continent_stats(current_user: User = Depends(get_current_user)):
         visited_by_continent[name]["visited_points"] += v["visited_points"]
         visited_by_continent[name]["visited_countries"].update(v["visited_countries"])
     
-    # Merge country visits into continent stats
+    # Merge destination visits into continent stats
     for cv in cv_results:
         name = CONTINENT_MAP.get(cv["_id"], cv["_id"])
         if name not in visited_by_continent:

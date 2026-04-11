@@ -50,7 +50,7 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
     country_name = country.get("name", "Unknown")
     continent = country.get("continent", "Unknown")
     
-    # Check if country visit already exists (either manual or auto from landmark)
+    # Check if destination visit already exists (either manual or auto from landmark)
     existing_visit = await db.country_visits.find_one({
         "user_id": current_user.user_id,
         "country_id": data.country_id
@@ -117,7 +117,7 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
             "has_photos": has_photos
         }
     
-    # Award 50 points for new country visit
+    # Award 50 points for new destination visit
     points_earned = 50
     leaderboard_points_earned = 50 if has_photos else 0
     

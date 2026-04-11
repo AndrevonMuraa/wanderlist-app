@@ -574,7 +574,7 @@ async def recalculate_leaderboard_points(admin_user: User = Depends(get_admin_us
                     visited_countries.add(landmark.get("country_id"))
                     visited_continents.add(landmark.get("continent"))
         
-        # Sum points from country visits that have photos
+        # Sum points from destination visits that have photos
         country_visits = await db.country_visits.find(
             {"user_id": uid},
             {"_id": 0, "photos": 1, "points_earned": 1}
@@ -584,7 +584,7 @@ async def recalculate_leaderboard_points(admin_user: User = Depends(get_admin_us
             if bool(cv.get("photos")):
                 verified_points += cv.get("points_earned", 50)
         
-        # Add country visit bonuses (50pts per country visited)
+        # Add destination visit bonuses (50pts per country visited)
         verified_points += len(visited_countries) * 50
         
         # Add continent exploration bonuses (50pts per first continent with photo-verified visits)

@@ -142,13 +142,13 @@ export default function PhotoCollectionScreen() {
 
     switch (activeTab) {
       case 'country':
-        const byCountry: { [key: string]: Photo[] } = {};
+        const byDestination: { [key: string]: Photo[] } = {};
         collection.photos.forEach(photo => {
           const country = photo.country_name || 'Unknown';
-          if (!byCountry[country]) byCountry[country] = [];
-          byCountry[country].push(photo);
+          if (!byDestination[country]) byDestination[country] = [];
+          byDestination[country].push(photo);
         });
-        return Object.entries(byCountry).map(([country, photos]) => ({
+        return Object.entries(byDestination).map(([country, photos]) => ({
           title: country,
           subtitle: `${photos.length} photo${photos.length > 1 ? 's' : ''}`,
           icon: getCountryFlag(country),

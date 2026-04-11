@@ -14,7 +14,7 @@ import ProFeatureLock from '../../components/ProFeatureLock';
 import { useSubscription } from '../../hooks/useSubscription';
 import { BACKEND_URL } from '../../utils/config';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
-import { AddCountryVisitModal } from '../../components/AddCountryVisitModal';
+import { AddDestinationVisitModal } from '../../components/AddCountryVisitModal';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import { getToken } from '../utils/token';
 
@@ -40,13 +40,13 @@ export default function LandmarksScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
-  const [showCountryVisitModal, setShowCountryVisitModal] = useState(false);
+  const [showDestinationVisitModal, setShowDestinationVisitModal] = useState(false);
   const [countryProgress, setCountryProgress] = useState<{visited: number; total: number; percentage: number; verified: number; points: number; maxPoints: number} | null>(null);
   const [visitedLandmarkIds, setVisitedLandmarkIds] = useState<Set<string>>(new Set());
-  const [isCountryVisited, setIsCountryVisited] = useState(false);
-  const [countryVisitId, setCountryVisitId] = useState<string | null>(null);
-  const [countryVisitSource, setCountryVisitSource] = useState<string | null>(null);
-  const [countryVisitHasPhotos, setCountryVisitHasPhotos] = useState(false);
+  const [isDestinationVisited, setIsDestinationVisited] = useState(false);
+  const [destinationVisitId, setDestinationVisitId] = useState<string | null>(null);
+  const [destinationVisitSource, setDestinationVisitSource] = useState<string | null>(null);
+  const [destinationVisitHasPhotos, setDestinationVisitHasPhotos] = useState(false);
   const [highlights, setHighlights] = useState<any[]>([]);
   
   // All hooks must be called in consistent order
@@ -66,7 +66,7 @@ export default function LandmarksScreen() {
   useFocusEffect(
     useCallback(() => {
       fetchData();
-      checkCountryVisitStatus();
+      checkDestinationVisitStatus();
     }, [country_id])
   );
 
@@ -85,7 +85,7 @@ export default function LandmarksScreen() {
     }
   };
 
-  const checkCountryVisitStatus = async () => {
+  const checkDestinationVisitStatus = async () => {
     try {
       const token = await getToken();
       // Use the new check endpoint that considers both manual visits AND landmark visits
@@ -96,17 +96,17 @@ export default function LandmarksScreen() {
       if (response.ok) {
         const visitStatus = await response.json();
         if (visitStatus.visited) {
-          setIsCountryVisited(true);
-          setCountryVisitSource(visitStatus.source || null);
-          setCountryVisitHasPhotos(visitStatus.has_photos || false);
+          setIsDestinationVisited(true);
+          setDestinationVisitSource(visitStatus.source || null);
+          setDestinationVisitHasPhotos(visitStatus.has_photos || false);
           if (visitStatus.country_visit_id) {
-            setCountryVisitId(visitStatus.country_visit_id);
+            setDestinationVisitId(visitStatus.country_visit_id);
           }
         } else {
-          setIsCountryVisited(false);
-          setCountryVisitId(null);
-          setCountryVisitSource(null);
-          setCountryVisitHasPhotos(false);
+          setIsDestinationVisited(false);
+          setDestinationVisitId(null);
+          setDestinationVisitSource(null);
+          setDestinationVisitHasPhotos(false);
         }
       }
     } catch (error) {
@@ -126,10 +126,10 @@ export default function LandmarksScreen() {
         }),
       ]);
 
-      let countryVisits: any[] = [];
+      let landmarkVisits: any[] = [];
       if (visitsResponse.ok) {
         const allVisits = await visitsResponse.json();
-        countryVisits = allVisits.filter((v: any) => v.landmark_id?.startsWith(country_id + '_'));
+        landmarkVisits = allVisits.filter((v: any) => v.landmark_id?.startsWith(country_id + '_'));
       }
 
       if (landmarksResponse.ok) {
@@ -145,8 +145,8 @@ export default function LandmarksScreen() {
         // Compute country progress with verified/points from visits data
         const totalLandmarks = data.length;
         const visitedCount = visitedIds.size;
-        const verifiedCount = countryVisits.filter((v: any) => v.verified).length;
-        const totalPoints = countryVisits.reduce((sum: number, v: any) => sum + (v.points_earned || 0), 0);
+        const verifiedCount = landmarkVisits.filter((v: any) => v.verified).length;
+        const totalPoints = landmarkVisits.reduce((sum: number, v: any) => sum + (v.points_earned || 0), 0);
         const maxPoints = data.reduce((sum: number, lm: any) => sum + (lm.points || 10), 0);
         
         if (totalLandmarks > 0) {
@@ -188,21 +188,21 @@ export default function LandmarksScreen() {
     setShowUpgradeModal(false);
   };
 
-  const handleCountryVisitAction = () => {
-    if (!isCountryVisited) {
-      // Not visited — open modal to create new country visit
-      setShowCountryVisitModal(true);
-    } else if (countryVisitId) {
+  const handleDestinationVisitAction = () => {
+    if (!isDestinationVisited) {
+      // Destination visit
+      setShowDestinationVisitModal(true);
+    } else if (destinationVisitId) {
       // Visited — always navigate to view/edit visit details
-      router.push(`/country-visit-detail/${countryVisitId}`);
+      router.push(`/country-visit-detail/${destinationVisitId}`);
     } else {
       // Fallback: open modal to add content
-      setShowCountryVisitModal(true);
+      setShowDestinationVisitModal(true);
     }
   };
 
   const getFabConfig = () => {
-    if (!isCountryVisited) {
+    if (!isDestinationVisited) {
       return { 
         text: 'Mark as Visited', 
         colors: [theme.colors.primary, theme.colors.secondary],
@@ -219,10 +219,10 @@ export default function LandmarksScreen() {
     };
   };
 
-  const handleRemoveCountryVisit = async () => {
+  const handleRemoveDestinationVisit = async () => {
     // If no country_visit_id, the visit was detected via landmarks only
     // In this case, we can't remove it directly - need to inform the user
-    if (!countryVisitId) {
+    if (!destinationVisitId) {
       Alert.alert(
         'Cannot Remove',
         `This country is marked as visited because you have visited landmarks here. To unmark the country, you would need to remove your individual landmark visits.`,
@@ -242,14 +242,14 @@ export default function LandmarksScreen() {
           onPress: async () => {
             try {
               const token = await getToken();
-              const response = await fetch(`${BACKEND_URL}/api/country-visits/${countryVisitId}`, {
+              const response = await fetch(`${BACKEND_URL}/api/country-visits/${destinationVisitId}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${token}` },
               });
 
               if (response.ok) {
                 // Re-check status because they might still be "visited" via landmarks
-                await checkCountryVisitStatus();
+                await checkDestinationVisitStatus();
                 Alert.alert('Success', 'Destination visit removed successfully');
               } else {
                 Alert.alert('Error', 'Failed to remove destination visit');
@@ -504,7 +504,7 @@ export default function LandmarksScreen() {
         {/* Destination Visit FAB */}
         <TouchableOpacity 
           style={styles.fab}
-          onPress={handleCountryVisitAction}
+          onPress={handleDestinationVisitAction}
           activeOpacity={0.8}
           data-testid="country-visit-fab"
         >
@@ -541,14 +541,14 @@ export default function LandmarksScreen() {
       />
       
       {/* Destination Visit Modal */}
-      <AddCountryVisitModal
-        visible={showCountryVisitModal}
+      <AddDestinationVisitModal
+        visible={showDestinationVisitModal}
         countryId={country_id as string}
         countryName={name as string}
-        onClose={() => setShowCountryVisitModal(false)}
+        onClose={() => setShowDestinationVisitModal(false)}
         onSuccess={() => {
-          setIsCountryVisited(true);
-          checkCountryVisitStatus();
+          setIsDestinationVisited(true);
+          checkDestinationVisitStatus();
           fetchData();
         }}
       />

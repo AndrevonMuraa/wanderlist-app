@@ -37,7 +37,7 @@ import { getCountryFlag } from '../utils/countryFlags';
 const { width, height } = Dimensions.get('window');
 
 
-interface CountryVisit {
+interface DestinationVisit {
   country_visit_id: string;
   user_id: string;
   user_name?: string;
@@ -51,10 +51,10 @@ interface CountryVisit {
   visited_at?: string;
   created_at: string;
 }
-export default function CountryVisitDetailScreen() {
+export default function DestinationVisitDetailScreen() {
   const router = useRouter();
   const { country_visit_id } = useLocalSearchParams();
-  const [visit, setVisit] = useState<CountryVisit | null>(null);
+  const [visit, setVisit] = useState<DestinationVisit | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -342,8 +342,8 @@ export default function CountryVisitDetailScreen() {
     if (!visit) return;
     
     try {
-      const { shareCountryVisit } = await import('../../utils/shareUtils');
-      await shareCountryVisit(
+      const { shareDestinationVisit } = await import('../../utils/shareUtils');
+      await shareDestinationVisit(
         visit.country_name,
         visit.photos.length,
         visit.points_earned,

@@ -53,14 +53,14 @@ export default function ExploreCountriesScreen() {
       setLoading(true);
       const token = await getToken();
       
-      // Fetch countries, progress data, AND country visits in parallel (cached)
+      // Destination visits in parallel (cached)
       const results = await Promise.allSettled([
         cachedFetch(`${BACKEND_URL}/api/countries`, token || '', 'countries'),
         cachedFetch(`${BACKEND_URL}/api/progress`, token || '', 'progress'),
         cachedFetch(`${BACKEND_URL}/api/country-visits`, token || '', 'country-visits'),
       ]);
 
-      const [countriesResult, progressResult, countryVisitsResult] = results;
+      const [countriesResult, progressResult, destinationVisitsResult] = results;
 
       const countriesOk = countriesResult.status === 'fulfilled' && countriesResult.value.ok;
       const progressOk = progressResult.status === 'fulfilled' && progressResult.value.ok;
@@ -70,13 +70,13 @@ export default function ExploreCountriesScreen() {
         const progress = await progressResult.value.json();
         setProgressData(progress);
         
-        // Get country visits (set of country_ids that have been visited)
-        let visitedCountryIds = new Set<string>();
-        let verifiedCountryIds = new Set<string>();
-        if (countryVisitsResult.status === 'fulfilled' && countryVisitsResult.value.ok) {
-          const countryVisits = await countryVisitsResult.value.json();
-          visitedCountryIds = new Set(countryVisits.map((v: any) => v.country_id));
-          verifiedCountryIds = new Set(countryVisits.filter((v: any) => v.photos && v.photos.length > 0).map((v: any) => v.country_id));
+        // Destination visits (set of country_ids that have been visited)
+        let visitedDestinationIds = new Set<string>();
+        let verifiedDestinationIds = new Set<string>();
+        if (destinationVisitsResult.status === 'fulfilled' && destinationVisitsResult.value.ok) {
+          const destinationVisits = await destinationVisitsResult.value.json();
+          visitedDestinationIds = new Set(destinationVisits.map((v: any) => v.country_id));
+          verifiedDestinationIds = new Set(destinationVisits.filter((v: any) => v.photos && v.photos.length > 0).map((v: any) => v.country_id));
         }
         
         // Filter by continent if specified
@@ -87,13 +87,13 @@ export default function ExploreCountriesScreen() {
           );
         }
         
-        // Merge progress data AND country visit status with countries
+        // Destination visit status with countries
         const enrichedCountries = countries.map((country: Country) => ({
           ...country,
           visited: progress.countries[country.country_id]?.visited || 0,
           percentage: progress.countries[country.country_id]?.percentage || 0,
-          countryVisited: visitedCountryIds.has(country.country_id) || (progress.countries[country.country_id]?.visited || 0) > 0,
-          countryVerified: verifiedCountryIds.has(country.country_id) || (progress.countries[country.country_id]?.visited || 0) > 0,
+          destinationVisited: visitedDestinationIds.has(country.country_id) || (progress.countries[country.country_id]?.visited || 0) > 0,
+          countryVerified: verifiedDestinationIds.has(country.country_id) || (progress.countries[country.country_id]?.visited || 0) > 0,
         }));
         
         // Group countries by continent
@@ -144,13 +144,13 @@ export default function ExploreCountriesScreen() {
 
   const [flagErrors, setFlagErrors] = useState<Set<string>>(new Set());
 
-  const renderCountryCard = ({ item }: { item: Country[] }) => {
+  const renderDestinationCard = ({ item }: { item: Country[] }) => {
     return (
       <View style={styles.rowContainer}>
         {item.map((country) => {
           const isComplete = country.percentage === 100;
           const hasProgress = (country.visited || 0) > 0;
-          const isCountryVisited = country.countryVisited || false; // Country marked as visited (manual or via landmarks)
+          const isDestinationVisited = country.destinationVisited || false; // Country marked as visited (manual or via landmarks)
           const flagUrl = getFlagUrl(country.name);
           const flagFailed = flagErrors.has(country.country_id);
           const pointReward = country.total_points || (country.landmark_count * 10); // Use API points or fallback
@@ -210,7 +210,7 @@ export default function ExploreCountriesScreen() {
                     </LinearGradient>
                     
                     {/* Visited Badge - shows when country is visited (manual or via landmarks) */}
-                    {isCountryVisited && (
+                    {isDestinationVisited && (
                       <View style={styles.completeBadgeTop}>
                         <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
                       </View>
@@ -316,13 +316,13 @@ export default function ExploreCountriesScreen() {
     const totalVisited = sections.reduce((sum, section) => 
       sum + section.data.flat().reduce((visitedSum, country) => visitedSum + (country.visited || 0), 0), 0);
 
-    // User progress stats — count countries visited via landmarks OR country visits
-    const totalVisitedCountries = allCountries.filter(c => c.countryVisited).length;
+    // Destination visits
+    const totalVisitedCountries = allCountries.filter(c => c.destinationVisited).length;
     const totalVerifiedCountries = allCountries.filter(c => c.countryVerified).length;
     const totalEarnedPoints = allCountries.reduce((sum, country) => {
       const visitedLandmarks = country.visited || 0;
-      const countryVisitPoints = country.countryVisited ? 50 : 0;
-      return sum + (visitedLandmarks * 10) + countryVisitPoints;
+      const destinationVisitPoints = country.destinationVisited ? 50 : 0;
+      return sum + (visitedLandmarks * 10) + destinationVisitPoints;
     }, 0);
     const totalMaxPoints = totalCountries * 50;
 
@@ -470,7 +470,7 @@ export default function ExploreCountriesScreen() {
 
       <SectionList
         sections={sections}
-        renderItem={renderCountryCard}
+        renderItem={renderDestinationCard}
         renderSectionHeader={renderSectionHeader}
         keyExtractor={(item, index) => `row-${index}-${item.map(c => c.country_id).join('-')}`}
         contentContainerStyle={[styles.listContainer, { paddingBottom: Platform.OS === 'ios' ? 100 : 90 }]}

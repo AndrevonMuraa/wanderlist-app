@@ -495,7 +495,7 @@ async def get_country_community_photos(
     
     visits = await db.visits.aggregate(pipeline).to_list(300)
     
-    # Also get country visit photos
+    # Also get destination visit photos
     country_visits_pipeline = [
         {"$match": {
             "country_name": country_name,
@@ -555,7 +555,7 @@ async def get_country_community_photos(
                 "has_diary": bool(visit.get("diary_notes")) and visit.get("share_diary", True),
             })
     
-    # Add country visit photos
+    # Add destination visit photos
     for cv in country_visits:
         for idx, photo in enumerate(cv.get("photos", [])):
             photo_id = f"cv_{cv['country_visit_id']}_{idx}"

@@ -42,7 +42,7 @@ interface DiaryEntry {
   visited_at?: string;
 }
 
-export default function CountryCommunityPhotosScreen() {
+export default function DestinationCommunityPhotosScreen() {
   const { country_id, name } = useLocalSearchParams();
   const [photos, setPhotos] = useState<CommunityPhoto[]>([]);
   const [diaries, setDiaries] = useState<DiaryEntry[]>([]);

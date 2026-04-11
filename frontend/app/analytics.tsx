@@ -55,18 +55,18 @@ export default function AnalyticsScreen() {
         const visits = await visitsRes.json();
 
         // Process visits for analytics
-        const countryVisits: { [key: string]: number } = {};
+        const destinationVisits: { [key: string]: number } = {};
         const countryPoints: { [key: string]: number } = {};
         
         visits.forEach((visit: any) => {
           const country = visit.country_name || 'Unknown';
-          countryVisits[country] = (countryVisits[country] || 0) + 1;
+          destinationVisits[country] = (destinationVisits[country] || 0) + 1;
           countryPoints[country] = (countryPoints[country] || 0) + (visit.points_earned || 0);
         });
 
         const countryBreakdown = Object.keys(countryVisits).reduce((acc, country) => {
           acc[country] = {
-            visits: countryVisits[country],
+            visits: destinationVisits[country],
             points: countryPoints[country],
           };
           return acc;
