@@ -106,7 +106,7 @@ export default function PointsSummary() {
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={22} color="#fff" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Points Summary</Text>
+          <Text style={styles.headerTitle}>Points summary</Text>
           <View style={{ width: 40 }} />
         </LinearGradient>
         <View style={styles.loadingContainer}>
@@ -122,7 +122,7 @@ export default function PointsSummary() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="Points Summary" />
+      <UniversalHeader title="Points summary" />
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Main Points Card */}
@@ -133,71 +133,14 @@ export default function PointsSummary() {
             end={{ x: 1, y: 1 }}
             style={styles.mainCardGradient}
           >
-            <Text style={styles.totalLabel}>Total Points</Text>
+            <Text style={styles.totalLabel}>Total points</Text>
             <Text style={styles.totalNumber}>{totalPoints.toLocaleString()}</Text>
           </LinearGradient>
         </View>
 
         {/* Points Breakdown */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Points Breakdown</Text>
-          
-          <Surface style={styles.card}>
-            <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#FCE4EC' }]}>
-                <Ionicons name="camera" size={18} color="#E91E63" />
-              </View>
-              <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Photo Verification</Text>
-                <Text style={styles.infoDesc}>Add a photo to earn verified points. Verified points count for the global leaderboard and rank. Without photos, points only count for the friends leaderboard.</Text>
-              </View>
-            </View>
-
-            <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#FDEAE4' }]}>
-                <Ionicons name="location" size={18} color="#E87850" />
-              </View>
-              <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Landmark Visit</Text>
-                <Text style={styles.infoDesc}>10 pts (official) or 25 pts (premium)</Text>
-              </View>
-            </View>
-            
-            <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#E0F4F4' }]}>
-                <Ionicons name="flag" size={18} color="#4DB8D8" />
-              </View>
-              <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Destination Visit</Text>
-                <Text style={styles.infoDesc}>+50 pts for each destination visited</Text>
-              </View>
-            </View>
-
-            <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#E8F5E9' }]}>
-                <Ionicons name="globe-outline" size={18} color="#66BB6A" />
-              </View>
-              <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Continent Bonus</Text>
-                <Text style={styles.infoDesc}>+50 pts for first destination on a new continent</Text>
-              </View>
-            </View>
-
-            <View style={styles.infoRow}>
-              <View style={[styles.infoIcon, { backgroundColor: '#FFF8E1' }]}>
-                <Ionicons name="star" size={18} color="#FFD700" />
-              </View>
-              <View style={styles.infoContent}>
-                <Text style={styles.infoLabel}>Completion Bonuses</Text>
-                <Text style={styles.infoDesc}>+50 pts per destination, +200 pts per continent completed</Text>
-              </View>
-            </View>
-          </Surface>
-        </View>
-
-        {/* How Points Work */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>How Points Work</Text>
+          <Text style={styles.sectionTitle}>Points breakdown</Text>
           
           <Surface style={styles.card}>
             <TouchableOpacity onPress={() => handleToggleSection('verified')} activeOpacity={0.7}>
@@ -206,7 +149,7 @@ export default function PointsSummary() {
                   <Ionicons name="shield-checkmark" size={20} color="#4CAF50" />
                 </View>
                 <View style={styles.breakdownContent}>
-                  <Text style={styles.breakdownLabel}>Verified Points</Text>
+                  <Text style={styles.breakdownLabel}>Verified points</Text>
                   <Text style={styles.breakdownDesc}>From visits with photos — counts for leaderboard and rank</Text>
                 </View>
                 <Text style={[styles.breakdownValue, { color: '#4CAF50' }]}>{verifiedPoints.toLocaleString()}</Text>
@@ -232,7 +175,7 @@ export default function PointsSummary() {
                 )}
                 {breakdown.country_visits.filter((c: any) => c.verified).length > 0 && (
                   <>
-                    <Text style={styles.detailGroupTitle}>Destination Visits ({breakdown.summary.country_verified || 0} pts)</Text>
+                    <Text style={styles.detailGroupTitle}>Destination visits ({breakdown.summary.country_verified || 0} pts)</Text>
                     {breakdown.country_visits.filter((c: any) => c.verified).map((c: any) => (
                       <TouchableOpacity key={c.country_visit_id} style={styles.detailRow} onPress={() => router.push(`/country-visit-detail/${c.country_visit_id}`)} activeOpacity={0.7}>
                         <Ionicons name="flag" size={14} color="#4DB8D8" />
@@ -245,7 +188,7 @@ export default function PointsSummary() {
                 )}
                 {breakdown.continent_bonuses.filter((b: any) => b.verified).length > 0 && (
                   <>
-                    <Text style={styles.detailGroupTitle}>Continent Bonuses ({breakdown.summary.continent_verified} pts)</Text>
+                    <Text style={styles.detailGroupTitle}>Continent bonuses ({breakdown.summary.continent_verified} pts)</Text>
                     {breakdown.continent_bonuses.filter((b: any) => b.verified).map((b: any) => (
                       <View key={b.continent} style={styles.detailRow}>
                         <Ionicons name="globe-outline" size={14} color="#66BB6A" />
@@ -257,7 +200,7 @@ export default function PointsSummary() {
                 )}
                 {breakdown.completion_bonuses?.destinations?.filter((d: any) => d.verified).length > 0 && (
                   <>
-                    <Text style={styles.detailGroupTitle}>Completion Bonuses ({breakdown.summary.completion_verified || 0} pts)</Text>
+                    <Text style={styles.detailGroupTitle}>Completion bonuses ({breakdown.summary.completion_verified || 0} pts)</Text>
                     {breakdown.completion_bonuses.destinations.filter((d: any) => d.verified).map((d: any) => (
                       <View key={d.name} style={styles.detailRow}>
                         <Ionicons name="star" size={14} color="#FFD700" />
@@ -288,7 +231,7 @@ export default function PointsSummary() {
                   <Ionicons name="star" size={20} color="#FFA726" />
                 </View>
                 <View style={styles.breakdownContent}>
-                  <Text style={styles.breakdownLabel}>Unverified Points</Text>
+                  <Text style={styles.breakdownLabel}>Unverified points</Text>
                   <Text style={styles.breakdownDesc}>From visits without photos — counts for friends leaderboard only</Text>
                 </View>
                 <Text style={styles.breakdownValue}>{unverifiedPoints.toLocaleString()}</Text>
@@ -314,7 +257,7 @@ export default function PointsSummary() {
                 )}
                 {breakdown.country_visits.filter((c: any) => !c.verified).length > 0 && (
                   <>
-                    <Text style={styles.detailGroupTitle}>Destination Visits ({breakdown.summary.country_total - (breakdown.summary.country_verified || 0)} pts)</Text>
+                    <Text style={styles.detailGroupTitle}>Destination visits ({breakdown.summary.country_total - (breakdown.summary.country_verified || 0)} pts)</Text>
                     {breakdown.country_visits.filter((c: any) => !c.verified).map((c: any) => (
                       <TouchableOpacity key={c.country_visit_id} style={styles.detailRow} onPress={() => router.push(`/country-visit-detail/${c.country_visit_id}`)} activeOpacity={0.7}>
                         <Ionicons name="flag" size={14} color="#4DB8D8" />
@@ -327,7 +270,7 @@ export default function PointsSummary() {
                 )}
                 {breakdown.continent_bonuses.filter((b: any) => !b.verified).length > 0 && (
                   <>
-                    <Text style={styles.detailGroupTitle}>Continent Bonuses ({breakdown.summary.continent_total - (breakdown.summary.continent_verified || 0)} pts)</Text>
+                    <Text style={styles.detailGroupTitle}>Continent bonuses ({breakdown.summary.continent_total - (breakdown.summary.continent_verified || 0)} pts)</Text>
                     {breakdown.continent_bonuses.filter((b: any) => !b.verified).map((b: any) => (
                       <View key={b.continent} style={styles.detailRow}>
                         <Ionicons name="globe-outline" size={14} color="#66BB6A" />
@@ -339,7 +282,7 @@ export default function PointsSummary() {
                 )}
                 {((breakdown.completion_bonuses?.destinations?.filter((d: any) => !d.verified).length || 0) + (breakdown.completion_bonuses?.continents?.filter((c: any) => !c.verified).length || 0)) > 0 && (
                   <>
-                    <Text style={styles.detailGroupTitle}>Completion Bonuses ({(breakdown.summary.completion_total || 0) - (breakdown.summary.completion_verified || 0)} pts)</Text>
+                    <Text style={styles.detailGroupTitle}>Completion bonuses ({(breakdown.summary.completion_total || 0) - (breakdown.summary.completion_verified || 0)} pts)</Text>
                     {(breakdown.completion_bonuses?.destinations || []).filter((d: any) => !d.verified).map((d: any) => (
                       <View key={d.name} style={styles.detailRow}>
                         <Ionicons name="star" size={14} color="#FFD700" />
@@ -364,9 +307,66 @@ export default function PointsSummary() {
           </Surface>
         </View>
 
+        {/* How Points Work */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>How points work</Text>
+          
+          <Surface style={styles.card}>
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#FCE4EC' }]}>
+                <Ionicons name="camera" size={18} color="#E91E63" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Photo verification</Text>
+                <Text style={styles.infoDesc}>Add a photo to earn verified points. Verified points count for the global leaderboard and rank. Without photos, points only count for the friends leaderboard.</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#FDEAE4' }]}>
+                <Ionicons name="location" size={18} color="#E87850" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Landmark visit</Text>
+                <Text style={styles.infoDesc}>10 pts (official) or 25 pts (premium)</Text>
+              </View>
+            </View>
+            
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#E0F4F4' }]}>
+                <Ionicons name="flag" size={18} color="#4DB8D8" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Destination visit</Text>
+                <Text style={styles.infoDesc}>+50 pts for each destination visited</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#E8F5E9' }]}>
+                <Ionicons name="globe-outline" size={18} color="#66BB6A" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Continent bonus</Text>
+                <Text style={styles.infoDesc}>+50 pts for first destination on a new continent</Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <View style={[styles.infoIcon, { backgroundColor: '#FFF8E1' }]}>
+                <Ionicons name="star" size={18} color="#FFD700" />
+              </View>
+              <View style={styles.infoContent}>
+                <Text style={styles.infoLabel}>Completion bonuses</Text>
+                <Text style={styles.infoDesc}>+50 pts per destination, +200 pts per continent completed</Text>
+              </View>
+            </View>
+          </Surface>
+        </View>
+
         {/* Earning Potential */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Earning Potential</Text>
+          <Text style={styles.sectionTitle}>Earning potential</Text>
           
           <Surface style={styles.card}>
             <Text style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center', marginBottom: 12 }}>
@@ -409,7 +409,7 @@ export default function PointsSummary() {
               </View>
               <View style={styles.potentialContent}>
                 <View style={styles.potentialLabelRow}>
-                  <Text style={styles.potentialLabel}>Continent Bonuses</Text>
+                  <Text style={styles.potentialLabel}>Continent bonuses</Text>
                   <Text style={styles.potentialValue}>{breakdown?.summary?.continent_total || 0} <Text style={styles.potentialMax}>/ 250</Text></Text>
                 </View>
                 <View style={styles.potentialBarBg}>
@@ -424,7 +424,7 @@ export default function PointsSummary() {
               </View>
               <View style={styles.potentialContent}>
                 <View style={styles.potentialLabelRow}>
-                  <Text style={styles.potentialLabel}>Completion Bonuses</Text>
+                  <Text style={styles.potentialLabel}>Completion bonuses</Text>
                   <Text style={styles.potentialValue}>{breakdown?.summary?.completion_total || 0} <Text style={styles.potentialMax}>/ 6,000</Text></Text>
                 </View>
                 <View style={styles.potentialBarBg}>
@@ -435,7 +435,7 @@ export default function PointsSummary() {
 
             <View style={[styles.divider, { marginTop: 8 }]} />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 8 }}>
-              <Text style={{ fontSize: 14, fontWeight: '700', color: theme.colors.text }}>Total Earned</Text>
+              <Text style={{ fontSize: 14, fontWeight: '700', color: theme.colors.text }}>Total earned</Text>
               <Text style={{ fontSize: 14, fontWeight: '800', color: theme.colors.primary }}>{totalPoints.toLocaleString()} <Text style={styles.potentialMax}>/ 33,750</Text></Text>
             </View>
           </Surface>
@@ -458,7 +458,7 @@ export default function PointsSummary() {
                       <Ionicons name="trophy" size={22} color={nextRank.color} />
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 12, color: theme.colors.textSecondary }}>Next Rank</Text>
+                      <Text style={{ fontSize: 12, color: theme.colors.textSecondary }}>Next rank</Text>
                       <Text style={{ fontSize: 16, fontWeight: '700', color: nextRank.color }}>{nextRank.name}</Text>
                       <Text style={{ fontSize: 12, color: theme.colors.textLight, marginTop: 2 }}>{needed.toLocaleString()} more verified points needed</Text>
                     </View>
@@ -484,7 +484,7 @@ export default function PointsSummary() {
             style={styles.ctaGradient}
           >
             <Ionicons name="trophy" size={20} color="#fff" />
-            <Text style={styles.ctaText}>View Leaderboard</Text>
+            <Text style={styles.ctaText}>View leaderboard</Text>
           </LinearGradient>
         </TouchableOpacity>
 

@@ -268,7 +268,7 @@ export default function CountryCommunityPhotosScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <UniversalHeader title="Country Photos" />
+        <UniversalHeader title="Country photos" />
         <View style={styles.centered}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>

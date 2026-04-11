@@ -494,7 +494,7 @@ export default function LandmarksScreen() {
               >
                 <Ionicons name="images" size={20} color="#fff" />
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.communityPhotosTitle}>Community Photos</Text>
+                  <Text style={styles.communityPhotosTitle}>Community photos</Text>
                   <Text style={styles.communityPhotosSub}>Photos from travelers in {name}</Text>
                 </View>
                 <Ionicons name="chevron-forward" size={18} color="rgba(255,255,255,0.7)" />

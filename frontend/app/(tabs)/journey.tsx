@@ -324,7 +324,7 @@ export default function JourneyScreen() {
               >
                 <Ionicons name="star" size={20} color="#FFD700" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.totalPoints || 0}</Text>
-                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Total Points</Text>
+                <Text style={[styles.statLabelCompact, { color: colors.textSecondary }]}>Total points</Text>
               </TouchableOpacity>
 
               <TouchableOpacity 
@@ -357,7 +357,7 @@ export default function JourneyScreen() {
         {/* Overall Progress */}
         {progressStats && stats && (
           <Surface style={[styles.progressCard, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.sectionTitle, { color: colors.text, textAlign: 'center' }]}>Overall Progress</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text, textAlign: 'center' }]}>Overall progress</Text>
             <View style={styles.tripleProgressRow}>
               <View style={styles.progressItem}>
                 <CircularProgress
@@ -397,7 +397,7 @@ export default function JourneyScreen() {
         {rankProgress.nextRank && (
           <TouchableOpacity activeOpacity={0.7} onPress={() => router.push('/ranks')}>
           <Surface style={[styles.milestoneCard, { backgroundColor: colors.surface }]}>
-            <Text style={[styles.sectionTitle, { color: colors.text, textAlign: 'center', marginBottom: theme.spacing.sm }]}>Next Rank</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text, textAlign: 'center', marginBottom: theme.spacing.sm }]}>Next rank</Text>
             <View style={styles.milestoneRow}>
               <View style={styles.milestoneContent}>
                 <Text style={[styles.milestoneName, { color: rankProgress.nextRank.color }]}>{rankProgress.nextRank.name}</Text>
@@ -473,7 +473,7 @@ export default function JourneyScreen() {
                 <Ionicons name="location" size={22} color="#E87850" />
               </View>
               <View>
-                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>My Landmark Visits</Text>
+                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>My landmark visits</Text>
                 <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>All visited landmarks</Text>
               </View>
             </View>
@@ -518,7 +518,7 @@ export default function JourneyScreen() {
               </View>
               <View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>Custom Visits</Text>
+                  <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>Custom visits</Text>
                   {!canCreateCustomVisits && (
                     <View style={[styles.proBadge, { backgroundColor: colors.accentTeal + '15' }]}>
                       <Ionicons name="diamond" size={12} color={colors.accentTeal} />
@@ -549,7 +549,7 @@ export default function JourneyScreen() {
                 <Ionicons name="star" size={22} color={colors.accentYellow} />
               </View>
               <View>
-                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>Points Summary</Text>
+                <Text style={[styles.countryVisitsTitle, { color: colors.text }]}>Points summary</Text>
                 <Text style={[styles.countryVisitsSubtitle, { color: colors.textLight }]}>How points work</Text>
               </View>
             </View>

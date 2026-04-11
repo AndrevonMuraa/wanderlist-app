@@ -237,7 +237,7 @@ export default function LandmarkDetailScreen() {
   if (!landmark) {
     return (
       <View style={styles.container}>
-        <UniversalHeader title="Landmark Not Found" />
+        <UniversalHeader title="Landmark not found" />
 
         <View style={styles.errorContainer}>
           <Ionicons name="alert-circle" size={64} color={theme.colors.accent} />
@@ -375,7 +375,7 @@ export default function LandmarkDetailScreen() {
             >
               <Ionicons name="images" size={22} color="#fff" />
               <View style={{ flex: 1 }}>
-                <Text style={styles.communityPhotosTitle}>Community Photos</Text>
+                <Text style={styles.communityPhotosTitle}>Community photos</Text>
                 <Text style={styles.communityPhotosSubtitle}>See photos from other travelers</Text>
               </View>
               <Ionicons name="chevron-forward" size={20} color="rgba(255,255,255,0.7)" />

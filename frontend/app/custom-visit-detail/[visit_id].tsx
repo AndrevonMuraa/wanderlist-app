@@ -269,7 +269,7 @@ export default function CustomVisitDetailScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="Custom Visit" onBack={() => safeGoBack(router)} />
+      <UniversalHeader title="Custom visit" onBack={() => safeGoBack(router)} />
 
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
         {/* Hero / Photo carousel */}

@@ -214,7 +214,7 @@ export default function SearchScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       {/* Header */}
-      <UniversalHeader title="Search Landmarks" />
+      <UniversalHeader title="Search landmarks" />
 
       {/* Search Bar + Filters */}
       <View style={[styles.searchContainer, { backgroundColor: colors.surface }]}>

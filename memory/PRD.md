@@ -24,7 +24,15 @@ Travel app (React Native + Expo + FastAPI + MongoDB Atlas) for tracking landmark
 - P3: Image optimization (server-side compression)
 - P4: Rename GitHub repo to wandermark-app
 
-## Completed (April 10, 2026 - Session 2 continued)
+## Completed (April 11, 2026 - Session 2 continued)
+### Points Summary section fix + Sentence case
+- **Points summary fix**: Byttet "Points breakdown" (nå viser verified/unverified poeng med tall) og "How points work" (nå viser forklaringer)
+- **Sentence case**: Endret alle Title Case-overskrifter til sentence case i hele appen (40+ strenger)
+  - Hovedskjermer: journey, profile, explore, social, points-summary, continents
+  - Detalj-sider: visit-detail, country-visit-detail, landmark-detail, custom-visit-detail
+  - Andre: search, ranks, analytics, about, photo-collection, community photos
+  - Beholdt egennavn: WanderMark, Pro
+
 ### Community Features Overhaul
 - **A: Photo of the Week backend** — Forbedret fallback: nåværende uke → forrige uke → tilfeldig fra oppstemte → tilfeldig populært → country_visits
 - **B: Community Photos åpnet** — Alle brukere ser alle bilder (ikke bare 3). Premium-verdi: dagbok-tilgang (diary_locked for Basic)

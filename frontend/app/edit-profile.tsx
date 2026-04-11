@@ -173,7 +173,7 @@ export default function EditProfileScreen() {
     return (
       <View style={styles.container}>
         <UniversalHeader 
-          title="Edit Profile" 
+          title="Edit profile" 
           onBack={handleBack}
         />
         <View style={styles.centerContainer}>
@@ -189,7 +189,7 @@ export default function EditProfileScreen() {
   return (
     <View style={styles.container}>
       <UniversalHeader 
-        title="Edit Profile" 
+        title="Edit profile" 
         onBack={handleBack}
       />
       

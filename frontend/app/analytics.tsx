@@ -104,7 +104,7 @@ export default function AnalyticsScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <UniversalHeader title="Travel Analytics" />
+        <UniversalHeader title="Travel analytics" />
         <View style={styles.loadingContainer}>
           <Text>Loading your analytics...</Text>
         </View>
@@ -115,7 +115,7 @@ export default function AnalyticsScreen() {
   if (!analytics) {
     return (
       <View style={styles.container}>
-        <UniversalHeader title="Travel Analytics" />
+        <UniversalHeader title="Travel analytics" />
         <View style={styles.errorContainer}>
           <Text>Unable to load analytics</Text>
         </View>
@@ -129,7 +129,7 @@ export default function AnalyticsScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="Travel Analytics" />
+      <UniversalHeader title="Travel analytics" />
       
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         {/* Key Stats Grid */}

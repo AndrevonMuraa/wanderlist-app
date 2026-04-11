@@ -251,7 +251,7 @@ export default function ContinentsScreen() {
             onPress={() => router.replace('/bucket-list')}
           >
             <Ionicons name="bookmark" size={18} color={theme.colors.textSecondary} />
-            <Text style={styles.tabLabel}>Bucket List</Text>
+            <Text style={styles.tabLabel}>Bucket list</Text>
           </TouchableOpacity>
         </View>
 
@@ -342,7 +342,7 @@ export default function ContinentsScreen() {
           <View style={styles.trendingSection}>
             <View style={styles.trendingSectionHeader}>
               <Ionicons name="flame" size={18} color="#E87850" />
-              <Text style={styles.trendingSectionTitle}>Trending Landmarks</Text>
+              <Text style={styles.trendingSectionTitle}>Trending landmarks</Text>
             </View>
             <ScrollView 
               horizontal 
@@ -554,7 +554,6 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.8)',
     fontSize: 11,
     fontWeight: '600',
-  },
   },
   // Cards
   cardsContainer: {

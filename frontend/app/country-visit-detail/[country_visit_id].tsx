@@ -448,7 +448,7 @@ export default function CountryVisitDetailScreen() {
   if (!visit) {
     return (
       <View style={styles.container}>
-        <UniversalHeader title="Visit Not Found" />
+        <UniversalHeader title="Visit not found" />
         <View style={styles.errorContainer}>
           <Ionicons name="alert-circle" size={64} color={theme.colors.textLight} />
           <Text style={styles.errorText}>This visit could not be found</Text>

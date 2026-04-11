@@ -228,7 +228,7 @@ export default function AddVisitScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <UniversalHeader title="Add Visit" />
+        <UniversalHeader title="Add visit" />
         <View style={styles.loadingInner}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
           <Text style={styles.loadingText}>Loading landmark...</Text>
@@ -239,7 +239,7 @@ export default function AddVisitScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="Add Visit" />
+      <UniversalHeader title="Add visit" />
 
       {/* Modern Modal Component */}
       {landmark && (

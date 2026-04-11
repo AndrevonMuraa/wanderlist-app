@@ -188,7 +188,7 @@ export default function AboutScreen() {
             <HowItWorksStep
               number={1}
               icon="compass"
-              title="Explore Landmarks"
+              title="Explore landmarks"
               description="Browse 1,500 landmarks across 100 destinations and 5 continents."
             />
             <HowItWorksStep
@@ -200,7 +200,7 @@ export default function AboutScreen() {
             <HowItWorksStep
               number={3}
               icon="star"
-              title="Earn Points & Rank Up"
+              title="Earn points & rank up"
               description="Collect points for visits. Take personal photos at landmarks for verified leaderboard points!"
             />
             <HowItWorksStep
@@ -221,7 +221,7 @@ export default function AboutScreen() {
 
           <FeatureCard
             icon="earth"
-            title="Explore Continents"
+            title="Explore continents"
             description="Discover destinations across 5 continents"
             color="#3BB8C3"
             onPress={() => router.push('/continents')}
@@ -229,7 +229,7 @@ export default function AboutScreen() {
 
           <FeatureCard
             icon="location"
-            title="Landmark Visits"
+            title="Landmark visits"
             description="Visit 1,500 landmarks and earn points"
             color={theme.colors.accent}
             onPress={() => router.push('/my-landmark-visits')}
@@ -237,7 +237,7 @@ export default function AboutScreen() {
 
           <FeatureCard
             icon="flag"
-            title="Destination Visits"
+            title="Destination visits"
             description="Record entire country experiences with photos & diaries"
             color={theme.colors.primary}
             onPress={() => router.push('/my-country-visits')}
@@ -245,7 +245,7 @@ export default function AboutScreen() {
 
           <FeatureCard
             icon="airplane"
-            title="Custom Visits"
+            title="Custom visits"
             description="Record trips to places not in our database"
             color="#1E8A8A"
             onPress={() => router.push({ pathname: '/(tabs)/journey', params: { scrollTo: 'custom-visits' } })}
@@ -253,7 +253,7 @@ export default function AboutScreen() {
 
           <FeatureCard
             icon="trophy"
-            title="Rank System"
+            title="Rank system"
             description="Progress through 20 ranks as you earn points"
             color="#FFD700"
             onPress={() => router.push('/ranks')}

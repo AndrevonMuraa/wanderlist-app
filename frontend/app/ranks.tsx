@@ -145,7 +145,7 @@ export default function RanksScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="Rank System" />
+      <UniversalHeader title="Rank system" />
 
       <ScrollView 
         style={styles.scrollView}

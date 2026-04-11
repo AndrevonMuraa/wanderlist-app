@@ -186,7 +186,7 @@ export default function LandmarkCommunityPhotosScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <UniversalHeader title="Community Photos" />
+        <UniversalHeader title="Community photos" />
         <View style={styles.centered}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
@@ -196,7 +196,7 @@ export default function LandmarkCommunityPhotosScreen() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="Community Photos" />
+      <UniversalHeader title="Community photos" />
 
       <FlatList
         data={photos}
