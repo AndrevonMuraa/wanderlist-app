@@ -181,6 +181,7 @@ export default function MyLandmarkVisits() {
 
   const verifiedCount = visits.filter(v => v.verified).length;
   const totalPoints = visits.reduce((sum, v) => sum + (v.points_earned || 0), 0);
+  const verifiedPoints = visits.filter(v => v.verified).reduce((sum, v) => sum + (v.points_earned || 0), 0);
 
   const SortChip = ({ label, value, icon }: { label: string; value: SortType; icon: keyof typeof Ionicons.glyphMap }) => (
     <TouchableOpacity
@@ -230,26 +231,34 @@ export default function MyLandmarkVisits() {
       <View style={styles.statsRow}>
         <View style={styles.statItem}>
           <View style={[styles.statIconWrap, { backgroundColor: '#E3F6FC' }]}>
-            <Ionicons name="location" size={16} color={theme.colors.primary} />
+            <Ionicons name="location" size={14} color={theme.colors.primary} />
           </View>
           <Text style={styles.statNumber}>{visits.length}</Text>
           <Text style={styles.statLabel}>Visited</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
+          <View style={[styles.statIconWrap, { backgroundColor: '#E8F5E9' }]}>
+            <Ionicons name="shield-checkmark" size={14} color="#4CAF50" />
+          </View>
+          <Text style={[styles.statNumber, { color: '#4CAF50' }]}>{verifiedCount}</Text>
+          <Text style={styles.statLabel}>Verified</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statItem}>
           <View style={[styles.statIconWrap, { backgroundColor: '#FFF3E0' }]}>
-            <Ionicons name="star" size={16} color="#FFA726" />
+            <Ionicons name="star" size={14} color="#FFA726" />
           </View>
           <Text style={[styles.statNumber, { color: '#FFA726' }]}>{totalPoints}</Text>
-          <Text style={styles.statLabel}>Points</Text>
+          <Text style={styles.statLabel}>Total pts</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
           <View style={[styles.statIconWrap, { backgroundColor: '#E8F5E9' }]}>
-            <Ionicons name="shield-checkmark" size={16} color="#4CAF50" />
+            <Ionicons name="star" size={14} color="#4CAF50" />
           </View>
-          <Text style={[styles.statNumber, { color: '#4CAF50' }]}>{verifiedCount}</Text>
-          <Text style={styles.statLabel}>Verified</Text>
+          <Text style={[styles.statNumber, { color: '#4CAF50' }]}>{verifiedPoints}</Text>
+          <Text style={styles.statLabel}>Verified pts</Text>
         </View>
       </View>
 
