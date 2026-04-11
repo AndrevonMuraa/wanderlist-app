@@ -756,11 +756,18 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
     
     # Calculate completion bonuses
     # Destination completion: all landmarks in a country visited
+    # Batch-fetch landmark counts per country (avoids N+1 query)
     all_db_countries = await db.countries.find({}, {"_id": 0, "country_id": 1, "continent": 1}).to_list(200)
+    lm_count_pipeline = [
+        {"$group": {"_id": "$country_id", "count": {"$sum": 1}}}
+    ]
+    lm_counts = await db.landmarks.aggregate(lm_count_pipeline).to_list(200)
+    lm_count_map = {doc["_id"]: doc["count"] for doc in lm_counts}
+    
     dest_completions = []
     for country in all_db_countries:
         cid = country["country_id"]
-        total_lm = await db.landmarks.count_documents({"country_id": cid})
+        total_lm = lm_count_map.get(cid, 0)
         if total_lm == 0:
             continue
         user_visits_in_c = [v for v in visits if landmark_country_map.get(v.get("landmark_id")) == cid]

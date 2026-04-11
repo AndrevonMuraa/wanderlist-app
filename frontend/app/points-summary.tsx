@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import theme, { gradients } from '../styles/theme';
 import UniversalHeader from '../components/UniversalHeader';
 import { BACKEND_URL } from '../utils/config';
+import { cachedFetch } from '../utils/apiCache';
 import { getToken } from '../../utils/token';
 
 interface UserStats {
@@ -38,10 +39,11 @@ export default function PointsSummary() {
     const fetchStats = async () => {
       try {
         const token = await getToken();
-        // Fetch both stats and progress in parallel — progress has calculated points
+        // Use cachedFetch for stats/progress (likely already cached from Journey tab)
+        // Breakdown always fetched fresh (unique to this page)
         const [statsRes, progressRes, breakdownRes] = await Promise.all([
-          fetch(`${BACKEND_URL}/api/stats`, { headers: { Authorization: `Bearer ${token}` } }),
-          fetch(`${BACKEND_URL}/api/progress`, { headers: { Authorization: `Bearer ${token}` } }),
+          cachedFetch(`${BACKEND_URL}/api/stats`, token || '', 'stats'),
+          cachedFetch(`${BACKEND_URL}/api/progress`, token || '', 'progress'),
           fetch(`${BACKEND_URL}/api/points/breakdown`, { headers: { Authorization: `Bearer ${token}` } }),
         ]);
         
