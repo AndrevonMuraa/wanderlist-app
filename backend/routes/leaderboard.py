@@ -90,7 +90,11 @@ async def get_enhanced_leaderboard(
             privacy_match = {"user_id": {"$in": public_ids}}
 
         pipeline = [
-            {"$match": {**time_filter, **({"user_id": {"$in": user_filter}} if user_filter else privacy_match)}},
+            {"$match": {
+                **time_filter,
+                **({"user_id": {"$in": user_filter}} if user_filter else privacy_match),
+                **({"verified": True} if not user_filter else {}),
+            }},
             {"$group": {"_id": "$user_id", "visit_count": {"$sum": 1}}},
             {"$sort": {"visit_count": -1}},
             {"$limit": limit},
@@ -131,7 +135,11 @@ async def get_enhanced_leaderboard(
             privacy_match = {"user_id": {"$in": public_ids}}
 
         pipeline = [
-            {"$match": {**time_filter, **({"user_id": {"$in": user_filter}} if user_filter else privacy_match)}},
+            {"$match": {
+                **time_filter,
+                **({"user_id": {"$in": user_filter}} if user_filter else privacy_match),
+                **({"verified": True} if not user_filter else {}),
+            }},
             {"$group": {"_id": {"user_id": "$user_id", "country": "$country_name"}}},
             {"$group": {"_id": "$_id.user_id", "country_count": {"$sum": 1}}},
             {"$sort": {"country_count": -1}},
