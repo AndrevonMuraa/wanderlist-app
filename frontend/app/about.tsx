@@ -244,11 +244,11 @@ export default function AboutScreen() {
           />
 
           <FeatureCard
-            icon="airplane"
+            icon="globe-outline"
             title="Custom visits"
             description="Record trips to places not in our database"
             color="#1E8A8A"
-            onPress={() => router.push({ pathname: '/(tabs)/journey', params: { scrollTo: 'custom-visits' } })}
+            onPress={() => router.push('/custom-visits')}
           />
 
           <FeatureCard
@@ -257,6 +257,14 @@ export default function AboutScreen() {
             description="Progress through 20 ranks as you earn points"
             color="#FFD700"
             onPress={() => router.push('/ranks')}
+          />
+
+          <FeatureCard
+            icon="star"
+            title="Point system"
+            description="Earn and track verified and unverified points"
+            color="#FFA726"
+            onPress={() => router.push('/points-summary')}
           />
 
           <FeatureCard
