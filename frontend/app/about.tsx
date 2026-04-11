@@ -263,7 +263,7 @@ export default function AboutScreen() {
             icon="star"
             title="Point system"
             description="Earn and track verified and unverified points"
-            color="#FFA726"
+            color="#FFD700"
             onPress={() => router.push('/points-summary')}
           />
 
