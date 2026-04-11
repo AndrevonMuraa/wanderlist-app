@@ -275,7 +275,7 @@ export default function AboutScreen() {
             icon="earth"
             title="Explore continents"
             description="Discover destinations across 5 continents"
-            color="#3BB8C3"
+            color="#4CAF50"
             onPress={() => router.push('/continents')}
           />
 
@@ -283,7 +283,7 @@ export default function AboutScreen() {
             icon="location"
             title="Landmark visits"
             description="Visit 1,500 landmarks and earn points"
-            color={theme.colors.accent}
+            color="#E87850"
             onPress={() => router.push('/my-landmark-visits')}
           />
 
@@ -291,7 +291,7 @@ export default function AboutScreen() {
             icon="flag"
             title="Destination visits"
             description="Record entire country experiences with photos & diaries"
-            color={theme.colors.primary}
+            color="#4DB8D8"
             onPress={() => router.push('/my-country-visits')}
           />
 
