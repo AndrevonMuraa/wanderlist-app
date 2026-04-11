@@ -14,7 +14,6 @@ import { useUpgradePrompt } from '../../hooks/useUpgradePrompt';
 import UpgradeModal from '../../components/UpgradeModal';
 import { getToken } from '../../utils/token';
 
-// Helper to get token
 
 interface Message {
   message_id: string;

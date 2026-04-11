@@ -14,7 +14,6 @@ import { PersistentTabBar } from '../components/PersistentTabBar';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 import { getToken } from '../utils/token';
-// Helper to get token (works on both web and native)
 
 interface User {
   user_id: string;

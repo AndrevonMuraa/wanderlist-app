@@ -20,7 +20,6 @@ import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import ShareJourneyCard from '../../components/ShareJourneyCard';
 import { getToken } from '../../utils/token';
 
-// Helper to get token (works on both web and native)
 
 interface UserStats {
   total_visits: number;

@@ -20,7 +20,6 @@ import { trackVisitForReview, maybePromptForReview } from '../../utils/appReview
 import { getToken } from '../../utils/token';
 
 
-// Helper to get token (works on both web and native)
 
 export default function AddVisitScreen() {
   const { landmark_id, name } = useLocalSearchParams();
