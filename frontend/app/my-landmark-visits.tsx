@@ -13,7 +13,6 @@ import { Text, Surface } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as SecureStore from 'expo-secure-store';
 import { Skeleton } from '../components/Skeleton';
 import theme, { gradients } from '../styles/theme';
 import UniversalHeader from '../components/UniversalHeader';

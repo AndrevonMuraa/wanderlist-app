@@ -34,13 +34,15 @@ Travel app (React Native + Expo + FastAPI + MongoDB Atlas) for tracking landmark
   - Beholdt egennavn: WanderMark, Pro
 
 ### Codebase cleanup (April 11, 2026)
-- **Loading gates**: Added to leaderboard.tsx (prevents stale data flash)
-- **Deleted 3 unused components**: PhotoGalleryModal, CommentItem, PrivacySelector
-- **Deleted 6 unused utils**: accessibility, community, errorMessages, offline, performance, toast
-- **Consolidated getToken()**: Moved to `utils/token.ts`, removed 35 duplicate definitions
-- **Consolidated countryFlags**: Moved to `utils/countryFlags.ts`, removed 3 duplicate maps (~100 lines each)
-- **Removed 4 unused styles** in points-summary.tsx (statsGrid, statCard, statNumber, statLabel)
-- **Cleaned backend imports**: visits.py, subscription.py, community.py, admin.py (removed unused Request, Response, Cookie, etc.)
+- **Loading gates**: Added to leaderboard.tsx and ranks.tsx (prevents stale data flash)
+- **Deleted 1 unused component**: PhotoGalleryModal (replaced by PhotoViewer)
+- **Deleted 7 unused utils**: accessibility, community, errorMessages, offline, performance, toast
+- **Consolidated getToken()**: Moved to `utils/token.ts`, removed 35 duplicate definitions across app
+- **Consolidated countryFlags**: Moved to `utils/countryFlags.ts`, removed 3 duplicate maps (~300 lines saved)
+- **Removed 26 orphaned SecureStore imports** + 5 orphaned Platform imports
+- **Removed 4 unused styles** in points-summary.tsx
+- **Cleaned backend imports**: visits.py, subscription.py, community.py, admin.py
+- **Regression verified**: CommentItem + PrivacySelector restored (used by other components), all 9 API endpoints tested OK
 - **A: Photo of the Week backend** — Forbedret fallback: nåværende uke → forrige uke → tilfeldig fra oppstemte → tilfeldig populært → country_visits
 - **B: Community Photos åpnet** — Alle brukere ser alle bilder (ikke bare 3). Premium-verdi: dagbok-tilgang (diary_locked for Basic)
 - **C: Trending Landmarks** — Erstattet Photo of the Week på Explore-siden med horisontal karusell av mest fotograferte landemerker globalt

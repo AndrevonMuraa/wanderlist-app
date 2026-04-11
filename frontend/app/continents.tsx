@@ -10,7 +10,6 @@ import theme, { gradients } from '../styles/theme';
 import { useTheme } from '../contexts/ThemeContext';
 import { BACKEND_URL } from '../utils/config';
 import { cachedFetch } from '../utils/apiCache';
-import * as SecureStore from 'expo-secure-store';
 import { useAuth } from '../contexts/AuthContext';
 import AddUserCreatedVisitModal from '../components/AddUserCreatedVisitModal';
 import ProFeatureLock from '../components/ProFeatureLock';

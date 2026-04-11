@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, FlatList, ScrollView, Image, TouchableOpacity, Platform, Dimensions, Alert, Modal } from 'react-native';
+import { View, StyleSheet, FlatList, ScrollView, Image, TouchableOpacity, Dimensions, Alert, Modal } from 'react-native';
 import { Text, ActivityIndicator, Surface } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';

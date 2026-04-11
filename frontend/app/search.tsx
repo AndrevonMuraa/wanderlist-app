@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, TextInput, FlatList, TouchableOpacity, Platform, RefreshControl } from 'react-native';
+import { View, StyleSheet, TextInput, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { Text, Surface, Chip, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -7,7 +7,6 @@ import { safeGoBack } from '../utils/navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import UniversalHeader from '../components/UniversalHeader';
-import * as SecureStore from 'expo-secure-store';
 import theme, { gradients } from '../styles/theme';
 import { useTheme } from '../contexts/ThemeContext';
 import { BACKEND_URL } from '../utils/config';
