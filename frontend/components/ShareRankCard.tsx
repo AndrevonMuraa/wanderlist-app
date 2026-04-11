@@ -45,7 +45,6 @@ export default function ShareRankCard({ visible, onDismiss, rank, totalUsers, ca
       });
       onDismiss();
     } catch (error) {
-      console.error('Error sharing:', error);
       Alert.alert('Error', 'Failed to share. Please try again.');
     } finally {
       setSharing(false);
@@ -65,7 +64,7 @@ export default function ShareRankCard({ visible, onDismiss, rank, totalUsers, ca
         contentContainerStyle={[styles.modalContainer, { backgroundColor: colors.background }]}
       >
         <View style={styles.header}>
-          <Text style={[styles.headerTitle, { color: colors.text }]}>Share Your Ranking</Text>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>Share your ranking</Text>
           <TouchableOpacity onPress={onDismiss}>
             <Ionicons name="close" size={24} color={colors.textSecondary} />
           </TouchableOpacity>
@@ -130,7 +129,7 @@ export default function ShareRankCard({ visible, onDismiss, rank, totalUsers, ca
           data-testid="share-rank-card-button"
         >
           <LinearGradient
-            colors={['#7c3aed', '#a78bfa']}
+            colors={['#2E9AB5', '#4DB8D8']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.shareButtonGradient}
@@ -140,7 +139,7 @@ export default function ShareRankCard({ visible, onDismiss, rank, totalUsers, ca
             ) : (
               <>
                 <Ionicons name="share-social" size={20} color="#fff" />
-                <Text style={styles.shareButtonText}>Share to Social Media</Text>
+                <Text style={styles.shareButtonText}>Share to social media</Text>
               </>
             )}
           </LinearGradient>

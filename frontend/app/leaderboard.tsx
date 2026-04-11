@@ -44,7 +44,7 @@ export default function LeaderboardScreen() {
   const [refreshing, setRefreshing] = useState(false);
   
   // Filter states
-  const [timePeriod, setTimePeriod] = useState<'all_time' | 'monthly' | 'weekly'>('all_time');
+  const [timePeriod] = useState<'all_time'>('all_time');
   const [category, setCategory] = useState<'points' | 'visits' | 'countries'>('points');
   const [friendsOnly, setFriendsOnly] = useState(false);
   
@@ -134,16 +134,24 @@ export default function LeaderboardScreen() {
   const getCategoryLabel = () => {
     switch (category) {
       case 'points': return friendsOnly ? 'Points' : 'Verified';
-      case 'visits': return 'Visits';
+      case 'visits': return 'Landmarks';
       case 'countries': return 'Destinations';
+    }
+  };
+
+  const getCategoryColor = () => {
+    switch (category) {
+      case 'points': return '#FFD700';
+      case 'visits': return '#E87850';
+      case 'countries': return '#4DB8D8';
     }
   };
 
   const getCategoryIcon = () => {
     switch (category) {
       case 'points': return 'star';
-      case 'visits': return 'location-outline';
-      case 'countries': return 'earth-outline';
+      case 'visits': return 'location';
+      case 'countries': return 'flag';
     }
   };
 
@@ -238,7 +246,7 @@ export default function LeaderboardScreen() {
       <Surface style={styles.yourPositionCard} elevation={1}>
         <View style={styles.yourPositionContent}>
           <View style={styles.yourPositionLeft}>
-            <Text style={styles.yourPositionLabel}>Your Position</Text>
+            <Text style={styles.yourPositionLabel}>Your position</Text>
             <Text style={styles.yourPositionRank}>#{userRank}</Text>
           </View>
           <View style={styles.yourPositionRight}>
@@ -274,14 +282,9 @@ export default function LeaderboardScreen() {
           style={styles.userRankGradient}
         >
           <View style={styles.userRankContent}>
-            <View style={styles.userRankLeft}>
-              <Text style={styles.userRankLabel}>Your Rank</Text>
-              <Text style={styles.userRankNumber}>#{userRank}</Text>
-            </View>
-            <View style={styles.userRankRight}>
-              <Text style={styles.userRankTotal}>of {totalUsers.toLocaleString()}</Text>
-              <Ionicons name="trophy" size={32} color="#FFD700" />
-            </View>
+            <Ionicons name="trophy" size={22} color="#FFD700" />
+            <Text style={styles.userRankNumber}>#{userRank}</Text>
+            <Text style={styles.userRankLabel}>of {totalUsers.toLocaleString()} travelers</Text>
           </View>
         </LinearGradient>
       </Surface>
@@ -301,46 +304,14 @@ export default function LeaderboardScreen() {
         style={styles.content}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        {/* Time Period Filter - Custom styled */}
-        <View style={styles.filterSection}>
-          <Text style={styles.filterLabel}>Time Period</Text>
-          <View style={styles.timePeriodContainer}>
-            {[
-              { value: 'all_time', label: 'All Time', icon: 'calendar-outline' },
-              { value: 'monthly', label: 'Monthly', icon: 'calendar' },
-              { value: 'weekly', label: 'Weekly', icon: 'today' },
-            ].map((item) => (
-              <TouchableOpacity
-                key={item.value}
-                style={[
-                  styles.timePeriodButton,
-                  timePeriod === item.value && styles.timePeriodButtonActive,
-                ]}
-                onPress={() => setTimePeriod(item.value as any)}
-                activeOpacity={0.7}
-              >
-                <Ionicons 
-                  name={item.icon as any} 
-                  size={16} 
-                  color={timePeriod === item.value ? '#fff' : theme.colors.textSecondary} 
-                />
-                <Text style={[
-                  styles.timePeriodText,
-                  timePeriod === item.value && styles.timePeriodTextActive,
-                ]}>{item.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-
-        {/* Category Filter - Custom styled */}
+        {/* Category Filter */}
         <View style={styles.filterSection}>
           <Text style={styles.filterLabel}>Category</Text>
           <View style={styles.categoryChips}>
             {[
-              { value: 'points', label: 'Points', icon: 'star' },
-              { value: 'visits', label: 'Visits', icon: 'location' },
-              { value: 'countries', label: 'Destinations', icon: 'earth' },
+              { value: 'points', label: 'Points', icon: 'star', color: '#FFD700' },
+              { value: 'visits', label: 'Landmarks', icon: 'location', color: '#E87850' },
+              { value: 'countries', label: 'Destinations', icon: 'flag', color: '#4DB8D8' },
             ].map((item) => (
               <TouchableOpacity
                 key={item.value}
@@ -354,7 +325,7 @@ export default function LeaderboardScreen() {
                 <Ionicons 
                   name={item.icon as any} 
                   size={14} 
-                  color={category === item.value ? '#fff' : theme.colors.textSecondary} 
+                  color={category === item.value ? '#fff' : item.color} 
                 />
                 <Text style={[
                   styles.categoryChipText,
@@ -436,7 +407,7 @@ export default function LeaderboardScreen() {
             data-testid="share-ranking-button"
           >
             <Ionicons name="share-social-outline" size={16} color={theme.colors.primary} />
-            <Text style={styles.shareRankText}>Share My Ranking</Text>
+            <Text style={styles.shareRankText}>Share my ranking</Text>
           </TouchableOpacity>
         )}
 
@@ -444,7 +415,7 @@ export default function LeaderboardScreen() {
         <View style={styles.leaderboardSection}>
           <View style={styles.sectionHeader}>
             <Ionicons name={getCategoryIcon()} size={20} color={theme.colors.primary} />
-            <Text style={styles.sectionTitle}>Top Rankings</Text>
+            <Text style={styles.sectionTitle}>Top rankings</Text>
           </View>
 
           {/* Info banner for global points leaderboard */}
@@ -568,33 +539,6 @@ const styles = StyleSheet.create({
   segmentedButtons: {
     backgroundColor: '#fff',
   },
-  timePeriodContainer: {
-    flexDirection: 'row',
-    backgroundColor: theme.colors.backgroundSecondary,
-    borderRadius: 12,
-    padding: 3,
-    gap: 3,
-  },
-  timePeriodButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-    borderRadius: 10,
-    gap: 6,
-  },
-  timePeriodButtonActive: {
-    backgroundColor: theme.colors.primary,
-  },
-  timePeriodText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: theme.colors.textSecondary,
-  },
-  timePeriodTextActive: {
-    color: '#fff',
-  },
   categoryChips: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -706,39 +650,28 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   userRankCard: {
-    margin: 16,
+    marginHorizontal: 16,
     marginTop: 8,
-    borderRadius: 16,
+    borderRadius: 12,
     overflow: 'hidden',
   },
   userRankGradient: {
-    padding: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
   },
   userRankContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  userRankLeft: {
-    flex: 1,
+    gap: 10,
   },
   userRankLabel: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.9)',
-    marginBottom: 4,
+    fontSize: 13,
+    color: 'rgba(255, 255, 255, 0.75)',
   },
   userRankNumber: {
-    fontSize: 36,
+    fontSize: 24,
     fontWeight: '800',
     color: '#fff',
-  },
-  userRankRight: {
-    alignItems: 'center',
-    gap: 4,
-  },
-  userRankTotal: {
-    fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.9)',
   },
   noRankText: {
     padding: 20,
