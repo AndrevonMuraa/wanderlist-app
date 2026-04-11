@@ -173,6 +173,7 @@ export default function MyCountryVisitsScreen() {
 
   const totalPoints = visits.reduce((sum, v) => sum + (v.points_earned || 0), 0);
   const verifiedCount = visits.filter(v => (v.photos?.length || 0) > 0).length;
+  const verifiedPoints = visits.filter(v => (v.photos?.length || 0) > 0).reduce((sum, v) => sum + (v.points_earned || 0), 0);
 
   const SortChip = ({ label, value, icon }: { label: string; value: SortType; icon: keyof typeof Ionicons.glyphMap }) => (
     <TouchableOpacity
@@ -221,8 +222,8 @@ export default function MyCountryVisitsScreen() {
       {/* Stats Summary */}
       <View style={styles.statsRow}>
         <View style={styles.statItem}>
-          <View style={[styles.statIconWrap, { backgroundColor: '#E3F6FC' }]}>
-            <Ionicons name="flag" size={16} color={theme.colors.primary} />
+          <View style={[styles.statIconWrap, { backgroundColor: '#E0F4F4' }]}>
+            <Ionicons name="flag" size={14} color="#4DB8D8" />
           </View>
           <Text style={styles.statNumber}>{visits.length}</Text>
           <Text style={styles.statLabel}>Visited</Text>
@@ -230,7 +231,7 @@ export default function MyCountryVisitsScreen() {
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
           <View style={[styles.statIconWrap, { backgroundColor: '#E8F5E9' }]}>
-            <Ionicons name="shield-checkmark" size={16} color="#4CAF50" />
+            <Ionicons name="shield-checkmark" size={14} color="#4CAF50" />
           </View>
           <Text style={[styles.statNumber, { color: '#4CAF50' }]}>{verifiedCount}</Text>
           <Text style={styles.statLabel}>Verified</Text>
@@ -238,10 +239,18 @@ export default function MyCountryVisitsScreen() {
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
           <View style={[styles.statIconWrap, { backgroundColor: '#FFF3E0' }]}>
-            <Ionicons name="star" size={16} color="#FFA726" />
+            <Ionicons name="star" size={14} color="#FFA726" />
           </View>
           <Text style={[styles.statNumber, { color: '#FFA726' }]}>{totalPoints}</Text>
-          <Text style={styles.statLabel}>Points</Text>
+          <Text style={styles.statLabel}>Total pts</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statItem}>
+          <View style={[styles.statIconWrap, { backgroundColor: '#E8F5E9' }]}>
+            <Ionicons name="star" size={14} color="#4CAF50" />
+          </View>
+          <Text style={[styles.statNumber, { color: '#4CAF50' }]}>{verifiedPoints}</Text>
+          <Text style={styles.statLabel}>Verified pts</Text>
         </View>
       </View>
 
@@ -308,7 +317,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 4,
     borderRadius: 16,
-    paddingVertical: 14,
+    paddingVertical: 10,
     paddingHorizontal: 8,
     ...theme.shadows.card,
   },
@@ -317,15 +326,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statIconWrap: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
+    marginBottom: 3,
   },
   statNumber: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '800',
     color: theme.colors.text,
   },
