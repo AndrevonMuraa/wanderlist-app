@@ -338,6 +338,16 @@ export default function SocialHubScreen() {
               </View>
             </Surface>
           )}
+          <TouchableOpacity
+            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 10, marginTop: 4 }}
+            onPress={() => router.push('/community')}
+            activeOpacity={0.7}
+            data-testid="explore-community-link"
+          >
+            <Ionicons name="people" size={16} color={theme.colors.primary} />
+            <Text style={{ fontSize: 13, fontWeight: '600', color: theme.colors.primary }}>Explore community</Text>
+            <Ionicons name="chevron-forward" size={14} color={theme.colors.primary} />
+          </TouchableOpacity>
         </View>
 
 
