@@ -261,6 +261,29 @@ export default function UserProfileScreen() {
           </View>
         )}
 
+        {/* Recent visits with photos */}
+        {(profile.recent_visits || []).filter((v: any) => v.photo_url).length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Recent photos</Text>
+            <View style={styles.photoGrid}>
+              {(profile.recent_visits || []).filter((v: any) => v.photo_url).map((v: any) => (
+                <TouchableOpacity
+                  key={v.visit_id}
+                  style={styles.photoGridItem}
+                  onPress={() => router.push(`/visit-detail/${v.visit_id}`)}
+                  activeOpacity={0.85}
+                  data-testid={`profile-photo-${v.visit_id}`}
+                >
+                  <Image source={{ uri: v.photo_url }} style={styles.photoGridImage} resizeMode="cover" />
+                  <View style={styles.photoGridOverlay}>
+                    <Text style={styles.photoGridName} numberOfLines={1}>{v.landmark_name}</Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        )}
+
         <View style={{ height: 120 }} />
       </ScrollView>
       <PersistentTabBar />
@@ -341,4 +364,33 @@ const styles = StyleSheet.create({
   destInfo: { flex: 1 },
   destName: { fontSize: 14, fontWeight: '600', color: theme.colors.text },
   destMeta: { fontSize: 12, color: theme.colors.textSecondary, marginTop: 2 },
+  photoGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  photoGridItem: {
+    width: '31.5%',
+    aspectRatio: 1,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  photoGridImage: {
+    width: '100%',
+    height: '100%',
+  },
+  photoGridOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+  },
+  photoGridName: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '600',
+  },
 });
