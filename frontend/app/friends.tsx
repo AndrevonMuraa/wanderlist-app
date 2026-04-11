@@ -88,7 +88,6 @@ export default function FriendsScreen() {
       if (requestsRes.ok) setPendingRequests(await requestsRes.json());
       if (sentRes.ok) setSentRequests(await sentRes.json());
     } catch (error) {
-      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -143,7 +142,6 @@ export default function FriendsScreen() {
         Alert.alert('Error', error.detail || 'Failed to send request');
       }
     } catch (error) {
-      console.error('Error sending request:', error);
       Alert.alert('Error', 'Failed to send request');
     } finally {
       setSending(false);
@@ -180,7 +178,6 @@ export default function FriendsScreen() {
         Alert.alert('Error', 'Failed to accept request');
       }
     } catch (error) {
-      console.error('Error accepting request:', error);
       Alert.alert('Error', 'Failed to accept request');
     }
   };
@@ -235,7 +232,7 @@ export default function FriendsScreen() {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) setSearchResults(await res.json());
-      } catch (e) { console.error(e); }
+      } catch (e) { }
       finally { setSearching(false); }
     }, 300);
   }, []);

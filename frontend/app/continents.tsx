@@ -149,7 +149,6 @@ export default function ContinentsScreen() {
         setTrendingLandmarks(data.highlights || []);
       }
     } catch (error) {
-      console.error('Error fetching trending landmarks:', error);
     }
   };
 
@@ -190,7 +189,6 @@ export default function ContinentsScreen() {
         }
       }
     } catch (error) {
-      console.error('Error fetching continent stats:', error);
     } finally {
       setLoading(false);
     }

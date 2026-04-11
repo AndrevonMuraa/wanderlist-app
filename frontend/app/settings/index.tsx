@@ -127,7 +127,6 @@ export default function SettingsScreen() {
         setDefaultPrivacy(data.default_privacy || 'public');
       }
     } catch (error) {
-      console.error('Error loading settings:', error);
     }
   };
 

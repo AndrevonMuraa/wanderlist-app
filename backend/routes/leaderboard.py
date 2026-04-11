@@ -32,7 +32,7 @@ async def get_enhanced_leaderboard(
                 {"user_id": current_user.user_id, "status": "accepted"},
                 {"friend_id": current_user.user_id, "status": "accepted"}
             ]
-        }, {"_id": 0}).to_list(1000)
+        }, {"_id": 0}).to_list(100)
         
         user_filter = [current_user.user_id]
         for f in friendships:
@@ -85,7 +85,7 @@ async def get_enhanced_leaderboard(
             public_users = await db.users.find(
                 {"$or": [{"default_privacy": "public"}, {"default_privacy": {"$exists": False}}]},
                 {"_id": 0, "user_id": 1}
-            ).to_list(10000)
+            ).to_list(500)
             public_ids = [u["user_id"] for u in public_users]
             privacy_match = {"user_id": {"$in": public_ids}}
 
@@ -126,7 +126,7 @@ async def get_enhanced_leaderboard(
             public_users = await db.users.find(
                 {"$or": [{"default_privacy": "public"}, {"default_privacy": {"$exists": False}}]},
                 {"_id": 0, "user_id": 1}
-            ).to_list(10000)
+            ).to_list(500)
             public_ids = [u["user_id"] for u in public_users]
             privacy_match = {"user_id": {"$in": public_ids}}
 
@@ -176,7 +176,7 @@ async def get_rising_stars(limit: int = 10, current_user: User = Depends(get_cur
     public_users = await db.users.find(
         {"$or": [{"default_privacy": "public"}, {"default_privacy": {"$exists": False}}]},
         {"_id": 0, "user_id": 1}
-    ).to_list(10000)
+    ).to_list(500)
     public_ids = [u["user_id"] for u in public_users]
     
     pipeline = [

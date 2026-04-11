@@ -87,7 +87,6 @@ export default function AnalyticsScreen() {
         });
       }
     } catch (error) {
-      console.error('Error loading analytics:', error);
     } finally {
       setLoading(false);
     }

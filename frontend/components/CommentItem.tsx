@@ -65,11 +65,17 @@ export default function CommentItem({
 
   return (
     <View style={[styles.container, isReply && styles.replyContainer]}>
-      <Avatar.Image
-        size={isReply ? 28 : 32}
-        source={{ uri: comment.user_picture || 'https://via.placeholder.com/100' }}
-        style={styles.avatar}
-      />
+      {comment.user_picture ? (
+        <Avatar.Image
+          size={isReply ? 28 : 32}
+          source={{ uri: comment.user_picture }}
+          style={styles.avatar}
+        />
+      ) : (
+        <View style={[styles.avatar, { width: isReply ? 28 : 32, height: isReply ? 28 : 32, borderRadius: isReply ? 14 : 16, backgroundColor: theme.colors.border, justifyContent: 'center', alignItems: 'center' }]}>
+          <Ionicons name="person" size={isReply ? 14 : 16} color={theme.colors.textLight} />
+        </View>
+      )}
       
       <View style={styles.content}>
         <View style={styles.header}>

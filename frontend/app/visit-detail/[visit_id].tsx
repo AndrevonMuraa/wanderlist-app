@@ -173,7 +173,7 @@ export default function VisitDetailScreen() {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: true,
-        quality: 0.7,
+        quality: 0.6,
         base64: true,
       });
       if (!result.canceled && result.assets) {
@@ -207,7 +207,7 @@ export default function VisitDetailScreen() {
         Alert.alert('Permission Required', 'Please allow camera access.');
         return;
       }
-      const result = await ImagePicker.launchCameraAsync({ quality: 0.7, base64: true });
+      const result = await ImagePicker.launchCameraAsync({ quality: 0.6, base64: true });
       if (!result.canceled && result.assets?.[0]?.base64) {
         setUploadingPhotos(true);
         const newPhoto = `data:image/jpeg;base64,${result.assets[0].base64}`;

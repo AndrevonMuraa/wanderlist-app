@@ -70,7 +70,6 @@ export default function SearchScreen() {
         setVisitedIds(visitedSet);
       }
     } catch (err) {
-      console.error('Error fetching data:', err);
     } finally {
       setLoading(false);
       setRefreshing(false);

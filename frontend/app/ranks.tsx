@@ -45,7 +45,6 @@ export default function RanksScreen() {
         setCurrentRank(getUserRank(points));
       }
     } catch (error) {
-      console.error('Error fetching user data:', error);
     } finally {
       setLoading(false);
     }

@@ -82,7 +82,6 @@ export default function LandmarkDetailScreen() {
         setLandmark(data);
       }
     } catch (error) {
-      console.error('Error fetching landmark:', error);
     } finally {
       setLoading(false);
     }
@@ -103,7 +102,6 @@ export default function LandmarkDetailScreen() {
         }
       }
     } catch (error) {
-      console.error('Error checking visit status:', error);
     }
   };
 
@@ -120,7 +118,6 @@ export default function LandmarkDetailScreen() {
         setBucketListId(data.bucket_list_id);
       }
     } catch (error) {
-      console.error('Error checking bucket list:', error);
     }
   };
 
@@ -160,7 +157,6 @@ export default function LandmarkDetailScreen() {
         }
       }
     } catch (error) {
-      console.error('Error toggling bucket list:', error);
     } finally {
       setBucketListLoading(false);
     }
@@ -197,7 +193,6 @@ export default function LandmarkDetailScreen() {
                 Alert.alert('Error', 'Failed to remove visit');
               }
             } catch (error) {
-              console.error('Error removing visit:', error);
               Alert.alert('Error', 'Failed to remove visit');
             }
           },

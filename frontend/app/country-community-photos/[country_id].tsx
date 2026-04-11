@@ -83,7 +83,6 @@ export default function CountryCommunityPhotosScreen() {
         if (data.country_name) setCountryName(data.country_name);
       }
     } catch (error) {
-      console.error('Error fetching country community photos:', error);
     } finally {
       setLoading(false);
     }
@@ -104,7 +103,6 @@ export default function CountryCommunityPhotosScreen() {
         if (data.country_name) setCountryName(data.country_name);
       }
     } catch (error) {
-      console.error('Error fetching travel diaries:', error);
     }
   };
 
@@ -126,7 +124,6 @@ export default function CountryCommunityPhotosScreen() {
         );
       }
     } catch (error) {
-      console.error('Error upvoting:', error);
     }
   };
 

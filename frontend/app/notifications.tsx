@@ -63,7 +63,6 @@ export default function NotificationsScreen() {
         setNotifications(data);
       }
     } catch (error) {
-      console.error('Error loading notifications:', error);
     } finally {
       setLoading(false);
     }
@@ -94,7 +93,6 @@ export default function NotificationsScreen() {
           )
         );
       } catch (error) {
-        console.error('Error marking notification as read:', error);
       }
     }
 
@@ -127,7 +125,6 @@ export default function NotificationsScreen() {
 
       setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
     } catch (error) {
-      console.error('Error marking all as read:', error);
     }
   };
 

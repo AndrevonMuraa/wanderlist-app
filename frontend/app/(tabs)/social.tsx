@@ -104,7 +104,6 @@ export default function SocialHubScreen() {
         setCommunityFeed(data.items || []);
       }
     } catch (error) {
-      console.error('Error loading community feed:', error);
     }
   };
 
@@ -119,7 +118,6 @@ export default function SocialHubScreen() {
         setFriends(data);
       }
     } catch (error) {
-      console.error('Error loading friends:', error);
     }
   };
 
@@ -134,7 +132,6 @@ export default function SocialHubScreen() {
         setPendingCount(data.length);
       }
     } catch (error) {
-      console.error('Error loading pending requests:', error);
     }
   };
 
@@ -151,7 +148,6 @@ export default function SocialHubScreen() {
         setLeaderboard(entries.slice(0, 5)); // Show top 5
       }
     } catch (error) {
-      console.error('Error loading leaderboard:', error);
     }
   };
 
@@ -161,10 +157,13 @@ export default function SocialHubScreen() {
       style={styles.friendItem}
       onPress={() => router.push(`/messages/${friend.user_id}`)}
     >
-      <Avatar.Image 
-        size={36} 
-        source={{ uri: friend.picture || 'https://via.placeholder.com/100' }} 
-      />
+      {friend.picture ? (
+        <Avatar.Image size={36} source={{ uri: friend.picture }} />
+      ) : (
+        <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: theme.colors.border, justifyContent: 'center', alignItems: 'center' }}>
+          <Ionicons name="person" size={18} color={theme.colors.textLight} />
+        </View>
+      )}
       <Text style={styles.friendName} numberOfLines={1}>
         {friend.name.split(' ')[0]}
       </Text>
@@ -185,10 +184,13 @@ export default function SocialHubScreen() {
           ]}>
             <Text style={styles.rankText}>{entry.rank}</Text>
           </View>
-          <Avatar.Image 
-            size={32} 
-            source={{ uri: entry.picture || 'https://via.placeholder.com/100' }} 
-          />
+          {entry.picture ? (
+            <Avatar.Image size={32} source={{ uri: entry.picture }} />
+          ) : (
+            <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: theme.colors.border, justifyContent: 'center', alignItems: 'center' }}>
+              <Ionicons name="person" size={16} color={theme.colors.textLight} />
+            </View>
+          )}
           <View style={styles.leaderboardNameContainer}>
             <Text style={styles.leaderboardName} numberOfLines={1}>{entry.name}</Text>
             <View style={styles.userRankBadgeSmall}>

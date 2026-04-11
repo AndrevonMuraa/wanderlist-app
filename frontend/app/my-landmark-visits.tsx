@@ -139,7 +139,6 @@ export default function MyLandmarkVisits() {
         setVisits(data);
       }
     } catch (error) {
-      console.error('Error fetching visits:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);

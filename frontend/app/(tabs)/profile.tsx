@@ -91,7 +91,6 @@ export default function ProfileScreen() {
         setUnreadCount(data.unread_count);
       }
     } catch (error) {
-      console.error('Error fetching unread count:', error);
     }
   };
 
@@ -109,7 +108,6 @@ export default function ProfileScreen() {
         setStats(data);
       }
     } catch (error) {
-      console.error('Error fetching stats:', error);
     }
   };
 
@@ -127,7 +125,6 @@ export default function ProfileScreen() {
         setProgressStats(data);
       }
     } catch (error) {
-      console.error('Error fetching progress stats:', error);
     }
   };
 

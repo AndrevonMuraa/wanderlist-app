@@ -100,7 +100,6 @@ export default function FeedScreen() {
         setHasMore(data.length === 20);
       }
     } catch (error) {
-      console.error('Error loading feed:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -123,7 +122,7 @@ export default function FeedScreen() {
         const data = await res.json();
         setCommunityItems(data.items || []);
       }
-    } catch (e) { console.error('Error loading community:', e); }
+    } catch (e) { }
     finally { setLoading(false); setRefreshing(false); }
   };
 
@@ -161,7 +160,6 @@ export default function FeedScreen() {
         ));
       }
     } catch (error) {
-      console.error('Error liking activity:', error);
     }
   };
 
@@ -178,10 +176,13 @@ export default function FeedScreen() {
     return (
       <Surface style={styles.activityCard}>
         <View style={styles.activityHeader}>
-          <Avatar.Image 
-            size={44} 
-            source={{ uri: activity.user_picture || 'https://via.placeholder.com/100' }} 
-          />
+          {activity.user_picture ? (
+            <Avatar.Image size={44} source={{ uri: activity.user_picture }} />
+          ) : (
+            <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: theme.colors.border, justifyContent: 'center', alignItems: 'center' }}>
+              <Ionicons name="person" size={22} color={theme.colors.textLight} />
+            </View>
+          )}
           <View style={styles.activityInfo}>
             <View style={styles.activityNameRow}>
               <Text style={styles.activityUser}>{activity.user_name}</Text>
@@ -317,7 +318,13 @@ export default function FeedScreen() {
   const renderCommunityItem = ({ item }: { item: CommunityFeedItem }) => (
     <Surface style={styles.activityCard}>
       <View style={styles.activityHeader}>
-        <Avatar.Image size={44} source={{ uri: item.user_picture || 'https://via.placeholder.com/100' }} />
+        {item.user_picture ? (
+          <Avatar.Image size={44} source={{ uri: item.user_picture }} />
+        ) : (
+          <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: theme.colors.border, justifyContent: 'center', alignItems: 'center' }}>
+            <Ionicons name="person" size={22} color={theme.colors.textLight} />
+          </View>
+        )}
         <View style={styles.activityInfo}>
           <Text style={styles.activityUser}>{item.user_name}</Text>
           <Text style={styles.activityTime}>{item.visited_at ? formatTimeAgo(item.visited_at) : ''}</Text>

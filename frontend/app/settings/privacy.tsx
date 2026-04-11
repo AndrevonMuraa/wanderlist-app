@@ -69,7 +69,6 @@ export default function PrivacySettingsScreen() {
         setCommentPermission(user.comment_permission || 'everyone');
       }
     } catch (error) {
-      console.error('Error loading settings:', error);
     } finally {
       setLoading(false);
     }
@@ -100,7 +99,6 @@ export default function PrivacySettingsScreen() {
           Alert.alert('Error', 'Failed to update privacy setting');
         }
       } catch (error) {
-        console.error('Error updating privacy:', error);
         Alert.alert('Error', 'Failed to update privacy setting');
       } finally {
         setSaving(false);
@@ -354,7 +352,7 @@ export default function PrivacySettingsScreen() {
                         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
                         body: JSON.stringify({ comment_permission: opt.value }),
                       });
-                    } catch (e) { console.error(e); }
+                    } catch (e) { }
                   }}
                   activeOpacity={0.7}
                   data-testid={`comment-perm-${opt.value}`}

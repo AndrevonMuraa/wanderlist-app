@@ -353,7 +353,7 @@ async def get_landmark_community_photos(
         }}
     ]
     
-    visits = await db.visits.aggregate(pipeline).to_list(500)
+    visits = await db.visits.aggregate(pipeline).to_list(200)
     
     # Build photo list from visits
     photos = []
@@ -493,7 +493,7 @@ async def get_country_community_photos(
         }}
     ]
     
-    visits = await db.visits.aggregate(pipeline).to_list(1000)
+    visits = await db.visits.aggregate(pipeline).to_list(300)
     
     # Also get country visit photos
     country_visits_pipeline = [
@@ -519,7 +519,7 @@ async def get_country_community_photos(
             "username": "$user_info.username"
         }}
     ]
-    country_visits = await db.country_visits.aggregate(country_visits_pipeline).to_list(500)
+    country_visits = await db.country_visits.aggregate(country_visits_pipeline).to_list(200)
     
     # Build photo list - collect all photo IDs first for batch upvote fetch
     photos = []

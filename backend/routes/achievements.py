@@ -17,7 +17,7 @@ async def get_user_achievements(current_user: User = Depends(get_current_user)):
     """Get all achievements/badges for the current user"""
     achievements = await db.achievements.find(
         {"user_id": current_user.user_id}
-    ).sort("earned_at", -1).to_list(1000)
+    ).sort("earned_at", -1).to_list(200)
     
     return [Achievement(**achievement) for achievement in achievements]
 
@@ -27,7 +27,7 @@ async def get_achievements_showcase(current_user: User = Depends(get_current_use
     # Get earned achievements
     earned_achievements = await db.achievements.find(
         {"user_id": current_user.user_id}
-    ).sort("earned_at", -1).to_list(1000)
+    ).sort("earned_at", -1).to_list(200)
     
     earned_badge_types = {badge["badge_type"] for badge in earned_achievements}
     
@@ -64,7 +64,7 @@ async def get_achievements_showcase(current_user: User = Depends(get_current_use
             "$visit_count",
             {"$arrayElemAt": ["$landmark_info.total", 0]}
         ]}}}
-    ]).to_list(1000)
+    ]).to_list(200)
     
     completed_country_count = len(completed_countries)
     

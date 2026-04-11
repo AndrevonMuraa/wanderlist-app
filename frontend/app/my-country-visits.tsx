@@ -136,7 +136,6 @@ export default function MyCountryVisitsScreen() {
         setVisits(data);
       }
     } catch (error) {
-      console.error('Error fetching country visits:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);

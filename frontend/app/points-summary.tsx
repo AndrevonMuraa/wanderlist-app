@@ -65,7 +65,6 @@ export default function PointsSummary() {
           setBreakdown(await breakdownRes.json());
         }
       } catch (error) {
-        console.error('Error fetching stats:', error);
       } finally {
         setLoading(false);
       }

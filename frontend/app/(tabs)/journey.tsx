@@ -180,7 +180,6 @@ export default function JourneyScreen() {
         }
       }
     } catch (error) {
-      console.error('Error fetching journey data:', error);
       // Last resort: try offline cache
       try {
         const cachedProgress = await getCachedProgress();

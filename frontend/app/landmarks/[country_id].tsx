@@ -82,7 +82,6 @@ export default function LandmarksScreen() {
         setHighlights(data.highlights || []);
       }
     } catch (error) {
-      console.error('Error fetching highlights:', error);
     }
   };
 
@@ -111,7 +110,6 @@ export default function LandmarksScreen() {
         }
       }
     } catch (error) {
-      console.error('Error checking country visit status:', error);
     }
   };
 
@@ -163,7 +161,6 @@ export default function LandmarksScreen() {
         }
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -258,7 +255,6 @@ export default function LandmarksScreen() {
                 Alert.alert('Error', 'Failed to remove destination visit');
               }
             } catch (error) {
-              console.error('Error removing destination visit:', error);
               Alert.alert('Error', 'Failed to remove destination visit');
             }
           },

@@ -133,7 +133,7 @@ export default function CustomVisitDetailScreen() {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: true,
-        quality: 0.7,
+        quality: 0.6,
         base64: true,
       });
       if (!result.canceled && result.assets) {
@@ -169,7 +169,7 @@ export default function CustomVisitDetailScreen() {
         return;
       }
       const result = await ImagePicker.launchCameraAsync({
-        quality: 0.7,
+        quality: 0.6,
         base64: true,
       });
       if (!result.canceled && result.assets?.[0]?.base64) {

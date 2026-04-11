@@ -120,7 +120,6 @@ export default function LeaderboardScreen() {
         } catch {}
       }
     } catch (error) {
-      console.error('Error loading leaderboard:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);

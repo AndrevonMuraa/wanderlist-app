@@ -41,7 +41,6 @@ export default function NotificationSettingsScreen() {
         setPermissionGranted(granted);
       }
     } catch (error) {
-      console.error('Error loading settings:', error);
     } finally {
       setLoading(false);
     }

@@ -57,7 +57,6 @@ export default function LandmarkSearchScreen() {
         setSearched(true);
       }
     } catch (error) {
-      console.error('Error searching landmarks:', error);
     } finally {
       setLoading(false);
     }

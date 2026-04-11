@@ -131,7 +131,6 @@ export default function ExploreCountriesScreen() {
         setSections(sectionList);
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);

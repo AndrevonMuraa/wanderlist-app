@@ -85,11 +85,11 @@ async def redeem_promo_code(request: PromoRedeemRequest, current_user: User = De
 
 @router.get("/admin/promo-codes")
 async def get_promo_codes(admin_user: User = Depends(get_admin_user)):
-    codes = await db.promo_codes.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+    codes = await db.promo_codes.find({}, {"_id": 0}).sort("created_at", -1).to_list(200)
     for code in codes:
         redemptions = await db.promo_redemptions.find(
             {"code_id": code["code_id"]}, {"_id": 0}
-        ).to_list(500)
+        ).to_list(200)
         code["redemptions"] = redemptions
     return codes
 

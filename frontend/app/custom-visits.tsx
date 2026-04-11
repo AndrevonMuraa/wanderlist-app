@@ -47,7 +47,6 @@ export default function CustomVisitsScreen() {
         setIsPro(sub.tier === 'pro' || sub.tier === 'basic_plus');
       }
     } catch (e) {
-      console.error('Error fetching custom visits:', e);
     } finally {
       setLoading(false);
     }

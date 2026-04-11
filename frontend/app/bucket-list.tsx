@@ -61,7 +61,6 @@ export default function BucketListScreen() {
         setBucketList(data);
       }
     } catch (error) {
-      console.error('Error loading bucket list:', error);
     } finally {
       setLoading(false);
     }
@@ -100,7 +99,6 @@ export default function BucketListScreen() {
         setBucketList(prev => prev.filter(item => item.bucket_list_id !== bucketListId));
       }
     } catch (error) {
-      console.error('Error removing from bucket list:', error);
     }
   };
 

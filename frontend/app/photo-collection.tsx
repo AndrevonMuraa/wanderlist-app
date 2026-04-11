@@ -92,7 +92,6 @@ export default function PhotoCollectionScreen() {
         setCollection(data);
       }
     } catch (error) {
-      console.error('Error fetching photo collection:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);

@@ -80,7 +80,6 @@ export default function SubscriptionScreen() {
         setStatus(data);
       }
     } catch (error) {
-      console.error('Error fetching subscription:', error);
     } finally {
       setLoading(false);
     }
@@ -118,7 +117,6 @@ export default function SubscriptionScreen() {
         );
       }
     } catch (error) {
-      console.error('Error upgrading:', error);
       Alert.alert('Error', 'Failed to process purchase. Please try again.');
     } finally {
       setUpgrading(false);
@@ -180,7 +178,6 @@ export default function SubscriptionScreen() {
         );
       }
     } catch (error) {
-      console.error('Error restoring:', error);
       Alert.alert('Error', 'Failed to restore purchases. Please try again.');
     } finally {
       setUpgrading(false);

@@ -91,7 +91,6 @@ export default function ChatScreen() {
         }
       }
     } catch (error) {
-      console.error('Error fetching messages:', error);
     } finally {
       setLoading(false);
     }
@@ -155,7 +154,6 @@ export default function ChatScreen() {
         setNewMessage(messageContent); // Restore message
       }
     } catch (error) {
-      console.error('Error sending message:', error);
       if (Platform.OS === 'web') {
         alert('Failed to send message');
       } else {

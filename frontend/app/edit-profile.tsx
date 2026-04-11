@@ -63,7 +63,6 @@ export default function EditProfileScreen() {
         setBannerImage(data.banner_image);
       }
     } catch (error) {
-      console.error('Error loading profile:', error);
     } finally {
       setLoading(false);
     }
@@ -91,7 +90,6 @@ export default function EditProfileScreen() {
         setPicture(base64Image);
       }
     } catch (error) {
-      console.error('Error picking image:', error);
       Alert.alert('Error', 'Failed to pick image');
     }
   };
@@ -118,7 +116,6 @@ export default function EditProfileScreen() {
         setBannerImage(base64Image);
       }
     } catch (error) {
-      console.error('Error picking banner:', error);
       Alert.alert('Error', 'Failed to pick banner image');
     }
   };
@@ -155,7 +152,6 @@ export default function EditProfileScreen() {
         Alert.alert('Error', 'Failed to update profile');
       }
     } catch (error) {
-      console.error('Error saving profile:', error);
       Alert.alert('Error', 'Failed to update profile');
     } finally {
       setSaving(false);

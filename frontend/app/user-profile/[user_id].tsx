@@ -50,7 +50,7 @@ export default function UserProfileScreen() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) setProfile(await res.json());
-    } catch (e) { console.error(e); }
+    } catch (e) { }
     finally { setLoading(false); }
   };
 
@@ -83,7 +83,7 @@ export default function UserProfileScreen() {
           }},
         ]);
       }
-    } catch (e) { console.error(e); }
+    } catch (e) { }
     finally { setActionLoading(false); }
   };
 

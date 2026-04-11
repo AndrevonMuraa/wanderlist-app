@@ -60,7 +60,6 @@ export default function LandmarkCommunityPhotosScreen() {
         setDiaryLocked(data.diary_locked || false);
       }
     } catch (error) {
-      console.error('Error fetching community photos:', error);
     } finally {
       setLoading(false);
     }
@@ -84,7 +83,6 @@ export default function LandmarkCommunityPhotosScreen() {
         );
       }
     } catch (error) {
-      console.error('Error upvoting:', error);
     }
   };
 
