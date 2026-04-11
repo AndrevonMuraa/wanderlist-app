@@ -172,7 +172,7 @@ export default function LeaderboardScreen() {
       <TouchableOpacity key={entry.user_id} onPress={() => router.push(`/user-profile/${entry.user_id}`)} activeOpacity={0.7}>
       <Surface style={[styles.entryCard, isMe && styles.entryCardHighlight]} elevation={1}>
         <View style={styles.entryContent}>
-          {/* Rank */}
+          {/* Rank + Medal */}
           <View style={styles.rankContainer}>
             {medal ? (
               <Text style={styles.medalText}>{medal}</Text>
@@ -183,29 +183,17 @@ export default function LeaderboardScreen() {
 
           {/* Avatar */}
           {entry.picture ? (
-            <Avatar.Image
-              size={48}
-              source={{ uri: entry.picture }}
-              style={styles.avatar}
-            />
+            <Avatar.Image size={36} source={{ uri: entry.picture }} />
           ) : (
-            <Avatar.Text
-              size={48}
-              label={entry.name.substring(0, 2).toUpperCase()}
-              style={styles.avatar}
-            />
+            <Avatar.Text size={36} label={entry.name.substring(0, 2).toUpperCase()} />
           )}
 
-          {/* User Info */}
+          {/* Name + Username */}
           <View style={styles.userInfo}>
-            <View style={styles.nameRow}>
-              <Text style={styles.userName} numberOfLines={1}>{entry.name}</Text>
-              <RankBadge rank={rankInfo} size="small" />
-            </View>
+            <Text style={styles.userName} numberOfLines={1}>{entry.name}</Text>
             {entry.username && (
-              <Text style={styles.username}>@{entry.username}</Text>
+              <Text style={styles.username} numberOfLines={1}>@{entry.username}</Text>
             )}
-            
           </View>
 
           {/* Value */}
@@ -698,52 +686,51 @@ const styles = StyleSheet.create({
     color: '#1a1a1a',
   },
   entryCard: {
-    marginBottom: 8,
-    borderRadius: 12,
+    marginBottom: 6,
+    borderRadius: 10,
     backgroundColor: '#fff',
     overflow: 'hidden',
   },
   entryContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
   },
   rankContainer: {
-    width: 40,
+    width: 32,
     alignItems: 'center',
     justifyContent: 'center',
   },
   medalText: {
-    fontSize: 24,
+    fontSize: 18,
   },
   rankText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '700',
     color: '#666',
   },
   avatar: {
-    marginLeft: 8,
+    marginLeft: 6,
   },
   userInfo: {
     flex: 1,
-    marginLeft: 12,
+    marginLeft: 10,
   },
   nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginBottom: 2,
   },
   userName: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#1a1a1a',
-    flex: 1,
   },
   username: {
-    fontSize: 13,
-    color: '#666',
-    marginBottom: 2,
+    fontSize: 11,
+    color: '#888',
+    marginTop: 1,
   },
   statsRow: {
     flexDirection: 'row',
@@ -757,17 +744,16 @@ const styles = StyleSheet.create({
   },
   valueContainer: {
     alignItems: 'flex-end',
-    marginLeft: 12,
+    marginLeft: 8,
   },
   valueText: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 16,
+    fontWeight: '800',
     color: theme.colors.primary,
   },
   valueLabel: {
-    fontSize: 11,
-    color: '#666',
-    marginTop: 2,
+    fontSize: 10,
+    color: '#888',
   },
   emptyCard: {
     padding: 40,
