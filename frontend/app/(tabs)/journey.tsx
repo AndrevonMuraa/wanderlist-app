@@ -23,7 +23,7 @@ import { cachedFetch } from '../../utils/apiCache';
 import { getProgressToNextRank } from '../../utils/rankSystem';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import ShareJourneyCard from '../../components/ShareJourneyCard';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 
 
 interface Stats {

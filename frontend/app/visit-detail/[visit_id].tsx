@@ -19,7 +19,7 @@ import ShareVisitCard from '../../components/ShareVisitCard';
 
 import { KeyboardDoneBar } from '../../components/KeyboardDoneBar';
 import UniversalHeader from '../../components/UniversalHeader';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 
 const { width } = Dimensions.get('window');
 

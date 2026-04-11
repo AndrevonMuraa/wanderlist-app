@@ -31,8 +31,8 @@ import ProFeatureLock from '../../components/ProFeatureLock';
 import PhotoViewer from '../../components/PhotoViewer';
 import { KeyboardDoneBar } from '../../components/KeyboardDoneBar';
 import UniversalHeader from '../../components/UniversalHeader';
-import { getToken } from '../utils/token';
-import { getCountryFlag } from '../utils/countryFlags';
+import { getToken } from '../../utils/token';
+import { getCountryFlag } from '../../utils/countryFlags';
 import ShareVisitCard from '../../components/ShareVisitCard';
 
 const { width, height } = Dimensions.get('window');

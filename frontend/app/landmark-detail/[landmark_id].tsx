@@ -17,7 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../../styles/theme';
 import UniversalHeader from '../../components/UniversalHeader';
 import { BACKEND_URL } from '../../utils/config';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 
 const { width } = Dimensions.get('window');
 

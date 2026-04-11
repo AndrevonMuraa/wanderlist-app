@@ -10,7 +10,7 @@ import { BACKEND_URL } from '../../utils/config';
 import theme from '../../styles/theme';
 import { useAuth } from '../../contexts/AuthContext';
 import UpgradeModal from '../../components/UpgradeModal';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 
 // Helper to get token
 

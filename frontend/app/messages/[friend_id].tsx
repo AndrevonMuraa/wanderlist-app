@@ -12,7 +12,7 @@ import theme from '../../styles/theme';
 import { useAuth } from '../../contexts/AuthContext';
 import { useUpgradePrompt } from '../../hooks/useUpgradePrompt';
 import UpgradeModal from '../../components/UpgradeModal';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 
 // Helper to get token
 

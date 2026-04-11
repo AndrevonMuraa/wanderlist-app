@@ -18,7 +18,7 @@ import ShareVisitCard from '../../components/ShareVisitCard';
 import PhotoViewer from '../../components/PhotoViewer';
 import UniversalHeader from '../../components/UniversalHeader';
 import { useAuth } from '../../contexts/AuthContext';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 
 const { width } = Dimensions.get('window');
 interface CustomVisit {

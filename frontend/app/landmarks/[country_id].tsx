@@ -16,7 +16,7 @@ import { BACKEND_URL } from '../../utils/config';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
 import { AddDestinationVisitModal } from '../../components/AddCountryVisitModal';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 
 // Helper to get token (works on both web and native)
 

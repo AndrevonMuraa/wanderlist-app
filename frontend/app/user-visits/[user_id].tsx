@@ -10,7 +10,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { BACKEND_URL } from '../../utils/config';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import UniversalHeader from '../../components/UniversalHeader';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 interface Visit {
   visit_id: string;
   landmark_id: string;

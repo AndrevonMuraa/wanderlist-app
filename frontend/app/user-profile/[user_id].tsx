@@ -13,7 +13,7 @@ import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
 import ReportButton from '../../components/ReportButton';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 interface UserProfile {
   user_id: string;
   name: string;

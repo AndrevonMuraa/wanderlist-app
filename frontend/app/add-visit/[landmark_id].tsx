@@ -17,7 +17,7 @@ import CelebrationEffect from '../../components/CelebrationEffect';
 import { checkLevelUp } from '../../utils/rankSystem';
 import UniversalHeader from '../../components/UniversalHeader';
 import { trackVisitForReview, maybePromptForReview } from '../../utils/appReview';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 
 
 // Helper to get token (works on both web and native)

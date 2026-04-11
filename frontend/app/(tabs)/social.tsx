@@ -26,7 +26,7 @@ import ReportModal from '../../components/ReportModal';
 import { getUserRank } from '../../utils/rankSystem';
 import { BACKEND_URL } from '../../utils/config';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 
 
 interface Friend {

@@ -18,7 +18,7 @@ import { DefaultAvatar } from '../../components/DefaultAvatar';
 import Constants from 'expo-constants';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import ShareJourneyCard from '../../components/ShareJourneyCard';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 
 // Helper to get token (works on both web and native)
 

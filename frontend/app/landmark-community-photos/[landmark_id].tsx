@@ -8,7 +8,7 @@ import theme from '../../styles/theme';
 import { useSubscription } from '../../hooks/useSubscription';
 import { BACKEND_URL } from '../../utils/config';
 import UniversalHeader from '../../components/UniversalHeader';
-import { getToken } from '../utils/token';
+import { getToken } from '../../utils/token';
 
 const { width } = Dimensions.get('window');
 const PHOTO_SIZE = (width - theme.spacing.lg * 3) / 2;
