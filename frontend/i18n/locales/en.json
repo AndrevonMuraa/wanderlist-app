@@ -31,7 +31,8 @@
     "dontHaveAccount": "Don't have an account?",
     "alreadyHaveAccount": "Already have an account?",
     "signUp": "Sign Up",
-    "signIn": "Sign In"
+    "signIn": "Sign In",
+    "logoutConfirm": "Are you sure you want to logout?"
   },
   "tabs": {
     "explore": "Explore",

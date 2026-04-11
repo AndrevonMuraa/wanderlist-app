@@ -276,7 +276,7 @@ async def create_landmark(data: LandmarkCreate, current_user: User = Depends(get
     # Get country info
     country = await db.countries.find_one({"country_id": data.country_id}, {"_id": 0})
     if not country:
-        raise HTTPException(status_code=404, detail="Country not found")
+        raise HTTPException(status_code=404, detail="Destination not found")
     
     landmark_id = f"landmark_{uuid.uuid4().hex[:12]}"
     landmark = {

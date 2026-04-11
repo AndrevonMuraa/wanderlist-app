@@ -45,7 +45,7 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
     # Look up country details from database
     country = await db.countries.find_one({"country_id": data.country_id}, {"_id": 0})
     if not country:
-        raise HTTPException(status_code=404, detail="Country not found")
+        raise HTTPException(status_code=404, detail="Destination not found")
     
     country_name = country.get("name", "Unknown")
     continent = country.get("continent", "Unknown")

@@ -350,13 +350,13 @@ export default function ProfileScreen() {
 
       <Portal>
         <Dialog visible={showLogoutDialog} onDismiss={() => setShowLogoutDialog(false)}>
-          <Dialog.Title>Logout</Dialog.Title>
+          <Dialog.Title>{t('auth.logout')}</Dialog.Title>
           <Dialog.Content>
-            <Text>Are you sure you want to logout?</Text>
+            <Text>{t('auth.logoutConfirm')}</Text>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setShowLogoutDialog(false)}>Cancel</Button>
-            <Button onPress={confirmLogout}>Logout</Button>
+            <Button onPress={() => setShowLogoutDialog(false)}>{t('common.cancel')}</Button>
+            <Button onPress={confirmLogout}>{t('auth.logout')}</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>

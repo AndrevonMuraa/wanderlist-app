@@ -224,7 +224,7 @@ async def notify_friend_request(requester_name: str, target_user_id: str):
 
 
 async def recalculate_user_points(user_id: str):
-    """Recalculate user points from actual visit data. Cleans stale auto country visits."""
+    """Recalculate user points from actual visit data. Cleans stale auto destination visits."""
     # 1. Get all landmark visits
     visits = await db.visits.find(
         {"user_id": user_id},
@@ -247,7 +247,7 @@ async def recalculate_user_points(user_id: str):
         for lm in landmarks:
             countries_with_landmarks.add(lm["country_id"])
 
-    # 3. Clean stale auto country visits
+    # 3. Clean stale auto destination visits
     async for cv in db.country_visits.find(
         {"user_id": user_id, "source": "auto_landmark"},
         {"_id": 0, "country_visit_id": 1, "country_id": 1}
@@ -256,8 +256,8 @@ async def recalculate_user_points(user_id: str):
             await db.country_visits.delete_one({"country_visit_id": cv["country_visit_id"]})
             await db.activities.delete_many({"country_visit_id": cv["country_visit_id"]})
 
-    # 4. Sum remaining country visit points
-    # For auto country visits: if the country has verified landmark visits, count as verified
+    # 4. Sum remaining destination visit points
+    # For auto destination visits: if the country has verified landmark visits, count as verified
     country_points = 0
     verified_country_points = 0
     async for cv in db.country_visits.find(
@@ -268,7 +268,7 @@ async def recalculate_user_points(user_id: str):
         country_points += cv_points
         
         if cv.get("source") == "auto_landmark":
-            # Auto country visit: verified if any landmark in this country is verified
+            # Auto destination visit: verified if any landmark in this country is verified
             country_id = cv.get("country_id", "")
             has_verified_in_country = any(
                 v.get("verified") for v in visits
@@ -277,7 +277,7 @@ async def recalculate_user_points(user_id: str):
             if has_verified_in_country:
                 verified_country_points += cv_points
         else:
-            # Manual country visit: use stored leaderboard_points_earned
+            # Manual destination visit: use stored leaderboard_points_earned
             verified_country_points += cv.get("leaderboard_points_earned", 0)
 
     # 5. Calculate continent bonuses
@@ -295,7 +295,7 @@ async def recalculate_user_points(user_id: str):
             if has_verified:
                 verified_continents.add(country_doc["continent"])
 
-    # Also check continents from manual country visits (no landmarks needed)
+    # Also check continents from manual destination visits (no landmarks needed)
     async for cv in db.country_visits.find(
         {"user_id": user_id, "source": {"$ne": "auto_landmark"}},
         {"_id": 0, "country_id": 1, "has_photos": 1}
@@ -310,8 +310,8 @@ async def recalculate_user_points(user_id: str):
     verified_continent_bonus = len(verified_continents) * 50
 
     # 6. Calculate completion bonuses
-    # Destination completion: +50 for each country where ALL landmarks are visited
-    # Verified if ALL landmarks in that country are verified
+    # Destination completion: +50 for each destination where ALL landmarks are visited
+    # Verified if ALL landmarks in that destination are verified
     destination_completion_bonus = 0
     verified_destination_completion = 0
     all_countries = await db.countries.find({}, {"_id": 0, "country_id": 1, "continent": 1}).to_list(200)
@@ -329,12 +329,12 @@ async def recalculate_user_points(user_id: str):
                 verified_destination_completion += 50
 
     # Continent completion: +200 for each continent where ALL destinations are visited
-    # A destination is "visited" if it has a country_visit record
+    # A destination is "visited" if it has a destination visit record
     # Verified if each destination has photo OR at least one verified landmark
     continent_completion_bonus = 0
     verified_continent_completion = 0
     
-    # Get all user's country visits
+    # Get all user's destination visits
     user_cv_map = {}
     async for cv in db.country_visits.find(
         {"user_id": user_id},
