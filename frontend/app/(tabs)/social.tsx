@@ -572,8 +572,8 @@ const styles = StyleSheet.create({
   friendsStats: {
     flexDirection: 'row',
     gap: theme.spacing.xl,
-    marginBottom: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
+    paddingBottom: theme.spacing.sm,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border,
   },
@@ -715,7 +715,7 @@ const styles = StyleSheet.create({
   emptyState: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: theme.spacing.xl,
+    paddingVertical: theme.spacing.md,
   },
   emptyText: {
     ...theme.typography.body,
@@ -728,9 +728,9 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.xs / 2,
   },
   addFriendButton: {
-    marginTop: theme.spacing.md,
+    marginTop: theme.spacing.sm,
     paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.sm,
+    paddingVertical: 8,
     backgroundColor: theme.colors.primary,
     borderRadius: theme.borderRadius.md,
   },
