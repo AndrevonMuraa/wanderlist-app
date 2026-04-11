@@ -22,7 +22,7 @@ import UniversalHeader from '../components/UniversalHeader';
 import { getToken } from '../utils/token';
 import { getCountryFlag } from '../utils/countryFlags';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const PHOTO_SIZE = (width - theme.spacing.md * 4) / 3;
 
 
