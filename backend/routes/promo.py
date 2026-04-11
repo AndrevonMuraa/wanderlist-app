@@ -32,7 +32,7 @@ async def redeem_promo_code(request: PromoRedeemRequest, current_user: User = De
     existing_redemption = await db.promo_redemptions.find_one({
         "user_id": current_user.user_id,
         "code_id": promo["code_id"]
-    })
+    }, {"_id": 0})
     if existing_redemption:
         raise HTTPException(status_code=400, detail="You have already redeemed this code")
 
@@ -98,7 +98,7 @@ async def get_promo_codes(admin_user: User = Depends(get_admin_user)):
 async def create_promo_code(request: PromoCodeCreate, admin_user: User = Depends(get_admin_user)):
     code_str = request.code.strip().upper()
 
-    existing = await db.promo_codes.find_one({"code": code_str})
+    existing = await db.promo_codes.find_one({"code": code_str}, {"_id": 0})
     if existing:
         raise HTTPException(status_code=400, detail="This code already exists")
 
@@ -126,7 +126,7 @@ async def create_promo_code(request: PromoCodeCreate, admin_user: User = Depends
 
 @router.put("/admin/promo-codes/{code_id}")
 async def update_promo_code(code_id: str, request: PromoCodeUpdate, admin_user: User = Depends(get_admin_user)):
-    promo = await db.promo_codes.find_one({"code_id": code_id})
+    promo = await db.promo_codes.find_one({"code_id": code_id}, {"_id": 0})
     if not promo:
         raise HTTPException(status_code=404, detail="Code not found")
 
@@ -147,7 +147,7 @@ async def update_promo_code(code_id: str, request: PromoCodeUpdate, admin_user: 
 
 @router.delete("/admin/promo-codes/{code_id}")
 async def delete_promo_code(code_id: str, admin_user: User = Depends(get_admin_user)):
-    promo = await db.promo_codes.find_one({"code_id": code_id})
+    promo = await db.promo_codes.find_one({"code_id": code_id}, {"_id": 0})
     if not promo:
         raise HTTPException(status_code=404, detail="Code not found")
 
@@ -169,7 +169,7 @@ async def batch_create_promo_codes(request: PromoBatchCreate, admin_user: User =
     for i in range(1, count + 1):
         code_str = f"{prefix}-{i:03d}"
 
-        existing = await db.promo_codes.find_one({"code": code_str})
+        existing = await db.promo_codes.find_one({"code": code_str}, {"_id": 0})
         if existing:
             skipped += 1
             continue

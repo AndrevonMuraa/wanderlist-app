@@ -35,7 +35,7 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
         if max_photos == 1:
             raise HTTPException(
                 status_code=403, 
-                detail="Free users can add 1 photo per country visit. Upgrade to WanderMark Pro for up to 10 photos!"
+                detail="Basic travelers can add 1 photo per destination visit. Upgrade to WanderMark Pro for up to 10 photos!"
             )
         else:
             raise HTTPException(status_code=400, detail=f"Maximum {max_photos} photos allowed")
@@ -241,7 +241,7 @@ async def get_country_visit_details(country_visit_id: str, current_user: User = 
     )
     
     if not country_visit:
-        raise HTTPException(status_code=404, detail="Country visit not found")
+        raise HTTPException(status_code=404, detail="Destination visit not found")
     
     is_owner = country_visit.get("user_id") == current_user.user_id
     
@@ -249,7 +249,7 @@ async def get_country_visit_details(country_visit_id: str, current_user: User = 
     if not is_owner:
         visibility = country_visit.get("visibility", "public")
         if visibility == "private":
-            raise HTTPException(status_code=404, detail="Country visit not found")
+            raise HTTPException(status_code=404, detail="Destination visit not found")
         if visibility == "friends":
             are_friends = await db.friends.find_one({
                 "$or": [
@@ -258,7 +258,7 @@ async def get_country_visit_details(country_visit_id: str, current_user: User = 
                 ]
             })
             if not are_friends:
-                raise HTTPException(status_code=404, detail="Country visit not found")
+                raise HTTPException(status_code=404, detail="Destination visit not found")
     
     result = {**country_visit}
     
@@ -279,7 +279,7 @@ async def delete_country_visit(country_visit_id: str, current_user: User = Depen
     })
     
     if not country_visit:
-        raise HTTPException(status_code=404, detail="Country visit not found")
+        raise HTTPException(status_code=404, detail="Destination visit not found")
     
     # Block deletion if user has landmark visits in this country
     country_id = country_visit.get("country_id")
@@ -322,7 +322,7 @@ async def update_country_visit(country_visit_id: str, data: dict, current_user: 
     })
     
     if not country_visit:
-        raise HTTPException(status_code=404, detail="Country visit not found")
+        raise HTTPException(status_code=404, detail="Destination visit not found")
     
     # Build update fields
     update_fields = {}

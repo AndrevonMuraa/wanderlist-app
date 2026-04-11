@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime, timezone, timedelta
 
 from utils.db import db
-from utils.auth import get_current_user, is_user_pro, get_user_limits
+from utils.auth import get_current_user, is_user_pro, get_user_limits, get_admin_user
 from models.all import User
 
 
@@ -120,9 +120,9 @@ async def cancel_subscription(current_user: User = Depends(get_current_user)):
         "expires_at": current_user.subscription_expires_at.isoformat() if current_user.subscription_expires_at else None
     }
 
-# For testing purposes - remove in production
+# Admin-only: Toggle subscription for testing (requires admin or superadmin role)
 @router.post("/subscription/test-toggle")
-async def toggle_subscription_for_testing(current_user: User = Depends(get_current_user)):
+async def toggle_subscription_for_testing(current_user: User = Depends(get_admin_user)):
     """Toggle subscription on/off for testing purposes"""
     is_pro = is_user_pro(current_user)
     
