@@ -237,19 +237,19 @@ export default function MyLandmarkVisits() {
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
-          <View style={[styles.statIconWrap, { backgroundColor: '#E8F5E9' }]}>
-            <Ionicons name="shield-checkmark" size={16} color="#4CAF50" />
-          </View>
-          <Text style={[styles.statNumber, { color: '#4CAF50' }]}>{verifiedCount}</Text>
-          <Text style={styles.statLabel}>Verified</Text>
-        </View>
-        <View style={styles.statDivider} />
-        <View style={styles.statItem}>
           <View style={[styles.statIconWrap, { backgroundColor: '#FFF3E0' }]}>
             <Ionicons name="star" size={16} color="#FFA726" />
           </View>
           <Text style={[styles.statNumber, { color: '#FFA726' }]}>{totalPoints}</Text>
           <Text style={styles.statLabel}>Points</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statItem}>
+          <View style={[styles.statIconWrap, { backgroundColor: '#E8F5E9' }]}>
+            <Ionicons name="shield-checkmark" size={16} color="#4CAF50" />
+          </View>
+          <Text style={[styles.statNumber, { color: '#4CAF50' }]}>{verifiedCount}</Text>
+          <Text style={styles.statLabel}>Verified</Text>
         </View>
       </View>
 
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 4,
     borderRadius: 16,
-    paddingVertical: 14,
+    paddingVertical: 10,
     paddingHorizontal: 8,
     ...theme.shadows.card,
   },
@@ -329,15 +329,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statIconWrap: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
+    marginBottom: 3,
   },
   statNumber: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '800',
     color: theme.colors.text,
   },
