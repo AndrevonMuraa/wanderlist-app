@@ -314,6 +314,7 @@ export default function AboutScreen() {
                     • Same values, but without personal photo verification{'\n'}
                     • Count for total points and friends leaderboard{'\n'}
                     • Do not count for global leaderboard or rank{'\n\n'}
+                    Total points = verified + unverified points combined.{'\n\n'}
                     Photos must show you personally at the landmark to earn verified points. Non-compliant uploads may have their verified status revoked.
                   </Text>
                 </View>
