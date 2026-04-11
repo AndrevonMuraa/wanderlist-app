@@ -17,8 +17,8 @@ import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
 import { Skeleton } from '../components/Skeleton';
-import { getToken } from '../../utils/token';
-import { getCountryFlag } from '../../utils/countryFlags';
+import { getToken } from '../utils/token';
+import { getCountryFlag } from '../utils/countryFlags';
 
 
 interface CountryVisit {

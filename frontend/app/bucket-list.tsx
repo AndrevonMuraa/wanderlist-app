@@ -19,7 +19,7 @@ import { BACKEND_URL } from '../utils/config';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 interface BucketListItem {
   bucket_list_id: string;

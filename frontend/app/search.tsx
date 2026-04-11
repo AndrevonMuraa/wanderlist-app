@@ -11,7 +11,7 @@ import theme, { gradients } from '../styles/theme';
 import { useTheme } from '../contexts/ThemeContext';
 import { BACKEND_URL } from '../utils/config';
 import debounce from 'lodash.debounce';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 
 interface Landmark {

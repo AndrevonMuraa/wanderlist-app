@@ -15,7 +15,7 @@ import AddUserCreatedVisitModal from '../components/AddUserCreatedVisitModal';
 import ProFeatureLock from '../components/ProFeatureLock';
 import { useSubscription } from '../hooks/useSubscription';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 const { width } = Dimensions.get('window');
 

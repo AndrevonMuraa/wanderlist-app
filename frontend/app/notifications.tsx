@@ -20,7 +20,7 @@ import { formatTimeAgo } from '../utils/formatTime';
 import { lightHaptic, successHaptic } from '../utils/haptics';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 interface Notification {
   notification_id: string;

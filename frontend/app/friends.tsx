@@ -13,7 +13,7 @@ import { useSubscription } from '../hooks/useSubscription';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 // Helper to get token (works on both web and native)
 
 interface User {

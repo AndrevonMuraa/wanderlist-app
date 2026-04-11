@@ -18,7 +18,7 @@ import { Skeleton } from '../components/Skeleton';
 import theme, { gradients } from '../styles/theme';
 import UniversalHeader from '../components/UniversalHeader';
 import { BACKEND_URL } from '../utils/config';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 interface LandmarkVisit {
   visit_id: string;

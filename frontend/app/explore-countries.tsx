@@ -15,7 +15,7 @@ import { CountryCardSkeleton } from '../components/Skeleton';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 import {
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
   getFlagUrl, CONTINENT_ICON_NAMES, CONTINENT_DESCRIPTIONS,
   OCEANIA_GEOGRAPHIC, Country, ContinentSection,
 } from '../utils/countryConfig';

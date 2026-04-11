@@ -19,8 +19,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
-import { getToken } from '../../utils/token';
-import { getCountryFlag } from '../../utils/countryFlags';
+import { getToken } from '../utils/token';
+import { getCountryFlag } from '../utils/countryFlags';
 
 const { width } = Dimensions.get('window');
 const PHOTO_SIZE = (width - theme.spacing.md * 4) / 3;

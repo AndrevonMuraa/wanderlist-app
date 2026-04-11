@@ -10,7 +10,7 @@ import { BACKEND_URL } from '../utils/config';
 import { PersistentTabBar } from '../components/PersistentTabBar';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 import UniversalHeader from '../components/UniversalHeader';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 interface Activity {
   activity_id: string;

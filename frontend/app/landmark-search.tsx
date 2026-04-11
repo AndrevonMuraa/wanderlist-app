@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 
 interface Landmark {

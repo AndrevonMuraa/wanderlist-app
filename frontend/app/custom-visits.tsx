@@ -12,7 +12,7 @@ import theme from '../styles/theme';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 import AddUserCreatedVisitModal from '../components/AddUserCreatedVisitModal';
 import ProFeatureLock from '../components/ProFeatureLock';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 const { colors } = theme;
 interface UserCreatedVisit {

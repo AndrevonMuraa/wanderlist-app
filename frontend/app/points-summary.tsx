@@ -15,7 +15,7 @@ import theme, { gradients } from '../styles/theme';
 import UniversalHeader from '../components/UniversalHeader';
 import { BACKEND_URL } from '../utils/config';
 import { cachedFetch } from '../utils/apiCache';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 interface UserStats {
   total_points: number;

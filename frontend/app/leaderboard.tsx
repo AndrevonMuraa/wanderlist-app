@@ -20,7 +20,7 @@ import ShareRankCard from '../components/ShareRankCard';
 import { BACKEND_URL } from '../utils/config';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 interface LeaderboardEntry {
   user_id: string;

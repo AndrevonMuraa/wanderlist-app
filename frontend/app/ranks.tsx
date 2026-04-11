@@ -17,7 +17,7 @@ import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 export default function RanksScreen() {
   const router = useRouter();

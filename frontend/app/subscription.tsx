@@ -21,7 +21,7 @@ import { usePurchases } from '../contexts/PurchaseContext';
 import { Package } from '../utils/purchases';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 interface SubscriptionStatus {
   subscription_tier: string;

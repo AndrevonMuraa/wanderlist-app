@@ -17,7 +17,7 @@ import * as ImagePicker from 'expo-image-picker';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 
 
 interface UserProfile {

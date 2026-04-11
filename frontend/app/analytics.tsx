@@ -12,7 +12,7 @@ import { PersistentTabBar } from '../components/PersistentTabBar';
 import UniversalHeader from '../components/UniversalHeader';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
-import { getToken } from '../../utils/token';
+import { getToken } from '../utils/token';
 const { width } = Dimensions.get('window');
 
 interface AnalyticsData {
