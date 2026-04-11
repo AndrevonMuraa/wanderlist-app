@@ -9,7 +9,7 @@ router = APIRouter()
 async def get_conversations(current_user: User = Depends(get_current_user)):
     """Get conversations list with last message and unread count — single optimized query"""
     if current_user.subscription_tier == "free":
-        raise HTTPException(status_code=403, detail="Messaging is a premium feature.")
+        raise HTTPException(status_code=403, detail="Messaging requires WanderMark Pro.")
 
     # Get friend list
     friendships = await db.friends.find({
@@ -86,7 +86,7 @@ async def send_message(data: MessageCreate, current_user: User = Depends(get_cur
     if current_user.subscription_tier == "free":
         raise HTTPException(
             status_code=403,
-            detail="Messaging is a premium feature. Upgrade to Basic or Premium to chat with friends!"
+            detail="Messaging requires WanderMark Pro. Upgrade to chat with friends!"
         )
     
     # Verify users are friends
@@ -120,7 +120,7 @@ async def get_messages(friend_id: str, current_user: User = Depends(get_current_
     if current_user.subscription_tier == "free":
         raise HTTPException(
             status_code=403,
-            detail="Messaging is a premium feature. Upgrade to Basic or Premium to chat with friends!"
+            detail="Messaging requires WanderMark Pro. Upgrade to chat with friends!"
         )
     
     # Verify friendship

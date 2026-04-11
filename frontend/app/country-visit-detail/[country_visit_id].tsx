@@ -306,14 +306,11 @@ export default function DestinationVisitDetailScreen() {
           Alert.alert('Success', 'Diary updated!');
         }
       } else {
-        throw new Error('Failed to update');
+        const err = await response.json().catch(() => null);
+        Alert.alert('Diary limit', err?.detail || 'Failed to update diary');
       }
     } catch {
-      if (Platform.OS === 'web') {
-        alert('Failed to update diary');
-      } else {
-        Alert.alert('Error', 'Failed to update diary');
-      }
+      Alert.alert('Error', 'Failed to update diary');
     } finally {
       setSaving(false);
     }

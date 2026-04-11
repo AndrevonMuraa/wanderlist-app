@@ -134,6 +134,10 @@ export default function VisitDetailScreen() {
       if (res.ok) {
         setVisit(prev => prev ? { ...prev, diary_notes: editDiary, diary: editDiary } : prev);
         setShowEditDiaryDialog(false);
+        invalidateCacheGroup('visit');
+      } else {
+        const err = await res.json();
+        Alert.alert('Diary limit', err.detail || 'Could not save diary');
       }
     } catch {
       Alert.alert('Error', 'Could not update diary');

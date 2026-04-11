@@ -295,26 +295,25 @@ export default function SubscriptionScreen() {
           <Text style={styles.sectionTitle}>What's Included</Text>
           
           <Surface style={styles.featuresCard}>
-            <Text style={styles.tierLabel}>Free</Text>
-            <FeatureRow icon="flag" text="1,000 Official Landmarks" included />
-            <FeatureRow icon="camera" text="1 Photo per Visit" included />
-            <FeatureRow icon="people" text="5 Friends Maximum" included />
-            <FeatureRow icon="trophy" text="Leaderboard & Rankings" included />
-            <FeatureRow icon="ribbon" text="Rank Badges (20 ranks)" included />
-            <FeatureRow icon="images" text="Community Photo Preview" included />
-            <FeatureRow icon="star" text="Photo of the Week" included />
-            <FeatureRow icon="heart" text="Photo Upvoting" included />
+            <Text style={styles.tierLabel}>Basic traveler</Text>
+            <FeatureRow icon="flag" text="1,000 official landmarks" included />
+            <FeatureRow icon="camera" text="1 photo per visit" included />
+            <FeatureRow icon="people" text="5 friends maximum" included />
+            <FeatureRow icon="trophy" text="Leaderboard & rankings" included />
+            <FeatureRow icon="ribbon" text="Rank badges (20 ranks)" included />
+            <FeatureRow icon="images" text="Community photos & upvoting" included />
+            <FeatureRow icon="flame" text="Trending landmarks" included />
+            <FeatureRow icon="book" text="3 diary entries per month" included />
             <View style={styles.divider} />
-            <Text style={[styles.tierLabel, styles.tierLabelPro]}>+ Pro Features</Text>
-            <FeatureRow icon="diamond" text="500 Premium Landmarks (12,500 extra pts)" included={isPro || false} highlight />
-            <FeatureRow icon="images" text="10 Photos per Visit" included={isPro || false} highlight />
-            <FeatureRow icon="people" text="Unlimited Friends" included={isPro || false} highlight />
-            <FeatureRow icon="airplane" text="Custom Visits Feature" included={isPro || false} highlight />
-            <FeatureRow icon="earth" text="Full Community Gallery" included={isPro || false} highlight />
-            <FeatureRow icon="book" text="Travel Diary Access" included={isPro || false} highlight />
-            <FeatureRow icon="chatbubbles" text="Direct Messaging" included={isPro || false} highlight />
-            <FeatureRow icon="share-social" text="Share in Community Feed" included={isPro || false} highlight />
-            <FeatureRow icon="medal" text="All Rank Badges Achievable" included={isPro || false} highlight />
+            <Text style={[styles.tierLabel, styles.tierLabelPro]}>+ Pro traveler</Text>
+            <FeatureRow icon="diamond" text="500 premium landmarks (+12,500 pts)" included={isPro || false} highlight />
+            <FeatureRow icon="images" text="10 photos per visit" included={isPro || false} highlight />
+            <FeatureRow icon="people" text="Unlimited friends" included={isPro || false} highlight />
+            <FeatureRow icon="airplane" text="Custom visits" included={isPro || false} highlight />
+            <FeatureRow icon="book" text="Unlimited diary entries" included={isPro || false} highlight />
+            <FeatureRow icon="chatbubbles" text="Direct messaging" included={isPro || false} highlight />
+            <FeatureRow icon="eye" text="Read community diaries" included={isPro || false} highlight />
+            <FeatureRow icon="rocket" text="Faster rank progression" included={isPro || false} highlight />
           </Surface>
         </View>
 
