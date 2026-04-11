@@ -13,6 +13,7 @@ import * as ImagePicker from 'expo-image-picker';
 import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import { invalidateCacheGroup } from '../../utils/apiCache';
+import { shareCustomVisit } from '../../utils/shareUtils';
 import PhotoViewer from '../../components/PhotoViewer';
 import UniversalHeader from '../../components/UniversalHeader';
 import { useAuth } from '../../contexts/AuthContext';
@@ -402,13 +403,23 @@ export default function CustomVisitDetailScreen() {
         )}
 
         {isOwner && (
-          <TouchableOpacity
-            onPress={() => setShowDeleteDialog(true)}
-            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 12, marginTop: 16 }}
-          >
-            <Ionicons name="trash-outline" size={16} color="#E53935" />
-            <Text style={{ fontSize: 13, color: '#E53935' }}>Delete Visit</Text>
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 24, marginTop: 16 }}>
+            <TouchableOpacity
+              onPress={() => shareCustomVisit(visit.name, visit.country_name || '', visit.points_earned || 0)}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 12 }}
+              data-testid="share-custom-visit-btn"
+            >
+              <Ionicons name="share-social-outline" size={16} color={theme.colors.primary} />
+              <Text style={{ fontSize: 13, color: theme.colors.primary }}>Share</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setShowDeleteDialog(true)}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 12 }}
+            >
+              <Ionicons name="trash-outline" size={16} color="#E53935" />
+              <Text style={{ fontSize: 13, color: '#E53935' }}>Delete</Text>
+            </TouchableOpacity>
+          </View>
         )}
 
         <View style={{ height: 40 }} />

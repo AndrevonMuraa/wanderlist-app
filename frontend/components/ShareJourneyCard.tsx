@@ -70,7 +70,7 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
         <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
         {/* Modal Header */}
         <View style={styles.modalHeader}>
-          <Text style={[styles.modalTitle, { color: colors.text }]}>Share Your Journey</Text>
+          <Text style={[styles.modalTitle, { color: colors.text }]}>Share your journey</Text>
           <TouchableOpacity onPress={onDismiss} data-testid="share-journey-close">
             <Ionicons name="close" size={24} color={colors.textSecondary} />
           </TouchableOpacity>
@@ -110,7 +110,7 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
                 <Text style={styles.statNum}>{stats.countries}</Text>
                 <View style={styles.statLabelRow}>
                   <Ionicons name="flag" size={11} color="#4DB8D8" />
-                  <Text style={styles.statLabel}>Countries</Text>
+                  <Text style={styles.statLabel}>Destinations</Text>
                 </View>
               </View>
 
@@ -185,7 +185,7 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
             ) : (
               <>
                 <Ionicons name="share-social" size={18} color="#1a1a2e" />
-                <Text style={styles.shareBtnText}>Share to Social Media</Text>
+                <Text style={styles.shareBtnText}>Share to social media</Text>
               </>
             )}
           </LinearGradient>

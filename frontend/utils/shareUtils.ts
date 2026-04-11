@@ -1,4 +1,4 @@
-import { Platform, Share } from 'react-native';
+import { Share } from 'react-native';
 import { successHaptic } from './haptics';
 
 const APP_LINK = 'https://wandermark.app';
@@ -7,52 +7,14 @@ export const shareVisit = async (landmarkName: string, countryName: string, poin
   try {
     await successHaptic();
     
-    const message = `🎉 Just visited ${landmarkName} in ${countryName}! +${points} points on WanderMark! 🌍✈️\n\nTrack your travels: ${APP_LINK}`;
-    
-    const result = await Share.share({
-      message,
-      title: 'My WanderMark Visit',
-    });
-
-    if (result.action === Share.sharedAction) {
-      return true;
-    }
-  } catch (error) {
-    console.error('Error sharing:', error);
-    return false;
-  }
-};
-
-export const shareProgress = async (visits: number, countries: number, points: number) => {
-  try {
-    await successHaptic();
-    
-    const message = `📊 My WanderMark Progress:\n${visits} landmarks visited\n${countries} countries explored\n${points} points earned!\n\nJoin me on WanderMark! 🌍✈️\n${APP_LINK}`;
+    const message = `Just visited ${landmarkName} in ${countryName}! +${points} points on WanderMark!\n\nTrack your travels: ${APP_LINK}`;
     
     await Share.share({
       message,
-      title: 'My Travel Stats',
+      title: 'My WanderMark visit',
     });
     return true;
-  } catch (error) {
-    console.error('Error sharing progress:', error);
-    return false;
-  }
-};
-
-export const shareCollection = async (collectionName: string, landmarkCount: number) => {
-  try {
-    await successHaptic();
-    
-    const message = `📚 Check out my "${collectionName}" collection on WanderMark! ${landmarkCount} amazing landmarks to explore! 🗺️\n\n${APP_LINK}`;
-    
-    await Share.share({
-      message,
-      title: 'My Travel Collection',
-    });
-    return true;
-  } catch (error) {
-    console.error('Error sharing collection:', error);
+  } catch {
     return false;
   }
 };
@@ -62,28 +24,30 @@ export const shareDestinationVisit = async (countryName: string, photoCount: num
     await successHaptic();
     
     const diarySnippet = diary ? `\n"${diary.substring(0, 100)}${diary.length > 100 ? '...' : ''}"` : '';
-    const message = `🌍 My trip to ${countryName}!${diarySnippet}\n\n📸 ${photoCount} photo${photoCount !== 1 ? 's' : ''} | ⭐ ${points} points\n\nTrack your travels: ${APP_LINK}\n#WanderMark #Travel #${countryName.replace(/\s/g, '')}`;
+    const message = `My trip to ${countryName}!${diarySnippet}\n\n${photoCount} photo${photoCount !== 1 ? 's' : ''} | ${points} points\n\nTrack your travels: ${APP_LINK}\n#WanderMark #Travel #${countryName.replace(/\s/g, '')}`;
     
     await Share.share({
       message,
-      title: `My ${countryName} Adventure`,
+      title: `My ${countryName} adventure`,
     });
     return true;
-  } catch (error) {
-    console.error('Error sharing country visit:', error);
+  } catch {
     return false;
   }
 };
 
-
-export const shareProfile = async (name: string, visits: number, countries: number, points: number) => {
+export const shareCustomVisit = async (visitName: string, countryName: string, points: number) => {
   try {
     await successHaptic();
-    const message = `Check out ${name}'s travel profile on WanderMark!\n\n${visits} landmarks | ${countries} countries | ${points.toLocaleString()} points\n\nJoin the adventure: ${APP_LINK}`;
-    await Share.share({ message, title: `${name} on WanderMark` });
+    
+    const message = `Explored ${visitName} in ${countryName}! +${points} points on WanderMark!\n\nTrack your travels: ${APP_LINK}`;
+    
+    await Share.share({
+      message,
+      title: 'My WanderMark visit',
+    });
     return true;
-  } catch (error) {
-    console.error('Error sharing profile:', error);
+  } catch {
     return false;
   }
 };
