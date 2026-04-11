@@ -131,6 +131,7 @@ export default function LoginScreen() {
                   mode="outlined"
                   keyboardType="email-address"
                   autoCapitalize="none"
+                  returnKeyType="next"
                   style={styles.input}
                   outlineColor={theme.colors.border}
                   activeOutlineColor={theme.colors.primary}
@@ -144,6 +145,7 @@ export default function LoginScreen() {
                   onChangeText={setPassword}
                   mode="outlined"
                   secureTextEntry
+                  returnKeyType="done"
                   style={styles.input}
                   outlineColor={theme.colors.border}
                   activeOutlineColor={theme.colors.primary}

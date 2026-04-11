@@ -432,6 +432,7 @@ export default function SubscriptionScreen() {
                 placeholder="Enter code"
                 placeholderTextColor="#999"
                 autoCapitalize="characters"
+              returnKeyType="done"
                 editable={!promoLoading}
                 data-testid="redeem-promo-input"
               />

@@ -97,6 +97,7 @@ export default function LandmarkSearchScreen() {
             onChangeText={handleSearch}
             autoCapitalize="none"
             autoCorrect={false}
+            returnKeyType="search"
             autoFocus
           />
           {searchQuery.length > 0 && (
