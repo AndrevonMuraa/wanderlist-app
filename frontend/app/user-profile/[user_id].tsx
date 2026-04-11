@@ -261,7 +261,7 @@ export default function UserProfileScreen() {
               data-testid="block-user-btn"
             >
               <Ionicons
-                name={profile.is_blocked_by_me ? 'ban' : 'ban-outline'}
+                name={profile.is_blocked_by_me ? 'close-circle' : 'close-circle-outline'}
                 size={18}
                 color={profile.is_blocked_by_me ? '#E53935' : theme.colors.textLight}
               />
