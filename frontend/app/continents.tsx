@@ -328,13 +328,14 @@ export default function ContinentsScreen() {
           />
         </TouchableOpacity>
 
-        {/* Trending Landmarks */}
+        {/* Community Highlights */}
         {trendingLandmarks.length > 0 && (
           <View style={styles.trendingSection}>
-            <View style={styles.trendingSectionHeader}>
-              <Ionicons name="flame" size={18} color="#E87850" />
-              <Text style={styles.trendingSectionTitle}>Trending landmarks</Text>
-            </View>
+            <TouchableOpacity style={styles.trendingSectionHeader} onPress={() => router.push('/community')} activeOpacity={0.7}>
+              <Ionicons name="people" size={18} color={theme.colors.primary} />
+              <Text style={styles.trendingSectionTitle}>Community highlights</Text>
+              <Ionicons name="chevron-forward" size={16} color={theme.colors.primary} style={{ marginLeft: 'auto' }} />
+            </TouchableOpacity>
             <ScrollView 
               horizontal 
               showsHorizontalScrollIndicator={false}
