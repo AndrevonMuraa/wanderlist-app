@@ -134,8 +134,8 @@ export default function LeaderboardScreen() {
   const getCategoryLabel = () => {
     switch (category) {
       case 'points': return friendsOnly ? 'Points' : 'Verified';
-      case 'visits': return 'Landmarks';
-      case 'countries': return 'Destinations';
+      case 'visits': return friendsOnly ? 'Landmarks' : 'Verified';
+      case 'countries': return friendsOnly ? 'Destinations' : 'Verified';
     }
   };
 
