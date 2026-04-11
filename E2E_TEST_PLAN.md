@@ -1,191 +1,154 @@
-# WanderMark E2E Test Plan — Build 74
-# Test credentials: test@wandermark.app / Test1234!
-# Premium test: testpro@wandermark.app / Test1234!
-#
-# Legend:
-#   PASSED        = Tested and passed in previous build
-#   FIX APPLIED   = Bug found, fix in code — MUST verify in new build
-#   NEW           = New feature, never tested
-#   UNTESTED      = Not yet tested
+# WanderMark E2E Test Plan — Build 82
+
+## Test Accounts
+| Account | Email | Password | Role | Tier |
+|---|---|---|---|---|
+| Admin (superadmin) | test@wandermark.app | Test1234! | admin | free |
+| Pro User | testpro@wandermark.app | Test1234! | user | free |
+| Moderator | mod@wandermark.app | Test1234! | moderator | free |
 
 ---
 
-## PRE-TEST: App Launch
-- [ ] PASSED: Splash screen shows "WanderMark" with correct app icon
-- [ ] App opens without crash
-- [ ] Login with test@wandermark.app / Test1234!
+## 1. Core Navigation
+- [ ] All 4 tabs load (Explore, Journey, Social, Profile)
+- [ ] Back navigation works from all pushed screens
+- [ ] Tab bar visible on tab screens, hidden on pushed screens
+
+## 2. Explore Tab
+- [ ] Continent cards load with correct stats
+- [ ] "Community highlights" section visible with chevron → /community
+- [ ] Community hub loads (trending, recent, popular sections)
+- [ ] Destination list loads when clicking a continent
+- [ ] Landmarks list loads from destination
+
+## 3. Journey Tab
+- [ ] Overall progress card shows correct stats
+- [ ] My landmark visits → 4-column stats (Visited | Verified | Total pts | Verified pts)
+- [ ] My destination visits → same 4-column stats
+- [ ] My photos → photo grid loads
+- [ ] Points summary → loads without delay, sections in correct order
+- [ ] Ranks page → loading spinner then content (no stale flash)
+
+## 4. Social Tab
+- [ ] Feed section with "Explore community" link
+- [ ] Friends section (komprimert whitespace)
+- [ ] Leaderboard preview
+- [ ] Click user in feed → user-profile
+- [ ] Click user in leaderboard → user-profile
+
+## 5. Leaderboard (Full Page)
+- [ ] Category chips (Points/Landmarks/Destinations) with colored icons
+- [ ] Global: Shows "Verified" label, counts only verified visits
+- [ ] Friends: Shows category name, counts all visits
+- [ ] No Time Period filter (removed)
+- [ ] Kompakt rank box (#1 of X travelers)
+- [ ] Entry cards: full username visible, komprimert
+- [ ] Share ranking → card renders within bounds
+- [ ] Click entry → user-profile
+
+## 6. User Profile
+- [ ] Stats, destinations explored, recent photos
+- [ ] Friend request flow (Add → Pending → Accept → Friends)
+- [ ] Message button visible only for friends
+- [ ] Block button → confirm dialog → user blocked
+- [ ] Blocked user: friend/message buttons hidden
+
+## 7. Visit Detail (Landmark)
+- [ ] Photo action sheet (Take Photo / Choose from Library / Cancel)
+- [ ] PhotoViewer: pinch-to-zoom, smooth scroll
+- [ ] Share button → ShareVisitCard modal
+- [ ] Privacy respected in share (share_diary)
+- [ ] Adding/removing photo triggers cache invalidation
+- [ ] Diary save shows "Diary limit" alert for basic users at limit
+
+## 8. Visit Detail (Destination)
+- [ ] Same photo action sheet
+- [ ] Same ShareVisitCard
+- [ ] Cache invalidation on photo changes
+
+## 9. Edit Profile
+- [ ] Username: keyboard with "Done" button
+- [ ] Bio: "Done" text button below field
+- [ ] Location: keyboard with "Done" button
+- [ ] Save button works
+
+## 10. About & Help
+- [ ] Key Features: all 7 items with correct icons/colors, navigate to correct screens
+- [ ] Point system → /points-summary
+- [ ] Custom visits → /custom-visits (not Journey)
+- [ ] Rank system → /ranks (no crash)
+- [ ] Leaderboard → /leaderboard
+- [ ] FAQ: "Custom visits" in photos list
+- [ ] "Total points = verified + unverified" text present
+- [ ] "Report an issue" → modal opens, can type, add screenshot, cancel, submit
+- [ ] Bug report submitted successfully
+
+## 11. Community Photos
+- [ ] All users see all photos (not just 3)
+- [ ] Diary locked for basic users
+- [ ] Click user name → user-profile
+- [ ] Upvoting works
+
+## 12. Subscription
+- [ ] Updated feature list (no "Photo of the Week", "Community Photo Preview")
+- [ ] Shows "Basic traveler" and "+ Pro traveler" labels
+- [ ] Promo code input: keyboard with "Done"
+
+## 13. Privacy
+- [ ] Settings → Privacy: 3 levels (Public/Friends/Private)
+- [ ] Visit visibility respected in community feed
+- [ ] User profile photos filtered by privacy
+- [ ] Visit detail access control (friends-only blocked for non-friends)
 
 ---
 
-## 1. EXPLORE TAB
+## ADMIN TESTING
 
-### 1.1 Continents Page
-- [ ] PASSED: 5 continent cards, Oceania shows "& other island paradises"
+### 14. Admin Panel (login as test@wandermark.app — superadmin)
+- [ ] Admin dashboard accessible from Profile → settings gear
+- [ ] Users list loads
+- [ ] Can update user role (set moderator/admin)
+- [ ] Can delete user (superadmin only)
+- [ ] Reports tab: User reports visible
+- [ ] Bug reports tab: Bug reports visible with description, screenshots count
+- [ ] Blocks tab: Block list visible (if any blocks exist)
+- [ ] Promo codes: Create, view, delete
+- [ ] Push notifications: Send test notification
+- [ ] Test-toggle subscription: Works (admin only)
 
-### 1.2 Explore Destinations (was "Explore Countries")
-- [ ] FIX APPLIED: Header says "Explore Destinations" (was "Explore Countries")
-- [ ] NEW: "Your Progress" dashboard with 3 progress bars (Destinations/Landmarks/Points) + earned pts badge
-- [ ] NEW: Section subtitles show points ("20 destinations • 300 landmarks • 4,500 pts")
-- [ ] Progress dashboard updates dynamically after visits change
+### 15. Moderator Panel (login as mod@wandermark.app)
+- [ ] Admin dashboard accessible
+- [ ] Users list loads
+- [ ] CANNOT delete users (403)
+- [ ] CANNOT change user roles (403)
+- [ ] CANNOT see bug reports tab (403 on API)
+- [ ] CAN see user reports and blocks
+- [ ] Test-toggle: works (admin/mod both have access)
 
-### 1.3 Landmarks List
-- [ ] PASSED: 15 landmarks per country (10 official + 5 premium)
-- [ ] PASSED: Search shows 1500 landmarks
-
-### 1.4 Landmark Detail
-- [ ] PASSED: Community Photos section visible
-- [ ] PASSED: Upvote heart turns red for all users
-
----
-
-## 2. MY JOURNEY TAB
-
-### 2.1 Stats Section
-- [ ] All 6 stat boxes tappable, correct icons
-- [ ] FIX APPLIED: Landmark icon is coral (#E87850) — matches stats box
-
-### 2.2 My Landmark Visits (redesigned)
-- [ ] NEW: List layout with thumbnails (was grid with camera icons)
-- [ ] NEW: Stats box with colored icons (Visits/Verified/Points) — dynamically calculated
-- [ ] NEW: Sort chips: Recent | Country | Points
-- [ ] NEW: Animated card fade-in
-- [ ] NEW: Verified badge overlay on thumbnail
-- [ ] NEW: "Start Exploring" CTA on empty state
-- [ ] Header says "Landmarks" (was "My Landmark Vi...")
-- [ ] FIX APPLIED: Thumbnail shows actual photo (was always camera icon)
-- [ ] FIX APPLIED: Verified count is dynamic (was showing stale stored value)
-
-### 2.3 My Country Visits → "Destinations" (redesigned)
-- [ ] NEW: List layout with flag thumbnails (was broken grid)
-- [ ] NEW: Stats box with colored icons (Visited/Photos/Points)
-- [ ] NEW: Sort chips: Recent | Continent | Points
-- [ ] NEW: Animated card fade-in
-- [ ] Header says "Destinations"
-
-### 2.4 Overall Progress
-- [ ] PASSED: Three progress wheels — Continents, Destinations, Landmarks
-
-### 2.5 Next Rank
-- [ ] FIX APPLIED: Says "more verified points needed" (was "more points needed")
-- [ ] Tappable → navigates to /ranks
-
-### 2.6 Points Summary (major upgrade)
-- [ ] NEW: Tappable Verified/Unverified rows with chevron → expand to show itemized breakdown
-- [ ] NEW: Each landmark in breakdown is tappable → navigates to visit-detail
-- [ ] NEW: Each destination visit is tappable → navigates to country-visit-detail
-- [ ] NEW: Continent bonuses shown in verified breakdown
-- [ ] NEW: "Earning Potential" section replacing "Your Journey" — shows pts/max with progress bars
-- [ ] NEW: Landmarks row tappable → my-landmark-visits
-- [ ] NEW: Destinations row tappable → my-country-visits
-- [ ] NEW: "Next Milestone" card with next rank + pts needed
-- [ ] Back navigation from visit-detail returns to Points Summary
-
-### 2.7 Points Consistency (CRITICAL)
-- [ ] FIX APPLIED: All pages show same total points
-- [ ] FIX APPLIED: /api/progress includes continent bonuses
-- [ ] FIX APPLIED: Default values synced (0, not 10/15)
-- [ ] Run recalculate_points.py on Render Shell before testing
-
-### 2.8 Custom Visits
-- [ ] Custom Visits page loads without crash
-- [ ] NEW: Country name autocomplete with 100 DB destinations
-- [ ] NEW: Green "Linked to X" badge when DB country matched
-- [ ] Free text still works for non-DB countries
+### 16. Role Differentiation Verification
+- [ ] Superadmin (test@wandermark.app): Full access to all admin features
+- [ ] Moderator (mod@wandermark.app): Limited access (no role changes, no user deletion, no bug reports)
+- [ ] Regular user (testpro@wandermark.app): No admin access at all
 
 ---
 
-## 3. VISIT CREATION & MANAGEMENT
+## Share Testing
 
-### 3.1 Create Landmark Visit
-- [ ] PASSED: "Add Photo" is primary, "Take Photo" secondary
-- [ ] PASSED: Keyboard Done bar on diary
-
-### 3.2 Visit Detail (major upgrade)
-- [ ] NEW: "Add Photo to Verify" CTA for visits without photos (teal dashed box)
-- [ ] NEW: Long-press thumbnail to remove individual photo
-- [ ] NEW: Warning when removing last photo ("will change to unverified")
-- [ ] NEW: Info card shows shield icon — orange "Unverified" / green "Verified"
-- [ ] NEW: "Add a photo to earn verified points" hint for unverified
-- [ ] FIX APPLIED: "+Add" button hidden for basic users at photo limit (1)
-- [ ] FIX APPLIED: Backend recalculates points after photo changes
-- [ ] Verified↔Unverified transitions correctly when photos added/removed
-
-### 3.3 Country Visit Detail
-- [ ] NEW: "Your Custom Landmarks" section (PRO) — shows linked custom visit landmarks
-- [ ] Custom landmarks tappable → custom-visit-detail
-- [ ] Section only appears when custom landmarks exist for this country
-
-### 3.4 Privacy (CRITICAL)
-- [ ] FIX APPLIED: Private visits return 404 for non-owners
-- [ ] FIX APPLIED: Friends-only visits check friendship status
-- [ ] FIX APPLIED: Diary hidden from non-owners when share_diary=false
-- [ ] Test with test2@wandermark.app viewing test@wandermark.app's private visit
+### 17. Share Functions
+- [ ] Landmark visit → ShareVisitCard with photo (if available)
+- [ ] Destination visit → ShareVisitCard
+- [ ] Custom visit → Share + Delete buttons, ShareVisitCard
+- [ ] Journey → ShareJourneyCard (stats card)
+- [ ] Profile → ShareJourneyCard
+- [ ] Leaderboard → ShareRankCard (no overflow)
 
 ---
 
-## 4. SOCIAL TAB
+## Anti-Cheat Verification
 
-### 4.1 Feed
-- [ ] FIX APPLIED: Community tab is default (was Friends)
-- [ ] FIX APPLIED: Community tab placed first (left)
-
-### 4.2 Messages
-- [ ] FIX APPLIED: "View All" sends basic users to /subscription (was showing old upgrade modal)
-
-### 4.3 Leaderboard (major upgrade)
-- [ ] NEW: Top 10 shown in standard view (was showing all 100)
-- [ ] NEW: "Your Position" card for users ranked #11+ with gap to #10
-- [ ] NEW: "Show Full Rankings" button expands to compact Top 100
-- [ ] NEW: Compact mode: half-height rows, no rank badges
-- [ ] NEW: User's own row highlighted with teal background
-- [ ] NEW: "Show Less" collapses back to Top 10
-- [ ] NEW: Expanded state resets when switching Global/Friends/category
-- [ ] FIX APPLIED: Rank always based on verified_points (was using total on Friends)
-- [ ] FIX APPLIED: "Destinations" label (was "Countries")
-
----
-
-## 5. PROFILE TAB
-
-### 5.1 Profile
-- [ ] FIX APPLIED: "Basic Traveler" (was "Free user")
-- [ ] FIX APPLIED: "Premium Traveler" (was "Pro user")
-- [ ] FIX APPLIED: Diamond icon teal #1E8A8A (was gold #C9A961)
-- [ ] NEW: Rank badge shows "X pts to {NextRank}" undertekst
-- [ ] Points stat tappable → Points Summary
-- [ ] Rank badge tappable → Ranks page
-
-### 5.2 Ranks Page
-- [ ] FIX APPLIED: No flash of "Newcomer" badge (hidden until loaded)
-- [ ] NEW: Next unlockable rank shows progress bar + "X pts to unlock • Y%"
-
-### 5.3 Subscription
-- [ ] NEW: "500 Premium Landmarks (12,500 extra pts)" — shows point value
-
-### 5.4 About
-- [ ] FIX APPLIED: Stats box spacing fixed (30,000+ not cut off)
-
----
-
-## 6. TERMINOLOGY CONSISTENCY
-- [ ] FIX APPLIED: "Countries" → "Destinations" everywhere (i18n + hardcoded)
-- [ ] FIX APPLIED: "Free user" → "Basic Traveler"
-- [ ] FIX APPLIED: "Pro user" → "Premium Traveler"
-- [ ] Check: Leaderboard, Profile, Journey, Explore, About, Subscription
-
----
-
-## 7. BACKEND (auto-deployed via Render)
-- [ ] FIX APPLIED: /api/visits/{id} enforces visibility + strips diary
-- [ ] FIX APPLIED: /api/country-visits/{id} enforces visibility + strips diary
-- [ ] FIX APPLIED: /api/visits PUT recalculates points after photo changes
-- [ ] NEW: /api/points/breakdown returns itemized point sources
-- [ ] NEW: /api/user-created-visits/by-country/{id} returns linked custom landmarks
-- [ ] NEW: /api/countries/names returns lightweight autocomplete data
-- [ ] Custom visit creation auto-matches country_name to DB countries
-
----
-
-## BUILD INFO:
-- buildNumber: 74 (bump before build!)
-- Run on Render Shell: `cd scripts && python3 recalculate_points.py`
+### 18. Global Leaderboard Integrity
+- [ ] Points: Only leaderboard_points (verified) counted
+- [ ] Landmarks: Only visits with verified=true counted
+- [ ] Destinations: Only visits with verified=true counted
+- [ ] Adding a visit WITHOUT photo: Does NOT appear on global leaderboard
+- [ ] Adding a photo to visit: NOW appears on global leaderboard

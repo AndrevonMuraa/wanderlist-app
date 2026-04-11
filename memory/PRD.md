@@ -1,58 +1,92 @@
 # WanderMark PRD
 
-## Product
-Travel app (React Native + Expo + FastAPI + MongoDB Atlas) for tracking landmark/destination visits with a gamified points system.
+## Product Overview
+WanderMark is a gamified travel app where users visit landmarks, earn points, compete on leaderboards, and share their travel experiences. React Native (Expo Router) + FastAPI + MongoDB Atlas.
 
-## Current State (April 8, 2026)
+## Current State (April 11, 2026)
 - 100 destinations, 1,500 landmarks, 20 ranks, 30+ badges
-- BuildNumber: 78
+- BuildNumber: 82
 - Backend: Render (auto-deploy from GitHub)
 - Database: MongoDB Atlas
 
 ### CRITICAL NOTES
 - "Destinations" not "Countries", "Basic Traveler" not "Free user", "Pro Traveler" not "Pro user"
 - `recalculate_user_points()` is SINGLE SOURCE OF TRUTH for points
-- Diamond: teal #1E8A8A. Landmark: coral #E87850. Destination: turkis #4DB8D8. Continent: green #4CAF50. Points: gold #FFD700
-- Continent bonus verified = country_visit has photo OR at least one verified landmark
-- Country visit verified = has photos OR has verified landmark in that country
-- Completion bonuses: destination (+50, all landmarks visited, verified if all have photos), continent (+200, all destinations visited, verified if each has photo/verified landmark)
+- Sentence case everywhere (not Title Case)
+- Global leaderboard requires verified (photo) for ALL 3 categories (points, landmarks, destinations)
+- Friends leaderboard shows all (verified + unverified)
+
+## Test Accounts
+- **Admin (superadmin)**: test@wandermark.app / Test1234! (role: admin, tier: free)
+- **Pro user**: testpro@wandermark.app / Test1234! (role: user, tier: free — use admin test-toggle for pro)
+- **Moderator**: mod@wandermark.app / Test1234! (role: moderator, tier: free)
+
+## Completed (Session 3 — April 11, 2026)
+
+### Features
+- Community Hub page (`community.tsx`) — Trending landmarks, recent photos, most popular
+- "Community highlights" on Explore → links to Community Hub
+- "Explore community" link on Social tab
+- ShareVisitCard (visual share card for all visit types with privacy respect)
+- Bug report system (About → "Report an issue" → modal with text + screenshots → `bug_reports` collection)
+- User blocking (block/unblock, friend request prevention, search hiding, minimal profile)
+- Photo gallery on user profiles (privacy-filtered recent photos)
+
+### Leaderboard
+- Anti-cheat: Global landmarks/destinations now require `verified: true` (photo proof)
+- Friends leaderboard unchanged (trust)
+- Time Period removed (overflødig)
+- Category icons match Journey colors (star gold, location coral, flag teal)
+- Entry cards komprimert ~40% (full username visible)
+- Share card overflow fix (width: 100%)
+- "Verified" label on global, category names on friends
+
+### Admin
+- Bug reports tab in admin Reports (superadmin only)
+- Blocks overview tab in admin Reports
+- Test-toggle restricted to admin role
+- Moderator user created (mod@wandermark.app)
+
+### About & Help
+- Key Features: Added Point system + Leaderboard, fixed Custom visits icon/route
+- Removed duplicate Rank System from Game Mechanics
+- "Custom visits" added to FAQ photos list
+- "Total points = verified + unverified" clarification
+- Bug report link under "Need help?"
+- Icons match Journey page colors
+
+### UX Polish
+- Keyboard handling: returnKeyType on ALL TextInputs across app (edit-profile, login, register, search, subscription)
+- Bio field: "Done" button for multiline
+- Social Friends section: whitespace komprimert
+- Leaderboard rank box komprimert
+- Stats boxes: 4-column layout (Visited | Verified | Total pts | Verified pts) on both my-landmark-visits and my-country-visits
+- Photo section: removed black background, reduced card padding
+- Subscription page: updated features list (removed outdated, added current)
+- Diary limit: proper error handling with "Diary limit" alert
+
+### Code Quality
+- Community photos open for all (diary locked for basic)
+- Photo of the Week: improved fallback + country_visits
+- formatTimeAgo consolidated to utils/formatTime.ts
+- getToken consolidated to utils/token.ts
+- countryFlags consolidated to utils/countryFlags.ts
+- console.log removed (65 statements)
+- Unused components/utils deleted
+- Backend imports cleaned
+- "country" → "destination" terminology in code
+
+### Bugfixes
+- photo-collection crash (missing `height` in Dimensions)
+- ranks crash (missing ActivityIndicator import)
+- user-profile crash (invalid `ban` Ionicons name)
+- my-country-visits crash (missing `countryFlags` import)
+- Import paths fixed (token, countryFlags)
+- explore-countries broken multi-line import
 
 ## Upcoming Tasks
-- P0: Build 79 - test all changes (includes landmark visit photo action sheet)
-- P1: Deploy juridiske sider (Privacy/Terms)
+- P0: Build 82 E2E testing
+- P1: Deploy legal pages (Privacy/Terms)
 - P2: Sentry integration
-- P3: Image optimization (server-side compression)
-- P4: Rename GitHub repo to wandermark-app
-
-## Completed (April 11, 2026 - Session 2 continued)
-### Points Summary section fix + Sentence case
-- **Points summary fix**: Byttet "Points breakdown" (nå viser verified/unverified poeng med tall) og "How points work" (nå viser forklaringer)
-- **Sentence case**: Endret alle Title Case-overskrifter til sentence case i hele appen (40+ strenger)
-  - Hovedskjermer: journey, profile, explore, social, points-summary, continents
-  - Detalj-sider: visit-detail, country-visit-detail, landmark-detail, custom-visit-detail
-  - Andre: search, ranks, analytics, about, photo-collection, community photos
-  - Beholdt egennavn: WanderMark, Pro
-
-### Codebase cleanup (April 11, 2026)
-- **Loading gates**: Added to leaderboard.tsx and ranks.tsx (prevents stale data flash)
-- **Deleted 1 unused component**: PhotoGalleryModal (replaced by PhotoViewer)
-- **Deleted 7 unused utils**: accessibility, community, errorMessages, offline, performance, toast
-- **Consolidated getToken()**: Moved to `utils/token.ts`, removed 35 duplicate definitions across app
-- **Consolidated countryFlags**: Moved to `utils/countryFlags.ts`, removed 3 duplicate maps (~300 lines saved)
-- **Removed 26 orphaned SecureStore imports** + 5 orphaned Platform imports
-- **Removed 4 unused styles** in points-summary.tsx
-- **Cleaned backend imports**: visits.py, subscription.py, community.py, admin.py
-- **Regression verified**: CommentItem + PrivacySelector restored (used by other components), all 9 API endpoints tested OK
-- **A: Photo of the Week backend** — Forbedret fallback: nåværende uke → forrige uke → tilfeldig fra oppstemte → tilfeldig populært → country_visits
-- **B: Community Photos åpnet** — Alle brukere ser alle bilder (ikke bare 3). Premium-verdi: dagbok-tilgang (diary_locked for Basic)
-- **C: Trending Landmarks** — Erstattet Photo of the Week på Explore-siden med horisontal karusell av mest fotograferte landemerker globalt
-- Nytt backend-endepunkt: `GET /api/community-highlights` (global, topp 5 trender)
-- Frontend: Landmark/Country community photos viser diary lock-ikon for Basic-brukere
-- Backend testing: **39/39 tester bestått**
-
-### Add Photo Action Sheet (Build 79)
-- Action sheet (Take Photo / Choose from Library / Cancel) på landmark visit-detail
-- ProFeatureLock for Basic-brukere ved fotogrense
-- PhotoViewer (pinch-to-zoom) erstatter gammel PhotoGalleryModal
-- Fikset ProFeatureLock feature-prop på country-visit-detail
-- Backend testing: **16/16 tester bestått**
+- P3: Server-side image compression
+- P4: Rename GitHub repo
