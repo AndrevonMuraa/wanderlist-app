@@ -771,7 +771,7 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.9)',
   },
   photoSection: {
-    backgroundColor: '#000',
+    backgroundColor: theme.colors.background,
   },
   mainPhoto: {
     width: width - 32,
@@ -812,7 +812,7 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     margin: theme.spacing.md,
-    padding: theme.spacing.lg,
+    padding: theme.spacing.md,
     borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
@@ -839,7 +839,7 @@ const styles = StyleSheet.create({
   diaryCard: {
     margin: theme.spacing.md,
     marginTop: 0,
-    padding: theme.spacing.lg,
+    padding: theme.spacing.md,
     borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
@@ -847,7 +847,7 @@ const styles = StyleSheet.create({
   visibilityCard: {
     margin: theme.spacing.md,
     marginTop: 0,
-    padding: theme.spacing.lg,
+    padding: theme.spacing.md,
     borderRadius: theme.borderRadius.xl,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,

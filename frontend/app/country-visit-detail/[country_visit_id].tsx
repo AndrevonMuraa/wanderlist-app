@@ -1142,7 +1142,7 @@ const styles = StyleSheet.create({
   infoCard: {
     marginHorizontal: theme.spacing.md,
     marginBottom: theme.spacing.md,
-    padding: theme.spacing.lg,
+    padding: theme.spacing.md,
     borderRadius: theme.borderRadius.lg,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.sm,
@@ -1179,7 +1179,7 @@ const styles = StyleSheet.create({
   diaryCard: {
     marginHorizontal: theme.spacing.md,
     marginBottom: theme.spacing.md,
-    padding: theme.spacing.lg,
+    padding: theme.spacing.md,
     borderRadius: theme.borderRadius.lg,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.sm,
