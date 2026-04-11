@@ -428,6 +428,7 @@ All privacy settings can be changed at any time from Settings > Privacy.`}
 
 • Landmark visits
 • Destination visits
+• Custom visits
 
 You can filter by destination.`}
             />
