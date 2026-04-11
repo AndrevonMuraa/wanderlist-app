@@ -9,6 +9,7 @@ import {
   Image,
   Alert,
   KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
@@ -228,6 +229,8 @@ export default function EditProfileScreen() {
               value={name}
               onChangeText={setName}
               maxLength={50}
+              returnKeyType="done"
+              onSubmitEditing={() => Keyboard.dismiss()}
             />
           </Surface>
 
@@ -254,6 +257,9 @@ export default function EditProfileScreen() {
               numberOfLines={4}
               maxLength={200}
             />
+            <TouchableOpacity onPress={() => Keyboard.dismiss()} style={{ alignSelf: 'flex-end', marginTop: 6 }}>
+              <Text style={{ fontSize: 13, fontWeight: '600', color: theme.colors.primary }}>Done</Text>
+            </TouchableOpacity>
           </Surface>
 
           {/* Location */}
@@ -266,6 +272,8 @@ export default function EditProfileScreen() {
               value={location}
               onChangeText={setLocation}
               maxLength={50}
+              returnKeyType="done"
+              onSubmitEditing={() => Keyboard.dismiss()}
             />
           </Surface>
 
