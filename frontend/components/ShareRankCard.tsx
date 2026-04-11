@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   shareCard: {
     padding: 24,
     alignItems: 'center',
-    width: screenWidth - 80,
+    width: '100%',
   },
   brandRow: {
     flexDirection: 'row',
