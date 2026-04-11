@@ -152,6 +152,12 @@ export default function RanksScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
+        {loading ? (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 100 }}>
+            <ActivityIndicator size="large" color={theme.colors.primary} />
+          </View>
+        ) : (
+        <>
         {/* Hero Section */}
         <View style={styles.heroSection}>
           <Text style={styles.heroTitle}>Path to Transcendent</Text>
@@ -161,12 +167,11 @@ export default function RanksScreen() {
           </Text>
 
           {/* Your Progress */}
-          {!loading && (
           <Surface style={styles.progressCard}>
             <View style={styles.progressHeader}>
               <RankBadge rank={currentRank} size="medium" showName={false} />
               <View style={styles.progressInfo}>
-                <Text style={styles.progressTitle}>Your Current Rank</Text>
+                <Text style={styles.progressTitle}>Your current rank</Text>
                 <Text style={[styles.progressRank, { color: currentRank.color }]}>
                   {currentRank.name}
                 </Text>
@@ -181,7 +186,7 @@ export default function RanksScreen() {
 
         {/* All Ranks */}
         <View style={styles.ranksSection}>
-          <Text style={styles.sectionTitle}>All Ranks</Text>
+          <Text style={styles.sectionTitle}>All ranks</Text>
           {RANKS.map((rank, index) => (
             <RankCard key={rank.name} rank={rank} index={index} />
           ))}
@@ -189,7 +194,7 @@ export default function RanksScreen() {
 
         {/* How to Earn Points */}
         <Surface style={styles.infoCard}>
-          <Text style={styles.infoTitle}>How to Earn Points</Text>
+          <Text style={styles.infoTitle}>How to earn points</Text>
           <View style={styles.infoItem}>
             <Ionicons name="camera" size={20} color="#E91E63" />
             <Text style={styles.infoText}>
@@ -239,12 +244,14 @@ export default function RanksScreen() {
             end={{ x: 1, y: 0 }}
             style={styles.ctaGradient}
           >
-            <Text style={styles.ctaText}>Start Exploring</Text>
+            <Text style={styles.ctaText}>Start exploring</Text>
             <Ionicons name="arrow-forward" size={20} color="#fff" />
           </LinearGradient>
         </TouchableOpacity>
 
         <View style={{ height: theme.spacing.xxl }} />
+        </>
+        )}
       </ScrollView>
     </View>
   );
