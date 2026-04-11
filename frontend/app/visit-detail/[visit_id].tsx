@@ -192,6 +192,8 @@ export default function VisitDetailScreen() {
         if (res.ok) {
           setVisit(prev => prev ? { ...prev, photos: all } : prev);
           invalidateCacheGroup('visit');
+        } else {
+          Alert.alert('Upload failed', 'Photo could not be saved. Try a smaller image or fewer photos.');
         }
       }
     } catch {
