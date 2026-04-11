@@ -248,28 +248,28 @@ export default function ProfileScreen() {
           {/* Stats Row — tappable icons, reordered: Continents > Destinations > Landmarks > Points */}
           {stats && progressStats && (
             <View style={[styles.statsRow, { borderTopColor: colors.border }]}>
-              <TouchableOpacity style={styles.statItem} onPress={() => router.push('/continents')} activeOpacity={0.7}>
+              <TouchableOpacity style={styles.statItem} onPress={() => router.push('/continents')} activeOpacity={0.7} data-testid="profile-stat-continents">
                 <Ionicons name="earth" size={16} color="#66BB6A" />
                 <Text style={[styles.statValue, { color: colors.text }]}>
                   {stats.continents_visited || 0}
                 </Text>
                 <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('profile.continents')}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.statItem} onPress={() => router.push('/my-country-visits')} activeOpacity={0.7}>
+              <TouchableOpacity style={styles.statItem} onPress={() => router.push('/my-country-visits')} activeOpacity={0.7} data-testid="profile-stat-destinations">
                 <Ionicons name="flag" size={16} color="#4DB8D8" />
                 <Text style={[styles.statValue, { color: colors.text }]}>
                   {stats.countries_visited || 0}
                 </Text>
                 <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('journey.countries')}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.statItem} onPress={() => router.push('/my-landmark-visits')} activeOpacity={0.7}>
+              <TouchableOpacity style={styles.statItem} onPress={() => router.push('/my-landmark-visits')} activeOpacity={0.7} data-testid="profile-stat-landmarks">
                 <Ionicons name="location" size={16} color="#E87850" />
                 <Text style={[styles.statValue, { color: colors.text }]}>
                   {progressStats.overall?.visited || stats.total_visits || 0}
                 </Text>
                 <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Landmarks</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.statItem} onPress={() => router.push('/points-summary')} activeOpacity={0.7}>
+              <TouchableOpacity style={styles.statItem} onPress={() => router.push('/points-summary')} activeOpacity={0.7} data-testid="profile-stat-points">
                 <Ionicons name="star" size={16} color="#FFD700" />
                 <Text style={[styles.statValue, { color: colors.accent }]}>
                   {progressStats.totalPoints || 0}
@@ -282,7 +282,7 @@ export default function ProfileScreen() {
           {/* Share Stats Button */}
           <TouchableOpacity
             style={[styles.shareStatsButton, { backgroundColor: colors.primary + '15' }]}
-            onPress={() => setShowShareModal(true)}
+            onPress={() => setShowShareModal(true)} data-testid="profile-share-btn"
             activeOpacity={0.7}
           >
             <Ionicons name="share-social-outline" size={18} color={colors.primary} />
@@ -336,7 +336,7 @@ export default function ProfileScreen() {
 
         <Button
           mode="outlined"
-          onPress={handleLogout}
+          onPress={handleLogout} data-testid="profile-logout-btn"
           icon="logout"
           style={[styles.logoutButton, { borderColor: colors.error }]}
           textColor={colors.error}

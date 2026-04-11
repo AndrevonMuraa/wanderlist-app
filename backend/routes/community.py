@@ -563,7 +563,7 @@ async def get_country_community_photos(
             photo_entries.append({
                 "photo_id": photo_id,
                 "photo_url": photo,
-                "landmark_name": "Country Visit",
+                "landmark_name": "Destination visit",
                 "landmark_id": None,
                 "user_id": cv["user_id"],
                 "user_name": cv.get("user_name", "Anonymous"),

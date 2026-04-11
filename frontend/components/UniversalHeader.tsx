@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     marginRight: theme.spacing.sm,
   },
   headerTitle: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: '700',
     color: '#fff',
     flex: 1,
