@@ -59,7 +59,10 @@ const STATUS_COLORS: { [key: string]: string } = {
 export default function AdminReportsScreen() {
   const router = useRouter();
   const { colors } = useTheme();
+  const [activeTab, setActiveTab] = useState<'reports' | 'bugs' | 'blocks'>('reports');
   const [reports, setReports] = useState<ReportItem[]>([]);
+  const [bugReports, setBugReports] = useState<any[]>([]);
+  const [blocks, setBlocks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string | null>('pending');
@@ -67,8 +70,32 @@ export default function AdminReportsScreen() {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    fetchReports();
-  }, [page, statusFilter]);
+    if (activeTab === 'reports') fetchReports();
+    else if (activeTab === 'bugs') fetchBugReports();
+    else if (activeTab === 'blocks') fetchBlocks();
+  }, [page, statusFilter, activeTab]);
+
+  const fetchBugReports = async () => {
+    try {
+      setLoading(true);
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/admin/bug-reports`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) setBugReports(await res.json());
+    } catch {} finally { setLoading(false); setRefreshing(false); }
+  };
+
+  const fetchBlocks = async () => {
+    try {
+      setLoading(true);
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/admin/blocks`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) setBlocks(await res.json());
+    } catch {} finally { setLoading(false); setRefreshing(false); }
+  };
 
   const fetchReports = async () => {
     try {
@@ -272,6 +299,31 @@ export default function AdminReportsScreen() {
         </View>
       </LinearGradient>
 
+      {/* Tab Selector */}
+      <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingTop: 12, gap: 8 }}>
+        {[
+          { key: 'reports', label: 'Reports', icon: 'flag' },
+          { key: 'bugs', label: 'Bug reports', icon: 'bug' },
+          { key: 'blocks', label: 'Blocks', icon: 'close-circle' },
+        ].map((tab) => (
+          <TouchableOpacity
+            key={tab.key}
+            onPress={() => { setActiveTab(tab.key as any); setLoading(true); }}
+            style={{
+              flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4,
+              paddingVertical: 8, borderRadius: 10,
+              backgroundColor: activeTab === tab.key ? theme.colors.primary : theme.colors.backgroundSecondary,
+            }}
+          >
+            <Ionicons name={tab.icon as any} size={14} color={activeTab === tab.key ? '#fff' : theme.colors.textSecondary} />
+            <Text style={{ fontSize: 12, fontWeight: '600', color: activeTab === tab.key ? '#fff' : theme.colors.textSecondary }}>{tab.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {/* Tab Content */}
+      {activeTab === 'reports' && (
+      <>
       {/* Filters */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersScroll}>
         <View style={styles.filtersRow}>
@@ -332,6 +384,77 @@ export default function AdminReportsScreen() {
           
           <View style={styles.bottomSpacer} />
         </ScrollView>
+      )}
+      </>
+      )}
+
+      {/* Bug Reports Tab */}
+      {activeTab === 'bugs' && (
+        loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.primary} />
+          </View>
+        ) : bugReports.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Ionicons name="checkmark-circle" size={64} color={colors.textSecondary} />
+            <Text style={[styles.emptyTitle, { color: colors.text }]}>No bug reports</Text>
+          </View>
+        ) : (
+          <ScrollView style={styles.reportsList} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={fetchBugReports} />}>
+            {bugReports.map((bug) => (
+              <View key={bug.report_id} style={[styles.reportCard, { backgroundColor: colors.surface }]}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+                  <Text style={{ fontSize: 11, color: colors.textSecondary }}>{bug.user_name} ({bug.user_email})</Text>
+                  <View style={{ backgroundColor: bug.status === 'open' ? '#f59e0b' : '#10b981', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8 }}>
+                    <Text style={{ fontSize: 10, color: '#fff', fontWeight: '700' }}>{bug.status}</Text>
+                  </View>
+                </View>
+                <Text style={{ fontSize: 14, color: colors.text, lineHeight: 20 }}>{bug.description}</Text>
+                {bug.screenshots?.length > 0 && (
+                  <Text style={{ fontSize: 11, color: colors.primary, marginTop: 6 }}>{bug.screenshots.length} screenshot(s) attached</Text>
+                )}
+                <Text style={{ fontSize: 10, color: colors.textLight, marginTop: 6 }}>
+                  {new Date(bug.created_at).toLocaleDateString()} {new Date(bug.created_at).toLocaleTimeString()}
+                </Text>
+              </View>
+            ))}
+            <View style={styles.bottomSpacer} />
+          </ScrollView>
+        )
+      )}
+
+      {/* Blocks Tab */}
+      {activeTab === 'blocks' && (
+        loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.primary} />
+          </View>
+        ) : blocks.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Ionicons name="checkmark-circle" size={64} color={colors.textSecondary} />
+            <Text style={[styles.emptyTitle, { color: colors.text }]}>No blocks</Text>
+          </View>
+        ) : (
+          <ScrollView style={styles.reportsList} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={fetchBlocks} />}>
+            {blocks.map((b, i) => (
+              <View key={i} style={[styles.reportCard, { backgroundColor: colors.surface }]}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <Ionicons name="close-circle" size={16} color="#E53935" />
+                  <Text style={{ fontSize: 13, color: colors.text, fontWeight: '600' }}>
+                    {b.blocker_name} {b.blocker_username ? `(@${b.blocker_username})` : ''}
+                  </Text>
+                </View>
+                <Text style={{ fontSize: 12, color: colors.textSecondary, marginLeft: 22, marginTop: 2 }}>
+                  blocked {b.blocked_name} {b.blocked_username ? `(@${b.blocked_username})` : ''}
+                </Text>
+                <Text style={{ fontSize: 10, color: colors.textLight, marginTop: 6 }}>
+                  {b.created_at ? new Date(b.created_at).toLocaleDateString() : ''}
+                </Text>
+              </View>
+            ))}
+            <View style={styles.bottomSpacer} />
+          </ScrollView>
+        )
       )}
     </SafeAreaView>
   );

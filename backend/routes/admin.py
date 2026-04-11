@@ -666,3 +666,53 @@ async def strip_verified_points(user_id: str, admin_user: User = Depends(get_adm
         "leaderboard_points_reset": True
     }
 
+
+# ============= BUG REPORTS ADMIN =============
+
+@router.get("/admin/bug-reports")
+async def get_bug_reports(admin_user: User = Depends(get_admin_user)):
+    reports = await db.bug_reports.find(
+        {}, {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    return reports
+
+@router.put("/admin/bug-reports/{report_id}")
+async def update_bug_report(report_id: str, body: dict, admin_user: User = Depends(get_admin_user)):
+    status = body.get("status", "open")
+    admin_notes = body.get("admin_notes", "")
+    await db.bug_reports.update_one(
+        {"report_id": report_id},
+        {"$set": {"status": status, "admin_notes": admin_notes, "resolved_by": admin_user.user_id, "resolved_at": datetime.now(timezone.utc)}}
+    )
+    return {"message": "Bug report updated"}
+
+
+# ============= BLOCKS ADMIN =============
+
+@router.get("/admin/blocks")
+async def get_all_blocks(admin_user: User = Depends(get_admin_user)):
+    blocks = await db.blocks.find({}, {"_id": 0}).sort("created_at", -1).to_list(200)
+    if not blocks:
+        return []
+    all_ids = set()
+    for b in blocks:
+        all_ids.add(b["blocker_id"])
+        all_ids.add(b["blocked_id"])
+    users = await db.users.find(
+        {"user_id": {"$in": list(all_ids)}},
+        {"_id": 0, "user_id": 1, "name": 1, "username": 1}
+    ).to_list(len(all_ids))
+    user_map = {u["user_id"]: u for u in users}
+    result = []
+    for b in blocks:
+        blocker = user_map.get(b["blocker_id"], {})
+        blocked = user_map.get(b["blocked_id"], {})
+        result.append({
+            "blocker_name": blocker.get("name", "Unknown"),
+            "blocker_username": blocker.get("username"),
+            "blocked_name": blocked.get("name", "Unknown"),
+            "blocked_username": blocked.get("username"),
+            "created_at": b.get("created_at").isoformat() if b.get("created_at") else None,
+        })
+    return result
+
