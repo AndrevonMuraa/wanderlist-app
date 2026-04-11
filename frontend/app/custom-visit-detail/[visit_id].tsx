@@ -14,6 +14,7 @@ import theme from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import { invalidateCacheGroup } from '../../utils/apiCache';
 import { shareCustomVisit } from '../../utils/shareUtils';
+import ShareVisitCard from '../../components/ShareVisitCard';
 import PhotoViewer from '../../components/PhotoViewer';
 import UniversalHeader from '../../components/UniversalHeader';
 import { useAuth } from '../../contexts/AuthContext';
@@ -405,7 +406,7 @@ export default function CustomVisitDetailScreen() {
         {isOwner && (
           <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 24, marginTop: 16 }}>
             <TouchableOpacity
-              onPress={() => shareCustomVisit(visit.name, visit.country_name || '', visit.points_earned || 0)}
+              onPress={() => setShowShareCard(true)}
               style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 12 }}
               data-testid="share-custom-visit-btn"
             >
@@ -428,7 +429,7 @@ export default function CustomVisitDetailScreen() {
       {/* Delete dialog */}
       <Portal>
         <Dialog visible={showDeleteDialog} onDismiss={() => setShowDeleteDialog(false)}>
-          <Dialog.Title>Delete Custom Visit</Dialog.Title>
+          <Dialog.Title>Delete custom visit</Dialog.Title>
           <Dialog.Content>
             <Text>Are you sure you want to delete this custom visit? This cannot be undone.</Text>
           </Dialog.Content>
@@ -438,6 +439,19 @@ export default function CustomVisitDetailScreen() {
           </Dialog.Actions>
         </Dialog>
       </Portal>
+
+      {visit && (
+        <ShareVisitCard
+          visible={showShareCard}
+          onDismiss={() => setShowShareCard(false)}
+          visitName={visit.name}
+          locationName={visit.country_name || ''}
+          points={visit.points_earned || 0}
+          photoUrl={visit.photos?.length > 0 ? visit.photos[0] : undefined}
+          diary={(visit.share_diary !== false) ? (visit.diary || undefined) : undefined}
+          visitType="custom"
+        />
+      )}
 
       {/* Edit diary dialog */}
       <RNModal

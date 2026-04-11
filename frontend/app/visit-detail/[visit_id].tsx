@@ -15,6 +15,7 @@ import CommentsSection from '../../components/CommentsSection';
 import { useAuth } from '../../contexts/AuthContext';
 import ProFeatureLock from '../../components/ProFeatureLock';
 import PhotoViewer from '../../components/PhotoViewer';
+import ShareVisitCard from '../../components/ShareVisitCard';
 
 import { KeyboardDoneBar } from '../../components/KeyboardDoneBar';
 import UniversalHeader from '../../components/UniversalHeader';
@@ -66,6 +67,7 @@ export default function VisitDetailScreen() {
   const [showProLock, setShowProLock] = useState(false);
   const [showFullscreen, setShowFullscreen] = useState(false);
   const [fullscreenIndex, setFullscreenIndex] = useState(0);
+  const [showShareCard, setShowShareCard] = useState(false);
   const router = useRouter();
   const isOwner = user?.user_id === visit?.user_id;
   const isPro = user?.subscription_tier === 'pro' || user?.subscription_tier === 'basic_plus';
@@ -95,14 +97,8 @@ export default function VisitDetailScreen() {
     }
   };
 
-  const handleShare = async () => {
-    if (visit) {
-      await shareVisit(
-        visit.landmark_name || 'Landmark',
-        visit.country_name || 'Country',
-        visit.points_earned
-      );
-    }
+  const handleShare = () => {
+    setShowShareCard(true);
   };
 
   const handleChangeVisibility = async (newVisibility: string) => {
@@ -701,6 +697,19 @@ export default function VisitDetailScreen() {
         onClose={() => setShowProLock(false)}
         feature="unlimited_photos"
       />
+
+      {visit && (
+        <ShareVisitCard
+          visible={showShareCard}
+          onDismiss={() => setShowShareCard(false)}
+          visitName={visit.landmark_name || 'Landmark'}
+          locationName={visit.country_name || ''}
+          points={visit.points_earned}
+          photoUrl={photos.length > 0 ? photos[0] : undefined}
+          diary={(visit.share_diary !== false) ? (visit.diary_notes || visit.diary || undefined) : undefined}
+          visitType="landmark"
+        />
+      )}
     </View>
   );
 }

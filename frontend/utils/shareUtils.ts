@@ -3,11 +3,13 @@ import { successHaptic } from './haptics';
 
 const APP_LINK = 'https://wandermark.app';
 
-export const shareVisit = async (landmarkName: string, countryName: string, points: number) => {
+export const shareVisit = async (landmarkName: string, countryName: string, points: number, photoCount?: number, diary?: string) => {
   try {
     await successHaptic();
     
-    const message = `Just visited ${landmarkName} in ${countryName}! +${points} points on WanderMark!\n\nTrack your travels: ${APP_LINK}`;
+    const diarySnippet = diary ? `\n"${diary.substring(0, 100)}${diary.length > 100 ? '...' : ''}"` : '';
+    const photoStr = photoCount ? ` | ${photoCount} photo${photoCount !== 1 ? 's' : ''}` : '';
+    const message = `Just visited ${landmarkName} in ${countryName}!${diarySnippet}\n\n${points} points${photoStr}\n\nTrack your travels: ${APP_LINK}\n#WanderMark #Travel #${countryName.replace(/\s/g, '')}`;
     
     await Share.share({
       message,
@@ -36,11 +38,12 @@ export const shareDestinationVisit = async (countryName: string, photoCount: num
   }
 };
 
-export const shareCustomVisit = async (visitName: string, countryName: string, points: number) => {
+export const shareCustomVisit = async (visitName: string, countryName: string, points: number, diary?: string) => {
   try {
     await successHaptic();
     
-    const message = `Explored ${visitName} in ${countryName}! +${points} points on WanderMark!\n\nTrack your travels: ${APP_LINK}`;
+    const diarySnippet = diary ? `\n"${diary.substring(0, 100)}${diary.length > 100 ? '...' : ''}"` : '';
+    const message = `Explored ${visitName} in ${countryName}!${diarySnippet}\n\n${points} points\n\nTrack your travels: ${APP_LINK}\n#WanderMark #Travel`;
     
     await Share.share({
       message,

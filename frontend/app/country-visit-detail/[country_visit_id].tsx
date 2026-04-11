@@ -33,6 +33,7 @@ import { KeyboardDoneBar } from '../../components/KeyboardDoneBar';
 import UniversalHeader from '../../components/UniversalHeader';
 import { getToken } from '../utils/token';
 import { getCountryFlag } from '../utils/countryFlags';
+import ShareVisitCard from '../../components/ShareVisitCard';
 
 const { width, height } = Dimensions.get('window');
 
@@ -340,20 +341,10 @@ export default function DestinationVisitDetailScreen() {
     }
   };
 
-  const handleShare = async () => {
-    if (!visit) return;
-    
-    try {
-      const { shareDestinationVisit } = await import('../../utils/shareUtils');
-      await shareDestinationVisit(
-        visit.country_name,
-        visit.photos.length,
-        visit.points_earned,
-        visit.diary
-      );
-    } catch {
-      // Share failed silently
-    }
+  const [showShareCard, setShowShareCard] = useState(false);
+
+  const handleShare = () => {
+    setShowShareCard(true);
   };
 
   const openFullscreen = (index: number) => {
@@ -899,6 +890,19 @@ export default function DestinationVisitDetailScreen() {
         onClose={() => setShowProLock(false)}
         feature="unlimited_photos"
       />
+
+      {visit && (
+        <ShareVisitCard
+          visible={showShareCard}
+          onDismiss={() => setShowShareCard(false)}
+          visitName={visit.country_name}
+          locationName={visit.country_name}
+          points={visit.points_earned}
+          photoUrl={visit.photos?.length > 0 ? visit.photos[0] : undefined}
+          diary={(visit.share_diary !== false) ? (visit.diary || undefined) : undefined}
+          visitType="destination"
+        />
+      )}
 
       {/* Edit Diary Modal */}
       <RNModal
