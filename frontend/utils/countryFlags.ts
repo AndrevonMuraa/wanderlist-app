@@ -10,7 +10,7 @@ export const countryFlags: Record<string, string> = {
   vietnam: '🇻🇳', 'south korea': '🇰🇷', indonesia: '🇮🇩', malaysia: '🇲🇾',
   singapore: '🇸🇬', philippines: '🇵🇭', cambodia: '🇰🇭', nepal: '🇳🇵',
   'sri lanka': '🇱🇰', taiwan: '🇹🇼', laos: '🇱🇦', mongolia: '🇲🇳',
-  bhutan: '🇧🇹', georgia: '🇬🇪', uzbekistan: '🇺🇿', kyrgyzstan: '🇰🇬',
+  bhutan: '🇧🇹', georgia: '🇬🇪', uzbekistan: '🇺🇿', pakistan: '🇵🇰',
   // Africa (20)
   egypt: '🇪🇬', 'south africa': '🇿🇦', morocco: '🇲🇦', kenya: '🇰🇪',
   tanzania: '🇹🇿', botswana: '🇧🇼', namibia: '🇳🇦', tunisia: '🇹🇳',
