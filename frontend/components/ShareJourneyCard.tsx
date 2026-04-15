@@ -95,7 +95,7 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
 
             {/* User Greeting */}
             <Text style={styles.cardTitle}>{firstName}'s Journey</Text>
-            <Text style={styles.cardSubtitle}>A life measured in destinations</Text>
+            <Text style={styles.cardSubtitle}>A life measured in destinations and landmarks</Text>
 
             {/* Rank Badge */}
             <View style={[styles.rankPill, { borderColor: userRank.color + '60' }]}>
@@ -108,7 +108,7 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
               <View style={styles.statCell}>
                 <Text style={styles.statNum}>{stats.countries}</Text>
                 <View style={styles.statLabelRow}>
-                  <Ionicons name="flag" size={11} color="#4DB8D8" />
+                  <Ionicons name="flag" size={9} color="#4DB8D8" />
                   <Text style={styles.statLabel}>Destinations</Text>
                 </View>
               </View>
@@ -118,7 +118,7 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
               <View style={styles.statCell}>
                 <Text style={styles.statNum}>{stats.landmarks}</Text>
                 <View style={styles.statLabelRow}>
-                  <Ionicons name="location" size={11} color="#C9A961" />
+                  <Ionicons name="location" size={9} color="#C9A961" />
                   <Text style={styles.statLabel}>Landmarks</Text>
                 </View>
               </View>
@@ -128,7 +128,7 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
               <View style={styles.statCell}>
                 <Text style={styles.statNum}>{stats.continents}</Text>
                 <View style={styles.statLabelRow}>
-                  <Ionicons name="earth" size={11} color="#10b981" />
+                  <Ionicons name="earth" size={9} color="#10b981" />
                   <Text style={styles.statLabel}>Continents</Text>
                 </View>
               </View>
@@ -321,30 +321,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   statCell: {
     flex: 1,
     alignItems: 'center',
+    paddingHorizontal: 4,
   },
   statNum: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: '800',
     color: '#fff',
-    lineHeight: 36,
+    lineHeight: 32,
   },
   statLabelRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 3,
     marginTop: 4,
   },
   statLabel: {
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: '600',
     color: 'rgba(255,255,255,0.45)',
     textTransform: 'uppercase',
-    letterSpacing: 0.8,
+    letterSpacing: 0.5,
   },
   statDivider: {
     width: 1,
