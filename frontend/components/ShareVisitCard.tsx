@@ -70,7 +70,9 @@ export default function ShareVisitCard({
           >
             {/* Brand */}
             <View style={styles.brandRow}>
-              <View style={[styles.brandDot, { backgroundColor: typeColor }]} />
+              <View style={[styles.brandLogo, { backgroundColor: typeColor }]}>
+                <Text style={styles.brandLogoText}>W</Text>
+              </View>
               <Text style={styles.brandText}>WANDERMARK</Text>
             </View>
 
@@ -299,6 +301,14 @@ const styles = StyleSheet.create({
   shareBtnText: {
     color: '#fff',
     fontSize: 15,
+    fontWeight: '700',
+  },
+  hint: {
+    fontSize: 12,
+    textAlign: 'center',
+  },
+});
+15,
     fontWeight: '700',
   },
   hint: {

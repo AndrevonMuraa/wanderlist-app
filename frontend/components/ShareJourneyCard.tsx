@@ -87,9 +87,11 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
             <View style={styles.decorCircle1} />
             <View style={styles.decorCircle2} />
 
-            {/* Brand */}
+            {/* Brand with logo */}
             <View style={styles.brandRow}>
-              <View style={styles.brandDot} />
+              <View style={styles.brandLogo}>
+                <Text style={styles.brandLogoText}>W</Text>
+              </View>
               <Text style={styles.brandText}>WANDERMARK</Text>
             </View>
 
@@ -103,8 +105,18 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
               <Text style={[styles.rankLabel, { color: userRank.color }]}>{userRank.name}</Text>
             </View>
 
-            {/* Stats - Premium Layout */}
+            {/* Stats: Continents → Destinations → Landmarks */}
             <View style={styles.statsRow}>
+              <View style={styles.statCell}>
+                <Text style={styles.statNum}>{stats.continents}</Text>
+                <View style={styles.statLabelRow}>
+                  <Ionicons name="earth" size={9} color="#4CAF50" />
+                  <Text style={styles.statLabel}>Continents</Text>
+                </View>
+              </View>
+
+              <View style={styles.statDivider} />
+
               <View style={styles.statCell}>
                 <Text style={styles.statNum}>{stats.countries}</Text>
                 <View style={styles.statLabelRow}>
@@ -118,18 +130,8 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
               <View style={styles.statCell}>
                 <Text style={styles.statNum}>{stats.landmarks}</Text>
                 <View style={styles.statLabelRow}>
-                  <Ionicons name="location" size={9} color="#C9A961" />
+                  <Ionicons name="location" size={9} color="#E87850" />
                   <Text style={styles.statLabel}>Landmarks</Text>
-                </View>
-              </View>
-
-              <View style={styles.statDivider} />
-
-              <View style={styles.statCell}>
-                <Text style={styles.statNum}>{stats.continents}</Text>
-                <View style={styles.statLabelRow}>
-                  <Ionicons name="earth" size={9} color="#10b981" />
-                  <Text style={styles.statLabel}>Continents</Text>
                 </View>
               </View>
             </View>
@@ -265,13 +267,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 20,
+    marginBottom: 16,
   },
-  brandDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+  brandLogo: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
     backgroundColor: '#4DB8D8',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  brandLogoText: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#fff',
   },
   brandText: {
     fontSize: 11,
