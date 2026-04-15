@@ -188,9 +188,9 @@ DUPLICATE_FIXES = [
 # PHASE 2: Weak landmarks → stronger replacements
 # ============================================================
 WEAK_REPLACEMENTS = [
-    # Norway: "The Old Town of Fredrikstad" → "Flåm Railway"
+    # Norway: "Vigeland Park Oslo" → "Flåm Railway"
     {
-        "delete": {"country_id": "norway", "name": "The Old Town of Fredrikstad"},
+        "delete": {"country_id": "norway", "name": "Vigeland Park Oslo"},
         "insert": {
             "landmark_id": "norway_flam_railway",
             "name": "Flåm Railway",
