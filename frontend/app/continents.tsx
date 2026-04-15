@@ -246,6 +246,14 @@ export default function ContinentsScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* Guide CTA */}
+        <View style={styles.guideCta}>
+          <Ionicons name="compass-outline" size={16} color={theme.colors.primary} />
+          <Text style={styles.guideCtaText}>
+            Where have you been? Register your visits to earn points and climb the ranks!
+          </Text>
+        </View>
+
         {/* Continent Cards */}
         <View style={styles.cardsContainer}>
           {continents.map((continent, index) => (
@@ -481,6 +489,27 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: theme.colors.primary,
   },
+  // Guide CTA
+  guideCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginHorizontal: theme.spacing.md,
+    marginBottom: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    backgroundColor: theme.colors.primary + '08',
+    borderRadius: 12,
+    borderLeftWidth: 3,
+    borderLeftColor: theme.colors.primary,
+  },
+  guideCtaText: {
+    flex: 1,
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+    lineHeight: 17,
+  },
+
   // Trending Landmarks
   trendingSection: {
     marginHorizontal: theme.spacing.md,
