@@ -369,6 +369,7 @@ export default function AboutScreen() {
                     Total points = verified + unverified points combined.{'\n\n'}
                     Photos must show you personally at the landmark to earn verified points. Non-compliant uploads may have their verified status revoked.
                   </Text>
+                  <View style={{ height: 8 }} />
                 </View>
               )}
             </Surface>
