@@ -229,7 +229,7 @@ export default function MyLandmarkVisits() {
 
       {/* Stats Summary */}
       <View style={styles.statsRow}>
-        <View style={styles.statItem}>
+        <View style={[styles.statItem, { flex: 0.7 }]}>
           <View style={[styles.statIconWrap, { backgroundColor: '#E3F6FC' }]}>
             <Ionicons name="location" size={14} color={theme.colors.primary} />
           </View>
@@ -253,7 +253,7 @@ export default function MyLandmarkVisits() {
           <Text style={styles.statLabel}>Total pts</Text>
         </View>
         <View style={styles.statDivider} />
-        <View style={styles.statItem}>
+        <View style={[styles.statItem, { flex: 1.2 }]}>
           <View style={[styles.statIconWrap, { backgroundColor: '#E8F5E9' }]}>
             <Ionicons name="star" size={14} color="#4CAF50" />
           </View>
