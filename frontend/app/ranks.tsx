@@ -192,37 +192,37 @@ export default function RanksScreen() {
           <View style={styles.infoItem}>
             <Ionicons name="camera" size={20} color="#E91E63" />
             <Text style={styles.infoText}>
-              <Text style={styles.infoBold}>Verified Points:</Text> Upload a personal photo of yourself at the landmark. Counts for the global leaderboard.
+              <Text style={styles.infoBold}>Verified points:</Text> Upload a personal photo of yourself at the landmark. Counts for the global leaderboard.
             </Text>
           </View>
           <View style={styles.infoItem}>
-            <Ionicons name="location" size={20} color={theme.colors.primary} />
+            <Ionicons name="location" size={20} color="#E87850" />
             <Text style={styles.infoText}>
-              <Text style={styles.infoBold}>Visit Official Landmarks:</Text> +10 points each
+              <Text style={styles.infoBold}>Visit official landmarks:</Text> +10 points each
             </Text>
           </View>
           <View style={styles.infoItem}>
-            <Ionicons name="diamond" size={20} color="#FFD700" />
+            <Ionicons name="diamond" size={20} color="#1E8A8A" />
             <Text style={styles.infoText}>
-              <Text style={styles.infoBold}>Visit Premium Landmarks:</Text> +25 points each
+              <Text style={styles.infoBold}>Visit premium landmarks:</Text> +25 points each
             </Text>
           </View>
           <View style={styles.infoItem}>
-            <Ionicons name="flag" size={20} color="#4CAF50" />
+            <Ionicons name="flag" size={20} color="#4DB8D8" />
             <Text style={styles.infoText}>
               <Text style={styles.infoBold}>Destination visit:</Text> +50 points
             </Text>
           </View>
           <View style={styles.infoItem}>
-            <Ionicons name="earth" size={20} color="#1E8A8A" />
+            <Ionicons name="earth" size={20} color="#4CAF50" />
             <Text style={styles.infoText}>
-              <Text style={styles.infoBold}>New Continent Bonus:</Text> +50 points for first country on a new continent
+              <Text style={styles.infoBold}>New continent bonus:</Text> +50 points for first destination on a new continent
             </Text>
           </View>
           <View style={styles.infoItem}>
-            <Ionicons name="trophy" size={20} color="#FFA726" />
+            <Ionicons name="star" size={20} color="#FFD700" />
             <Text style={styles.infoText}>
-              <Text style={styles.infoBold}>Completion:</Text> +50 per country, +200 per continent completed
+              <Text style={styles.infoBold}>Completion:</Text> +50 per destination, +200 per continent completed
             </Text>
           </View>
         </Surface>
