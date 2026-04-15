@@ -168,6 +168,7 @@ export default function RanksScreen() {
                 <Text style={[styles.progressRank, { color: currentRank.color }]}>
                   {currentRank.name}
                 </Text>
+                <Text style={styles.progressCatchphrase}>{currentRank.description}</Text>
               </View>
             </View>
             <Text style={styles.progressPoints}>
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
   },
   progressCard: {
     width: '100%',
-    padding: theme.spacing.lg,
+    padding: theme.spacing.md,
     borderRadius: theme.borderRadius.lg,
     backgroundColor: theme.colors.surface,
     ...theme.shadows.card,
@@ -290,8 +291,8 @@ const styles = StyleSheet.create({
   progressHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.md,
-    marginBottom: theme.spacing.md,
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
   },
   progressInfo: {
     flex: 1,
@@ -299,17 +300,23 @@ const styles = StyleSheet.create({
   progressTitle: {
     ...theme.typography.caption,
     color: theme.colors.textSecondary,
-    marginBottom: 4,
+    marginBottom: 2,
   },
   progressRank: {
-    ...theme.typography.h2,
+    fontSize: 22,
     fontWeight: '700',
+  },
+  progressCatchphrase: {
+    fontSize: 11,
+    color: theme.colors.textLight,
+    fontStyle: 'italic',
+    marginTop: 1,
   },
   progressPoints: {
     ...theme.typography.body,
     color: theme.colors.text,
     textAlign: 'center',
-    paddingTop: theme.spacing.md,
+    paddingTop: theme.spacing.sm,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
   },
