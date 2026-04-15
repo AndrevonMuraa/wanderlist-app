@@ -188,15 +188,15 @@ DUPLICATE_FIXES = [
 # PHASE 2: Weak landmarks → stronger replacements
 # ============================================================
 WEAK_REPLACEMENTS = [
-    # Norway: "Vigeland Park Oslo" → "Flåm Railway"
+    # Norway: "Tromsø Arctic Cathedral" → "Flåm Railway" (premium)
     {
-        "delete": {"country_id": "norway", "name": "Vigeland Park Oslo"},
+        "delete": {"country_id": "norway", "name": "Tromsø Arctic Cathedral"},
         "insert": {
             "landmark_id": "norway_flam_railway",
             "name": "Flåm Railway",
             "country_id": "norway", "country_name": "Norway", "continent": "Europe",
             "description": "One of the world's steepest railway lines, descending 866m through spectacular fjord scenery, waterfalls, and mountain tunnels between Myrdal and Flåm.",
-            "category": "official", "points": 10,
+            "category": "premium", "points": 25,
             "best_time_to_visit": "May-Sep", "duration": "1 hour ride", "difficulty": "Easy",
         }
     },
