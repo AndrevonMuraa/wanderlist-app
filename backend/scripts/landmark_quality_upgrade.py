@@ -188,9 +188,9 @@ DUPLICATE_FIXES = [
 # PHASE 2: Weak landmarks → stronger replacements
 # ============================================================
 WEAK_REPLACEMENTS = [
-    # Norway: "Tromsø Arctic Cathedral" → "Flåm Railway" (premium)
+    # Norway: "Atlantic Ocean Road" → "Flåm Railway" (premium)
     {
-        "delete": {"country_id": "norway", "name": "Tromsø Arctic Cathedral"},
+        "delete": {"country_id": "norway", "name": "Atlantic Ocean Road"},
         "insert": {
             "landmark_id": "norway_flam_railway",
             "name": "Flåm Railway",
