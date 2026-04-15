@@ -534,9 +534,10 @@ const styles = StyleSheet.create({
   // ============ TIER BADGE ============
   tierBadge: {
     alignSelf: 'flex-start',
+    marginBottom: 4,
   },
   tierText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600',
   },
   tierPremium: {
