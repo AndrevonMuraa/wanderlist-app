@@ -324,22 +324,13 @@ export default function TermsOfServiceScreen() {
 
         {/* Contact */}
         <Surface style={styles.card}>
-          <Section title="14. Contact Us">
+          <Section title="14. Contact us">
             <Text style={styles.paragraph}>
               If you have questions about these Terms, please contact us:
             </Text>
-            <TouchableOpacity 
-              style={styles.contactBox}
-              onPress={async () => {
-                await Clipboard.setStringAsync('support@wandermark.app');
-                Alert.alert('Copied', 'Email address copied to clipboard');
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="mail" size={20} color={theme.colors.primary} />
-              <Text style={styles.contactText}>support@wandermark.app</Text>
-              <Ionicons name="copy-outline" size={16} color={theme.colors.textLight} />
-            </TouchableOpacity>
+            <Text style={styles.paragraph} selectable>
+              support@wandermark.app
+            </Text>
           </Section>
         </Surface>
 

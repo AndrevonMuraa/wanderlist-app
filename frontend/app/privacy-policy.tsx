@@ -257,22 +257,13 @@ export default function PrivacyPolicyScreen() {
 
         {/* Contact Us */}
         <Surface style={styles.card}>
-          <Section title="11. Contact Us">
+          <Section title="11. Contact us">
             <Text style={styles.paragraph}>
               If you have questions or concerns about this Privacy Policy or our data practices, please contact us:
             </Text>
-            <TouchableOpacity 
-              style={styles.contactBox}
-              onPress={async () => {
-                await Clipboard.setStringAsync('support@wandermark.app');
-                Alert.alert('Copied', 'Email address copied to clipboard');
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="mail" size={20} color={theme.colors.primary} />
-              <Text style={styles.contactText}>support@wandermark.app</Text>
-              <Ionicons name="copy-outline" size={16} color={theme.colors.textLight} />
-            </TouchableOpacity>
+            <Text style={styles.paragraph} selectable>
+              support@wandermark.app
+            </Text>
           </Section>
         </Surface>
 
