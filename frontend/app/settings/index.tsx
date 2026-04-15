@@ -267,77 +267,19 @@ export default function SettingsScreen() {
               </>
             )}
             
-            {user?.has_password !== false && (
-              <>
-                <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
-                
-                <TouchableOpacity 
-                  style={styles.accountItem}
-                  onPress={handleChangePassword}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.settingItemLeft}>
-                    <View style={[styles.settingIcon, { backgroundColor: 'rgba(241, 196, 15, 0.1)' }]}>
-                      <Ionicons name="key-outline" size={18} color="#f1c40f" />
-                    </View>
-                    <Text style={[styles.accountLabel, { color: colors.text }]}>{t('settings.changePassword')}</Text>
-                  </View>
-                  <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
-                </TouchableOpacity>
-              </>
-            )}
-            
             <View style={[styles.settingDivider, { backgroundColor: colors.border }]} />
-            
             <TouchableOpacity 
               style={styles.accountItem}
-              onPress={() => {
-                Alert.alert(
-                  'Delete Account',
-                  'Your account will be deactivated and permanently deleted after 30 days. If you change your mind, simply log in again within 30 days to reactivate.',
-                  [
-                    { text: 'Cancel', style: 'cancel' },
-                    { 
-                      text: 'Deactivate', 
-                      style: 'destructive', 
-                      onPress: async () => {
-                        try {
-                          const token = await getToken();
-                          const response = await fetch(`${BACKEND_URL}/api/auth/account`, {
-                            method: 'DELETE',
-                            headers: { Authorization: `Bearer ${token}` },
-                          });
-                          if (response.ok) {
-                            if (Platform.OS === 'web') {
-                              localStorage.removeItem('auth_token');
-                            } else {
-                              await SecureStore.deleteItemAsync('auth_token');
-                            }
-                            Alert.alert(
-                              'Account Deactivated',
-                              'Your account has been deactivated and will be permanently deleted in 30 days. Log in again to reactivate.',
-                              [{ text: 'OK', onPress: () => router.replace('/(auth)/login') }]
-                            );
-                          } else {
-                            Alert.alert('Error', 'Failed to deactivate account. Please try again.');
-                          }
-                        } catch (error) {
-                          Alert.alert('Error', 'Something went wrong. Please try again.');
-                        }
-                      }
-                    },
-                  ]
-                );
-              }}
+              onPress={() => router.push('/settings/account')}
               activeOpacity={0.7}
             >
               <View style={styles.settingItemLeft}>
-                <View style={[styles.settingIcon, { backgroundColor: 'rgba(231, 76, 60, 0.1)' }]}>
-                  <Ionicons name="trash-outline" size={18} color="#e74c3c" />
+                <View style={[styles.settingIcon, { backgroundColor: 'rgba(149, 165, 166, 0.1)' }]}>
+                  <Ionicons name="settings-outline" size={18} color="#7f8c8d" />
                 </View>
-                <Text style={[styles.accountLabel, { color: '#e74c3c' }]}>{t('settings.deleteAccount')}</Text>
+                <Text style={[styles.accountLabel, { color: colors.text }]}>Account settings</Text>
               </View>
-              <Ionicons name="chevron-forward" size={20} color="#e74c3c" />
+              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
             </TouchableOpacity>
           </View>
         </View>
