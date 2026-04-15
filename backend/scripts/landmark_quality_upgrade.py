@@ -250,6 +250,72 @@ WEAK_REPLACEMENTS = [
     },
 ]
 
+# ============================================================
+# PHASE 3: Replace "drive-by" landmarks with concrete visit points
+# ============================================================
+DRIVEBY_REPLACEMENTS = [
+    # Australia: "Great Ocean Road" → "Twelve Apostles"
+    {
+        "delete": {"country_id": "australia", "name": "Great Ocean Road"},
+        "insert": {
+            "landmark_id": "australia_twelve_apostles",
+            "name": "Twelve Apostles",
+            "country_id": "australia", "country_name": "Australia", "continent": "Oceania",
+            "description": "Dramatic limestone stacks rising from the Southern Ocean along Victoria's coast. These 45-million-year-old rock formations are Australia's most photographed natural landmark.",
+            "category": "official", "points": 10,
+            "best_time_to_visit": "Year-round", "duration": "1-2 hours", "difficulty": "Easy",
+        }
+    },
+    # Austria: "Grossglockner High Alpine Road" → "Hallstatt Skywalk"
+    {
+        "delete": {"country_id": "austria", "name": "Grossglockner High Alpine Road"},
+        "insert": {
+            "landmark_id": "austria_hallstatt_skywalk",
+            "name": "Hallstatt Skywalk",
+            "country_id": "austria", "country_name": "Austria", "continent": "Europe",
+            "description": "A panoramic viewing platform 350m above Hallstatt village with breathtaking views of the lake, Dachstein mountains, and the UNESCO World Heritage town below.",
+            "category": "premium", "points": 25,
+            "best_time_to_visit": "May-Oct", "duration": "2-3 hours", "difficulty": "Moderate",
+        }
+    },
+    # Germany: "Romantic Road" → "Sanssouci Palace"
+    {
+        "delete": {"country_id": "germany", "name": "Romantic Road"},
+        "insert": {
+            "landmark_id": "germany_sanssouci_palace",
+            "name": "Sanssouci Palace",
+            "country_id": "germany", "country_name": "Germany", "continent": "Europe",
+            "description": "Frederick the Great's stunning rococo summer palace in Potsdam, often called the 'Prussian Versailles'. UNESCO World Heritage Site with terraced vineyards and 300 hectares of gardens.",
+            "category": "official", "points": 10,
+            "best_time_to_visit": "Apr-Oct", "duration": "3-4 hours", "difficulty": "Easy",
+        }
+    },
+    # South Africa: "Garden Route" → "Boulders Beach Penguins"
+    {
+        "delete": {"country_id": "south_africa", "name": "Garden Route"},
+        "insert": {
+            "landmark_id": "south_africa_boulders_beach",
+            "name": "Boulders Beach Penguins",
+            "country_id": "south_africa", "country_name": "South Africa", "continent": "Africa",
+            "description": "Home to a colony of over 3,000 endangered African penguins near Simon's Town. Wooden boardwalks allow close encounters with penguins on pristine white sand.",
+            "category": "official", "points": 10,
+            "best_time_to_visit": "Year-round", "duration": "1-2 hours", "difficulty": "Easy",
+        }
+    },
+    # Argentina: "Salta Wine Route" → "Quebrada de las Flechas"
+    {
+        "delete": {"country_id": "argentina", "name": "Salta Wine Route"},
+        "insert": {
+            "landmark_id": "argentina_quebrada_flechas",
+            "name": "Quebrada de las Flechas",
+            "country_id": "argentina", "country_name": "Argentina", "continent": "South America",
+            "description": "A dramatic canyon of ancient tilted rock formations resembling giant arrowheads. These 65-million-year-old sedimentary layers create a surreal, Mars-like landscape in Salta province.",
+            "category": "premium", "points": 25,
+            "best_time_to_visit": "Apr-Nov", "duration": "Half day", "difficulty": "Easy",
+        }
+    },
+]
+
 COMMON_FIELDS = {
     "image_url": "", "images": [], "facts": [],
     "latitude": None, "longitude": None,
@@ -279,6 +345,18 @@ async def run_upgrade():
     # Phase 2: Weak replacements
     print("\n--- PHASE 2: 5 weak → strong replacements ---")
     for i, fix in enumerate(WEAK_REPLACEMENTS, 1):
+        d = fix["delete"]
+        result = await db.landmarks.delete_one(d)
+        deleted = result.deleted_count
+        
+        ins = {**fix["insert"], **COMMON_FIELDS}
+        await db.landmarks.insert_one(ins)
+        
+        print(f"  {i}. {d['country_id']}: Removed '{d['name']}' ({deleted}), Added '{fix['insert']['name']}'")
+    
+    # Phase 3: Drive-by replacements
+    print("\n--- PHASE 3: 5 drive-by → concrete landmarks ---")
+    for i, fix in enumerate(DRIVEBY_REPLACEMENTS, 1):
         d = fix["delete"]
         result = await db.landmarks.delete_one(d)
         deleted = result.deleted_count
