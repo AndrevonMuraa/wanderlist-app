@@ -366,8 +366,6 @@ export default function FeedScreen() {
             count: item.comments_count || 0,
             source: 'community',
           })}
-          likeDisabled={!item.activity_id}
-          commentDisabled={!item.activity_id}
           likeTestId={`community-like-${item.visit_id}`}
           commentTestId={`community-comment-${item.visit_id}`}
           rightExtra={item.upvotes > 0 ? (
