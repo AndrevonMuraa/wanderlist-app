@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 import os
 import random
+import uuid
 from datetime import datetime, timezone, timedelta
 
 from utils.db import db
@@ -86,7 +87,44 @@ async def get_community_feed(
     ).to_list(len(visit_ids))
     visit_to_activity = {a["visit_id"]: a for a in activity_docs}
 
-    activity_ids_v = [a["activity_id"] for a in activity_docs]
+    # AUTO-HEAL: create missing activities for public visits (idempotent)
+    # This patches legacy data where an activity doc was never created.
+    missing_visit_ids = [v["visit_id"] for v in visits if v["visit_id"] not in visit_to_activity]
+    if missing_visit_ids:
+        new_acts = []
+        for v in visits:
+            if v["visit_id"] in visit_to_activity:
+                continue
+            new_id = f"activity_{uuid.uuid4().hex[:12]}"
+            new_acts.append({
+                "activity_id": new_id,
+                "user_id": v.get("user_id"),
+                "user_name": v.get("user_name"),
+                "user_picture": v.get("user_picture"),
+                "activity_type": "visit",
+                "landmark_id": v.get("landmark_id"),
+                "landmark_name": v.get("landmark_name"),
+                "country_name": v.get("country_name"),
+                "visit_id": v["visit_id"],
+                "has_diary": bool(v.get("diary_notes")),
+                "has_photos": bool(v.get("photos")),
+                "photo_count": len(v.get("photos") or []),
+                "visibility": "public",
+                "created_at": v.get("visited_at") or datetime.now(timezone.utc),
+                "likes_count": 0,
+                "comments_count": 0,
+            })
+        if new_acts:
+            await db.activities.insert_many(new_acts)
+            for a in new_acts:
+                visit_to_activity[a["visit_id"]] = {
+                    "activity_id": a["activity_id"],
+                    "visit_id": a["visit_id"],
+                    "likes_count": 0,
+                    "comments_count": 0,
+                }
+
+    activity_ids_v = [a["activity_id"] for a in visit_to_activity.values()]
 
     items = []
     for visit in visits:
@@ -160,7 +198,50 @@ async def get_community_feed(
         {"_id": 0, "activity_id": 1, "user_created_visit_id": 1, "likes_count": 1, "comments_count": 1}
     ).to_list(len(ucv_ids)) if ucv_ids else []
     ucv_to_activity = {a["user_created_visit_id"]: a for a in ucv_activities}
-    activity_ids_v += [a["activity_id"] for a in ucv_activities]
+
+    # AUTO-HEAL: create missing activities for public custom visits (idempotent)
+    missing_ucv = [cv for cv in custom_visits
+                   if cv.get("user_created_visit_id") and cv["user_created_visit_id"] not in ucv_to_activity]
+    if missing_ucv:
+        new_ucv_acts = []
+        for cv in missing_ucv:
+            new_id = f"activity_{uuid.uuid4().hex[:12]}"
+            landmark_names = [lm.get("name") for lm in (cv.get("landmarks") or []) if lm.get("name")]
+            if len(landmark_names) == 1:
+                desc = f"visited {landmark_names[0]} in {cv.get('country_name','')}"
+            elif len(landmark_names) > 1:
+                desc = f"visited {len(landmark_names)} places in {cv.get('country_name','')}"
+            else:
+                desc = f"visited {cv.get('country_name','')}"
+            new_ucv_acts.append({
+                "activity_id": new_id,
+                "user_id": cv.get("user_id"),
+                "user_name": cv.get("user_name"),
+                "user_picture": cv.get("user_picture"),
+                "activity_type": "user_created_visit",
+                "user_created_visit_id": cv["user_created_visit_id"],
+                "country_name": cv.get("country_name"),
+                "landmarks": cv.get("landmarks") or [],
+                "description": desc,
+                "photos": cv.get("photos") or [],
+                "diary": cv.get("diary"),
+                "visibility": "public",
+                "points_earned": 0,
+                "created_at": cv.get("visited_at") or datetime.now(timezone.utc),
+                "likes_count": 0,
+                "comments_count": 0,
+            })
+        if new_ucv_acts:
+            await db.activities.insert_many(new_ucv_acts)
+            for a in new_ucv_acts:
+                ucv_to_activity[a["user_created_visit_id"]] = {
+                    "activity_id": a["activity_id"],
+                    "user_created_visit_id": a["user_created_visit_id"],
+                    "likes_count": 0,
+                    "comments_count": 0,
+                }
+
+    activity_ids_v += [a["activity_id"] for a in ucv_to_activity.values()]
 
     for cv in custom_visits:
         photo_url = cv.get("photos", [None])[0] if cv.get("photos") else None
