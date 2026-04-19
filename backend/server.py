@@ -9,7 +9,7 @@ from routes import (
     auth, content, community, community_highlights, visits, admin,
     leaderboard, friends, messages, stats, feed,
     collections, notifications, country_visits, photos,
-    achievements, subscription, reports, push, legal, promo,
+    achievements, subscription, reports, push, legal, promo, shares,
 )
 
 # Configure logging
@@ -56,6 +56,7 @@ api_router.include_router(reports.router)
 api_router.include_router(push.router)
 api_router.include_router(legal.router)
 api_router.include_router(promo.router)
+api_router.include_router(shares.router)
 
 app.include_router(api_router)
 

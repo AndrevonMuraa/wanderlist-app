@@ -10,6 +10,30 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Database: MongoDB Atlas
 - Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
 
+## Session 14 — April 19, 2026 (Share-card attribution + virality analytics)
+
+### Backend (new)
+- `POST /api/shares` — logs a share event `{share_type, period, user_id, created_at}`. Validates `share_type` against allow-list (`top_month|top_all|journey|rank|visit`). Idempotent, fire-and-forget from client.
+- `GET /api/admin/shares/stats` — admin-only aggregate: `totals_by_type` + `top_sharers` (top 10 by share count, enriched with `name` + `username`).
+- New collection: `shares`. New route module: `routes/shares.py`. Registered in `server.py`.
+
+### Frontend
+- `AuthContext.User` extended with `username?: string` (already returned by `/api/auth/me`).
+- `ShareTopMonthCard`:
+  - Reads `user?.username` via `useAuth()`.
+  - Renders a subtle pill at the bottom of the shareable card: "👤 Shared by @username" (dark glass pill, 10px text). Only shown when username exists.
+  - On share success, fires `POST /api/shares {share_type:'top_month', period}` before invoking `Sharing.shareAsync` — non-blocking, swallows errors.
+
+### Verified (curl)
+- ✅ POST `/api/shares` with valid type → `{"success": true}`
+- ✅ POST with invalid type → 400 with allow-list
+- ✅ Admin stats → `{"totals_by_type":{"top_month":1},"top_sharers":[{"username":"protester","share_count":1,...}]}`
+- ✅ TypeScript clean
+- ✅ Modal UI verified: empty-state still renders cleanly when no monthly content
+
+### Why this matters (growth lever)
+Every shared Top 10 card now carries the sharer's @handle — turning viral share into organic referral. Admin can see the monthly top sharers (proto-leaderboard for power users). Easy to extend: add a "Top sharers this month" page, or gift Pro minutes to top sharers.
+
 ## Session 13 — April 19, 2026 (Shareable "Top 10 of the month" card)
 
 ### Backend

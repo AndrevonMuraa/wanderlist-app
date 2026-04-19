@@ -8,6 +8,7 @@ interface User {
   user_id: string;
   email: string;
   name: string;
+  username?: string;
   picture?: string;
   is_premium: boolean;
   subscription_tier?: string;

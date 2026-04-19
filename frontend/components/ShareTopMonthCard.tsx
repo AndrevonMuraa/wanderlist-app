@@ -10,6 +10,7 @@ import { captureRef } from 'react-native-view-shot';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { getToken } from '../utils/token';
+import { useAuth } from '../contexts/AuthContext';
 
 interface ShareTopMonthCardProps {
   visible: boolean;
@@ -32,11 +33,14 @@ interface Item {
  * react-native-view-shot, and shared via the native share sheet.
  */
 export default function ShareTopMonthCard({ visible, onDismiss }: ShareTopMonthCardProps) {
+  const { user } = useAuth();
   const [items, setItems] = useState<Item[]>([]);
   const [period, setPeriod] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [sharing, setSharing] = useState(false);
   const cardRef = useRef<View>(null);
+
+  const handle = user?.username ? `@${user.username}` : null;
 
   useEffect(() => {
     if (!visible) return;
@@ -67,6 +71,14 @@ export default function ShareTopMonthCard({ visible, onDismiss }: ShareTopMonthC
         return;
       }
       const uri = await captureRef(cardRef, { format: 'png', quality: 1, result: 'tmpfile' });
+      // Fire-and-forget analytics ping — never blocks the share flow
+      getToken().then((token) => {
+        fetch(`${BACKEND_URL}/api/shares`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ share_type: 'top_month', period }),
+        }).catch(() => {});
+      }).catch(() => {});
       await Sharing.shareAsync(uri, {
         mimeType: 'image/png',
         dialogTitle: `Top 10 community photos — ${period}`,
@@ -201,6 +213,12 @@ export default function ShareTopMonthCard({ visible, onDismiss }: ShareTopMonthC
                     <View style={styles.footerLine} />
                     <Text style={styles.footerText}>Discover what the world loves</Text>
                     <Text style={styles.footerUrl}>wandermark.app</Text>
+                    {handle && (
+                      <View style={styles.attributionRow}>
+                        <Ionicons name="person-circle-outline" size={11} color="rgba(255,255,255,0.55)" />
+                        <Text style={styles.attributionText}>Shared by {handle}</Text>
+                      </View>
+                    )}
                   </View>
                 </LinearGradient>
               </View>
@@ -413,6 +431,22 @@ const styles = StyleSheet.create({
   },
   footerText: { fontSize: 12, color: 'rgba(255,255,255,0.85)', fontWeight: '500', letterSpacing: 0.3 },
   footerUrl: { fontSize: 11, fontWeight: '700', color: '#FFD700', marginTop: 3, letterSpacing: 0.6 },
+  attributionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 100,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+  },
+  attributionText: {
+    color: 'rgba(255,255,255,0.72)',
+    fontSize: 10,
+    fontWeight: '600',
+    letterSpacing: 0.2,
+  },
 
   // Share btn
   shareBtn: { borderRadius: 16, overflow: 'hidden', marginBottom: 8 },
