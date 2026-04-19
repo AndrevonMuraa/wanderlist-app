@@ -14,7 +14,7 @@ import requests
 import os
 import uuid
 
-BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://wandermark-build78.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('EXPO_PUBLIC_BACKEND_URL', 'https://feed-interaction-fix.preview.emergentagent.com').rstrip('/')
 
 # Test credentials from test_credentials.md
 STANDARD_USER = {"email": "test@wandermark.app", "password": "Test1234!"}

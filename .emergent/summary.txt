@@ -1,41 +1,39 @@
-<analysis>**original_problem_statement**: The user's primary goal is to bring the WanderMark application to a production-ready state. In this session, the user conducted extensive E2E testing, uncovering several complex UI/UX inconsistencies, cache invalidation bugs, and discrepancies in the points calculation engine (specifically regarding verified/unverified points, completion bonuses, and auto-created visits). The user also requested visual polish across multiple screens, including the user profile, photo viewer, progress dashboards, and terminology standardization.
-
+<analysis>**original_problem_statement**: The user's primary goal is to bring the WanderMark application to a production-ready state. In this session, the user conducted extensive E2E testing, uncovering several complex UI/UX inconsistencies, cache invalidation bugs, and discrepancies in the points calculation engine. The user also requested visual polish across multiple screens, including the user profile, photo viewer, progress dashboards, and terminology standardization.
 PRODUCT REQUIREMENTS:
 - Standardize terminology app-wide (Country Visits -> Destination Visits, Countries -> Destinations, Free User -> Basic Traveler, Premium -> Pro Traveler).
-- Ensure 100% point consistency across all views (, , and ).
+- Ensure 100% point consistency across all views.
 - Redesign User Profile, Photo Viewer, Points Summary, and Explore Destinations for a premium, highly polished UX.
-- Enforce photo limits visually via a ProFeatureLock action sheet instead of standalone buttons.
+- Enforce photo limits visually via a ProFeatureLock action sheet.
 - Fix all cache staleness issues on screen navigation.
-- Prepare the app for TestFlight deployment (Build 78).
+- Prepare the app for TestFlight deployment.
 
 **User's preferred language**: Norwegian (You MUST automatically detect the user's primary language from their messages inside the <trajectory> tag and INSTRUCT next agent to respond in the user's preferred language only. All user interactions MUST be in Norwegian).
 
 **what currently exists?** 
-A highly polished, pre-release full-stack travel app (React Native + FastAPI + MongoDB). The app features a perfectly synchronized point system that dynamically calculates verified vs unverified points across landmarks, destinations, and continents (including completion bonuses). The UI has received a massive premium overhaul, featuring custom pinch-to-zoom photo viewers, robust keyboard-avoiding diary edits, and consistent Pro badging. The codebase is currently fully prepped as Build 78 for the next EAS deployment.
+A highly polished, pre-release full-stack travel app (React Native + FastAPI + MongoDB). The app features a perfectly synchronized point system that dynamically calculates verified vs unverified points, a robust social system (friend requests, messaging, user blocking), a global and friends leaderboard (with anti-cheat measures), a community photo hub, and an admin/moderator panel. 
 
 **Last working item**:
-    - Last item agent was working: Klargjøring av Build 78 og forking av sesjonen for å spare tokens. All code for Build 78 is pushed or ready to be pushed to GitHub by the user, followed by running --platform is required when building in non-interactive mode and  on Render.
-    - Status: USER VERIFICATION PENDING
-    - Agent Testing Done: Y (Extensively tested backend APIs via curl/bash).
-    - Which testing method agent to use? NA (Next step is user compiling Build 78 via EAS).
+    - Last item agent was working: Analysere konsistensen mellom Community feed og Friends feed (social tab). Brukeren påpekte at man ikke kan like eller kommentere direkte fra community-seksjonen på samme måte som på friends-seksjonen. Agenten ble bedt om å analysere dette og foreslå en løsning før implementering.
+    - Status: NOT STARTED
+    - Agent Testing Done: N
+    - Which testing method agent to use? Frontend testing agent/ manual testing by screenshot tool.
     - User Testing Done: N
 
 **All Pending/In progress Issue list**: 
-  - Issue 1: Verify all implemented features and fixes in Build 78 (P0)
-     - Attempted fixes: N/A (Waiting for user to trigger EAS build).
-     - Next debug checklist: Ensure the user successfully pushes to GitHub, runs  on Render, and builds EAS preview.
-     - Why fix this issue and what will be achieved with the fix? Validates the massive backend points overhaul and UX refinements implemented in this session.
-     - Status: USER VERIFICATION PENDING
+  Issue 1: Feed Consistency & Interaction Analysis (Community vs Friends) - P0
+     - Attempted fixes: None yet.
+     - Next debug checklist: Analyze  and  (Community Feed section). Check  interface and rendering logic to see why like/comment buttons are missing or behaving differently compared to the main friends feed. Propose a plan to the user to sync their designs and functionality.
+     - Why fix this issue and what will be achieved with the fix? Ensures a seamless, frustration-free social UX where users can interact with content consistently regardless of where they discover it in the app.
+     - Status: NOT STARTED
      - Is recurring issue? N
-     - Should Test frontend/backend/both after fix? Both (via User E2E)
+     - Should Test frontend/backend/both after fix? Frontend primarily (screenshot tool / testing agent).
      - Blocked on other issue: None.
 
 **In progress Task List**:
-  - None strictly in progress, but the Add Photo UI overhaul for landmark visits is explicitly queued up as the first P1 task.
+  - None (All tasks from the previous session were completed).
 
 **Upcoming and Future Tasks**
     Upcoming Tasks:
-    - P1: Implement Add Photo action sheet for  (landmark visits). *Context: The agent already implemented this beautiful flow (Take Photo / Choose from Library / Cancel in an action sheet, with a ProFeatureLock for >1 photo for basic users) on , but it still needs to be ported to landmark .*
     - P1: Deploy Website Legal Pages (Privacy Policy and Terms of Service in ).
     
     Future Tasks:
@@ -44,87 +42,88 @@ A highly polished, pre-release full-stack travel app (React Native + FastAPI + M
     - P4: Rename GitHub Repository from  to .
 
 **Completed work in this session**
-- **Points Engine Overhaul (CRITICAL)**: Fixed massive discrepancies between , , and . All endpoints now correctly include destination visits without landmarks, completion bonuses (Destination +50, Continent +200), and auto-created visits. The verified/unverified logic is completely synchronized.
-- **Cache Invalidation Fixes**: Fixed stale data remaining after deleting a visit. Delete handlers now call , and affected screens (, ) were updated to use  to refetch fresh data on back-navigation.
-- **UI Redesigns**:
-  - : Replaced generic stats with colored icon wraps, removed share button, and replaced Recent Visits with Destinations Explored list.
-  - : Replaced static modal with a fullscreen, pinch-to-zoom () component with a dark blurred backdrop.
-  - : Reordered sections (Points Breakdown -> How Points Work -> Earning Potential), made the Next Rank card tappable to navigate to , and split Destination Visits accurately into Verified/Unverified.
-  -  / : Added unified Destination Progress / Landmark Progress dashboard cards with progress bars. Removed the search button from the explore header to encourage natural discovery.
-- **UX Fixes**:
-  - : Moved from a center modal to a bottom-sheet with  so the Save button is never hidden by the iOS keyboard. Applied to all 3 visit types (landmark, destination, custom).
-  - : Fixed runaway vertical heights on destination visit cards by strictly enforcing .
-- **Terminology & Styling**: Completely purged Country Visits in favor of Destination Visits in frontend strings. Fixed Pro badge styling (using  diamond with a teal pill background for consistency across profile and journey screens). 
-- **Bugfixes**: Fixed  returning a 500 Error when registering a visit without a photo (missing  statement). Created  (tested via dry-run).
+- **Community Hub & Feed Overhaul**: Created a dedicated  hub. Opened community photos to basic users. Added Explore community link to the Social tab. 
+- **Leaderboard Anti-Cheat**: Global leaderboard for Points, Landmarks, and Destinations now strictly counts ONLY  visits (visits with photos). Friends leaderboard continues to count all visits.
+- **Social & Privacy Features**: Implemented User Blocking functionality (). Blocked users cannot send friend requests, are hidden from search, and profiles are restricted. Added Bug Reporting tool () with a new tab in the Admin panel.
+- **UI/UX Polish**: 
+  - Redesigned  and  with premium layouts and consistent branding. 
+  - Converted app-wide Title Case to Sentence case. 
+  - Fixed Keyboard traps (added  and ) across all inputs.
+  - Replaced gesture-based  with native  pinch-to-zoom for better stability.
+  - Adjusted 4-column stat boxes in  and  to prevent text truncation ( adjustments).
+- **Codebase Optimization**: Centralized  and  utilities. Removed dead code and unused components (, etc.). Fixed N+1 query performance issue in  by using MongoDB aggregation.
+- **Database Upgrades**: Executed Render scripts to replace Kyrgyzstan with Pakistan and upgraded 19 landmarks to higher-quality, concrete tourist destinations (e.g., Atlantic Ocean Road -> Flåm Railway).
 
 **Earlier issues found/mentioned but not fixed**
-  - None. All issues discovered by the user in Build 73-77 were systematically squashed.
+  - None.
 
 **Known issue recurrence from previous fork**
-  - Issue recurrence in previous fork: Stale data upon navigating back.
-  - Recurrence count: 2 (Addressed in this session by aggressively enforcing  and ).
+  - Issue recurrence in previous fork: Cache staleness after photo mutations.
+  - Recurrence count: 1 (Fixed in this session by enforcing  after adding/taking/deleting photos in  and ).
   - Status: RESOLVED
 
 **Code Architecture**
-- Frontend: React Native with Expo Router. Tab-based navigation with deep linking to detail pages.
-- Backend: FastAPI & MongoDB Atlas.
-- API Cache: Frontend uses a custom lightweight  mechanism in .
+- Frontend: React Native with Expo Router. Tab-based navigation with deep linking to detail pages. Global styles in . API requests primarily wrapped in custom  utility.
+- Backend: FastAPI & MongoDB Atlas. Modular routing in .
+- Admin: Integrated within the frontend  with role-based routing checks.
 
 **Key Technical Concepts**
-- **Points Source of Truth:**  in . The app NEVER relies on  for complex points; it always recalculates from scratch based on actual DB visits.
-- **Verified vs Unverified:** Verified points () only apply if a visit has photos attached. Continent and Destination completion bonuses inherit verified status if the underlying visits meet photo criteria.
-- **Navigation Caching:** React Navigation caches screens.  is dangerous for refreshing data; always use  coupled with  for data that might change on other screens.
+- **Cache Invalidation**: Mutations must manually call  or relevant keys, combined with  on screens to fetch fresh data on navigation.
+- **Role-based Access**: Handled via dependencies in backend (, ) and conditional rendering in frontend based on  or .
+- **MongoDB Aggregations**: Extensively used for leaderboard ranking and points breakdowns to avoid N+1 query limits.
 
 **key DB schema**
-  - : , , 
-  -  (Landmarks): , , 
-  -  (Destinations): , 
-  -  (Custom): Linked to 
+  - : , , , , , .
+  -  /  / : Core visit tracking collections.
+  - : Friendship status tracking (, ).
+  - : Tracks user blocking (, ).
+  - : Stores user-submitted issues and screenshots.
 
 **changes in tech stack**
   - None.
 
 **All files of reference**
-  -  (Source of truth for points logic)
-  -  &  (APIs updated with completion bonus logic)
-  -  (Deeply redesigned)
-  -  (Completely redesigned)
-  -  (Rebuilt with pinch-to-zoom)
-  -  (Cache invalidation logic)
+  -  (Needs analysis for consistency)
+  -  (Needs analysis for consistency)
+  -  &  (Social APIs)
+  -  (API Cache logic)
 
 **Areas that need refactoring**: 
-  - None immediately. The codebase was heavily refactored for UI consistency during this session.
+  - The  file handles multiple types of feeds. Consolidating the rendering logic for  vs  could improve maintainability.
 
 **key api endpoints**
-  -  (Refactored to include destination visits)
-  -  (Refactored to match  output perfectly)
-  -  (Refactored to include both landmark and destination visits)
+  -  vs 
+  - 
+  - 
 
 **Critical Info for New Agent**
 - **Language Requirement**: The user communicates entirely in **Norwegian**. You MUST reply in Norwegian.
-- **Point System Golden Rule**: If points ever look out of sync, check . It is the absolute source of truth.
-- **Data Refresh Golden Rule**: If the user complains about old stats showing after deleting/adding, it's a caching issue. Ensure the mutation endpoint calls  and the screen uses .
-- **EAS Builds**: The user is actively testing via Expo EAS (An Expo user account is required to proceed.
-Either log in with eas login or set the EXPO_TOKEN environment variable if you're using EAS CLI on CI (Learn more: https://docs.expo.dev/accounts/programmatic-access/)). When making frontend changes, prompt them to run a new build.
+- **Current Blocker**: The user wants an analysis of the missing/inconsistent Like and Comment features between the Community Feed and Friends Feed. *Analyze the code and propose a solution before making file edits.*
+- **EAS Builds**: The user is actively testing via Expo EAS. Do not break production imports. When  is used, do not mix it with percentages in  without absolute dimensions, as it crashes iOS.
+- **Test Credentials**: 
+  - Admin (superadmin):  / 
+  - Pro user:  / 
+  - Moderator:  / 
 
 **documents and test reports created in this job**
-  -  (Updated)
-  -  (Created)
+  - 
+  - 
+  - 
 
 **Last 10 User Messages and any pending HUMAN messages** 
- 1. User: Asked to make the Next Rank section clickable. (Agent navigated it to ).
- 2. User: Requested Photo Viewer upgrade (Fullscreen, pinch-to-zoom, remove rotate/text).
- 3. User: Asked to improve the black background on fullscreen photos. (Agent added blur and transparency).
- 4. User: Pointed out the Edit Diary keyboard bug remained on . (Agent applied the KeyboardAvoidingView fix here as well).
- 5. User: Noticed Earning Potential did not include completion bonuses, making max ranks look impossible.
- 6. User: Asked for clarification on how completion bonuses and auto-visits trigger Verified status. (Agent overhauled backend logic to sync  and ).
- 7. User: Asked to reorder Points Breakdown and How Points Work, and remove arrows from earning potential.
- 8. User: Pointed out the About stats box looked cluttered. (Agent fixed padding/font size).
- 9. User: Noticed old stats hung around after deleting a visit. (Agent fixed cache invalidation bugs).
- 10. User: Asked to fork the session to save tokens. (Agent updated PRD and finished).
+ 1. User: Asked to remove Rank system from game mechanics since it's already in Key features. (Agent removed it).
+ 2. User: Asked to clarify Total points includes verified and unverified in About page. (Agent added text).
+ 3. User: Asked if custom visits should be in the Where are my photos? list. (Agent added it).
+ 4. User: Asked to add Leaderboard to key features and change Rank System icon. (Agent changed Rank to ribbon, Leaderboard to trophy).
+ 5. User: Pointed out ShareRankCard text overlaps. (Agent fixed width constraint).
+ 6. User: Asked for a Report issue/bug link in the About page. (Agent built full bug report modal and backend).
+ 7. User: Asked if admin functions work, distinguishing superadmin vs mod. (Agent verified and restricted bug reports to superadmin only).
+ 8. User: Asked to match About icons to Journey icons. (Agent synced all colors/icons).
+ 9. User: Keyboard traps on 3 text fields in Edit Profile. (Agent fixed all app-wide keyboard traps).
+ 10. User: (Pending) Vi trenger bedre consistency mellom de to feed seksjonene... Nå kan man f.eks. ikke like et bilde direkte fra community seksjonen... Gjør analyse og gi tilbakemelding før vi implementerer noe.
 
 **Project Health Check:**
-- Broken: None. Build 78 is pristine.
+- Broken: Community Feed lacks like and comment interaction parity with Friends feed.
 - Mocked: None.
 
 **3rd Party Integrations**
@@ -134,14 +133,15 @@ Either log in with eas login or set the EXPO_TOKEN environment variable if you'r
   - RevenueCat (In-App Purchases)
 
 **Testing status**
-  - Testing agent used after significant changes: NO (Heavy manual testing via bash + User testing via Testflight/EAS).
+  - Testing agent used after significant changes: YES
   - Troubleshoot agent used after agent stuck in loop: NO
   - Test files created: None.
   - Known regressions: None known.
 
 **Credentials to test flow:**
-- Standard User:  / 
-- Premium User:  / 
+- Admin:  / 
+- Pro User:  / 
+- Moderator:  / 
 
 **What agent forgot to execute**
-- The agent was about to implement the Add Photo action sheet (Take Photo / Choose from Library / Cancel) with Pro checks for  (landmarks) but ran out of tokens and the user requested a fork. This must be picked up first.</analysis>
+- The agent was explicitly asked to analyze the difference in interaction (likes/comments) between the community feed and friends feed, but forked the session to preserve context tokens before doing the analysis. This is the very first task to pick up.</analysis>
