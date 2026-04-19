@@ -359,7 +359,7 @@ async def update_admin_report(
                 title="A photo has been removed",
                 message=(
                     f"Your photo at {target_name} was removed after a community review. "
-                    "Please check our community guidelines for details."
+                    "Tap to read the community guidelines."
                 ),
                 related_id=report_id,
             )

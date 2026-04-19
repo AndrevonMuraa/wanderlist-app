@@ -113,6 +113,9 @@ export default function NotificationsScreen() {
       case 'rank_up':
         router.push('/(tabs)/journey');
         break;
+      case 'content_removed':
+        router.push('/terms-of-service?section=guidelines');
+        break;
     }
   };
 
@@ -143,6 +146,8 @@ export default function NotificationsScreen() {
         return { name: 'people', color: theme.colors.success };
       case 'rank_up':
         return { name: 'trophy', color: '#FFD700' };
+      case 'content_removed':
+        return { name: 'shield', color: '#E87850' };
       default:
         return { name: 'notifications', color: theme.colors.textSecondary };
     }

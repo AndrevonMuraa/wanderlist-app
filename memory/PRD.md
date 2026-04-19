@@ -28,6 +28,14 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - P0: User profile crash on leaderboard click — possibly aspectRatio issue, fixed with Dimensions but needs testing
 - P0: Verify all fixes in Build 83
 
+## Session 9 — April 19, 2026 (Community Guidelines deep-link)
+
+- `app/terms-of-service.tsx`: Content Moderation card upgraded into a visually distinct **Community Guidelines** card with gradient banner header, clearer "What's welcome / What's not allowed / Reporting / Enforcement / If your content was removed" sections, friendlier copy, and an `onLayout` Y-tracker for deep-linking.
+- Deep-link support: `/terms-of-service?section=guidelines` auto-scrolls to the Community Guidelines card on mount.
+- `app/notifications.tsx`: `content_removed` notifications now navigate to `/terms-of-service?section=guidelines`, with a dedicated shield icon in the feed.
+- `routes/admin.py`: Notification message updated to "Tap to read the community guidelines" so users get clear CTA.
+- ✅ End-to-end verified: admin resolves photo report → owner receives notification with correct deep-link copy.
+
 ## Session 8 — April 19, 2026 (Notification + Report wiring)
 
 ### Auto-notify photo owner on content removal

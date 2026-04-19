@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,7 +12,7 @@ import * as Clipboard from 'expo-clipboard';
 import { Text, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { safeGoBack } from '../utils/navigation';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme, { gradients } from '../styles/theme';
@@ -21,6 +21,19 @@ import { HeaderBranding } from '../components/BrandedGlobeIcon';
 export default function TermsOfServiceScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { section } = useLocalSearchParams<{ section?: string }>();
+  const scrollRef = useRef<ScrollView>(null);
+  const guidelinesY = useRef(0);
+
+  // Deep-link: /terms-of-service?section=guidelines → scroll to Community Guidelines card
+  useEffect(() => {
+    if (section === 'guidelines') {
+      const t = setTimeout(() => {
+        scrollRef.current?.scrollTo({ y: Math.max(0, guidelinesY.current - 12), animated: true });
+      }, 500);
+      return () => clearTimeout(t);
+    }
+  }, [section]);
 
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
   const lastUpdated = 'February 28, 2026';
@@ -67,6 +80,7 @@ export default function TermsOfServiceScreen() {
       </LinearGradient>
 
       <ScrollView 
+        ref={scrollRef}
         style={styles.scrollView} 
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -147,30 +161,47 @@ export default function TermsOfServiceScreen() {
           </Section>
         </Surface>
 
-        {/* Content Moderation - NEW */}
-        <Surface style={styles.card}>
-          <Section title="4. Content Moderation & Reporting">
-            <Text style={styles.subTitle}>Community Guidelines</Text>
+        {/* Community Guidelines — expanded, deep-linkable from `content_removed` notification */}
+        <Surface
+          style={[styles.card, styles.guidelinesCard]}
+          onLayout={(e) => { guidelinesY.current = e.nativeEvent.layout.y; }}
+        >
+          <View style={styles.guidelinesBanner}>
+            <Ionicons name="shield-checkmark" size={22} color="#FFF" />
+            <Text style={styles.guidelinesBannerText}>Community guidelines</Text>
+          </View>
+          <Section title="4. Content moderation & reporting">
             <Text style={styles.paragraph}>
-              WanderMark is committed to maintaining a safe and respectful community. All user-generated content, including photos, diary entries, and tips, must comply with our guidelines.
+              WanderMark is a community of curious travelers. To keep it welcoming and trustworthy, every photo and post should follow these rules.
             </Text>
-            
-            <Text style={[styles.subTitle, { marginTop: 16 }]}>Prohibited Content</Text>
+
+            <Text style={[styles.subTitle, { marginTop: 16 }]}>What's welcome</Text>
+            <BulletPoint text="Your own photos of landmarks and places you've visited" />
+            <BulletPoint text="Honest diary entries about your trip" />
+            <BulletPoint text="Helpful tips for fellow travelers" />
+            <BulletPoint text="Respectful comments and likes" />
+
+            <Text style={[styles.subTitle, { marginTop: 16 }]}>What's not allowed</Text>
+            <BulletPoint text="Photos that don't depict the claimed landmark (e.g. screenshots, product photos, ads)" />
             <BulletPoint text="Inappropriate, offensive, or explicit material" />
             <BulletPoint text="Harassment, hate speech, or bullying" />
-            <BulletPoint text="Spam or misleading information" />
-            <BulletPoint text="Copyright-infringing content" />
-            <BulletPoint text="Photos that do not depict the claimed landmark" />
-            <BulletPoint text="Fake or fabricated visits" />
-            
+            <BulletPoint text="Spam, promotions, or misleading information" />
+            <BulletPoint text="Copyright-infringing content you don't own" />
+            <BulletPoint text="Fake or fabricated visits / impersonation" />
+
             <Text style={[styles.subTitle, { marginTop: 16 }]}>Reporting</Text>
             <Text style={styles.paragraph}>
-              Users can report inappropriate content or behavior using the report feature. Reports are reviewed by our moderation team within 24-48 hours. False reports may result in account restrictions.
+              See something off? Tap the flag icon on any photo or long-press a card in the community grids. Our moderation team reviews every report within 24–48 hours. Please use reports responsibly — repeated false reports may restrict your account.
             </Text>
-            
+
             <Text style={[styles.subTitle, { marginTop: 16 }]}>Enforcement</Text>
             <Text style={styles.paragraph}>
-              Violations may result in content removal, temporary suspension, or permanent account termination depending on severity and frequency.
+              Depending on severity, a first violation usually means the photo or post is removed and you receive an in-app notification explaining why. Repeated or serious violations can lead to temporary suspension or permanent account closure.
+            </Text>
+
+            <Text style={[styles.subTitle, { marginTop: 16 }]}>If your content was removed</Text>
+            <Text style={styles.paragraph}>
+              You'll get an in-app notification when we remove something of yours. We remove content — not people — so your account stays active and you can keep sharing the right kind of content. If you believe the removal was a mistake, reply to the notification or contact support.
             </Text>
           </Section>
         </Surface>
@@ -408,6 +439,29 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.06,
     shadowRadius: 8,
     elevation: 3,
+  },
+  guidelinesCard: {
+    borderWidth: 1.5,
+    borderColor: theme.colors.primary + '40',
+    paddingTop: 0,
+    overflow: 'hidden',
+  },
+  guidelinesBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    backgroundColor: theme.colors.primary,
+    marginHorizontal: -20,
+    marginBottom: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  guidelinesBannerText: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   cardHeader: {
     flexDirection: 'row',
