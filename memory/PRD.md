@@ -28,6 +28,18 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - P0: User profile crash on leaderboard click — possibly aspectRatio issue, fixed with Dimensions but needs testing
 - P0: Verify all fixes in Build 83
 
+## Session 8 — April 19, 2026 (Notification + Report wiring)
+
+### Auto-notify photo owner on content removal
+- `PUT /api/admin/reports/{id}` now fires a `content_removed` notification to the content owner when admin transitions a photo/activity report from non-resolved → `resolved`. Owner lookup supports both `visits` and `user_created_visits`. Idempotent (no re-fire on re-resolve).
+- Verified end-to-end: admin resolves → owner `fake_user_43528211` received "A photo has been removed" notification.
+
+### Report wiring across community surfaces
+- **Feed community cards** (`feed.tsx`): subtle flag icon added next to upvote pill in `rightExtra` of `FeedCardActions`. Opens `<ReportModal reportType="photo">`.
+- **Top 10 grid** (`community-highlights/top.tsx`): long-press on `MediaCard` → Alert confirmation → `<ReportModal>`. `MediaCard` gained new `onLongPress` prop.
+- **Landmark community photos** (`landmark-community-photos/[landmark_id].tsx`): flag button appended to each photo's action row. Opens `<ReportModal>`.
+- Footer hint text on Top 10 page: "Tip: long-press a card to report inappropriate content."
+
 ## Session 7 — April 19, 2026 (Refactor + Photo reports)
 
 ### Refactor

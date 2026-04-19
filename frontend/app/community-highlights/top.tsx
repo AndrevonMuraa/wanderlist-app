@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, RefreshControl, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl, ActivityIndicator, Dimensions, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import theme from '../../styles/theme';
@@ -7,6 +7,7 @@ import { BACKEND_URL } from '../../utils/config';
 import UniversalHeader from '../../components/UniversalHeader';
 import { getToken } from '../../utils/token';
 import MediaCard from '../../components/MediaCard';
+import ReportModal from '../../components/ReportModal';
 
 const { width } = Dimensions.get('window');
 const COLS = 2;
@@ -18,6 +19,7 @@ export default function CommunityHighlightsTopScreen() {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [reportTarget, setReportTarget] = useState<{ id: string; name: string } | null>(null);
 
   const load = async () => {
     try {
@@ -49,6 +51,24 @@ export default function CommunityHighlightsTopScreen() {
     } else {
       router.push(`/country-visit-detail/${item.visit_id}`);
     }
+  };
+
+  const handleLongPress = (item: any) => {
+    Alert.alert(
+      'Report this photo?',
+      `You're about to report the photo from ${item.landmark_name || 'this place'}. Our team will review it within 24-48 hours.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Report',
+          style: 'destructive',
+          onPress: () => setReportTarget({
+            id: item.visit_id,
+            name: item.landmark_name || 'Community photo',
+          }),
+        },
+      ]
+    );
   };
 
   return (
@@ -88,6 +108,7 @@ export default function CommunityHighlightsTopScreen() {
                 commentsCount={item.comments_count}
                 rankBadge={item.rank}
                 onPress={() => goToVisit(item)}
+                onLongPress={() => handleLongPress(item)}
                 width={CARD_WIDTH}
                 aspect={1.2}
                 testID={`top-item-${item.rank}`}
@@ -95,7 +116,19 @@ export default function CommunityHighlightsTopScreen() {
             ))}
           </View>
         )}
+
+        <Text style={styles.footerHint}>
+          Tip: long-press a card to report inappropriate content.
+        </Text>
       </ScrollView>
+
+      <ReportModal
+        visible={!!reportTarget}
+        onClose={() => setReportTarget(null)}
+        reportType="photo"
+        targetId={reportTarget?.id || ''}
+        targetName={reportTarget?.name || 'Community photo'}
+      />
     </View>
   );
 }
@@ -117,4 +150,11 @@ const styles = StyleSheet.create({
   empty: { alignItems: 'center', paddingVertical: 60, gap: 10 },
   emptyTitle: { fontSize: 16, fontWeight: '700', color: theme.colors.text },
   emptyText: { fontSize: 13, color: theme.colors.textSecondary, textAlign: 'center', paddingHorizontal: 32 },
+  footerHint: {
+    marginTop: 24,
+    textAlign: 'center',
+    fontSize: 12,
+    color: theme.colors.textLight,
+    fontStyle: 'italic',
+  },
 });

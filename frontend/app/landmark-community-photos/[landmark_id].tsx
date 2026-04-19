@@ -8,6 +8,7 @@ import theme from '../../styles/theme';
 import { useSubscription } from '../../hooks/useSubscription';
 import { BACKEND_URL } from '../../utils/config';
 import UniversalHeader from '../../components/UniversalHeader';
+import ReportModal from '../../components/ReportModal';
 import { getToken } from '../../utils/token';
 
 const { width } = Dimensions.get('window');
@@ -35,6 +36,7 @@ export default function LandmarkCommunityPhotosScreen() {
   const [photos, setPhotos] = useState<CommunityPhoto[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [diaryLocked, setDiaryLocked] = useState(false);
+  const [reportTarget, setReportTarget] = useState<{ id: string; name: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'popular' | 'newest'>('popular');
   const [diaryModal, setDiaryModal] = useState<{ visible: boolean; text: string; userName: string }>({ visible: false, text: '', userName: '' });
@@ -140,6 +142,14 @@ export default function LandmarkCommunityPhotosScreen() {
                 <Ionicons name="lock-closed" size={14} color={theme.colors.textLight} />
               </View>
             )}
+            <TouchableOpacity
+              onPress={() => setReportTarget({ id: item.visit_id, name: 'Community photo' })}
+              style={styles.diaryButton}
+              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+              data-testid={`report-btn-${item.photo_id}`}
+            >
+              <Ionicons name="flag-outline" size={14} color={theme.colors.textLight} />
+            </TouchableOpacity>
           </View>
           {item.visited_at && (
             <Text style={styles.dateText}>
@@ -263,6 +273,14 @@ export default function LandmarkCommunityPhotosScreen() {
           </View>
         </TouchableOpacity>
       </Modal>
+
+      <ReportModal
+        visible={!!reportTarget}
+        onClose={() => setReportTarget(null)}
+        reportType="photo"
+        targetId={reportTarget?.id || ''}
+        targetName={reportTarget?.name || 'Community photo'}
+      />
     </View>
   );
 }

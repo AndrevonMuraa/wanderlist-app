@@ -7,6 +7,7 @@ from datetime import datetime, timezone, timedelta
 
 from utils.db import db
 from utils.auth import get_admin_user, get_super_admin_user
+from utils.helpers import create_notification
 from models.all import User, AdminUserUpdate, AdminReportUpdate, AdminNotificationRequest
 
 
@@ -315,26 +316,54 @@ async def update_admin_report(
     update_data: AdminReportUpdate,
     admin_user: User = Depends(get_admin_user)
 ):
-    """Update report status"""
+    """Update report status. If a photo/activity report is RESOLVED (content removed),
+    notify the photo owner so they understand why the content is gone."""
     if update_data.status not in ["pending", "reviewed", "resolved", "dismissed"]:
         raise HTTPException(status_code=400, detail="Invalid status")
-    
+
+    # Load existing report (needed for owner lookup)
+    existing = await db.reports.find_one({"report_id": report_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Report not found")
+
     update_fields = {
         "status": update_data.status,
         "reviewed_at": datetime.now(timezone.utc)
     }
-    
     if update_data.admin_notes:
         update_fields["admin_notes"] = update_data.admin_notes
-    
-    result = await db.reports.update_one(
-        {"report_id": report_id},
-        {"$set": update_fields}
-    )
-    
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Report not found")
-    
+
+    await db.reports.update_one({"report_id": report_id}, {"$set": update_fields})
+
+    # Notify content owner if the report was RESOLVED against a photo/activity
+    is_new_resolution = update_data.status == "resolved" and existing.get("status") != "resolved"
+    if is_new_resolution and existing.get("report_type") in ("photo", "activity"):
+        target_id = existing.get("target_id")
+        owner_id = None
+        # target_id is a visit_id OR user_created_visit_id
+        if target_id:
+            visit = await db.visits.find_one({"visit_id": target_id}, {"_id": 0, "user_id": 1})
+            if visit:
+                owner_id = visit.get("user_id")
+            else:
+                cv = await db.user_created_visits.find_one(
+                    {"user_created_visit_id": target_id}, {"_id": 0, "user_id": 1}
+                )
+                if cv:
+                    owner_id = cv.get("user_id")
+        if owner_id and owner_id != admin_user.user_id:
+            target_name = existing.get("target_name") or "your photo"
+            await create_notification(
+                user_id=owner_id,
+                notif_type="content_removed",
+                title="A photo has been removed",
+                message=(
+                    f"Your photo at {target_name} was removed after a community review. "
+                    "Please check our community guidelines for details."
+                ),
+                related_id=report_id,
+            )
+
     return {"message": "Report updated successfully", "status": update_data.status}
 
 @router.get("/admin/logs")

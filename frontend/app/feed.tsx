@@ -9,6 +9,7 @@ import { PersistentTabBar } from '../components/PersistentTabBar';
 import UniversalHeader from '../components/UniversalHeader';
 import { getToken } from '../utils/token';
 import CommentsModal from '../components/CommentsModal';
+import ReportModal from '../components/ReportModal';
 import FeedCardHeader from '../components/FeedCardHeader';
 import FeedCardActions from '../components/FeedCardActions';
 import { useAuth } from '../contexts/AuthContext';interface Activity {
@@ -70,6 +71,10 @@ export default function FeedScreen() {
     activityId: string;
     count: number;
     source: 'friends' | 'community';
+  } | null>(null);
+  const [reportTarget, setReportTarget] = useState<{
+    targetId: string;
+    targetName: string;
   } | null>(null);
   const router = useRouter();
   const { user } = useAuth();
@@ -368,12 +373,26 @@ export default function FeedScreen() {
           })}
           likeTestId={`community-like-${item.visit_id}`}
           commentTestId={`community-comment-${item.visit_id}`}
-          rightExtra={item.upvotes > 0 ? (
-            <View style={styles.upvoteChip}>
-              <Ionicons name="star" size={15} color="#FFD700" />
-              <Text style={styles.likeCount}>{item.upvotes}</Text>
+          rightExtra={
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              {item.upvotes > 0 && (
+                <View style={styles.upvoteChip}>
+                  <Ionicons name="star" size={15} color="#FFD700" />
+                  <Text style={styles.likeCount}>{item.upvotes}</Text>
+                </View>
+              )}
+              <TouchableOpacity
+                onPress={() => setReportTarget({
+                  targetId: item.visit_id,
+                  targetName: item.landmark_name || 'Community photo',
+                })}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                data-testid={`community-report-${item.visit_id}`}
+              >
+                <Ionicons name="flag-outline" size={16} color={theme.colors.textLight} />
+              </TouchableOpacity>
             </View>
-          ) : undefined}
+          }
         />
       </Surface>
     );
@@ -456,6 +475,14 @@ export default function FeedScreen() {
           }
           setCommentsTarget({ ...commentsTarget, count: newCount });
         }}
+      />
+
+      <ReportModal
+        visible={!!reportTarget}
+        onClose={() => setReportTarget(null)}
+        reportType="photo"
+        targetId={reportTarget?.targetId || ''}
+        targetName={reportTarget?.targetName || 'Community photo'}
       />
     </View>
   );

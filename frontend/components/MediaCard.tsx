@@ -15,6 +15,7 @@ export interface MediaCardProps {
   commentsCount?: number;
   rankBadge?: number;
   onPress?: () => void;
+  onLongPress?: () => void;
   width?: number;
   aspect?: number; // height / width. default 1.25 = 4:5
   testID?: string;
@@ -35,6 +36,7 @@ export default function MediaCard({
   commentsCount = 0,
   rankBadge,
   onPress,
+  onLongPress,
   width = 170,
   aspect = 1.25,
   testID,
@@ -45,6 +47,8 @@ export default function MediaCard({
     <TouchableOpacity
       activeOpacity={0.9}
       onPress={onPress}
+      onLongPress={onLongPress}
+      delayLongPress={450}
       style={[styles.card, { width, height }]}
       data-testid={testID}
     >
