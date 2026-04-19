@@ -10,6 +10,7 @@ from typing import Optional
 
 from utils.db import db
 from models.all import User
+from utils.auto_flag import get_flagged_target_ids
 
 
 FRESHNESS_DECAY_DAYS = 30.0
@@ -41,9 +42,13 @@ async def build_candidate_pool(current_user: User, include_custom: bool = True) 
     with activity_id, likes_count, user info, and a precomputed 'hotness' value.
 
     Callers should filter out entries without a usable photo_url (already done here).
+    Auto-flagged content (3+ pending reports) is excluded from the pool.
     """
+    flagged_ids = await get_flagged_target_ids()
+
     visits = await db.visits.find(
-        {"visibility": "public", "photos": {"$exists": True, "$ne": []}},
+        {"visibility": "public", "photos": {"$exists": True, "$ne": []},
+         "visit_id": {"$nin": list(flagged_ids)}},
         {"_id": 0, "visit_id": 1, "user_id": 1, "landmark_id": 1,
          "photos": 1, "diary_notes": 1, "visited_at": 1}
     ).sort("visited_at", -1).limit(200).to_list(200)
@@ -53,6 +58,7 @@ async def build_candidate_pool(current_user: User, include_custom: bool = True) 
         custom_visits = await db.user_created_visits.find(
             {
                 "visibility": "public",
+                "user_created_visit_id": {"$nin": list(flagged_ids)},
                 "$or": [
                     {"photos": {"$exists": True, "$ne": []}},
                     {"landmarks.photo": {"$exists": True, "$ne": None}},

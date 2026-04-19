@@ -19,11 +19,15 @@ async def get_community_feed(
     current_user: User = Depends(get_current_user)
 ):
     """Get a unified community feed - optimized to eliminate N+1 queries."""
+    from utils.auto_flag import get_flagged_target_ids
+    flagged_ids = list(await get_flagged_target_ids())
+
     # Standard landmark visits
     pipeline = [
         {"$match": {
             "visibility": "public",
-            "photos": {"$exists": True, "$ne": []}
+            "photos": {"$exists": True, "$ne": []},
+            "visit_id": {"$nin": flagged_ids}
         }},
         {"$sort": {"visited_at": -1}},
         {"$limit": limit},
@@ -164,7 +168,10 @@ async def get_community_feed(
 
     # Custom visits (user-created)
     custom_pipeline = [
-        {"$match": {"visibility": "public"}},
+        {"$match": {
+            "visibility": "public",
+            "user_created_visit_id": {"$nin": flagged_ids}
+        }},
         {"$sort": {"visited_at": -1}},
         {"$limit": limit},
         {"$lookup": {
@@ -924,12 +931,15 @@ async def get_global_community_highlights(
     current_user: User = Depends(get_current_user)
 ):
     """Get top trending landmarks globally — most photographed across all countries."""
-    
+    from utils.auto_flag import get_flagged_target_ids
+    flagged_ids = list(await get_flagged_target_ids())
+
     # Aggregate: top landmarks by photo count from public visits
     pipeline = [
         {"$match": {
             "visibility": "public",
-            "photos": {"$exists": True, "$ne": []}
+            "photos": {"$exists": True, "$ne": []},
+            "visit_id": {"$nin": flagged_ids}
         }},
         {"$project": {
             "landmark_id": 1,

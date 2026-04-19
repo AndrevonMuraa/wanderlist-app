@@ -28,6 +28,18 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - P0: User profile crash on leaderboard click — possibly aspectRatio issue, fixed with Dimensions but needs testing
 - P0: Verify all fixes in Build 83
 
+## Session 10 — April 19, 2026 (Auto-flag P2)
+
+- Ny `backend/utils/auto_flag.py` — eksporterer `AUTO_FLAG_THRESHOLD = 3` og `get_flagged_target_ids()` (returnerer set av target_ids med 3+ **pending** photo-reports; resolved/dismissed teller ikke).
+- Wiret inn i 4 discovery-overflater:
+  - `GET /api/community-highlight` (singular hero)
+  - `GET /api/community-highlights/top`
+  - `GET /api/community-feed` (både landmark-visits og custom-visits pipelines)
+  - `GET /api/community-highlights` (plural / trending landmarks)
+- Implementasjon: `$nin: flagged_ids` på `visit_id` / `user_created_visit_id` ved query-tid.
+- Self-healing: når admin dismisser eller resolver rapportene, telleren faller under 3 → innholdet kommer automatisk tilbake (eller er allerede fjernet hvis resolvert).
+- **Verifisert end-to-end**: 3 rapporter fra 3 forskjellige brukere → visit forsvant fra Top10 + Highlight (5 tries) + Feed → admin dismisset → flagged-set tømt → gjenoppstått.
+
 ## Session 9 — April 19, 2026 (Community Guidelines deep-link)
 
 - `app/terms-of-service.tsx`: Content Moderation card upgraded into a visually distinct **Community Guidelines** card with gradient banner header, clearer "What's welcome / What's not allowed / Reporting / Enforcement / If your content was removed" sections, friendlier copy, and an `onLayout` Y-tracker for deep-linking.
