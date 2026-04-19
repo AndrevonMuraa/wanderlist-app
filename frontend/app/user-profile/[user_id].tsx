@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform, Alert, StatusBar } from 'react-native';
+import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform, Alert, StatusBar, Dimensions } from 'react-native';
 import { Text, ActivityIndicator, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -405,8 +405,8 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   photoGridItem: {
-    width: '31.5%',
-    aspectRatio: 1,
+    width: (Dimensions.get('window').width - 64) / 3,
+    height: (Dimensions.get('window').width - 64) / 3,
     borderRadius: 12,
     overflow: 'hidden',
   },
