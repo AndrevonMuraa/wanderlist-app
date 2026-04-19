@@ -8,25 +8,49 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - BuildNumber: 82
 - Backend: Render (auto-deploy from GitHub) — api.wandermark.app
 - Database: MongoDB Atlas
-- Pakistan added, Kyrgyzstan removed, 24 landmark upgrades applied
+- Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
 
-### CRITICAL NOTES
-- "Destinations" not "Countries", "Basic Traveler" not "Free user", "Pro Traveler" not "Pro user"
-- `recalculate_user_points()` is SINGLE SOURCE OF TRUTH for points
-- Sentence case everywhere (not Title Case)
-- Global leaderboard requires verified (photo) for ALL 3 categories
-- Friends leaderboard shows all (verified + unverified)
-- Icon colors: location=#E87850, flag=#4DB8D8, earth=#4CAF50, star=#FFD700, diamond=#1E8A8A
+## Session 12 — April 19, 2026 (Penthouse Window V2 — Phase B + C)
+
+All "ALT!" design items shipped and smoke-tested (testing_agent iteration_20: 6/6 pages zero crashes).
+
+### Theme (global)
+- `theme.ts`: `shadows.sm/md/lg/xl/card` all migrated from `#000` → `shadowWarm` (`#C9A961`). This cascades into every consumer (social.tsx, feed.tsx, admin surfaces, etc.).
+
+### Hero + highlight surfaces
+- `app/community-highlights.tsx` rewritten: `Animated.ScrollView` with **parallax hero** (scale + translateY on scroll/pull), 1px matte inner frame inside the hero, 24px radius, warm shadow.
+- **Floating glass action bar** (pill-shaped, rgba(255,255,255,0.92) + sand border) overlapping the hero bottom edge (-22 margin). Like/Comment pills with inline dividers + a report icon button.
+- Like button has **spring-physics scale bump** (1 → 1.25 → 1) + **haptic** (iOS only).
+- User row upgraded to Window Card DNA (sand border, warm shadow, avatar glow wrap).
+- Top 10 link card now has a small ocean-to-sand gradient trophy tile.
+
+### Top 10 page
+- `app/community-highlights/top.tsx`: unchanged — uses `MediaCard` which already renders ocean-to-sand gradient + warm glow on ranks #1-#3 and standard black pill on 4-10.
+
+### Feed
+- `app/feed.tsx` → `activityCard`: 20px padding, 20px radius, 1px sand border, warm `#C9A961` shadow (6px offset, 14px radius, opacity 0.1).
+- `components/FeedCardHeader.tsx`: avatar wrapped in sand-glow container, 12px bottom padding + 1px sand divider below header (subtle 0.35 opacity line).
+- `components/FeedCardActions.tsx`: top border now sand; **Like button has spring animation** (1 → 1.3 → 1) + iOS haptic on tap; **Comment button has iOS selection haptic**.
+
+### Explore tab
+- `app/continents.tsx` Community CTA: migrated from heavy dark-ocean gradient card to a **white Window Card** (sand border + warm shadow) with a small ocean-to-sand gradient icon tile and a chevron. Ocean-blue title, secondary-gray subtitle, premium glass feel.
+
+### Community tab
+- `app/community.tsx`: fallback `featuredLink` (shown only when no dynamic highlight exists) now uses warm shadow + sand border instead of heavy `#000`.
+
+### Regression testing
+- `testing_agent_v3_fork` iteration_20: 6/6 pages load clean, 0 crashes, 0 JS errors. Visual DNA smoke-validated via self-screenshot on `/feed` (white cards, sand borders, header divider, warm shadows all confirmed).
 
 ## Test Accounts
 - **Admin (superadmin)**: test@wandermark.app / Test1234!
 - **Pro user**: testpro@wandermark.app / Test1234!
 - **Moderator**: mod@wandermark.app / Test1234!
 
-## Pending Issues (for next fork)
-- ~~P0: Feed consistency — Community vs Friends tabs have different like/date/info behavior~~ ✅ DONE (April 19, 2026 — Session 5)
-- P0: User profile crash on leaderboard click — possibly aspectRatio issue, fixed with Dimensions but needs testing
-- P0: Verify all fixes in Build 83
+## Upcoming Tasks
+- P1: Sentry Integration for production error monitoring
+- P2: Server-side image compression/resizing
+- P3: Rename GitHub Repository from `wanderlist-app` to `wandermark-app`
+- P4: "Nearby travelers" section for geographical discovery
 
 ## Session 11 — April 19, 2026 (Admin auto-flag badge)
 
