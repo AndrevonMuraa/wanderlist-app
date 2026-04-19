@@ -1,20 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Platform, StatusBar, RefreshControl } from 'react-native';
-import { Avatar, Surface } from 'react-native-paper';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Platform, RefreshControl } from 'react-native';
+import { Surface } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import theme, { gradients } from '../styles/theme';
+import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { PersistentTabBar } from '../components/PersistentTabBar';
-import { HeaderBranding } from '../components/BrandedGlobeIcon';
 import UniversalHeader from '../components/UniversalHeader';
 import { getToken } from '../utils/token';
 import CommentsModal from '../components/CommentsModal';
-import { useAuth } from '../contexts/AuthContext';
-
-interface Activity {
+import FeedCardHeader from '../components/FeedCardHeader';
+import FeedCardActions from '../components/FeedCardActions';
+import { useAuth } from '../contexts/AuthContext';interface Activity {
   activity_id: string;
   user_id: string;
   user_name: string;
@@ -37,17 +34,6 @@ interface Activity {
   visit_id?: string;
 }
 
-
-import { formatTimeAgo } from '../utils/formatTime';
-
-const getPrivacyIcon = (visibility: string) => {
-  switch (visibility) {
-    case 'public': return { icon: 'globe-outline', color: '#4CAF50' };
-    case 'friends': return { icon: 'people-outline', color: '#2196F3' };
-    case 'private': return { icon: 'lock-closed-outline', color: '#FF9800' };
-    default: return { icon: 'globe-outline', color: '#4CAF50' };
-  }
-};
 
 interface CommunityFeedItem {
   visit_id: string;
@@ -86,7 +72,6 @@ export default function FeedScreen() {
     source: 'friends' | 'community';
   } | null>(null);
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const currentUserId = user?.user_id || '';
 
@@ -204,39 +189,19 @@ export default function FeedScreen() {
     ));
   };
 
-  const handleBack = () => {
-    router.push('/(tabs)/social');
-  };
-
-  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 24);
-
   const renderActivityItem = ({ item: activity }: { item: Activity }) => {
-    const privacyInfo = getPrivacyIcon(activity.visibility);
     const hasRichContent = activity.has_photos || activity.has_diary;
 
     return (
       <Surface style={styles.activityCard}>
-        <TouchableOpacity style={styles.activityHeader} onPress={() => router.push(`/user-profile/${activity.user_id}`)} activeOpacity={0.7}>
-          {activity.user_picture ? (
-            <Avatar.Image size={44} source={{ uri: activity.user_picture }} />
-          ) : (
-            <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: theme.colors.border, justifyContent: 'center', alignItems: 'center' }}>
-              <Ionicons name="person" size={22} color={theme.colors.textLight} />
-            </View>
-          )}
-          <View style={styles.activityInfo}>
-            <View style={styles.activityNameRow}>
-              <Text style={styles.activityUser}>{activity.user_name}</Text>
-              <Ionicons 
-                name={privacyInfo.icon as any} 
-                size={12} 
-                color={privacyInfo.color} 
-                style={styles.privacyIcon}
-              />
-            </View>
-            <Text style={styles.activityTime}>{formatTimeAgo(activity.created_at)}</Text>
-          </View>
-        </TouchableOpacity>
+        <FeedCardHeader
+          userId={activity.user_id}
+          userName={activity.user_name}
+          userPicture={activity.user_picture}
+          timestamp={activity.created_at}
+          visibility={activity.visibility}
+          onPress={() => router.push(`/user-profile/${activity.user_id}`)}
+        />
 
         {/* Photo Preview */}
         {activity.photo_url && (
@@ -332,76 +297,36 @@ export default function FeedScreen() {
         </View>
 
         {/* Like + Comment Section */}
-        <View style={styles.activityActions}>
-          <TouchableOpacity 
-            style={styles.likeButton} 
-            onPress={() => handleLike(activity.activity_id)}
-            data-testid={`friends-like-${activity.activity_id}`}
-          >
-            <Ionicons 
-              name={activity.is_liked ? "heart" : "heart-outline"} 
-              size={20} 
-              color={activity.is_liked ? "#FF4B6E" : theme.colors.textSecondary} 
-            />
-            {(activity.likes_count || activity.like_count || 0) > 0 && (
-              <Text style={[
-                styles.likeCount,
-                activity.is_liked && styles.likeCountActive
-              ]}>
-                {activity.likes_count || activity.like_count || 0}
-              </Text>
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.likeButton}
-            onPress={() => setCommentsTarget({
-              activityId: activity.activity_id,
-              count: activity.comments_count || 0,
-              source: 'friends',
-            })}
-            data-testid={`friends-comment-${activity.activity_id}`}
-          >
-            <Ionicons name="chatbubble-outline" size={19} color={theme.colors.textSecondary} />
-            {(activity.comments_count || 0) > 0 && (
-              <Text style={styles.likeCount}>{activity.comments_count}</Text>
-            )}
-          </TouchableOpacity>
-        </View>
+        <FeedCardActions
+          isLiked={activity.is_liked}
+          likesCount={activity.likes_count || activity.like_count || 0}
+          commentsCount={activity.comments_count || 0}
+          onLike={() => handleLike(activity.activity_id)}
+          onComment={() => setCommentsTarget({
+            activityId: activity.activity_id,
+            count: activity.comments_count || 0,
+            source: 'friends',
+          })}
+          likeTestId={`friends-like-${activity.activity_id}`}
+          commentTestId={`friends-comment-${activity.activity_id}`}
+        />
       </Surface>
     );
   };
 
   const renderCommunityItem = ({ item }: { item: CommunityFeedItem }) => {
-    const privacyInfo = getPrivacyIcon('public');
     const likesCount = item.likes_count || 0;
 
     return (
       <Surface style={styles.activityCard}>
-        <TouchableOpacity
-          style={styles.activityHeader}
-          onPress={() => item.user_id && router.push(`/user-profile/${item.user_id}`)}
-          activeOpacity={0.7}
-        >
-          {item.user_picture ? (
-            <Avatar.Image size={44} source={{ uri: item.user_picture }} />
-          ) : (
-            <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: theme.colors.border, justifyContent: 'center', alignItems: 'center' }}>
-              <Ionicons name="person" size={22} color={theme.colors.textLight} />
-            </View>
-          )}
-          <View style={styles.activityInfo}>
-            <View style={styles.activityNameRow}>
-              <Text style={styles.activityUser}>{item.user_name}</Text>
-              <Ionicons
-                name={privacyInfo.icon as any}
-                size={12}
-                color={privacyInfo.color}
-                style={styles.privacyIcon}
-              />
-            </View>
-            <Text style={styles.activityTime}>{item.visited_at ? formatTimeAgo(item.visited_at) : ''}</Text>
-          </View>
-        </TouchableOpacity>
+        <FeedCardHeader
+          userId={item.user_id}
+          userName={item.user_name}
+          userPicture={item.user_picture}
+          timestamp={item.visited_at}
+          visibility="public"
+          onPress={item.user_id ? () => router.push(`/user-profile/${item.user_id}`) : undefined}
+        />
 
         {item.photo_url && (
           <TouchableOpacity
@@ -431,49 +356,27 @@ export default function FeedScreen() {
           )}
         </View>
 
-        {/* Like + Comment + Upvotes Section */}
-        <View style={styles.activityActions}>
-          <TouchableOpacity
-            style={styles.likeButton}
-            onPress={() => handleCommunityLike(item)}
-            disabled={!item.activity_id}
-            data-testid={`community-like-${item.visit_id}`}
-          >
-            <Ionicons
-              name={item.is_liked ? 'heart' : 'heart-outline'}
-              size={20}
-              color={item.is_liked ? '#FF4B6E' : theme.colors.textSecondary}
-            />
-            {likesCount > 0 && (
-              <Text style={[styles.likeCount, item.is_liked && styles.likeCountActive]}>
-                {likesCount}
-              </Text>
-            )}
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.likeButton}
-            onPress={() => item.activity_id && setCommentsTarget({
-              activityId: item.activity_id,
-              count: item.comments_count || 0,
-              source: 'community',
-            })}
-            disabled={!item.activity_id}
-            data-testid={`community-comment-${item.visit_id}`}
-          >
-            <Ionicons name="chatbubble-outline" size={19} color={theme.colors.textSecondary} />
-            {(item.comments_count || 0) > 0 && (
-              <Text style={styles.likeCount}>{item.comments_count}</Text>
-            )}
-          </TouchableOpacity>
-
-          {item.upvotes > 0 && (
-            <View style={[styles.likeButton, { marginLeft: 'auto' }]}>
+        <FeedCardActions
+          isLiked={!!item.is_liked}
+          likesCount={likesCount}
+          commentsCount={item.comments_count || 0}
+          onLike={() => handleCommunityLike(item)}
+          onComment={() => item.activity_id && setCommentsTarget({
+            activityId: item.activity_id,
+            count: item.comments_count || 0,
+            source: 'community',
+          })}
+          likeDisabled={!item.activity_id}
+          commentDisabled={!item.activity_id}
+          likeTestId={`community-like-${item.visit_id}`}
+          commentTestId={`community-comment-${item.visit_id}`}
+          rightExtra={item.upvotes > 0 ? (
+            <View style={styles.upvoteChip}>
               <Ionicons name="star" size={15} color="#FFD700" />
               <Text style={styles.likeCount}>{item.upvotes}</Text>
             </View>
-          )}
-        </View>
+          ) : undefined}
+        />
       </Surface>
     );
   };
@@ -609,37 +512,11 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
-  activityHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
   activityPhoto: {
     width: '100%',
     height: 200,
     borderRadius: 12,
     marginBottom: 12,
-  },
-  activityInfo: {
-    marginLeft: 12,
-    flex: 1,
-  },
-  activityNameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  activityUser: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: theme.colors.text,
-  },
-  privacyIcon: {
-    marginLeft: 6,
-  },
-  activityTime: {
-    fontSize: 12,
-    color: theme.colors.textLight,
-    marginTop: 2,
   },
   activityContent: {
     marginBottom: 12,
@@ -684,28 +561,10 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontWeight: '500',
   },
-  activityActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
-  },
-  likeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-  },
   likeCount: {
     fontSize: 13,
     color: theme.colors.textSecondary,
     fontWeight: '500',
-  },
-  likeCountActive: {
-    color: '#FF4B6E',
   },
   emptyState: {
     alignItems: 'center',
@@ -762,5 +621,10 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     marginTop: 6,
     lineHeight: 18,
+  },
+  upvoteChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
 });

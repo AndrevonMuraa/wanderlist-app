@@ -28,10 +28,12 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - P0: User profile crash on leaderboard click — possibly aspectRatio issue, fixed with Dimensions but needs testing
 - P0: Verify all fixes in Build 83
 
-## Session 5 — April 19, 2026 (Feed parity)
+## Session 5 — April 19, 2026 (Feed parity + refactor)
 - Backend: `/api/community-feed` now enriches each item with `activity_id`, `user_id`, `is_liked`, `likes_count`, `comments_count`, `user_upvoted` by joining activities via `visit_id` + `user_created_visit_id`. Likes and comments counts are aggregated live from their collections for parity with `/api/feed`.
 - Frontend: Community feed card redesigned to match Friends feed. Heart toggles REAL like (reuses `/api/activities/{id}/like`). New comment icon button opens a shared `CommentsModal` bottom-sheet (wraps existing `CommentsSection` with new `forceExpanded` prop). Comment button also added to Friends feed card.
 - Added `components/CommentsModal.tsx` (new). Extended `components/CommentsSection.tsx` with `forceExpanded` prop.
+- **Notification bonus**: Because community likes/comments now flow through the activity endpoints, `create_notification(...)` fires automatically for the post owner — verified end-to-end with two accounts. No extra code needed.
+- **Mini refactor (phase 3-lite)**: Extracted `components/FeedCardHeader.tsx` + `components/FeedCardActions.tsx` — shared across Friends and Community feeds. Removed ~100 lines of duplicated JSX/styles + cleaned unused imports (`StatusBar`, `LinearGradient`, `HeaderBranding`, `gradients`, `formatTimeAgo`, `useSafeAreaInsets`) and dead code (`handleBack`, `topPadding`).
 - Backend tested: `test_feed_parity_iteration18.py` — 10/10 passed.
 
 ## Completed (Session 3+4 — April 11-19, 2026)
