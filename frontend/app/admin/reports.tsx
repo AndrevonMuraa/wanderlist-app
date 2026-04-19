@@ -29,6 +29,8 @@ interface ReportItem {
   admin_notes?: string;
   created_at: string;
   reviewed_at?: string;
+  auto_flagged?: boolean;
+  pending_report_count?: number;
   reporter?: {
     name: string;
     email: string;
@@ -163,7 +165,24 @@ export default function AdminReportsScreen() {
   };
 
   const ReportCard = ({ report }: { report: ReportItem }) => (
-    <View style={[styles.reportCard, { backgroundColor: colors.surface }]}>
+    <View
+      style={[
+        styles.reportCard,
+        { backgroundColor: colors.surface },
+        report.auto_flagged && styles.autoFlaggedCard,
+      ]}
+      data-testid={`report-card-${report.report_id}`}
+    >
+      {/* Auto-flag banner */}
+      {report.auto_flagged && (
+        <View style={styles.autoFlagBanner}>
+          <Ionicons name="shield" size={13} color="#FFF" />
+          <Text style={styles.autoFlagBannerText}>
+            Auto-hidden — {report.pending_report_count} pending reports
+          </Text>
+        </View>
+      )}
+
       {/* Header */}
       <View style={styles.reportHeader}>
         <View style={[styles.typeBadge, { backgroundColor: colors.primary + '20' }]}>
@@ -535,6 +554,30 @@ const styles = StyleSheet.create({
   reportCard: {
     padding: 16,
     borderRadius: 16,
+  },
+  autoFlaggedCard: {
+    borderWidth: 1.5,
+    borderColor: '#dc2626',
+  },
+  autoFlagBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#dc2626',
+    marginHorizontal: -16,
+    marginTop: -16,
+    marginBottom: 12,
+    paddingVertical: 7,
+    paddingHorizontal: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
+  autoFlagBannerText: {
+    color: '#FFF',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   reportHeader: {
     flexDirection: 'row',

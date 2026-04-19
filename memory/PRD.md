@@ -28,6 +28,15 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - P0: User profile crash on leaderboard click — possibly aspectRatio issue, fixed with Dimensions but needs testing
 - P0: Verify all fixes in Build 83
 
+## Session 11 — April 19, 2026 (Admin auto-flag badge)
+
+- Backend `GET /api/admin/reports` enriched with two new per-report fields:
+  - `pending_report_count` — number of pending photo/activity reports against the same `target_id`
+  - `auto_flagged` — boolean, true when `pending_report_count ≥ AUTO_FLAG_THRESHOLD (3)`
+- Backend re-sorts response: auto-flagged pending reports bubble to the top, then by pending_count DESC, then recency. Admins triage severe cases first.
+- Frontend `/admin/reports` ReportCard: red border + top banner "Auto-hidden — N pending reports" + shield icon when `auto_flagged=true`.
+- ✅ End-to-end curl verified: 3 reports from 3 distinct users → all 3 bubble to top with `[AUTO-FLAGGED]` + `pending=3`.
+
 ## Session 10 — April 19, 2026 (Auto-flag P2)
 
 - Ny `backend/utils/auto_flag.py` — eksporterer `AUTO_FLAG_THRESHOLD = 3` og `get_flagged_target_ids()` (returnerer set av target_ids med 3+ **pending** photo-reports; resolved/dismissed teller ikke).

@@ -286,14 +286,30 @@ async def get_admin_reports(
     skip = (page - 1) * limit
     reports = await db.reports.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
     
-    # Enrich with reporter info
+    # Enrich with reporter info + auto-flag state (3+ pending reports on same target)
+    from utils.auto_flag import get_flagged_target_ids, AUTO_FLAG_THRESHOLD
+
+    # Count pending photo/activity reports per target_id for badge
+    target_ids_in_page = list({r.get("target_id") for r in reports if r.get("target_id")})
+    pending_count_map = {}
+    if target_ids_in_page:
+        count_agg = await db.reports.aggregate([
+            {"$match": {
+                "target_id": {"$in": target_ids_in_page},
+                "status": "pending",
+                "report_type": {"$in": ["photo", "activity"]}
+            }},
+            {"$group": {"_id": "$target_id", "count": {"$sum": 1}}}
+        ]).to_list(len(target_ids_in_page))
+        pending_count_map = {c["_id"]: c["count"] for c in count_agg}
+
     for report in reports:
         reporter = await db.users.find_one(
             {"user_id": report["reporter_id"]},
             {"_id": 0, "name": 1, "email": 1, "picture": 1}
         )
         report["reporter"] = reporter
-        
+
         # Get target info based on type
         if report["report_type"] == "user":
             target = await db.users.find_one(
@@ -301,7 +317,21 @@ async def get_admin_reports(
                 {"_id": 0, "name": 1, "email": 1, "picture": 1}
             )
             report["target"] = target
-    
+
+        # Auto-flag metadata
+        pending = pending_count_map.get(report.get("target_id"), 0)
+        report["pending_report_count"] = pending
+        report["auto_flagged"] = pending >= AUTO_FLAG_THRESHOLD
+
+    # Reorder: auto-flagged pending reports bubble to top; otherwise keep recency order
+    reports.sort(
+        key=lambda r: (
+            0 if (r.get("auto_flagged") and r.get("status") == "pending") else 1,
+            -(r.get("pending_report_count") or 0),
+            -(r.get("created_at").timestamp() if hasattr(r.get("created_at"), "timestamp") else 0),
+        )
+    )
+
     return {
         "reports": reports,
         "total": total,
