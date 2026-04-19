@@ -28,7 +28,30 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - P0: User profile crash on leaderboard click — possibly aspectRatio issue, fixed with Dimensions but needs testing
 - P0: Verify all fixes in Build 83
 
-## Session 5 — April 19, 2026 (Feed parity + refactor + auto-heal)
+## Session 6 — April 19, 2026 (Community Highlight redesign)
+### Design
+- Ran `design_agent_full_stack` → `/app/design_guidelines.json` (v1). Coastal/nautical theme confirmed, Card DNA (16px radius, consistent shadow), 4:5 hero aspect, kebab-case section headers with "See all →", unified spacing scale.
+
+### Backend
+- New: `GET /api/community-highlight` — returns ONE dynamically-picked highlight using hotness algorithm `(likes+1) * max(0.3, 1 - age_days/30)`, random from top 20 for rotation. Sources: public landmark visits + public custom visits. Includes `activity_id`, `is_liked`, `likes_count`, `comments_count` (privacy/interaction aware).
+- New: `GET /api/community-highlights/top?limit=N` — top N (max 50) all-time ranked by raw `likes_count`.
+- Shared helper `_build_candidate_pool()` — joins users + activities + likes + (new) landmarks lookup to populate landmark_name/country_name from canonical source.
+- Fix: custom visit query now includes `landmarks.photo` as photo source, not just top-level `photos`.
+
+### Frontend
+- New page: `app/community-highlights.tsx` — hero (4:5, dual gradient + badges), user row, Like + Comment action bar, "Why this photo?" info card, subtle discoverable "See top 10 all-time →" link.
+- New page: `app/community-highlights/top.tsx` — 2-col grid of ranked MediaCard with rank badge.
+- New component: `components/CommunityHighlightHero.tsx` — signature hero card rendered on Social tab.
+- New component: `components/MediaCard.tsx` — unified card DNA for all carousels and grids.
+- New component: `components/SectionHeader.tsx` — icon + title + optional "See all →".
+- Rewritten: `app/community.tsx` — all carousels consistent (Recent photos converted from grid → carousel). Gradient CTA banner "Today's community highlight" at top.
+- Updated: `app/continents.tsx` (Explore) — replaced redundant "Community highlights" carousel with a single gradient CTA banner linking to `/community-highlights`.
+- Updated: `app/(tabs)/social.tsx` — renders `<CommunityHighlightHero>` at top of scroll; tapping navigates to `/community-highlights`.
+
+### Testing
+- Backend: `test_community_highlight_iteration19.py` — 11/11 active tests pass. Previous iteration_18 regression suite still green.
+- TypeScript: clean across all new and modified files.
+- Visual smoke: `/community-highlights` empty-state page renders correctly at 390px viewport.
 - Backend: `/api/community-feed` now enriches each item with `activity_id`, `user_id`, `is_liked`, `likes_count`, `comments_count`, `user_upvoted` by joining activities via `visit_id` + `user_created_visit_id`. Likes and comments counts are aggregated live from their collections for parity with `/api/feed`.
 - **Auto-heal**: For any public visit or public custom visit in the community feed that is missing an activity document (legacy data or failed prior insert), `community.py` now creates the activity inline (idempotent batch insert) so every visible item always has a valid `activity_id` → like/comment always works. Tested by deleting an activity, fetching the feed (auto-heals), and then successfully posting a like + comment against the restored activity.
 - Frontend: Community feed card redesigned to match Friends feed. Heart toggles REAL like (reuses `/api/activities/{id}/like`). New comment icon button opens a shared `CommentsModal` bottom-sheet (wraps existing `CommentsSection` with new `forceExpanded` prop). Comment button also added to Friends feed card.

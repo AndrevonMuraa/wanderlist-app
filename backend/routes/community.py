@@ -1023,7 +1023,13 @@ async def _build_candidate_pool(current_user: User, include_custom: bool = True)
     custom_visits = []
     if include_custom:
         custom_visits = await db.user_created_visits.find(
-            {"visibility": "public", "photos": {"$exists": True, "$ne": []}},
+            {
+                "visibility": "public",
+                "$or": [
+                    {"photos": {"$exists": True, "$ne": []}},
+                    {"landmarks.photo": {"$exists": True, "$ne": None}},
+                ],
+            },
             {"_id": 0, "user_created_visit_id": 1, "user_id": 1, "country_name": 1,
              "photos": 1, "landmarks": 1, "diary": 1, "visited_at": 1}
         ).sort("visited_at", -1).limit(100).to_list(100)
