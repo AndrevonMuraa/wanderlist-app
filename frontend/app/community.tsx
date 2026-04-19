@@ -12,6 +12,7 @@ import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
 import SectionHeader from '../components/SectionHeader';
 import MediaCard from '../components/MediaCard';
+import CommunityHighlightHero from '../components/CommunityHighlightHero';
 import { getToken } from '../utils/token';
 
 const CARD_WIDTH = 170;
@@ -20,6 +21,7 @@ const CARD_ASPECT = 1.25;
 export default function CommunityScreen() {
   const router = useRouter();
   const [highlights, setHighlights] = useState<any[]>([]);
+  const [communityHighlight, setCommunityHighlight] = useState<any>(null);
   const [recentPhotos, setRecentPhotos] = useState<any[]>([]);
   const [topPhotos, setTopPhotos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,13 +31,18 @@ export default function CommunityScreen() {
     try {
       const token = await getToken();
       const headers = { Authorization: `Bearer ${token}` };
-      const [hlRes, feedRes] = await Promise.all([
+      const [hlRes, feedRes, singleHlRes] = await Promise.all([
         fetch(`${BACKEND_URL}/api/community-highlights`, { headers }),
         fetch(`${BACKEND_URL}/api/community-feed?limit=20`, { headers }),
+        fetch(`${BACKEND_URL}/api/community-highlight`, { headers }),
       ]);
       if (hlRes.ok) {
         const d = await hlRes.json();
         setHighlights(d.highlights || []);
+      }
+      if (singleHlRes.ok) {
+        const d = await singleHlRes.json();
+        setCommunityHighlight(d.highlight || null);
       }
       if (feedRes.ok) {
         const d = await feedRes.json();
@@ -89,30 +96,46 @@ export default function CommunityScreen() {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         contentContainerStyle={{ paddingBottom: 40 }}
       >
-        {/* Featured highlight link card */}
-        <TouchableOpacity
-          style={styles.featuredLink}
-          onPress={() => router.push('/community-highlights')}
-          activeOpacity={0.85}
-          data-testid="community-featured-link"
-        >
-          <LinearGradient
-            colors={[theme.colors.primary, theme.colors.primaryDark]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.featuredGradient}
+        {/* Community Highlight — real hero (replaces the old CTA gradient) */}
+        {communityHighlight ? (
+          <>
+            <SectionHeader
+              icon="sparkles"
+              iconColor={theme.colors.accentGold}
+              title="Community highlight"
+              onSeeAll={() => router.push('/community-highlights')}
+              seeAllTestId="community-highlight-see-all"
+            />
+            <CommunityHighlightHero
+              highlight={communityHighlight}
+              onPress={() => router.push('/community-highlights')}
+            />
+          </>
+        ) : (
+          <TouchableOpacity
+            style={styles.featuredLink}
+            onPress={() => router.push('/community-highlights')}
+            activeOpacity={0.85}
+            data-testid="community-featured-link"
           >
-            <View style={{ flex: 1 }}>
-              <View style={styles.featuredBadge}>
-                <Ionicons name="sparkles" size={10} color="#FFF" />
-                <Text style={styles.featuredBadgeText}>Featured</Text>
+            <LinearGradient
+              colors={[theme.colors.primary, theme.colors.primaryDark]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.featuredGradient}
+            >
+              <View style={{ flex: 1 }}>
+                <View style={styles.featuredBadge}>
+                  <Ionicons name="sparkles" size={10} color="#FFF" />
+                  <Text style={styles.featuredBadgeText}>Featured</Text>
+                </View>
+                <Text style={styles.featuredTitle}>Today's community highlight</Text>
+                <Text style={styles.featuredSub}>Discover what's captivating the community right now</Text>
               </View>
-              <Text style={styles.featuredTitle}>Today's community highlight</Text>
-              <Text style={styles.featuredSub}>Discover what's captivating the community right now</Text>
-            </View>
-            <Ionicons name="arrow-forward-circle" size={36} color="#FFF" />
-          </LinearGradient>
-        </TouchableOpacity>
+              <Ionicons name="arrow-forward-circle" size={36} color="#FFF" />
+            </LinearGradient>
+          </TouchableOpacity>
+        )}
 
         {/* Trending landmarks */}
         {highlights.length > 0 && (

@@ -17,7 +17,7 @@ import requests
 
 BASE_URL = os.environ.get("EXPO_PUBLIC_BACKEND_URL") or os.environ.get(
     "REACT_APP_BACKEND_URL",
-    "https://feed-interaction-fix.preview.emergentagent.com",
+    "https://travel-polish.preview.emergentagent.com",
 )
 BASE_URL = BASE_URL.rstrip("/")
 

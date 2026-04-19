@@ -58,6 +58,12 @@ export const lightColors = {
   
   // Borders - Subtle
   border: '#E8E4DF',
+  borderSand: 'rgba(232, 220, 200, 0.5)',  // Window Card frame
+  borderGlass: 'rgba(255, 255, 255, 0.4)',  // Matte frame on hero images
+  
+  // Window DNA - Warm shadow tints
+  shadowWarm: '#C9A961',  // Penthouse window warm cast
+  accentSand: '#E8DCC8',  // Signature sand accent
   borderLight: '#F0EDE8',
 
   // Additional properties used across the app

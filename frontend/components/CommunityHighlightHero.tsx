@@ -53,6 +53,9 @@ export default function CommunityHighlightHero({
         <View style={[StyleSheet.absoluteFillObject, { backgroundColor: theme.colors.border }]} />
       )}
 
+      {/* Matte inner frame — "penthouse window" edge */}
+      <View pointerEvents="none" style={styles.innerFrame} />
+
       {/* Top badge row */}
       <View style={styles.topRow}>
         <View style={styles.featuredBadge}>
@@ -84,7 +87,9 @@ export default function CommunityHighlightHero({
           <View style={styles.metaRow}>
             <View style={styles.userBlock}>
               {highlight.user_picture ? (
-                <Image source={{ uri: highlight.user_picture }} style={styles.avatar} />
+                <View style={styles.avatarGlow}>
+                  <Image source={{ uri: highlight.user_picture }} style={styles.avatar} />
+                </View>
               ) : (
                 <View style={[styles.avatar, styles.avatarFallback]}>
                   <Ionicons name="person" size={12} color="#FFF" />
@@ -111,16 +116,29 @@ export default function CommunityHighlightHero({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 20,
+    borderRadius: 24,
     overflow: 'hidden',
     marginHorizontal: 16,
     marginVertical: 8,
     backgroundColor: theme.colors.surface,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.15,
-    shadowRadius: 16,
+    borderWidth: 1,
+    borderColor: theme.colors.borderSand,
+    shadowColor: theme.colors.shadowWarm,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.12,
+    shadowRadius: 20,
     elevation: 6,
+  },
+  innerFrame: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    right: 4,
+    bottom: 4,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: theme.colors.borderGlass,
+    zIndex: 1,
   },
   topRow: {
     position: 'absolute',
@@ -198,12 +216,19 @@ const styles = StyleSheet.create({
     gap: 8,
     flex: 1,
   },
+  avatarGlow: {
+    shadowColor: theme.colors.accentSand,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.9,
+    shadowRadius: 6,
+    elevation: 3,
+  },
   avatar: {
     width: 24,
     height: 24,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.6)',
+    borderColor: 'rgba(255,255,255,0.7)',
   },
   avatarFallback: {
     backgroundColor: 'rgba(255,255,255,0.25)',

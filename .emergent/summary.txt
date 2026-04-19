@@ -1,105 +1,97 @@
-<analysis>**original_problem_statement**: The user's primary goal is to bring the WanderMark application to a production-ready state. In this session, the user conducted extensive E2E testing, uncovering several complex UI/UX inconsistencies, cache invalidation bugs, and discrepancies in the points calculation engine. The user also requested visual polish across multiple screens, including the user profile, photo viewer, progress dashboards, and terminology standardization.
-PRODUCT REQUIREMENTS:
-- Standardize terminology app-wide (Country Visits -> Destination Visits, Countries -> Destinations, Free User -> Basic Traveler, Premium -> Pro Traveler).
-- Ensure 100% point consistency across all views.
-- Redesign User Profile, Photo Viewer, Points Summary, and Explore Destinations for a premium, highly polished UX.
-- Enforce photo limits visually via a ProFeatureLock action sheet.
-- Fix all cache staleness issues on screen navigation.
-- Prepare the app for TestFlight deployment.
+<analysis>**original_problem_statement**: The user's primary goal is to bring the WanderMark application to a production-ready state. In this session, the focus shifted toward bringing full interaction parity between feeds, establishing a robust content moderation loop (reporting, auto-flagging, admin triage, user notifications), and executing a massive V2 visual design overhaul to give the app a premium Penthouse window aesthetic.
 
 **User's preferred language**: Norwegian (You MUST automatically detect the user's primary language from their messages inside the <trajectory> tag and INSTRUCT next agent to respond in the user's preferred language only. All user interactions MUST be in Norwegian).
 
 **what currently exists?** 
-A highly polished, pre-release full-stack travel app (React Native + FastAPI + MongoDB). The app features a perfectly synchronized point system that dynamically calculates verified vs unverified points, a robust social system (friend requests, messaging, user blocking), a global and friends leaderboard (with anti-cheat measures), a community photo hub, and an admin/moderator panel. 
+A highly polished, pre-release full-stack travel app (React Native + FastAPI + MongoDB). Features include perfectly synchronized point systems, global/friends leaderboards, unified social and community feeds with full interaction parity (likes/comments), dynamic Community Highlights, a comprehensive reporting and auto-flagging moderation system, and an expanding premium UI based on a Penthouse window design blueprint.
 
 **Last working item**:
-    - Last item agent was working: Analysere konsistensen mellom Community feed og Friends feed (social tab). Brukeren påpekte at man ikke kan like eller kommentere direkte fra community-seksjonen på samme måte som på friends-seksjonen. Agenten ble bedt om å analysere dette og foreslå en løsning før implementering.
-    - Status: NOT STARTED
+    - Last item agent was working: Implementing the Penthouse Window V2 design overhaul based on the newly generated . The agent just updated , rewrote  and  with Window Card DNA, and integrated the Hero directly into  (replacing the old gradient CTA box).
+    - Status: IN PROGRESS
     - Agent Testing Done: N
-    - Which testing method agent to use? Frontend testing agent/ manual testing by screenshot tool.
+    - Which testing method agent to use? Screenshot tool to verify layout, then Frontend testing agent for the full UI flow.
     - User Testing Done: N
 
-**All Pending/In progress Issue list**: 
-  Issue 1: Feed Consistency & Interaction Analysis (Community vs Friends) - P0
-     - Attempted fixes: None yet.
-     - Next debug checklist: Analyze  and  (Community Feed section). Check  interface and rendering logic to see why like/comment buttons are missing or behaving differently compared to the main friends feed. Propose a plan to the user to sync their designs and functionality.
-     - Why fix this issue and what will be achieved with the fix? Ensures a seamless, frustration-free social UX where users can interact with content consistently regardless of where they discover it in the app.
-     - Status: NOT STARTED
-     - Is recurring issue? N
-     - Should Test frontend/backend/both after fix? Frontend primarily (screenshot tool / testing agent).
-     - Blocked on other issue: None.
+**All Pending/In progress Issue list**:
+  None. There are no active bugs, only the in-progress design feature implementation.
 
 **In progress Task List**:
-  - None (All tasks from the previous session were completed).
+  Task 1: Complete Penthouse Window V2 Design Overhaul (Phases B & C) - P0
+     - Where to resume: The agent just pushed updates to , , , and . You need to typecheck these, run a visual smoke test, and then proceed to the remaining design tasks specified in .
+     - What will be achieved with this? A premium, highly polished UI utilizing Window Card DNA (sand-tinted 1px inner borders, warm  shadows, pure white surfaces), floating glass action bars, ocean-to-sand gradient glows for Top 10 ranks, and interactive micro-polishes (parallax, spring physics, haptics).
+     - Status: IN PROGRESS
+     - Should Test frontend/backend/both after fix? Frontend primarily (screenshot tool / testing agent).
+     - Blocked on something: No.
 
 **Upcoming and Future Tasks**
     Upcoming Tasks:
-    - P1: Deploy Website Legal Pages (Privacy Policy and Terms of Service in ).
+    - P1: Sentry Integration for production error monitoring.
+    - P2: Server-side image compression/resizing to optimize load times.
     
     Future Tasks:
-    - P2: Sentry Integration for production error monitoring.
-    - P3: Image Upload Optimization (server-side compression/resizing).
-    - P4: Rename GitHub Repository from  to .
+    - P3: Rename GitHub Repository from  to .
+    - P4: Nearby travelers section for geographical discovery.
 
 **Completed work in this session**
-- **Community Hub & Feed Overhaul**: Created a dedicated  hub. Opened community photos to basic users. Added Explore community link to the Social tab. 
-- **Leaderboard Anti-Cheat**: Global leaderboard for Points, Landmarks, and Destinations now strictly counts ONLY  visits (visits with photos). Friends leaderboard continues to count all visits.
-- **Social & Privacy Features**: Implemented User Blocking functionality (). Blocked users cannot send friend requests, are hidden from search, and profiles are restricted. Added Bug Reporting tool () with a new tab in the Admin panel.
-- **UI/UX Polish**: 
-  - Redesigned  and  with premium layouts and consistent branding. 
-  - Converted app-wide Title Case to Sentence case. 
-  - Fixed Keyboard traps (added  and ) across all inputs.
-  - Replaced gesture-based  with native  pinch-to-zoom for better stability.
-  - Adjusted 4-column stat boxes in  and  to prevent text truncation ( adjustments).
-- **Codebase Optimization**: Centralized  and  utilities. Removed dead code and unused components (, etc.). Fixed N+1 query performance issue in  by using MongoDB aggregation.
-- **Database Upgrades**: Executed Render scripts to replace Kyrgyzstan with Pakistan and upgraded 19 landmarks to higher-quality, concrete tourist destinations (e.g., Atlantic Ocean Road -> Flåm Railway).
+- **Feed Parity**: Implemented full like and comment functionality in the Community Feed, merging interaction logic with the Friends feed.
+- **Activity Auto-Heal**: Added automatic activity document generation for legacy/custom visits to ensure interactions never fail.
+- **Community Highlights Redesign**: Replaced the static Photo of the week with a dynamic, hotness-scored  hero and a dedicated Top 10 All-Time page.
+- **Backend Refactoring**: Split the oversized  into  and .
+- **Content Moderation Loop**: 
+  - Added Report photo flow across all community surfaces (feed, highlights, top 10, landmark photos).
+  - Wired auto-notifications to alert content owners when a reported photo is removed, deep-linking to Community Guidelines.
+  - Implemented Auto-Flagging () to automatically hide content from discovery if it receives 3+ pending reports.
+  - Added  badge and pending counts to the Admin Panel.
+- **Legal Pages Sync**: Upgraded both in-app () and web (, ) to prominently display detailed Community Guidelines with anchor tags for deep linking.
 
 **Earlier issues found/mentioned but not fixed**
   - None.
 
 **Known issue recurrence from previous fork**
-  - Issue recurrence in previous fork: Cache staleness after photo mutations.
-  - Recurrence count: 1 (Fixed in this session by enforcing  after adding/taking/deleting photos in  and ).
+  - Issue recurrence in previous fork: None triggered in this session.
+  - Recurrence count: 0
   - Status: RESOLVED
 
 **Code Architecture**
-- Frontend: React Native with Expo Router. Tab-based navigation with deep linking to detail pages. Global styles in . API requests primarily wrapped in custom  utility.
-- Backend: FastAPI & MongoDB Atlas. Modular routing in .
+- Frontend: React Native with Expo Router. Custom caching wrapper for API calls. Heavy use of  and  for the new design updates.
+- Backend: FastAPI & MongoDB Atlas. Separated routing logic into granular files under  with shared utilities under .
 - Admin: Integrated within the frontend  with role-based routing checks.
 
 **Key Technical Concepts**
-- **Cache Invalidation**: Mutations must manually call  or relevant keys, combined with  on screens to fetch fresh data on navigation.
-- **Role-based Access**: Handled via dependencies in backend (, ) and conditional rendering in frontend based on  or .
-- **MongoDB Aggregations**: Extensively used for leaderboard ranking and points breakdowns to avoid N+1 query limits.
+- **Hotness Algorithm**:  calculates highlight rotation based on  weighted by a time-decay freshness factor.
+- **Auto-Flagging**:  aggregates report counts; dynamically injects a  excluding flagged s in feed pipelines.
+- **Window Card DNA**: The newly adopted design system paradigm prioritizing 1px warm borders, warm shadow drops (), and floating glassmorphism elements over solid heavy containers.
 
 **key DB schema**
   - : , , , , , .
-  -  /  / : Core visit tracking collections.
-  - : Friendship status tracking (, ).
-  - : Tracks user blocking (, ).
-  - : Stores user-submitted issues and screenshots.
+  -  / : Core visit tracking.
+  - : Maps visits to social feeds to handle likes and comments.
+  - : Stores reported content (, ).
+  - : Alerts users to interactions or moderation actions.
 
 **changes in tech stack**
   - None.
 
 **All files of reference**
-  -  (Needs analysis for consistency)
-  -  (Needs analysis for consistency)
-  -  &  (Social APIs)
-  -  (API Cache logic)
+  -  (Crucial source of truth for the current UI task).
+  -  (Added new sand and glass variables).
+  -  (Updated to Window Card DNA).
+  -  (Updated to Matte frame).
+  -  (Target for Hero integration).
+  -  (New moderation logic).
+  -  (Moderation dashboard).
 
 **Areas that need refactoring**: 
-  - The  file handles multiple types of feeds. Consolidating the rendering logic for  vs  could improve maintainability.
+  -  and  logic has been shifted significantly; after finishing the design overhaul, ensure imports and unused styles are purged.
 
 **key api endpoints**
-  -  vs 
-  - 
-  - 
+  -  (Returns the single hottest highlight)
+  -  (Returns top 10 all-time highlights)
+  -  (Handles moderation resolutions)
 
 **Critical Info for New Agent**
 - **Language Requirement**: The user communicates entirely in **Norwegian**. You MUST reply in Norwegian.
-- **Current Blocker**: The user wants an analysis of the missing/inconsistent Like and Comment features between the Community Feed and Friends Feed. *Analyze the code and propose a solution before making file edits.*
-- **EAS Builds**: The user is actively testing via Expo EAS. Do not break production imports. When  is used, do not mix it with percentages in  without absolute dimensions, as it crashes iOS.
+- **Current Blocker/Task**: The user approved implementing ALT! (Everything) from the newly generated . You are mid-way through implementing this. Read the JSON file, review the last few file edits (, , , ), typecheck, and continue implementing Phase B & C (floating glass action bars, ocean-to-sand rank glow, parallax, haptics, spring animations).
 - **Test Credentials**: 
   - Admin (superadmin):  / 
   - Pro user:  / 
@@ -109,21 +101,24 @@ A highly polished, pre-release full-stack travel app (React Native + FastAPI + M
   - 
   - 
   - 
+  - 
 
 **Last 10 User Messages and any pending HUMAN messages** 
- 1. User: Asked to remove Rank system from game mechanics since it's already in Key features. (Agent removed it).
- 2. User: Asked to clarify Total points includes verified and unverified in About page. (Agent added text).
- 3. User: Asked if custom visits should be in the Where are my photos? list. (Agent added it).
- 4. User: Asked to add Leaderboard to key features and change Rank System icon. (Agent changed Rank to ribbon, Leaderboard to trophy).
- 5. User: Pointed out ShareRankCard text overlaps. (Agent fixed width constraint).
- 6. User: Asked for a Report issue/bug link in the About page. (Agent built full bug report modal and backend).
- 7. User: Asked if admin functions work, distinguishing superadmin vs mod. (Agent verified and restricted bug reports to superadmin only).
- 8. User: Asked to match About icons to Journey icons. (Agent synced all colors/icons).
- 9. User: Keyboard traps on 3 text fields in Edit Profile. (Agent fixed all app-wide keyboard traps).
- 10. User: (Pending) Vi trenger bedre consistency mellom de to feed seksjonene... Nå kan man f.eks. ikke like et bilde direkte fra community seksjonen... Gjør analyse og gi tilbakemelding før vi implementerer noe.
+ 1. User: Asked to add push notification to owner when a comment is made on community-feed. (Agent realized it already works automatically due to shared logic).
+ 2. User: Approved Phase 3-lite refactor for feed items.
+ 3. User: Asked for auto-heal for custom visits so they get an activity doc. (Agent implemented).
+ 4. User: Uploaded images showing inconsistent layout on community/explore pages, requested an upgrade.
+ 5. User: Refined the plan, requested replacing Photo of the week with a dynamic Community Highlight, asked if custom visits should be included, and requested a top 10 page.
+ 6. User: Approved the plan (Option C - run design agent first, then build).
+ 7. User: Approved adding a friendly notification when an admin removes a reported photo.
+ 8. User: Asked to make the guidelines deep-linkable in the Privacy/Terms page.
+ 9. User: Requested P2 Auto-flag (hide photos with 3+ reports).
+ 10. User: Requested P3 Admin panel badge for auto-flagged content.
+ 11. User: Requested a broad design status analysis using Opus 4.7 to push the visual design to a Penthouse window premium aesthetic.
+ 12. User: (Pending) When presented with implementation options for the new design (A, B, or C), user replied: C: ALT! (Do everything).
 
 **Project Health Check:**
-- Broken: Community Feed lacks like and comment interaction parity with Friends feed.
+- Broken: None.
 - Mocked: None.
 
 **3rd Party Integrations**
@@ -133,7 +128,7 @@ A highly polished, pre-release full-stack travel app (React Native + FastAPI + M
   - RevenueCat (In-App Purchases)
 
 **Testing status**
-  - Testing agent used after significant changes: YES
+  - Testing agent used after significant changes: YES (For backend parity and highlight API updates).
   - Troubleshoot agent used after agent stuck in loop: NO
   - Test files created: None.
   - Known regressions: None known.
@@ -144,4 +139,4 @@ A highly polished, pre-release full-stack travel app (React Native + FastAPI + M
 - Moderator:  / 
 
 **What agent forgot to execute**
-- The agent was explicitly asked to analyze the difference in interaction (likes/comments) between the community feed and friends feed, but forked the session to preserve context tokens before doing the analysis. This is the very first task to pick up.</analysis>
+- The agent was in the middle of executing the ALT! design upgrade (Phase A, B, and C). The , , and  have been edited but not yet smoke-tested or verified. The remaining phases (B & C) involving floating glass action bars, ocean-to-sand gradient glow for Top 10, parallax scrolling, and spring physics still need to be implemented according to .</analysis>
