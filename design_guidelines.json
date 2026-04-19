@@ -1,21 +1,74 @@
 {
   "project": "WanderMark",
+  "version": "2.0",
+  "status_analysis": {
+    "philosophy": "Clean, light, and neutral ('ren, lys, nøytral') with a 'Penthouse window looking out over the Maldivean sea' aesthetic. Premium, calm, interactive, with sand-to-ocean gradient accents.",
+    "surfaces_audit": [
+      {
+        "surface": "1. Community tab (/community.tsx)",
+        "current": "Uses a solid gradient CTA block to link to the highlight. Followed by 3 horizontal carousels.",
+        "issue": "User explicitly requested the highlight to be an integrated section, not just a link.",
+        "recommendation": "Replace the 'Featured Link' gradient box with the actual CommunityHighlightHero card at the very top. This integrates the 'View of the day' directly into the page. Apply 'Window Card' styling to the carousels below."
+      },
+      {
+        "surface": "2. Community Highlight dedicated page (/community-highlights.tsx)",
+        "current": "Standard hero image, user row, Bulky action bar for like/comment.",
+        "issue": "Action bar feels heavy. User row shadow is generic black. Lacks the 'premium penthouse' framing.",
+        "recommendation": "Apply the 'Penthouse Window' treatment to the user row. Convert the Like/Comment action bar into floating, glass-like pills (white with 90% opacity, barely-there sand border). Add a 'matte-frame' inner border to the Hero image."
+      },
+      {
+        "surface": "3. Top 10 all-time page (/community-highlights/top.tsx)",
+        "current": "2-column MediaCard grid with basic dark rank badges.",
+        "issue": "Lacks the premium 'wow' factor suitable for an all-time leaderboard.",
+        "recommendation": "Upgrade MediaCard to 'Window Card' DNA. Make the top 3 rank badges use the ocean-to-sand gradient background, and add a subtle gold/sand glow behind them."
+      },
+      {
+        "surface": "4. Social tab (/(tabs)/social.tsx)",
+        "current": "Contains CommunityHighlightHero, Leaderboard, Feed preview with standard shadows.",
+        "issue": "Card shadows use standard black (#000), which feels slightly heavy and contrasts with the light/neutral goal.",
+        "recommendation": "Replace all standard Surface shadows with the warm 'Sand Shadow' (shadowColor: '#C9A961' or '#E8DCC8'). Add the 1px sand-tinted inner border to all cards to mimic framed glass."
+      },
+      {
+        "surface": "5. Explore tab (/continents.tsx)",
+        "current": "Continent cards and a Community CTA banner at the bottom.",
+        "issue": "The Community CTA banner is a flat, heavy gradient block.",
+        "recommendation": "Elevate the Community CTA banner to feel like a premium glass window. Use the 'Window Card' DNA with a light sand background and ocean-blue text, or a very light gradient with a sand border."
+      },
+      {
+        "surface": "6. Feed (/feed.tsx)",
+        "current": "Activity cards with generic shadow, spacing, and styling.",
+        "issue": "Cards feel utilitarian rather than like premium memories.",
+        "recommendation": "Apply 'Window Card' DNA. Increase padding to 20px. Add a soft glow behind user avatars. Use a subtle 1px sand-colored divider between the header and the content."
+      },
+      {
+        "surface": "7. Universal card patterns (MediaCard, FeedCardHeader, etc.)",
+        "current": "Standard radii, generic black shadow, flat borders without depth.",
+        "issue": "Inconsistent 'premium' feel across the app.",
+        "recommendation": "Enforce the 'Window Card' globally: 16px-24px radii, 1px inner border using 'rgba(232, 220, 200, 0.5)', warm sand shadow, and pure white backgrounds on top of the warm cream app background."
+      }
+    ]
+  },
   "theme": {
     "archetype": "1 (Organic & Earthy)",
     "description": "Premium travel app with a coastal, sandy, and nautical vibe. Focus on generous spacing, elegant typography, and iOS-native aesthetics.",
+    "signature_gradient": {
+      "name": "Ocean to Sand",
+      "colors": ["#4DB8D8", "#E8DCC8"],
+      "usage": "Headers, premium badges, top 3 rank highlights"
+    },
     "colors": {
-      "background": "#F5EEE5",
+      "background": "#F5F3F0",
       "surface": "#FFFFFF",
-      "surface_secondary": "#F9F6F0",
-      "primary": "#1A868C",
-      "primary_light": "#2DB3B9",
-      "secondary": "#E07A5F",
-      "text_primary": "#1E293B",
-      "text_secondary": "#64748B",
-      "border": "rgba(30, 41, 43, 0.08)",
-      "overlay": "rgba(0, 0, 0, 0.4)",
-      "gradient_bottom": "rgba(0, 0, 0, 0.8)",
-      "white": "#FFFFFF"
+      "surface_tinted": "#FAF8F5",
+      "primary": "#4DB8D8",
+      "primary_dark": "#2E9AB5",
+      "accent_sand": "#E8DCC8",
+      "accent_gold": "#C9A961",
+      "text_primary": "#2A2A2A",
+      "text_secondary": "#6B6B6B",
+      "border_sand": "rgba(232, 220, 200, 0.5)",
+      "border_glass": "rgba(255, 255, 255, 0.8)",
+      "shadow_warm": "#C9A961"
     }
   },
   "typography": {
@@ -49,20 +102,6 @@
         "family": "body",
         "line_height": 24,
         "letter_spacing": 0
-      },
-      "meta_label": {
-        "size": 13,
-        "weight": "500",
-        "family": "body",
-        "line_height": 18,
-        "letter_spacing": 0.2
-      },
-      "badge": {
-        "size": 11,
-        "weight": "700",
-        "family": "body",
-        "text_transform": "uppercase",
-        "letter_spacing": 1.0
       }
     }
   },
@@ -76,124 +115,110 @@
     "screen_margin": 16
   },
   "components": {
-    "card_dna": {
-      "border_radius": 16,
+    "window_card_dna": {
+      "border_radius": 20,
       "background_color": "#FFFFFF",
       "border_width": 1,
-      "border_color": "rgba(30, 41, 43, 0.08)",
+      "border_color": "rgba(232, 220, 200, 0.5)",
       "shadow": {
         "ios": {
-          "shadowColor": "#000",
-          "shadowOffset": { "width": 0, "height": 4 },
-          "shadowOpacity": 0.06,
-          "shadowRadius": 12
+          "shadowColor": "#C9A961",
+          "shadowOffset": { "width": 0, "height": 8 },
+          "shadowOpacity": 0.08,
+          "shadowRadius": 16
         },
         "android": {
-          "elevation": 2
+          "elevation": 3
         }
       },
       "overflow": "hidden"
     },
-    "community_highlight_hero": {
+    "window_hero_dna": {
       "aspect_ratio": 0.8,
-      "width": "100%",
-      "gradient_overlay": ["transparent", "rgba(0,0,0,0.8)"],
-      "content_position": "absolute_bottom",
-      "padding": 20
+      "border_radius": 24,
+      "inner_frame": {
+        "border_width": 1,
+        "border_color": "rgba(255, 255, 255, 0.4)",
+        "margin": 4,
+        "border_radius": 20
+      },
+      "gradient_overlay": ["transparent", "rgba(0,0,0,0.6)"]
     },
-    "carousel_card": {
-      "width": "72%",
-      "aspect_ratio": 0.8,
-      "snap_alignment": "start",
-      "margin_right": 16
-    },
-    "custom_trip_badge": {
-      "background": "rgba(0, 0, 0, 0.4)",
-      "backdrop_filter": "blur(10px)",
-      "border_radius": 100,
-      "padding_horizontal": 10,
-      "padding_vertical": 4,
-      "text_color": "#FFFFFF",
-      "icon": "sparkles"
-    },
-    "section_header": {
-      "layout": "row_space_between",
-      "margin_bottom": 16,
-      "title_color": "#1E293B",
-      "link_color": "#1A868C",
-      "link_text": "See all \u2192",
-      "icon_color": "#E07A5F"
-    },
-    "explore_cta_banner": {
-      "aspect_ratio": 2.0,
-      "border_radius": 16,
-      "gradient_overlay": ["rgba(26, 134, 140, 0.1)", "rgba(26, 134, 140, 0.8)"],
-      "text_color": "#FFFFFF"
+    "floating_glass_action_bar": {
+      "background": "rgba(255, 255, 255, 0.9)",
+      "border_width": 1,
+      "border_color": "rgba(232, 220, 200, 0.4)",
+      "shadowColor": "#C9A961",
+      "shadowOpacity": 0.08
     }
   },
   "layouts": {
-    "social_tab": {
-      "description": "Home of the new Community Highlight Hero.",
-      "structure": [
-        "Header (Social)",
-        "Community Highlight Hero (Dynamic daily/weekly pick)",
-        "Feed/Other Social Content"
-      ]
-    },
     "community_page": {
-      "description": "Unified horizontal carousels replacing mixed layouts.",
+      "description": "Unified page with an integrated hero at the top.",
       "structure": [
+        "Community Highlight Hero (Integrated rendering, not just a CTA link)",
+        "Section Header with 'See all' to Top 10",
         "Section: Trending Landmarks (Carousel)",
         "Section: Recent Photos (Carousel)",
         "Section: Most Popular (Carousel)"
-      ],
-      "carousel_props": {
-        "horizontal": true,
-        "showsHorizontalScrollIndicator": false,
-        "snapToInterval": "card_width + spacing",
-        "decelerationRate": "fast",
-        "contentContainerStyle": { "paddingHorizontal": 16 }
-      }
+      ]
     },
     "dedicated_highlight_page": {
       "path": "/community-highlights",
-      "description": "Immersive detail view of the featured visit.",
       "structure": [
-        "Full-width Hero Image (Parallax scroll)",
-        "Action Bar (Like, Comment, Share) - Sticky or fixed bottom",
-        "Visit Details (Location, Date, Story)",
-        "User Profile Row",
-        "Comments Section Preview",
-        "Large CTA Button: 'See the top 10 all time \u2192'"
-      ]
-    },
-    "top_10_page": {
-      "path": "/community-highlights/top",
-      "description": "Ranked grid of all-time best community photos.",
-      "structure": [
-        "Header: Top 10 All-Time",
-        "Masonry or 2-column Grid",
-        "Card Aspect Ratio: 1:1 (Square)",
-        "Ranking Badge (1-10) top-left of each card"
+        "Window Hero Image (Parallax scroll with inner matte frame)",
+        "Floating Glass Action Bar (Like, Comment, Share)",
+        "User Profile Row (Window Card DNA)",
+        "Why this photo? Info Card",
+        "Large CTA Button: 'See the top 10 all time →'"
       ]
     }
   },
   "motion_and_interactions": {
     "card_press": {
-      "activeOpacity": 0.9,
-      "transform": [{ "scale": 0.97 }],
-      "animation": "spring"
+      "activeOpacity": 0.95,
+      "transform": [{ "scale": 0.98 }],
+      "animation": "spring, damping 15"
     },
-    "hero_entrance": {
-      "animation": "fade_in_up",
-      "duration": 600,
-      "easing": "ease-out"
+    "parallax_hero": {
+      "description": "Image scales up and moves slightly down on pull-to-refresh / downward scroll."
     }
   },
-  "innovation_suggestions": [
-    "Swipeable Filter Pills: On the Community page, add a sticky top row of pills (e.g., 'All', 'Landmarks', 'Nature', 'Cities') to filter the carousels without leaving the page.",
-    "Haptic Feedback: Trigger a light haptic bump (UIImpactFeedbackGenerator) when snapping to a new card in the carousel, and a success haptic when liking a photo.",
-    "Parallax Hero: On the dedicated /community-highlights page, make the hero image scale up slightly as the user scrolls down (pull-to-refresh gesture)."
+  "micro_polish_list": [
+    "1. Replace harsh #000 shadows with warm #C9A961 or #E8DCC8 shadows at 8% opacity.",
+    "2. Add a 1px inner border (rgba(232, 220, 200, 0.5)) to all white cards to create a 'framed glass' edge.",
+    "3. Implement the 'matte frame' on Hero images: a 1px semi-transparent white border inset by 4px.",
+    "4. Top 10 rank badges (1-3) should use the oceanToSand gradient as their background.",
+    "5. Add a subtle, soft glow (warm shadow) behind user avatars in the feed and highlight pages.",
+    "6. Convert the flat 'Like/Comment' action buttons into unified, pill-shaped glassmorphism elements.",
+    "7. Use a very subtle divider (1px, rgba(232, 220, 200, 0.3)) between feed card headers and the main image.",
+    "8. Apply a light haptic bump when pressing 'Like' or 'Comment'.",
+    "9. In the Community tab, remove the solid gradient 'Featured' box and replace it with the actual Hero image card.",
+    "10. Ensure the main background is #F5F3F0 (warm cream), allowing pure white #FFFFFF cards to pop naturally."
+  ],
+  "action_plan": {
+    "P0_must_ship": [
+      "Update theme.ts and components to use the 'Window Card' DNA (warm shadow, sand border, white surface).",
+      "Integrate Community Highlight directly into the Community tab as a hero section, replacing the gradient CTA.",
+      "Update MediaCard to use the new Window Card styling globally."
+    ],
+    "P1_wow_add": [
+      "Implement 'matte-frame' inner borders on Hero images.",
+      "Add gradient backgrounds and soft glows to Top 10 rank badges.",
+      "Refactor the action bar in community-highlights.tsx to use floating glass pills."
+    ],
+    "P2_nice_to_have": [
+      "Parallax scroll effect on the Community Highlight dedicated page hero.",
+      "Spring physics animations on card press.",
+      "Soft shadow glows behind user avatars."
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Read the 'micro_polish_list' and 'action_plan' carefully.",
+    "Do NOT use raw #000 for shadows anymore. Use the 'shadow_warm' color defined in the theme for all standard card elevations.",
+    "For the 'Community tab', you MUST replace the 'featuredLink' component with a rendering of the 'CommunityHighlightHero' component (or an inline equivalent) that shows the actual photo of the day.",
+    "Implement the 'matte frame' by adding a View with absolute positioning, 4px margin, rounded corners, and a 1px border inside hero images.",
+    "All cards must have the 1px 'border_sand' to achieve the penthouse window feel."
   ],
   "media": {
     "image_urls": [
@@ -201,35 +226,7 @@
         "category": "hero_landmark",
         "url": "https://images.pexels.com/photos/18471697/pexels-photo-18471697.jpeg",
         "description": "Tourist exploring Colosseum - use for Community Highlight testing"
-      },
-      {
-        "category": "carousel_landmark",
-        "url": "https://images.pexels.com/photos/18111185/pexels-photo-18111185.jpeg",
-        "description": "Tower Bridge London - use for Trending Landmarks testing"
-      },
-      {
-        "category": "user_avatar_1",
-        "url": "https://images.pexels.com/photos/3768907/pexels-photo-3768907.jpeg",
-        "description": "Female tourist portrait - use for user avatar on cards"
-      },
-      {
-        "category": "user_avatar_2",
-        "url": "https://images.pexels.com/photos/20319700/pexels-photo-20319700.jpeg",
-        "description": "Female tourist portrait - use for comment section testing"
-      },
-      {
-        "category": "explore_cta_background",
-        "url": "https://images.pexels.com/photos/1106437/pexels-photo-1106437.jpeg",
-        "description": "Coastal aerial landscape - use for Explore page CTA banner"
       }
     ]
-  },
-  "instructions_to_main_agent": [
-    "Strictly use the 'Card DNA' spec for all photo cards (Trending, Recent, Popular, Top 10) to maintain visual consistency.",
-    "Ensure 'react-native-paper' Surface components use elevation: 0 on iOS and manual shadow styles for the premium iOS feel.",
-    "The Custom Trip badge must be clearly visible over images; use the semi-transparent dark pill style.",
-    "Replace the 'Community Highlights' on the Explore page with the single CTA banner as specified.",
-    "Implement horizontal FlatLists with snapToInterval for all Community page sections.",
-    "All interactive elements MUST have a data-testid attribute in kebab-case for testing."
-  ]
+  }
 }
