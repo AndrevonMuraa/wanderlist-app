@@ -1,6 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import theme from '../styles/theme';
 
 interface FeedCardActionsProps {
@@ -19,7 +20,7 @@ interface FeedCardActionsProps {
 
 /**
  * Shared actions row used by Friends- and Community-feed cards.
- * Always renders Like + Comment buttons side-by-side.
+ * Window Card DNA: warm sand divider, spring-physics heart, haptic bump.
  */
 export default function FeedCardActions({
   isLiked,
@@ -33,19 +34,38 @@ export default function FeedCardActions({
   commentTestId,
   rightExtra,
 }: FeedCardActionsProps) {
+  const likeScale = useRef(new Animated.Value(1)).current;
+
+  const handleLike = () => {
+    if (Platform.OS === 'ios') Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    Animated.sequence([
+      Animated.spring(likeScale, { toValue: 1.3, useNativeDriver: true, speed: 40, bounciness: 14 }),
+      Animated.spring(likeScale, { toValue: 1, useNativeDriver: true, speed: 30, bounciness: 10 }),
+    ]).start();
+    onLike();
+  };
+
+  const handleComment = () => {
+    if (Platform.OS === 'ios') Haptics.selectionAsync().catch(() => {});
+    onComment();
+  };
+
   return (
     <View style={styles.actions}>
       <TouchableOpacity
         style={styles.btn}
-        onPress={onLike}
+        onPress={handleLike}
         disabled={likeDisabled}
+        activeOpacity={0.7}
         data-testid={likeTestId}
       >
-        <Ionicons
-          name={isLiked ? 'heart' : 'heart-outline'}
-          size={20}
-          color={isLiked ? '#FF4B6E' : theme.colors.textSecondary}
-        />
+        <Animated.View style={{ transform: [{ scale: likeScale }] }}>
+          <Ionicons
+            name={isLiked ? 'heart' : 'heart-outline'}
+            size={20}
+            color={isLiked ? '#FF4B6E' : theme.colors.textSecondary}
+          />
+        </Animated.View>
         {likesCount > 0 && (
           <Text style={[styles.count, isLiked && styles.countActive]}>
             {likesCount}
@@ -55,8 +75,9 @@ export default function FeedCardActions({
 
       <TouchableOpacity
         style={styles.btn}
-        onPress={onComment}
+        onPress={handleComment}
         disabled={commentDisabled}
+        activeOpacity={0.7}
         data-testid={commentTestId}
       >
         <Ionicons name="chatbubble-outline" size={19} color={theme.colors.textSecondary} />
@@ -74,10 +95,10 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingTop: 12,
+    gap: 14,
+    paddingTop: 14,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
+    borderTopColor: theme.colors.borderSand,
   },
   btn: {
     flexDirection: 'row',

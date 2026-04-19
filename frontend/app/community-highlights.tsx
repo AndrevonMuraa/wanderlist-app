@@ -1,8 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, RefreshControl, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import {
+  View, Text, StyleSheet, Image, TouchableOpacity, RefreshControl, ActivityIndicator,
+  Animated, Platform, Pressable,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
@@ -22,6 +26,18 @@ export default function CommunityHighlightsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
+
+  // Parallax scroll
+  const scrollY = useRef(new Animated.Value(0)).current;
+
+  // Like button spring animation
+  const likeScale = useRef(new Animated.Value(1)).current;
+  const bumpLike = () => {
+    Animated.sequence([
+      Animated.spring(likeScale, { toValue: 1.25, useNativeDriver: true, speed: 40, bounciness: 14 }),
+      Animated.spring(likeScale, { toValue: 1, useNativeDriver: true, speed: 30, bounciness: 10 }),
+    ]).start();
+  };
 
   const load = async () => {
     try {
@@ -49,6 +65,8 @@ export default function CommunityHighlightsScreen() {
 
   const handleLike = async () => {
     if (!highlight?.activity_id) return;
+    bumpLike();
+    if (Platform.OS === 'ios') Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
     try {
       const token = await getToken();
       const method = highlight.is_liked ? 'DELETE' : 'POST';
@@ -64,6 +82,12 @@ export default function CommunityHighlightsScreen() {
         }));
       }
     } catch {}
+  };
+
+  const openComments = () => {
+    if (!highlight?.activity_id) return;
+    if (Platform.OS === 'ios') Haptics.selectionAsync().catch(() => {});
+    setCommentsOpen(true);
   };
 
   const goToVisit = () => {
@@ -99,20 +123,48 @@ export default function CommunityHighlightsScreen() {
     );
   }
 
+  // Parallax: image scales up and shifts down on overscroll/pull
+  const heroScale = scrollY.interpolate({
+    inputRange: [-200, 0, 300],
+    outputRange: [1.25, 1, 1],
+    extrapolate: 'clamp',
+  });
+  const heroTranslate = scrollY.interpolate({
+    inputRange: [-200, 0, 300],
+    outputRange: [-60, 0, 90],
+    extrapolate: 'clamp',
+  });
+
   return (
     <View style={styles.container}>
       <UniversalHeader title="Community highlight" showBack />
-      <ScrollView
+      <Animated.ScrollView
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        contentContainerStyle={{ paddingBottom: 48 }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.colors.primary} />}
+        contentContainerStyle={{ paddingBottom: 56 }}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true }
+        )}
+        scrollEventThrottle={16}
       >
-        {/* Hero image */}
+        {/* Hero image — Window Card DNA + parallax + matte frame */}
         <TouchableOpacity activeOpacity={0.95} onPress={goToVisit} data-testid="highlight-hero-image">
           <View style={styles.heroWrap}>
-            <Image source={{ uri: highlight.photo_url }} style={styles.hero} resizeMode="cover" />
+            <Animated.View
+              style={[
+                StyleSheet.absoluteFillObject,
+                { transform: [{ scale: heroScale }, { translateY: heroTranslate }] },
+              ]}
+            >
+              <Image source={{ uri: highlight.photo_url }} style={styles.hero} resizeMode="cover" />
+            </Animated.View>
+
+            {/* Matte inner frame — penthouse window edge */}
+            <View pointerEvents="none" style={styles.heroInnerFrame} />
+
             <LinearGradient
-              colors={['transparent', 'rgba(0,0,0,0.35)', 'rgba(0,0,0,0.95)']}
+              colors={['transparent', 'rgba(0,0,0,0.35)', 'rgba(0,0,0,0.92)']}
               locations={[0, 0.5, 1]}
               style={styles.heroGradient}
             >
@@ -138,18 +190,70 @@ export default function CommunityHighlightsScreen() {
           </View>
         </TouchableOpacity>
 
-        {/* User row */}
+        {/* Floating glass action bar */}
+        <View style={styles.glassActionBarWrap}>
+          <View style={styles.glassActionBar}>
+            <Pressable
+              onPress={handleLike}
+              disabled={!highlight.activity_id}
+              style={({ pressed }) => [styles.glassPill, pressed && styles.glassPillPressed]}
+              data-testid="highlight-like-btn"
+            >
+              <Animated.View style={{ transform: [{ scale: likeScale }] }}>
+                <Ionicons
+                  name={highlight.is_liked ? 'heart' : 'heart-outline'}
+                  size={20}
+                  color={highlight.is_liked ? '#FF4B6E' : theme.colors.text}
+                />
+              </Animated.View>
+              <Text style={[styles.glassPillText, highlight.is_liked && { color: '#FF4B6E' }]}>
+                {highlight.likes_count}
+              </Text>
+            </Pressable>
+
+            <View style={styles.pillDivider} />
+
+            <Pressable
+              onPress={openComments}
+              disabled={!highlight.activity_id}
+              style={({ pressed }) => [styles.glassPill, pressed && styles.glassPillPressed]}
+              data-testid="highlight-comment-btn"
+            >
+              <Ionicons name="chatbubble-outline" size={18} color={theme.colors.text} />
+              <Text style={styles.glassPillText}>{highlight.comments_count}</Text>
+            </Pressable>
+
+            <View style={styles.pillDivider} />
+
+            <Pressable
+              onPress={() => {
+                if (Platform.OS === 'ios') Haptics.selectionAsync().catch(() => {});
+                setReportOpen(true);
+              }}
+              style={({ pressed }) => [styles.glassPillIcon, pressed && styles.glassPillPressed]}
+              data-testid="highlight-report-btn"
+            >
+              <Ionicons name="flag-outline" size={17} color={theme.colors.textSecondary} />
+            </Pressable>
+          </View>
+        </View>
+
+        {/* User row — Window Card DNA */}
         <TouchableOpacity
           style={styles.userRow}
           onPress={() => highlight.user_id && router.push(`/user-profile/${highlight.user_id}`)}
-          activeOpacity={0.8}
+          activeOpacity={0.85}
           data-testid="highlight-user-row"
         >
           {highlight.user_picture ? (
-            <Image source={{ uri: highlight.user_picture }} style={styles.userAvatar} />
+            <View style={styles.avatarGlowWrap}>
+              <Image source={{ uri: highlight.user_picture }} style={styles.userAvatar} />
+            </View>
           ) : (
-            <View style={[styles.userAvatar, styles.userAvatarFallback]}>
-              <Ionicons name="person" size={22} color="#FFF" />
+            <View style={styles.avatarGlowWrap}>
+              <View style={[styles.userAvatar, styles.userAvatarFallback]}>
+                <Ionicons name="person" size={22} color="#FFF" />
+              </View>
             </View>
           )}
           <View style={{ flex: 1 }}>
@@ -158,39 +262,6 @@ export default function CommunityHighlightsScreen() {
           </View>
           <Ionicons name="chevron-forward" size={18} color={theme.colors.textLight} />
         </TouchableOpacity>
-
-        {/* Actions bar */}
-        <View style={styles.actionsBar}>
-          <TouchableOpacity
-            style={[styles.actionBtn, highlight.is_liked && styles.actionBtnActive]}
-            onPress={handleLike}
-            disabled={!highlight.activity_id}
-            data-testid="highlight-like-btn"
-          >
-            <Ionicons name={highlight.is_liked ? 'heart' : 'heart-outline'} size={22} color={highlight.is_liked ? '#FF4B6E' : theme.colors.text} />
-            <Text style={[styles.actionLabel, highlight.is_liked && { color: '#FF4B6E' }]}>
-              {highlight.likes_count} {highlight.likes_count === 1 ? 'like' : 'likes'}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.actionBtn}
-            onPress={() => highlight.activity_id && setCommentsOpen(true)}
-            disabled={!highlight.activity_id}
-            data-testid="highlight-comment-btn"
-          >
-            <Ionicons name="chatbubble-outline" size={20} color={theme.colors.text} />
-            <Text style={styles.actionLabel}>
-              {highlight.comments_count} {highlight.comments_count === 1 ? 'comment' : 'comments'}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.actionBtn, styles.reportBtn]}
-            onPress={() => setReportOpen(true)}
-            data-testid="highlight-report-btn"
-          >
-            <Ionicons name="flag-outline" size={18} color={theme.colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
 
         {/* Why this? */}
         <View style={styles.infoCard}>
@@ -205,16 +276,23 @@ export default function CommunityHighlightsScreen() {
         <TouchableOpacity
           style={styles.top10Link}
           onPress={() => router.push('/community-highlights/top')}
-          activeOpacity={0.7}
+          activeOpacity={0.85}
           data-testid="view-top-10-link"
         >
+          <LinearGradient
+            colors={[theme.colors.primary, theme.colors.accentSand]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.top10Icon}
+          >
+            <Ionicons name="trophy" size={20} color="#FFF" />
+          </LinearGradient>
           <View style={{ flex: 1 }}>
             <Text style={styles.top10Title}>Curious about the all-time greats?</Text>
             <Text style={styles.top10Sub}>See the top 10 most liked community photos →</Text>
           </View>
-          <Ionicons name="trophy" size={24} color={theme.colors.accent} />
         </TouchableOpacity>
-      </ScrollView>
+      </Animated.ScrollView>
 
       <CommentsModal
         visible={commentsOpen}
@@ -243,24 +321,36 @@ const styles = StyleSheet.create({
   emptyTitle: { fontSize: 17, fontWeight: '700', color: theme.colors.text },
   emptyText: { fontSize: 13, color: theme.colors.textSecondary, textAlign: 'center' },
 
+  // Hero — Window Card DNA
   heroWrap: {
     marginHorizontal: 16,
-    marginTop: 12,
-    borderRadius: 20,
+    marginTop: 14,
+    borderRadius: 24,
     overflow: 'hidden',
     aspectRatio: 0.8,
-    backgroundColor: theme.colors.border,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.15,
-    shadowRadius: 16,
-    elevation: 6,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.borderSand,
+    shadowColor: theme.colors.shadowWarm,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.14,
+    shadowRadius: 22,
+    elevation: 8,
   },
   hero: { width: '100%', height: '100%' },
+  heroInnerFrame: {
+    position: 'absolute',
+    top: 4, left: 4, right: 4, bottom: 4,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: theme.colors.borderGlass,
+    zIndex: 1,
+  },
   heroGradient: {
     position: 'absolute', left: 0, right: 0, top: 0, bottom: 0,
     justifyContent: 'flex-end',
-    padding: 20,
+    padding: 22,
+    zIndex: 2,
   },
   badgeRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
   featuredBadge: {
@@ -274,44 +364,113 @@ const styles = StyleSheet.create({
   },
   customBadgeText: { color: '#FFF', fontSize: 10, fontWeight: '700', letterSpacing: 0.5 },
   landmark: { color: '#FFF', fontSize: 30, fontWeight: '700', letterSpacing: -0.5, lineHeight: 34 },
-  country: { color: 'rgba(255,255,255,0.82)', fontSize: 15, marginTop: 4, fontWeight: '500' },
+  country: { color: 'rgba(255,255,255,0.85)', fontSize: 15, marginTop: 4, fontWeight: '500' },
 
-  userRow: {
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-    backgroundColor: theme.colors.surface, marginHorizontal: 16, marginTop: 16,
-    paddingHorizontal: 16, paddingVertical: 14, borderRadius: 14,
-    ...theme.shadows?.card,
+  // Floating glass action bar
+  glassActionBarWrap: {
+    marginHorizontal: 16,
+    marginTop: -22, // float over the hero
+    alignItems: 'center',
+    zIndex: 10,
   },
-  userAvatar: { width: 42, height: 42, borderRadius: 21 },
+  glassActionBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.92)',
+    borderWidth: 1,
+    borderColor: 'rgba(232, 220, 200, 0.6)',
+    borderRadius: 100,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    gap: 4,
+    shadowColor: theme.colors.shadowWarm,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.14,
+    shadowRadius: 16,
+    elevation: 6,
+  },
+  glassPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 100,
+  },
+  glassPillIcon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    borderRadius: 100,
+  },
+  glassPillPressed: {
+    backgroundColor: 'rgba(232, 220, 200, 0.35)',
+  },
+  glassPillText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  pillDivider: {
+    width: 1,
+    height: 18,
+    backgroundColor: 'rgba(232, 220, 200, 0.6)',
+  },
+
+  // User row — Window Card DNA
+  userRow: {
+    flexDirection: 'row', alignItems: 'center', gap: 14,
+    backgroundColor: theme.colors.surface,
+    marginHorizontal: 16, marginTop: 16,
+    paddingHorizontal: 16, paddingVertical: 14,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: theme.colors.borderSand,
+    ...theme.shadows.card,
+  },
+  avatarGlowWrap: {
+    shadowColor: theme.colors.accentSand,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.9,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  userAvatar: { width: 44, height: 44, borderRadius: 22 },
   userAvatarFallback: { backgroundColor: theme.colors.primary, alignItems: 'center', justifyContent: 'center' },
   userLabel: { fontSize: 11, color: theme.colors.textSecondary, fontWeight: '500' },
   userName: { fontSize: 15, fontWeight: '700', color: theme.colors.text, marginTop: 2 },
 
-  actionsBar: {
-    flexDirection: 'row', gap: 10, marginHorizontal: 16, marginTop: 12,
-  },
-  actionBtn: {
-    flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, paddingVertical: 14, borderRadius: 14, backgroundColor: theme.colors.surface,
-    ...theme.shadows?.card,
-  },
-  actionBtnActive: { backgroundColor: '#FFF0F3' },
-  reportBtn: { flex: 0, paddingHorizontal: 16, flexGrow: 0 },
-  actionLabel: { fontSize: 14, fontWeight: '600', color: theme.colors.text },
-
+  // Info
   infoCard: {
-    backgroundColor: theme.colors.surfaceTinted, marginHorizontal: 16, marginTop: 20,
-    padding: 14, borderRadius: 12,
+    backgroundColor: theme.colors.surfaceTinted,
+    marginHorizontal: 16, marginTop: 16,
+    padding: 14, borderRadius: 14,
+    borderWidth: 1,
+    borderColor: theme.colors.borderSand,
   },
   infoHeader: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 },
-  infoTitle: { fontSize: 13, fontWeight: '700', color: theme.colors.textSecondary, letterSpacing: 0.3, textTransform: 'uppercase' },
+  infoTitle: { fontSize: 12, fontWeight: '700', color: theme.colors.textSecondary, letterSpacing: 0.5, textTransform: 'uppercase' },
   infoText: { fontSize: 13, color: theme.colors.textSecondary, lineHeight: 19 },
 
+  // Top 10
   top10Link: {
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-    marginHorizontal: 16, marginTop: 24,
-    backgroundColor: theme.colors.surface, padding: 16, borderRadius: 14,
-    borderWidth: 1, borderColor: theme.colors.border,
+    flexDirection: 'row', alignItems: 'center', gap: 14,
+    marginHorizontal: 16, marginTop: 20,
+    backgroundColor: theme.colors.surface,
+    padding: 16, borderRadius: 18,
+    borderWidth: 1, borderColor: theme.colors.borderSand,
+    ...theme.shadows.card,
+  },
+  top10Icon: {
+    width: 42, height: 42,
+    borderRadius: 12,
+    alignItems: 'center', justifyContent: 'center',
+    shadowColor: theme.colors.shadowWarm,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 3,
   },
   top10Title: { fontSize: 14, fontWeight: '700', color: theme.colors.text },
   top10Sub: { fontSize: 12, color: theme.colors.primary, marginTop: 2, fontWeight: '600' },

@@ -1,0 +1,49 @@
+{
+  "summary": "Frontend-only smoke/regression testing of WanderMark 'Penthouse Window' V2 design overhaul across 6 target surfaces (/feed, /community-highlights, /community-highlights/top, /community, /continents, /(tabs)/social). All 6 pages LOAD WITHOUT CRASHES (zero pageerrors, zero red/error banners). Empty states render cleanly. Navigation shells, headers, tabs, bottom nav, and fallback CTAs all present. Primary regression goal MET. Limitation: the DB has no seeded community/highlight/photo content in this preview environment, so the actual Window Card DNA on real content cards (sand 1px borders, warm #C9A961 shadows, 20px padding, avatar glow, matte inner frame on hero, ocean-to-sand top-3 rank gradients, floating glass action pill) could NOT be visually verified against populated data. Like/Comment/Report interactions could not be exercised because no cards rendered. Login via the Paper TextInput on web was flaky (the email field is not a plain input[type=email] until interacted with) so deeper authenticated flows were not completed; however every target route still rendered its shell + empty state cleanly under the unauthenticated session returning 401 on data fetches, which itself is a regression-safety positive.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Login on web (/login)",
+        "issue": "React Native Paper TextInput on web does not expose a native input[type='email'] that is stably selectable on first paint; first-try Playwright form fill only populated the first field once. Minor web-test-harness ergonomics; not a user-visible bug.",
+        "affected_selectors": ["input[type='email']", "data-testid='text-input-outlined'"]
+      }
+    ],
+    "design_issues": [
+      {
+        "screen": "/continents (Explore)",
+        "issues": ["The new 'Community CTA white Window Card with sand border + small ocean-to-sand gradient square + chevron' described in the request was not visible in the default viewport. It may render below the continent list (further scroll) but could not be confirmed. Main agent should verify placement/ordering so users discover /community-highlights."]
+      }
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Seed at least 1 public community activity (photo), 1 photo_of_week, and 1 community highlight in the preview DB so the next visual QA pass can actually inspect Window Card DNA (sand border, warm shadow, matte inner frame, floating glass pill, top-3 rank gradient).",
+    "Verify /continents shows the new white Community CTA banner above-the-fold (or scrollable to) — it was not visible in the captured viewport.",
+    "(Nice-to-have) Add data-testid to the Login submit button and email/password TextInputs on /login (currently both share testid='text-input-outlined') so web E2E harnesses can deterministically drive auth.",
+    "Main agent should self-verify the visual Window Card styling on /feed, /community-highlights, /community-highlights/top, /landmark-community-photos/[landmark_id] once seed data exists. Also manually tap like/comment/flag on web to confirm spring+haptic path does not throw on non-iOS Platform branch."
+  ],
+  "critical_code_review_comments": [
+    "Haptics + spring are iOS-only/best-effort (Platform.OS === 'ios'). Confirm Platform guard wraps Haptics import too, not just invocation, to avoid bundling cost on web — if Haptics is imported unconditionally from expo-haptics, web still pulls it in.",
+    "FeedCardActions spring animation: ensure useNativeDriver fallback is OK on web (there is already a console warning 'useNativeDriver is not supported' on many surfaces — JS-driven spring is fine for 1 like press but audit if multiple simultaneous card animations cause jank).",
+    "Global shadow color change to #C9A961 — verify any component that still uses default black shadow constants (e.g., older screens) is either intentionally kept or migrated; a grep for 'shadowColor' across /app/frontend should be done to prevent visual inconsistency.",
+    "Empty-state shells across /feed, /community-highlights, /community-highlights/top, /community all render identically well — good defensive coding. However /community-highlights empty state lacks a CTA button to '/continents' or a primary action; consider adding for better UX when highlight is absent.",
+    "Login page labels 'Email' and 'Password' appear twice in DOM (label + placeholder text), causing screen-reader duplication. Consider label-only or placeholder-only."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "not tested (scope: frontend only)",
+    "frontend": "6/6 pages load cleanly (100%) — zero crashes/pageerrors. Visual DNA verification: 0/6 confirmable due to empty seed data. Interaction verification (like/comment/report): not exercised (no cards rendered)."
+  },
+  "test_credentials": "Used (from /app/memory/test_credentials.md): testpro@wandermark.app / Test1234! — login submission attempted but web TextInput field-fill was flaky; subsequent navigations proceeded unauthenticated and still rendered page shells without crashing.",
+  "seed_data_creation": "None. No new seed data was created during this test run.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iteration_20 verified that the V2 'Penthouse Window' design overhaul introduced NO regressions at the page-load level — all 6 target routes render without crashes or JS errors, both unauthenticated and (expected) authenticated. The blocker for full visual QA is lack of seed community content in the preview DB: feed/highlights/top/community all show empty states so Window Card DNA (sand borders, warm #C9A961 shadows, 20px padding, avatar glow, matte inner frame, floating glass pill, ocean-to-sand top-3 gradient) cannot be photographically verified. Next run: (1) seed via API as authed user (POST a landmark visit with photo via testpro), OR ask main agent to expose an admin seed endpoint; (2) then re-run playwright screenshots at /feed, /community-highlights, /community-highlights/top, /community, and /landmark-community-photos/<id>; (3) tap like → assert heart turns red + count increments, tap comment → assert modal opens, long-press top card → assert report dialog; (4) verify /continents community CTA card is rendered (was not visible in our default-viewport capture).",
+  "rca of the issue": "N/A — no defects reproduced. Only observed limitations: (a) empty DB prevents visual-DNA validation, (b) RN Paper TextInput on web has no stable data-testid differentiation between email and password fields, making scripted login flaky but not user-breaking."
+}

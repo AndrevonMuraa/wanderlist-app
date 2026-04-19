@@ -43,10 +43,14 @@ export default function FeedCardHeader({
       data-testid={userId ? `feed-card-header-${userId}` : 'feed-card-header'}
     >
       {userPicture ? (
-        <Avatar.Image size={44} source={{ uri: userPicture }} />
+        <View style={styles.avatarGlow}>
+          <Avatar.Image size={44} source={{ uri: userPicture }} />
+        </View>
       ) : (
-        <View style={styles.avatarFallback}>
-          <Ionicons name="person" size={22} color={theme.colors.textLight} />
+        <View style={styles.avatarGlow}>
+          <View style={styles.avatarFallback}>
+            <Ionicons name="person" size={22} color={theme.colors.textLight} />
+          </View>
         </View>
       )}
       <View style={styles.info}>
@@ -71,7 +75,17 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 14,
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(232, 220, 200, 0.35)',
+  },
+  avatarGlow: {
+    shadowColor: theme.colors.accentSand,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.9,
+    shadowRadius: 8,
+    elevation: 3,
   },
   avatarFallback: {
     width: 44,

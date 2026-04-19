@@ -258,16 +258,18 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.colors.background },
   loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 
-  // Featured link (gradient card)
+  // Featured link fallback (only shown when no dynamic highlight is loaded)
   featuredLink: {
     marginHorizontal: 16,
     marginTop: 14,
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    borderWidth: 1,
+    borderColor: theme.colors.borderSand,
+    shadowColor: theme.colors.shadowWarm,
+    shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.12,
-    shadowRadius: 12,
+    shadowRadius: 14,
     elevation: 4,
   },
   featuredGradient: {

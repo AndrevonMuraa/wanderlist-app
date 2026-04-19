@@ -336,27 +336,28 @@ export default function ContinentsScreen() {
           />
         </TouchableOpacity>
 
-        {/* Community highlight CTA banner (replaced the redundant trending-landmarks carousel) */}
+        {/* Community highlight CTA — "Window" glass card */}
         <TouchableOpacity
           style={styles.communityCta}
           onPress={() => router.push('/community-highlights')}
-          activeOpacity={0.9}
+          activeOpacity={0.88}
           data-testid="explore-community-cta"
         >
-          <LinearGradient
-            colors={[theme.colors.primary, theme.colors.primaryDark]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.communityCtaGradient}
-          >
-            <View style={styles.communityCtaIconWrap}>
-              <Ionicons name="sparkles" size={24} color="#FFF" />
-            </View>
+          <View style={styles.communityCtaInner}>
+            <LinearGradient
+              colors={[theme.colors.primary, theme.colors.accentSand]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.communityCtaIconWrap}
+            >
+              <Ionicons name="sparkles" size={22} color="#FFF" />
+            </LinearGradient>
             <View style={{ flex: 1 }}>
               <Text style={styles.communityCtaTitle}>Community highlight</Text>
               <Text style={styles.communityCtaSub}>See what the community is loving today →</Text>
             </View>
-          </LinearGradient>
+            <Ionicons name="chevron-forward" size={18} color={theme.colors.primary} />
+          </View>
         </TouchableOpacity>
       </ScrollView>
 
@@ -489,20 +490,23 @@ const styles = StyleSheet.create({
     lineHeight: 17,
   },
 
-  // Community CTA (replaces Trending Landmarks carousel)
+  // Community CTA (Window glass card, ocean-to-sand icon)
   communityCta: {
     marginHorizontal: theme.spacing.md,
     marginTop: theme.spacing.md,
     marginBottom: theme.spacing.md,
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.borderSand,
+    shadowColor: theme.colors.shadowWarm,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 14,
     elevation: 4,
   },
-  communityCtaGradient: {
+  communityCtaInner: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 14,
@@ -511,13 +515,17 @@ const styles = StyleSheet.create({
   communityCtaIconWrap: {
     width: 46,
     height: 46,
-    borderRadius: 23,
-    backgroundColor: 'rgba(255,255,255,0.22)',
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: theme.colors.shadowWarm,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 3,
   },
-  communityCtaTitle: { color: '#FFF', fontSize: 17, fontWeight: '700', letterSpacing: -0.3 },
-  communityCtaSub: { color: 'rgba(255,255,255,0.86)', fontSize: 13, marginTop: 3, fontWeight: '500' },
+  communityCtaTitle: { color: theme.colors.text, fontSize: 17, fontWeight: '700', letterSpacing: -0.3 },
+  communityCtaSub: { color: theme.colors.textSecondary, fontSize: 13, marginTop: 3, fontWeight: '500' },
 
   // Trending Landmarks
   trendingSection: {
