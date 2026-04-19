@@ -9,6 +9,7 @@ import UniversalHeader from '../components/UniversalHeader';
 import { getToken } from '../utils/token';
 import { useAuth } from '../contexts/AuthContext';
 import CommentsModal from '../components/CommentsModal';
+import ReportModal from '../components/ReportModal';
 
 const algorithmExplanation =
   'A rotating spotlight picked by our community algorithm — based on likes and how fresh the photo is. A new highlight is chosen every time you open the app.';
@@ -20,6 +21,7 @@ export default function CommunityHighlightsScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [commentsOpen, setCommentsOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
 
   const load = async () => {
     try {
@@ -181,6 +183,13 @@ export default function CommunityHighlightsScreen() {
               {highlight.comments_count} {highlight.comments_count === 1 ? 'comment' : 'comments'}
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.actionBtn, styles.reportBtn]}
+            onPress={() => setReportOpen(true)}
+            data-testid="highlight-report-btn"
+          >
+            <Ionicons name="flag-outline" size={18} color={theme.colors.textSecondary} />
+          </TouchableOpacity>
         </View>
 
         {/* Why this? */}
@@ -214,6 +223,14 @@ export default function CommunityHighlightsScreen() {
         commentsCount={highlight?.comments_count || 0}
         currentUserId={user?.user_id || ''}
         onCommentsChange={(n) => setHighlight((prev: any) => ({ ...prev, comments_count: n }))}
+      />
+
+      <ReportModal
+        visible={reportOpen}
+        onClose={() => setReportOpen(false)}
+        reportType="photo"
+        targetId={highlight?.visit_id || ''}
+        targetName={highlight?.landmark_name || 'Community photo'}
       />
     </View>
   );
@@ -279,6 +296,7 @@ const styles = StyleSheet.create({
     ...theme.shadows?.card,
   },
   actionBtnActive: { backgroundColor: '#FFF0F3' },
+  reportBtn: { flex: 0, paddingHorizontal: 16, flexGrow: 0 },
   actionLabel: { fontSize: 14, fontWeight: '600', color: theme.colors.text },
 
   infoCard: {

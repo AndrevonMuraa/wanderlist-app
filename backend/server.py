@@ -6,7 +6,7 @@ import os
 from utils.db import db, client, create_indexes
 from utils.rate_limit import RateLimitMiddleware
 from routes import (
-    auth, content, community, visits, admin,
+    auth, content, community, community_highlights, visits, admin,
     leaderboard, friends, messages, stats, feed,
     collections, notifications, country_visits, photos,
     achievements, subscription, reports, push, legal, promo,
@@ -39,6 +39,7 @@ api_router = APIRouter(prefix="/api")
 api_router.include_router(auth.router)
 api_router.include_router(content.router)
 api_router.include_router(community.router)
+api_router.include_router(community_highlights.router)
 api_router.include_router(visits.router)
 api_router.include_router(admin.router)
 api_router.include_router(leaderboard.router)

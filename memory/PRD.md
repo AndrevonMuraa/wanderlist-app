@@ -28,6 +28,19 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - P0: User profile crash on leaderboard click — possibly aspectRatio issue, fixed with Dimensions but needs testing
 - P0: Verify all fixes in Build 83
 
+## Session 7 — April 19, 2026 (Refactor + Photo reports)
+
+### Refactor
+- Extracted `utils/highlight_scoring.py` — exports `compute_hotness()` + `build_candidate_pool()` helpers, with clear docstrings and constants (`FRESHNESS_DECAY_DAYS=30`, `FRESHNESS_FLOOR=0.3`).
+- Split `routes/community_highlights.py` from `community.py` — contains only `/community-highlight` + `/community-highlights/top`. Registered in `server.py`.
+- `community.py` trimmed from 1235 → 1011 lines.
+
+### Content moderation — Report photo
+- Reused existing `reports` collection and `POST /api/reports` endpoint (report_type='photo', 5 reasons including 'inappropriate', 'not_landmark', 'copyright', 'offensive', 'other').
+- Existing `<ReportModal>` wired into `/community-highlights` page — subtle flag icon in action bar next to Like + Comment.
+- Admin panel `/admin/reports` already supports filtering by report_type; photo reports now flow into the same triage UI.
+- Verified end-to-end: testpro submits photo report → admin sees it in `/api/admin/reports?report_type=photo` → admin dismisses via `PUT /api/admin/reports/{id}`.
+
 ## Session 6 — April 19, 2026 (Community Highlight redesign)
 ### Design
 - Ran `design_agent_full_stack` → `/app/design_guidelines.json` (v1). Coastal/nautical theme confirmed, Card DNA (16px radius, consistent shadow), 4:5 hero aspect, kebab-case section headers with "See all →", unified spacing scale.
