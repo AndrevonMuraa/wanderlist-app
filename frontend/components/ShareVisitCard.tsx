@@ -308,11 +308,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-15,
-    fontWeight: '700',
-  },
-  hint: {
-    fontSize: 12,
-    textAlign: 'center',
-  },
-});
