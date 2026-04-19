@@ -1,0 +1,39 @@
+{
+  "summary": "Backend parity testing for /api/community-feed vs /api/feed (friends). 10/10 pytest tests passed. Validated: community-feed items now include activity_id, user_id, is_liked, likes_count, comments_count, user_upvoted; like/unlike on an activity_id from community feed correctly toggles is_liked and updates likes_count; add/delete comment correctly updates comments_count; friends feed not regressed; community-photos/photo-of-the-week and landmarks/{id}/community-photos still work.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/community-feed", "issue": "Items from user-created-visit source without an activity doc will have activity_id=None — like/comment buttons in UI must be hidden or the backend should auto-create activities for these visits. Not a regression but a UX gap."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_feed_parity_iteration18.py",
+    "/app/test_reports/pytest/pytest_iteration18.xml"
+  ],
+  "action_items": [
+    "Consider backfilling / auto-creating an activity document for user_created_visits so the Community tab like+comment buttons work for custom visits too (currently activity_id may be None for those items → frontend should fall back gracefully).",
+    "Duplicate POST like returns 400 'Already liked' — frontend must treat 400 as an optimistic-UI-ok state (not an error toast) when is_liked was already true in a stale feed."
+  ],
+  "critical_code_review_comments": [
+    "community.py: After aggregating items, the final `items.sort(..., reverse=True)` + `items[:limit]` is applied AFTER landmark and custom visits are independently queried with limit N each, so the merged list is pre-truncated per-source. With limit=10 you can get up to 20 items joined, then sliced to 10. Slightly wasteful but correct.",
+    "community.py: `activity_ids_v += [...]` builds list across two sources before the single batch-fetch of likes/is_liked — good (no N+1). is_liked post-processing correctly walks items and matches by activity_id.",
+    "community.py `likes_count` returned from activities collection is overwritten by the authoritative count from the likes collection (lines 227-233) — good, keeps parity with /api/feed which also computes from likes collection.",
+    "feed.py POST /activities/{id}/comment increments activities.comments_count via $inc; community-feed reads from activities.comments_count first then is not overwritten afterwards (unlike likes_count). If the counter drifts (e.g., comment deleted while activity doc missed the decrement for any reason), community-feed will show stale counts. Consider computing comments_count from `comments` collection in community-feed for true parity with the likes approach.",
+    "community.py returns is_liked=False in initial dict then overwrites in second pass — minor readability; could set inline."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_feed_parity_iteration18.py"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "not tested (backend-only request)"},
+  "test_credentials": "Used admin: test@wandermark.app / Test1234!",
+  "seed_data_creation": "Tests create/delete one TEST_parity_comment per run and toggle a like; all state restored after each test.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend parity verified. Frontend React Native testing was explicitly skipped per request. For next iteration, if verifying frontend, note web preview shows Expo onboarding so UI automation is unreliable — test on mobile simulator. Test account `activity_d9811bf4c810` is heavily used by these tests; counts are restored but be aware of concurrent test interference.",
+  "rca of the issue": "N/A — feature verification passed."
+}

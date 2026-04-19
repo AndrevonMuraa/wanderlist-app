@@ -33,6 +33,7 @@ interface CommentsSectionProps {
   commentsCount: number;
   currentUserId: string;
   onCommentsChange?: (newCount: number) => void;
+  forceExpanded?: boolean;
 }
 
 const getToken = async (): Promise<string | null> => {
@@ -48,10 +49,11 @@ export default function CommentsSection({
   commentsCount,
   currentUserId,
   onCommentsChange,
+  forceExpanded = false,
 }: CommentsSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(forceExpanded);
   const [commentText, setCommentText] = useState('');
   const [replyingTo, setReplyingTo] = useState<Comment | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -186,28 +188,30 @@ export default function CommentsSection({
   return (
     <View style={styles.container}>
       {/* Comments Toggle */}
-      <TouchableOpacity
-        style={styles.toggleButton}
-        onPress={() => setExpanded(!expanded)}
-      >
-        <Ionicons
-          name="chatbubble-outline"
-          size={16}
-          color={theme.colors.textSecondary}
-        />
-        <Text style={styles.toggleText}>
-          {commentsCount === 0
-            ? 'Be the first to comment'
-            : commentsCount === 1
-            ? '1 comment'
-            : `${commentsCount} comments`}
-        </Text>
-        <Ionicons
-          name={expanded ? 'chevron-up' : 'chevron-down'}
-          size={16}
-          color={theme.colors.textSecondary}
-        />
-      </TouchableOpacity>
+      {!forceExpanded && (
+        <TouchableOpacity
+          style={styles.toggleButton}
+          onPress={() => setExpanded(!expanded)}
+        >
+          <Ionicons
+            name="chatbubble-outline"
+            size={16}
+            color={theme.colors.textSecondary}
+          />
+          <Text style={styles.toggleText}>
+            {commentsCount === 0
+              ? 'Be the first to comment'
+              : commentsCount === 1
+              ? '1 comment'
+              : `${commentsCount} comments`}
+          </Text>
+          <Ionicons
+            name={expanded ? 'chevron-up' : 'chevron-down'}
+            size={16}
+            color={theme.colors.textSecondary}
+          />
+        </TouchableOpacity>
+      )}
 
       {/* Comments List */}
       {expanded && (

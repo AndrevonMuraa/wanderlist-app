@@ -11,6 +11,8 @@ import { PersistentTabBar } from '../components/PersistentTabBar';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 import UniversalHeader from '../components/UniversalHeader';
 import { getToken } from '../utils/token';
+import CommentsModal from '../components/CommentsModal';
+import { useAuth } from '../contexts/AuthContext';
 
 interface Activity {
   activity_id: string;
@@ -26,6 +28,7 @@ interface Activity {
   is_liked: boolean;
   like_count: number;
   likes_count?: number;
+  comments_count?: number;
   visibility: 'public' | 'friends' | 'private';
   has_photos?: boolean;
   has_diary?: boolean;
@@ -48,6 +51,8 @@ const getPrivacyIcon = (visibility: string) => {
 
 interface CommunityFeedItem {
   visit_id: string;
+  user_id?: string;
+  activity_id?: string;
   type: string;
   source: string;
   photo_url?: string;
@@ -60,6 +65,10 @@ interface CommunityFeedItem {
   diary_snippet?: string;
   has_diary: boolean;
   upvotes: number;
+  user_upvoted?: boolean;
+  likes_count?: number;
+  comments_count?: number;
+  is_liked?: boolean;
   visited_at?: string;
 }
 
@@ -71,8 +80,15 @@ export default function FeedScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [commentsTarget, setCommentsTarget] = useState<{
+    activityId: string;
+    count: number;
+    source: 'friends' | 'community';
+  } | null>(null);
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { user } = useAuth();
+  const currentUserId = user?.user_id || '';
 
   const loadFeed = useCallback(async (pageNum: number = 1, append: boolean = false) => {
     try {
@@ -151,6 +167,41 @@ export default function FeedScreen() {
       }
     } catch (error) {
     }
+  };
+
+  const handleCommunityLike = async (item: CommunityFeedItem) => {
+    if (!item.activity_id) return;
+    try {
+      const token = await getToken();
+      const method = item.is_liked ? 'DELETE' : 'POST';
+      const response = await fetch(`${BACKEND_URL}/api/activities/${item.activity_id}/like`, {
+        method,
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (response.ok) {
+        setCommunityItems(prev => prev.map(ci =>
+          ci.visit_id === item.visit_id
+            ? {
+                ...ci,
+                is_liked: !ci.is_liked,
+                likes_count: (ci.likes_count || 0) + (ci.is_liked ? -1 : 1),
+              }
+            : ci
+        ));
+      }
+    } catch (e) {}
+  };
+
+  const handleCommentsChangeFriends = (activityId: string, newCount: number) => {
+    setActivities(prev => prev.map(a =>
+      a.activity_id === activityId ? { ...a, comments_count: newCount } : a
+    ));
+  };
+
+  const handleCommentsChangeCommunity = (activityId: string, newCount: number) => {
+    setCommunityItems(prev => prev.map(ci =>
+      ci.activity_id === activityId ? { ...ci, comments_count: newCount } : ci
+    ));
   };
 
   const handleBack = () => {
@@ -280,11 +331,12 @@ export default function FeedScreen() {
           )}
         </View>
 
-        {/* Like Section */}
+        {/* Like + Comment Section */}
         <View style={styles.activityActions}>
           <TouchableOpacity 
             style={styles.likeButton} 
             onPress={() => handleLike(activity.activity_id)}
+            data-testid={`friends-like-${activity.activity_id}`}
           >
             <Ionicons 
               name={activity.is_liked ? "heart" : "heart-outline"} 
@@ -300,61 +352,131 @@ export default function FeedScreen() {
               </Text>
             )}
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.likeButton}
+            onPress={() => setCommentsTarget({
+              activityId: activity.activity_id,
+              count: activity.comments_count || 0,
+              source: 'friends',
+            })}
+            data-testid={`friends-comment-${activity.activity_id}`}
+          >
+            <Ionicons name="chatbubble-outline" size={19} color={theme.colors.textSecondary} />
+            {(activity.comments_count || 0) > 0 && (
+              <Text style={styles.likeCount}>{activity.comments_count}</Text>
+            )}
+          </TouchableOpacity>
         </View>
       </Surface>
     );
   };
 
-  const renderCommunityItem = ({ item }: { item: CommunityFeedItem }) => (
-    <Surface style={styles.activityCard}>
-      <TouchableOpacity style={styles.activityHeader} onPress={() => router.push(`/user-profile/${item.user_id}`)} activeOpacity={0.7}>
-        {item.user_picture ? (
-          <Avatar.Image size={44} source={{ uri: item.user_picture }} />
-        ) : (
-          <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: theme.colors.border, justifyContent: 'center', alignItems: 'center' }}>
-            <Ionicons name="person" size={22} color={theme.colors.textLight} />
-          </View>
-        )}
-        <View style={styles.activityInfo}>
-          <Text style={styles.activityUser}>{item.user_name}</Text>
-          <Text style={styles.activityTime}>{item.visited_at ? formatTimeAgo(item.visited_at) : ''}</Text>
-        </View>
-      </TouchableOpacity>
-      {item.photo_url && (
-        <TouchableOpacity onPress={() => item.landmark_id ? router.push(`/landmark-community-photos/${item.landmark_id}?name=${encodeURIComponent(item.landmark_name)}`) : null} activeOpacity={0.9}>
-          <Image source={{ uri: item.photo_url }} style={styles.activityPhoto} resizeMode="cover" />
-        </TouchableOpacity>
-      )}
-      <View style={styles.activityContent}>
-        <Text style={styles.activityText}>
-          Visited <Text style={styles.activityHighlight}>{item.landmark_name}</Text>
-          {item.country_name && ` in ${item.country_name}`}
-        </Text>
-        {item.diary_snippet && (
-          <Text style={styles.diarySnippet} numberOfLines={2}>{item.diary_snippet}</Text>
-        )}
-      </View>
-      <View style={styles.activityActions}>
-        <TouchableOpacity 
-          style={styles.likeButton}
-          onPress={() => {
-            if (item.landmark_id) {
-              router.push(`/landmark-community-photos/${item.landmark_id}?name=${encodeURIComponent(item.landmark_name)}`);
-            }
-          }}
+  const renderCommunityItem = ({ item }: { item: CommunityFeedItem }) => {
+    const privacyInfo = getPrivacyIcon('public');
+    const likesCount = item.likes_count || 0;
+
+    return (
+      <Surface style={styles.activityCard}>
+        <TouchableOpacity
+          style={styles.activityHeader}
+          onPress={() => item.user_id && router.push(`/user-profile/${item.user_id}`)}
+          activeOpacity={0.7}
         >
-          <Ionicons name="heart" size={18} color={item.upvotes > 0 ? "#FF6B6B" : theme.colors.textSecondary} />
-          <Text style={[styles.likeCount, item.upvotes > 0 && { color: '#FF6B6B' }]}>{item.upvotes}</Text>
-        </TouchableOpacity>
-        {item.has_diary && (
-          <View style={styles.richBadge}>
-            <Ionicons name="journal" size={12} color={theme.colors.primary} />
-            <Text style={styles.richBadgeText}>Diary</Text>
+          {item.user_picture ? (
+            <Avatar.Image size={44} source={{ uri: item.user_picture }} />
+          ) : (
+            <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: theme.colors.border, justifyContent: 'center', alignItems: 'center' }}>
+              <Ionicons name="person" size={22} color={theme.colors.textLight} />
+            </View>
+          )}
+          <View style={styles.activityInfo}>
+            <View style={styles.activityNameRow}>
+              <Text style={styles.activityUser}>{item.user_name}</Text>
+              <Ionicons
+                name={privacyInfo.icon as any}
+                size={12}
+                color={privacyInfo.color}
+                style={styles.privacyIcon}
+              />
+            </View>
+            <Text style={styles.activityTime}>{item.visited_at ? formatTimeAgo(item.visited_at) : ''}</Text>
           </View>
+        </TouchableOpacity>
+
+        {item.photo_url && (
+          <TouchableOpacity
+            onPress={() => item.landmark_id ? router.push(`/landmark-community-photos/${item.landmark_id}?name=${encodeURIComponent(item.landmark_name)}`) : null}
+            activeOpacity={0.9}
+            data-testid={`community-photo-${item.visit_id}`}
+          >
+            <Image source={{ uri: item.photo_url }} style={styles.activityPhoto} resizeMode="cover" />
+          </TouchableOpacity>
         )}
-      </View>
-    </Surface>
-  );
+
+        <View style={styles.activityContent}>
+          <Text style={styles.activityText}>
+            Visited <Text style={styles.activityHighlight}>{item.landmark_name}</Text>
+            {item.country_name && ` in ${item.country_name}`}
+          </Text>
+          {item.diary_snippet && (
+            <Text style={styles.diarySnippet} numberOfLines={2}>{item.diary_snippet}</Text>
+          )}
+          {item.has_diary && (
+            <View style={styles.richContentBadges}>
+              <View style={styles.richBadge}>
+                <Ionicons name="journal" size={12} color={theme.colors.primary} />
+                <Text style={styles.richBadgeText}>Diary</Text>
+              </View>
+            </View>
+          )}
+        </View>
+
+        {/* Like + Comment + Upvotes Section */}
+        <View style={styles.activityActions}>
+          <TouchableOpacity
+            style={styles.likeButton}
+            onPress={() => handleCommunityLike(item)}
+            disabled={!item.activity_id}
+            data-testid={`community-like-${item.visit_id}`}
+          >
+            <Ionicons
+              name={item.is_liked ? 'heart' : 'heart-outline'}
+              size={20}
+              color={item.is_liked ? '#FF4B6E' : theme.colors.textSecondary}
+            />
+            {likesCount > 0 && (
+              <Text style={[styles.likeCount, item.is_liked && styles.likeCountActive]}>
+                {likesCount}
+              </Text>
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.likeButton}
+            onPress={() => item.activity_id && setCommentsTarget({
+              activityId: item.activity_id,
+              count: item.comments_count || 0,
+              source: 'community',
+            })}
+            disabled={!item.activity_id}
+            data-testid={`community-comment-${item.visit_id}`}
+          >
+            <Ionicons name="chatbubble-outline" size={19} color={theme.colors.textSecondary} />
+            {(item.comments_count || 0) > 0 && (
+              <Text style={styles.likeCount}>{item.comments_count}</Text>
+            )}
+          </TouchableOpacity>
+
+          {item.upvotes > 0 && (
+            <View style={[styles.likeButton, { marginLeft: 'auto' }]}>
+              <Ionicons name="star" size={15} color="#FFD700" />
+              <Text style={styles.likeCount}>{item.upvotes}</Text>
+            </View>
+          )}
+        </View>
+      </Surface>
+    );
+  };
 
   const renderEmpty = () => (
     <View style={styles.emptyState}>
@@ -417,6 +539,23 @@ export default function FeedScreen() {
       )}
 
       <PersistentTabBar />
+
+      <CommentsModal
+        visible={!!commentsTarget}
+        onClose={() => setCommentsTarget(null)}
+        activityId={commentsTarget?.activityId || null}
+        commentsCount={commentsTarget?.count || 0}
+        currentUserId={currentUserId}
+        onCommentsChange={(newCount) => {
+          if (!commentsTarget) return;
+          if (commentsTarget.source === 'friends') {
+            handleCommentsChangeFriends(commentsTarget.activityId, newCount);
+          } else {
+            handleCommentsChangeCommunity(commentsTarget.activityId, newCount);
+          }
+          setCommentsTarget({ ...commentsTarget, count: newCount });
+        }}
+      />
     </View>
   );
 }
@@ -548,6 +687,7 @@ const styles = StyleSheet.create({
   activityActions: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 12,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,

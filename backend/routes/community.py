@@ -71,6 +71,23 @@ async def get_community_feed(
     upvote_results = await db.photo_upvotes.aggregate(upvote_pipeline).to_list(len(photo_ids))
     upvote_map = {r["_id"]: r["count"] for r in upvote_results}
 
+    # Check which photos the current user has upvoted
+    user_upvoted_docs = await db.photo_upvotes.find(
+        {"photo_id": {"$in": photo_ids}, "user_id": current_user.user_id},
+        {"_id": 0, "photo_id": 1}
+    ).to_list(len(photo_ids))
+    user_upvoted_set = {d["photo_id"] for d in user_upvoted_docs}
+
+    # Batch-fetch activities for these visits (for activity_id, likes, comments parity)
+    visit_ids = [v["visit_id"] for v in visits]
+    activity_docs = await db.activities.find(
+        {"visit_id": {"$in": visit_ids}},
+        {"_id": 0, "activity_id": 1, "visit_id": 1, "likes_count": 1, "comments_count": 1}
+    ).to_list(len(visit_ids))
+    visit_to_activity = {a["visit_id"]: a for a in activity_docs}
+
+    activity_ids_v = [a["activity_id"] for a in activity_docs]
+
     items = []
     for visit in visits:
         photo_url = visit.get("photos", [None])[0] if visit.get("photos") else None
@@ -80,8 +97,13 @@ async def get_community_feed(
             text = visit["diary_notes"]
             diary_snippet = text[:100] + "..." if len(text) > 100 else text
 
+        act = visit_to_activity.get(visit["visit_id"]) or {}
+        photo_id = f"{visit['visit_id']}_0"
+
         items.append({
             "visit_id": visit["visit_id"],
+            "user_id": visit.get("user_id"),
+            "activity_id": act.get("activity_id"),
             "type": "diary" if has_diary else "photo",
             "source": "landmark",
             "photo_url": photo_url,
@@ -94,7 +116,11 @@ async def get_community_feed(
             "country_id": visit.get("country_id"),
             "diary_snippet": diary_snippet,
             "has_diary": has_diary,
-            "upvotes": upvote_map.get(f"{visit['visit_id']}_0", 0),
+            "upvotes": upvote_map.get(photo_id, 0),
+            "user_upvoted": photo_id in user_upvoted_set,
+            "likes_count": act.get("likes_count", 0) or 0,
+            "comments_count": act.get("comments_count", 0) or 0,
+            "is_liked": False,  # will be filled below
             "visited_at": visit.get("visited_at").isoformat() if visit.get("visited_at") else None,
         })
 
@@ -127,6 +153,15 @@ async def get_community_feed(
     ]
     custom_visits = await db.user_created_visits.aggregate(custom_pipeline).to_list(limit)
 
+    # Batch fetch activities for custom visits
+    ucv_ids = [cv.get("user_created_visit_id") for cv in custom_visits if cv.get("user_created_visit_id")]
+    ucv_activities = await db.activities.find(
+        {"user_created_visit_id": {"$in": ucv_ids}},
+        {"_id": 0, "activity_id": 1, "user_created_visit_id": 1, "likes_count": 1, "comments_count": 1}
+    ).to_list(len(ucv_ids)) if ucv_ids else []
+    ucv_to_activity = {a["user_created_visit_id"]: a for a in ucv_activities}
+    activity_ids_v += [a["activity_id"] for a in ucv_activities]
+
     for cv in custom_visits:
         photo_url = cv.get("photos", [None])[0] if cv.get("photos") else None
         if not photo_url and cv.get("landmarks"):
@@ -146,8 +181,12 @@ async def get_community_feed(
             text = cv["diary"]
             diary_snippet = text[:100] + "..." if len(text) > 100 else text
 
+        act = ucv_to_activity.get(cv.get("user_created_visit_id")) or {}
+
         items.append({
             "visit_id": cv.get("user_created_visit_id"),
+            "user_id": cv.get("user_id"),
+            "activity_id": act.get("activity_id"),
             "type": "custom_visit",
             "source": "custom",
             "photo_url": photo_url,
@@ -161,8 +200,37 @@ async def get_community_feed(
             "diary_snippet": diary_snippet,
             "has_diary": has_diary,
             "upvotes": 0,
+            "user_upvoted": False,
+            "likes_count": act.get("likes_count", 0) or 0,
+            "comments_count": act.get("comments_count", 0) or 0,
+            "is_liked": False,
             "visited_at": cv.get("visited_at").isoformat() if cv.get("visited_at") else None,
         })
+
+    # Batch fetch is_liked AND accurate likes_count for all activities in one pass
+    if activity_ids_v:
+        # likes_count (grouped from likes collection — authoritative source)
+        likes_count_pipeline = [
+            {"$match": {"activity_id": {"$in": activity_ids_v}}},
+            {"$group": {"_id": "$activity_id", "count": {"$sum": 1}}}
+        ]
+        likes_count_results = await db.likes.aggregate(likes_count_pipeline).to_list(len(activity_ids_v))
+        likes_count_map = {r["_id"]: r["count"] for r in likes_count_results}
+
+        # is_liked by current user
+        user_likes = await db.likes.find(
+            {"activity_id": {"$in": activity_ids_v}, "user_id": current_user.user_id},
+            {"_id": 0, "activity_id": 1}
+        ).to_list(len(activity_ids_v))
+        liked_set = {lk["activity_id"] for lk in user_likes}
+
+        for it in items:
+            aid = it.get("activity_id")
+            if not aid:
+                continue
+            if aid in liked_set:
+                it["is_liked"] = True
+            it["likes_count"] = likes_count_map.get(aid, 0)
 
     # Sort combined items by visited_at descending
     items.sort(key=lambda x: x.get("visited_at") or "", reverse=True)
