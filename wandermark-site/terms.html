@@ -33,6 +33,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .footer{text-align:center;padding:32px 16px;color:#999;font-size:13px}
 .footer a{color:#2d5a8e;text-decoration:none;font-weight:600}
 .caps{font-size:13px;text-transform:uppercase;letter-spacing:.3px}
+.guidelines-card{border:1.5px solid #2d5a8e33;padding:0;overflow:hidden;scroll-margin-top:24px}
+.guidelines-banner{background:#2d5a8e;color:#fff;padding:14px 20px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;letter-spacing:.5px;text-transform:uppercase}
+.guidelines-banner svg{flex-shrink:0}
+.guidelines-body{padding:24px 28px}
+.guidelines-body h3{color:#2d5a8e}
+.guidelines-body ul li::before{color:#2d5a8e}
+.ok-list li::before{content:"\2713";font-weight:700}
+.bad-list li::before{content:"\2715";color:#c53030 !important;font-weight:700}
 </style>
 </head>
 <body>
@@ -97,23 +105,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 <p>You are solely responsible for your content. By uploading, you represent that you have the right to do so and that your content does not violate any laws or third-party rights.</p>
 </div>
 
-<div class="card">
-<h2>4. Content Moderation &amp; Reporting</h2>
-<h3>Community Guidelines</h3>
-<p>WanderMark is committed to maintaining a safe and respectful community. All user-generated content, including photos, diary entries, and tips, must comply with our guidelines.</p>
-<h3>Prohibited Content</h3>
-<ul>
+<div class="card guidelines-card" id="community-guidelines">
+<div class="guidelines-banner">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+<span>Community guidelines</span>
+</div>
+<div class="guidelines-body">
+<h2 style="border:none;padding:0;margin-bottom:12px">4. Content moderation &amp; reporting</h2>
+<p>WanderMark is a community of curious travelers. To keep it welcoming and trustworthy, every photo and post should follow these rules.</p>
+
+<h3>What's welcome</h3>
+<ul class="ok-list">
+<li>Your own photos of landmarks and places you've visited</li>
+<li>Honest diary entries about your trip</li>
+<li>Helpful tips for fellow travelers</li>
+<li>Respectful comments and likes</li>
+</ul>
+
+<h3>What's not allowed</h3>
+<ul class="bad-list">
+<li>Photos that don't depict the claimed landmark (e.g. screenshots, product photos, ads)</li>
 <li>Inappropriate, offensive, or explicit material</li>
 <li>Harassment, hate speech, or bullying</li>
-<li>Spam or misleading information</li>
-<li>Copyright-infringing content</li>
-<li>Photos that do not depict the claimed landmark</li>
-<li>Fake or fabricated visits</li>
+<li>Spam, promotions, or misleading information</li>
+<li>Copyright-infringing content you don't own</li>
+<li>Fake or fabricated visits / impersonation</li>
 </ul>
+
 <h3>Reporting</h3>
-<p>Users can report inappropriate content or behavior using the report feature. Reports are reviewed by our moderation team within 24-48 hours. False reports may result in account restrictions.</p>
+<p>See something off? Tap the flag icon on any photo or long-press a card in the community grids. Our moderation team reviews every report within 24–48 hours. Please use reports responsibly — repeated false reports may restrict your account.</p>
+
 <h3>Enforcement</h3>
-<p>Violations may result in content removal, temporary suspension, or permanent account termination depending on severity and frequency.</p>
+<p>Depending on severity, a first violation usually means the photo or post is removed and you receive an in-app notification explaining why. Repeated or serious violations can lead to temporary suspension or permanent account closure.</p>
+
+<h3>If your content was removed</h3>
+<p>You'll get an in-app notification when we remove something of yours. We remove content — not people — so your account stays active and you can keep sharing the right kind of content. If you believe the removal was a mistake, reply to the notification or contact support.</p>
+</div>
 </div>
 
 <div class="card">
