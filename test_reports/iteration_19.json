@@ -1,0 +1,52 @@
+{
+  "summary": "Backend testing of Community Highlight redesign (singular /api/community-highlight + /api/community-highlights/top). 11/12 new tests PASS, 1 SKIPPED due to seed-data gap. All 10 iteration_18 regression tests still pass (community-feed, likes, comments, plural community-highlights trending landmarks, photo-of-week, landmark-community-photos).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "GET /api/community-highlights/top",
+        "issue": "source='custom' cannot be surfaced with current seed data AND there is a latent code gap: _build_candidate_pool uses mongo query {'photos':{'$exists':True,'$ne':[]}} for user_created_visits BEFORE falling back to landmarks[].photo (community.py:1025-1029 & 1123-1128). Any custom visit whose only photos live inside landmarks[].photo will be pre-filtered out, so the fallback logic is unreachable for those documents. Either loosen the query to {'$or':[{'photos':{'$ne':[]}},{'landmarks.photo':{'$ne':None}}]} or always pass and drop later via the existing photo_url!=None filter at line 1151."
+      },
+      {
+        "endpoint": "GET /api/community-highlights/top",
+        "issue": "visited_at is serialized to isoformat string in the candidate; tiebreak sort uses it as string which works only because all dates include timezone suffix of same length. Consider sorting by datetime before serialization for safety."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_community_highlight_iteration19.py",
+    "/app/test_reports/pytest/iteration_19_results.xml"
+  ],
+  "action_items": [
+    "(Minor) Fix _build_candidate_pool to include custom visits whose only photos live in landmarks[].photo (see community.py:1025-1029). Current query pre-filters those out.",
+    "(Seed) Add a public user_created_visit with a non-empty photos array OR a landmarks[].photo set — this will allow the skipped test 'test_custom_visits_included_with_source_custom' to actually validate source='custom' rotation + top listing.",
+    "(Nice-to-have) Consider secondary sort by datetime object (not iso string) in /community-highlights/top."
+  ],
+  "critical_code_review_comments": [
+    "community.py is 1229 lines — approaching/over the 700-line threshold. Consider splitting highlight endpoints into routes/community_highlights.py.",
+    "Same hotness computation is duplicated twice in _build_candidate_pool for visits and custom_visits (~20 lines each). Extract a helper _score(visit_doc, now, user_map, ...).",
+    "random.choice on hotness-sorted top-20 is fine, but two back-to-back callers could get same pick; acceptable per design. Document this in endpoint docstring.",
+    "No upper-bound protection on likes.find/comments.aggregate in _build_candidate_pool — currently fine because limited upstream to 200+100 activities, but worth an explicit comment.",
+    "is_liked on the SINGLE /community-highlight is computed with find_one + count_documents — two separate DB round-trips per request. With 200 candidates already aggregated, consider reusing aggregated likes/comments maps built during scoring to avoid the extra round-trip (minor perf).",
+    "Error handling: no try/except around endpoints; a mongo hiccup returns 500. Consider wrapping with structured error response consistent with rest of the API."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_community_highlight_iteration19.py"
+  ],
+  "success_rate": {
+    "backend": "100% (11/11 active, 1 skipped due to seed gap)",
+    "frontend": "not tested (scope: backend only)"
+  },
+  "test_credentials": "admin test@wandermark.app / Test1234!, pro testpro@wandermark.app / Test1234! (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "No seed created. Did unlike/delete cleanup in interaction tests. Comment delete endpoint expects /api/comments/{id} (returns 404 for /activities/{id}/comment/{id}) — test cleanup attempted wrong path but this is cosmetic since test assertions had already passed.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iteration_19 validates the new singular /api/community-highlight endpoint and /api/community-highlights/top endpoint. All core contracts verified: required fields, rotation across calls, rank ordering, limit param, like/comment side-effect reflection, and regressions for community-feed & plural community-highlights. One skipped test (test_custom_visits_included_with_source_custom) needs seed data with a public user_created_visit having a non-empty photos array. Endpoints are under /app/backend/routes/community.py lines 1012-1226. No frontend testing performed (out of scope). For future runs, the test file at /app/backend/tests/test_community_highlight_iteration19.py is reusable as a regression suite.",
+  "rca of the issue": "Skipped test RCA: DB has 3 public user_created_visits with empty photos=[] and null landmarks[].photo. The mongo query in _build_candidate_pool filters on photos!=[] BEFORE the fallback to landmarks[].photo, making the fallback unreachable for docs with empty photos. Two remediations: (a) seed a custom visit with photos populated, (b) widen the query to include docs where landmarks[].photo exists. Reproduction: `GET /api/community-highlights/top?limit=50` — response items never contain source='custom'."
+}

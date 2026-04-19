@@ -27,6 +27,7 @@ import { getUserRank } from '../../utils/rankSystem';
 import { BACKEND_URL } from '../../utils/config';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import { getToken } from '../../utils/token';
+import CommunityHighlightHero from '../../components/CommunityHighlightHero';
 
 
 interface Friend {
@@ -57,6 +58,7 @@ export default function SocialHubScreen() {
   const [pendingCount, setPendingCount] = useState(0);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [communityHighlight, setCommunityHighlight] = useState<any>(null);
 
   // Report modal state
   const [reportModalVisible, setReportModalVisible] = useState(false);
@@ -91,7 +93,21 @@ export default function SocialHubScreen() {
       loadFriends(),
       loadLeaderboard(),
       loadPendingRequests(),
+      loadCommunityHighlight(),
     ]);
+  };
+
+  const loadCommunityHighlight = async () => {
+    try {
+      const token = await getToken();
+      const response = await fetch(`${BACKEND_URL}/api/community-highlight`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setCommunityHighlight(data.highlight || null);
+      }
+    } catch (error) {}
   };
 
   const onRefresh = async () => {
@@ -251,6 +267,14 @@ export default function SocialHubScreen() {
         }
         showsVerticalScrollIndicator={false}
       >
+
+        {/* Community Highlight Hero */}
+        {communityHighlight && (
+          <CommunityHighlightHero
+            highlight={communityHighlight}
+            onPress={() => router.push('/community-highlights')}
+          />
+        )}
 
         {/* Leaderboard Section - TOP */}
         <View style={styles.section}>

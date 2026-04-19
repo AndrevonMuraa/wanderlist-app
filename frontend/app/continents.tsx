@@ -336,50 +336,28 @@ export default function ContinentsScreen() {
           />
         </TouchableOpacity>
 
-        {/* Community Highlights */}
-        {trendingLandmarks.length > 0 && (
-          <View style={styles.trendingSection}>
-            <TouchableOpacity style={styles.trendingSectionHeader} onPress={() => router.push('/community')} activeOpacity={0.7}>
-              <Ionicons name="people" size={18} color={theme.colors.primary} />
-              <Text style={styles.trendingSectionTitle}>Community highlights</Text>
-              <Ionicons name="chevron-forward" size={16} color={theme.colors.primary} style={{ marginLeft: 'auto' }} />
-            </TouchableOpacity>
-            <ScrollView 
-              horizontal 
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.trendingScroll}
-            >
-              {trendingLandmarks.map((lm, index) => (
-                <TouchableOpacity
-                  key={lm.landmark_id || index}
-                  style={styles.trendingCard}
-                  data-testid={`trending-landmark-${index}`}
-                  onPress={() => lm.landmark_id && router.push(`/landmark-community-photos/${lm.landmark_id}?name=${encodeURIComponent(lm.landmark_name)}&country=${encodeURIComponent(lm.country_name || '')}`)}
-                  activeOpacity={0.85}
-                >
-                  <Image source={{ uri: lm.sample_photo }} style={styles.trendingImage} resizeMode="cover" />
-                  <LinearGradient
-                    colors={['transparent', 'rgba(0,0,0,0.8)']}
-                    style={styles.trendingOverlay}
-                  >
-                    <Text style={styles.trendingName} numberOfLines={1}>{lm.landmark_name}</Text>
-                    <Text style={styles.trendingCountry} numberOfLines={1}>{lm.country_name}</Text>
-                    <View style={styles.trendingStats}>
-                      <View style={styles.trendingStat}>
-                        <Ionicons name="people" size={12} color="rgba(255,255,255,0.8)" />
-                        <Text style={styles.trendingStatText}>{lm.visitor_count}</Text>
-                      </View>
-                      <View style={styles.trendingStat}>
-                        <Ionicons name="images" size={12} color="rgba(255,255,255,0.8)" />
-                        <Text style={styles.trendingStatText}>{lm.total_photos}</Text>
-                      </View>
-                    </View>
-                  </LinearGradient>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-        )}
+        {/* Community highlight CTA banner (replaced the redundant trending-landmarks carousel) */}
+        <TouchableOpacity
+          style={styles.communityCta}
+          onPress={() => router.push('/community-highlights')}
+          activeOpacity={0.9}
+          data-testid="explore-community-cta"
+        >
+          <LinearGradient
+            colors={[theme.colors.primary, theme.colors.primaryDark]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.communityCtaGradient}
+          >
+            <View style={styles.communityCtaIconWrap}>
+              <Ionicons name="sparkles" size={24} color="#FFF" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.communityCtaTitle}>Community highlight</Text>
+              <Text style={styles.communityCtaSub}>See what the community is loving today →</Text>
+            </View>
+          </LinearGradient>
+        </TouchableOpacity>
       </ScrollView>
 
       {/* Custom Visit Modal */}
@@ -510,6 +488,36 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     lineHeight: 17,
   },
+
+  // Community CTA (replaces Trending Landmarks carousel)
+  communityCta: {
+    marginHorizontal: theme.spacing.md,
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+    borderRadius: 16,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  communityCtaGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    padding: 18,
+  },
+  communityCtaIconWrap: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    backgroundColor: 'rgba(255,255,255,0.22)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  communityCtaTitle: { color: '#FFF', fontSize: 17, fontWeight: '700', letterSpacing: -0.3 },
+  communityCtaSub: { color: 'rgba(255,255,255,0.86)', fontSize: 13, marginTop: 3, fontWeight: '500' },
 
   // Trending Landmarks
   trendingSection: {
