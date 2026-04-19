@@ -24,13 +24,15 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - **Moderator**: mod@wandermark.app / Test1234!
 
 ## Pending Issues (for next fork)
-- P0: Feed consistency — Community vs Friends tabs have different like/date/info behavior
-  - Community like button not interactive (needs upvote toggle)
-  - Date format inconsistent (raw date vs formatTimeAgo)
-  - Points info missing on community cards
-  - See analysis in last user message
+- ~~P0: Feed consistency — Community vs Friends tabs have different like/date/info behavior~~ ✅ DONE (April 19, 2026 — Session 5)
 - P0: User profile crash on leaderboard click — possibly aspectRatio issue, fixed with Dimensions but needs testing
 - P0: Verify all fixes in Build 83
+
+## Session 5 — April 19, 2026 (Feed parity)
+- Backend: `/api/community-feed` now enriches each item with `activity_id`, `user_id`, `is_liked`, `likes_count`, `comments_count`, `user_upvoted` by joining activities via `visit_id` + `user_created_visit_id`. Likes and comments counts are aggregated live from their collections for parity with `/api/feed`.
+- Frontend: Community feed card redesigned to match Friends feed. Heart toggles REAL like (reuses `/api/activities/{id}/like`). New comment icon button opens a shared `CommentsModal` bottom-sheet (wraps existing `CommentsSection` with new `forceExpanded` prop). Comment button also added to Friends feed card.
+- Added `components/CommentsModal.tsx` (new). Extended `components/CommentsSection.tsx` with `forceExpanded` prop.
+- Backend tested: `test_feed_parity_iteration18.py` — 10/10 passed.
 
 ## Completed (Session 3+4 — April 11-19, 2026)
 

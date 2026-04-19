@@ -207,7 +207,7 @@ async def get_community_feed(
             "visited_at": cv.get("visited_at").isoformat() if cv.get("visited_at") else None,
         })
 
-    # Batch fetch is_liked AND accurate likes_count for all activities in one pass
+    # Batch fetch is_liked AND accurate likes_count + comments_count for all activities
     if activity_ids_v:
         # likes_count (grouped from likes collection — authoritative source)
         likes_count_pipeline = [
@@ -216,6 +216,14 @@ async def get_community_feed(
         ]
         likes_count_results = await db.likes.aggregate(likes_count_pipeline).to_list(len(activity_ids_v))
         likes_count_map = {r["_id"]: r["count"] for r in likes_count_results}
+
+        # comments_count (grouped from comments collection — authoritative source)
+        comments_count_pipeline = [
+            {"$match": {"activity_id": {"$in": activity_ids_v}}},
+            {"$group": {"_id": "$activity_id", "count": {"$sum": 1}}}
+        ]
+        comments_count_results = await db.comments.aggregate(comments_count_pipeline).to_list(len(activity_ids_v))
+        comments_count_map = {r["_id"]: r["count"] for r in comments_count_results}
 
         # is_liked by current user
         user_likes = await db.likes.find(
@@ -228,9 +236,9 @@ async def get_community_feed(
             aid = it.get("activity_id")
             if not aid:
                 continue
-            if aid in liked_set:
-                it["is_liked"] = True
+            it["is_liked"] = aid in liked_set
             it["likes_count"] = likes_count_map.get(aid, 0)
+            it["comments_count"] = comments_count_map.get(aid, 0)
 
     # Sort combined items by visited_at descending
     items.sort(key=lambda x: x.get("visited_at") or "", reverse=True)
