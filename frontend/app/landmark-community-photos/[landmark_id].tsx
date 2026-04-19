@@ -332,8 +332,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   photoCard: {
-    flex: 1,
-    maxWidth: PHOTO_SIZE,
+    width: '100%',
     borderRadius: theme.borderRadius.lg,
     backgroundColor: theme.colors.surface,
     overflow: 'hidden',
@@ -342,7 +341,7 @@ const styles = StyleSheet.create({
   },
   photoImage: {
     width: '100%',
-    height: PHOTO_SIZE,
+    aspectRatio: 1,
     backgroundColor: theme.colors.background,
   },
   photoInfo: {
