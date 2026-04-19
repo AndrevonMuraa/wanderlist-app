@@ -2,12 +2,14 @@
 
 - GET /api/community-highlight → single dynamic featured visit (hotness algorithm)
 - GET /api/community-highlights/top → top N all-time by raw likes_count
+- GET /api/community-highlights/top?scope=month → top N in the current month
 
 See utils/highlight_scoring.py for the hotness algorithm.
 """
 import random
+from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 from utils.db import db
 from utils.auth import get_current_user
@@ -57,13 +59,24 @@ async def get_community_highlight(
 @router.get("/community-highlights/top")
 async def get_top_community_highlights(
     limit: int = 10,
+    scope: str = Query("all", regex="^(all|month)$"),
     current_user: User = Depends(get_current_user)
 ):
-    """Top N (max 50) all-time community photos ranked purely by likes_count."""
+    """Top N (max 50) community photos ranked by likes_count.
+
+    - scope=all (default): all-time leaderboard
+    - scope=month: restrict to visits whose `visited_at` falls inside the current
+      calendar month (UTC). Powers the shareable "Top 10 of the month" card.
+    """
     limit = max(1, min(limit, 50))
     candidates = await build_candidate_pool(current_user)
     if not candidates:
-        return {"items": []}
+        return {"items": [], "scope": scope, "period": _period_label(scope)}
+
+    if scope == "month":
+        now = datetime.now(timezone.utc)
+        start_iso = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
+        candidates = [c for c in candidates if (c.get("visited_at") or "") >= start_iso]
 
     candidates.sort(key=lambda c: (c.get("likes_count", 0), c.get("visited_at") or ""), reverse=True)
     top = candidates[:limit]
@@ -89,4 +102,11 @@ async def get_top_community_highlights(
         c["is_liked"] = c.get("activity_id") in liked_set
         c["comments_count"] = comments_map.get(c.get("activity_id"), 0)
 
-    return {"items": top}
+    return {"items": top, "scope": scope, "period": _period_label(scope)}
+
+
+def _period_label(scope: str) -> str:
+    """Human-readable period label shown on the share card."""
+    if scope == "month":
+        return datetime.now(timezone.utc).strftime("%B %Y")
+    return "All-time"

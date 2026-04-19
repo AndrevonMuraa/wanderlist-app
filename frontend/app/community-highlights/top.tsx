@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, RefreshControl, ActivityIndicator, Dimensions, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl, ActivityIndicator, Dimensions, Alert, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import theme from '../../styles/theme';
@@ -8,6 +9,7 @@ import UniversalHeader from '../../components/UniversalHeader';
 import { getToken } from '../../utils/token';
 import MediaCard from '../../components/MediaCard';
 import ReportModal from '../../components/ReportModal';
+import ShareTopMonthCard from '../../components/ShareTopMonthCard';
 
 const { width } = Dimensions.get('window');
 const COLS = 2;
@@ -20,6 +22,7 @@ export default function CommunityHighlightsTopScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [reportTarget, setReportTarget] = useState<{ id: string; name: string } | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const load = async () => {
     try {
@@ -83,6 +86,30 @@ export default function CommunityHighlightsTopScreen() {
           The community's most-loved photos, ranked purely by all-time likes.
         </Text>
 
+        {/* Share monthly card CTA */}
+        <TouchableOpacity
+          style={styles.shareMonthBtn}
+          onPress={() => setShareOpen(true)}
+          activeOpacity={0.88}
+          data-testid="share-top-month-cta"
+        >
+          <LinearGradient
+            colors={[theme.colors.primary, theme.colors.accentSand]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.shareMonthIcon}
+          >
+            <Ionicons name="share-social" size={18} color="#FFF" />
+          </LinearGradient>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.shareMonthTitle}>Share Top 10 of the month</Text>
+            <Text style={styles.shareMonthSub}>
+              Post the monthly leaderboard to Instagram, TikTok & more
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={theme.colors.primary} />
+        </TouchableOpacity>
+
         {loading ? (
           <View style={styles.loading}>
             <ActivityIndicator size="large" color={theme.colors.primary} />
@@ -129,6 +156,11 @@ export default function CommunityHighlightsTopScreen() {
         targetId={reportTarget?.id || ''}
         targetName={reportTarget?.name || 'Community photo'}
       />
+
+      <ShareTopMonthCard
+        visible={shareOpen}
+        onDismiss={() => setShareOpen(false)}
+      />
     </View>
   );
 }
@@ -157,4 +189,32 @@ const styles = StyleSheet.create({
     color: theme.colors.textLight,
     fontStyle: 'italic',
   },
+  shareMonthBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    padding: 14,
+    marginBottom: 18,
+    backgroundColor: theme.colors.surface,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: theme.colors.borderSand,
+    shadowColor: theme.colors.shadowWarm,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 14,
+    elevation: 4,
+  },
+  shareMonthIcon: {
+    width: 42, height: 42,
+    borderRadius: 12,
+    alignItems: 'center', justifyContent: 'center',
+    shadowColor: theme.colors.shadowWarm,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  shareMonthTitle: { fontSize: 14, fontWeight: '700', color: theme.colors.text, letterSpacing: -0.2 },
+  shareMonthSub: { fontSize: 12, color: theme.colors.textSecondary, marginTop: 2, fontWeight: '500' },
 });

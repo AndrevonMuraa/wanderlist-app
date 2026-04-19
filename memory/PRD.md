@@ -10,6 +10,30 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Database: MongoDB Atlas
 - Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
 
+## Session 13 — April 19, 2026 (Shareable "Top 10 of the month" card)
+
+### Backend
+- `GET /api/community-highlights/top` extended with `scope=all|month` query param:
+  - `scope=month` filters visits whose `visited_at` >= first of current UTC month
+  - Response adds `scope` + `period` fields (e.g. `period: "April 2026"`)
+- All-time endpoint unchanged (default scope=all).
+- Curl-verified: returns 10 items all-time, 0 items for current empty month.
+
+### Frontend
+- New `components/ShareTopMonthCard.tsx` (RN Paper `Modal` + `captureRef` + `expo-sharing`):
+  - Ocean→Sand gradient card with decorative orbs, WanderMark brand row, title + period + gold accent line
+  - **Podium row** (top 3) with `#rank` gold-sand gradient badges, photo thumbnails, like counts
+  - **Rest list** (#4–#10) in compact dark row layout: rank / thumb / name / country / likes
+  - Footer CTA: `"Discover what the world loves"` + `wandermark.app`
+  - Gold `Share to social media` button → renders card to PNG → native share sheet
+  - Empty-state card with friendly "No photos yet this month" copy
+- Wired from `/community-highlights/top`: new premium Window Card CTA banner ("Share Top 10 of the month") between intro and grid, opens the modal.
+
+### Verified
+- Curl: scope=all (10 items) + scope=month (0 items, period="April 2026") both return 200.
+- Playwright: CTA renders, click opens modal, dynamic "Share Top 10 of April 2026" title + empty-state shown.
+- TypeScript clean (no errors in new files).
+
 ## Session 12 — April 19, 2026 (Penthouse Window V2 — Phase B + C)
 
 All "ALT!" design items shipped and smoke-tested (testing_agent iteration_20: 6/6 pages zero crashes).
