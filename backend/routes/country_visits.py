@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from utils.db import db
 from utils.auth import get_current_user, is_user_pro, get_user_limits
 from utils.helpers import check_and_award_badges, recalculate_user_points
+from utils.image_validate import normalize_photo, normalize_photos
 from models.all import User, CountryVisitCreate, UserCreatedVisitCreate
 
 
@@ -39,7 +40,10 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
             )
         else:
             raise HTTPException(status_code=400, detail=f"Maximum {max_photos} photos allowed")
-    
+
+    # Server-side photo defense-in-depth: reject >5MB, auto-resize 2-5MB
+    data.photos = normalize_photos(data.photos) or []
+
     has_photos = len(data.photos) > 0
     
     # Look up country details from database
@@ -586,6 +590,11 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
     total_photos = len(data.photos) + landmark_photos_count
     if total_photos > 20:
         raise HTTPException(status_code=400, detail="Maximum 20 total photos allowed (10 country + 10 landmark)")
+
+    # Server-side photo defense-in-depth: reject >5MB, auto-resize 2-5MB
+    data.photos = normalize_photos(data.photos) or []
+    for lm in processed_landmarks:
+        lm["photo"] = normalize_photo(lm.get("photo"))
     
     # Parse visit date
     visited_at = datetime.now(timezone.utc)
@@ -795,14 +804,14 @@ async def update_user_created_visit(visit_id: str, body: dict = Body(...), curre
             if isinstance(lm, dict):
                 name = lm.get("name", "").strip() if lm.get("name") else ""
                 if name:
-                    processed.append({"name": name, "photo": lm.get("photo")})
+                    processed.append({"name": name, "photo": normalize_photo(lm.get("photo"))})
             elif isinstance(lm, str) and lm.strip():
                 processed.append({"name": lm.strip(), "photo": None})
         update_fields["landmarks"] = processed
     
     # General photos (max 10)
     if "photos" in body:
-        photos = body["photos"][:10]
+        photos = normalize_photos(body["photos"][:10]) or []
         update_fields["photos"] = photos
     
     # Diary

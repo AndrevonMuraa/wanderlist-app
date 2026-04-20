@@ -16,6 +16,7 @@ from models.all import (
     SessionDataResponse, AppleAuthRequest,
 )
 import httpx
+from utils.image_validate import normalize_photo
 
 router = APIRouter()
 
@@ -503,7 +504,7 @@ async def update_profile(profile_data: ProfileUpdate, current_user: User = Depen
         update_fields["username"] = username
     
     if profile_data.picture is not None:
-        update_fields["picture"] = profile_data.picture
+        update_fields["picture"] = normalize_photo(profile_data.picture)
     
     if profile_data.bio is not None:
         # Limit bio to 200 characters
@@ -513,7 +514,7 @@ async def update_profile(profile_data: ProfileUpdate, current_user: User = Depen
         update_fields["location"] = profile_data.location
     
     if profile_data.banner_image is not None:
-        update_fields["banner_image"] = profile_data.banner_image
+        update_fields["banner_image"] = normalize_photo(profile_data.banner_image)
     
     if profile_data.featured_badges is not None:
         # Limit to 3 featured badges max

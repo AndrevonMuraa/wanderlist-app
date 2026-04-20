@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 
 from utils.db import db
 from utils.auth import get_current_user
+from utils.image_validate import normalize_photos
 from models.all import User, ReportCreate, Report
 
 
@@ -79,14 +80,17 @@ async def submit_bug_report(body: dict, current_user: User = Depends(get_current
     
     if not description:
         raise HTTPException(status_code=400, detail="Please describe the issue")
-    
+
+    # Server-side defense-in-depth: reject >5MB, auto-resize 2-5MB
+    screenshots = normalize_photos(screenshots[:5]) or []
+
     report = {
         "report_id": f"bug_{uuid.uuid4().hex[:12]}",
         "user_id": current_user.user_id,
         "user_name": current_user.name,
         "user_email": current_user.email,
         "description": description,
-        "screenshots": screenshots[:5],
+        "screenshots": screenshots,
         "status": "open",
         "created_at": datetime.now(timezone.utc),
     }

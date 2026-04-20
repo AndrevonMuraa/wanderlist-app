@@ -9,6 +9,7 @@ from utils.db import db
 from utils.auth import get_current_user, is_user_pro, get_user_limits
 from models.all import User, Visit, VisitCreate
 from utils.helpers import check_and_award_badges, create_notification, get_rank_for_points, recalculate_user_points
+from utils.image_validate import normalize_photo, normalize_photos
 
 
 router = APIRouter()
@@ -105,6 +106,7 @@ async def update_visit(visit_id: str, body: dict = Body(...), current_user: User
     update_fields = {}
     
     if "photos" in body:
+        body["photos"] = normalize_photos(body["photos"]) or []
         update_fields["photos"] = body["photos"][:10]
         update_fields["has_photo"] = len(body["photos"]) > 0
         update_fields["photo_count"] = len(body["photos"][:10])
@@ -313,6 +315,10 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
             )
         else:
             raise HTTPException(status_code=400, detail=f"Maximum {max_photos} photos allowed per visit")
+
+    # Server-side photo defense-in-depth: reject >5MB, auto-resize 2-5MB
+    photos = normalize_photos(photos) or []
+    data.photo_base64 = normalize_photo(data.photo_base64)
     
     
     # Determine if visit is verified (has photo proof)
