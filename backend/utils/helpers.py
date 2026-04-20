@@ -221,6 +221,26 @@ async def notify_friend_request(requester_name: str, target_user_id: str):
     )
 
 
+async def notify_new_message(sender_name: str, target_user_id: str, preview: str, sender_id: str):
+    """Notify a user they received a new chat message.
+
+    Respects `messages_enabled` in push_settings (default True).
+    Preview is truncated to 80 chars to keep the push payload small.
+    """
+    settings = await db.push_settings.find_one({"user_id": target_user_id})
+    if settings and not settings.get("messages_enabled", True):
+        return
+    body = (preview or "Sent you a photo").strip()
+    if len(body) > 80:
+        body = body[:77] + "…"
+    await send_push_notification(
+        user_id=target_user_id,
+        title=f"💬 {sender_name}",
+        body=body,
+        data={"type": "message", "sender_id": sender_id}
+    )
+
+
 
 
 async def recalculate_user_points(user_id: str):

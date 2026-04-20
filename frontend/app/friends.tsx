@@ -16,6 +16,7 @@ import GroupStatsModal from '../components/GroupStatsModal';
 import ProFeatureLock from '../components/ProFeatureLock';
 import { useSubscription } from '../hooks/useSubscription';
 import { PersistentTabBar } from '../components/PersistentTabBar';
+import { NewMessageNotifPrompt } from '../components/NewMessageNotifPrompt';
 
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 import { getToken } from '../utils/token';
@@ -391,6 +392,9 @@ export default function FriendsScreen() {
           <FriendsLeaderboardCard />
           <SharedPlacesStrip />
           <FriendsActivityFeed />
+
+          {/* One-time onboarding: ask permission to ping on new messages */}
+          <NewMessageNotifPrompt />
 
           {/* Messages inbox shortcut — messaging is a friends-only feature */}
           <TouchableOpacity

@@ -10,7 +10,22 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Database: MongoDB Atlas
 - Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
 
-## Session 20 — April 20, 2026 (Free vs. Pro tier rebalancing — A1-A3 + B1-B2)
+## Session 20 — April 20, 2026 (Free vs. Pro tier rebalancing — A1-A3 + B1-B2 + messaging push notifications)
+
+### Enhancement: New-message push notifications with in-app onboarding prompt (Friends Hub)
+Now that messaging is free for every user, added a full notification path so friends actually see each other's replies:
+- **Backend** (`/app/backend/utils/helpers.py`): New `notify_new_message(sender_name, target_user_id, preview, sender_id)` helper. Respects `messages_enabled` flag in `db.push_settings` (defaults True). Preview truncated to 80 chars, delivered via Expo Push Service with `{ "type": "message", "sender_id": ... }` payload.
+- **Wired into `POST /api/messages`** in `routes/messages.py` — fire-and-forget inside a try/except so a failed push never breaks message delivery. Body falls back to "📷 Sent you a photo" when only an image was sent.
+- **`/api/push-settings` updated** (`routes/push.py`) to include `messages_enabled` in both the default payload and the writable allow-list.
+- **Frontend** (`/app/frontend/components/NewMessageNotifPrompt.tsx`) — Penthouse-DNA onboarding card (1px sand border + warm `#C9A961` shadow + matte ocean-to-sand gradient inner fill) rendered at the top of the My-Friends block in `friends.tsx`. Visibility rules:
+  - Hidden on web (expo-notifications is a no-op)
+  - Hidden if user has already enabled OR dismissed (AsyncStorage keys `@wandermark/msg_notif_prompt_*_v1`)
+  - Auto-persists ENABLED if OS permission was already granted before first open
+  - On tap **Turn on** → requests permissions, fetches Expo push token via `Notifications.getExpoPushTokenAsync()`, POSTs to `/api/push-token` (best-effort, swallows network errors). On tap **Not now** → sets dismissed flag so it never shows again.
+- **Test-ids**: `new-message-notif-prompt`, `notif-prompt-enable-btn`, `notif-prompt-later-btn`.
+- **Verified**: `POST /api/messages` → HTTP 200 with notify helper active; `/api/push-settings` now returns `messages_enabled: true`; 48/48 messaging+friend pytest tests pass; no JS errors on Friends page.
+
+### Free vs. Pro tier rebalancing — A1-A3 + B1-B2
 - **A1 Messaging free for everyone**: Removed `if current_user.subscription_tier == "free"` guards from all three messaging endpoints in `/app/backend/routes/messages.py`:
   - `GET /api/messages/conversations` — Pro-gate removed
   - `POST /api/messages` — Pro-gate removed (docstring explains Free-tier 5-friend cap is the natural volume limit)

@@ -1,6 +1,7 @@
 """Messaging endpoints — available to all users (Free tier naturally capped by 5-friend limit)."""
 from ._social_common import *
 from utils.image_validate import normalize_photo
+from utils.helpers import notify_new_message
 
 router = APIRouter()
 
@@ -110,6 +111,20 @@ async def send_message(data: MessageCreate, current_user: User = Depends(get_cur
     }
     
     await db.messages.insert_one(message)
+
+    # Fire-and-forget push notification to the receiver
+    try:
+        preview = data.content or ("📷 Sent you a photo" if data.image_base64 else "")
+        await notify_new_message(
+            sender_name=current_user.name,
+            target_user_id=data.receiver_id,
+            preview=preview,
+            sender_id=current_user.user_id,
+        )
+    except Exception:
+        # Never let a failed push break the message send
+        pass
+
     return Message(**message)
 
 @router.get("/messages/{friend_id}")
