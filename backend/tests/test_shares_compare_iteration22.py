@@ -231,6 +231,44 @@ def test_compare_landmark_403_non_friend(admin_ctx, mod_ctx):
     )
 
 
+@pytest.mark.parametrize(
+    "admin_friend_shared_landmark",
+    [{"include_private_friend_visit": True}],
+    indirect=True,
+)
+def test_compare_landmark_has_private_visits_flag(admin_ctx, admin_friend_shared_landmark):
+    """Covers the only remaining branch of the compare-landmark endpoint:
+    when the friend has a `private` visit on the same landmark, the viewer
+    must NOT see that visit in `friend.visits`, but `has_private_visits`
+    MUST be True so the UI can render the respectful 'X has a private visit
+    here' hint. Fixture cleans up all 3 seeded visits after the test."""
+    landmark_id = admin_friend_shared_landmark["landmark_id"]
+    friend_user_id = admin_friend_shared_landmark["friend_user_id"]
+    private_visit_id = admin_friend_shared_landmark["friend_private_visit_id"]
+    assert private_visit_id, "fixture should have seeded a private visit"
+
+    r = requests.get(
+        f"{BASE_URL}/api/compare/landmarks/{landmark_id}/friends/{friend_user_id}",
+        headers=admin_ctx["headers"],
+        timeout=20,
+    )
+    assert r.status_code == 200, r.text
+    payload = r.json()
+
+    # Flag must flip to True when the friend has ≥1 private visit on this landmark
+    assert payload["friend"]["has_private_visits"] is True, (
+        f"has_private_visits should be True; got payload={payload['friend']}"
+    )
+
+    # Privacy leak guard: the private visit must NOT appear in friend.visits
+    friend_visit_ids = [v.get("visit_id") for v in payload["friend"]["visits"]]
+    assert private_visit_id not in friend_visit_ids, (
+        f"Private visit {private_visit_id} leaked into friend.visits: {friend_visit_ids}"
+    )
+    for v in payload["friend"]["visits"]:
+        assert v.get("visibility") != "private"
+
+
 def test_compare_landmark_requires_auth():
     r = requests.get(
         f"{BASE_URL}/api/compare/landmarks/landmark_x/friends/user_y",

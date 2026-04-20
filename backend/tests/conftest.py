@@ -52,13 +52,23 @@ def _admin_token_and_id():
 
 
 @pytest.fixture(scope="function")
-def admin_friend_shared_landmark():
+def admin_friend_shared_landmark(request):
     """Ensure admin + Social Tester share at least one landmark visit.
 
-    Yields: dict with landmark_id, admin_user_id, friend_user_id.
-    Tears down: deletes exactly the 2 seeded visits (identified by unique
-    visit_ids) so the rest of the DB is untouched.
+    Optional indirect parameter (via `@pytest.mark.parametrize` with
+    `indirect=["admin_friend_shared_landmark"]`):
+      - `include_private_friend_visit=True` → also inserts an additional
+        `private`-visibility visit for the friend on the SAME landmark, so
+        the caller can assert the `has_private_visits` flag flips.
+
+    Yields: dict with landmark_id, admin_user_id, friend_user_id, tokens, visit_ids.
+    Tears down: deletes the seeded visits (identified by fixture-prefixed
+    visit_ids) — no other DB state is touched.
     """
+    # Read optional param — default False (most tests want the simple case).
+    opts = getattr(request, "param", {}) or {}
+    include_private = bool(opts.get("include_private_friend_visit", False))
+
     db = _mongo()
     token, admin_id = _admin_token_and_id()
 
@@ -86,10 +96,9 @@ def admin_friend_shared_landmark():
     now = datetime.now(timezone.utc)
     admin_visit_id = f"fixture_admin_{uuid.uuid4().hex[:12]}"
     friend_visit_id = f"fixture_friend_{uuid.uuid4().hex[:12]}"
+    friend_private_visit_id = f"fixture_friend_private_{uuid.uuid4().hex[:12]}"
 
-    admin_visit = {
-        "visit_id": admin_visit_id,
-        "user_id": admin_id,
+    base_visit = {
         "landmark_id": landmark_id,
         "landmark_name": landmark.get("name"),
         "country_name": landmark.get("country_name"),
@@ -97,23 +106,42 @@ def admin_friend_shared_landmark():
         "points_earned": 10,
         "comments": None,
         "visit_location": None,
-        "diary_notes": "Admin fixture visit (pytest seed — auto-cleanup).",
         "status": "accepted",
         "verified": True,
-        "visibility": "friends",
         "visited_at": now,
         "created_at": now,
         "updated_at": now,
     }
+
+    admin_visit = {
+        **base_visit,
+        "visit_id": admin_visit_id,
+        "user_id": admin_id,
+        "diary_notes": "Admin fixture visit (pytest seed — auto-cleanup).",
+        "visibility": "friends",
+    }
     friend_visit = {
-        **admin_visit,
+        **base_visit,
         "visit_id": friend_visit_id,
         "user_id": _SOCIAL_TESTER_ID,
         "diary_notes": "Social Tester fixture visit (pytest seed — auto-cleanup).",
+        "visibility": "friends",
     }
 
+    inserted_visit_ids = [admin_visit_id, friend_visit_id]
     db.visits.insert_one(admin_visit)
     db.visits.insert_one(friend_visit)
+
+    if include_private:
+        friend_private_visit = {
+            **base_visit,
+            "visit_id": friend_private_visit_id,
+            "user_id": _SOCIAL_TESTER_ID,
+            "diary_notes": "Social Tester PRIVATE fixture visit (pytest seed).",
+            "visibility": "private",
+        }
+        db.visits.insert_one(friend_private_visit)
+        inserted_visit_ids.append(friend_private_visit_id)
 
     try:
         yield {
@@ -122,8 +150,10 @@ def admin_friend_shared_landmark():
             "friend_user_id": _SOCIAL_TESTER_ID,
             "admin_visit_id": admin_visit_id,
             "friend_visit_id": friend_visit_id,
+            "friend_private_visit_id": friend_private_visit_id if include_private else None,
             "admin_token": token,
+            "has_private": include_private,
         }
     finally:
         # Always clean up — even if the test failed.
-        db.visits.delete_many({"visit_id": {"$in": [admin_visit_id, friend_visit_id]}})
+        db.visits.delete_many({"visit_id": {"$in": inserted_visit_ids}})
