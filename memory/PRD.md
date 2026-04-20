@@ -15,7 +15,20 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Both happy-path tests (`test_shares_compare_iteration22.py::test_compare_landmark_happy_path` + `test_friends_hub_iteration21.py::test_compare_landmark_happy_path`) now consume the fixture instead of calling `pytest.skip("no shared landmark")`. They assert on real payload: `photo_count >= 1`, `visits` list length, and privacy leak detection.
 - **Result**: 64/64 tests PASS, 0 skipped (previously 62 passed + 2 skipped). Zero dev-data pollution — verified 0 `fixture_*` visits remain in DB after test run.
 
-## Session 19 — April 20, 2026 (ShareComparisonCard + backend refactor + test hygiene)
+## Session 19 — April 20, 2026 (ShareComparisonCard + backend refactor + test hygiene + server-side image defense)
+
+### Feature: P5 — Server-side image compression / hard 5 MB ceiling (defense-in-depth)
+- **NEW** `/app/backend/utils/image_validate.py` — single entry point `normalize_photo` / `normalize_photos` implementing the hybrid strategy chosen by user:
+  - `< 2 MB` decoded bytes → pass through unchanged (fast path, since client already targets 1600px/q70)
+  - `2–5 MB` → re-encode via Pillow to max 1600px JPEG q70 (honours EXIF rotation, flattens RGBA on white, LANCZOS downscale)
+  - `> 5 MB` → `HTTPException(413, "Image too large")`
+  - Invalid base64 / non-image → `HTTPException(400, "Invalid image")`
+- Wired into **all 6 upload surfaces**: `POST/PUT /api/visits` (photos + photo_base64), `POST/PUT /api/country-visits`, `POST/PUT /api/user-created-visits` (general photos + landmark photos), `PUT /api/auth/profile` (picture + banner_image), `POST /api/messages` (image_base64), `POST /api/bug-reports` (screenshots[]).
+- **Testing**: 12 unit tests (11 pass + 1 platform-dependent PNG skip) in `test_image_validate.py` + 23 live E2E tests in `test_image_validate_live_endpoints_iteration24.py` covering every endpoint × every branch. E2E verified real 7.9 MB → 413, 4 MB → 200 auto-resized to 1.15 MB (28% of original), small → unchanged.
+- **Collateral fix**: `testpro@wandermark.app` seed had `subscription_tier='free'` despite the "pro" name. Patched to `pro` + `active` so pro-gated flows (messaging, user-created visits) can be tested with that account.
+- **Collateral fix**: removed a stray `deleted_count}` line at end of `routes/auth.py` that caused a `SyntaxError` during one of the edits.
+
+### Test hygiene: Happy-path compare-landmark tests no longer skip (P3 follow-up)
 
 ### Feature: Shareable "We've both been here" memory card (P1)
 - **NEW** `/app/frontend/components/ShareComparisonCard.tsx` — modal rendered on top of the Compare screen that captures an Instagram-Stories-ready gradient card featuring: WanderMark brand, landmark + country/continent, two-avatar-with-heart-connector row, 2x2 photo mosaic with "me / friend" badges, total-photos stat pill, subtle attribution footer.
@@ -258,9 +271,8 @@ All "ALT!" design items shipped and smoke-tested (testing_agent iteration_20: 6/
 - P1: Self-verify ShareComparisonCard on native preview (backend 100% green; user to confirm UX on device)
 - P2: "Mitt år i reise" / Yearly travel recap — auto-generated annual summary
 - P3: Rename GitHub Repository from `wanderlist-app` to `wandermark-app` + deploy Privacy/Terms website
-- P4 (future / deferred): **Forward-looking monthly share card** (e.g. "My month in travel") — DELIBERATELY deferred. A share card that rewards drip-feeding old content would fight the app's DNA right now since most users are still registering *retroactive* visits. Revisit when the user base is large enough and active enough that monthly share cards reflect real-time travel (core target: hardcore travelers, while staying accessible to anyone who's been abroad more than once).
-- P5: Server-side image compression/resizing (client-side shipped in Session 16; server-side defense-in-depth still open)
-- P6: "Nearby travelers" section for geographical discovery
+- P4 (future / deferred): **Forward-looking monthly share card** — DELIBERATELY deferred until user base is large enough that monthly share cards reflect real-time travel (not retroactive logging).
+- P5: "Nearby travelers" section for geographical discovery
 
 ## Session 11 — April 19, 2026 (Admin auto-flag badge)
 

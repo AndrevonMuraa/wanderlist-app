@@ -14,6 +14,7 @@
 - Has multiple visits, photos, diary entries — good for feed/compare/overlap testing
 - `user_id`: `user_6ef7ed0c470a`
 - Username: `protester`
+- `subscription_tier`: `pro` (confirmed/patched Apr-2026 — prior seed had free)
 
 ### Moderator
 - **Email**: `mod@wandermark.app`
