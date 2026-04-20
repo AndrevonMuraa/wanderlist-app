@@ -10,6 +10,7 @@ import { BACKEND_URL } from '../utils/config';
 import { cachedFetch } from '../utils/apiCache';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BlurView } from 'expo-blur';
 import theme, { gradients } from '../styles/theme';
 import { CountryCardSkeleton } from '../components/Skeleton';
 import { PersistentTabBar } from '../components/PersistentTabBar';
@@ -21,6 +22,10 @@ import {
 } from '../utils/countryConfig';
 
 const { width } = Dimensions.get('window');
+
+// Pilot: render flag background as a blurred version of the flag itself
+// (instead of the flat sand-beige backdrop). Expand the set to roll out.
+const BLUR_FLAG_BACKDROP: ReadonlySet<string> = new Set(['Pakistan']);
 
 
 // ISO 3166-1 alpha-2 country codes for flag CDN
@@ -165,6 +170,31 @@ export default function ExploreCountriesScreen() {
                 <View style={styles.countryCard}>
                   {/* Full Flag - Top Section */}
                   <View style={styles.flagSectionFull}>
+                    {/* Premium: blurred flag backdrop (pilot — expand via BLUR_FLAG_BACKDROP) */}
+                    {flagUrl && !flagFailed && BLUR_FLAG_BACKDROP.has(country.name) && (
+                      <>
+                        <Image
+                          source={{ uri: flagUrl }}
+                          style={[
+                            StyleSheet.absoluteFillObject,
+                            Platform.OS === 'web'
+                              ? ({ filter: 'blur(22px) saturate(1.6)', transform: [{ scale: 1.2 }] } as any)
+                              : { transform: [{ scale: 1.15 }] },
+                          ]}
+                          resizeMode="cover"
+                          blurRadius={Platform.OS === 'web' ? 0 : 28}
+                        />
+                        {Platform.OS !== 'web' && (
+                          <BlurView
+                            intensity={35}
+                            tint="light"
+                            style={StyleSheet.absoluteFillObject}
+                          />
+                        )}
+                        {/* Soft tint layer so blurred colors feel dreamy, not neon */}
+                        <View style={[StyleSheet.absoluteFillObject, { backgroundColor: 'rgba(255,255,255,0.28)' }]} />
+                      </>
+                    )}
                     {/* Base Flag Image or Fallback */}
                     {flagUrl && !flagFailed ? (
                       <Image
