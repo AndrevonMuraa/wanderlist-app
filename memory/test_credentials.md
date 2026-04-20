@@ -6,7 +6,7 @@
 - **Email**: `test@wandermark.app`
 - **Password**: `Test1234!`
 - Role: superadmin — has full admin panel access
-- `user_id`: `user_2c6cfce45eda` (approx — verify with GET /api/auth/me)
+- `user_id`: `user_dd46a314f120`
 
 ### Pro user (most test data)
 - **Email**: `testpro@wandermark.app`
@@ -19,12 +19,17 @@
 - **Email**: `mod@wandermark.app`
 - **Password**: `Test1234!`
 - Role: moderator — can moderate reports
+- `user_id`: `user_d2cee3abc41d`
+
+### Social Tester (admin's only friend in seed)
+- **user_id**: `user_ff9a3f370f6b`
 
 ## Backend URL
 - Preview: `https://friends-hub-v2.preview.emergentagent.com`
 - All endpoints prefixed with `/api/`
 
 ## Notes
-- Admin + Pro User are friends (verified: `/api/friends` returns Social Tester for admin)
-- For compare-page testing: admin (test@) → /compare/{any_shared_landmark_id}/{friend_user_id}
-- Sentry is ACTIVE (DSN configured) — test events will appear in aarum/wandermark-api project
+- Admin (test@) is friends ONLY with Social Tester (`user_ff9a3f370f6b`) — NOT with testpro. Verify via `GET /api/friends`.
+- Admin currently has 0 shared-landmark visits in seed — happy-path compare tests require seeding a shared visit first.
+- For compare-page testing: admin (test@) → /compare/{shared_landmark_id}/user_ff9a3f370f6b
+- Sentry is ACTIVE (DSN configured) — test events appear in aarum/wandermark-api project.

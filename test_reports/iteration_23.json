@@ -1,0 +1,38 @@
+{
+  "summary": "Backend-only regression verification of the PURE REFACTOR of /app/backend/routes/friends.py (1004→700 lines) into routes/compare.py + routes/leaderboards.py + utils/social_stats.py. Re-ran iteration_21 suite (21 tests) and iteration_22 suite (17 tests) unchanged — 36/36 PASSED, 2 skipped (same admin-has-no-shared-landmark seed gap as before — NOT a regression). Added /app/backend/tests/test_refactor_regression_iteration23.py (26 tests) covering the endpoints the review request called out but which iter21/22 hadn't exercised directly: /api/users/{id}/overlap (plain, moved to compare.py), /api/landmarks/{lid}/friends-visited (moved to compare.py), /api/users/{id}/profile|visits|activity (stayed in friends.py), /api/users/search, friendship CRUD basics (/api/friends, /friends/pending, /friends/sent, POST /friends/request, /api/blocked-users), plus explicit URL-preservation checks (/api/friends/leaderboard still reachable after move to leaderboards.py; /api/users/{id}/compare-stats still reachable after move to compare.py). All 26/26 PASSED. Auth 401 and access-control 403 enforcement unchanged on moved endpoints. Backend starts clean — tail /var/log/supervisor/backend.err.log shows only the pre-existing benign IndexKeySpecsConflict warning; no import-order / circular-import errors, supervisor process healthy through multiple hot-reloads. Total: 62/62 executed tests PASSED, 2 skipped. ZERO regressions detected from the refactor.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_refactor_regression_iteration23.py",
+    "/app/backend/tests/test_friends_hub_iteration21.py",
+    "/app/backend/tests/test_shares_compare_iteration22.py",
+    "/app/test_reports/pytest/iteration23.xml",
+    "/app/test_reports/pytest/iteration23_refactor.xml"
+  ],
+  "action_items": [
+    "(Carry-over from iter21/22) Seed 1 shared landmark visit between admin (user_dd46a314f120) and Social Tester (user_ff9a3f370f6b) so the /api/compare/landmarks/{lid}/friends/{fid} happy-path stops skipping. Currently 2 tests skip for this reason (1 in iter21 suite, 1 in iter22 suite) — not a product bug.",
+    "(Minor DX) The GET /api/blocked-users route is registered directly on friends.router without a /friends prefix (friends.py line 237: `@router.get(\"/blocked-users\")`), while all other block routes sit under /users/{user_id}/block. Namespace is inconsistent — consider moving to /api/friends/blocked-users or /api/users/me/blocked for the next iteration. NOT a regression (same as iter21).",
+    "(Carry-over) /app/memory/test_credentials.md — file was updated in iter22 per review context and now matches reality (admin is friends with Social Tester only). No further action needed on this front."
+  ],
+  "critical_code_review_comments": [
+    "server.py: registration order is fine (friends → ... → compare → leaderboards). No prefix collisions detected. No circular-import risk — utils/social_stats.py has no imports from routes/, and both compare.py + leaderboards.py only depend on utils.social_stats + utils.db + utils.auth, so the dependency graph is acyclic.",
+    "utils/social_stats.py (56 lines) cleanly exposes assert_friends_or_self, friend_ids, user_stats. Good call renaming from leading-underscore private helpers to public names now that they cross module boundaries. Consider adding pytest-level unit tests for user_stats (currently only exercised transitively via /compare-stats and /leaderboard).",
+    "routes/compare.py (226 lines): /api/compare/landmarks/{lid}/friends/{fid} still has permission check BEFORE landmark existence check — prevents enumeration leak (non-friends get 403, not 404). Verified by test_compare_landmark_403_non_friend. Intentional & correct.",
+    "routes/leaderboards.py (50 lines): single endpoint module — acceptable at this size but watch the pattern; if more leaderboard metrics (weekly, country-specific, etc.) land, it stays self-contained.",
+    "routes/friends.py (700 lines, down from 1004): still the heaviest route file. If friendship CRUD + user-profile + user-visits + user-activity + shared-places + activity + group-stats keep growing, consider one more split (e.g., user_profile.py with /users/{id}/profile|visits|activity). Not blocking."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_refactor_regression_iteration23.py"
+  ],
+  "success_rate": {
+    "backend": "62/62 executed tests PASSED (100%); 2 skipped (same pre-existing seed-data gap, NOT a regression)",
+    "frontend": "Not tested (backend-only scope per review request)"
+  },
+  "test_credentials": "Used /app/memory/test_credentials.md — now accurate per iter22 update. admin=user_dd46a314f120, admin's only friend=user_ff9a3f370f6b (Social Tester), mod=user_d2cee3abc41d (non-friend, used for 403 checks).",
+  "seed_data_creation": "None. (Harmless side-effect: POST /api/shares from iter22 regression re-fired a few 'compare' and existing-type share events; they show up in /api/admin/shares/stats but are cosmetic.)",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "The iteration_23 refactor is fully verified as a zero-behaviour-change split. Reusable regression suites: (1) /app/backend/tests/test_friends_hub_iteration21.py — all Friends Hub / compare endpoints incl. 4 leaderboard metrics, shared-places, activity, group-stats, compare-stats, /overlap/countries, /compare/landmarks/.../friends/..., with 403/404/401 negative paths; (2) /app/backend/tests/test_shares_compare_iteration22.py — 6 share_types incl. 'compare', /admin/shares/stats, compare-endpoint auth gates; (3) /app/backend/tests/test_refactor_regression_iteration23.py (NEW) — /users/{id}/overlap plain, /landmarks/{lid}/friends-visited, /users/{id}/profile|visits|activity, /users/search, friendship CRUD, explicit URL-preservation assertions. All three can be run together: `pytest /app/backend/tests/test_friends_hub_iteration21.py /app/backend/tests/test_shares_compare_iteration22.py /app/backend/tests/test_refactor_regression_iteration23.py -v`. Still-open carry-over: seed a shared landmark between admin + Social Tester to unblock the 2 compare-landmark happy-path tests currently skipping.",
+  "rca of the issue": "No product issues to RCA. Two initial test-harness-only failures were fixed in place: (a) POST /api/friends/request expects {friend_username}, not {user_id} — corrected test to resolve the friend's username first via /users/{id}/profile; (b) blocked-users is mounted at /api/blocked-users (no /friends prefix), not /api/friends/blocked-users — corrected URL. Both fixes were to the test file only; no product code changed."
+}
