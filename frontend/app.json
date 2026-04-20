@@ -64,7 +64,7 @@
       [
         "@sentry/react-native/expo",
         {
-          "organization": "YOUR_SENTRY_ORG_SLUG",
+          "organization": "aarum",
           "project": "wandermark-mobile",
           "url": "https://sentry.io/"
         }
