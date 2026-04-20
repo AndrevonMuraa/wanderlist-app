@@ -3,12 +3,31 @@
 ## Product Overview
 WanderMark is a gamified travel app where users visit landmarks, earn points, compete on leaderboards, and share their travel experiences. React Native (Expo Router) + FastAPI + MongoDB Atlas.
 
-## Current State (April 19, 2026)
+## Current State (April 20, 2026)
 - 100 destinations, 1,500 landmarks, 20 ranks, 30+ badges
 - BuildNumber: 82
 - Backend: Render (auto-deploy from GitHub) — api.wandermark.app
 - Database: MongoDB Atlas
 - Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
+
+## Session 19 — April 20, 2026 (ShareComparisonCard + backend refactor)
+
+### Feature: Shareable "We've both been here" memory card (P1)
+- **NEW** `/app/frontend/components/ShareComparisonCard.tsx` — modal rendered on top of the Compare screen that captures an Instagram-Stories-ready gradient card featuring: WanderMark brand, landmark + country/continent, two-avatar-with-heart-connector row, 2x2 photo mosaic with "me / friend" badges, total-photos stat pill, subtle attribution footer.
+- Re-uses `react-native-view-shot` + `expo-sharing` (same infra as ShareTopMonthCard / ShareJourneyCard / ShareVisitCard / ShareRankCard). Fire-and-forget `POST /api/shares` with `share_type="compare"` for virality analytics.
+- Integrated into `/app/frontend/app/compare/[landmark_id]/[friend_user_id].tsx` — share button in header (right slot) + CTA pill inside hero. Also fixed pre-existing missing `useRouter()` declaration that broke avatar-tap navigation.
+- **Backend** extended `allowed_types` in `/app/backend/routes/shares.py` to accept `"compare"` (set now: top_month, top_all, journey, rank, visit, compare).
+
+### Refactor: Split friends.py into focused modules (P3)
+- `/app/backend/routes/friends.py`: 1004 → 700 lines. Retained ONLY friendship CRUD + block management + user search + user profile/visits/activity + Friends Hub tail (shared-places, activity, group-stats).
+- **NEW** `/app/backend/routes/compare.py` (226 lines): `/users/{id}/overlap`, `/users/{id}/overlap/countries`, `/landmarks/{id}/friends-visited`, `/users/{id}/compare-stats`, `/compare/landmarks/{lid}/friends/{fid}`.
+- **NEW** `/app/backend/routes/leaderboards.py` (50 lines): `/friends/leaderboard?metric=...`.
+- **NEW** `/app/backend/utils/social_stats.py` (56 lines): shared helpers `assert_friends_or_self`, `friend_ids`, `user_stats` (renamed from `_private` → public as they cross modules).
+- Both new routers registered in `server.py`. Zero URL changes — all external clients continue to work unchanged.
+- **Regression**: 62/62 pytest tests passed, 0 regressions (iteration_23.json). 2 skips are pre-existing seed-data gaps (admin has no shared-landmark with their only friend).
+
+### Test credentials realigned (iter22)
+- `/app/memory/test_credentials.md` updated with correct user_ids: admin=user_dd46a314f120, testpro=user_6ef7ed0c470a, mod=user_d2cee3abc41d. Clarified admin is friends ONLY with Social Tester (user_ff9a3f370f6b), not testpro.
 
 ## Session 18 — April 20, 2026 (Friends hub redesign + compare page + stats)
 
