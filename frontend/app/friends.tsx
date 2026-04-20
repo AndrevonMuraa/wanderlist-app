@@ -391,6 +391,25 @@ export default function FriendsScreen() {
           <FriendsLeaderboardCard />
           <SharedPlacesStrip />
           <FriendsActivityFeed />
+
+          {/* Messages inbox shortcut — messaging is a friends-only feature */}
+          <TouchableOpacity
+            style={styles.messagesInboxCard}
+            onPress={() => router.push('/messages')}
+            activeOpacity={0.85}
+            data-testid="friends-messages-inbox"
+          >
+            <View style={[styles.sectionIconCircle, { backgroundColor: 'rgba(77, 184, 216, 0.14)' }]}>
+              <Ionicons name="chatbubbles" size={20} color={theme.colors.primary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.messagesInboxTitle}>Messages</Text>
+              <Text style={styles.messagesInboxSubtitle}>
+                Chat with your travel crew — tap a friend below or open the inbox
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={18} color={theme.colors.textSecondary} />
+          </TouchableOpacity>
         </>
       )}
 

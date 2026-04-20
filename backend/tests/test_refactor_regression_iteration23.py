@@ -21,7 +21,7 @@ import requests
 
 BASE_URL = os.environ.get(
     "EXPO_PUBLIC_BACKEND_URL",
-    "https://friends-hub-v2.preview.emergentagent.com",
+    "https://tier-rebalance.preview.emergentagent.com",
 ).rstrip("/")
 
 ADMIN_EMAIL = "test@wandermark.app"

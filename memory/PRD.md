@@ -10,6 +10,24 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Database: MongoDB Atlas
 - Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
 
+## Session 20 — April 20, 2026 (Free vs. Pro tier rebalancing — A1-A3 + B1-B2)
+- **A1 Messaging free for everyone**: Removed `if current_user.subscription_tier == "free"` guards from all three messaging endpoints in `/app/backend/routes/messages.py`:
+  - `GET /api/messages/conversations` — Pro-gate removed
+  - `POST /api/messages` — Pro-gate removed (docstring explains Free-tier 5-friend cap is the natural volume limit)
+  - `GET /api/messages/{friend_id}` — Pro-gate removed
+  - Module docstring + section header updated ("Basic+ Only" → "available to all users").
+- **A2 Friends-hub messages entry point**: `/app/frontend/app/friends.tsx` now includes a "Messages" inbox card (`friends-messages-inbox` testid) inside the My-Friends section that navigates to `/messages`.
+- **A3 Old `Messages` section removed from `/(tabs)/social.tsx`**: Unused `unreadMessages` state cleaned up; tapping a friend avatar in the social feed now routes directly to `/messages/{friend.user_id}`.
+- **B1 Free-tier limits raised** in `/app/backend/utils/auth.py::LIMITS`:
+  - `max_friends`: 3 → **5**
+  - `photos_per_visit`: 1 → **3**
+  - `diary_entries_per_month`: 5 → **10**
+- **B2 Subscription page copy refreshed** (`/app/frontend/app/subscription.tsx`) to reflect new free-tier limits.
+- **Verification** (Apr-2026 session):
+  - Fresh Free user (`freetestuser_msg@wandermark.app`) → `GET /api/messages/conversations` returns HTTP 200 (previously 403). See `/app/memory/test_credentials.md`.
+  - 48/48 pytest tests matching `message|Message|friend|Friend` pass.
+  - 199/208 full suite pass; 7 pre-existing failures (rate-limit middleware cascade + stats test-data carry-over from iteration 15) are unrelated to this rebalance.
+
 ### Test hygiene: Happy-path compare-landmark tests no longer skip (P3 follow-up)
 - **NEW** `/app/backend/tests/conftest.py` — introduces the `admin_friend_shared_landmark` pytest fixture that inserts 2 mutual visits (one for admin, one for Social Tester) with unique fixture-prefixed `visit_id`s, then auto-deletes them after the test via `try/finally`. Uses `dotenv` to load `backend/.env` so `MONGO_URL`/`DB_NAME` are available under pytest.
 - Both happy-path tests (`test_shares_compare_iteration22.py::test_compare_landmark_happy_path` + `test_friends_hub_iteration21.py::test_compare_landmark_happy_path`) now consume the fixture instead of calling `pytest.skip("no shared landmark")`. They assert on real payload: `photo_count >= 1`, `visits` list length, and privacy leak detection.

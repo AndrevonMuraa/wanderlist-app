@@ -297,13 +297,14 @@ export default function SubscriptionScreen() {
           <Surface style={styles.featuresCard}>
             <Text style={styles.tierLabel}>Basic traveler</Text>
             <FeatureRow icon="flag" text="1,000 official landmarks" included />
-            <FeatureRow icon="camera" text="1 photo per visit" included />
-            <FeatureRow icon="people" text="5 friends maximum" included />
+            <FeatureRow icon="camera" text="Up to 3 photos per visit" included />
+            <FeatureRow icon="people" text="Up to 5 friends" included />
+            <FeatureRow icon="chatbubbles" text="Direct messaging with friends" included />
             <FeatureRow icon="trophy" text="Leaderboard & rankings" included />
             <FeatureRow icon="ribbon" text="Rank badges (20 ranks)" included />
             <FeatureRow icon="images" text="Community photos & upvoting" included />
             <FeatureRow icon="flame" text="Trending landmarks" included />
-            <FeatureRow icon="book" text="3 diary entries per month" included />
+            <FeatureRow icon="book" text="Up to 10 diary entries per month" included />
             <View style={styles.divider} />
             <Text style={[styles.tierLabel, styles.tierLabelPro]}>+ Pro traveler</Text>
             <FeatureRow icon="diamond" text="500 premium landmarks (+12,500 pts)" included={isPro || false} highlight />
@@ -311,7 +312,6 @@ export default function SubscriptionScreen() {
             <FeatureRow icon="people" text="Unlimited friends" included={isPro || false} highlight />
             <FeatureRow icon="airplane" text="Custom visits" included={isPro || false} highlight />
             <FeatureRow icon="book" text="Unlimited diary entries" included={isPro || false} highlight />
-            <FeatureRow icon="chatbubbles" text="Direct messaging" included={isPro || false} highlight />
             <FeatureRow icon="eye" text="Read community diaries" included={isPro || false} highlight />
             <FeatureRow icon="rocket" text="Faster rank progression" included={isPro || false} highlight />
           </Surface>

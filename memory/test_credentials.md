@@ -25,8 +25,14 @@
 ### Social Tester (admin's only friend in seed)
 - **user_id**: `user_ff9a3f370f6b`
 
+### Free tier test user (for Pro-gate regression)
+- **Email**: `freetestuser_msg@wandermark.app`
+- **Password**: `Free1234!`
+- `subscription_tier`: `free`
+- Created Apr-2026 to verify Free users can access `/api/messages/*` after Pro-gate removal.
+
 ## Backend URL
-- Preview: `https://friends-hub-v2.preview.emergentagent.com`
+- Preview: `https://tier-rebalance.preview.emergentagent.com`
 - All endpoints prefixed with `/api/`
 
 ## Notes

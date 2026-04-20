@@ -57,7 +57,6 @@ export default function SocialHubScreen() {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [pendingCount, setPendingCount] = useState(0);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
-  const [unreadMessages, setUnreadMessages] = useState(0);
   const [communityHighlight, setCommunityHighlight] = useState<any>(null);
 
   // Report modal state
@@ -433,68 +432,6 @@ export default function SocialHubScreen() {
                 </TouchableOpacity>
               </View>
             )}
-          </Surface>
-        </View>
-
-        {/* Messages Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <View style={styles.sectionTitleRow}>
-              <Ionicons name="chatbubbles" size={24} color={theme.colors.primary} />
-              <Text style={styles.sectionTitle}>{t('social.messages')}</Text>
-              {unreadMessages > 0 && (
-                <Badge size={20} style={styles.unreadBadge}>{unreadMessages}</Badge>
-              )}
-            </View>
-            <TouchableOpacity onPress={() => {
-              if (user?.subscription_tier === 'free') {
-                router.push('/subscription');
-              } else {
-                router.push('/messages');
-              }
-            }}>
-              <Text style={styles.seeAllButton}>View All</Text>
-            </TouchableOpacity>
-          </View>
-
-          <Surface style={styles.card}>
-            <TouchableOpacity 
-              style={styles.messagesButton}
-              onPress={() => {
-                if (user?.subscription_tier === 'free') {
-                  Alert.alert(
-                    '🔒 Pro Feature',
-                    'Messaging is available for Pro members. Upgrade to Pro to chat with your travel buddies!',
-                    [
-                      { text: 'Maybe Later', style: 'cancel' },
-                      { text: 'Upgrade to Pro', onPress: () => router.push('/subscription') }
-                    ]
-                  );
-                } else {
-                  router.push('/messages');
-                }
-              }}
-            >
-              <LinearGradient
-                colors={[theme.colors.primary, theme.colors.secondary]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.messagesGradient}
-              >
-                <Ionicons name={user?.subscription_tier === 'free' ? 'lock-closed' : 'chatbubble-ellipses'} size={24} color="#fff" />
-                <Text style={styles.messagesButtonText}>
-                  {user?.subscription_tier === 'free' ? 'Unlock Messages' : 'Open Messages'}
-                </Text>
-                {user?.subscription_tier !== 'free' && unreadMessages > 0 && (
-                  <Badge size={20} style={styles.messageBadge}>{unreadMessages}</Badge>
-                )}
-              </LinearGradient>
-            </TouchableOpacity>
-            <Text style={[styles.messagesHint, { color: user?.subscription_tier === 'free' ? theme.colors.textSecondary : theme.colors.textSecondary }]}>
-              {user?.subscription_tier === 'free' 
-                ? '🔒 Upgrade to Pro to message friends'
-                : 'Stay in touch with your travel buddies'}
-            </Text>
           </Surface>
         </View>
 

@@ -1,17 +1,17 @@
-"""Messaging endpoints (Basic+ Only)."""
+"""Messaging endpoints — available to all users (Free tier naturally capped by 5-friend limit)."""
 from ._social_common import *
 from utils.image_validate import normalize_photo
 
 router = APIRouter()
 
-# ============= MESSAGING ENDPOINTS (Basic+ Only) =============
+# ============= MESSAGING ENDPOINTS =============
 
 @router.get("/messages/conversations")
 async def get_conversations(current_user: User = Depends(get_current_user)):
-    """Get conversations list with last message and unread count — single optimized query"""
-    if current_user.subscription_tier == "free":
-        raise HTTPException(status_code=403, detail="Messaging requires WanderMark Pro.")
+    """Get conversations list with last message and unread count — single optimized query.
 
+    Available to all users. The Free tier's 5-friend cap naturally limits volume.
+    """
     # Get friend list
     friendships = await db.friends.find({
         "$or": [
@@ -82,14 +82,11 @@ async def get_conversations(current_user: User = Depends(get_current_user)):
 
 @router.post("/messages", response_model=Message)
 async def send_message(data: MessageCreate, current_user: User = Depends(get_current_user)):
-    """Send a message to a friend - Basic and Premium only"""
-    # Check if user has messaging access
-    if current_user.subscription_tier == "free":
-        raise HTTPException(
-            status_code=403,
-            detail="Messaging requires WanderMark Pro. Upgrade to chat with friends!"
-        )
-    
+    """Send a message to an accepted friend.
+
+    Not a Pro-gated feature — the friend-count limit on Free accounts
+    (max 5) already caps potential message volume to a healthy level.
+    """
     # Verify users are friends
     friendship = await db.friends.find_one({
         "$or": [
@@ -117,13 +114,7 @@ async def send_message(data: MessageCreate, current_user: User = Depends(get_cur
 
 @router.get("/messages/{friend_id}")
 async def get_messages(friend_id: str, current_user: User = Depends(get_current_user)):
-    """Get message history with a friend - Basic and Premium only"""
-    if current_user.subscription_tier == "free":
-        raise HTTPException(
-            status_code=403,
-            detail="Messaging requires WanderMark Pro. Upgrade to chat with friends!"
-        )
-    
+    """Get message history with a friend. Available to all users (Free tier capped by 5-friend limit)."""
     # Verify friendship
     friendship = await db.friends.find_one({
         "$or": [
