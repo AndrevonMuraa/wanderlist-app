@@ -11,7 +11,7 @@ import theme, { gradients } from '../../styles/theme';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { BACKEND_URL } from '../../utils/config';
-import AdminImageNormCard from '../../components/AdminImageNormCard';
+import AdminSystemHealth from '../../components/AdminSystemHealth';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -228,8 +228,9 @@ export default function AdminDashboard() {
           />
         </View>
 
-        {/* Image defense-in-depth observability */}
-        <AdminImageNormCard />
+        {/* System Health — compact 2x2 grid of defensive metrics */}
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>System Health</Text>
+        <AdminSystemHealth adminStats={stats} />
 
         {/* Quick Actions */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>Management</Text>
@@ -386,43 +387,66 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: '700',
-    marginBottom: 12,
-    marginTop: 8,
+    letterSpacing: -0.2,
+    marginBottom: 10,
+    marginTop: 4,
   },
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 10,
     marginBottom: 24,
   },
   statCard: {
-    width: '47%',
-    padding: 16,
-    borderRadius: 16,
+    width: '48%',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 14,
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(201,169,97,0.14)',
+    shadowColor: '#C9A961',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    elevation: 2,
   },
   statIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 36,
+    height: 36,
+    borderRadius: 11,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
+  },
+  statContent: {
+    flex: 1,
+    minWidth: 0,
+  },
+  statValueRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 6,
   },
   statValue: {
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: '800',
+    letterSpacing: -0.3,
+    flexShrink: 1,
   },
   statTitle: {
-    fontSize: 13,
-    marginTop: 4,
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: 1,
+    letterSpacing: 0.3,
   },
   statSubtitle: {
-    fontSize: 12,
-    fontWeight: '600',
-    marginTop: 4,
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.2,
   },
   menuList: {
     gap: 12,
