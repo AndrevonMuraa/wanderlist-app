@@ -1,8 +1,10 @@
 """Simple in-memory rate limiter middleware."""
 import time
+import json
 from collections import defaultdict
-from fastapi import Request, HTTPException
+from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """Rate limit by IP address. Limits auth endpoints more strictly."""
@@ -27,7 +29,14 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.requests[key] = [t for t in self.requests[key] if now - t < 60]
         
         if len(self.requests[key]) >= rpm:
-            raise HTTPException(status_code=429, detail="Too many requests. Please try again later.")
+            # Return a response directly — raising HTTPException inside a
+            # BaseHTTPMiddleware.dispatch is wrapped in an anyio ExceptionGroup
+            # that Starlette collapses as 500. Direct Response avoids that.
+            return Response(
+                content=json.dumps({"detail": "Too many requests. Please try again later."}),
+                status_code=429,
+                media_type="application/json",
+            )
         
         self.requests[key].append(now)
         

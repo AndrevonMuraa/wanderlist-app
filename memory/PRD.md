@@ -12,6 +12,12 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 
 ## Session 20 — April 20, 2026 (Free vs. Pro tier rebalancing — A1-A3 + B1-B2 + messaging push notifications + notification-settings wired to backend + unread-counts badge)
 
+### Bug fix: Rate-limit middleware propagerte 429 som 500 (Starlette anyio edge case)
+- **Rot-årsak**: `utils/rate_limit.py` gjorde `raise HTTPException(status_code=429, ...)` inne i en `BaseHTTPMiddleware.dispatch`. Starlettes anyio TaskGroup wrapper exceptionen i en `ExceptionGroup` som `collapse_excgroups` ikke kan kollapse, og den propagerer opp som ubehandlet 500.
+- **Fix**: Bytt `raise HTTPException` med direkte `Response(content=json.dumps({"detail": "..."}), status_code=429, media_type="application/json")`. Ingen exception heves → ingen TaskGroup-wrap → ren 429-respons.
+- **Resultat**: 7 → 4 pre-eksisterende pytest-feil (202/208 passerer nå). Tre tester som nå passerer: `test_rate_limit_active` (forventer 429), `test_no_duplicate_landmarks_per_country`, `test_all_social_endpoints_accessible`.
+- **Gjenværende 4 feil**: iteration15/16 test-data carry-over (separat backlog-item, krever isolerte fixtures).
+
 ### Enhancement: Subtle unread badges on the Social tab (both native + PersistentTabBar) + smart tab-redirect
 Now that messaging is in Free tier + push notifications are wired, added a red dot on the Social tab whenever the user has unread messages OR pending friend requests — PLUS a smart short-circuit so tapping Social with unread messages jumps **straight to the inbox**, saving one tap.
 - **NEW** `/app/frontend/contexts/UnreadCountsContext.tsx` — lightweight provider that:
