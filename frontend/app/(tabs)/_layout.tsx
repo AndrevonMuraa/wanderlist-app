@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter, usePathname } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +33,9 @@ const SocialTabIcon = ({ color, size }: { color: string; size: number }) => {
 export default function TabsLayout() {
   const { colors, shadows } = useTheme();
   const { t } = useTranslation();
-  
+  const { messages: unreadMessages } = useUnreadCounts();
+  const router = useRouter();
+  const pathname = usePathname();
   return (
     <Tabs
       screenOptions={{

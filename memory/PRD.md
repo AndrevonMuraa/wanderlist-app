@@ -12,8 +12,8 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 
 ## Session 20 — April 20, 2026 (Free vs. Pro tier rebalancing — A1-A3 + B1-B2 + messaging push notifications + notification-settings wired to backend + unread-counts badge)
 
-### Enhancement: Subtle unread badges on the Social tab (both native + PersistentTabBar)
-Now that messaging is in Free tier + push notifications are wired, added a red dot on the Social tab whenever the user has unread messages OR pending friend requests.
+### Enhancement: Subtle unread badges on the Social tab (both native + PersistentTabBar) + smart tab-redirect
+Now that messaging is in Free tier + push notifications are wired, added a red dot on the Social tab whenever the user has unread messages OR pending friend requests — PLUS a smart short-circuit so tapping Social with unread messages jumps **straight to the inbox**, saving one tap.
 - **NEW** `/app/frontend/contexts/UnreadCountsContext.tsx` — lightweight provider that:
   - Polls `GET /api/messages/conversations` + `GET /api/friends/pending` every 30s while authed.
   - Re-fetches immediately on `AppState` change to `active` (app returning to foreground).
@@ -480,6 +480,14 @@ All "ALT!" design items shipped and smoke-tested (testing_agent iteration_20: 6/
 - 14 duplicates fixed, 5 weak landmarks upgraded, 5 drive-by landmarks replaced
 - Norway: Atlantic Ocean Road → Flåm Railway
 - Database verified: exactly 1500 landmarks, 100 countries
+
+## Upcoming Tasks
+- P0: Feed consistency fixes (community vs friends)
+- P1: Deploy legal pages (Privacy/Terms website)
+- P2: Sentry integration
+- P3: Server-side image compression
+- P4: Rename GitHub repo
+andmarks, 100 countries
 
 ## Upcoming Tasks
 - P0: Feed consistency fixes (community vs friends)

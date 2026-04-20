@@ -10,7 +10,7 @@ import { useUnreadCounts } from '../contexts/UnreadCountsContext';
 export const PersistentTabBar: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { total } = useUnreadCounts();
+  const { total, messages: unreadMessages } = useUnreadCounts();
 
   const tabs = [
     { name: 'Explore', icon: 'compass-outline', route: '/(tabs)/explore', showBadge: false },
@@ -29,6 +29,11 @@ export const PersistentTabBar: React.FC = () => {
 
   const handlePress = async (route: string) => {
     await lightHaptic();
+    // Smart redirect: tapping Social with unread messages → go straight to inbox.
+    if (route.includes('social') && unreadMessages > 0 && !pathname?.startsWith('/messages')) {
+      router.push('/messages');
+      return;
+    }
     router.push(route as any);
   };
 
