@@ -15,6 +15,12 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Both happy-path tests (`test_shares_compare_iteration22.py::test_compare_landmark_happy_path` + `test_friends_hub_iteration21.py::test_compare_landmark_happy_path`) now consume the fixture instead of calling `pytest.skip("no shared landmark")`. They assert on real payload: `photo_count >= 1`, `visits` list length, and privacy leak detection.
 - **Result**: 64/64 tests PASS, 0 skipped (previously 62 passed + 2 skipped). Zero dev-data pollution — verified 0 `fixture_*` visits remain in DB after test run.
 
+### Bug fixes: Pakistan flag + landmark seed + flag cropping
+- **Pakistan-flagg fix**: `countryConfig.ts` had stale `'Kyrgyzstan': 'kg'` mapping — Pakistan was added to the DB in a prior session via `scripts/replace_kyrgyzstan_pakistan.py`, but the frontend flag-code map was never updated. Replaced with `'Pakistan': 'pk'`.
+- **Flag cropping fix**: Changed `resizeMode="cover"` → `resizeMode="contain"` on the country card hero flag in `explore-countries.tsx`. Flags with unusual aspect ratios (Nepal 4:3, Switzerland/Vatican 1:1, Pakistan's crescent near the top) were getting top/bottom edges cropped. Added `backgroundColor: '#F4F1EB'` (sand-beige Penthouse Window tone) to `flagSectionFull` so the letterboxing from `contain` blends with the design language.
+- **Preview-DB seed**: Ran `scripts/replace_kyrgyzstan_pakistan.py` against `test_database` (not the default `wandermark`) — removed 15 Kyrgyzstan landmarks, inserted 15 Pakistan landmarks (K2 Base Camp, Badshahi Mosque, Faisal Mosque, etc.) + the Pakistan country record. Production DB should be re-seeded on next deploy if same drift exists there.
+- **Live-verified**: screenshot confirms Pakistan flag renders fully, "225 pts · 0/15" landmarks visible. All other Asian flags (Laos, Mongolia, Bhutan, Georgia, Uzbekistan) + African flags (Egypt, Morocco, Kenya, South Africa) show full detail with no cropping.
+
 ## Session 19 — April 20, 2026 (ShareComparisonCard + backend refactor + test hygiene + server-side image defense)
 
 ### Feature: P5 — Server-side image compression / hard 5 MB ceiling (defense-in-depth) + observability

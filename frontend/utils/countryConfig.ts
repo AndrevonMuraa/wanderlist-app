@@ -14,7 +14,7 @@ export const COUNTRY_FLAG_CODES: Record<string, string> = {
   'Singapore': 'sg', 'Indonesia': 'id', 'South Korea': 'kr', 'Vietnam': 'vn',
   'Malaysia': 'my', 'Cambodia': 'kh', 'Nepal': 'np', 'Philippines': 'ph',
   'Sri Lanka': 'lk', 'Taiwan': 'tw', 'Laos': 'la', 'Mongolia': 'mn',
-  'Bhutan': 'bt', 'Georgia': 'ge', 'Uzbekistan': 'uz', 'Kyrgyzstan': 'kg',
+  'Bhutan': 'bt', 'Georgia': 'ge', 'Uzbekistan': 'uz', 'Pakistan': 'pk',
   // Africa (20)
   'Egypt': 'eg', 'South Africa': 'za', 'Morocco': 'ma', 'Kenya': 'ke',
   'Tanzania': 'tz', 'Botswana': 'bw', 'Namibia': 'na', 'Tunisia': 'tn',

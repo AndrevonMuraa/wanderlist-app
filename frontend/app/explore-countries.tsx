@@ -170,7 +170,7 @@ export default function ExploreCountriesScreen() {
                       <Image
                         source={{ uri: flagUrl }}
                         style={styles.flagImage}
-                        resizeMode="cover"
+                        resizeMode="contain"
                         onError={() => setFlagErrors(prev => new Set(prev).add(country.country_id))}
                       />
                     ) : (
@@ -985,6 +985,9 @@ const styles = StyleSheet.create<any>({
     height: '70%',
     position: 'relative',
     overflow: 'hidden',
+    // Soft neutral backdrop so that `resizeMode="contain"` letterboxing stays
+    // visually elegant when flag ratios don't match the container.
+    backgroundColor: '#F4F1EB',
   },
   flagImage: {
     width: '100%',
