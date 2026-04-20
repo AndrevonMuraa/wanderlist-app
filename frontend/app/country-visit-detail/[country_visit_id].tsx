@@ -32,6 +32,7 @@ import PhotoViewer from '../../components/PhotoViewer';
 import { KeyboardDoneBar } from '../../components/KeyboardDoneBar';
 import UniversalHeader from '../../components/UniversalHeader';
 import { getToken } from '../../utils/token';
+import { compressToBase64 } from '../../utils/image';
 import { getCountryFlag } from '../../utils/countryFlags';
 import ShareVisitCard from '../../components/ShareVisitCard';
 
@@ -152,15 +153,14 @@ export default function DestinationVisitDetailScreen() {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: isPro,
         selectionLimit: isPro ? 10 - (visit?.photos?.length || 0) : 1,
-        quality: 0.6,
-        base64: true,
+        quality: 1,
       });
 
       if (!result.canceled && result.assets) {
         setUploadingPhotos(true);
-        const newPhotos = result.assets
-          .filter(asset => asset.base64)
-          .map(asset => `data:image/jpeg;base64,${asset.base64}`);
+        const newPhotos = await Promise.all(
+          result.assets.filter(a => a.uri).map(a => compressToBase64(a.uri))
+        );
         
         const existingPhotos = visit?.photos || [];
         const allPhotos = [...existingPhotos, ...newPhotos];
@@ -540,11 +540,11 @@ export default function DestinationVisitDetailScreen() {
                       { text: 'Take Photo', onPress: async () => {
                         const { status } = await ImagePicker.requestCameraPermissionsAsync();
                         if (status !== 'granted') { Alert.alert('Permission Required', 'Please allow camera access.'); return; }
-                        const result = await ImagePicker.launchCameraAsync({ quality: 0.6, base64: true });
-                        if (!result.canceled && result.assets?.[0]?.base64) {
+                        const result = await ImagePicker.launchCameraAsync({ quality: 1 });
+                        if (!result.canceled && result.assets?.[0]?.uri) {
                           setUploadingPhotos(true);
                           try {
-                            const newPhoto = `data:image/jpeg;base64,${result.assets[0].base64}`;
+                            const newPhoto = await compressToBase64(result.assets[0].uri);
                             const all = [...(visit.photos || []), newPhoto];
                             const token = await getToken();
                             await fetch(`${BACKEND_URL}/api/country-visits/${country_visit_id}`, {

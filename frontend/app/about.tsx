@@ -24,6 +24,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import theme, { gradients } from '../styles/theme';
 import { HeaderBranding } from '../components/BrandedGlobeIcon';
 import Constants from 'expo-constants';
+import { compressToBase64 } from '../utils/image';
 
 const { width } = Dimensions.get('window');
 
@@ -42,11 +43,10 @@ export default function AboutScreen() {
   const handlePickScreenshot = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 0.6,
-      base64: true,
+      quality: 1,
     });
-    if (!result.canceled && result.assets[0]?.base64) {
-      const uri = `data:image/jpeg;base64,${result.assets[0].base64}`;
+    if (!result.canceled && result.assets[0]?.uri) {
+      const uri = await compressToBase64(result.assets[0].uri);
       setBugScreenshots(prev => [...prev.slice(0, 4), uri]);
     }
   };

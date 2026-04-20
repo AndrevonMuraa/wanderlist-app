@@ -19,6 +19,7 @@ import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import UniversalHeader from '../components/UniversalHeader';
 import { getToken } from '../utils/token';
+import { compressToBase64, compressAvatarToBase64 } from '../utils/image';
 
 
 interface UserProfile {
@@ -82,12 +83,11 @@ export default function EditProfileScreen() {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [1, 1],
-        quality: 0.5,
-        base64: true,
+        quality: 1,
       });
 
-      if (!result.canceled && result.assets[0].base64) {
-        const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`;
+      if (!result.canceled && result.assets[0]?.uri) {
+        const base64Image = await compressAvatarToBase64(result.assets[0].uri);
         setPicture(base64Image);
       }
     } catch (error) {
@@ -108,12 +108,11 @@ export default function EditProfileScreen() {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [3, 1], // Banner aspect ratio
-        quality: 0.6,
-        base64: true,
+        quality: 1,
       });
 
-      if (!result.canceled && result.assets[0].base64) {
-        const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`;
+      if (!result.canceled && result.assets[0]?.uri) {
+        const base64Image = await compressToBase64(result.assets[0].uri, { maxWidth: 1200, quality: 0.75 });
         setBannerImage(base64Image);
       }
     } catch (error) {

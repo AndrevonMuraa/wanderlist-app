@@ -10,6 +10,7 @@ import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { invalidateCacheGroup } from '../utils/apiCache';
 import { successHaptic } from '../utils/haptics';
+import { compressToBase64 } from '../utils/image';
 
 interface AddDestinationVisitModalProps {
   visible: boolean;
@@ -48,11 +49,11 @@ export const AddDestinationVisitModal: React.FC<AddDestinationVisitModalProps> =
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsMultipleSelection: false,
-      quality: 0.7,
-      base64: true,
+      quality: 1,
     });
-    if (!result.canceled && result.assets?.[0]?.base64) {
-      setPhotos(prev => [...prev, `data:image/jpeg;base64,${result.assets[0].base64}`]);
+    if (!result.canceled && result.assets?.[0]?.uri) {
+      const base64Image = await compressToBase64(result.assets[0].uri);
+      setPhotos(prev => [...prev, base64Image]);
     }
   };
 

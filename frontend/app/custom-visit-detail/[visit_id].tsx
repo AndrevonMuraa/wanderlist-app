@@ -19,6 +19,7 @@ import PhotoViewer from '../../components/PhotoViewer';
 import UniversalHeader from '../../components/UniversalHeader';
 import { useAuth } from '../../contexts/AuthContext';
 import { getToken } from '../../utils/token';
+import { compressToBase64 } from '../../utils/image';
 
 const { width } = Dimensions.get('window');
 interface CustomVisit {
@@ -137,14 +138,13 @@ export default function CustomVisitDetailScreen() {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: true,
-        quality: 0.6,
-        base64: true,
+        quality: 1,
       });
       if (!result.canceled && result.assets) {
         setUploadingPhotos(true);
-        const newPhotos = result.assets
-          .filter(a => a.base64)
-          .map(a => `data:image/jpeg;base64,${a.base64}`);
+        const newPhotos = await Promise.all(
+          result.assets.filter(a => a.uri).map(a => compressToBase64(a.uri))
+        );
         const existing = visit?.photos || [];
         const all = [...existing, ...newPhotos].slice(0, 10);
         const token = await getToken();
@@ -173,12 +173,11 @@ export default function CustomVisitDetailScreen() {
         return;
       }
       const result = await ImagePicker.launchCameraAsync({
-        quality: 0.6,
-        base64: true,
+        quality: 1,
       });
-      if (!result.canceled && result.assets?.[0]?.base64) {
+      if (!result.canceled && result.assets?.[0]?.uri) {
         setUploadingPhotos(true);
-        const newPhoto = `data:image/jpeg;base64,${result.assets[0].base64}`;
+        const newPhoto = await compressToBase64(result.assets[0].uri);
         const existing = visit?.photos || [];
         const all = [...existing, newPhoto].slice(0, 10);
         const token = await getToken();

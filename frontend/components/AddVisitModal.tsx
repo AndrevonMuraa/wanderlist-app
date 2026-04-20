@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Text } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { VisitModalShell, PhotoSection, DiarySection, VisitSubmitButton } from './visit-shared';
+import { compressToBase64 } from '../utils/image';
 import theme from '../styles/theme';
 
 interface AddVisitModalProps {
@@ -51,11 +52,11 @@ export default function AddVisitModal({
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsMultipleSelection: false,
-      quality: 0.7,
-      base64: true,
+      quality: 1,
     });
-    if (!result.canceled && result.assets?.[0]?.base64) {
-      setPhotos(prev => [...prev, `data:image/jpeg;base64,${result.assets[0].base64}`]);
+    if (!result.canceled && result.assets?.[0]?.uri) {
+      const base64Image = await compressToBase64(result.assets[0].uri);
+      setPhotos(prev => [...prev, base64Image]);
     }
   };
 

@@ -6,6 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import theme from '../../styles/theme';
 import { useSubscription } from '../../hooks/useSubscription';
+import { compressToBase64 } from '../../utils/image';
 
 interface PhotoSectionProps {
   photos: string[];
@@ -51,9 +52,10 @@ export default function PhotoSection({
       Alert.alert('Camera Access', 'Please allow camera access in your device settings to take photos.');
       return;
     }
-    const result = await ImagePicker.launchCameraAsync({ quality: 0.7, base64: true });
-    if (!result.canceled && result.assets?.[0]?.base64) {
-      onPhotosChange([...photos, `data:image/jpeg;base64,${result.assets[0].base64}`]);
+    const result = await ImagePicker.launchCameraAsync({ quality: 1 });
+    if (!result.canceled && result.assets?.[0]?.uri) {
+      const base64Image = await compressToBase64(result.assets[0].uri);
+      onPhotosChange([...photos, base64Image]);
     }
   };
 
@@ -67,13 +69,13 @@ export default function PhotoSection({
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsMultipleSelection: isPro || !!maxOverride,
-      quality: 0.7,
-      base64: true,
+      quality: 1,
     });
     if (!result.canceled && result.assets) {
-      const newPhotos = result.assets
-        .slice(0, maxPhotos - photos.length)
-        .map(a => `data:image/jpeg;base64,${a.base64}`);
+      const assets = result.assets.slice(0, maxPhotos - photos.length);
+      const newPhotos = await Promise.all(
+        assets.map(a => compressToBase64(a.uri))
+      );
       onPhotosChange([...photos, ...newPhotos]);
     }
   };
