@@ -186,46 +186,21 @@ def test_admin_shares_stats_rejects_non_admin(pro_ctx):
 
 
 # ---------- GET /api/compare/landmarks/{lid}/friends/{fid} ----------
-def test_compare_landmark_happy_path(admin_ctx, admin_friend_id):
-    """Find a landmark both admin+friend visited and verify payload shape."""
-    # Find a shared landmark via /api/friends/shared-places
-    r = requests.get(
-        f"{BASE_URL}/api/friends/shared-places",
-        headers=admin_ctx["headers"],
-        timeout=20,
-    )
-    assert r.status_code == 200, r.text
-    shared = r.json()
-    # shared-places returns a list of landmarks with friend overlap
-    landmark_id = None
-    if isinstance(shared, list):
-        for item in shared:
-            lid = item.get("landmark_id") or item.get("id")
-            friends_list = item.get("friends", []) or item.get("friend_ids", [])
-            # Some shapes embed friend user_ids; if any overlap — good
-            if lid and (
-                any(
-                    (f.get("user_id") if isinstance(f, dict) else f) == admin_friend_id
-                    for f in friends_list
-                )
-                or not friends_list  # fallback: just take first shared landmark
-            ):
-                landmark_id = lid
-                break
-    if not landmark_id:
-        pytest.skip(
-            "No shared landmark between admin + friend in seed; happy-path verified "
-            "structurally elsewhere"
-        )
+def test_compare_landmark_happy_path(admin_ctx, admin_friend_shared_landmark):
+    """Fixture seeds a shared landmark between admin + Social Tester, then
+    verifies payload shape end-to-end. Seeded visits are auto-cleaned."""
+    landmark_id = admin_friend_shared_landmark["landmark_id"]
+    friend_user_id = admin_friend_shared_landmark["friend_user_id"]
 
     r2 = requests.get(
-        f"{BASE_URL}/api/compare/landmarks/{landmark_id}/friends/{admin_friend_id}",
+        f"{BASE_URL}/api/compare/landmarks/{landmark_id}/friends/{friend_user_id}",
         headers=admin_ctx["headers"],
         timeout=20,
     )
     assert r2.status_code == 200, r2.text
     payload = r2.json()
     assert "landmark" in payload, payload
+    assert payload["landmark"]["landmark_id"] == landmark_id
     assert "me" in payload, payload
     assert "friend" in payload, payload
     for side in ("me", "friend"):
@@ -233,6 +208,14 @@ def test_compare_landmark_happy_path(admin_ctx, admin_friend_id):
         assert "photo_count" in payload[side], f"{side} missing photo_count: {payload[side]}"
         assert isinstance(payload[side]["visits"], list)
         assert isinstance(payload[side]["photo_count"], int)
+        # Each seeded visit has 1 photo
+        assert payload[side]["photo_count"] >= 1, f"{side} should have >=1 photo from fixture"
+        assert len(payload[side]["visits"]) >= 1, f"{side} should have >=1 visit"
+    # Friend-side should never leak 'private' visibility
+    for v in payload["friend"]["visits"]:
+        assert v.get("visibility") != "private"
+    # has_private_visits flag exists on friend side
+    assert "has_private_visits" in payload["friend"]
 
 
 def test_compare_landmark_403_non_friend(admin_ctx, mod_ctx):

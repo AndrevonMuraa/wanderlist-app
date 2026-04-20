@@ -196,12 +196,13 @@ def _find_shared_landmark(ctx):
     return items[0]["landmark_id"] if items else None
 
 
-def test_compare_landmark_happy_path(admin_ctx, admin_friend_id):
-    lid = _find_shared_landmark(admin_ctx)
-    if not lid:
-        pytest.skip("No shared landmarks between admin & friends")
+def test_compare_landmark_happy_path(admin_ctx, admin_friend_shared_landmark):
+    """Uses shared fixture to guarantee a mutual landmark visit between admin
+    and Social Tester. Seeded visits are auto-cleaned after the test."""
+    lid = admin_friend_shared_landmark["landmark_id"]
+    friend_user_id = admin_friend_shared_landmark["friend_user_id"]
     r = requests.get(
-        f"{BASE_URL}/api/compare/landmarks/{lid}/friends/{admin_friend_id}",
+        f"{BASE_URL}/api/compare/landmarks/{lid}/friends/{friend_user_id}",
         headers=admin_ctx["headers"], timeout=20,
     )
     assert r.status_code == 200, r.text
@@ -209,6 +210,9 @@ def test_compare_landmark_happy_path(admin_ctx, admin_friend_id):
     assert body["landmark"]["landmark_id"] == lid
     assert "visits" in body["me"] and "visits" in body["friend"]
     assert "has_private_visits" in body["friend"]
+    # Both sides should have ≥1 visit from the fixture
+    assert len(body["me"]["visits"]) >= 1
+    assert len(body["friend"]["visits"]) >= 1
     # Verify no private visits leak
     for v in body["friend"]["visits"]:
         assert v.get("visibility") != "private"

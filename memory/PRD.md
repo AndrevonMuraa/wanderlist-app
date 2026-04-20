@@ -10,7 +10,12 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Database: MongoDB Atlas
 - Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
 
-## Session 19 — April 20, 2026 (ShareComparisonCard + backend refactor)
+### Test hygiene: Happy-path compare-landmark tests no longer skip (P3 follow-up)
+- **NEW** `/app/backend/tests/conftest.py` — introduces the `admin_friend_shared_landmark` pytest fixture that inserts 2 mutual visits (one for admin, one for Social Tester) with unique fixture-prefixed `visit_id`s, then auto-deletes them after the test via `try/finally`. Uses `dotenv` to load `backend/.env` so `MONGO_URL`/`DB_NAME` are available under pytest.
+- Both happy-path tests (`test_shares_compare_iteration22.py::test_compare_landmark_happy_path` + `test_friends_hub_iteration21.py::test_compare_landmark_happy_path`) now consume the fixture instead of calling `pytest.skip("no shared landmark")`. They assert on real payload: `photo_count >= 1`, `visits` list length, and privacy leak detection.
+- **Result**: 64/64 tests PASS, 0 skipped (previously 62 passed + 2 skipped). Zero dev-data pollution — verified 0 `fixture_*` visits remain in DB after test run.
+
+## Session 19 — April 20, 2026 (ShareComparisonCard + backend refactor + test hygiene)
 
 ### Feature: Shareable "We've both been here" memory card (P1)
 - **NEW** `/app/frontend/components/ShareComparisonCard.tsx` — modal rendered on top of the Compare screen that captures an Instagram-Stories-ready gradient card featuring: WanderMark brand, landmark + country/continent, two-avatar-with-heart-connector row, 2x2 photo mosaic with "me / friend" badges, total-photos stat pill, subtle attribution footer.
@@ -252,11 +257,10 @@ All "ALT!" design items shipped and smoke-tested (testing_agent iteration_20: 6/
 ## Upcoming Tasks
 - P1: Self-verify ShareComparisonCard on native preview (backend 100% green; user to confirm UX on device)
 - P2: "Mitt år i reise" / Yearly travel recap — auto-generated annual summary
-- P3: Seed one shared landmark between admin (`user_dd46a314f120`) and Social Tester (`user_ff9a3f370f6b`) to unblock the 2 skipping compare-landmark happy-path tests
-- P4: Rename GitHub Repository from `wanderlist-app` to `wandermark-app` + deploy Privacy/Terms website
-- P5 (future / deferred): **Forward-looking monthly share card** (e.g. "My month in travel") — DELIBERATELY deferred. A share card that rewards drip-feeding old content would fight the app's DNA right now since most users are still registering *retroactive* visits. Revisit when the user base is large enough and active enough that monthly share cards reflect real-time travel (core target: hardcore travelers, while staying accessible to anyone who's been abroad more than once).
-- P6: Server-side image compression/resizing (client-side shipped in Session 16; server-side defense-in-depth still open)
-- P7: "Nearby travelers" section for geographical discovery
+- P3: Rename GitHub Repository from `wanderlist-app` to `wandermark-app` + deploy Privacy/Terms website
+- P4 (future / deferred): **Forward-looking monthly share card** (e.g. "My month in travel") — DELIBERATELY deferred. A share card that rewards drip-feeding old content would fight the app's DNA right now since most users are still registering *retroactive* visits. Revisit when the user base is large enough and active enough that monthly share cards reflect real-time travel (core target: hardcore travelers, while staying accessible to anyone who's been abroad more than once).
+- P5: Server-side image compression/resizing (client-side shipped in Session 16; server-side defense-in-depth still open)
+- P6: "Nearby travelers" section for geographical discovery
 
 ## Session 11 — April 19, 2026 (Admin auto-flag badge)
 
