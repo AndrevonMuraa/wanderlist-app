@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Platform, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { BACKEND_URL } from '../utils/config';
 import { useTheme } from '../contexts/ThemeContext';
@@ -44,6 +45,7 @@ function severityColor(s: Severity) {
  */
 export default function AdminSystemHealth({ adminStats }: { adminStats: AdminStatsShape | null }) {
   const { colors } = useTheme();
+  const router = useRouter();
   const [imageNorm, setImageNorm] = useState<ImageNormData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -79,7 +81,16 @@ export default function AdminSystemHealth({ adminStats }: { adminStats: AdminSta
     value: string | number;
     subtitle: string;
     severity: Severity;
+    onPress: () => void;
     testId?: string;
+  };
+
+  const openImageDefenseInfo = () => {
+    Alert.alert(
+      'Image defense-in-depth',
+      `Auto-resized (2-5 MB): ${auto_resized}\nRejected (> 5 MB): ${rejected}\n\nThresholds: resize > ${imageNorm.thresholds.auto_resize_above_mb} MB · reject > ${imageNorm.thresholds.reject_above_mb} MB\n\nCounters reset on backend restart. Long-term record lives in Sentry.`,
+      [{ text: 'Got it', style: 'default' }]
+    );
   };
 
   const tiles: Tile[] = [
@@ -92,6 +103,7 @@ export default function AdminSystemHealth({ adminStats }: { adminStats: AdminSta
         ? `rejected · ${auto_resized} resized`
         : auto_resized > 0 ? `${auto_resized} auto-resized` : 'all clean',
       severity: rejected > 0 ? 'alert' : auto_resized >= 50 ? 'warn' : 'ok',
+      onPress: openImageDefenseInfo,
       testId: 'health-image-defense',
     },
     {
@@ -101,6 +113,7 @@ export default function AdminSystemHealth({ adminStats }: { adminStats: AdminSta
       value: pending,
       subtitle: pending > 0 ? `pending · ${adminStats.reports.total} total` : 'queue empty',
       severity: pending >= 5 ? 'alert' : pending > 0 ? 'warn' : 'ok',
+      onPress: () => router.push('/admin/reports'),
       testId: 'health-moderation',
     },
     {
@@ -110,6 +123,7 @@ export default function AdminSystemHealth({ adminStats }: { adminStats: AdminSta
       value: banned,
       subtitle: banned > 0 ? `of ${adminStats.users.total} users` : 'no bans',
       severity: banned > 0 ? 'info' : 'ok',
+      onPress: () => router.push('/admin/users?filter=banned'),
       testId: 'health-banned',
     },
     {
@@ -119,6 +133,7 @@ export default function AdminSystemHealth({ adminStats }: { adminStats: AdminSta
       value: newWeek,
       subtitle: newWeek > 0 ? 'signups' : 'no new users',
       severity: newWeek > 0 ? 'ok' : 'info',
+      onPress: () => router.push('/admin/users'),
       testId: 'health-growth',
     },
   ];
@@ -128,9 +143,11 @@ export default function AdminSystemHealth({ adminStats }: { adminStats: AdminSta
       {tiles.map((t) => {
         const color = severityColor(t.severity);
         return (
-          <View
+          <TouchableOpacity
             key={t.key}
             style={[styles.tile, { backgroundColor: colors.surface }]}
+            onPress={t.onPress}
+            activeOpacity={0.75}
             data-testid={t.testId}
           >
             <View style={styles.tileHeader}>
@@ -140,6 +157,12 @@ export default function AdminSystemHealth({ adminStats }: { adminStats: AdminSta
               <Text style={[styles.tileLabel, { color: colors.textSecondary }]} numberOfLines={1}>
                 {t.label}
               </Text>
+              <Ionicons
+                name="chevron-forward"
+                size={12}
+                color={colors.textSecondary}
+                style={{ opacity: 0.45 }}
+              />
             </View>
             <View style={styles.tileValueRow}>
               <Text style={[
@@ -155,7 +178,7 @@ export default function AdminSystemHealth({ adminStats }: { adminStats: AdminSta
             <Text style={[styles.tileSubtitle, { color: colors.textLight || colors.textSecondary }]} numberOfLines={1}>
               {t.subtitle}
             </Text>
-          </View>
+          </TouchableOpacity>
         );
       })}
     </View>
