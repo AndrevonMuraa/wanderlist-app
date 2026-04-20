@@ -99,14 +99,29 @@ async def get_current_user(request: Request, session_token: Optional[str] = Cook
     if session_token:
         user = await get_current_user_from_session(session_token)
         if user:
+            _tag_sentry_user(user)
             return user
     auth_header = request.headers.get("Authorization")
     if auth_header and auth_header.startswith("Bearer "):
         token = auth_header.split(" ")[1]
         user = await get_current_user_from_token(token)
         if user:
+            _tag_sentry_user(user)
             return user
     raise HTTPException(status_code=401, detail="Not authenticated")
+
+
+def _tag_sentry_user(user: User) -> None:
+    """Attach user context to Sentry scope — safe no-op if Sentry is disabled."""
+    try:
+        from utils.sentry import set_sentry_user
+        set_sentry_user(
+            user_id=user.user_id,
+            email=getattr(user, "email", None),
+            username=getattr(user, "username", None),
+        )
+    except Exception:
+        pass
 
 
 async def get_admin_user(current_user: User = Depends(get_current_user)) -> User:

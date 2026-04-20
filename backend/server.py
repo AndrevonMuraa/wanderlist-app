@@ -3,6 +3,9 @@ from starlette.middleware.cors import CORSMiddleware
 import logging
 import os
 
+from utils.sentry import init_sentry  # MUST be imported + called before FastAPI is created
+init_sentry()
+
 from utils.db import db, client, create_indexes
 from utils.rate_limit import RateLimitMiddleware
 from routes import (

@@ -3,6 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { Platform } from 'react-native';
 import { BACKEND_URL } from '../utils/config';
+import { setSentryUser } from '../utils/sentry';
 
 interface User {
   user_id: string;
@@ -35,6 +36,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAppleSignInAvailable, setIsAppleSignInAvailable] = useState(false);
+
+  // Keep Sentry user scope in sync with auth state (safe no-op if Sentry disabled).
+  useEffect(() => {
+    setSentryUser(user ? { user_id: user.user_id, username: user.username, email: user.email } : null);
+  }, [user]);
 
   useEffect(() => {
     // Check if Apple Sign-In is available (iOS only)

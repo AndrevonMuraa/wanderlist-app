@@ -60,6 +60,14 @@
           "color": "#4DB8D8",
           "sounds": []
         }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "organization": "YOUR_SENTRY_ORG_SLUG",
+          "project": "wandermark-mobile",
+          "url": "https://sentry.io/"
+        }
       ]
     ],
     "experiments": {

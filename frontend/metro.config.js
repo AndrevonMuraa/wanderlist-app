@@ -1,9 +1,17 @@
 // metro.config.js
 const { getDefaultConfig } = require("expo/metro-config");
+const { getSentryExpoConfig } = require("@sentry/react-native/metro");
 const path = require('path');
 const { FileStore } = require('metro-cache');
 
-const config = getDefaultConfig(__dirname);
+// Wrap the Expo config with Sentry so builds produce debug IDs and Sentry
+// can correlate production stack traces back to source.
+// Falls back to getDefaultConfig when Sentry wrapper is unavailable.
+const baseConfig = typeof getSentryExpoConfig === 'function'
+  ? getSentryExpoConfig(__dirname)
+  : getDefaultConfig(__dirname);
+
+const config = baseConfig;
 
 // Use a stable on-disk store (shared across web/android)
 const root = process.env.METRO_CACHE_ROOT || path.join(__dirname, '.metro-cache');

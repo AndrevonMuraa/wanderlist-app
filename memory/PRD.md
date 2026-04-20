@@ -10,6 +10,43 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Database: MongoDB Atlas
 - Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
 
+## Session 15 — April 20, 2026 (Sentry error-monitoring integration)
+
+### Plug-and-play setup (activates only when DSN is set)
+Everything below is a **safe no-op until the user adds DSN env vars** — the app boots and works identically when Sentry is disabled.
+
+### Backend
+- New `utils/sentry.py`:
+  - `init_sentry()` — reads `SENTRY_DSN` / `SENTRY_ENVIRONMENT` / `SENTRY_RELEASE` / `SENTRY_TRACES_SAMPLE_RATE` from env. Returns False + logs "disabled" if DSN missing.
+  - FastApi + Starlette integrations with `transaction_style="endpoint"`, 5xx-only capture.
+  - `before_send` filter drops `/health`, `/docs`, `/openapi.json`, `/redoc` + ClientDisconnect/ConnectionReset.
+  - `set_sentry_user()` / `clear_sentry_user()` helpers.
+- `server.py`: calls `init_sentry()` **before** FastAPI instance is created.
+- `utils/auth.py` → `get_current_user`: now auto-attaches `{user_id, email, username}` to Sentry scope on every authenticated request (via `_tag_sentry_user`).
+- `requirements.txt`: `sentry-sdk==2.58.0` added.
+
+### Frontend
+- New `utils/sentry.ts`:
+  - `initSentry()` — reads `EXPO_PUBLIC_SENTRY_DSN` / `EXPO_PUBLIC_SENTRY_ENVIRONMENT`. Release name auto-built from `Constants.expoConfig.version` + build number.
+  - `tracesSampleRate: 0.1` in prod / `1.0` in dev. `replaysOnErrorSampleRate: 1.0`, session replay disabled.
+  - `ignoreErrors`: Network request failed, AbortError, user-cancelled, etc.
+  - `setSentryUser()` helper.
+- `app/_layout.tsx`: imports + calls `initSentry()` early. Root component wrapped in `Sentry.wrap()` for native crash + touch breadcrumbs.
+- `contexts/AuthContext.tsx`: `useEffect` syncs `user` state → Sentry scope automatically on login/logout/refresh (no need to patch every auth path).
+- `metro.config.js`: now wrapped with `getSentryExpoConfig` so Metro emits debug IDs for source-map correlation in EAS builds.
+- `app.json`: `@sentry/react-native/expo` plugin registered (placeholder org slug — user replaces before first EAS build).
+- `package.json`: `@sentry/react-native@~7.2.0` (Expo SDK 51 compatible).
+- `.env`: `EXPO_PUBLIC_SENTRY_DSN=` + `EXPO_PUBLIC_SENTRY_ENVIRONMENT=preview` (empty strings so behavior is no-op until filled).
+
+### Docs
+- `memory/SENTRY_SETUP.md` — step-by-step instructions: Sentry account creation, two-project setup, auth-token creation, Render env vars, EAS secret, and verification flow.
+
+### Verified
+- Backend reloaded cleanly with Sentry init (logged "Sentry disabled (SENTRY_DSN not set)").
+- Frontend: `/` onboarding renders normally (smoke-screenshot passed).
+- `POST /api/auth/login → 200`, `GET /api/community-highlights/top → 200`, `POST /api/shares → 200` — all unchanged.
+- TypeScript + Ruff clean.
+
 ## Session 14 — April 19, 2026 (Share-card attribution + virality analytics)
 
 ### Backend (new)
