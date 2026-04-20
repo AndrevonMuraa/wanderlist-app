@@ -250,10 +250,13 @@ All "ALT!" design items shipped and smoke-tested (testing_agent iteration_20: 6/
 - **Moderator**: mod@wandermark.app / Test1234!
 
 ## Upcoming Tasks
-- P1: Sentry Integration for production error monitoring
-- P2: Server-side image compression/resizing
-- P3: Rename GitHub Repository from `wanderlist-app` to `wandermark-app`
-- P4: "Nearby travelers" section for geographical discovery
+- P1: Self-verify ShareComparisonCard on native preview (backend 100% green; user to confirm UX on device)
+- P2: "Mitt år i reise" / Yearly travel recap — auto-generated annual summary
+- P3: Seed one shared landmark between admin (`user_dd46a314f120`) and Social Tester (`user_ff9a3f370f6b`) to unblock the 2 skipping compare-landmark happy-path tests
+- P4: Rename GitHub Repository from `wanderlist-app` to `wandermark-app` + deploy Privacy/Terms website
+- P5 (future / deferred): **Forward-looking monthly share card** (e.g. "My month in travel") — DELIBERATELY deferred. A share card that rewards drip-feeding old content would fight the app's DNA right now since most users are still registering *retroactive* visits. Revisit when the user base is large enough and active enough that monthly share cards reflect real-time travel (core target: hardcore travelers, while staying accessible to anyone who's been abroad more than once).
+- P6: Server-side image compression/resizing (client-side shipped in Session 16; server-side defense-in-depth still open)
+- P7: "Nearby travelers" section for geographical discovery
 
 ## Session 11 — April 19, 2026 (Admin auto-flag badge)
 
