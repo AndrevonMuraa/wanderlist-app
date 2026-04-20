@@ -52,6 +52,23 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [refreshSignal, setRefreshSignal] = useState(0);
+  const [tick, setTick] = useState(0); // forces "X ago" to re-render every 15s
+
+  // Relative-time ticker for "Updated Xs/Xm ago"
+  useEffect(() => {
+    const iv = setInterval(() => setTick((t) => t + 1), 15000);
+    return () => clearInterval(iv);
+  }, []);
+
+  const formatRelative = (d: Date) => {
+    const diff = Math.max(0, Math.round((Date.now() - d.getTime()) / 1000));
+    if (diff < 10) return 'Updated just now';
+    if (diff < 60) return `Updated ${diff}s ago`;
+    if (diff < 3600) return `Updated ${Math.floor(diff / 60)}m ago`;
+    return `Updated ${Math.floor(diff / 3600)}h ago`;
+  };
 
   useEffect(() => {
     // Check if user has admin access
@@ -78,6 +95,7 @@ export default function AdminDashboard() {
         const data = await response.json();
         setStats(data);
         setError(null);
+        setLastUpdated(new Date());
       } else {
         setError('Failed to load stats');
       }
@@ -93,6 +111,7 @@ export default function AdminDashboard() {
   const onRefresh = () => {
     setRefreshing(true);
     fetchStats();
+    setRefreshSignal((n) => n + 1); // nudge AdminSystemHealth to refetch too
   };
 
   if (loading) {
@@ -185,7 +204,18 @@ export default function AdminDashboard() {
             <Ionicons name="shield-checkmark" size={24} color="#4ade80" />
             <Text style={styles.headerTitle}>Admin Panel</Text>
           </View>
-          <View style={{ width: 40 }} />
+          <TouchableOpacity
+            onPress={onRefresh}
+            style={styles.headerBackButton}
+            disabled={refreshing}
+            data-testid="admin-refresh-btn"
+          >
+            <Ionicons
+              name="refresh"
+              size={22}
+              color={refreshing ? 'rgba(255,255,255,0.4)' : '#fff'}
+            />
+          </TouchableOpacity>
         </View>
       </LinearGradient>
 
@@ -198,7 +228,16 @@ export default function AdminDashboard() {
         }
       >
         {/* Stats Overview */}
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>Overview</Text>
+        <View style={styles.sectionHeaderRow}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Overview</Text>
+          <Text
+            style={[styles.sectionTimestamp, { color: colors.textSecondary }]}
+            data-testid="admin-last-updated"
+          >
+            {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
+            {tick >= 0 && formatRelative(lastUpdated)}
+          </Text>
+        </View>
         <View style={styles.statsGrid}>
           <StatCard 
             title="Total Users" 
@@ -392,6 +431,19 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
     marginBottom: 10,
     marginTop: 4,
+  },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    marginBottom: 10,
+    marginTop: 4,
+  },
+  sectionTimestamp: {
+    fontSize: 10,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+    opacity: 0.7,
   },
   statsGrid: {
     flexDirection: 'row',

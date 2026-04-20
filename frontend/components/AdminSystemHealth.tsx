@@ -43,7 +43,13 @@ function severityColor(s: Severity) {
  *
  * Tiles color their own icon circle by severity. Zero-state = green.
  */
-export default function AdminSystemHealth({ adminStats }: { adminStats: AdminStatsShape | null }) {
+export default function AdminSystemHealth({
+  adminStats,
+  refreshSignal = 0,
+}: {
+  adminStats: AdminStatsShape | null;
+  refreshSignal?: number;
+}) {
   const { colors } = useTheme();
   const router = useRouter();
   const [imageNorm, setImageNorm] = useState<ImageNormData | null>(null);
@@ -59,7 +65,7 @@ export default function AdminSystemHealth({ adminStats }: { adminStats: AdminSta
     } catch {} finally { setLoading(false); }
   }, []);
 
-  useEffect(() => { fetchImageNorm(); }, [fetchImageNorm]);
+  useEffect(() => { fetchImageNorm(); }, [fetchImageNorm, refreshSignal]);
 
   if (loading || !imageNorm || !adminStats) {
     return (
