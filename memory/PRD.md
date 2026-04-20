@@ -10,7 +10,17 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Database: MongoDB Atlas
 - Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
 
-## Session 20 — April 20, 2026 (Free vs. Pro tier rebalancing — A1-A3 + B1-B2 + messaging push notifications + notification-settings wired to backend + unread-counts badge)
+## Session 20 — April 20, 2026 (Free vs. Pro tier rebalancing — A1-A3 + B1-B2 + messaging push notifications + notification-settings wired to backend + unread-counts badge + Build 83 prep + repo cleanup)
+
+### Build 83 Preparation (ready for GitHub push)
+- `frontend/app.json`: iOS `buildNumber` 82 → **83**, Android `versionCode` 2 → **3**.
+- **`E2E_TEST_PLAN.md` fully rewritten** for Build 83 (25 sections, 260+ lines) covering every new flow from this session: Messages-free, Friends Hub Messages Inbox, Notification prompt onboarding, 6-toggle Notification Settings, Unread badges, Smart tab-redirect, ShareComparisonCard, Admin Command Center redesign, Image defense, Rate-limit fix, Pakistan migration.
+- **NEW `RELEASE_NOTES_BUILD_83.md`** — complete build dossier including user-facing changelog, Render Shell migration commands (Pakistan + db_compare + push_settings backfill), EAS build one-liner, 12-step TestFlight smoke test.
+
+### Repository cleanup (before GitHub push)
+- **`frontend/.metro-cache` removed from git tracking** — `git rm -r --cached frontend/.metro-cache` removed **7091 files / 185MB** of Metro build cache that was accidentally committed over time. Repo file count: 7466 → **375** (95% reduction). Local cache folder untouched; Metro continues using it.
+- **`frontend/.gitignore` updated**: added `.metro-cache/` and `.metro/` patterns to prevent re-commit.
+- **NEW `backend/.gitignore`** — proactive Python cruft guards: `__pycache__/`, `*.pyc`, `.pytest_cache/`, `.coverage`, `venv/`, IDE + OS noise. No current Python cache was tracked, but this prevents future accidents.
 
 ### Bug fix: Rate-limit middleware propagerte 429 som 500 (Starlette anyio edge case)
 - **Rot-årsak**: `utils/rate_limit.py` gjorde `raise HTTPException(status_code=429, ...)` inne i en `BaseHTTPMiddleware.dispatch`. Starlettes anyio TaskGroup wrapper exceptionen i en `ExceptionGroup` som `collapse_excgroups` ikke kan kollapse, og den propagerer opp som ubehandlet 500.
