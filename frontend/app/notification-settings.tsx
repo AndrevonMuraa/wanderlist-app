@@ -1,84 +1,175 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Platform, Alert } from 'react-native';
 import { Text, Switch, ActivityIndicator } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { safeGoBack } from '../utils/navigation';
-import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../styles/theme';
 import { useTheme } from '../contexts/ThemeContext';
 import UniversalHeader from '../components/UniversalHeader';
-import {
-  requestNotificationPermissions,
-  getNotificationSettings,
-  saveNotificationSettings,
-} from '../utils/notifications';
+import { requestNotificationPermissions } from '../utils/notifications';
+import { BACKEND_URL } from '../utils/config';
+import { getToken } from '../utils/token';
+
+type PushKey =
+  | 'messages_enabled'
+  | 'likes_enabled'
+  | 'comments_enabled'
+  | 'friend_requests_enabled'
+  | 'achievements_enabled'
+  | 'weekly_summary_enabled';
+
+type PushSettings = Record<PushKey, boolean>;
+
+const DEFAULT_SETTINGS: PushSettings = {
+  messages_enabled: true,
+  likes_enabled: true,
+  comments_enabled: true,
+  friend_requests_enabled: true,
+  achievements_enabled: true,
+  weekly_summary_enabled: true,
+};
+
+interface ToggleRow {
+  key: PushKey;
+  title: string;
+  subtitle: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  accent: string;
+  testId: string;
+}
+
+const ROWS: ToggleRow[] = [
+  {
+    key: 'messages_enabled',
+    title: 'Messages',
+    subtitle: 'When a friend sends you a chat message',
+    icon: 'chatbubbles',
+    accent: '#4DB8D8',
+    testId: 'toggle-messages',
+  },
+  {
+    key: 'likes_enabled',
+    title: 'Likes',
+    subtitle: 'When someone likes your visit',
+    icon: 'heart',
+    accent: '#D4747E',
+    testId: 'toggle-likes',
+  },
+  {
+    key: 'comments_enabled',
+    title: 'Comments',
+    subtitle: 'When someone comments on your post',
+    icon: 'chatbox-ellipses',
+    accent: '#C9A961',
+    testId: 'toggle-comments',
+  },
+  {
+    key: 'friend_requests_enabled',
+    title: 'Friend requests',
+    subtitle: 'When another traveler wants to connect',
+    icon: 'person-add',
+    accent: '#7DCBE3',
+    testId: 'toggle-friend-requests',
+  },
+  {
+    key: 'achievements_enabled',
+    title: 'Achievements',
+    subtitle: 'Rank ups, badges, and milestones',
+    icon: 'trophy',
+    accent: '#FFD700',
+    testId: 'toggle-achievements',
+  },
+  {
+    key: 'weekly_summary_enabled',
+    title: 'Weekly digest',
+    subtitle: 'A summary of your week, every Sunday',
+    icon: 'newspaper',
+    accent: '#B8956A',
+    testId: 'toggle-weekly',
+  },
+];
 
 export default function NotificationSettingsScreen() {
   const router = useRouter();
   const { colors } = useTheme();
   const [loading, setLoading] = useState(true);
   const [permissionGranted, setPermissionGranted] = useState(false);
-  const [settings, setSettings] = useState({
-    dailyReminders: false,
-    weeklyDigest: true,
-    rankProgress: true,
-    reminderTime: '19:00',
-  });
+  const [settings, setSettings] = useState<PushSettings>(DEFAULT_SETTINGS);
+  const [savingKey, setSavingKey] = useState<PushKey | null>(null);
 
-  useEffect(() => {
-    loadSettings();
-  }, []);
-
-  const loadSettings = async () => {
+  const loadSettings = useCallback(async () => {
     try {
-      const currentSettings = await getNotificationSettings();
-      setSettings(currentSettings);
-      
       if (Platform.OS !== 'web') {
         const granted = await requestNotificationPermissions();
         setPermissionGranted(granted);
       }
-    } catch (error) {
+
+      const token = await getToken();
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+      const resp = await fetch(`${BACKEND_URL}/api/push-settings`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        setSettings({
+          messages_enabled: data.messages_enabled ?? true,
+          likes_enabled: data.likes_enabled ?? true,
+          comments_enabled: data.comments_enabled ?? true,
+          friend_requests_enabled: data.friend_requests_enabled ?? true,
+          achievements_enabled: data.achievements_enabled ?? true,
+          weekly_summary_enabled: data.weekly_summary_enabled ?? true,
+        });
+      }
+    } catch {
+      // keep defaults on failure
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const handleToggle = async (key: keyof typeof settings) => {
-    const newValue = !settings[key];
-    const newSettings = { ...settings, [key]: newValue };
-    setSettings(newSettings);
-    await saveNotificationSettings({ [key]: newValue });
-  };
+  useEffect(() => {
+    loadSettings();
+  }, [loadSettings]);
 
-  const handleTimeChange = () => {
-    Alert.alert(
-      'Reminder Time',
-      'Select when you want to receive your daily reminder',
-      [
-        { text: 'Morning (9:00)', onPress: () => updateTime('09:00') },
-        { text: 'Afternoon (14:00)', onPress: () => updateTime('14:00') },
-        { text: 'Evening (19:00)', onPress: () => updateTime('19:00') },
-        { text: 'Night (21:00)', onPress: () => updateTime('21:00') },
-        { text: 'Cancel', style: 'cancel' },
-      ]
-    );
-  };
+  const handleToggle = useCallback(
+    async (key: PushKey) => {
+      if (savingKey) return;
+      const previous = settings[key];
+      const nextValue = !previous;
 
-  const updateTime = async (time: string) => {
-    setSettings(prev => ({ ...prev, reminderTime: time }));
-    await saveNotificationSettings({ reminderTime: time });
-  };
+      // Optimistic update
+      setSettings((s) => ({ ...s, [key]: nextValue }));
+      setSavingKey(key);
 
-  const formatTime = (time: string) => {
-    const [hours, minutes] = time.split(':');
-    const hour = parseInt(hours);
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    const hour12 = hour % 12 || 12;
-    return `${hour12}:${minutes} ${ampm}`;
-  };
+      try {
+        const token = await getToken();
+        if (!token) throw new Error('no token');
+        const resp = await fetch(`${BACKEND_URL}/api/push-settings`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ [key]: nextValue }),
+        });
+        if (!resp.ok) throw new Error(`status ${resp.status}`);
+      } catch {
+        // Rollback on failure
+        setSettings((s) => ({ ...s, [key]: previous }));
+        Alert.alert(
+          'Couldn’t save',
+          'We couldn’t update your notification preference. Please try again.'
+        );
+      } finally {
+        setSavingKey(null);
+      }
+    },
+    [settings, savingKey]
+  );
 
   if (loading) {
     return (
@@ -94,71 +185,61 @@ export default function NotificationSettingsScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <UniversalHeader title="Notifications" onBack={() => safeGoBack(router)} />
-      
+
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Permission Warning */}
+        {/* Permission warning */}
         {Platform.OS !== 'web' && !permissionGranted && (
           <TouchableOpacity
             style={styles.permissionWarning}
-            onPress={requestNotificationPermissions}
+            onPress={async () => {
+              const granted = await requestNotificationPermissions();
+              setPermissionGranted(granted);
+            }}
+            activeOpacity={0.85}
+            data-testid="notif-permission-warning"
           >
-            <Ionicons name="warning" size={24} color="#f59e0b" />
+            <Ionicons name="warning" size={22} color="#b45309" />
             <View style={styles.permissionTextContainer}>
               <Text style={styles.permissionTitle}>Notifications Disabled</Text>
               <Text style={styles.permissionMessage}>
-                Tap to enable notifications in settings
+                Tap to grant permission. Your preferences below still save for later.
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#f59e0b" />
+            <Ionicons name="chevron-forward" size={18} color="#b45309" />
           </TouchableOpacity>
         )}
 
-        {/* Rank Progress */}
-        <View style={[styles.section, { backgroundColor: colors.surface }]}>
-          <View style={styles.sectionHeader}>
-            <View style={[styles.iconContainer, { backgroundColor: '#fbbf2420' }]}>
-              <Ionicons name="trophy" size={22} color="#fbbf24" />
-            </View>
-            <View style={styles.sectionHeaderText}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                Rank Alerts
-              </Text>
-              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
-                Rank ups & milestones
-              </Text>
-            </View>
-            <Switch
-              value={settings.rankProgress}
-              onValueChange={() => handleToggle('rankProgress')}
-              color={theme.colors.primary}
-            />
-          </View>
-        </View>
+        <Text style={[styles.sectionHeading, { color: colors.textSecondary }]}>
+          What should ping you?
+        </Text>
 
-        {/* Social Notifications */}
-        <View style={[styles.section, { backgroundColor: colors.surface }]}>
-          <View style={styles.sectionHeader}>
-            <View style={[styles.iconContainer, { backgroundColor: '#3b82f620' }]}>
-              <Ionicons name="people" size={22} color="#3b82f6" />
+        {ROWS.map((row) => (
+          <View
+            key={row.key}
+            style={[styles.row, { backgroundColor: colors.surface }]}
+            data-testid={`${row.testId}-row`}
+          >
+            <View style={[styles.iconContainer, { backgroundColor: row.accent + '1F' }]}>
+              <Ionicons name={row.icon} size={20} color={row.accent} />
             </View>
-            <View style={styles.sectionHeaderText}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                Social Activity
-              </Text>
-              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
-                Friend requests & interactions
+            <View style={styles.rowText}>
+              <Text style={[styles.rowTitle, { color: colors.text }]}>{row.title}</Text>
+              <Text style={[styles.rowSubtitle, { color: colors.textSecondary }]}>
+                {row.subtitle}
               </Text>
             </View>
             <Switch
-              value={settings.weeklyDigest}
-              onValueChange={() => handleToggle('weeklyDigest')}
+              value={settings[row.key]}
+              onValueChange={() => handleToggle(row.key)}
+              disabled={savingKey === row.key}
               color={theme.colors.primary}
+              data-testid={row.testId}
             />
           </View>
-        </View>
+        ))}
 
         <Text style={[styles.footer, { color: colors.textSecondary }]}>
-          You can change these settings at any time. We'll only send notifications you've enabled.
+          These preferences apply across all your devices. You can change them any time.
         </Text>
       </ScrollView>
     </View>
@@ -181,83 +262,76 @@ const styles = StyleSheet.create({
   permissionWarning: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fef3c7',
-    padding: 16,
-    borderRadius: 12,
+    backgroundColor: '#FEF3C7',
+    padding: 14,
+    borderRadius: 14,
     marginBottom: 16,
     gap: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(180, 83, 9, 0.2)',
   },
   permissionTextContainer: {
     flex: 1,
   },
   permissionTitle: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#92400e',
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#92400E',
   },
   permissionMessage: {
-    fontSize: 13,
-    color: '#b45309',
+    fontSize: 12.5,
+    color: '#B45309',
     marginTop: 2,
+    lineHeight: 17,
   },
-  section: {
-    borderRadius: 16,
-    marginBottom: 12,
-    overflow: 'hidden',
+  sectionHeading: {
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+    marginBottom: 10,
+    marginLeft: 4,
   },
-  sectionHeader: {
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    padding: 14,
+    borderRadius: 14,
+    marginBottom: 10,
     gap: 12,
+    borderWidth: 1,
+    borderColor: theme.colors.borderSand,
+    shadowColor: theme.colors.shadowWarm,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 1,
   },
   iconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  sectionHeaderText: {
+  rowText: {
     flex: 1,
   },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+  rowTitle: {
+    fontSize: 15,
+    fontWeight: '700',
   },
-  sectionSubtitle: {
-    fontSize: 13,
+  rowSubtitle: {
+    fontSize: 12.5,
     marginTop: 2,
-  },
-  timeSelector: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingBottom: 16,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.05)',
-    paddingTop: 12,
-    marginLeft: 56,
-  },
-  timeLabel: {
-    fontSize: 14,
-  },
-  timeValue: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  timeText: {
-    fontSize: 14,
-    fontWeight: '500',
+    lineHeight: 17,
   },
   footer: {
-    fontSize: 13,
+    fontSize: 12.5,
     textAlign: 'center',
-    marginTop: 8,
-    marginBottom: 24,
+    marginTop: 12,
+    marginBottom: 32,
     paddingHorizontal: 20,
-    lineHeight: 20,
+    lineHeight: 18,
   },
 });

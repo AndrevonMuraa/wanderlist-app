@@ -10,7 +10,19 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Database: MongoDB Atlas
 - Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
 
-## Session 20 — April 20, 2026 (Free vs. Pro tier rebalancing — A1-A3 + B1-B2 + messaging push notifications)
+## Session 20 — April 20, 2026 (Free vs. Pro tier rebalancing — A1-A3 + B1-B2 + messaging push notifications + notification-settings wired to backend)
+
+### Enhancement: Notification-settings screen rewired to backend (Option C — full sync + cleanup)
+Previously `/app/frontend/app/notification-settings.tsx` was **AsyncStorage-only** with 2 generic toggles ("Rank Alerts", "Social Activity") that never reached the backend — the 6 `push_settings` fields the backend relied on (`likes_enabled`, `comments_enabled`, `friend_requests_enabled`, `messages_enabled`, `achievements_enabled`, `weekly_summary_enabled`) were effectively orphaned.
+- **Full rewrite** of `notification-settings.tsx`:
+  - On mount: `GET /api/push-settings` + `requestNotificationPermissions()`
+  - Shows 6 real toggles (Messages 💬, Likes ❤️, Comments 💭, Friend requests 👥, Achievements 🏆, Weekly digest 📬), each with Penthouse-DNA styling: 1px sand border, warm `#C9A961` shadow, colored icon circle (20% opacity accent), two-line title+subtitle.
+  - **Optimistic updates**: UI flips instantly, `PUT /api/push-settings` fires with `{ [key]: newValue }`, rolls back + shows Alert on failure.
+  - `savingKey` state disables a Switch while its update is inflight (prevents double-taps).
+  - Test-ids: `toggle-messages`, `toggle-likes`, `toggle-comments`, `toggle-friend-requests`, `toggle-achievements`, `toggle-weekly`, plus `-row` variants and `notif-permission-warning`.
+- **`utils/notifications.ts` slimmed** from 100 → 21 lines. Removed dead code: `getNotificationSettings`, `saveNotificationSettings`, `sendLocalNotification`, `sendAchievementNotification`, `cancelAllNotifications`, `NotificationSettings` interface, `NOTIFICATION_SETTINGS_KEY`, `defaultSettings` (none were actually referenced — all fields were orphaned AsyncStorage ghosts). Kept only `requestNotificationPermissions()` (used by `NewMessageNotifPrompt` + the permission warning row) and the global `setNotificationHandler`.
+- **Verified**: `PUT /api/push-settings` with `{"messages_enabled":false}` → 200, `GET` reads back `messages_enabled: false`, toggle back → `true`. Screenshot confirms all 6 toggles render correctly with Penthouse aesthetic. 0 JS errors.
+- **Metro CI-mode gotcha hit again** — restarted expo via `sudo supervisorctl restart expo` to pick up the overwritten file. Documented in prior PRD session.
 
 ### Enhancement: New-message push notifications with in-app onboarding prompt (Friends Hub)
 Now that messaging is free for every user, added a full notification path so friends actually see each other's replies:
