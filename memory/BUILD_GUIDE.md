@@ -156,4 +156,20 @@ Hvis noe avviker, gi output til agenten for feilsoking.
 2. **Aldri bruk landmark_id for migreringsscript** — bruk `name`-feltet for matching
 3. **Alltid sjekk for duplikate navn** etter omdoping — unnga a gi nytt navn til noe som allerede finnes
 4. **Kjor db_compare.py etter ALLE migreringer** — ikke stol pa at "det ble OK lokalt"
-5. **Aldri bruk inline python i Render Shell** — terminalen odelegger escaping. Lag alltid en .py-fil
+## Del 6: Dependency-hygiene (verify_requirements.py)
+
+Før hver "Save to GitHub" på backend, kjør:
+
+```bash
+cd backend && python3 scripts/verify_requirements.py
+```
+
+Dette scriptet finner "ghost dependencies" — pakker pinned i `requirements.txt` som ikke importeres direkte eller transitivt. Slike spøkelses-deps feiler ofte på Render (f.eks. `emergentintegrations` finnes ikke på PyPI, eller versjon-pin skaper konflikt).
+
+**Exit 0** = rent. **Exit 1** = ghost deps funnet (se output).
+
+### Hvorfor trenger vi dette?
+Container-miljøet i Emergent kan ha pakker installert fra tidligere eksperimenter. Hvis noen kjører `pip freeze > requirements.txt`, blir alle disse ghost-pakkene pinned — selv om ingen kode bruker dem. Render sitt `pip install -r requirements.txt` kan da feile på pakker som ikke finnes på PyPI, eller pakker med uforenlige versjoner.
+
+I april 2026 ble 48 slike ghost-pakker ryddet bort (stammet fra en ubrukt `emergentintegrations` transitive-kjede: `litellm`, `tokenizers`, `huggingface_hub`, `openai`, `google-genai`, m.fl.).
+
