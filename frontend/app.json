@@ -11,7 +11,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.wandermark.app",
-      "buildNumber": "82",
+      "buildNumber": "83",
       "usesAppleSignIn": true,
       "infoPlist": {
         "NSCameraUsageDescription": "Take photos of landmarks you visit",
@@ -21,7 +21,7 @@
     },
     "android": {
       "package": "com.wandermark.app",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#4DB8D8"
