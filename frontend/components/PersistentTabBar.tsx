@@ -5,16 +5,18 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, usePathname } from 'expo-router';
 import theme from '../styles/theme';
 import { lightHaptic } from '../utils/haptics';
+import { useUnreadCounts } from '../contexts/UnreadCountsContext';
 
 export const PersistentTabBar: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const { total } = useUnreadCounts();
 
   const tabs = [
-    { name: 'Explore', icon: 'compass-outline', route: '/(tabs)/explore' },
-    { name: 'My Journey', icon: 'map-outline', route: '/(tabs)/journey' },
-    { name: 'Social', icon: 'people-outline', route: '/(tabs)/social' },
-    { name: 'Profile', icon: 'person-outline', route: '/(tabs)/profile' },
+    { name: 'Explore', icon: 'compass-outline', route: '/(tabs)/explore', showBadge: false },
+    { name: 'My Journey', icon: 'map-outline', route: '/(tabs)/journey', showBadge: false },
+    { name: 'Social', icon: 'people-outline', route: '/(tabs)/social', showBadge: true },
+    { name: 'Profile', icon: 'person-outline', route: '/(tabs)/profile', showBadge: false },
   ];
 
   const isActive = (route: string) => {
@@ -40,12 +42,18 @@ export const PersistentTabBar: React.FC = () => {
             style={styles.tab}
             onPress={() => handlePress(tab.route)}
             activeOpacity={0.7}
+            data-testid={`persistent-tab-${tab.name.toLowerCase().replace(' ', '-')}`}
           >
-            <Ionicons
-              name={tab.icon as any}
-              size={24}
-              color={active ? theme.colors.primary : theme.colors.textLight}
-            />
+            <View>
+              <Ionicons
+                name={tab.icon as any}
+                size={24}
+                color={active ? theme.colors.primary : theme.colors.textLight}
+              />
+              {tab.showBadge && total > 0 && (
+                <View style={styles.badgeDot} data-testid="persistent-tab-badge" />
+              )}
+            </View>
             <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>
               {tab.name}
             </Text>
@@ -85,5 +93,16 @@ const styles = StyleSheet.create({
   },
   tabLabelActive: {
     color: theme.colors.primary,
+  },
+  badgeDot: {
+    position: 'absolute',
+    top: -2,
+    right: -4,
+    width: 9,
+    height: 9,
+    borderRadius: 4.5,
+    backgroundColor: '#D4747E',
+    borderWidth: 1.5,
+    borderColor: theme.colors.surface,
   },
 });

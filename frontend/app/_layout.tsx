@@ -4,6 +4,7 @@ import { AuthProvider } from '../contexts/AuthContext';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import { OfflineProvider } from '../contexts/OfflineContext';
 import { PurchaseProvider } from '../contexts/PurchaseContext';
+import { UnreadCountsProvider } from '../contexts/UnreadCountsContext';
 import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ErrorBoundary } from '../components/ErrorBoundary';
@@ -31,7 +32,9 @@ function RootLayout() {
             <AuthProvider>
               <OfflineProvider>
                 <PurchaseProvider>
-                  <Stack screenOptions={{ headerShown: false }} />
+                  <UnreadCountsProvider>
+                    <Stack screenOptions={{ headerShown: false }} />
+                  </UnreadCountsProvider>
                 </PurchaseProvider>
               </OfflineProvider>
             </AuthProvider>

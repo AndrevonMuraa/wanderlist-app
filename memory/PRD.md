@@ -10,7 +10,20 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Database: MongoDB Atlas
 - Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
 
-## Session 20 — April 20, 2026 (Free vs. Pro tier rebalancing — A1-A3 + B1-B2 + messaging push notifications + notification-settings wired to backend)
+## Session 20 — April 20, 2026 (Free vs. Pro tier rebalancing — A1-A3 + B1-B2 + messaging push notifications + notification-settings wired to backend + unread-counts badge)
+
+### Enhancement: Subtle unread badges on the Social tab (both native + PersistentTabBar)
+Now that messaging is in Free tier + push notifications are wired, added a red dot on the Social tab whenever the user has unread messages OR pending friend requests.
+- **NEW** `/app/frontend/contexts/UnreadCountsContext.tsx` — lightweight provider that:
+  - Polls `GET /api/messages/conversations` + `GET /api/friends/pending` every 30s while authed.
+  - Re-fetches immediately on `AppState` change to `active` (app returning to foreground).
+  - Clears counts to zero on logout (`user` → null).
+  - Exposes `{ messages, pendingFriends, total, refresh }` — silent on network failures (retries on next tick).
+- **Native tab bar** (`app/(tabs)/_layout.tsx`): introduced `SocialTabIcon` that wraps `Ionicons` + an absolute-positioned red dot (`#D4747E` with white ring for contrast) rendered only when `total > 0`.
+- **PersistentTabBar** (`components/PersistentTabBar.tsx`): same dot overlay on the Social tab, using `theme.colors.surface` as the ring color for matte contrast. Test-id `persistent-tab-badge` + `persistent-tab-social` for automation.
+- **Wired in root** `_layout.tsx` — `UnreadCountsProvider` sits inside `PurchaseProvider` so it has access to the user state.
+- **Verified**: provider endpoints both return 200 for admin, tab bar renders with 0 JS errors on Social screen. Badge logic is a trivial `total > 0` conditional — no regression surface.
+- **Design DNA preserved**: dot is muted error-tone `#D4747E` (our existing `theme.colors.error`) rather than loud pure red — subtle Penthouse-Window notification that never shouts.
 
 ### Enhancement: Notification-settings screen rewired to backend (Option C — full sync + cleanup)
 Previously `/app/frontend/app/notification-settings.tsx` was **AsyncStorage-only** with 2 generic toggles ("Rank Alerts", "Social Activity") that never reached the backend — the 6 `push_settings` fields the backend relied on (`likes_enabled`, `comments_enabled`, `friend_requests_enabled`, `messages_enabled`, `achievements_enabled`, `weekly_summary_enabled`) were effectively orphaned.

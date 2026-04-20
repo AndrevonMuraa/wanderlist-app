@@ -1,8 +1,34 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../contexts/ThemeContext';
+import { useUnreadCounts } from '../../contexts/UnreadCountsContext';
+
+/** Small red dot overlay used on the Social tab when there are unread items. */
+const SocialTabIcon = ({ color, size }: { color: string; size: number }) => {
+  const { total } = useUnreadCounts();
+  return (
+    <View>
+      <Ionicons name="people-outline" size={size} color={color} />
+      {total > 0 && (
+        <View
+          style={{
+            position: 'absolute',
+            top: -2,
+            right: -4,
+            minWidth: 8,
+            height: 8,
+            borderRadius: 4,
+            backgroundColor: '#D4747E',
+            borderWidth: 1.5,
+            borderColor: '#FFFFFF',
+          }}
+        />
+      )}
+    </View>
+  );
+};
 
 export default function TabsLayout() {
   const { colors, shadows } = useTheme();
@@ -59,9 +85,7 @@ export default function TabsLayout() {
         options={{
           title: t('tabs.social'),
           tabBarAccessibilityLabel: 'Friends and social features',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="people-outline" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <SocialTabIcon color={color} size={size} />,
         }}
       />
       <Tabs.Screen
