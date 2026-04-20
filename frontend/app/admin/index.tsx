@@ -11,6 +11,7 @@ import theme, { gradients } from '../../styles/theme';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { BACKEND_URL } from '../../utils/config';
+import AdminImageNormCard from '../../components/AdminImageNormCard';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -226,6 +227,9 @@ export default function AdminDashboard() {
             color="#8b5cf6"
           />
         </View>
+
+        {/* Image defense-in-depth observability */}
+        <AdminImageNormCard />
 
         {/* Quick Actions */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>Management</Text>
