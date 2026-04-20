@@ -49,13 +49,19 @@ export default function FriendsActivityFeed() {
               onPress={() => a.visit_id && router.push(`/visit-detail/${a.visit_id}`)}
               data-testid={`activity-row-${a.visit_id}`}
             >
-              {a.user_picture ? (
-                <Image source={{ uri: a.user_picture }} style={styles.avatar} />
-              ) : (
-                <View style={[styles.avatar, styles.avatarFallback]}>
-                  <Text style={styles.avatarInitial}>{first.charAt(0).toUpperCase()}</Text>
-                </View>
-              )}
+              <TouchableOpacity
+                onPress={() => router.push(`/user-profile/${a.user_id}`)}
+                activeOpacity={0.7}
+                data-testid={`activity-avatar-${a.user_id}`}
+              >
+                {a.user_picture ? (
+                  <Image source={{ uri: a.user_picture }} style={styles.avatar} />
+                ) : (
+                  <View style={[styles.avatar, styles.avatarFallback]}>
+                    <Text style={styles.avatarInitial}>{first.charAt(0).toUpperCase()}</Text>
+                  </View>
+                )}
+              </TouchableOpacity>
               <View style={{ flex: 1 }}>
                 <Text style={styles.summary} numberOfLines={2}>
                   <Text style={styles.nameText}>{first}</Text> visited{' '}

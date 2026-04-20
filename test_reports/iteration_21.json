@@ -1,0 +1,46 @@
+{
+  "summary": "Backend: wrote pytest suite (20 tests) covering all 7 new Friends-hub/compare endpoints + 4 negative paths. Result: 20/20 PASSED (1 skipped — admin's only friend has no shared landmarks, so the compare-landmark happy-path could not be exercised on real data). All leaderboard metrics (points|landmarks|destinations|continents) return correctly sorted rows with sequential ranks and is_me flag. shared-places, activity, group-stats (max-4 enforcement), compare-stats, overlap/countries, compare/landmarks all return the expected shape. 403 enforcement on non-friend and 404 on missing landmark both verified. Non-private visit leak verified defensively. Frontend: /friends route loads cleanly unauthenticated (old empty-state shell — Find Friends + My Friends(0) + bottom tab bar), no pageerrors or crashes, just the expected 401 on data fetches. Authenticated web login is still flaky via RN Paper TextInput (same blocker as iteration_20), so the NEW hub layout (Crew carousel, Who's Leading, Shared Places strip, Activity Feed, Group mode) and /compare/[lid]/[fid] page could not be visually exercised end-to-end on web. Component code and backend powering them both verified present + functional.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Web login (/login)",
+        "issue": "Same as iteration_20: RN Paper TextInput doesn't expose a stable native input for Playwright fill, so scripted authenticated UI flows (friends hub, group mode, compare page) could not be executed on web. Not a user-visible bug on native; only affects web E2E harness.",
+        "affected_selectors": ["input[type='email']","input[type='password']"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_friends_hub_iteration21.py",
+    "/app/test_reports/pytest/iteration21.xml"
+  ],
+  "action_items": [
+    "UPDATE /app/memory/test_credentials.md — it says admin user_id is user_2c6cfce45eda and that admin is friends with testpro (user_6ef7ed0c470a). Both are WRONG. Actual admin user_id is user_dd46a314f120, and admin's only accepted friend is user_ff9a3f370f6b (Social Tester). testpro is NOT friends with admin in this env.",
+    "(Optional, improves test coverage) Seed at least one shared landmark visit between admin + Social Tester so the /api/compare/landmarks/{lid}/friends/{fid} happy-path can be regression-tested with real data (currently skipped because zero overlap).",
+    "Main agent should self-verify the new /friends authenticated hub (Crew carousel, Who's Leading pills, Shared Places strip, Activity Feed, Group mode toggle → GroupStatsModal) and /compare/[lid]/[fid] page on native/simulator — web login path is unreliable for automation.",
+    "Add distinct data-testid to Login email & password TextInputs (still shared 'text-input-outlined' in DOM) so future web E2E can authenticate deterministically."
+  ],
+  "critical_code_review_comments": [
+    "friends.py line 3: `from fastapi import Query` is the ONLY explicit fastapi import in this module; everything else (APIRouter, Depends, HTTPException) comes in via `from ._social_common import *`. A previous reload transiently errored NameError: Query not defined — confirm _social_common doesn't accidentally shadow/remove Query in future refactors.",
+    "friends.py _user_stats uses $addToSet on country_name and continent but filters None with `[c for c in stats['continents'] if c]` AFTER aggregation — if a user has visits to landmarks missing country/continent metadata, counts could understate. Consider $match out null in pipeline for determinism.",
+    "/api/friends/group-stats does NOT enforce a lower bound (0 user_ids is allowed and returns just 'me'). That's probably fine but worth documenting; also max=4 means 'max 4 friends' but the request-parsed list can contain the caller's own id (not explicitly rejected), inflating the effective group size to 5.",
+    "/api/compare/landmarks/.../friends/... permission check runs BEFORE landmark existence check, so a non-friend probing for landmarks gets 403 instead of 404 — correct (prevents enumeration leak). Confirm this is intentional (it is, per test_compare_landmark_403_non_friend passing).",
+    "test_credentials.md is stale — points to wrong user_ids. Any test agent that hard-codes those IDs will fail (as this run initially did). Single source of truth should be refreshed from /api/auth/me."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_friends_hub_iteration21.py"
+  ],
+  "success_rate": {
+    "backend": "20/20 executed tests PASSED (100%); 1 skipped due to no shared-landmark seed data",
+    "frontend": "1/1 route loaded cleanly unauthenticated (/friends). Authenticated flows (new hub + compare page) NOT exercised on web due to login harness flakiness"
+  },
+  "test_credentials": "Used /app/memory/test_credentials.md — BUT the user_ids listed there are STALE. Actual values from /api/auth/me: admin=user_dd46a314f120, testpro=user_6ef7ed0c470a, mod=user_d2cee3abc41d. Admin's accepted friend: user_ff9a3f370f6b (Social Tester) — NOT testpro.",
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend for iteration 21 is fully green (20/20). The ONE remaining gap is visual verification of the NEW authenticated Friends hub + /compare/[lid]/[fid] page on web — blocked by the long-standing RN Paper TextInput login-flakiness issue, not by a product bug. To unblock: either (a) add distinct data-testid on /login email+password inputs, or (b) seed a session cookie programmatically, or (c) test on iOS simulator. Also update /app/memory/test_credentials.md: admin user_id is user_dd46a314f120 and admin is friends with Social Tester (user_ff9a3f370f6b), NOT testpro — the file is misleading and caused initial test failures this run. Current reusable pytest regression file: /app/backend/tests/test_friends_hub_iteration21.py (uses an admin_friend_id fixture that auto-discovers admin's first accepted friend so it stays robust across DB changes).",
+  "rca of the issue": "Initial 5/21 test failures were NOT product bugs — they were caused by stale /app/memory/test_credentials.md claiming admin is friends with testpro when in fact admin's only accepted friend is Social Tester. After refactoring fixtures to auto-discover admin's first friend via GET /api/friends (instead of hardcoding testpro_id), all gated tests passed. Mitigation: keep test_credentials.md authoritative by deriving user_ids live from /api/auth/me in fixtures."
+}

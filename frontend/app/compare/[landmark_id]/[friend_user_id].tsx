@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import theme from '../../../styles/theme';
 import { BACKEND_URL } from '../../../utils/config';
 import { getToken } from '../../../utils/token';
@@ -155,7 +155,13 @@ export default function CompareLandmark() {
           )}
           <View style={styles.heroAvatars}>
             {[data.me, data.friend].map((s) => (
-              <View key={s.user_id} style={styles.heroAvatarWrap}>
+              <TouchableOpacity
+                key={s.user_id}
+                style={styles.heroAvatarWrap}
+                activeOpacity={0.8}
+                onPress={() => router.push(`/user-profile/${s.user_id}`)}
+                data-testid={`hero-avatar-${s.user_id}`}
+              >
                 {s.picture ? (
                   <Image source={{ uri: s.picture }} style={styles.heroAvatar} />
                 ) : (
@@ -163,7 +169,7 @@ export default function CompareLandmark() {
                     <Text style={styles.personInitial}>{(s.name || '?').charAt(0).toUpperCase()}</Text>
                   </View>
                 )}
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -249,3 +255,4 @@ const styles = StyleSheet.create({
     marginTop: 10, fontSize: 12, color: theme.colors.textLight, fontStyle: 'italic', textAlign: 'center',
   },
 });
+

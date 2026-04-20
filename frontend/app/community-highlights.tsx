@@ -238,13 +238,12 @@ export default function CommunityHighlightsScreen() {
           </View>
         </View>
 
-        {/* User row — Window Card DNA */}
-        <TouchableOpacity
-          style={styles.userRow}
-          onPress={() => highlight.user_id && router.push(`/user-profile/${highlight.user_id}`)}
-          activeOpacity={0.85}
-          data-testid="highlight-user-row"
-        >
+      <TouchableOpacity
+        style={styles.userRow}
+        onPress={() => highlight.user_id && router.push(`/user-profile/${highlight.user_id}`)}
+        activeOpacity={0.85}
+        data-testid="highlight-user-row"
+      >
           {highlight.user_picture ? (
             <View style={styles.avatarGlowWrap}>
               <Image source={{ uri: highlight.user_picture }} style={styles.userAvatar} />

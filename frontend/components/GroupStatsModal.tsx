@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Portal, Modal } from 'react-native-paper';
+import { useRouter } from 'expo-router';
 import theme from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { getToken } from '../utils/token';
@@ -20,6 +21,7 @@ interface Props {
 
 /** Group stats modal: you + selected friends, combined + per-person stats. */
 export default function GroupStatsModal({ visible, onDismiss, selectedFriendIds }: Props) {
+  const router = useRouter();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -56,7 +58,17 @@ export default function GroupStatsModal({ visible, onDismiss, selectedFriendIds 
           <>
             <View style={styles.avatarRow}>
               {rows.map((r) => (
-                <View key={r.user_id} style={styles.avatarCol}>
+                <TouchableOpacity
+                  key={r.user_id}
+                  style={styles.avatarCol}
+                  activeOpacity={r.is_me ? 1 : 0.7}
+                  onPress={() => {
+                    if (r.is_me) return;
+                    onDismiss();
+                    router.push(`/user-profile/${r.user_id}`);
+                  }}
+                  data-testid={`group-avatar-${r.user_id}`}
+                >
                   {r.picture ? (
                     <Image source={{ uri: r.picture }} style={styles.avatar} />
                   ) : (
@@ -67,7 +79,7 @@ export default function GroupStatsModal({ visible, onDismiss, selectedFriendIds 
                   <Text style={styles.avatarName} numberOfLines={1}>
                     {r.is_me ? 'You' : (r.name || '').split(' ')[0]}
                   </Text>
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
 
