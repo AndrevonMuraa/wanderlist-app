@@ -23,23 +23,47 @@ import {
 const { width } = Dimensions.get('window');
 
 /**
- * Per-country flag scale boost. Some flags (square, unusual ratios) render
- * visually small in a fixed-ratio container with `resizeMode="contain"`.
- * We "cheat" by scaling them up/down to match the optical weight of the
- * standard 2:3 flags — without cropping, since contain stays intact.
+ * Per-country flag aspect ratios (W:H decimal). Only list non-2:3 flags —
+ * all unlisted countries default to 2:3 baseline (scale=1.0, no boost).
  *
- * Conservative defaults: only outliers get boosted. Rule of thumb:
- *   - 1:1 (square): ~1.5×  (Switzerland, Vatican)
- *   - Tall/complex forms: ~1.25×  (Nepal)
- *   - Already-wide 2:3: leave at 1.0
+ * Why this matters: with `resizeMode="contain"` in a fixed container, a
+ * square flag (Switzerland, 1:1) fills ~58% of width vs. a standard 2:3
+ * flag (~86%). To make all flags feel the same "optical weight" without
+ * cropping national symbols, we transform-scale them up.
  */
-const FLAG_SCALE_BOOST: Record<string, number> = {
-  'Switzerland': 1.5,
-  'Vatican City': 1.5,
-  'Nepal': 1.3,
+const FLAG_ASPECT_RATIOS: Record<string, number> = {
+  // Square (1:1) — biggest optical mismatch, needs the most boost
+  'Switzerland': 1.0,
+  'Vatican City': 1.0,
+  // Near-square, narrower than 2:3 (needs mild boost)
+  'Belgium': 1.154,   // 15:13
+  'Monaco': 1.25,     // 5:4
+  // Nordic crosses — all slightly narrower than 2:3
+  'Denmark': 1.321,   // 37:28
+  'Iceland': 1.389,   // 25:18
+  'Norway': 1.375,    // 22:16
+  // Finland and Sweden are essentially 2:3-equivalent (1.6-ish) — no boost
+  // Unique / iconic shapes
+  'Nepal': 1.219,     // unique double-pennant (reverse W:H ~0.82)
+  // Hyper-wide flags fill container width naturally — no boost needed.
+  'United Kingdom': 2.0,   // 2:1
+  'Mongolia': 2.0,         // 2:1
+  'Qatar': 2.545,          // 28:11
 };
-const getFlagScale = (name?: string): number =>
-  (name && FLAG_SCALE_BOOST[name]) || 1;
+
+const BASELINE_W_H = 1.5;           // Most flags are 2:3 = 1.5 W/H
+const CONTAINER_W_H = 1.73;         // Approx container aspect ratio on mobile
+const MAX_SCALE = 1.55;             // Safety cap — no flag balloons beyond this
+const MIN_SCALE = 1.0;              // Never shrink flags; only boost up
+
+/** Derive a scale multiplier from a flag's W:H ratio. */
+function getFlagScale(name?: string): number {
+  const ratio = name ? FLAG_ASPECT_RATIOS[name] : undefined;
+  if (!ratio) return 1.0;                               // Default 2:3 baseline
+  if (ratio >= CONTAINER_W_H) return 1.0;               // Already fills width
+  const derived = BASELINE_W_H / ratio;                  // How much wider 2:3 would be
+  return Math.max(MIN_SCALE, Math.min(MAX_SCALE, derived));
+}
 
 
 // ISO 3166-1 alpha-2 country codes for flag CDN
