@@ -10,6 +10,31 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Database: MongoDB Atlas
 - Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
 
+## Session 17 — April 20, 2026 (Friends overlap / "We've both been here")
+
+### Motivation
+Authentic social moments based on *real* shared experiences — not gamified streaks. "Oh you've been there too!" is the most universal conversation-starter among travelers.
+
+### Backend — 2 new endpoints in `routes/friends.py`
+- `GET /api/users/{user_id}/overlap?limit=12` — intersection of landmarks both the current user and the target have visited. Returns each shared landmark with both users' first photo + visit dates. **Enforces friendship** (403 for non-friends).
+- `GET /api/landmarks/{landmark_id}/friends-visited?limit=6` — which of the current user's friends have visited this specific landmark. Returns friend list (with avatar + name) + total count. Deduplicates if a friend has multiple visits.
+- Both endpoints verified via curl: ✅ self returns shared places, ✅ non-friend gets 403, ✅ no-matches returns `{total:0, items:[]}`.
+
+### Frontend — 2 new components + 2 integrations
+- `components/FriendOverlap.tsx` — Window Card on friend profile: "You've both been here — {total} shared places", with horizontal photo strip (friend's photos, not viewer's, so it feels like discovering THEIR story). Each tile is tappable → jumps to landmark. Silent (returns null) if no overlap. Wired into `/user-profile/[user_id].tsx` — only renders when `friendship_status === 'friends' && !is_own_profile`.
+- `components/FriendsVisitedStrip.tsx` — Compact avatar-stack strip on landmark page: "Anna, Ola and 2 others have been here". Tappable → jumps to the top friend's profile. Silent when no friends match. Wired above Community Photos on `/landmark-detail/[landmark_id].tsx`.
+
+### Design principles applied
+- **Silent when empty** — neither component renders a placeholder when there's nothing to show. Surfaces organically only when there's a real shared moment.
+- **Friend's content, not viewer's** — on overlap tiles we show THE FRIEND's photo (on their profile) so browsing feels like discovering them.
+- **Window Card DNA** — sand border, warm shadow, surfaceTinted pill icons — consistent with the whole V2 design.
+
+### Verified
+- ✅ TypeScript clean
+- ✅ Backend endpoints curl-verified (3 cases)
+- ✅ Landmark page renders (Eiffel Tower smoke screenshot)
+- ✅ FriendsVisitedStrip correctly invisible when empty (avoids noise on pages without matches)
+
 ## Session 16 — April 20, 2026 (Client-side image compression)
 
 ### Motivation

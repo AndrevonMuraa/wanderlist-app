@@ -13,6 +13,7 @@ import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
 import ReportButton from '../../components/ReportButton';
+import FriendOverlap from '../../components/FriendOverlap';
 import { getToken } from '../../utils/token';
 interface UserProfile {
   user_id: string;
@@ -268,6 +269,11 @@ export default function UserProfileScreen() {
             </TouchableOpacity>
             <ReportButton contentType="user" contentId={profile.user_id} size={18} color={theme.colors.textLight} />
           </View>
+        )}
+
+        {/* Friend overlap — "You've both been here" */}
+        {profile.friendship_status === 'friends' && !profile.is_own_profile && (
+          <FriendOverlap friendUserId={profile.user_id} friendName={profile.name} />
         )}
 
         {/* Destinations Explored */}

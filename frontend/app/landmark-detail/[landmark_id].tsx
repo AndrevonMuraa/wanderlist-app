@@ -18,6 +18,7 @@ import theme from '../../styles/theme';
 import UniversalHeader from '../../components/UniversalHeader';
 import { BACKEND_URL } from '../../utils/config';
 import { getToken } from '../../utils/token';
+import FriendsVisitedStrip from '../../components/FriendsVisitedStrip';
 
 const { width } = Dimensions.get('window');
 
@@ -346,6 +347,9 @@ export default function LandmarkDetailScreen() {
             </Surface>
           </View>
         )}
+
+        {/* Friends who have visited this landmark */}
+        <FriendsVisitedStrip landmarkId={landmark.landmark_id} />
 
         {/* Community Photos Section */}
         <View style={styles.section}>

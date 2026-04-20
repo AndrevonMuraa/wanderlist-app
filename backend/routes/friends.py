@@ -550,3 +550,138 @@ async def get_user_activity(
         "skip": skip,
         "limit": limit,
     }
+
+
+# ============= OVERLAP / "WE'VE BOTH BEEN HERE" ENDPOINTS =============
+
+async def _assert_friends_or_self(current_user_id: str, other_user_id: str) -> bool:
+    """Return True if the two users are the same person or accepted friends."""
+    if current_user_id == other_user_id:
+        return True
+    friendship = await db.friends.find_one({
+        "status": "accepted",
+        "$or": [
+            {"user_id": current_user_id, "friend_id": other_user_id},
+            {"user_id": other_user_id, "friend_id": current_user_id},
+        ],
+    })
+    return friendship is not None
+
+
+@router.get("/users/{user_id}/overlap")
+async def get_user_overlap(
+    user_id: str,
+    limit: int = 12,
+    current_user: User = Depends(get_current_user),
+):
+    """Landmarks both the current user and `user_id` have visited.
+
+    Returns a compact list (ordered by the OTHER user's most recent visit) plus
+    a total count. Limited to accepted friends (or the user themselves).
+    """
+    if not await _assert_friends_or_self(current_user.user_id, user_id):
+        raise HTTPException(status_code=403, detail="Only friends can see overlap")
+
+    limit = max(1, min(limit, 50))
+
+    # Intersection of landmark_ids between the two users
+    my_landmarks = set(await db.visits.distinct("landmark_id", {"user_id": current_user.user_id}))
+    their_landmarks = set(await db.visits.distinct("landmark_id", {"user_id": user_id}))
+    shared_ids = list(my_landmarks & their_landmarks)
+
+    if not shared_ids:
+        return {"total": 0, "items": []}
+
+    # For each shared landmark, get THEIR most recent visit + the other user's photo
+    their_visits = await db.visits.find(
+        {"user_id": user_id, "landmark_id": {"$in": shared_ids}},
+        {"_id": 0, "landmark_id": 1, "landmark_name": 1, "visited_at": 1,
+         "photos": {"$slice": 1}, "country_name": 1}
+    ).sort("visited_at", -1).to_list(len(shared_ids))
+
+    # Current user's own visits to the same landmarks
+    my_visits_raw = await db.visits.find(
+        {"user_id": current_user.user_id, "landmark_id": {"$in": shared_ids}},
+        {"_id": 0, "landmark_id": 1, "visited_at": 1, "photos": {"$slice": 1}}
+    ).to_list(len(shared_ids))
+    my_visits = {v["landmark_id"]: v for v in my_visits_raw}
+
+    items = []
+    for v in their_visits[:limit]:
+        lid = v["landmark_id"]
+        mine = my_visits.get(lid, {})
+        items.append({
+            "landmark_id": lid,
+            "landmark_name": v.get("landmark_name"),
+            "country_name": v.get("country_name"),
+            "their_photo_url": v["photos"][0] if v.get("photos") else None,
+            "their_visited_at": v.get("visited_at"),
+            "my_photo_url": mine["photos"][0] if mine.get("photos") else None,
+            "my_visited_at": mine.get("visited_at"),
+        })
+
+    return {"total": len(shared_ids), "items": items}
+
+
+@router.get("/landmarks/{landmark_id}/friends-visited")
+async def get_friends_who_visited_landmark(
+    landmark_id: str,
+    limit: int = 6,
+    current_user: User = Depends(get_current_user),
+):
+    """Friends of the current user who have also visited this landmark.
+
+    Powers the "Anna and Ola were also here" strip on a landmark page.
+    """
+    limit = max(1, min(limit, 20))
+
+    friendships = await db.friends.find({
+        "status": "accepted",
+        "$or": [
+            {"user_id": current_user.user_id},
+            {"friend_id": current_user.user_id},
+        ],
+    }, {"_id": 0, "user_id": 1, "friend_id": 1}).to_list(2000)
+
+    friend_ids = [
+        (f["friend_id"] if f["user_id"] == current_user.user_id else f["user_id"])
+        for f in friendships
+    ]
+    if not friend_ids:
+        return {"total": 0, "friends": []}
+
+    visited = await db.visits.find(
+        {"user_id": {"$in": friend_ids}, "landmark_id": landmark_id},
+        {"_id": 0, "user_id": 1, "visited_at": 1, "photos": {"$slice": 1}}
+    ).sort("visited_at", -1).to_list(1000)
+
+    # Deduplicate: most recent visit per friend
+    seen = set()
+    ordered = []
+    for v in visited:
+        if v["user_id"] in seen:
+            continue
+        seen.add(v["user_id"])
+        ordered.append(v)
+
+    users = {}
+    if ordered:
+        for u in await db.users.find(
+            {"user_id": {"$in": [v["user_id"] for v in ordered]}},
+            {"_id": 0, "user_id": 1, "name": 1, "username": 1, "picture": 1},
+        ).to_list(len(ordered)):
+            users[u["user_id"]] = u
+
+    friends_list = []
+    for v in ordered[:limit]:
+        u = users.get(v["user_id"], {})
+        friends_list.append({
+            "user_id": v["user_id"],
+            "name": u.get("name"),
+            "username": u.get("username"),
+            "picture": u.get("picture"),
+            "visited_at": v.get("visited_at"),
+            "photo_url": v["photos"][0] if v.get("photos") else None,
+        })
+
+    return {"total": len(ordered), "friends": friends_list}
