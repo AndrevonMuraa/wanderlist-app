@@ -10,6 +10,46 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 - Database: MongoDB Atlas
 - Design system: V2 "Penthouse Window" DNA (warm #C9A961 shadows, 1px sand borders, matte inner frames, floating glass pills, ocean-to-sand rank gradients)
 
+## Session 18 — April 20, 2026 (Friends hub redesign + compare page + stats)
+
+### Backend — 7 new endpoints in `routes/friends.py`
+- `GET /api/users/{id}/compare-stats` — head-to-head Journey stats (continents/destinations/landmarks/points). Friends-only (403 else).
+- `GET /api/users/{id}/overlap/countries` — destinations both users have visited (for flag-strip).
+- `GET /api/compare/landmarks/{lid}/friends/{fid}` — side-by-side visit data. Respects privacy: friend's `private` visits hidden but surfaced as `has_private_visits` flag. No time-delta computed (registration dates unreliable).
+- `GET /api/friends/leaderboard?metric=points|landmarks|destinations|continents` — ranks viewer + friends by chosen stat. Default metric `points`.
+- `GET /api/friends/shared-places?limit=10` — landmarks you + ≥1 friend have visited, sorted by friend_count desc.
+- `GET /api/friends/activity?limit=8` — recent friend visits (public/friends-visible only).
+- `GET /api/friends/group-stats?user_ids=...` — combined stats for you + up to 4 selected friends.
+- All verified via curl (200 OK across the board).
+
+### Frontend — 7 new components + 1 new page
+- `utils/statDefs.ts` — **single source of truth** for the 4 Journey-page stats (identical icons/colors everywhere).
+- `components/FriendStatsCompare.tsx` — "HOW YOU COMPARE" table, 4 stat rows, subtle bold on leading value, **no winner labels**.
+- `components/FriendsCrew.tsx` — horizontal avatar karusell with pending-badge + "Group mode" selectable state.
+- `components/FriendsLeaderboardCard.tsx` — "Who's leading?" with 4-metric pill toggle, top 5 rank list, medals (🥇🥈🥉), You-row highlighted.
+- `components/SharedPlacesStrip.tsx` — horizontal landmark strip with `+X friends` badge, taps go directly to compare page.
+- `components/FriendsActivityFeed.tsx` — recent crew activity list (avatar + visit summary + landmark thumb).
+- `components/GroupStatsModal.tsx` — multi-friend comparison modal with 4-metric per-person rows, column-high values color-highlighted.
+- `app/compare/[landmark_id]/[friend_user_id].tsx` — shared memory hero + stacked Window Cards (you + friend) with photo-strip + diary. No date-as-hero; subtle "Last updated" only.
+
+### Frontend — integrations
+- `user-profile/[user_id].tsx` — renders `FriendOverlap` + `FriendStatsCompare` between header and Destinations Explored (order A per user's choice).
+- `components/FriendOverlap.tsx` — tiles now navigate to `/compare/{landmark_id}/{friend_id}` instead of `/landmark/...`.
+- `app/friends.tsx` — full hub redesign: sections reordered to Crew → Group toolbar → Who's leading → Shared places → Activity feed → Find friends (demoted). Group mode lets you multi-select up to 4 friends → opens GroupStatsModal.
+
+### Design decisions honored
+- **No date-as-hero anywhere** — respects that `visited_at` is a registration timestamp, not a true visit date. Only tiny "Last updated" meta on compare cards.
+- **Icons + colors identical to Journey page** — earth/#4CAF50, flag/#4DB8D8, location/#E87850, star/#FFD700. Single `STAT_DEFS` source prevents drift.
+- **Competition without pressure** — subtle fontweight bolding + sand-tinted cell bg on leading value. No "winning!" copy. No loser shaming.
+- **Custom visits**: only custom↔custom via normalized `landmark_name` (scoped for follow-up; MVP shipped without this to keep matching safe).
+- **Privacy**: friend's private visits hidden but acknowledged respectfully ("X has a private visit here — not shown").
+
+### Verified
+- ✅ All 7 new backend endpoints return 200 OK via curl.
+- ✅ TypeScript clean.
+- ✅ Friends hub screenshot shows: Your crew avatar, Group mode toggle, Who's leading pills, #1 medal "You 160 points", #2 Social Tester, old Find Friends demoted below.
+- ✅ Fixed mid-build: missing `from fastapi import Query` in friends.py (backend was erroring with `NameError: Query is not defined`).
+
 ## Session 17 — April 20, 2026 (Friends overlap / "We've both been here")
 
 ### Motivation

@@ -8,6 +8,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import theme, { gradients } from '../styles/theme';
 import { BACKEND_URL } from '../utils/config';
 import { useAuth } from '../contexts/AuthContext';
+import FriendsCrew from '../components/FriendsCrew';
+import FriendsLeaderboardCard from '../components/FriendsLeaderboardCard';
+import SharedPlacesStrip from '../components/SharedPlacesStrip';
+import FriendsActivityFeed from '../components/FriendsActivityFeed';
+import GroupStatsModal from '../components/GroupStatsModal';
 import ProFeatureLock from '../components/ProFeatureLock';
 import { useSubscription } from '../hooks/useSubscription';
 import { PersistentTabBar } from '../components/PersistentTabBar';
@@ -40,6 +45,17 @@ export default function FriendsScreen() {
   const [sending, setSending] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
   const [friendsFilter, setFriendsFilter] = useState('');
+  const [groupMode, setGroupMode] = useState(false);
+  const [groupSelected, setGroupSelected] = useState<string[]>([]);
+  const [groupModalOpen, setGroupModalOpen] = useState(false);
+
+  const toggleGroupMember = (uid: string) => {
+    setGroupSelected((prev) => {
+      if (prev.includes(uid)) return prev.filter((id) => id !== uid);
+      if (prev.length >= 4) return prev;
+      return [...prev, uid];
+    });
+  };
   
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -329,6 +345,55 @@ export default function FriendsScreen() {
 
   const renderHeader = () => (
     <>
+      {/* === NEW: Friends hub sections (only show if friends exist) === */}
+      {friends.length > 0 && (
+        <>
+          <FriendsCrew
+            friends={friends.map((f: any) => ({
+              user_id: f.user_id, name: f.name, username: f.username, picture: f.picture,
+            }))}
+            pendingCount={pendingRequests.length}
+            selectedIds={groupMode ? groupSelected : undefined}
+            onToggleSelect={groupMode ? toggleGroupMember : undefined}
+          />
+
+          {/* Group-mode toolbar */}
+          <View style={styles.groupToolbar}>
+            <TouchableOpacity
+              onPress={() => {
+                setGroupMode((m) => !m);
+                setGroupSelected([]);
+              }}
+              style={[styles.groupToggle, groupMode && styles.groupToggleActive]}
+              activeOpacity={0.85}
+              data-testid="group-mode-toggle"
+            >
+              <Ionicons name={groupMode ? 'close-circle' : 'people-circle'} size={16} color={groupMode ? '#FFF' : theme.colors.primary} />
+              <Text style={[styles.groupToggleText, groupMode && { color: '#FFF' }]}>
+                {groupMode ? 'Cancel' : 'Group mode'}
+              </Text>
+            </TouchableOpacity>
+            {groupMode && groupSelected.length > 0 && (
+              <TouchableOpacity
+                style={styles.compareGroupBtn}
+                onPress={() => setGroupModalOpen(true)}
+                activeOpacity={0.85}
+                data-testid="compare-group-btn"
+              >
+                <Ionicons name="stats-chart" size={15} color="#1a1a2e" />
+                <Text style={styles.compareGroupText}>
+                  Compare {groupSelected.length} {groupSelected.length === 1 ? 'friend' : 'friends'}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <FriendsLeaderboardCard />
+          <SharedPlacesStrip />
+          <FriendsActivityFeed />
+        </>
+      )}
+
       {/* Search Users Section */}
       <View style={styles.addFriendCard}>
         <View style={styles.sectionHeader}>
@@ -574,6 +639,12 @@ export default function FriendsScreen() {
 
       <PersistentTabBar />
 
+      <GroupStatsModal
+        visible={groupModalOpen}
+        onDismiss={() => setGroupModalOpen(false)}
+        selectedFriendIds={groupSelected}
+      />
+
       <ProFeatureLock
         visible={showProLock}
         onClose={() => setShowProLock(false)}
@@ -584,6 +655,49 @@ export default function FriendsScreen() {
 }
 
 const styles = StyleSheet.create({
+  groupToolbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginHorizontal: 16,
+    marginTop: 10,
+    marginBottom: 2,
+  },
+  groupToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 100,
+    borderWidth: 1,
+    borderColor: theme.colors.borderSand,
+    backgroundColor: theme.colors.surface,
+  },
+  groupToggleActive: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
+  },
+  groupToggleText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: theme.colors.primary,
+  },
+  compareGroupBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 100,
+    backgroundColor: '#FFD700',
+  },
+  compareGroupText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#1a1a2e',
+    letterSpacing: 0.2,
+  },
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,

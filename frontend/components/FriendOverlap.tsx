@@ -88,7 +88,7 @@ export default function FriendOverlap({ friendUserId, friendName }: FriendOverla
           <TouchableOpacity
             key={it.landmark_id}
             style={styles.tile}
-            onPress={() => router.push(`/landmark/${it.landmark_id}`)}
+            onPress={() => router.push(`/compare/${it.landmark_id}/${friendUserId}`)}
             activeOpacity={0.85}
             data-testid={`overlap-${it.landmark_id}`}
           >

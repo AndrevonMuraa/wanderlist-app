@@ -1,5 +1,5 @@
 """Shared imports and utilities for social module routes."""
-from fastapi import APIRouter, HTTPException, Depends, Request
+from fastapi import APIRouter, HTTPException, Depends, Request, Query
 from typing import List
 import asyncio
 import os

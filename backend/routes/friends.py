@@ -1,5 +1,6 @@
 """Friends, user search, and user profile endpoints."""
 from ._social_common import *
+from fastapi import Query
 
 router = APIRouter()
 
@@ -685,3 +686,318 @@ async def get_friends_who_visited_landmark(
         })
 
     return {"total": len(ordered), "friends": friends_list}
+
+
+# ============= COMPARE / STATS / HUB ENDPOINTS =============
+
+def _normalize_name(s: str) -> str:
+    return (s or "").strip().lower()
+
+
+async def _friend_ids(user_id: str) -> list:
+    """IDs of accepted friends for a user."""
+    friendships = await db.friends.find(
+        {"status": "accepted", "$or": [{"user_id": user_id}, {"friend_id": user_id}]},
+        {"_id": 0, "user_id": 1, "friend_id": 1},
+    ).to_list(2000)
+    return [
+        (f["friend_id"] if f["user_id"] == user_id else f["user_id"])
+        for f in friendships
+    ]
+
+
+async def _user_stats(user_id: str) -> dict:
+    """Compute the 4 Journey-page stats for a single user."""
+    agg = await db.visits.aggregate([
+        {"$match": {"user_id": user_id}},
+        {"$lookup": {
+            "from": "landmarks", "localField": "landmark_id", "foreignField": "landmark_id",
+            "as": "lm", "pipeline": [{"$project": {"_id": 0, "country_name": 1, "continent": 1}}],
+        }},
+        {"$unwind": {"path": "$lm", "preserveNullAndEmptyArrays": True}},
+        {"$group": {
+            "_id": None,
+            "landmarks": {"$sum": 1},
+            "countries": {"$addToSet": "$lm.country_name"},
+            "continents": {"$addToSet": "$lm.continent"},
+        }},
+    ]).to_list(1)
+    stats = agg[0] if agg else {"landmarks": 0, "countries": [], "continents": []}
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0, "leaderboard_points": 1, "points": 1})
+    return {
+        "continents": len([c for c in stats["continents"] if c]),
+        "destinations": len([c for c in stats["countries"] if c]),
+        "landmarks": stats["landmarks"],
+        "points": (user or {}).get("leaderboard_points") or (user or {}).get("points", 0),
+    }
+
+
+@router.get("/users/{user_id}/compare-stats")
+async def get_compare_stats(
+    user_id: str,
+    current_user: User = Depends(get_current_user),
+):
+    """Head-to-head Journey stats: continents / destinations / landmarks / points."""
+    if not await _assert_friends_or_self(current_user.user_id, user_id):
+        raise HTTPException(status_code=403, detail="Only friends can see compare stats")
+    me = await _user_stats(current_user.user_id)
+    friend = await _user_stats(user_id)
+    return {"me": me, "friend": friend}
+
+
+@router.get("/users/{user_id}/overlap/countries")
+async def get_country_overlap(
+    user_id: str,
+    current_user: User = Depends(get_current_user),
+):
+    """Destinations (countries) both users have visited — powers the flag strip."""
+    if not await _assert_friends_or_self(current_user.user_id, user_id):
+        raise HTTPException(status_code=403, detail="Only friends can see country overlap")
+    mine = set(await db.country_visits.distinct("country_name", {"user_id": current_user.user_id}))
+    theirs = set(await db.country_visits.distinct("country_name", {"user_id": user_id}))
+    shared = sorted([c for c in (mine & theirs) if c])
+    return {"total": len(shared), "countries": shared}
+
+
+@router.get("/compare/landmarks/{landmark_id}/friends/{friend_user_id}")
+async def compare_landmark_with_friend(
+    landmark_id: str,
+    friend_user_id: str,
+    current_user: User = Depends(get_current_user),
+):
+    """Side-by-side compare of both users' visits to this landmark.
+
+    Friend's `private` visits are hidden but surfaced as `has_private_visits`.
+    No time-delta computed — `visited_at` is registration timestamp only.
+    """
+    if not await _assert_friends_or_self(current_user.user_id, friend_user_id):
+        raise HTTPException(status_code=403, detail="Only friends can compare")
+
+    landmark = await db.landmarks.find_one({"landmark_id": landmark_id}, {"_id": 0})
+    if not landmark:
+        raise HTTPException(status_code=404, detail="Landmark not found")
+
+    async def _visits_for(uid: str, include_private: bool):
+        filt = {"user_id": uid, "landmark_id": landmark_id}
+        if not include_private:
+            filt["visibility"] = {"$in": ["public", "friends"]}
+        visits = await db.visits.find(
+            filt,
+            {"_id": 0, "visit_id": 1, "visited_at": 1, "updated_at": 1,
+             "photos": {"$slice": 3}, "diary_notes": 1, "visibility": 1},
+        ).sort("updated_at", -1).to_list(3)
+        return visits
+
+    me_visits = await _visits_for(current_user.user_id, include_private=True)
+    friend_visits = await _visits_for(friend_user_id, include_private=False)
+
+    friend_private_count = await db.visits.count_documents({
+        "user_id": friend_user_id, "landmark_id": landmark_id, "visibility": "private"
+    })
+
+    async def _user_stub(uid: str):
+        u = await db.users.find_one(
+            {"user_id": uid}, {"_id": 0, "user_id": 1, "name": 1, "username": 1, "picture": 1},
+        ) or {}
+        return u
+
+    me_user = await _user_stub(current_user.user_id)
+    friend_user = await _user_stub(friend_user_id)
+
+    return {
+        "landmark": {
+            "landmark_id": landmark["landmark_id"],
+            "name": landmark.get("name"),
+            "country_name": landmark.get("country_name"),
+            "continent": landmark.get("continent"),
+            "description": landmark.get("description"),
+        },
+        "me": {
+            **me_user,
+            "visits": me_visits,
+            "photo_count": sum(len(v.get("photos") or []) for v in me_visits),
+        },
+        "friend": {
+            **friend_user,
+            "visits": friend_visits,
+            "photo_count": sum(len(v.get("photos") or []) for v in friend_visits),
+            "has_private_visits": friend_private_count > 0,
+        },
+    }
+
+
+# ============= FRIENDS HUB ENDPOINTS =============
+
+@router.get("/friends/leaderboard")
+async def friends_leaderboard(
+    metric: str = Query("points", regex="^(points|landmarks|destinations|continents)$"),
+    current_user: User = Depends(get_current_user),
+):
+    """Ranked list of the current user + all friends by the given metric.
+    Powers the "Who's leading?" card on the Friends hub."""
+    friend_ids = await _friend_ids(current_user.user_id)
+    all_ids = [current_user.user_id] + friend_ids
+
+    rows = []
+    users = {}
+    if all_ids:
+        for u in await db.users.find(
+            {"user_id": {"$in": all_ids}},
+            {"_id": 0, "user_id": 1, "name": 1, "username": 1, "picture": 1},
+        ).to_list(len(all_ids)):
+            users[u["user_id"]] = u
+
+    for uid in all_ids:
+        stats = await _user_stats(uid)
+        u = users.get(uid, {})
+        rows.append({
+            "user_id": uid,
+            "name": u.get("name"),
+            "username": u.get("username"),
+            "picture": u.get("picture"),
+            "is_me": uid == current_user.user_id,
+            "value": stats.get(metric, 0),
+        })
+
+    rows.sort(key=lambda r: r["value"], reverse=True)
+    for idx, r in enumerate(rows):
+        r["rank"] = idx + 1
+    return {"metric": metric, "rows": rows[:10]}
+
+
+@router.get("/friends/shared-places")
+async def friends_shared_places(
+    limit: int = 10,
+    current_user: User = Depends(get_current_user),
+):
+    """Landmarks the current user + at least one friend have visited.
+    Sorted by most friends overlapping first."""
+    limit = max(1, min(limit, 30))
+    friend_ids = await _friend_ids(current_user.user_id)
+    if not friend_ids:
+        return {"items": []}
+
+    my_landmarks = set(await db.visits.distinct("landmark_id", {"user_id": current_user.user_id}))
+    if not my_landmarks:
+        return {"items": []}
+
+    agg = await db.visits.aggregate([
+        {"$match": {
+            "user_id": {"$in": friend_ids},
+            "landmark_id": {"$in": list(my_landmarks)},
+            "visibility": {"$in": ["public", "friends"]},
+        }},
+        {"$group": {
+            "_id": "$landmark_id",
+            "friend_ids": {"$addToSet": "$user_id"},
+            "any_photo": {"$first": "$photos"},
+            "landmark_name": {"$first": "$landmark_name"},
+            "country_name": {"$first": "$country_name"},
+        }},
+        {"$addFields": {"friend_count": {"$size": "$friend_ids"}}},
+        {"$sort": {"friend_count": -1}},
+        {"$limit": limit},
+    ]).to_list(limit)
+
+    # Enrich with friend sample info
+    all_sample_ids = list({fid for row in agg for fid in row.get("friend_ids", [])[:3]})
+    users = {}
+    if all_sample_ids:
+        for u in await db.users.find(
+            {"user_id": {"$in": all_sample_ids}},
+            {"_id": 0, "user_id": 1, "name": 1, "picture": 1},
+        ).to_list(len(all_sample_ids)):
+            users[u["user_id"]] = u
+
+    items = []
+    for row in agg:
+        sample = [users.get(fid, {"user_id": fid}) for fid in (row.get("friend_ids") or [])[:3]]
+        photo = (row.get("any_photo") or [None])[0]
+        items.append({
+            "landmark_id": row["_id"],
+            "landmark_name": row.get("landmark_name"),
+            "country_name": row.get("country_name"),
+            "photo_url": photo,
+            "friend_count": row["friend_count"],
+            "friend_sample": sample,
+        })
+    return {"items": items}
+
+
+@router.get("/friends/activity")
+async def friends_activity(
+    limit: int = 8,
+    current_user: User = Depends(get_current_user),
+):
+    """Recent visits + photo uploads from your friends. Powers the activity
+    strip on the Friends hub."""
+    limit = max(1, min(limit, 20))
+    friend_ids = await _friend_ids(current_user.user_id)
+    if not friend_ids:
+        return {"items": []}
+
+    visits = await db.visits.find(
+        {
+            "user_id": {"$in": friend_ids},
+            "visibility": {"$in": ["public", "friends"]},
+        },
+        {"_id": 0, "user_id": 1, "visit_id": 1, "landmark_id": 1, "landmark_name": 1,
+         "country_name": 1, "updated_at": 1, "visited_at": 1, "photos": {"$slice": 1}},
+    ).sort("updated_at", -1).limit(limit).to_list(limit)
+
+    user_ids = list({v["user_id"] for v in visits})
+    users = {}
+    if user_ids:
+        for u in await db.users.find(
+            {"user_id": {"$in": user_ids}},
+            {"_id": 0, "user_id": 1, "name": 1, "username": 1, "picture": 1},
+        ).to_list(len(user_ids)):
+            users[u["user_id"]] = u
+
+    items = []
+    for v in visits:
+        u = users.get(v["user_id"], {})
+        items.append({
+            "visit_id": v.get("visit_id"),
+            "landmark_id": v.get("landmark_id"),
+            "landmark_name": v.get("landmark_name"),
+            "country_name": v.get("country_name"),
+            "photo_url": (v.get("photos") or [None])[0],
+            "updated_at": v.get("updated_at") or v.get("visited_at"),
+            "user_id": v["user_id"],
+            "user_name": u.get("name"),
+            "user_username": u.get("username"),
+            "user_picture": u.get("picture"),
+        })
+    return {"items": items}
+
+
+@router.get("/friends/group-stats")
+async def friends_group_stats(
+    user_ids: str = Query(..., description="Comma-separated friend user IDs"),
+    current_user: User = Depends(get_current_user),
+):
+    """Combined stats for a selected group (you + selected friends).
+    Powers the basic "Group mode" overlay."""
+    selected_ids = [u.strip() for u in (user_ids or "").split(",") if u.strip()]
+    if len(selected_ids) > 4:
+        raise HTTPException(status_code=400, detail="Max 4 friends in a group")
+    for uid in selected_ids:
+        if not await _assert_friends_or_self(current_user.user_id, uid):
+            raise HTTPException(status_code=403, detail="Only accepted friends allowed")
+
+    all_ids = [current_user.user_id] + selected_ids
+    rows = []
+    users_map = {u["user_id"]: u for u in await db.users.find(
+        {"user_id": {"$in": all_ids}},
+        {"_id": 0, "user_id": 1, "name": 1, "username": 1, "picture": 1},
+    ).to_list(len(all_ids))}
+    for uid in all_ids:
+        stats = await _user_stats(uid)
+        u = users_map.get(uid, {})
+        rows.append({
+            "user_id": uid, "name": u.get("name"), "username": u.get("username"),
+            "picture": u.get("picture"), "is_me": uid == current_user.user_id,
+            **stats,
+        })
+    return {"rows": rows}
