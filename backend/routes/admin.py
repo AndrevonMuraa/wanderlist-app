@@ -8,6 +8,7 @@ from datetime import datetime, timezone, timedelta
 from utils.db import db
 from utils.auth import get_admin_user, get_super_admin_user
 from utils.helpers import create_notification
+from utils.sentry import IMAGE_NORM_COUNTERS
 from models.all import User, AdminUserUpdate, AdminReportUpdate, AdminNotificationRequest
 
 
@@ -66,6 +67,30 @@ async def get_admin_stats(admin_user: User = Depends(get_admin_user)):
             "landmarks": total_landmarks,
             "countries": total_countries
         }
+    }
+
+
+@router.get("/admin/image-normalization-stats")
+async def get_image_normalization_stats(admin_user: User = Depends(get_admin_user)):
+    """Observability for server-side image defense-in-depth (P5).
+
+    Returns cumulative counters since the current process started. Use the
+    ratio between `auto_resized` + `rejected` vs. total uploads as an
+    early-warning signal:
+    - High `auto_resized` → client-side compression failing / being bypassed
+    - Non-zero `rejected` → users hitting the 5 MB hard ceiling (investigate)
+    NOTE: counters reset on backend restart. For long-term trends, rely on
+    the Sentry events / breadcrumbs emitted by the same code path.
+    """
+    return {
+        "counters": dict(IMAGE_NORM_COUNTERS),
+        "thresholds": {
+            "auto_resize_above_mb": 2,
+            "reject_above_mb": 5,
+            "target_dimension_px": 1600,
+            "jpeg_quality": 70,
+        },
+        "note": "Counters reset on backend restart. Sentry breadcrumbs + warnings provide the authoritative long-term record.",
     }
 
 @router.get("/admin/users")

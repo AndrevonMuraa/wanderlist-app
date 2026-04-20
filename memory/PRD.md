@@ -17,16 +17,19 @@ WanderMark is a gamified travel app where users visit landmarks, earn points, co
 
 ## Session 19 — April 20, 2026 (ShareComparisonCard + backend refactor + test hygiene + server-side image defense)
 
-### Feature: P5 — Server-side image compression / hard 5 MB ceiling (defense-in-depth)
+### Feature: P5 — Server-side image compression / hard 5 MB ceiling (defense-in-depth) + observability
 - **NEW** `/app/backend/utils/image_validate.py` — single entry point `normalize_photo` / `normalize_photos` implementing the hybrid strategy chosen by user:
   - `< 2 MB` decoded bytes → pass through unchanged (fast path, since client already targets 1600px/q70)
   - `2–5 MB` → re-encode via Pillow to max 1600px JPEG q70 (honours EXIF rotation, flattens RGBA on white, LANCZOS downscale)
   - `> 5 MB` → `HTTPException(413, "Image too large")`
   - Invalid base64 / non-image → `HTTPException(400, "Invalid image")`
 - Wired into **all 6 upload surfaces**: `POST/PUT /api/visits` (photos + photo_base64), `POST/PUT /api/country-visits`, `POST/PUT /api/user-created-visits` (general photos + landmark photos), `PUT /api/auth/profile` (picture + banner_image), `POST /api/messages` (image_base64), `POST /api/bug-reports` (screenshots[]).
-- **Testing**: 12 unit tests (11 pass + 1 platform-dependent PNG skip) in `test_image_validate.py` + 23 live E2E tests in `test_image_validate_live_endpoints_iteration24.py` covering every endpoint × every branch. E2E verified real 7.9 MB → 413, 4 MB → 200 auto-resized to 1.15 MB (28% of original), small → unchanged.
-- **Collateral fix**: `testpro@wandermark.app` seed had `subscription_tier='free'` despite the "pro" name. Patched to `pro` + `active` so pro-gated flows (messaging, user-created visits) can be tested with that account.
-- **Collateral fix**: removed a stray `deleted_count}` line at end of `routes/auth.py` that caused a `SyntaxError` during one of the edits.
+- **Observability** (added in second pass):
+  - `utils/sentry.py` exposes `track_image_auto_resized()` (breadcrumb only, low-signal) and `track_image_rejected()` (breadcrumb + `capture_message(level="warning")`, shows up in Sentry issue stream). Both guarded by `try/except` so observability never breaks a real request.
+  - `IMAGE_NORM_COUNTERS` — in-memory dict `{auto_resized, rejected}` incremented on every event. Resets on process restart (Sentry owns the long-term record).
+  - **NEW** `GET /api/admin/image-normalization-stats` — admin-only endpoint returning `{counters, thresholds, note}`. Early-warning dashboard for client-side compression regressions.
+- **Testing**: 12 unit tests (11 pass + 1 platform-dependent PNG skip) + 23 live E2E tests across every endpoint × branch + 6 new observability tests. E2E verified: 7.9 MB → 413, 4 MB → 200 auto-resized to 1.15 MB (28% of original), counter increments survive real HTTP roundtrip.
+- **Collateral fixes**: Patched `testpro` seed `subscription_tier` from 'free' → 'pro'. Fixed stray `deleted_count}` syntax error at end of `routes/auth.py`. Upgraded one `sentry_sdk.push_scope()` → `new_scope()` to match Sentry 2.x API.
 
 ### Test hygiene: Happy-path compare-landmark tests no longer skip (P3 follow-up)
 

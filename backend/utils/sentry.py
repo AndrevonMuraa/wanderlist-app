@@ -87,3 +87,57 @@ def set_sentry_user(user_id: str, email: str | None = None, username: str | None
 def clear_sentry_user() -> None:
     """Clear user context (e.g. on logout)."""
     sentry_sdk.set_user(None)
+
+
+# ---------- Image-normalization observability ----------
+# Tracks how often server-side defense-in-depth fires. A high "auto_resized"
+# count means client-side compression is failing or being bypassed (potential
+# UX regression). A non-zero "rejected" count means 413 responses are being
+# returned — worth investigating per-user.
+IMAGE_NORM_COUNTERS = {
+    "auto_resized": 0,  # 2-5 MB → Pillow re-compress
+    "rejected": 0,      # > 5 MB → HTTP 413
+}
+
+
+def track_image_auto_resized(before_bytes: int, after_bytes: int) -> None:
+    """Fires when the server had to re-compress a >2MB image. Low-signal →
+    Sentry breadcrumb + counter only (no capture_message)."""
+    IMAGE_NORM_COUNTERS["auto_resized"] += 1
+    try:
+        sentry_sdk.add_breadcrumb(
+            category="image.normalize",
+            level="info",
+            message="Server-side auto-resize triggered",
+            data={
+                "before_kb": before_bytes // 1024,
+                "after_kb": after_bytes // 1024,
+                "saved_pct": round(100 * (before_bytes - after_bytes) / max(before_bytes, 1)),
+            },
+        )
+    except Exception:
+        # Never let observability break a real request
+        pass
+
+
+def track_image_rejected(size_bytes: int, limit_bytes: int) -> None:
+    """Fires on every 413. Higher signal → captures a warning so it surfaces
+    in the Sentry issue stream (rate-limited automatically by Sentry)."""
+    IMAGE_NORM_COUNTERS["rejected"] += 1
+    try:
+        sentry_sdk.add_breadcrumb(
+            category="image.normalize",
+            level="warning",
+            message="Image rejected (> hard limit)",
+            data={"size_kb": size_bytes // 1024, "limit_kb": limit_bytes // 1024},
+        )
+        with sentry_sdk.new_scope() as scope:
+            scope.set_tag("image_normalize", "rejected")
+            scope.set_extra("size_kb", size_bytes // 1024)
+            scope.set_extra("limit_kb", limit_bytes // 1024)
+            sentry_sdk.capture_message(
+                f"Oversized image rejected ({size_bytes // 1024} KB > {limit_bytes // 1024} KB)",
+                level="warning",
+            )
+    except Exception:
+        pass

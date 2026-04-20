@@ -17,6 +17,14 @@ from typing import Optional
 from fastapi import HTTPException
 from PIL import Image, ImageOps
 
+try:
+    # Observability is optional — module must still import if sentry helpers
+    # are missing during local dev.
+    from utils.sentry import track_image_auto_resized, track_image_rejected
+except Exception:  # pragma: no cover
+    def track_image_auto_resized(*args, **kwargs): pass
+    def track_image_rejected(*args, **kwargs): pass
+
 
 # ---- Tunables ----------------------------------------------------------------
 HARD_LIMIT_BYTES = 5 * 1024 * 1024            # 5 MB decoded → reject
@@ -87,6 +95,7 @@ def normalize_photo(value: Optional[str]) -> Optional[str]:
     size = len(raw)
 
     if size > HARD_LIMIT_BYTES:
+        track_image_rejected(size, HARD_LIMIT_BYTES)
         raise HTTPException(
             status_code=413,
             detail=f"Image too large ({size // 1024} KB). Max is {HARD_LIMIT_BYTES // (1024*1024)} MB.",
@@ -95,7 +104,11 @@ def normalize_photo(value: Optional[str]) -> Optional[str]:
         # Fast path: client already compressed sufficiently
         return value
     # 2–5 MB: re-compress server-side
-    return _recompress(raw)
+    recompressed = _recompress(raw)
+    # Approximate post-size from the base64 payload
+    after_bytes = len(recompressed) * 3 // 4
+    track_image_auto_resized(size, after_bytes)
+    return recompressed
 
 
 def normalize_photos(values):
