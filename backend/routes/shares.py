@@ -30,7 +30,7 @@ async def record_share(
     current_user: User = Depends(get_current_user),
 ):
     """Log a share event. Fire-and-forget from the client; never blocks UX."""
-    allowed_types = {"top_month", "top_all", "journey", "rank", "visit"}
+    allowed_types = {"top_month", "top_all", "journey", "rank", "visit", "compare"}
     if payload.share_type not in allowed_types:
         raise HTTPException(status_code=400, detail=f"Invalid share_type. Allowed: {sorted(allowed_types)}")
 

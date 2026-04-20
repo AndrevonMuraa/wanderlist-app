@@ -6,6 +6,7 @@ import theme from '../../../styles/theme';
 import { BACKEND_URL } from '../../../utils/config';
 import { getToken } from '../../../utils/token';
 import UniversalHeader from '../../../components/UniversalHeader';
+import ShareComparisonCard from '../../../components/ShareComparisonCard';
 
 interface Visit {
   visit_id: string; photos?: string[]; diary_notes?: string;
@@ -96,9 +97,11 @@ function PersonCard({ side, isMe, accentColor }: { side: Side; isMe: boolean; ac
 
 export default function CompareLandmark() {
   const { landmark_id, friend_user_id } = useLocalSearchParams<{ landmark_id: string; friend_user_id: string }>();
+  const router = useRouter();
   const [data, setData] = useState<Data | null>(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -139,7 +142,20 @@ export default function CompareLandmark() {
 
   return (
     <View style={styles.container}>
-      <UniversalHeader title="Shared place" showBack />
+      <UniversalHeader
+        title="Shared place"
+        showBack
+        rightElement={
+          <TouchableOpacity
+            onPress={() => setShareOpen(true)}
+            style={styles.headerShareBtn}
+            activeOpacity={0.85}
+            data-testid="compare-share-open"
+          >
+            <Ionicons name="share-social" size={18} color="#FFF" />
+          </TouchableOpacity>
+        }
+      />
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
         {/* Hero */}
         <View style={styles.hero} data-testid="compare-hero">
@@ -172,11 +188,30 @@ export default function CompareLandmark() {
               </TouchableOpacity>
             ))}
           </View>
+
+          {/* Share CTA inside hero */}
+          <TouchableOpacity
+            style={styles.shareCta}
+            onPress={() => setShareOpen(true)}
+            activeOpacity={0.88}
+            data-testid="compare-share-cta"
+          >
+            <Ionicons name="share-social" size={14} color={theme.colors.primary} />
+            <Text style={styles.shareCtaText}>Share this memory</Text>
+          </TouchableOpacity>
         </View>
 
         <PersonCard side={data.me} isMe={true} accentColor={theme.colors.primary} />
         <PersonCard side={data.friend} isMe={false} accentColor={theme.colors.accentSand} />
       </ScrollView>
+
+      <ShareComparisonCard
+        visible={shareOpen}
+        onDismiss={() => setShareOpen(false)}
+        landmark={data.landmark}
+        me={data.me}
+        friend={data.friend}
+      />
     </View>
   );
 }
@@ -209,6 +244,30 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.8, shadowRadius: 6, elevation: 2,
   },
   heroAvatar: { width: 40, height: 40, borderRadius: 20, borderWidth: 2, borderColor: theme.colors.surface },
+
+  shareCta: {
+    marginTop: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: theme.colors.surfaceTinted,
+    borderWidth: 1,
+    borderColor: theme.colors.borderSand,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 100,
+  },
+  shareCtaText: {
+    color: theme.colors.primary,
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.2,
+  },
+  headerShareBtn: {
+    width: 36, height: 36, borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    alignItems: 'center', justifyContent: 'center',
+  },
 
   personCard: {
     marginHorizontal: 16, marginTop: 14,

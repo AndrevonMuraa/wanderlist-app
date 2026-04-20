@@ -21,7 +21,7 @@
 - Role: moderator — can moderate reports
 
 ## Backend URL
-- Preview: `https://travel-polish.preview.emergentagent.com`
+- Preview: `https://friends-hub-v2.preview.emergentagent.com`
 - All endpoints prefixed with `/api/`
 
 ## Notes

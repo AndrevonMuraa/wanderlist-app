@@ -1,0 +1,35 @@
+{
+  "summary": "Backend-only verification for ShareComparisonCard (iteration 22). Added /app/backend/tests/test_shares_compare_iteration22.py covering: (1) POST /api/shares accepts new share_type='compare' (with and without period) — PASS; (2) regression of all 5 existing share types top_month/top_all/journey/rank/visit — PASS; (3) invalid share_type → 400 and detail lists all 6 allowed types including 'compare' — PASS; (4) unauthenticated POST → 401 — PASS; (5) GET /api/admin/shares/stats returns {totals_by_type, top_sharers}, includes our freshly-posted 'compare' share, and rejects non-admin with 403 — PASS; (6) compare endpoint regressions: 401 without auth, 403 for non-friends (admin↔mod), happy-path SKIPPED (admin has 0 shared-places in seed — same as iteration_21); (7) /api/friends/leaderboard + shared-places sanity — PASS. 16/16 executed tests passed, 1 legitimately skipped. No regressions detected.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_shares_compare_iteration22.py",
+    "/app/test_reports/pytest/iteration22.xml"
+  ],
+  "action_items": [
+    "(Optional — carry-over from iteration_21) Seed at least one shared landmark visit between admin (user_dd46a314f120) and their accepted friend Social Tester (user_ff9a3f370f6b) so the /api/compare/landmarks/{lid}/friends/{fid} happy-path can be exercised on real data. Currently /api/friends/shared-places returns {items: []} for admin, which forces the happy-path test to skip.",
+    "Main agent should self-verify ShareComparisonCard UI on native (modal opens from data-testid='compare-share-open' and 'compare-share-cta', share-comparison-button renders, POST /api/shares fires with {share_type:'compare', period:<landmark_id>}). Web login harness is still flaky — see iteration_21 note.",
+    "(Carry-over) Refresh /app/memory/test_credentials.md — it still claims admin is friends with testpro, which is incorrect. Actual: admin↔Social Tester only."
+  ],
+  "critical_code_review_comments": [
+    "shares.py: allowed_types is a function-local set rebuilt on every request — fine for 6 types, but if it grows consider hoisting to a module constant for readability and so the 400-detail list is generated from a single source of truth.",
+    "shares.py: `period` is free-form Optional[str] and not length-capped — a client could POST a 100KB period value that gets stored verbatim. Low-risk (auth-gated) but worth Field(max_length=128).",
+    "shares.py: no index on shares.{user_id, share_type, created_at} — the /admin/shares/stats aggregation will scan the full collection as the table grows. Add a compound index when share volume is non-trivial.",
+    "shares.py: share is fire-and-forget per the docstring, but failure modes (db.shares.insert_one raising) bubble up as 500 rather than the intended non-blocking behaviour. If the client is supposed to treat this endpoint as best-effort, wrap the insert in try/except and still return {success: true} (or a distinct 202).",
+    "shares.py routing: `/admin/shares/stats` lives inside the shares router but is an admin concern — keeps test coverage tight, just confirm this is consistent with how other admin/* routes are mounted (no prefix mismatch)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_shares_compare_iteration22.py"
+  ],
+  "success_rate": {
+    "backend": "16/16 executed tests PASSED (100%); 1 skipped (compare happy-path — no shared landmark in seed, not a product bug)",
+    "frontend": "Not tested (backend-only scope per request)"
+  },
+  "test_credentials": "Used /app/memory/test_credentials.md. Note (carry-over from iteration_21): that file still lists stale user_ids — actual admin=user_dd46a314f120, testpro=user_6ef7ed0c470a, mod=user_d2cee3abc41d; admin is friends with Social Tester (user_ff9a3f370f6b), NOT testpro. Tests auto-discover the friend via GET /api/friends so they remain robust.",
+  "seed_data_creation": "None (did POST several share events as side-effect of test_shares_regression_existing_types + test_shares_accepts_compare_type — these show up in /api/admin/shares/stats).",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Iteration 22 backend is fully green. The ONE remaining gap is the compare-landmark happy-path (endpoint itself is proven working structurally via 401/403 + underlying code review + passing iteration_21 tests; only skipped because admin has zero shared landmarks in the seed). To close: seed 1 shared visit between admin (user_dd46a314f120) and Social Tester (user_ff9a3f370f6b) on the same landmark, then re-run /app/backend/tests/test_shares_compare_iteration22.py::test_compare_landmark_happy_path. Frontend ShareComparisonCard was explicitly skipped per review request (backend-only). Reusable regression file: /app/backend/tests/test_shares_compare_iteration22.py.",
+  "rca of the issue": "No issues to RCA — all assertions passed first run except one test-harness-only bug on my side: I assumed /api/friends/leaderboard returns a raw list, but it actually returns {metric, rows:[...]}. I corrected the assertion (no product code change) and re-ran — 16/16 pass. The 1 skipped test is a seed-data gap, not a bug."
+}
