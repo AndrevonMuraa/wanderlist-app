@@ -57,17 +57,64 @@ def sequence_ratio(a: str, b: str) -> float:
     return SequenceMatcher(None, normalize_name(a), normalize_name(b)).ratio()
 
 
-# Activity / tourist-packaging name patterns (should be landmarks, not activities)
-ACTIVITY_PATTERNS = [
-    "cruise", "balloon", "safari", "diving", "surf", "rafting",
-    "train", "whale watching", "swimming", "snorkeling", "fish fry",
-    "festival", "dancers", "hunters", "camel", "shark cage",
-    "land diving", "ride", "express", "tour", "icebreaker",
-    "hot air", "sea turtles", "red elephants", "mud festival",
-    "light show", "pepper farm", "shipwreck div", "boat tour",
-    "fire dance", "bird watch", "whale shark swim", "walking tour",
-    "gaucho festival", "white water",
+# Activity / tourist-packaging keywords — words that suggest a tourist ACTIVITY
+# rather than an actual landmark (statue, mountain, ruin, cathedral, etc.).
+# Matched as whole words (word boundaries) to avoid false positives like
+# "Swimming" in "Blue Hole" or "Tour" in "Tourmalet Valley".
+#
+# Grouped by concern so reviewers can assess context.
+ACTIVITY_KEYWORDS = [
+    # Action verbs (clearest signal)
+    "hike", "hikes", "hiking",
+    "swim", "swims", "swimming",
+    "bike", "bikes", "biking", "cycling",
+    "ski", "skis", "skiing",
+    "paddle", "paddling", "kayak", "kayaking", "canoe", "canoeing",
+    "ride", "rides", "riding", "horseback",
+    "surf", "surfing", "windsurf", "windsurfing", "kitesurf", "kitesurfing",
+    "dive", "diving", "snorkel", "snorkeling", "snorkelling", "scuba",
+    "sail", "sailing", "yacht", "yachting",
+    "climb", "climbing",
+    "raft", "rafting",
+    "fishing",
+    "rafting",
+    "trek", "treks", "trekking",
+    "camping", "glamping",
+    # Tourist-experience suffixes
+    "tour", "tours", "excursion", "excursions",
+    "cruise", "cruises",
+    "safari", "safaris",
+    "expedition", "expeditions",
+    "adventure", "adventures",
+    "experience", "experiences",
+    # Facility keywords (not landmarks)
+    "resort", "resorts", "hotel", "hotels", "inn", "inns",
+    "lodge", "lodges", "lodging",
+    "bar", "bars", "pub", "pubs",
+    "restaurant", "restaurants", "cafe", "cafes",
+    "spa", "spas",
+    "mall", "malls",
+    "club", "clubs",
+    # Sports
+    "golf", "tennis", "polo",
+    # Packaged experiences
+    "workshop", "workshops",
+    "show", "shows",
+    "ride", "rides",
 ]
+
+# Legitimate proper-noun exceptions — if any ACTIVITY_KEYWORD appears ONLY
+# within these phrases, suppress the warning. Matched case-insensitively,
+# whole-word within the name.
+LEGITIMATE_EXCEPTIONS = {
+    # Cultural/historic place names that happen to contain an activity word
+    "sliding rocks",        # Papaseea Sliding Rocks is a natural feature
+    "fishing village",      # historic fishing villages are cultural heritage
+    "diving board",         # figurative geological features
+    "seven bar",            # "Seven Bar" could be place name (rare)
+    "golf coast",           # e.g. Gold Coast vs golf — not a real case
+    "ride temple",          # rare proper noun, kept for safety
+}
 
 
 async def main():
@@ -225,27 +272,39 @@ async def main():
         warnings += 1
 
     # --- 8. Name red flags ---
-    print(f"\n[7] NAME red flags (empty, too short, activity-like)")
+    print(f"\n[7] NAME red flags (empty, too short, tourist-activity patterns)")
+    activity_word_re = re.compile(
+        r"\b(" + "|".join(re.escape(w) for w in ACTIVITY_KEYWORDS) + r")\b",
+        flags=re.IGNORECASE,
+    )
     red_flags = []
     async for lm in db.landmarks.find(
         {"archived": {"$ne": True}},
-        {"_id": 0, "landmark_id": 1, "name": 1},
+        {"_id": 0, "landmark_id": 1, "name": 1, "country_id": 1, "category": 1},
     ):
         name = (lm.get("name") or "").strip()
         if not name:
-            red_flags.append((lm["landmark_id"], "EMPTY"))
+            red_flags.append((lm["landmark_id"], lm.get("country_id"), "EMPTY"))
             continue
         if len(name) < 3:
-            red_flags.append((lm["landmark_id"], f"TOO SHORT: '{name}'"))
+            red_flags.append((lm["landmark_id"], lm.get("country_id"), f"TOO SHORT: '{name}'"))
             continue
+        # Whole-word activity keyword match
         lower = name.lower()
-        for pat in ACTIVITY_PATTERNS:
-            if pat in lower and "sliding" not in lower:
-                red_flags.append((lm["landmark_id"], f"ACTIVITY-LIKE: '{name}' (matches '{pat}')"))
-                break
+        # Respect legitimate exceptions
+        if any(exc in lower for exc in LEGITIMATE_EXCEPTIONS):
+            continue
+        hits = activity_word_re.findall(name)
+        if hits:
+            unique = sorted(set(h.lower() for h in hits))
+            red_flags.append((
+                lm["landmark_id"],
+                lm.get("country_id"),
+                f"ACTIVITY-LIKE: '{name}' (keywords: {', '.join(unique)}) [{lm.get('category','?')[0]}]",
+            ))
     print(f"  Found: {len(red_flags)}")
-    for lid, msg in red_flags:
-        print(f"    - {lid}: {msg}")
+    for lid, cid, msg in red_flags:
+        print(f"    - [{cid}] {lid}: {msg}")
         warnings += 1
 
     # --- SUMMARY ---
