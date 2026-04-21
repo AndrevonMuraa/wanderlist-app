@@ -210,8 +210,18 @@ class TestVisitUpdate:
         get_response = requests.get(f"{BASE_URL}/api/visits/{existing_visit_id}", headers=headers)
         original_photos = get_response.json().get("photos", [])
         
-        # Update with test photo URL
-        test_photos = ["https://example.com/test_photo_1.jpg"]
+        # Minimal valid 1x1 JPEG as base64 data URL. Backend validates images via
+        # utils/image_validate.normalize_photo() which requires real base64 image
+        # data (not plain URLs) — so tests must send actual image bytes.
+        test_photo_b64 = (
+            "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAEBAQEBAQEB"
+            "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB"
+            "AQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB"
+            "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAA"
+            "AAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAA"
+            "AAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJ//2Q=="
+        )
+        test_photos = [test_photo_b64]
         response = requests.put(
             f"{BASE_URL}/api/visits/{existing_visit_id}",
             headers=headers,
@@ -221,11 +231,15 @@ class TestVisitUpdate:
         assert response.status_code == 200, f"Failed to update photos: {response.text}"
         print(f"✓ PUT /api/visits/{existing_visit_id} with photos array succeeded")
         
-        # Verify the update persisted
+        # Verify the update persisted — note backend may re-compress the image,
+        # so we only assert length rather than exact byte equality.
         get_response = requests.get(f"{BASE_URL}/api/visits/{existing_visit_id}", headers=headers)
         assert get_response.status_code == 200
         visit_data = get_response.json()
-        assert visit_data.get("photos") == test_photos, f"Photos not updated. Got: {visit_data.get('photos')}"
+        updated_photos = visit_data.get("photos", [])
+        assert len(updated_photos) == 1, f"Expected 1 photo, got {len(updated_photos)}"
+        assert updated_photos[0].startswith("data:image/"), \
+            f"Expected data URL, got: {updated_photos[0][:50]}..."
         print(f"✓ Photos update verified via GET")
         
         # Restore original photos

@@ -34,8 +34,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Rate limiting: 120 req/min general, 20 req/min for auth
-app.add_middleware(RateLimitMiddleware, default_rpm=120, auth_rpm=20)
+# Rate limiting: 120 req/min general, 20 req/min for auth.
+# Configurable via env for test environments (set to very high values to disable).
+_default_rpm = int(os.environ.get("RATE_LIMIT_DEFAULT_RPM", "120"))
+_auth_rpm = int(os.environ.get("RATE_LIMIT_AUTH_RPM", "20"))
+app.add_middleware(RateLimitMiddleware, default_rpm=_default_rpm, auth_rpm=_auth_rpm)
 
 # Create the /api prefix router and include all sub-routers
 api_router = APIRouter(prefix="/api")
