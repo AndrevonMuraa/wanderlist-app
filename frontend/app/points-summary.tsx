@@ -222,7 +222,7 @@ export default function PointsSummary() {
             <TouchableOpacity onPress={() => handleToggleSection('unverified')} activeOpacity={0.7}>
               <View style={styles.breakdownRow}>
                 <View style={styles.breakdownIcon}>
-                  <Ionicons name="star" size={20} color="#FFA726" />
+                  <Ionicons name="star-outline" size={20} color="#FFA726" />
                 </View>
                 <View style={styles.breakdownContent}>
                   <Text style={styles.breakdownLabel}>Unverified points</Text>

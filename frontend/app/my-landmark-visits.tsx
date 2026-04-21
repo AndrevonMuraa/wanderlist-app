@@ -231,7 +231,7 @@ export default function MyLandmarkVisits() {
       <View style={styles.statsRow}>
         <View style={[styles.statItem, { flex: 0.7 }]}>
           <View style={[styles.statIconWrap, { backgroundColor: '#E3F6FC' }]}>
-            <Ionicons name="location" size={14} color={theme.colors.primary} />
+            <Ionicons name="footsteps-outline" size={14} color={theme.colors.primary} />
           </View>
           <Text style={styles.statNumber}>{visits.length}</Text>
           <Text style={styles.statLabel}>Visited</Text>
@@ -255,7 +255,7 @@ export default function MyLandmarkVisits() {
         <View style={styles.statDivider} />
         <View style={[styles.statItem, { flex: 1.2 }]}>
           <View style={[styles.statIconWrap, { backgroundColor: '#E8F5E9' }]}>
-            <Ionicons name="star" size={14} color="#4CAF50" />
+            <Ionicons name="shield-checkmark" size={14} color="#4CAF50" />
           </View>
           <Text style={[styles.statNumber, { color: '#4CAF50' }]}>{verifiedPoints}</Text>
           <Text style={styles.statLabel}>Verified pts</Text>
