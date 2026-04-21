@@ -239,7 +239,7 @@ export default function MyLandmarkVisits() {
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
           <View style={[styles.statIconWrap, { backgroundColor: '#E8F5E9' }]}>
-            <Ionicons name="shield-checkmark" size={14} color="#4CAF50" />
+            <Ionicons name="shield-checkmark-outline" size={14} color="#4CAF50" />
           </View>
           <Text style={[styles.statNumber, { color: '#4CAF50' }]}>{verifiedCount}</Text>
           <Text style={styles.statLabel}>Verified</Text>
