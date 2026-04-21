@@ -32,7 +32,7 @@
 - Created Apr-2026 to verify Free users can access `/api/messages/*` after Pro-gate removal.
 
 ## Backend URL
-- Preview: `https://tier-rebalance.preview.emergentagent.com`
+- Preview: `https://wandermark-build83.preview.emergentagent.com`
 - All endpoints prefixed with `/api/`
 
 ## Notes

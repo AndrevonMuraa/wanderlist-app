@@ -68,7 +68,8 @@
           "project": "wandermark-mobile",
           "url": "https://sentry.io/"
         }
-      ]
+      ],
+      "@sentry/react-native"
     ],
     "experiments": {
       "typedRoutes": true
