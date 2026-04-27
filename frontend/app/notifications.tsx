@@ -7,6 +7,7 @@ import {
   RefreshControl,
   Platform,
   StatusBar,
+  Modal,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -41,6 +42,7 @@ export default function NotificationsScreen() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [modMessage, setModMessage] = useState<Notification | null>(null);
 
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
@@ -120,7 +122,8 @@ export default function NotificationsScreen() {
         router.push('/terms-of-service?section=guidelines');
         break;
       case 'moderator_message':
-        // Personal moderator message — no navigation, just mark as read
+        // Personal moderator message — open a modal so user can read the full text
+        setModMessage(notification);
         break;
     }
   };
@@ -259,7 +262,7 @@ export default function NotificationsScreen() {
                 key={notification.notification_id}
                 activeOpacity={0.7}
                 onPress={() => handleNotificationTap(notification)}
-                data-testid={`notification-${notification.notification_id}`}
+                testID={`notification-${notification.notification_id}`}
               >
                 <Surface
                   style={[
@@ -301,6 +304,43 @@ export default function NotificationsScreen() {
 
         <View style={{ height: theme.spacing.xl }} />
       </ScrollView>
+
+      {/* Moderator message modal */}
+      <Modal
+        visible={!!modMessage}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModMessage(null)}
+      >
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => setModMessage(null)}
+          style={styles.modalOverlay}
+        >
+          <TouchableOpacity activeOpacity={1} style={styles.modalCard} testID="moderator-message-modal">
+            <View style={styles.modalIconRow}>
+              <View style={styles.modalIconCircle}>
+                <Ionicons name="mail" size={24} color="#3B82F6" />
+              </View>
+              <TouchableOpacity onPress={() => setModMessage(null)} testID="moderator-message-close">
+                <Ionicons name="close" size={22} color={theme.colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.modalTitle}>{modMessage?.title}</Text>
+            <Text style={styles.modalBody}>{modMessage?.message}</Text>
+            <Text style={styles.modalFooter}>
+              {modMessage?.created_at ? new Date(modMessage.created_at).toLocaleString() : ''}
+            </Text>
+            <TouchableOpacity
+              style={styles.modalBtn}
+              onPress={() => setModMessage(null)}
+              testID="moderator-message-dismiss"
+            >
+              <Text style={styles.modalBtnText}>OK</Text>
+            </TouchableOpacity>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 }
@@ -444,5 +484,62 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     textAlign: 'center',
     lineHeight: 22,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  modalCard: {
+    backgroundColor: '#FFF',
+    borderRadius: 18,
+    padding: 24,
+    width: '100%',
+    maxWidth: 420,
+  },
+  modalIconRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  modalIconCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#DBEAFE',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: 10,
+  },
+  modalBody: {
+    fontSize: 15,
+    lineHeight: 22,
+    color: theme.colors.text,
+    marginBottom: 16,
+  },
+  modalFooter: {
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+    marginBottom: 20,
+    fontStyle: 'italic',
+  },
+  modalBtn: {
+    backgroundColor: '#3B82F6',
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalBtnText: {
+    color: '#FFF',
+    fontSize: 15,
+    fontWeight: '700',
   },
 });
