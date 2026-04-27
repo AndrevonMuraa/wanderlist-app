@@ -112,8 +112,7 @@ export default function ContinentsScreen() {
   const [loading, setLoading] = useState(true);
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
-  const [trendingLandmarks, setTrendingLandmarks] = useState<any[]>([]);
-  
+
   // All hooks must be called in consistent order
   const subscriptionData = useSubscription();
   const canCreateCustomVisits = subscriptionData.canCreateCustomVisits;
@@ -125,7 +124,6 @@ export default function ContinentsScreen() {
   useEffect(() => {
     if (user) {
       fetchContinentStats();
-      fetchTrendingLandmarks();
     }
   }, [user]);
 
@@ -137,20 +135,6 @@ export default function ContinentsScreen() {
       }
     }, [user])
   );
-
-  const fetchTrendingLandmarks = async () => {
-    try {
-      const token = await getToken();
-      const response = await fetch(`${BACKEND_URL}/api/community-highlights`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setTrendingLandmarks(data.highlights || []);
-      }
-    } catch (error) {
-    }
-  };
 
   const fetchContinentStats = async () => {
     try {
