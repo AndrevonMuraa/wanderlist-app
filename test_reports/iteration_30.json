@@ -1,0 +1,40 @@
+{
+  "summary": "Iteration 30 — re-verification after main agent cleared stale /app/frontend/dist/ and restarted expo. ALL polish changes from iteration_29 plan now render correctly in the browser. Backend skipped per request (15/15 in iter_29).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "/admin/reports type-filter row",
+        "issues": [
+          "The horizontal type-filter chip row (All Types / User / Photo / Diary / Comment / Activity) renders with each chip stretched vertically to ~450px tall (chip width is correct ~80px, but height fills the parent ScrollView). Likely a flex/height: '100%' or alignItems: 'stretch' on the chip container. Visually they look like tall pill columns instead of standard horizontal chips. Functional (chips are selectable) but cosmetically off."
+        ]
+      }
+    ]
+  },
+  "test_report_links": ["/app/test_reports/iteration_30.json"],
+  "action_items": [
+    "[MINOR] Fix admin/reports.tsx type-filter chip height — set chip container alignItems: 'flex-start' or wrap chips in a View with height: 'auto' so they don't stretch to ScrollView's contentContainer height. Affected file: /app/frontend/app/admin/reports.tsx around the type-filter ScrollView (line ~449)."
+  ],
+  "critical_code_review_comments": [
+    "Stale dist/ rebuild fix is effective: 'Track your visits, earn points, top the ranks.' is now served on /explore (verified via curl + browser). Previous iter_29 root-cause (prebuilt bundle in /app/frontend/dist/) is resolved.",
+    "Admin role-aware header (Super Admin / gold shield-checkmark) renders correctly for test@wandermark.app — no more literal 'Admin Panel' string.",
+    "REPORT_REASONS map is in effect: 'Inappropriate diary text' renders cleanly (no raw 'inappropriate_diary' enum surfaced anywhere on the page; confirmed locator count = 0).",
+    "TYPE_ICONS map applied correctly: Activity badges use pink walking icon, Diary badges use orange book icon, badges have differentiated background tints.",
+    "Recommend adding stable data-testids to the explore CTA, admin header title, and report type-filter chips to make this regression check trivial in future iterations (currently relying on text content which is brittle to copy edits)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "skipped (15/15 in iter_29)", "frontend": "100% — all 6 features render correctly; 1 minor cosmetic issue on chip row height"},
+  "test_credentials": "test@wandermark.app / Test1234! (super admin)",
+  "seed_data_creation": "None (used existing 8 pending reports incl. Activity + Diary types from prior seeds).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All iteration_29 polish items verified live in browser as of iter_30. The only remaining cosmetic issue is the type-filter chip row in /admin/reports rendering chips stretched vertically (~450px tall). Login flow note: the app shows onboarding carousel first; click 'Skip' before navigating to /login. Use page.evaluate to set localStorage flags if needed. Login button text is 'Login' (not 'Sign In'); inputs are RN Web TextInputs (use page.locator('input').nth(0/1)).",
+  "verification_evidence": {
+    "explore_cta": "page.locator('text=Track your visits, earn points, top the ranks.').count() == 1; old 'Where have you been' count == 0",
+    "admin_header": "page.locator('text=Super Admin').count() == 1; 'Admin Panel' count == 0",
+    "type_filter_chips": "All Types=1, User=1, Photo=1, Diary=3, Comment=6, Activity=2 (Diary/Comment/Activity counts >1 because they also appear as type badges on individual report cards — expected)",
+    "readable_reasons": "'Inappropriate diary text' count = 2; raw 'inappropriate_diary' count = 0; raw 'inappropriate_*' regex count = 0"
+  }
+}
