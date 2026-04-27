@@ -1,0 +1,81 @@
+{
+  "summary": "Phase 3 ContentMenu rollout regression test. Backend regression: 17/17 pytest pass (community-highlights/top continent filter, diary report_type, 5/hr rate limit, my-reports). Frontend: critical issue — the ContentMenu component does NOT render on the new Phase 3 surfaces (visit-detail photo overlay, visit-detail diary header, feed.tsx per-card). Verified via DOM inspection that 0 aria-label='More options' elements exist on a non-owner visit-detail page (admin viewing fake_user_43528211's Arc de Triomphe visit) and 0 such elements exist on the social-tab community feed even after scrolling to non-own items (e.g. Arc de Triomphe by Olav Strand). Owner-side regression OK (own visit shows long-press hint, Add Photo, share/edit toggles, no ContentMenu). The /community page, Profile menu row, Social hero compactness, and Explore-no-CTA regressions all continue to pass.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "ContentMenu (visit-detail photo overlay)",
+        "issue": "On a non-owner visit-detail page (admin viewing visit_ca8a3b6799b4 by fake_user_43528211 — Arc de Triomphe), the overlay ••• menu does NOT render on the main photo. DOM inspection: 0 elements with aria-label='More options' on the entire page; 0 data-testid attributes anywhere. Owner-side (visit_4f32a4eaf670) correctly hides the menu and shows the long-press / Add Photo affordances, so the !isOwner gating is being reached but the component output never reaches the DOM. Hypothesis: combination of (a) data-testid prop being silently dropped by react-native-web (RN-Web requires testID, see separate item) AND (b) accessibilityLabel not surviving — no aria-label appears either, which is unusual since social-tab pages do produce aria-labels. May also be a z-index collision with photoCountBadge which is positioned at the same top:8/right:8 corner of the photo (lines 312-317 vs 318-331).",
+        "selector": "[aria-label='More options'] / [data-testid='visit-photo-menu'] — both absent",
+        "priority": "HIGH"
+      },
+      {
+        "component": "ContentMenu (feed.tsx per-card)",
+        "issue": "Social-tab community feed cards do NOT show the ••• menu on non-own items. After scrolling to load feed (admin's view), card 'Arc de Triomphe / Olav Strand / 3 ❤' is visible but the rightExtra slot only shows the upvote chip — no ellipsis-horizontal icon. Total social-tab DOM has only 4 aria-labels, 0 of which are 'More options'. The wiring at feed.tsx:385 looks correct in source but the rendered DOM has no menu trigger.",
+        "selector": "[data-testid^='feed-menu-'] — 0 found",
+        "priority": "HIGH"
+      },
+      {
+        "component": "ContentMenu (visit-diary-menu)",
+        "issue": "Could not exercise because the seeded fake_user visits in preview DB have diary=null/diary_notes=null. The diary section header therefore isn't rendered (line 521 gate). Recommend seeding a public visit with diary_notes set so a non-owner test can verify the subtle ••• in the diary header.",
+        "selector": "[data-testid='visit-diary-menu']",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [
+      {
+        "flow": "ContentMenu data-testid testability across the app",
+        "issue": "ContentMenu.tsx lines 114, 136, 147, 157 pass `data-testid={...}` as a JSX prop to <TouchableOpacity>. React-native-web does NOT pass through arbitrary HTML data-* attributes on RN components — the canonical RN prop is `testID` (camelCase) which RN-Web auto-converts to data-testid in the DOM. As-written, all four data-testid attributes are dropped, breaking automated test selectors AND test wiring on production web. Fix: rename `data-testid` → `testID` on every TouchableOpacity in this file. Same anti-pattern is also used on visit-detail.tsx line 606 (data-testid='comments-section') — this attribute is not in the rendered DOM either.",
+        "affected_selectors": ["[data-testid='visit-photo-menu']", "[data-testid='visit-diary-menu']", "[data-testid='country-visit-diary-menu']", "[data-testid^='feed-menu-']", "[data-testid='content-menu-report']", "[data-testid='content-menu-view-profile']", "[data-testid='content-menu-cancel']", "[data-testid='comments-section']"]
+      },
+      {
+        "flow": "country-visit-detail diary header gating",
+        "issue": "Spec: 'When owner, only see share-toggle + edit buttons; when non-owner, only see ContentMenu.' Actual code (lines 659-706): the share-toggle (eye icon) and edit-pencil <TouchableOpacity> are rendered UNCONDITIONALLY inside the same flex row. Only the ContentMenu is gated by `user?.user_id !== visit?.user_id && visit?.diary`. Result: a non-owner viewing someone else's country visit will see ContentMenu + share-toggle + edit-pencil all together. Tapping edit on a non-owned visit will open the edit dialog and PUT against /api/country-visits/{id}, which the backend will reject — but the UX is broken either way. Fix: wrap lines 671-706 in an isOwner ternary and render ContentMenu in the non-owner branch.",
+        "affected_selectors": ["[data-testid='country-visit-diary-menu']"]
+      }
+    ],
+    "design_issues": [
+      {
+        "screen": "visit-detail main photo (non-owner)",
+        "issues": [
+          "If the ContentMenu render bug is fixed, the overlay ••• at top:8/right:8 will collide with the existing photoCountBadge which is also positioned top-right of the photo. Recommend offsetting one of them (e.g., shift photoCountBadge to bottom-right, or shift ContentMenu to top-left) to avoid visual stacking.",
+          "Visibility chips (Public / Friends Only / Private) render and look interactive on a non-owner page. The press handler (handleChangeVisibility) likely no-ops or 403s at the API but the UI gives the impression of editability. Pre-existing, but noticed during this test."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_community_refactor_iteration26.py",
+    "/app/test_reports/pytest/iteration_27.xml"
+  ],
+  "action_items": [
+    "[CRITICAL] Fix ContentMenu testID prop: in /app/frontend/components/ContentMenu.tsx replace every `data-testid={...}` with `testID={...}` (lines 114, 136, 147, 157). React-native-web auto-converts testID → data-testid in the DOM; arbitrary data-* attrs are silently dropped on RN components.",
+    "[CRITICAL] Investigate why ContentMenu does not render on visit-detail (non-owner). Even after the testID fix, the absence of aria-label='More options' suggests the component itself isn't returning a node. Add a console.log in ContentMenu render and/or in visit-detail line 319 to confirm the gate (`!isOwner && visit.user_id`) is hit. If the gate is hit, suspect a JS error inside ContentMenu (e.g. <ReportModal/> import, theme usage). Also check z-index/overlap with photoCountBadge.",
+    "[CRITICAL] Investigate why ContentMenu does not render on feed.tsx per-card. Same root cause is likely shared with #2.",
+    "[HIGH] /app/frontend/app/country-visit-detail/[country_visit_id].tsx lines 659-706: gate the share-toggle (eye) + edit-pencil under `user?.user_id === visit?.user_id` so that non-owners do NOT see those owner-only controls.",
+    "[MEDIUM] /app/frontend/app/visit-detail/[visit_id].tsx line 606: the <View> uses `data-testid='comments-section'` which RN-Web drops. Convert to `testID` for consistency.",
+    "[MEDIUM] Seed a public visit with non-empty diary_notes for a fake_user so that the diary-section ContentMenu can be exercised end-to-end on the preview environment.",
+    "[LOW] If ContentMenu overlay rendering is fixed, decide on a non-overlapping position vs. photoCountBadge."
+  ],
+  "critical_code_review_comments": [
+    "/app/frontend/components/ContentMenu.tsx — uses `data-testid` JSX prop on RN TouchableOpacity. RN-Web silently drops unknown HTML attributes on RN components; the canonical prop is `testID`. This single mistake breaks every Phase 3 + Phase 1+2 testid selector reachable through this component (8+ selectors).",
+    "/app/frontend/app/country-visit-detail/[country_visit_id].tsx lines 671-706 — share-toggle and edit-diary buttons are rendered without an isOwner check. They sit right next to the ContentMenu which IS gated, producing inconsistent UX for non-owners. Spec violation.",
+    "/app/frontend/app/visit-detail/[visit_id].tsx line 320-331 — overlay ContentMenu is positioned at the same coordinates (top:8 right:8) as photoCountBadge (line 312-317). Even if rendering is fixed, the overlap should be resolved.",
+    "Backend regression suite (test_community_refactor_iteration26.py) ran clean: 17/17 — community-highlights/top continent filter, diary report_type & inappropriate_diary reason, 5-per-hour rate limit, legacy /community-highlight, my-reports, unauth-reject. No backend regressions from Phase 3.",
+    "Owner-side regression for visit-detail confirmed correct: when admin views their own Mont Saint-Michel visit (visit_4f32a4eaf670), the page shows 'Travel Diary / Hidden / pencil-edit' header for owner, 'Add Photo' button, and 'Long-press a photo to remove it' hint — and NO ContentMenu trigger renders. Long-press deletion path is preserved."
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "100% (17/17 — same suite as iteration_26, no regressions)",
+    "frontend": "~40% — Phase 3's three new ContentMenu surfaces (visit-detail photo, visit-detail diary, feed.tsx per-card) all fail to render the trigger on non-owner content. country-visit-detail has a separate spec-mismatch (share/edit not owner-gated). All Phase 1+2 regressions (community page, profile menu row, social hero compact, explore no-CTA, owner-side visit-detail) continue to render correctly."
+  },
+  "test_credentials": "test@wandermark.app / Test1234! (admin), testpro@wandermark.app / Test1234! (pro). Both worked.",
+  "seed_data_creation": "None permanent. The rate-limit pytest test inserted 5 reports under admin user_id which roll off after 1h. No app-state pollution. Note: preview DB has 0 fake_user visits with diary_notes set, which limited diary-menu testing.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "After main agent applies the testID fix in ContentMenu.tsx and adds owner-gating in country-visit-detail.tsx, re-run the same flow: login as admin → goto /visit-detail/visit_ca8a3b6799b4 → expect aria-label='More options' AND data-testid='visit-photo-menu' on top-right of main photo. Also goto /social, scroll to find 'Arc de Triomphe by Olav Strand', expect the ••• icon and data-testid='feed-menu-visit_ca8a3b6799b4'. For the diary-menu, ask main agent to set diary_notes on at least one fake_user public landmark visit (any of visit_ca8a3b6799b4 / visit_9ff3cf5e68e9 / visit_3bc496dc91df) so the diary section header can be observed. Backend pytest suite at /app/backend/tests/test_community_refactor_iteration26.py is the regression baseline (17 cases — keep passing).",
+  "rca of the issue": "PRIMARY ROOT CAUSE: /app/frontend/components/ContentMenu.tsx uses `data-testid` as a JSX prop on react-native TouchableOpacity. React-native-web (used by Expo on web) does not forward arbitrary data-* attributes to the underlying DOM element on RN components — the canonical prop is `testID` (camelCase) which RN-Web converts internally to data-testid. This explains why DOM inspection finds 0 data-testid attributes on every page that uses ContentMenu. SECONDARY OBSERVATION: even the accessibilityLabel='More options' is absent from the visit-detail DOM (0 aria-labels page-wide) which suggests the entire ContentMenu component is not entering the render tree on visit-detail. Possible causes: (1) JS runtime error in ContentMenu's child components (ReportModal, theme import) suppresses render, (2) some prop type mismatch breaks the gate. Reproduction: login admin, navigate /visit-detail/visit_ca8a3b6799b4 (Arc de Triomphe by fake_user_43528211), inspect DOM — no aria-label='More options', no ••• visible at top-right of photo (only the photoCountBadge '2' is visible). Mitigation: rename data-testid → testID throughout ContentMenu.tsx; verify no JS error in browser console when the page loads; add z-index/position offset to avoid photoCountBadge overlap. The country-visit-detail share/edit ungated bug is independent — fix by wrapping lines 671-706 in isOwner ternary."
+}

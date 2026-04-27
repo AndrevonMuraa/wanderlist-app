@@ -35,6 +35,7 @@ import { getToken } from '../../utils/token';
 import { compressToBase64 } from '../../utils/image';
 import { getCountryFlag } from '../../utils/countryFlags';
 import ShareVisitCard from '../../components/ShareVisitCard';
+import ContentMenu from '../../components/ContentMenu';
 
 const { width, height } = Dimensions.get('window');
 
@@ -656,6 +657,17 @@ export default function DestinationVisitDetailScreen() {
               <Text style={styles.diaryTitle}>Travel Diary</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              {user?.user_id !== visit?.user_id && visit?.diary ? (
+                <ContentMenu
+                  contentType="diary"
+                  contentId={country_visit_id as string}
+                  contentName="Custom trip diary"
+                  ownerId={visit.user_id}
+                  ownerName={visit.user_name}
+                  variant="subtle"
+                  testID="country-visit-diary-menu"
+                />
+              ) : null}
               <TouchableOpacity
                 onPress={async () => {
                   const newVal = !(visit.share_diary ?? true);

@@ -315,6 +315,20 @@ export default function VisitDetailScreen() {
                   <Text style={styles.photoCountText}>{photos.length}</Text>
                 </View>
               )}
+              {/* Report-photo menu for non-owners — top-right overlay */}
+              {!isOwner && visit.user_id && (
+                <View style={{ position: 'absolute', top: 8, right: 8 }}>
+                  <ContentMenu
+                    contentType="photo"
+                    contentId={visit.visit_id}
+                    contentName={visit.landmark_name || 'Visit photo'}
+                    ownerId={visit.user_id}
+                    ownerName={visit.user_name}
+                    variant="overlay"
+                    testID="visit-photo-menu"
+                  />
+                </View>
+              )}
             </TouchableOpacity>
             <ScrollView
               horizontal
@@ -511,7 +525,7 @@ export default function VisitDetailScreen() {
                 <Ionicons name="journal" size={24} color={theme.colors.primary} />
                 <Text style={styles.sectionTitle}>Travel Diary</Text>
               </View>
-              {isOwner && (
+              {isOwner ? (
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
                   <TouchableOpacity onPress={handleToggleShareDiary} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                     <Ionicons
@@ -527,7 +541,17 @@ export default function VisitDetailScreen() {
                     <Ionicons name="create-outline" size={20} color={theme.colors.primary} />
                   </TouchableOpacity>
                 </View>
-              )}
+              ) : (visit.diary_notes || visit.diary) ? (
+                <ContentMenu
+                  contentType="diary"
+                  contentId={visit.visit_id}
+                  contentName={`${visit.user_name || 'User'}'s diary`}
+                  ownerId={visit.user_id}
+                  ownerName={visit.user_name}
+                  variant="subtle"
+                  testID="visit-diary-menu"
+                />
+              ) : null}
             </View>
             {(visit.diary_notes || visit.diary) ? (
               <Text style={styles.diaryText}>{visit.diary_notes || visit.diary}</Text>

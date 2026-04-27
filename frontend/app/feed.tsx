@@ -10,6 +10,7 @@ import UniversalHeader from '../components/UniversalHeader';
 import { getToken } from '../utils/token';
 import CommentsModal from '../components/CommentsModal';
 import ReportModal from '../components/ReportModal';
+import ContentMenu from '../components/ContentMenu';
 import FeedCardHeader from '../components/FeedCardHeader';
 import FeedCardActions from '../components/FeedCardActions';
 import { useAuth } from '../contexts/AuthContext';interface Activity {
@@ -381,16 +382,16 @@ export default function FeedScreen() {
                   <Text style={styles.likeCount}>{item.upvotes}</Text>
                 </View>
               )}
-              <TouchableOpacity
-                onPress={() => setReportTarget({
-                  targetId: item.visit_id,
-                  targetName: item.landmark_name || 'Community photo',
-                })}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                data-testid={`community-report-${item.visit_id}`}
-              >
-                <Ionicons name="flag-outline" size={16} color={theme.colors.textLight} />
-              </TouchableOpacity>
+              <ContentMenu
+                contentType="photo"
+                contentId={item.visit_id}
+                contentName={item.landmark_name || 'Community photo'}
+                ownerId={item.user_id}
+                ownerName={item.user_name}
+                isOwnContent={item.user_id === currentUserId}
+                variant="subtle"
+                testID={`feed-menu-${item.visit_id}`}
+              />
             </View>
           }
         />
