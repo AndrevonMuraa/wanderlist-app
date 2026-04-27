@@ -28,6 +28,7 @@ import { BACKEND_URL } from '../../utils/config';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import { getToken } from '../../utils/token';
 import CommunityHighlightHero from '../../components/CommunityHighlightHero';
+import ContentMenu from '../../components/ContentMenu';
 
 
 interface Friend {
@@ -323,35 +324,49 @@ export default function SocialHubScreen() {
             <>
             <View style={styles.cfVerticalList}>
               {communityFeed.slice(0, 5).map((item) => (
-                <TouchableOpacity
-                  key={item.visit_id}
-                  style={styles.cfVerticalCard}
-                  onPress={() => router.push(`/landmark-community-photos/${item.landmark_id}?name=${encodeURIComponent(item.landmark_name)}&country=${encodeURIComponent(item.country_name || '')}`)}
-                  activeOpacity={0.85}
-                  data-testid={`cf-card-${item.visit_id}`}
-                >
-                  {item.photo_url ? (
-                    <Image source={{ uri: item.photo_url }} style={styles.cfVerticalImage} resizeMode="cover" />
-                  ) : (
-                    <View style={[styles.cfVerticalImage, { backgroundColor: theme.colors.surface, alignItems: 'center', justifyContent: 'center' }]}>
-                      <Ionicons name="image-outline" size={30} color={theme.colors.textLight} />
-                    </View>
-                  )}
-                  <View style={styles.cfVerticalContent}>
-                    <Text style={styles.cfVerticalLandmark} numberOfLines={1}>{item.landmark_name}</Text>
-                    <Text style={styles.cfVerticalCountry} numberOfLines={1}>{item.country_name}</Text>
-                    <View style={styles.cfVerticalBottom}>
-                      <Text style={styles.cfVerticalUser} numberOfLines={1}>{item.user_name}</Text>
-                      <View style={styles.cfMeta}>
-                        {item.has_diary && (
-                          <Ionicons name="book" size={11} color={theme.colors.textLight} style={{ marginRight: 4 }} />
-                        )}
-                        <Ionicons name="heart" size={11} color="#FF6B6B" />
-                        <Text style={styles.cfUpvotes}>{item.upvotes}</Text>
+                <View key={item.visit_id} style={{ position: 'relative' }}>
+                  <TouchableOpacity
+                    style={styles.cfVerticalCard}
+                    onPress={() => router.push(`/landmark-community-photos/${item.landmark_id}?name=${encodeURIComponent(item.landmark_name)}&country=${encodeURIComponent(item.country_name || '')}`)}
+                    activeOpacity={0.85}
+                    testID={`cf-card-${item.visit_id}`}
+                  >
+                    {item.photo_url ? (
+                      <Image source={{ uri: item.photo_url }} style={styles.cfVerticalImage} resizeMode="cover" />
+                    ) : (
+                      <View style={[styles.cfVerticalImage, { backgroundColor: theme.colors.surface, alignItems: 'center', justifyContent: 'center' }]}>
+                        <Ionicons name="image-outline" size={30} color={theme.colors.textLight} />
+                      </View>
+                    )}
+                    <View style={styles.cfVerticalContent}>
+                      <Text style={styles.cfVerticalLandmark} numberOfLines={1}>{item.landmark_name}</Text>
+                      <Text style={styles.cfVerticalCountry} numberOfLines={1}>{item.country_name}</Text>
+                      <View style={styles.cfVerticalBottom}>
+                        <Text style={styles.cfVerticalUser} numberOfLines={1}>{item.user_name}</Text>
+                        <View style={styles.cfMeta}>
+                          {item.has_diary && (
+                            <Ionicons name="book" size={11} color={theme.colors.textLight} style={{ marginRight: 4 }} />
+                          )}
+                          <Ionicons name="heart" size={11} color="#FF6B6B" />
+                          <Text style={styles.cfUpvotes}>{item.upvotes}</Text>
+                        </View>
                       </View>
                     </View>
+                  </TouchableOpacity>
+                  {/* ContentMenu — sibling overlay (NOT nested in TouchableOpacity) */}
+                  <View style={{ position: 'absolute', top: 4, right: 4 }}>
+                    <ContentMenu
+                      contentType="photo"
+                      contentId={item.visit_id}
+                      contentName={item.landmark_name || 'Community photo'}
+                      ownerId={item.user_id}
+                      ownerName={item.user_name}
+                      isOwnContent={item.user_id === user?.user_id}
+                      variant="overlay"
+                      testID={`cf-menu-${item.visit_id}`}
+                    />
                   </View>
-                </TouchableOpacity>
+                </View>
               ))}
             </View>
             </>

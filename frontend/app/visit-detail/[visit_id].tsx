@@ -290,32 +290,37 @@ export default function VisitDetailScreen() {
         {/* Photo Gallery or Add Photo CTA */}
         {photos.length > 0 ? (
           <View style={styles.photoSection}>
-            <TouchableOpacity
-              onPress={async () => {
-                await lightHaptic();
-                setFullscreenIndex(selectedPhoto);
-                setShowFullscreen(true);
-              }}
-              activeOpacity={0.9}
+            <View
               style={{ marginHorizontal: 16, marginTop: 16, borderRadius: 16, overflow: 'hidden', position: 'relative' }}
             >
-              <Image
-                source={{ uri: photos[selectedPhoto] }}
-                style={styles.mainPhoto}
-                resizeMode="cover"
-              />
-              {/* Tap to zoom hint */}
-              <View style={styles.zoomHint}>
-                <Ionicons name="expand-outline" size={16} color="#fff" />
-                <Text style={styles.zoomHintText}>Tap to zoom</Text>
-              </View>
-              {photos.length > 1 && (
-                <View style={styles.photoCountBadge}>
-                  <Ionicons name="images" size={16} color="#fff" />
-                  <Text style={styles.photoCountText}>{photos.length}</Text>
+              <TouchableOpacity
+                onPress={async () => {
+                  await lightHaptic();
+                  setFullscreenIndex(selectedPhoto);
+                  setShowFullscreen(true);
+                }}
+                activeOpacity={0.9}
+              >
+                <Image
+                  source={{ uri: photos[selectedPhoto] }}
+                  style={styles.mainPhoto}
+                  resizeMode="cover"
+                />
+                {/* Tap to zoom hint */}
+                <View style={styles.zoomHint}>
+                  <Ionicons name="expand-outline" size={16} color="#fff" />
+                  <Text style={styles.zoomHintText}>Tap to zoom</Text>
                 </View>
-              )}
-              {/* Report-photo menu for non-owners — top-right overlay */}
+                {photos.length > 1 && (
+                  <View style={styles.photoCountBadge}>
+                    <Ionicons name="images" size={16} color="#fff" />
+                    <Text style={styles.photoCountText}>{photos.length}</Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+              {/* Report-photo menu for non-owners — sibling of TouchableOpacity
+                  (NOT nested) so RN-Web doesn't drop the inner button from the
+                  accessibility tree. Positioned absolute over the image. */}
               {!isOwner && visit.user_id && (
                 <View style={{ position: 'absolute', top: 8, right: 8 }}>
                   <ContentMenu
@@ -329,7 +334,7 @@ export default function VisitDetailScreen() {
                   />
                 </View>
               )}
-            </TouchableOpacity>
+            </View>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
