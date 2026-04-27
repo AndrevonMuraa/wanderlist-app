@@ -10,7 +10,7 @@ import { BACKEND_URL } from '../../utils/config';
 import { lightHaptic } from '../../utils/haptics';
 import { invalidateCacheGroup } from '../../utils/apiCache';
 import { shareVisit } from '../../utils/shareUtils';
-import ReportButton from '../../components/ReportButton';
+import ContentMenu from '../../components/ContentMenu';
 import CommentsSection from '../../components/CommentsSection';
 import { useAuth } from '../../contexts/AuthContext';
 import ProFeatureLock from '../../components/ProFeatureLock';

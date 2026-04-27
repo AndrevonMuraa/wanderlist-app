@@ -12,7 +12,7 @@ import RankBadge from '../../components/RankBadge';
 import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
-import ReportButton from '../../components/ReportButton';
+import ContentMenu from '../../components/ContentMenu';
 import FriendOverlap from '../../components/FriendOverlap';
 import FriendStatsCompare from '../../components/FriendStatsCompare';
 import { getToken } from '../../utils/token';
@@ -268,7 +268,15 @@ export default function UserProfileScreen() {
                 color={profile.is_blocked_by_me ? '#E53935' : theme.colors.textLight}
               />
             </TouchableOpacity>
-            <ReportButton contentType="user" contentId={profile.user_id} size={18} color={theme.colors.textLight} />
+            <ContentMenu
+              contentType="user"
+              contentId={profile.user_id}
+              ownerId={profile.user_id}
+              ownerName={profile.name}
+              isOwnContent={profile.is_own_profile}
+              variant="subtle"
+              testID="user-profile-menu"
+            />
           </View>
         )}
 

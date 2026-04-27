@@ -1,0 +1,45 @@
+{
+  "summary": "End-to-end testing of the WanderMark Community/Reporting refactor. Backend: 17/17 pytest cases pass (continent filter on /api/community-highlights/top, new 'diary' report_type + 'inappropriate_diary' reason, 5 reports/hr per-user anti-abuse rate limit, regression on legacy /api/community-highlight + /api/reports/my-reports). Frontend: /community page renders cleanly, scope+continent filter UI present and wired to backend (verified network call /api/community-highlights/top?limit=10&scope=all on mount), deleted /community-highlights route returns 'Unmatched Route' as expected, Profile tab shows 'Community' menu row, Continents tab no longer has 'Community highlight' CTA. Empty states render gracefully (preview env has 0 public photos for the filter — by design). Code review confirms TopHighlightsList visual spec (gold 1.5px border on #1, 80x80 image vs 60x60, silver/bronze badges for #2/#3, gray for #4-10) and ContentMenu spec (isOwnContent hides menu, red 'Report' option, view-profile when ownerId set).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_community_refactor_iteration26.py",
+    "/app/test_reports/pytest/iteration_26.xml"
+  ],
+  "action_items": [
+    "MINOR (code-quality, not blocker): /app/frontend/app/continents.tsx still calls /api/community-highlights and writes to trendingLandmarks state on mount, but the resulting state is never rendered anywhere on the page (the 'Community highlight' CTA card was removed). Net effect: wasted network call on every Explore tab visit. Recommend removing the unused fetchTrendingLandmarks() function, the trendingLandmarks state, and the call in useEffect. Net -15 lines of dead code.",
+    "MINOR (doc): /app/frontend/app/community.tsx line 191 has a stale comment referencing the deleted '/community-highlights/top' page — update the comment for clarity.",
+    "OPTIONAL (verify on native): Could not fully exercise the bottom-sheet ContentMenu interaction on Expo web due to onboarding/auth-gate intercept. Code-review confirms wiring is correct. Main agent should self-test on TestFlight: tap ••• on a photo in /landmark-community-photos/{id} → bottom sheet appears with 'Report photo' (red) → tap → confirmation alert → ReportModal opens with reason picker.",
+    "OPTIONAL (verify on native): Verify long-press delete still works on OWN photos in visit-detail (regression item from the spec). Static code shows ContentMenu hides via isOwnContent=true so own-photo long-press path is preserved, but visual verification is best done on device."
+  ],
+  "critical_code_review_comments": [
+    "/app/backend/routes/community_highlights.py: continent filter is correctly applied AFTER the candidate pool is built and BEFORE limit slicing (lines 83-87). Sorting by (likes_count, visited_at) is deterministic — no random.choice() in /top, so this list is stable across pulls. Good.",
+    "/app/backend/routes/reports.py: 'diary' added to valid_types (line 23); 'inappropriate_diary' + 'harassment_diary' added to valid_reasons (line 32). Rate-limit window is rolling-1-hour at 5 reports (lines 38-47) — implementation correct. Self-report check (line 59) only fires for report_type=='user' — diary/photo/comment self-reports are NOT blocked but the 'already reported' check (line 50) prevents duplicate target_id reports.",
+    "/app/backend/utils/highlight_scoring.py: continent enrichment is implemented correctly. Landmark visits get continent via lm_map (line 149). Custom visits get continent via country_continent_map (line 182, looked up by country_name). Both branches set the field — no leak.",
+    "/app/frontend/components/TopHighlightsList.tsx: spec exactly met — rowFirst gets borderColor: #FFD700 (gold), borderWidth: 1.5; imageWrapFirst sets 80x80 (vs default 60x60); rankBadge colors are ['#FFD700', '#C0C0C0', '#CD7F32'] for #1/#2/#3 and #E5E7EB (gray) for #4-10. Filter chips emit data-testid attributes correctly.",
+    "/app/frontend/components/ContentMenu.tsx: isOwnContent === true returns null (line 67) — own-content correctly hidden. data-testid present on trigger, view-profile, report, cancel actions.",
+    "/app/frontend/app/community.tsx: hero onPress (lines 110-119) navigates DIRECTLY to /visit-detail/{id} or /country-visit-detail/{id} based on highlight.source. This is the structural fix for the 'shape-shifting' bug — no second fetch happens at the destination.",
+    "/app/frontend/app/(tabs)/profile.tsx line 317: Community menu row present, navigates to /community on press. data-testid not visible in the grep output — may be missing on this row. Recommend adding data-testid='profile-menu-community' for testability.",
+    "Dead code in continents.tsx (see action_items #1)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_community_refactor_iteration26.py (NEW)"
+  ],
+  "success_rate": {
+    "backend": "100% (17/17 tests pass — covers continent filter, diary report_type, rate limit, regression)",
+    "frontend": "~85% (page renders correctly, deleted route 404s, Profile menu present, Explore CTA removed verified — bottom-sheet interaction not fully exercised due to web auth gate but code review confirms correct wiring)"
+  },
+  "test_credentials": "Used test@wandermark.app / Test1234! and testpro@wandermark.app / Test1234! per /app/memory/test_credentials.md. Both worked for backend API tests.",
+  "seed_data_creation": "None for backend (preview DB unchanged except for test reports created during rate-limit test — all entries prefixed with TEST_ in target_id). The 5 admin reports submitted by the rate-limit test will roll off after 1 hour. No app-state pollution.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend test file at /app/backend/tests/test_community_refactor_iteration26.py is reusable as a regression suite for the community/reporting refactor. Run via: cd /app/backend && pytest tests/test_community_refactor_iteration26.py -v. Note: rate-limit test (TestReportsRateLimit::test_rate_limit_kicks_in_at_6th) inserts 5 real reports for the admin user — those count against the 1-hour window, so re-running the file within ~1 hour may have the early submissions hit 429 immediately (the test handles this gracefully — looks for 'at least one 429 in 6 attempts'). For continent filter visual verification on /community page, the preview DB has 0 public photos so chips will all show empty state — main agent can seed a public visit with continent='Europe' to see filtering work end-to-end visually.",
+  "rca of the issue": "N/A — no bugs found. The 'shape-shifting' bug fix is structurally correct: hero on /community navigates DIRECTLY to /visit-detail/{id} (community.tsx lines 110-119), eliminating the second random.choice() refetch that previously happened on the deleted /community-highlights destination page. The deleted page indeed returns 'Unmatched Route' (verified)."
+}

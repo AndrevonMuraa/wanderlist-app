@@ -8,8 +8,9 @@ import theme from '../../styles/theme';
 import { useSubscription } from '../../hooks/useSubscription';
 import { BACKEND_URL } from '../../utils/config';
 import UniversalHeader from '../../components/UniversalHeader';
-import ReportModal from '../../components/ReportModal';
+import ContentMenu from '../../components/ContentMenu';
 import { getToken } from '../../utils/token';
+import { useAuth } from '../../contexts/AuthContext';
 
 const { width } = Dimensions.get('window');
 const PHOTO_SIZE = (width - theme.spacing.lg * 3) / 2;
@@ -36,7 +37,7 @@ export default function LandmarkCommunityPhotosScreen() {
   const [photos, setPhotos] = useState<CommunityPhoto[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [diaryLocked, setDiaryLocked] = useState(false);
-  const [reportTarget, setReportTarget] = useState<{ id: string; name: string } | null>(null);
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'popular' | 'newest'>('popular');
   const [diaryModal, setDiaryModal] = useState<{ visible: boolean; text: string; userName: string }>({ visible: false, text: '', userName: '' });
@@ -142,14 +143,16 @@ export default function LandmarkCommunityPhotosScreen() {
                 <Ionicons name="lock-closed" size={14} color={theme.colors.textLight} />
               </View>
             )}
-            <TouchableOpacity
-              onPress={() => setReportTarget({ id: item.visit_id, name: 'Community photo' })}
-              style={styles.diaryButton}
-              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
-              data-testid={`report-btn-${item.photo_id}`}
-            >
-              <Ionicons name="flag-outline" size={14} color={theme.colors.textLight} />
-            </TouchableOpacity>
+            <ContentMenu
+              contentType="photo"
+              contentId={item.visit_id}
+              contentName="Community photo"
+              ownerId={item.user_id}
+              ownerName={item.user_name}
+              isOwnContent={user?.user_id === item.user_id}
+              variant="subtle"
+              testID={`content-menu-${item.photo_id}`}
+            />
           </View>
           {item.visited_at && (
             <Text style={styles.dateText}>
@@ -273,14 +276,6 @@ export default function LandmarkCommunityPhotosScreen() {
           </View>
         </TouchableOpacity>
       </Modal>
-
-      <ReportModal
-        visible={!!reportTarget}
-        onClose={() => setReportTarget(null)}
-        reportType="photo"
-        targetId={reportTarget?.id || ''}
-        targetName={reportTarget?.name || 'Community photo'}
-      />
     </View>
   );
 }

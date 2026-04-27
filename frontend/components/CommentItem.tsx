@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Text, Avatar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import theme from '../styles/theme';
+import ContentMenu from './ContentMenu';
 
 interface Comment {
   comment_id: string;
@@ -116,13 +117,23 @@ export default function CommentItem({
             </TouchableOpacity>
           )}
 
-          {comment.user_id === currentUserId && (
+          {comment.user_id === currentUserId ? (
             <TouchableOpacity
               style={styles.actionButton}
               onPress={handleDelete}
             >
               <Ionicons name="trash-outline" size={16} color={theme.colors.textLight} />
             </TouchableOpacity>
+          ) : (
+            <ContentMenu
+              contentType="comment"
+              contentId={comment.comment_id}
+              contentName={comment.user_name + "'s comment"}
+              ownerId={comment.user_id}
+              ownerName={comment.user_name}
+              variant="compact"
+              testID={`comment-menu-${comment.comment_id}`}
+            />
           )}
         </View>
       </View>

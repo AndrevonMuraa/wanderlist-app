@@ -8,7 +8,9 @@ import theme from '../../styles/theme';
 import { useSubscription } from '../../hooks/useSubscription';
 import { BACKEND_URL } from '../../utils/config';
 import UniversalHeader from '../../components/UniversalHeader';
+import ContentMenu from '../../components/ContentMenu';
 import { getToken } from '../../utils/token';
+import { useAuth } from '../../contexts/AuthContext';
 
 const { width } = Dimensions.get('window');
 const PHOTO_SIZE = (width - theme.spacing.lg * 3) / 2;
@@ -43,6 +45,7 @@ interface DiaryEntry {
 }
 
 export default function DestinationCommunityPhotosScreen() {
+  const { user } = useAuth();
   const { country_id, name } = useLocalSearchParams();
   const [photos, setPhotos] = useState<CommunityPhoto[]>([]);
   const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
@@ -145,6 +148,16 @@ export default function DestinationCommunityPhotosScreen() {
               <Text style={styles.userHandle} numberOfLines={1}>@{item.username}</Text>
             )}
           </View>
+          <ContentMenu
+            contentType="photo"
+            contentId={item.visit_id || item.photo_id}
+            contentName={item.landmark_name}
+            ownerId={item.user_id}
+            ownerName={item.user_name}
+            isOwnContent={user?.user_id === item.user_id}
+            variant="subtle"
+            testID={`content-menu-${item.photo_id}`}
+          />
         </View>
         <View style={styles.landmarkTag}>
           <Ionicons name="location" size={10} color={theme.colors.primary} />
