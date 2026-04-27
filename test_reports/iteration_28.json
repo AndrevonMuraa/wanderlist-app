@@ -1,0 +1,63 @@
+{
+  "summary": "Phase 3 retest after iteration_27 fixes. The testID fix is PARTIALLY effective — /community page now renders 9 aria-label='More options' (ContentMenu triggers visible) which confirms the data-testid → testID refactor in ContentMenu.tsx propagates to the DOM. However, the two main Phase 3 surfaces STILL do NOT render ContentMenu: (1) visit-detail non-owner photo overlay — 0 aria-labels page-wide on admin visiting fake_user_43528211's Arc de Triomphe visit, despite the visit body text confirming page load; (2) feed.tsx per-card rightExtra — /feed renders 20 testIDs (all 'surface' from Surface wrapper) and 0 feed-menu-* testIDs and 0 'More options' labels, even after scrolling. Owner-side visit-detail (visit_4f32a4eaf670) correctly hides the overlay menu. country-visit-detail source-code review: owner-gating fix is correctly applied (lines 671–710 wrapped in user?.user_id === visit?.user_id fragment). Backend: skipped per request (already 100% last iteration).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "ContentMenu (visit-detail non-owner photo overlay)",
+        "issue": "On /visit-detail/visit_ca8a3b6799b4 (admin viewing fake_user_43528211's Arc de Triomphe), 0 aria-label='More options' and 0 data-testid='visit-photo-menu' in DOM. Page body DOES render visit content (Arc de Triomphe / France / 2 photos / 'Utrolig vakkert sted!...' quick-notes). The gate `!isOwner && visit.user_id` at /app/frontend/app/visit-detail/[visit_id].tsx:319 should be satisfied. SUSPECTED ROOT CAUSE: ContentMenu is nested inside the parent <TouchableOpacity> at line 293 (the photo tap-to-zoom wrapper). React-native-web renders TouchableOpacity as role='button' and nesting another role='button' (ContentMenu's button) inside can cause the child to be dropped from the accessibility/render tree. The sibling 'photoCountBadge' (a <View>, not a button) renders fine. Fix: move the ContentMenu overlay OUT of the outer TouchableOpacity — either render it as a sibling after </TouchableOpacity> with absolute positioning anchored to the photo container View, or wrap the photo+menu in a plain <View> and use a separate onPress element just for zoom.",
+        "selector": "[data-testid='visit-photo-menu'] / [aria-label='More options']",
+        "priority": "HIGH"
+      },
+      {
+        "component": "ContentMenu (feed.tsx per-card rightExtra)",
+        "issue": "On /feed (admin logged in), 0 data-testid^='feed-menu-' and 0 aria-label='More options'. /feed DOM has 20 testIDs — all are 'surface' from the Surface wrapper — no feed-menu trigger ever reaches the DOM. Verified on /feed after scrolling. Meanwhile /community has ContentMenu rendering correctly (9 aria-labels) so the component itself works when used directly. The issue is specifically with how feed.tsx passes `rightExtra` at lines 377–396 to the card component — either the receiving card component does not render rightExtra at all, OR rightExtra is being stripped. Recommend: inspect the FeedCard / SocialFeedCard rendering code (whichever /app/frontend/app/feed.tsx uses) to confirm rightExtra is rendered. If the card component is external, add a direct ContentMenu render inside feed.tsx's own card wrapper rather than via a prop.",
+        "selector": "[data-testid^='feed-menu-']",
+        "priority": "HIGH"
+      },
+      {
+        "component": "Social-tab community feed cards",
+        "issue": "SEPARATE ISSUE: /app/frontend/app/(tabs)/social.tsx lines 325–354 render community feed cards using inline JSX (cfVerticalCard), NOT the feed.tsx component. Therefore NO ContentMenu appears on the social home tab's feed section regardless of whether feed.tsx is fixed. If the intent of Phase 3 was to show ContentMenu on the social-tab feed preview (iteration_27 specifically mentioned 'social-tab community feed cards'), the ContentMenu needs to be added to social.tsx's inline cards too.",
+        "selector": "[data-testid^='feed-menu-'] on /social tab",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [
+      {
+        "flow": "country-visit-detail owner-gating",
+        "issue": "Source-code review: fix correctly applied at /app/frontend/app/country-visit-detail/[country_visit_id].tsx lines 671–710 — share-toggle (eye icon) + edit-pencil are now wrapped in `{user?.user_id === visit?.user_id && (<>...</>)}`. ContentMenu remains in the non-owner branch (lines 660–670) with testID='country-visit-diary-menu'. Not UI-verified end-to-end because (a) no non-owner public country_visit seeded with diary in preview DB easily discoverable and (b) the ContentMenu general render path is proven working on /community.",
+        "affected_selectors": ["[data-testid='country-visit-diary-menu']"]
+      }
+    ],
+    "design_issues": [
+      {
+        "screen": "Fix verification for /community",
+        "issues": ["/community page now shows 9 '•••' ContentMenu triggers on non-owner community photo cards — the data-testid→testID refactor in ContentMenu.tsx is successful there."]
+      }
+    ]
+  },
+  "test_report_links": ["/app/test_reports/iteration_28.json"],
+  "action_items": [
+    "[CRITICAL] /app/frontend/app/visit-detail/[visit_id].tsx lines 293–332: ContentMenu is nested inside the parent <TouchableOpacity> photo wrapper. In React-native-web, nested pressable/role='button' elements cause the inner accessibility node to be dropped. Refactor: wrap the Image + zoom-hint + photoCountBadge + ContentMenu in a plain <View> (not TouchableOpacity). Use Pressable on the Image only, OR keep the outer TouchableOpacity but pull ContentMenu out as an absolute-positioned SIBLING after </TouchableOpacity>. This is the only remaining blocker for Phase 3 visit-photo-menu.",
+    "[CRITICAL] /app/frontend/app/feed.tsx lines 377–396: the `rightExtra` prop is passed to a card component (likely at line 319 where `renderItem` calls that card). Either the receiving card does not render rightExtra, or the slot is being dropped. Inspect the card component's JSX — confirm rightExtra is rendered somewhere in its markup. Fix: if rightExtra is unused, inline <ContentMenu> directly inside the feed.tsx card wrapper (outside the outer Surface's onPress if any).",
+    "[HIGH] If the spec requires ContentMenu on the SOCIAL-TAB feed preview (not just /feed), add a <ContentMenu /> inside /app/frontend/app/(tabs)/social.tsx around line 343–352 (inside cfVerticalBottom) with isOwnContent={item.user_id === user?.user_id}.",
+    "[MEDIUM] Seed a public fake_user visit with `diary` (not just `diary_notes`) so the non-owner diary-section ContentMenu (visit-diary-menu at line 545) can be exercised end-to-end. Current test visit only has `comments` field which renders as 'Quick Notes', not Travel Diary.",
+    "[LOW] /app/frontend/app/visit-detail/[visit_id].tsx line 606: still uses `data-testid='comments-section'` as HTML attribute on <View> — RN-Web drops this. Convert to `testID`. Same for line 567 `data-testid='visit-visibility-section'` and line 621 `data-testid='share-visit-button'`."
+  ],
+  "critical_code_review_comments": [
+    "ContentMenu testID fix confirmed working: /community page renders 9 'More options' aria-labels, which was 0 before the fix. The data-testid→testID refactor in ContentMenu.tsx is the correct RN-Web pattern.",
+    "Remaining regression on visit-detail is architectural: ContentMenu is nested inside a TouchableOpacity. Nesting pressables in RN-Web is a well-known issue — the inner pressable is often dropped from the accessibility tree. Move the menu out to a sibling View.",
+    "feed.tsx uses a `rightExtra` slot pattern; this requires the receiving card component to explicitly render the slot. Unverified whether it does. Safer fix is inline render.",
+    "/social home tab's community feed preview (social.tsx lines 322–356) is a DIFFERENT rendering path from feed.tsx — any fix in feed.tsx will NOT surface on /social tab without separately updating social.tsx.",
+    "country-visit-detail owner-gating fix is clean and correctly applied (lines 671–710 fragment).",
+    "Across the codebase there are still several HTML `data-testid=` attributes on RN <View>/<TouchableOpacity> (visit-detail.tsx lines 567, 606, 621; (tabs)/social.tsx line 308, 331, 371). These do not reach the DOM on web and should be converted to testID for testability consistency."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (not retested)", "frontend": "~40% — /community ContentMenu works (fix #1 partial success); visit-detail photo overlay and /feed per-card still fail; country-visit-detail owner-gating source fix confirmed."},
+  "test_credentials": "test@wandermark.app / Test1234! (admin)",
+  "seed_data_creation": "None.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "After main agent refactors ContentMenu out of the nested TouchableOpacity on visit-detail.tsx line 319 and fixes the rightExtra wiring in feed.tsx, re-run: (1) login admin → /visit-detail/visit_ca8a3b6799b4 → expect aria-label='More options' AND data-testid='visit-photo-menu' in top-right of main photo; (2) /feed → expect data-testid^='feed-menu-' on at least one non-own card (admin's user_id=user_dd46a314f120). Also verify /community still shows 9 ContentMenu triggers (regression guard). For country-visit-detail, need a seeded non-owner public country visit with diary — or accept the source-code verification.",
+  "rca of the issue": "TWO DISTINCT ROOT CAUSES remaining: (A) visit-detail photo overlay — ContentMenu is nested INSIDE the parent TouchableOpacity at line 293 that wraps the photo for tap-to-zoom. React-native-web renders TouchableOpacity as role='button' and nesting another button inside causes the inner accessibility node to be dropped from the DOM. Evidence: page body renders visit content fine, but 0 aria-labels anywhere, and /community (where ContentMenu is used OUTSIDE any touchable) shows 9 aria-labels correctly. Fix: move ContentMenu to a sibling after </TouchableOpacity> with absolute positioning on the parent View. (B) feed.tsx per-card — ContentMenu is passed via `rightExtra` prop to a card component. The receiving card component either doesn't render rightExtra or drops it. Evidence: /feed has 20 testIDs (all 'surface' wrapper) and 0 feed-menu-* testIDs. Fix: inline the ContentMenu directly inside the feed card markup rather than via prop-slot."
+}

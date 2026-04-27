@@ -111,7 +111,7 @@ export default function ContentMenu({
         onPress={openSheet}
         style={buttonStyle}
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        data-testid={testID || `content-menu-${contentType}-${contentId}`}
+        testID={testID || `content-menu-${contentType}-${contentId}`}
       >
         <Ionicons
           name="ellipsis-horizontal"
@@ -133,7 +133,7 @@ export default function ContentMenu({
               <TouchableOpacity
                 style={styles.row}
                 onPress={handleViewProfile}
-                data-testid="content-menu-view-profile"
+                testID="content-menu-view-profile"
               >
                 <Ionicons name="person-outline" size={20} color={theme.colors.text} />
                 <Text style={styles.rowText}>
@@ -144,7 +144,7 @@ export default function ContentMenu({
             <TouchableOpacity
               style={styles.row}
               onPress={handleReportPress}
-              data-testid="content-menu-report"
+              testID="content-menu-report"
             >
               <Ionicons name="flag-outline" size={20} color="#E53935" />
               <Text style={[styles.rowText, styles.destructive]}>
@@ -154,7 +154,7 @@ export default function ContentMenu({
             <TouchableOpacity
               style={[styles.row, styles.cancelRow]}
               onPress={closeSheet}
-              data-testid="content-menu-cancel"
+              testID="content-menu-cancel"
             >
               <Text style={styles.cancelText}>Cancel</Text>
             </TouchableOpacity>

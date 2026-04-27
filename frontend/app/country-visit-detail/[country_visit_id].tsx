@@ -668,9 +668,11 @@ export default function DestinationVisitDetailScreen() {
                   testID="country-visit-diary-menu"
                 />
               ) : null}
-              <TouchableOpacity
-                onPress={async () => {
-                  const newVal = !(visit.share_diary ?? true);
+              {user?.user_id === visit?.user_id && (
+                <>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      const newVal = !(visit.share_diary ?? true);
                   try {
                     const token = await getToken();
                     await fetch(`${BACKEND_URL}/api/country-visits/${country_visit_id}`, {
@@ -694,15 +696,17 @@ export default function DestinationVisitDetailScreen() {
                   {(visit.share_diary !== false) ? 'Shared' : 'Hidden'}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity 
-                onPress={() => {
-                  setEditDiary(visit.diary || '');
-                  setShowEditDialog(true);
-                }}
-                style={styles.editDiaryBtn}
-              >
-                <Ionicons name="create-outline" size={20} color={theme.colors.primary} />
-              </TouchableOpacity>
+                  <TouchableOpacity 
+                    onPress={() => {
+                      setEditDiary(visit.diary || '');
+                      setShowEditDialog(true);
+                    }}
+                    style={styles.editDiaryBtn}
+                  >
+                    <Ionicons name="create-outline" size={20} color={theme.colors.primary} />
+                  </TouchableOpacity>
+                </>
+              )}
             </View>
           </View>
           {visit.diary ? (
