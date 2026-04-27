@@ -114,7 +114,13 @@ export default function NotificationsScreen() {
         router.push('/(tabs)/journey');
         break;
       case 'content_removed':
+      case 'content_hidden':
+      case 'warning_issued':
+      case 'account_suspended':
         router.push('/terms-of-service?section=guidelines');
+        break;
+      case 'moderator_message':
+        // Personal moderator message — no navigation, just mark as read
         break;
     }
   };
@@ -148,6 +154,14 @@ export default function NotificationsScreen() {
         return { name: 'trophy', color: '#FFD700' };
       case 'content_removed':
         return { name: 'shield', color: '#E87850' };
+      case 'content_hidden':
+        return { name: 'eye-off', color: '#F59E0B' };
+      case 'warning_issued':
+        return { name: 'warning', color: '#F59E0B' };
+      case 'account_suspended':
+        return { name: 'lock-closed', color: '#F97316' };
+      case 'moderator_message':
+        return { name: 'mail', color: '#3B82F6' };
       default:
         return { name: 'notifications', color: theme.colors.textSecondary };
     }
