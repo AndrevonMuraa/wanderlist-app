@@ -8,6 +8,7 @@ import {
   Platform,
   StatusBar,
   Modal,
+  Linking,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -331,13 +332,30 @@ export default function NotificationsScreen() {
             <Text style={styles.modalFooter}>
               {modMessage?.created_at ? new Date(modMessage.created_at).toLocaleString() : ''}
             </Text>
-            <TouchableOpacity
-              style={styles.modalBtn}
-              onPress={() => setModMessage(null)}
-              testID="moderator-message-dismiss"
-            >
-              <Text style={styles.modalBtnText}>OK</Text>
-            </TouchableOpacity>
+            <View style={styles.modalButtonRow}>
+              <TouchableOpacity
+                style={[styles.modalBtn, styles.modalBtnSecondary]}
+                onPress={() => {
+                  const subject = encodeURIComponent(`Re: ${modMessage?.title || 'Moderator message'}`);
+                  const body = encodeURIComponent(
+                    `\n\n---\nReply reference: ${modMessage?.notification_id || ''}\nOriginal message:\n${modMessage?.message || ''}`
+                  );
+                  Linking.openURL(`mailto:support@wandermark.app?subject=${subject}&body=${body}`).catch(() => {});
+                  setModMessage(null);
+                }}
+                testID="moderator-message-reply"
+              >
+                <Ionicons name="arrow-undo" size={16} color="#3B82F6" />
+                <Text style={[styles.modalBtnText, styles.modalBtnTextSecondary]}>Reply</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalBtn, styles.modalBtnPrimary]}
+                onPress={() => setModMessage(null)}
+                testID="moderator-message-dismiss"
+              >
+                <Text style={styles.modalBtnText}>OK</Text>
+              </TouchableOpacity>
+            </View>
           </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
