@@ -1,0 +1,50 @@
+{
+  "summary": "Iteration 29 verification of admin/moderator polish + Explore CTA compression. BACKEND: 15/15 passed, 1 skipped (no user-type reports). All super-admin gates, content_preview enrichment, reviewed_by audit fields, new make-moderator/demote endpoints verified. FRONTEND: all polish changes EXIST in source but a STALE /app/frontend/dist/ prebuilt bundle is being served by the preview — live source changes (continents.tsx line 236, admin/index.tsx line 210, admin/reports.tsx TYPE_ICONS + REPORT_REASONS) are NOT rendered in the browser.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Continents/Explore page CTA",
+        "issue": "Browser renders OLD compass-outline + blue-left-border block with text 'Where have you been? Register your visits to earn points and climb the ranks!' — but `grep` across /app/frontend/app/**/*.tsx returns ZERO matches for 'Where have you been'. Meanwhile /app/frontend/app/continents.tsx:236 contains the new text 'Track your visits, earn points, top the ranks.'. The stale text is present in /app/frontend/dist/_expo/static/js/web/entry-*.js, confirming the preview is serving a pre-built dist bundle instead of live source.",
+        "selector": "[data-testid='explore-guide-cta']",
+        "priority": "HIGH"
+      },
+      {
+        "component": "Admin header role-aware title",
+        "issue": "/admin header still shows literal 'Admin Panel'; source at /app/frontend/app/admin/index.tsx:210 renders {user?.role === 'admin' ? 'Super Admin' : user?.role === 'moderator' ? 'Moderator' : 'Admin'} with gold/silver shield, but the bundled dist doesn't contain this logic yet.",
+        "selector": "[data-testid='admin-header-title']",
+        "priority": "HIGH"
+      },
+      {
+        "component": "Admin reports type-filter row + readable reasons",
+        "issue": "/admin/reports shows only status filters (All / Pending / Resolved / Dismissed) and each report displays the RAW enum 'inappropriate_diary' (not the human-readable 'Inappropriate diary text'). Source has REPORT_REASONS map (line 61, including 80: inappropriate_diary → 'Inappropriate diary text'), TYPE_ICONS map (line 84), and All-Types + per-type chips (line 452-454). None render in browser. Same root cause: stale dist bundle. Report cards DO show differentiated colored type-badge icons (Activity/Diary/Comment) in screenshots, so part of the old theme did propagate — but these specific polish additions did not.",
+        "selector": "[data-testid='reports-type-filter']",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_admin_moderator_iteration29.py",
+    "/app/test_reports/pytest/iteration29.xml"
+  ],
+  "action_items": [
+    "[CRITICAL] Rebuild the Expo web frontend so the preview serves live source. The preview is serving /app/frontend/dist/_expo/static/js/web/entry-*.js which still contains the old 'Where have you been?' string and lacks all polish changes. Either: (a) remove /app/frontend/dist/ so expo dev server serves live, (b) run `yarn build` / `expo export --platform web` to regenerate dist, or (c) verify the supervisor expo process is in dev mode (not serving dist). Verification: after rebuild, browsing /continents should show 'Track your visits, earn points, top the ranks.' and /admin should show 'Super Admin' in header for test@wandermark.app.",
+    "[INFO] All BACKEND changes are verified working — no backend action needed."
+  ],
+  "critical_code_review_comments": [
+    "Backend role gating is clean: get_super_admin_user raises 403 with specific 'Super Admin privileges' message; all four destructive endpoints (recalculate-leaderboard-points, strip-verified, make-moderator, demote-to-user) depend on it and PUT /admin/users also has line 228 inline check. Verified by pytest.",
+    "content_preview enrichment covers photo/diary/activity/comment correctly with graceful fallback to user_created_visits collection.",
+    "Frontend source code for all polish items (continents CTA, admin header, reports type-filter row, REPORT_REASONS map, TYPE_ICONS map, audit-trail row) is present and correct per review — only the build/serve pipeline is stale.",
+    "Confirmed by grep: string 'Where have you been' exists ONLY in /app/frontend/dist/_expo/static/js/web/entry-*.js — not in any .tsx/.ts source. This definitively proves the dist bundle is serving stale code."
+  ],
+  "updated_files": ["/app/backend/tests/test_admin_moderator_iteration29.py"],
+  "success_rate": {"backend": "100% (15/15 passed, 1 legitimate skip)", "frontend": "0% — polish changes present in source but not served by preview due to stale dist bundle"},
+  "test_credentials": "test@wandermark.app / Test1234! (super admin), mod@wandermark.app / Test1234! (moderator), testpro@wandermark.app / Test1234!",
+  "seed_data_creation": "Created one TEST_iter29 user-type report via /api/reports as pro user targeting moderator user_id — used to verify reviewed_by audit. Remains in DB as reviewed.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend pytest suite /app/backend/tests/test_admin_moderator_iteration29.py is the regression guard for admin/moderator role gating — run with RATE_LIMIT_DEFAULT_RPM=10000 RATE_LIMIT_AUTH_RPM=500. After main agent rebuilds frontend dist (or removes dist/ so dev server serves live), re-verify UI: (1) /continents shows 'Track your visits, earn points, top the ranks.' one-liner with no compass icon and no blue left border; (2) /admin header shows 'Super Admin' with gold shield-checkmark for test@, 'Moderator' for mod@; (3) /admin/reports has a type-filter row (All Types, User, Photo, Diary, Comment, Activity chips) below status filter, and report reasons show as 'Inappropriate diary text' not raw 'inappropriate_diary'. Existing reports may lack content_preview/reviewed_by until refetched/updated — that's expected.",
+  "rca of the issue": "Preview URL serves prebuilt bundle from /app/frontend/dist/_expo/static/js/web/entry-*.js. Source code changes in /app/frontend/app/continents.tsx, /app/frontend/app/admin/index.tsx, /app/frontend/app/admin/reports.tsx are correct but not reflected in the served bundle. Evidence: (a) grep 'Where have you been' in /app/frontend/app returns 0 results, but the browser DOM contains that string; (b) grep across /app/frontend found the stale string inside dist/_expo/static/js/web/entry-1e3389fe6c5fe673fa297be72ad300ca.js. Fix: rebuild web bundle (`expo export --platform web`) or delete dist/ and restart expo supervisor so it serves dev mode."
+}

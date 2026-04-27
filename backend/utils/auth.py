@@ -134,7 +134,10 @@ async def get_admin_user(current_user: User = Depends(get_current_user)) -> User
 
 async def get_super_admin_user(current_user: User = Depends(get_current_user)) -> User:
     if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Super admin access required")
+        raise HTTPException(
+            status_code=403,
+            detail="This action requires Super Admin privileges. Moderators cannot perform destructive operations (leaderboard recalculation, stripping verified points, role changes)."
+        )
     if current_user.is_banned:
         raise HTTPException(status_code=403, detail="Account is banned")
     return current_user

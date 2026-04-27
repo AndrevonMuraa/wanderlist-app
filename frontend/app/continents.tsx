@@ -230,11 +230,10 @@ export default function ContinentsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Guide CTA */}
+        {/* Guide CTA — single-line punchy copy, no icon, no border */}
         <View style={styles.guideCta}>
-          <Ionicons name="compass-outline" size={16} color={theme.colors.primary} />
           <Text style={styles.guideCtaText}>
-            Where have you been? Register your visits to earn points and climb the ranks!
+            Track your visits, earn points, top the ranks.
           </Text>
         </View>
 
@@ -431,24 +430,19 @@ const styles = StyleSheet.create({
   },
   // Guide CTA
   guideCta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
     marginHorizontal: theme.spacing.md,
-    marginTop: 6,
-    marginBottom: 2,
+    marginTop: 8,
+    marginBottom: 8,
     paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingVertical: 10,
     backgroundColor: theme.colors.primary + '08',
     borderRadius: 12,
-    borderLeftWidth: 3,
-    borderLeftColor: theme.colors.primary,
   },
   guideCtaText: {
-    flex: 1,
     fontSize: 12,
     color: theme.colors.textSecondary,
-    lineHeight: 17,
+    textAlign: 'center',
+    fontWeight: '500',
   },
 
   // Community CTA (Window glass card, ocean-to-sand icon)

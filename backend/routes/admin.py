@@ -335,13 +335,61 @@ async def get_admin_reports(
         )
         report["reporter"] = reporter
 
-        # Get target info based on type
-        if report["report_type"] == "user":
+        # Get target info / content preview based on type. Allows moderators to
+        # judge reports without leaving the queue.
+        rtype = report.get("report_type")
+        target_id = report.get("target_id")
+        if rtype == "user" and target_id:
             target = await db.users.find_one(
-                {"user_id": report["target_id"]},
-                {"_id": 0, "name": 1, "email": 1, "picture": 1}
+                {"user_id": target_id},
+                {"_id": 0, "name": 1, "email": 1, "picture": 1, "user_id": 1}
             )
             report["target"] = target
+        elif rtype in ("photo", "activity", "diary") and target_id:
+            visit = await db.visits.find_one(
+                {"visit_id": target_id},
+                {"_id": 0, "user_id": 1, "landmark_id": 1, "photos": 1, "diary_notes": 1, "visited_at": 1}
+            )
+            if not visit:
+                visit = await db.user_created_visits.find_one(
+                    {"user_created_visit_id": target_id},
+                    {"_id": 0, "user_id": 1, "country_name": 1, "trip_name": 1, "photos": 1, "diary": 1, "visited_at": 1}
+                )
+            if visit:
+                owner = await db.users.find_one(
+                    {"user_id": visit.get("user_id")},
+                    {"_id": 0, "name": 1, "email": 1, "picture": 1, "user_id": 1}
+                )
+                report["target"] = owner
+                # Content preview: thumbnail (1st photo) + diary snippet (200 chars)
+                photos = visit.get("photos") or []
+                diary_text = visit.get("diary_notes") or visit.get("diary") or ""
+                report["content_preview"] = {
+                    "photo_url": photos[0] if photos else None,
+                    "photo_count": len(photos),
+                    "diary_snippet": (diary_text[:200] + "…") if len(diary_text) > 200 else diary_text,
+                    "landmark_id": visit.get("landmark_id"),
+                    "trip_name": visit.get("trip_name"),
+                    "country_name": visit.get("country_name"),
+                    "visited_at": visit.get("visited_at"),
+                }
+        elif rtype == "comment" and target_id:
+            comment = await db.comments.find_one(
+                {"comment_id": target_id},
+                {"_id": 0, "user_id": 1, "text": 1, "created_at": 1, "activity_id": 1}
+            )
+            if comment:
+                owner = await db.users.find_one(
+                    {"user_id": comment.get("user_id")},
+                    {"_id": 0, "name": 1, "email": 1, "picture": 1, "user_id": 1}
+                )
+                report["target"] = owner
+                text = comment.get("text") or ""
+                report["content_preview"] = {
+                    "comment_text": (text[:300] + "…") if len(text) > 300 else text,
+                    "comment_created_at": comment.get("created_at"),
+                    "activity_id": comment.get("activity_id"),
+                }
 
         # Auto-flag metadata
         pending = pending_count_map.get(report.get("target_id"), 0)
@@ -383,7 +431,10 @@ async def update_admin_report(
 
     update_fields = {
         "status": update_data.status,
-        "reviewed_at": datetime.now(timezone.utc)
+        "reviewed_at": datetime.now(timezone.utc),
+        "reviewed_by_user_id": admin_user.user_id,
+        "reviewed_by_name": admin_user.name,
+        "reviewed_by_role": admin_user.role,
     }
     if update_data.admin_notes:
         update_fields["admin_notes"] = update_data.admin_notes
@@ -463,6 +514,54 @@ async def make_user_admin(user_id: str, admin_user: User = Depends(get_super_adm
     })
     
     return {"message": f"User {user_id} promoted to admin"}
+
+
+@router.post("/admin/make-moderator/{user_id}")
+async def make_user_moderator(user_id: str, admin_user: User = Depends(get_super_admin_user)):
+    """Promote a user to moderator (super admin only).
+
+    Moderators get access to non-destructive admin tasks: viewing reports,
+    moderating content, banning users, sending notifications. They CANNOT
+    recalculate leaderboards, strip verified points, or promote other users.
+    """
+    result = await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": {"role": "moderator"}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    await db.admin_logs.insert_one({
+        "log_id": f"log_{uuid.uuid4().hex[:12]}",
+        "admin_id": admin_user.user_id,
+        "admin_name": admin_user.name,
+        "action": "promote_to_moderator",
+        "target_id": user_id,
+        "created_at": datetime.now(timezone.utc)
+    })
+    return {"message": f"User {user_id} promoted to moderator"}
+
+
+@router.post("/admin/demote-to-user/{user_id}")
+async def demote_to_user(user_id: str, admin_user: User = Depends(get_super_admin_user)):
+    """Remove admin/moderator role from a user (super admin only)."""
+    if user_id == admin_user.user_id:
+        raise HTTPException(status_code=400, detail="Cannot demote yourself")
+    result = await db.users.update_one(
+        {"user_id": user_id},
+        {"$unset": {"role": ""}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    await db.admin_logs.insert_one({
+        "log_id": f"log_{uuid.uuid4().hex[:12]}",
+        "admin_id": admin_user.user_id,
+        "admin_name": admin_user.name,
+        "action": "demote_to_user",
+        "target_id": user_id,
+        "created_at": datetime.now(timezone.utc)
+    })
+    return {"message": f"User {user_id} demoted to regular user"}
+
 
 # ============= ADMIN PUSH NOTIFICATIONS =============
 
@@ -619,7 +718,7 @@ async def get_notification_stats(
 # ============= LEADERBOARD ENDPOINTS =============
 
 @router.post("/admin/recalculate-leaderboard-points")
-async def recalculate_leaderboard_points(admin_user: User = Depends(get_admin_user)):
+async def recalculate_leaderboard_points(admin_user: User = Depends(get_super_admin_user)):
     """Recalculate leaderboard_points for all users based on actual photo-verified visits.
     
     This endpoint scans all visits and country_visits, sums up points only from
@@ -701,7 +800,7 @@ async def recalculate_leaderboard_points(admin_user: User = Depends(get_admin_us
 
 
 @router.put("/admin/users/{user_id}/strip-verified")
-async def strip_verified_points(user_id: str, admin_user: User = Depends(get_admin_user)):
+async def strip_verified_points(user_id: str, admin_user: User = Depends(get_super_admin_user)):
     """
     Strip all verified status from a user's visits without deleting content.
     - Sets all visits to verified=false

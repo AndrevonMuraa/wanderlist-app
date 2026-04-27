@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, Alert, Platform } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, Alert, Platform, Image } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -29,6 +29,9 @@ interface ReportItem {
   admin_notes?: string;
   created_at: string;
   reviewed_at?: string;
+  reviewed_by_user_id?: string;
+  reviewed_by_name?: string;
+  reviewed_by_role?: string;
   auto_flagged?: boolean;
   pending_report_count?: number;
   reporter?: {
@@ -41,14 +44,49 @@ interface ReportItem {
     email: string;
     picture?: string;
   };
+  content_preview?: {
+    photo_url?: string;
+    photo_count?: number;
+    diary_snippet?: string;
+    comment_text?: string;
+    landmark_id?: string;
+    trip_name?: string;
+    country_name?: string;
+    visited_at?: string;
+    comment_created_at?: string;
+    activity_id?: string;
+  };
 }
 
 const REPORT_REASONS: { [key: string]: string } = {
-  spam: 'Spam or misleading',
+  // Generic reasons (any type)
+  spam: 'Spam or promotional content',
   harassment: 'Harassment or bullying',
   inappropriate: 'Inappropriate content',
-  fake: 'Fake or misleading information',
+  hate_speech: 'Hate speech',
+  offensive: 'Offensive content',
+  copyright: 'Copyright violation',
   other: 'Other violation',
+  // User-specific
+  fake_profile: 'Fake profile',
+  cheating: 'Cheating / abusing the system',
+  // Photo/activity-specific
+  fake: 'Fake or misleading',
+  fake_visit: 'Fake visit',
+  inappropriate_photo: 'Inappropriate photo',
+  wrong_location: 'Wrong location tag',
+  not_landmark: 'Not a real landmark',
+  // Diary-specific
+  inappropriate_diary: 'Inappropriate diary text',
+  harassment_diary: 'Harassing diary text',
+};
+
+const TYPE_ICONS: { [key: string]: { name: any; color: string; label: string } } = {
+  user: { name: 'person', color: '#8B5CF6', label: 'User' },
+  photo: { name: 'image', color: '#3B82F6', label: 'Photo' },
+  diary: { name: 'book', color: '#F59E0B', label: 'Diary' },
+  comment: { name: 'chatbubble-ellipses', color: '#10B981', label: 'Comment' },
+  activity: { name: 'footsteps', color: '#EC4899', label: 'Activity' },
 };
 
 const STATUS_COLORS: { [key: string]: string } = {
@@ -68,6 +106,7 @@ export default function AdminReportsScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string | null>('pending');
+  const [typeFilter, setTypeFilter] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -75,7 +114,7 @@ export default function AdminReportsScreen() {
     if (activeTab === 'reports') fetchReports();
     else if (activeTab === 'bugs') fetchBugReports();
     else if (activeTab === 'blocks') fetchBlocks();
-  }, [page, statusFilter, activeTab]);
+  }, [page, statusFilter, typeFilter, activeTab]);
 
   const fetchBugReports = async () => {
     try {
@@ -106,6 +145,9 @@ export default function AdminReportsScreen() {
       
       if (statusFilter) {
         url += `&status=${statusFilter}`;
+      }
+      if (typeFilter) {
+        url += `&report_type=${typeFilter}`;
       }
 
       const response = await fetch(url, {
@@ -185,16 +227,15 @@ export default function AdminReportsScreen() {
 
       {/* Header */}
       <View style={styles.reportHeader}>
-        <View style={[styles.typeBadge, { backgroundColor: colors.primary + '20' }]}>
-          <Ionicons 
-            name={report.report_type === 'user' ? 'person' : 'image'} 
-            size={14} 
-            color={colors.primary} 
-          />
-          <Text style={[styles.typeText, { color: colors.primary }]}>
-            {report.report_type.charAt(0).toUpperCase() + report.report_type.slice(1)}
-          </Text>
-        </View>
+        {(() => {
+          const t = TYPE_ICONS[report.report_type] || { name: 'help-circle', color: colors.primary, label: report.report_type };
+          return (
+            <View style={[styles.typeBadge, { backgroundColor: t.color + '20' }]}>
+              <Ionicons name={t.name} size={14} color={t.color} />
+              <Text style={[styles.typeText, { color: t.color }]}>{t.label}</Text>
+            </View>
+          );
+        })()}
         <View style={[styles.statusBadge, { backgroundColor: STATUS_COLORS[report.status] }]}>
           <Text style={styles.statusText}>
             {report.status.charAt(0).toUpperCase() + report.status.slice(1)}
@@ -209,6 +250,35 @@ export default function AdminReportsScreen() {
           {REPORT_REASONS[report.reason] || report.reason}
         </Text>
       </View>
+
+      {/* Content preview — only for non-user reports */}
+      {report.content_preview && (
+        <View style={[styles.previewBox, { backgroundColor: colors.background, borderColor: colors.border }]}>
+          {report.content_preview.photo_url && (
+            <Image
+              source={{ uri: report.content_preview.photo_url }}
+              style={styles.previewImage}
+              resizeMode="cover"
+            />
+          )}
+          {report.content_preview.diary_snippet ? (
+            <View style={styles.previewTextBlock}>
+              <Text style={[styles.previewLabel, { color: colors.textSecondary }]}>Diary excerpt:</Text>
+              <Text style={[styles.previewText, { color: colors.text }]} numberOfLines={4}>
+                "{report.content_preview.diary_snippet}"
+              </Text>
+            </View>
+          ) : null}
+          {report.content_preview.comment_text ? (
+            <View style={styles.previewTextBlock}>
+              <Text style={[styles.previewLabel, { color: colors.textSecondary }]}>Comment:</Text>
+              <Text style={[styles.previewText, { color: colors.text }]} numberOfLines={4}>
+                "{report.content_preview.comment_text}"
+              </Text>
+            </View>
+          ) : null}
+        </View>
+      )}
 
       {/* Reporter Info */}
       <View style={styles.infoRow}>
@@ -241,6 +311,21 @@ export default function AdminReportsScreen() {
         <View style={[styles.notesContainer, { backgroundColor: colors.background }]}>
           <Text style={[styles.notesLabel, { color: colors.textSecondary }]}>Admin Notes:</Text>
           <Text style={[styles.notesText, { color: colors.text }]}>{report.admin_notes}</Text>
+        </View>
+      )}
+
+      {/* Audit trail — who reviewed and when */}
+      {report.reviewed_by_name && report.reviewed_at && (
+        <View style={styles.auditRow}>
+          <Ionicons
+            name={report.reviewed_by_role === 'admin' ? 'shield-checkmark' : 'shield-outline'}
+            size={12}
+            color={report.reviewed_by_role === 'admin' ? '#FFD700' : colors.textSecondary}
+          />
+          <Text style={[styles.auditText, { color: colors.textSecondary }]}>
+            Reviewed by <Text style={{ fontWeight: '600' }}>{report.reviewed_by_name}</Text>
+            {report.reviewed_by_role ? ` (${report.reviewed_by_role})` : ''} · {new Date(report.reviewed_at).toLocaleDateString()}
+          </Text>
         </View>
       )}
 
@@ -351,6 +436,34 @@ export default function AdminReportsScreen() {
           <FilterChip label="Resolved" value="resolved" active={statusFilter === 'resolved'} />
           <FilterChip label="Dismissed" value="dismissed" active={statusFilter === 'dismissed'} />
         </View>
+      </ScrollView>
+
+      {/* Type Filter */}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.filtersContainer}
+        contentContainerStyle={styles.filtersRow}
+      >
+        <TouchableOpacity
+          onPress={() => { setTypeFilter(null); setPage(1); }}
+          style={[styles.typeFilterChip, typeFilter === null && { backgroundColor: colors.primary, borderColor: colors.primary }]}
+        >
+          <Text style={[styles.typeFilterText, { color: typeFilter === null ? '#FFF' : colors.text }]}>All Types</Text>
+        </TouchableOpacity>
+        {Object.entries(TYPE_ICONS).map(([type, info]) => {
+          const active = typeFilter === type;
+          return (
+            <TouchableOpacity
+              key={type}
+              onPress={() => { setTypeFilter(active ? null : type); setPage(1); }}
+              style={[styles.typeFilterChip, active && { backgroundColor: info.color, borderColor: info.color }]}
+            >
+              <Ionicons name={info.name} size={12} color={active ? '#FFF' : info.color} />
+              <Text style={[styles.typeFilterText, { color: active ? '#FFF' : colors.text }]}>{info.label}</Text>
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
 
       {/* Reports List */}
@@ -522,6 +635,64 @@ const styles = StyleSheet.create({
   filterChipText: {
     fontSize: 14,
     fontWeight: '500',
+  },
+  typeFilterChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    backgroundColor: 'transparent',
+  },
+  typeFilterText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  previewBox: {
+    flexDirection: 'row',
+    gap: 12,
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginTop: 8,
+    marginBottom: 4,
+  },
+  previewImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+    backgroundColor: '#F3F4F6',
+  },
+  previewTextBlock: {
+    flex: 1,
+    gap: 4,
+  },
+  previewLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  previewText: {
+    fontSize: 13,
+    lineHeight: 18,
+    fontStyle: 'italic',
+  },
+  auditRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 8,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#F0F0F0',
+  },
+  auditText: {
+    fontSize: 11,
+    flex: 1,
   },
   loadingContainer: {
     flex: 1,

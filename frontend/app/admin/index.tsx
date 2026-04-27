@@ -201,8 +201,14 @@ export default function AdminDashboard() {
             <Ionicons name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
           <View style={styles.headerTitleContainer}>
-            <Ionicons name="shield-checkmark" size={24} color="#4ade80" />
-            <Text style={styles.headerTitle}>Admin Panel</Text>
+            <Ionicons
+              name={user?.role === 'admin' ? 'shield-checkmark' : 'shield-outline'}
+              size={24}
+              color={user?.role === 'admin' ? '#FFD700' : '#C0C0C0'}
+            />
+            <Text style={styles.headerTitle}>
+              {user?.role === 'admin' ? 'Super Admin' : user?.role === 'moderator' ? 'Moderator' : 'Admin'}
+            </Text>
           </View>
           <TouchableOpacity
             onPress={onRefresh}
