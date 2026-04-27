@@ -442,7 +442,7 @@ export default function AdminReportsScreen() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={styles.filtersContainer}
+        style={styles.filtersScroll}
         contentContainerStyle={styles.filtersRow}
       >
         <TouchableOpacity
@@ -639,9 +639,9 @@ const styles = StyleSheet.create({
   typeFilterChip: {
     flexDirection: 'row',
     alignItems: 'center',
+    height: 32,
     gap: 4,
     paddingHorizontal: 12,
-    paddingVertical: 6,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: '#E5E7EB',
