@@ -191,7 +191,7 @@ export default function TermsOfServiceScreen() {
 
             <Text style={[styles.subTitle, { marginTop: 16 }]}>Reporting</Text>
             <Text style={styles.paragraph}>
-              See something off? Tap the flag icon on any photo or long-press a card in the community grids. Our moderation team reviews every report within 24–48 hours. Please use reports responsibly — repeated false reports may restrict your account.
+              See something off? Tap the "•••" menu next to any photo, diary entry or comment, then choose "Report". Our moderation team reviews every report within 24–48 hours. Please use reports responsibly — repeated false reports may restrict your account.
             </Text>
 
             <Text style={[styles.subTitle, { marginTop: 16 }]}>Enforcement</Text>

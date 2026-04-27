@@ -267,11 +267,14 @@ export default function SocialHubScreen() {
         showsVerticalScrollIndicator={false}
       >
 
-        {/* Community Highlight Hero */}
+        {/* Community Highlight Hero (compact = ~16:10 aspect, leaves room for
+            content below). Tapping goes to /community where users can browse
+            the full top list — fixes "shape-shifting" bug from before. */}
         {communityHighlight && (
           <CommunityHighlightHero
             highlight={communityHighlight}
-            onPress={() => router.push('/community-highlights')}
+            compact
+            onPress={() => router.push('/community')}
           />
         )}
 

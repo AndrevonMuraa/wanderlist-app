@@ -336,29 +336,6 @@ export default function ContinentsScreen() {
           />
         </TouchableOpacity>
 
-        {/* Community highlight CTA — "Window" glass card */}
-        <TouchableOpacity
-          style={styles.communityCta}
-          onPress={() => router.push('/community-highlights')}
-          activeOpacity={0.88}
-          data-testid="explore-community-cta"
-        >
-          <View style={styles.communityCtaInner}>
-            <LinearGradient
-              colors={[theme.colors.primary, theme.colors.accentSand]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.communityCtaIconWrap}
-            >
-              <Ionicons name="sparkles" size={22} color="#FFF" />
-            </LinearGradient>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.communityCtaTitle}>Community highlight</Text>
-              <Text style={styles.communityCtaSub}>See what the community is loving today →</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={18} color={theme.colors.primary} />
-          </View>
-        </TouchableOpacity>
       </ScrollView>
 
       {/* Custom Visit Modal */}

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 import os
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from utils.db import db
 from utils.auth import get_current_user
@@ -20,7 +20,7 @@ async def create_report(report_data: ReportCreate, current_user: User = Depends(
     Reports are reviewed by moderators within 24-48 hours.
     """
     # Validate report type
-    valid_types = ["user", "activity", "photo", "comment"]
+    valid_types = ["user", "activity", "photo", "comment", "diary"]
     if report_data.report_type not in valid_types:
         raise HTTPException(status_code=400, detail="Invalid report type")
     
@@ -28,10 +28,23 @@ async def create_report(report_data: ReportCreate, current_user: User = Depends(
     valid_reasons = [
         "fake_profile", "harassment", "spam", "inappropriate", "cheating", "other",
         "fake_visit", "inappropriate_photo", "wrong_location", "copyright",
-        "not_landmark", "offensive", "hate_speech"
+        "not_landmark", "offensive", "hate_speech",
+        "inappropriate_diary", "harassment_diary"
     ]
     if report_data.reason not in valid_reasons:
         raise HTTPException(status_code=400, detail="Invalid report reason")
+    
+    # Anti-abuse: max 5 reports per user per hour
+    one_hour_ago = datetime.now(timezone.utc) - timedelta(hours=1)
+    recent_count = await db.reports.count_documents({
+        "reporter_id": current_user.user_id,
+        "created_at": {"$gte": one_hour_ago}
+    })
+    if recent_count >= 5:
+        raise HTTPException(
+            status_code=429,
+            detail="You've submitted too many reports. Please try again later."
+        )
     
     # Check if user has already reported this item
     existing_report = await db.reports.find_one({

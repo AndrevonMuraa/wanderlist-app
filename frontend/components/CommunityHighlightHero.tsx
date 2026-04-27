@@ -35,9 +35,12 @@ interface CommunityHighlightHeroProps {
 export default function CommunityHighlightHero({
   highlight,
   onPress,
-}: CommunityHighlightHeroProps) {
+  compact = false,
+}: CommunityHighlightHeroProps & { compact?: boolean }) {
   const width = SCREEN_WIDTH - 32;
-  const height = width / 0.8; // 4:5 aspect
+  // Compact mode = ~16:10 aspect (smaller, leaves room for content below).
+  // Default = 4:5 portrait (used inside the dedicated /community page where it's a hero).
+  const height = compact ? width / 1.6 : width / 0.8;
 
   return (
     <TouchableOpacity

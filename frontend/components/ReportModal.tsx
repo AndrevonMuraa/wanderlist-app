@@ -22,7 +22,7 @@ const getToken = async (): Promise<string | null> => {
   }
 };
 
-export type ReportType = 'user' | 'activity' | 'photo' | 'comment';
+export type ReportType = 'user' | 'activity' | 'photo' | 'comment' | 'diary';
 
 interface ReportReason {
   id: string;
@@ -59,6 +59,13 @@ const REPORT_REASONS: Record<ReportType, ReportReason[]> = {
     { id: 'spam', label: 'Spam', description: 'This is spam or promotional content' },
     { id: 'inappropriate', label: 'Inappropriate Language', description: 'This comment contains inappropriate language' },
     { id: 'hate_speech', label: 'Hate Speech', description: 'This comment contains hate speech' },
+    { id: 'other', label: 'Other', description: 'Other reason not listed above' },
+  ],
+  diary: [
+    { id: 'inappropriate_diary', label: 'Inappropriate Content', description: 'This diary text contains inappropriate content' },
+    { id: 'harassment_diary', label: 'Harassment', description: 'This diary text harasses or targets someone' },
+    { id: 'hate_speech', label: 'Hate Speech', description: 'This diary text contains hate speech' },
+    { id: 'spam', label: 'Spam', description: 'This diary text is spam or promotional content' },
     { id: 'other', label: 'Other', description: 'Other reason not listed above' },
   ],
 };

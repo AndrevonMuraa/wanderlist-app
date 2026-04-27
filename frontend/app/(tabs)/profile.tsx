@@ -310,6 +310,17 @@ export default function ProfileScreen() {
         {/* Menu - Simplified */}
         <Surface style={[styles.menuCard, { backgroundColor: colors.surface }]}>
           <List.Item
+            title="Community"
+            description="Top photos and trending visits"
+            left={props => <List.Icon {...props} icon="account-group-outline" color={colors.primary} />}
+            right={props => <List.Icon {...props} icon="chevron-right" color={colors.textLight} />}
+            onPress={() => router.push('/community')}
+            titleStyle={[styles.listItemTitle, { color: colors.text }]}
+            descriptionStyle={[styles.listItemDescription, { color: colors.textSecondary }]}
+            testID="profile-menu-community"
+          />
+          <Divider style={[styles.divider, { backgroundColor: colors.border }]} />
+          <List.Item
             title={t('profile.aboutWanderMark')}
             description={t('profile.learnHowToUse')}
             left={props => <List.Icon {...props} icon="information-outline" color={colors.primary} />}

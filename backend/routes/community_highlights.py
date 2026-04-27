@@ -60,6 +60,7 @@ async def get_community_highlight(
 async def get_top_community_highlights(
     limit: int = 10,
     scope: str = Query("all", regex="^(all|month)$"),
+    continent: str = Query(None),
     current_user: User = Depends(get_current_user)
 ):
     """Top N (max 50) community photos ranked by likes_count.
@@ -67,6 +68,7 @@ async def get_top_community_highlights(
     - scope=all (default): all-time leaderboard
     - scope=month: restrict to visits whose `visited_at` falls inside the current
       calendar month (UTC). Powers the shareable "Top 10 of the month" card.
+    - continent (optional): filter to a specific continent (e.g. "Europe", "Asia").
     """
     limit = max(1, min(limit, 50))
     candidates = await build_candidate_pool(current_user)
@@ -77,6 +79,9 @@ async def get_top_community_highlights(
         now = datetime.now(timezone.utc)
         start_iso = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
         candidates = [c for c in candidates if (c.get("visited_at") or "") >= start_iso]
+
+    if continent:
+        candidates = [c for c in candidates if c.get("continent") == continent]
 
     candidates.sort(key=lambda c: (c.get("likes_count", 0), c.get("visited_at") or ""), reverse=True)
     top = candidates[:limit]

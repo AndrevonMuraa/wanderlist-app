@@ -75,9 +75,20 @@ async def build_candidate_pool(current_user: User, include_custom: bool = True) 
     if landmark_ids:
         lms = await db.landmarks.find(
             {"landmark_id": {"$in": landmark_ids}},
-            {"_id": 0, "landmark_id": 1, "name": 1, "country_name": 1, "country_id": 1}
+            {"_id": 0, "landmark_id": 1, "name": 1, "country_name": 1, "country_id": 1, "continent": 1}
         ).to_list(len(landmark_ids))
         lm_map = {lm["landmark_id"]: lm for lm in lms}
+
+    # Lookup continent for custom-visit countries (lookup by country_name since custom visits
+    # store country_name but not country_id)
+    custom_country_names = list({cv.get("country_name") for cv in custom_visits if cv.get("country_name")})
+    country_continent_map = {}
+    if custom_country_names:
+        country_docs = await db.countries.find(
+            {"name": {"$in": custom_country_names}},
+            {"_id": 0, "name": 1, "continent": 1}
+        ).to_list(len(custom_country_names))
+        country_continent_map = {c["name"]: c["continent"] for c in country_docs}
 
     visit_ids = [v["visit_id"] for v in visits]
     ucv_ids = [cv["user_created_visit_id"] for cv in custom_visits]
@@ -135,6 +146,7 @@ async def build_candidate_pool(current_user: User, include_custom: bool = True) 
             "landmark_name": lm.get("name"),
             "country_name": lm.get("country_name"),
             "country_id": lm.get("country_id"),
+            "continent": lm.get("continent"),
             "has_diary": bool(v.get("diary_notes")),
             "likes_count": likes,
             "visited_at": visited_at.isoformat() if isinstance(visited_at, datetime) else None,
@@ -167,6 +179,7 @@ async def build_candidate_pool(current_user: User, include_custom: bool = True) 
             "landmark_name": label,
             "country_name": cv.get("country_name"),
             "country_id": None,
+            "continent": country_continent_map.get(cv.get("country_name")),
             "has_diary": bool(cv.get("diary")),
             "likes_count": likes,
             "visited_at": visited_at.isoformat() if isinstance(visited_at, datetime) else None,

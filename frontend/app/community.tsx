@@ -13,6 +13,7 @@ import UniversalHeader from '../components/UniversalHeader';
 import SectionHeader from '../components/SectionHeader';
 import MediaCard from '../components/MediaCard';
 import CommunityHighlightHero from '../components/CommunityHighlightHero';
+import TopHighlightsList from '../components/TopHighlightsList';
 import { getToken } from '../utils/token';
 
 const CARD_WIDTH = 170;
@@ -96,46 +97,28 @@ export default function CommunityScreen() {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         contentContainerStyle={{ paddingBottom: 40 }}
       >
-        {/* Community Highlight — real hero (replaces the old CTA gradient) */}
+        {/* Community Highlight — real hero (taps go DIRECTLY to the featured
+            visit, not to a separate page that re-fetches a different random
+            highlight — this was the source of the "shape-shifting" bug). */}
         {communityHighlight ? (
           <>
             <SectionHeader
               icon="sparkles"
               iconColor={theme.colors.accentGold}
               title="Community highlight"
-              onSeeAll={() => router.push('/community-highlights')}
-              seeAllTestId="community-highlight-see-all"
             />
             <CommunityHighlightHero
               highlight={communityHighlight}
-              onPress={() => router.push('/community-highlights')}
+              onPress={() => {
+                if (communityHighlight.source === 'custom') {
+                  router.push(`/country-visit-detail/${communityHighlight.visit_id}` as any);
+                } else {
+                  router.push(`/visit-detail/${communityHighlight.visit_id}` as any);
+                }
+              }}
             />
           </>
-        ) : (
-          <TouchableOpacity
-            style={styles.featuredLink}
-            onPress={() => router.push('/community-highlights')}
-            activeOpacity={0.85}
-            data-testid="community-featured-link"
-          >
-            <LinearGradient
-              colors={[theme.colors.primary, theme.colors.primaryDark]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.featuredGradient}
-            >
-              <View style={{ flex: 1 }}>
-                <View style={styles.featuredBadge}>
-                  <Ionicons name="sparkles" size={10} color="#FFF" />
-                  <Text style={styles.featuredBadgeText}>Featured</Text>
-                </View>
-                <Text style={styles.featuredTitle}>Today's community highlight</Text>
-                <Text style={styles.featuredSub}>Discover what's captivating the community right now</Text>
-              </View>
-              <Ionicons name="arrow-forward-circle" size={36} color="#FFF" />
-            </LinearGradient>
-          </TouchableOpacity>
-        )}
+        ) : null}
 
         {/* Trending landmarks */}
         {highlights.length > 0 && (
@@ -203,43 +186,15 @@ export default function CommunityScreen() {
           </>
         )}
 
-        {/* Most popular */}
-        {topPhotos.length > 0 && (
-          <>
-            <SectionHeader
-              icon="heart"
-              iconColor="#FF4B6E"
-              title="Most popular"
-              onSeeAll={() => router.push('/community-highlights/top')}
-              seeAllTestId="most-popular-see-all"
-            />
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.carouselContent}
-              snapToInterval={CARD_WIDTH + 12}
-              decelerationRate="fast"
-            >
-              {topPhotos.map((item, i) => (
-                <MediaCard
-                  key={item.visit_id || i}
-                  photoUrl={item.photo_url}
-                  title={item.landmark_name}
-                  subtitle={item.country_name}
-                  userName={item.user_name}
-                  userPicture={item.user_picture}
-                  isCustom={item.source === 'custom'}
-                  likesCount={item.likes_count || 0}
-                  commentsCount={item.comments_count || 0}
-                  onPress={() => goToFeedItem(item)}
-                  width={CARD_WIDTH}
-                  aspect={CARD_ASPECT}
-                  testID={`popular-${i}`}
-                />
-              ))}
-            </ScrollView>
-          </>
-        )}
+        {/* Top Community Highlights — numbered list (#1 emphasized) with
+            scope (all-time/month) + continent filter. Replaces the
+            previous "Most popular" carousel and the dedicated /community-highlights/top page. */}
+        <SectionHeader
+          icon="trophy"
+          iconColor="#FFD700"
+          title="Top community highlights"
+        />
+        <TopHighlightsList />
 
         {/* Empty state */}
         {highlights.length === 0 && recentPhotos.length === 0 && (
