@@ -99,6 +99,8 @@ async def get_admin_users(
     role: Optional[str] = None,
     tier: Optional[str] = None,
     is_banned: Optional[bool] = None,
+    has_warnings: Optional[bool] = None,
+    suspended: Optional[bool] = None,
     sort_by: str = "created_at",
     sort_order: str = "desc",
     page: int = 1,
@@ -123,6 +125,12 @@ async def get_admin_users(
     
     if is_banned is not None:
         query["is_banned"] = is_banned
+
+    if has_warnings is True:
+        query["warning_count"] = {"$gt": 0}
+
+    if suspended is True:
+        query["suspended_until"] = {"$gt": datetime.now(timezone.utc)}
     
     # Get total count
     total = await db.users.count_documents(query)

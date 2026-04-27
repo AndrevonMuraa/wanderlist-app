@@ -96,19 +96,32 @@ async def get_current_user_from_session(session_token: str) -> Optional[User]:
 
 
 async def get_current_user(request: Request, session_token: Optional[str] = Cookie(None), authorization: Optional[str] = None) -> User:
+    user: Optional[User] = None
     if session_token:
         user = await get_current_user_from_session(session_token)
-        if user:
-            _tag_sentry_user(user)
-            return user
-    auth_header = request.headers.get("Authorization")
-    if auth_header and auth_header.startswith("Bearer "):
-        token = auth_header.split(" ")[1]
-        user = await get_current_user_from_token(token)
-        if user:
-            _tag_sentry_user(user)
-            return user
-    raise HTTPException(status_code=401, detail="Not authenticated")
+    if not user:
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header.split(" ")[1]
+            user = await get_current_user_from_token(token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    # Enforce active suspensions (auth-blocked until the date passes).
+    # Super-admins bypass so a suspended admin can un-suspend themselves.
+    if user.role != "admin" and user.suspended_until:
+        suspended_until = user.suspended_until
+        if suspended_until.tzinfo is None:
+            suspended_until = suspended_until.replace(tzinfo=timezone.utc)
+        if suspended_until > datetime.now(timezone.utc):
+            reason = user.suspension_reason or "Violation of community guidelines"
+            raise HTTPException(
+                status_code=403,
+                detail=f"Account suspended until {suspended_until.strftime('%b %d, %Y')}. Reason: {reason}",
+            )
+
+    _tag_sentry_user(user)
+    return user
 
 
 def _tag_sentry_user(user: User) -> None:

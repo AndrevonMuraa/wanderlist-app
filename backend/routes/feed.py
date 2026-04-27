@@ -23,6 +23,7 @@ async def get_activity_feed(current_user: User = Depends(get_current_user), limi
 
     # Privacy filter
     privacy_filter = {
+        "hidden": {"$ne": True},
         "$or": [
             {"user_id": current_user.user_id},
             {
@@ -303,7 +304,7 @@ async def add_comment(activity_id: str, data: CommentCreate, current_user: User 
 async def get_activity_comments(activity_id: str, current_user: User = Depends(get_current_user)):
     """Get comments for an activity"""
     
-    comments = await db.comments.find({"activity_id": activity_id}).sort("created_at", 1).to_list(1000)
+    comments = await db.comments.find({"activity_id": activity_id, "hidden": {"$ne": True}}).sort("created_at", 1).to_list(1000)
     
     # Check which comments current user has liked
     comment_ids = [c["comment_id"] for c in comments]

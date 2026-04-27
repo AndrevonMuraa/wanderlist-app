@@ -10,6 +10,7 @@ import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
 import { useTheme } from '../../contexts/ThemeContext';
 import { BACKEND_URL } from '../../utils/config';
+import { useAuth } from '../../contexts/AuthContext';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -99,6 +100,8 @@ const STATUS_COLORS: { [key: string]: string } = {
 export default function AdminReportsScreen() {
   const router = useRouter();
   const { colors } = useTheme();
+  const { user: currentUser } = useAuth();
+  const isSuperAdmin = currentUser?.role === 'admin';
   const [activeTab, setActiveTab] = useState<'reports' | 'bugs' | 'blocks'>('reports');
   const [reports, setReports] = useState<ReportItem[]>([]);
   const [bugReports, setBugReports] = useState<any[]>([]);
@@ -192,6 +195,129 @@ export default function AdminReportsScreen() {
         Alert.alert('Error', 'Failed to update report');
       }
     } catch (err) {
+      Alert.alert('Error', 'Network error');
+    }
+  };
+
+  // Prompt user for a freeform reason (web uses prompt(), native uses Alert w/ TextInput fallback)
+  const promptReason = (title: string, message: string, defaultValue = ''): Promise<string | null> => {
+    return new Promise((resolve) => {
+      if (Platform.OS === 'web') {
+        // eslint-disable-next-line no-alert
+        const val = window.prompt(`${title}\n\n${message}`, defaultValue);
+        resolve(val && val.trim().length > 0 ? val.trim() : null);
+        return;
+      }
+      // @ts-ignore — RN Alert.prompt is iOS-only
+      if (Alert.prompt) {
+        // @ts-ignore
+        Alert.prompt(title, message, [
+          { text: 'Cancel', style: 'cancel', onPress: () => resolve(null) },
+          { text: 'OK', onPress: (val: string) => resolve(val?.trim() || null) },
+        ], 'plain-text', defaultValue);
+      } else {
+        Alert.alert(title, message, [{ text: 'OK', onPress: () => resolve(defaultValue || 'No reason provided') }]);
+      }
+    });
+  };
+
+  const hideContent = async (report: ReportItem) => {
+    const reason = await promptReason(
+      'Hide content',
+      `Hide this ${report.report_type} from public view? Owner will be notified. Enter a short reason (required):`,
+    );
+    if (!reason) return;
+    const token = await getToken();
+    try {
+      const res = await fetch(
+        `${BACKEND_URL}/api/admin/content/${report.report_type}/${report.target_id}/hide`,
+        {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reason, notify_owner: true }),
+        },
+      );
+      if (res.ok) {
+        Alert.alert('Content hidden', 'The content is now hidden from public feeds.');
+        await updateReportStatus(report.report_id, 'resolved');
+      } else {
+        const data = await res.json().catch(() => ({}));
+        Alert.alert('Error', data.detail || 'Failed to hide content');
+      }
+    } catch (err) {
+      Alert.alert('Error', 'Network error');
+    }
+  };
+
+  const deleteContentPermanent = async (report: ReportItem) => {
+    if (!isSuperAdmin) {
+      Alert.alert('Super Admin only', 'Permanent deletion requires Super Admin privileges.');
+      return;
+    }
+    const confirm = await promptReason(
+      'Delete permanently?',
+      'This action is IRREVERSIBLE. Type DELETE to confirm:',
+    );
+    if (confirm !== 'DELETE') {
+      if (confirm !== null) Alert.alert('Cancelled', 'You must type DELETE exactly.');
+      return;
+    }
+    const token = await getToken();
+    try {
+      const res = await fetch(
+        `${BACKEND_URL}/api/admin/content/${report.report_type}/${report.target_id}`,
+        { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (res.ok) {
+        Alert.alert('Deleted', 'Content permanently deleted.');
+        await updateReportStatus(report.report_id, 'resolved');
+      } else {
+        const data = await res.json().catch(() => ({}));
+        Alert.alert('Error', data.detail || 'Failed to delete');
+      }
+    } catch {
+      Alert.alert('Error', 'Network error');
+    }
+  };
+
+  const warnReportedUser = async (report: ReportItem) => {
+    const targetUserId = report.report_type === 'user' ? report.target_id : report.target?.name ? null : null;
+    // For content reports, warn the content's owner. We pass target_id=reporter's content → need owner.
+    // The backend moderation hide endpoint returns owner_id; simpler: for user reports use target_id, else navigate.
+    if (report.report_type !== 'user') {
+      Alert.alert(
+        'Warn user',
+        'Open the content owner\'s moderation page to issue a warning.',
+        [{ text: 'OK' }],
+      );
+      return;
+    }
+    const reason = await promptReason(
+      'Warn user',
+      `Issue a warning to ${report.target?.name || 'this user'}?\n\nReason (required):`,
+    );
+    if (!reason) return;
+    const token = await getToken();
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/admin/users/${targetUserId}/warn`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason, related_report_id: report.report_id }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        Alert.alert(
+          'Warning issued',
+          data.auto_suspended
+            ? `User auto-suspended for ${data.suspend_days} days (warning ${data.warning_count}).`
+            : `Warning issued. Total warnings: ${data.warning_count}.`,
+        );
+        await updateReportStatus(report.report_id, 'resolved');
+      } else {
+        const data = await res.json().catch(() => ({}));
+        Alert.alert('Error', data.detail || 'Failed to warn user');
+      }
+    } catch {
       Alert.alert('Error', 'Network error');
     }
   };
@@ -340,6 +466,7 @@ export default function AdminReportsScreen() {
                 { text: 'Resolve', onPress: () => updateReportStatus(report.report_id, 'resolved') }
               ]);
             }}
+            testID={`report-resolve-${report.report_id}`}
           >
             <Ionicons name="checkmark-circle" size={18} color="#10b981" />
             <Text style={[styles.actionBtnText, { color: '#10b981' }]}>Resolve</Text>
@@ -353,15 +480,53 @@ export default function AdminReportsScreen() {
                 { text: 'Dismiss', onPress: () => updateReportStatus(report.report_id, 'dismissed') }
               ]);
             }}
+            testID={`report-dismiss-${report.report_id}`}
           >
             <Ionicons name="close-circle" size={18} color="#6b7280" />
             <Text style={[styles.actionBtnText, { color: '#6b7280' }]}>Dismiss</Text>
           </TouchableOpacity>
 
+          {/* Hide content (non-user reports) */}
+          {report.report_type !== 'user' && (
+            <TouchableOpacity
+              style={[styles.actionBtn, { backgroundColor: '#F59E0B' + '20' }]}
+              onPress={() => hideContent(report)}
+              testID={`report-hide-${report.report_id}`}
+            >
+              <Ionicons name="eye-off" size={18} color="#F59E0B" />
+              <Text style={[styles.actionBtnText, { color: '#F59E0B' }]}>Hide</Text>
+            </TouchableOpacity>
+          )}
+
+          {/* Permanent delete — super admin only */}
+          {report.report_type !== 'user' && isSuperAdmin && (
+            <TouchableOpacity
+              style={[styles.actionBtn, { backgroundColor: '#DC2626' + '20' }]}
+              onPress={() => deleteContentPermanent(report)}
+              testID={`report-delete-${report.report_id}`}
+            >
+              <Ionicons name="trash" size={18} color="#DC2626" />
+              <Text style={[styles.actionBtnText, { color: '#DC2626' }]}>Delete</Text>
+            </TouchableOpacity>
+          )}
+
+          {/* Warn user (user-type reports) */}
+          {report.report_type === 'user' && report.target && (
+            <TouchableOpacity
+              style={[styles.actionBtn, { backgroundColor: '#F59E0B' + '20' }]}
+              onPress={() => warnReportedUser(report)}
+              testID={`report-warn-${report.report_id}`}
+            >
+              <Ionicons name="warning" size={18} color="#F59E0B" />
+              <Text style={[styles.actionBtnText, { color: '#F59E0B' }]}>Warn</Text>
+            </TouchableOpacity>
+          )}
+
           {report.report_type === 'user' && report.target && (
             <TouchableOpacity 
               style={[styles.actionBtn, { backgroundColor: colors.error + '20' }]}
-              onPress={() => router.push(`/admin/user-detail?id=${report.target_id}` as any)}
+              onPress={() => router.push(`/admin/user-moderation?id=${report.target_id}` as any)}
+              testID={`report-view-user-${report.report_id}`}
             >
               <Ionicons name="person" size={18} color={colors.error} />
               <Text style={[styles.actionBtnText, { color: colors.error }]}>View User</Text>

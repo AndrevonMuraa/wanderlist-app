@@ -27,6 +27,8 @@ interface UserItem {
   subscription_tier: string;
   role: string;
   is_banned: boolean;
+  warning_count?: number;
+  suspended_until?: string | null;
   visit_count: number;
   points: number;
   created_at: string;
@@ -63,6 +65,12 @@ export default function AdminUsersScreen() {
         url += '&tier=pro';
       } else if (filter === 'admin') {
         url += '&role=admin';
+      } else if (filter === 'moderator') {
+        url += '&role=moderator';
+      } else if (filter === 'warnings') {
+        url += '&has_warnings=true';
+      } else if (filter === 'suspended') {
+        url += '&suspended=true';
       }
 
       const response = await fetch(url, {
@@ -149,11 +157,15 @@ export default function AdminUsersScreen() {
     }
   };
 
-  const UserCard = ({ user }: { user: UserItem }) => (
+  const UserCard = ({ user }: { user: UserItem }) => {
+    const isSuspended = !!(user.suspended_until && new Date(user.suspended_until) > new Date());
+    const warningCount = user.warning_count || 0;
+    return (
     <TouchableOpacity 
       style={[styles.userCard, { backgroundColor: colors.surface }]}
-      onPress={() => router.push(`/admin/user-detail?id=${user.user_id}` as any)}
+      onPress={() => router.push(`/admin/user-moderation?id=${user.user_id}` as any)}
       activeOpacity={0.7}
+      testID={`admin-user-card-${user.user_id}`}
     >
       <View style={styles.userHeader}>
         <View style={[styles.avatar, { backgroundColor: colors.primary + '30' }]}>
@@ -189,10 +201,26 @@ export default function AdminUsersScreen() {
                 <Text style={styles.bannedBadgeText}>BANNED</Text>
               </View>
             )}
+            {isSuspended && !user.is_banned && (
+              <View style={[styles.bannedBadge, { backgroundColor: '#F97316' }]}>
+                <Text style={styles.bannedBadgeText}>SUSPENDED</Text>
+              </View>
+            )}
+            {warningCount > 0 && !isSuspended && !user.is_banned && (
+              <View style={[styles.bannedBadge, { backgroundColor: '#F59E0B', flexDirection: 'row', alignItems: 'center', gap: 3 }]}>
+                <Ionicons name="warning" size={10} color="#fff" />
+                <Text style={styles.bannedBadgeText}>{warningCount}</Text>
+              </View>
+            )}
           </View>
           <Text style={[styles.userEmail, { color: colors.textSecondary }]} numberOfLines={1}>
             {user.email}
           </Text>
+          {isSuspended && user.suspended_until && (
+            <Text style={{ fontSize: 11, color: '#F97316', marginTop: 2 }}>
+              Suspended until {new Date(user.suspended_until).toLocaleDateString()}
+            </Text>
+          )}
         </View>
       </View>
       
@@ -293,7 +321,8 @@ export default function AdminUsersScreen() {
         <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
       </View>
     </TouchableOpacity>
-  );
+    );
+  };
 
   const FilterChip = ({ label, value, active }: { label: string; value: string | null; active: boolean }) => (
     <TouchableOpacity
@@ -352,6 +381,8 @@ export default function AdminUsersScreen() {
         <View style={styles.filtersRow}>
           <FilterChip label="All" value={null} active={filter === null} />
           <FilterChip label="Banned" value="banned" active={filter === 'banned'} />
+          <FilterChip label="Suspended" value="suspended" active={filter === 'suspended'} />
+          <FilterChip label="Warnings" value="warnings" active={filter === 'warnings'} />
           <FilterChip label="Pro Users" value="pro" active={filter === 'pro'} />
           <FilterChip label="Moderators" value="moderator" active={filter === 'moderator'} />
           <FilterChip label="Admins" value="admin" active={filter === 'admin'} />

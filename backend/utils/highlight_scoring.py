@@ -48,7 +48,8 @@ async def build_candidate_pool(current_user: User, include_custom: bool = True) 
 
     visits = await db.visits.find(
         {"visibility": "public", "photos": {"$exists": True, "$ne": []},
-         "visit_id": {"$nin": list(flagged_ids)}},
+         "visit_id": {"$nin": list(flagged_ids)},
+         "hidden": {"$ne": True}},
         {"_id": 0, "visit_id": 1, "user_id": 1, "landmark_id": 1,
          "photos": 1, "diary_notes": 1, "visited_at": 1}
     ).sort("visited_at", -1).limit(200).to_list(200)
@@ -59,6 +60,7 @@ async def build_candidate_pool(current_user: User, include_custom: bool = True) 
             {
                 "visibility": "public",
                 "user_created_visit_id": {"$nin": list(flagged_ids)},
+                "hidden": {"$ne": True},
                 "$or": [
                     {"photos": {"$exists": True, "$ne": []}},
                     {"landmarks.photo": {"$exists": True, "$ne": None}},

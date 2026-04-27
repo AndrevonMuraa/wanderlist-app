@@ -20,7 +20,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from models.all import User
 from utils.auth import get_admin_user, get_super_admin_user
-from utils.notifications import create_notification
+from utils.helpers import create_notification
 
 router = APIRouter()
 
@@ -219,9 +219,16 @@ async def warn_user(
 
     # Auto-escalation: count warnings in last 30 days
     thirty_days_ago = now - timedelta(days=30)
+
+    def _aware(dt):
+        """Coerce naive datetimes (from older Mongo docs) to UTC-aware."""
+        if dt is None:
+            return None
+        return dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt
+
     recent_warnings = sum(
         1 for w in (user.get("warnings") or [])
-        if (w.get("issued_at") and w["issued_at"] > thirty_days_ago)
+        if (w.get("issued_at") and _aware(w["issued_at"]) > thirty_days_ago)
     ) + 1  # plus the one we just issued
 
     auto_suspended = False

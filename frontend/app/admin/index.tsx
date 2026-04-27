@@ -323,6 +323,15 @@ export default function AdminDashboard() {
             color="#f59e0b"
             onPress={() => router.push('/admin/promo-codes')}
           />
+          {user?.role === 'admin' && (
+            <MenuCard
+              title="Moderator Activity"
+              description="Review moderator actions, response times & accountability"
+              icon="shield-checkmark-outline"
+              color="#FFD700"
+              onPress={() => router.push('/admin/moderator-activity' as any)}
+            />
+          )}
         </View>
 
         {/* Activity Summary */}
