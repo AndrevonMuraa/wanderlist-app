@@ -4,77 +4,104 @@
 Bring "WanderMark" travel app (React Native + Expo + FastAPI + MongoDB) to a production-ready state for App Store launch.
 
 ## Architecture
-- **Frontend**: `/app/frontend` — Expo Router, "Penthouse Window" aesthetic
-- **Backend**: `/app/backend` — FastAPI + Motor (MongoDB)
-- **Production**: Render (backend) + EAS Build (iOS/TestFlight)
+- Frontend: `/app/frontend` — Expo Router, "Penthouse Window" aesthetic
+- Backend: `/app/backend` — FastAPI + Motor (MongoDB)
+- Production: Render (backend) + EAS Build (iOS/TestFlight)
 
-## What's been implemented (recent)
+## What's been implemented (completed sessions)
 
-### April 2026 — Build 83+ session
-- ✅ Build 83 EAS build successful → TestFlight
-- ✅ Production DB cleaned: 1500 landmarks / 100 countries (300/20 per continent)
-- ✅ Icon system unified (footsteps-outline / shield-checkmark-outline / star / shield-checkmark / star-outline)
-- ✅ Pytest suite 205/205 green
+### April 2026 — Build 83 + DB cleanup
+- Build 83 EAS build → TestFlight
+- Production DB: 1500 landmarks / 100 countries (300/20 per continent)
+- Icon system unified, pytest 205/205
 
-### April 2026 — Community refactor + reporting overhaul session
-- ✅ Shape-shifting bug fixed: Community Highlight hero → /community → DIRECTLY to /visit-detail
-- ✅ Deleted /community-highlights.tsx + /community-highlights/top.tsx
-- ✅ TopHighlightsList — numbered top 1-10, gold/silver/bronze badges, scope+continent filter
-- ✅ ContentMenu universal component (overlay/subtle/compact), 8 surfaces converted
-- ✅ Backend report rate limit (5/hr/user), diary report type
-- ✅ RN-Web pitfalls fixed: `data-testid` → `testID`, nested TouchableOpacity → sibling-overlay
+### April 2026 — Community refactor + reporting overhaul
+- Shape-shifting bug fixed (Community Highlight hero direct nav)
+- Deleted dedicated highlights pages
+- TopHighlightsList numbered top 1-10 with scope+continent filter
+- ContentMenu universal (••• bottom sheet) — 8 surfaces
+- Backend report rate limit (5/hr/user), diary report type
+- RN-Web pitfalls fixed (testID + sibling-overlay)
 
-### April 2026 — Polish + Admin/Moderator modernisation session (current)
-- ✅ **Explore CTA compressed**: Removed compass icon + 3px blue border-left, single-line copy "Track your visits, earn points, top the ranks." (centered)
-- ✅ **Admin/reports type-filter UI**: Color-coded chips for User (purple), Photo (blue), Diary (orange), Comment (green), Activity (pink)
-- ✅ **REPORT_REASONS expanded**: 15 entries covering all backend reasons (was only 5) — human-readable labels for `inappropriate_diary`, `harassment_diary`, `fake_visit`, `wrong_location`, etc.
-- ✅ **Differentiated type icons**: TYPE_ICONS map renders correct icon+color per report_type
-- ✅ **Content preview in admin reports**: Backend enriches reports with `content_preview` (photo thumbnail, diary snippet ≤200 chars, comment text ≤300 chars) so moderators can decide without leaving the queue
-- ✅ **Audit trail**: `update_admin_report` now stores `reviewed_by_user_id`, `reviewed_by_name`, `reviewed_by_role`. Frontend renders audit row with role-shield icon + reviewer name + date
-- ✅ **Destructive ops gated to super-admin**: `recalculate-leaderboard-points` and `strip-verified-points` now require `get_super_admin_user`
-- ✅ **NEW endpoints**: `POST /api/admin/make-moderator/{user_id}` + `POST /api/admin/demote-to-user/{user_id}` (both super-admin only, with admin_logs audit)
-- ✅ **Improved 403 message**: `get_super_admin_user` now returns descriptive "This action requires Super Admin privileges. Moderators cannot perform destructive operations..."
-- ✅ **Role-aware admin header**: `/admin` shows "Super Admin" (gold shield-checkmark) or "Moderator" (silver shield-outline) based on user.role
-- ✅ **Documentation**: Created `/app/memory/ADMIN_ROLES.md` with full role matrix, endpoint coverage, audit trail details
+### April 2026 — Admin/moderator polish
+- Explore CTA compressed (single-line text)
+- admin/reports: 15 reasons, type-color icons, content_preview, audit-trail
+- Destructive ops gated to super-admin (recalculate, strip-verified, role changes)
+- NEW: make-moderator, demote-to-user endpoints
+- Role-aware admin header (Super Admin / Moderator)
+- /app/memory/ADMIN_ROLES.md documentation
 
-## Prioritized Backlog
+### April 2026 — Moderator power tools (THIS SESSION — partially done)
+- ✅ User model extended: `warning_count`, `warnings[]`, `last_warning_at`, `suspended_until`, `suspension_reason`
+- ✅ NEW file `/app/backend/routes/moderation.py` with full implementation:
+  - `POST /api/admin/content/{ctype}/{id}/hide` — soft-delete (any moderator)
+  - `POST /api/admin/content/{ctype}/{id}/restore` — un-hide
+  - `DELETE /api/admin/content/{ctype}/{id}` — hard-delete (super-admin only)
+  - `POST /api/admin/users/{id}/warn` — issue warning + auto-escalation (3 in 30d → 7d suspend; 5+ ever → 30d)
+  - `POST /api/admin/users/{id}/suspend` — manual N-day suspension
+  - `POST /api/admin/users/{id}/unsuspend` — clear suspension
+  - `POST /api/admin/users/{id}/message` — send moderator message via push
+  - `GET /api/admin/users/{id}/moderation-history` — full mod history per user
+  - `GET /api/admin/moderator-activity?days=30` — super-admin dashboard
 
-### P1 — Polish
-- ⏳ Cleanup remaining `data-testid` HTML-attrs in visit-detail (line 567/606/621) + feed.tsx (dead reportTarget state)
-- ⏳ Seed public visit with diary in preview DB so non-owner diary ContentMenu can be exercised
+## ⏳ PENDING — Critical work to complete in next session
 
-### P2 — New features
-- ⏳ "Mitt år i reise" — Auto-generated yearly summary with shareable cards
-- ⏳ Block user UI in ContentMenu user-variant (backend route exists)
-- ⏳ Filter "Show only moderators" in /admin/users for quick role overview
+### 🔴 P0 — Backend wiring (10 min)
+1. **Wire moderation router** into `/app/backend/server.py`:
+   ```python
+   from routes import moderation
+   app.include_router(moderation.router, prefix="/api")
+   ```
+2. **Update `get_current_user`** in `/app/backend/utils/auth.py` to enforce suspended_until:
+   ```python
+   if current_user.suspended_until and current_user.suspended_until > datetime.now(timezone.utc):
+       raise HTTPException(403, detail=f"Account suspended until {suspended_until}. Reason: {suspension_reason}")
+   ```
+3. **Filter `hidden: true`** from public feeds:
+   - `utils/highlight_scoring.py` `build_candidate_pool` — add `"hidden": {"$ne": True}` to query
+   - `routes/feed.py`, `routes/social.py` (if applicable) — same filter
+   - Comments listing — exclude `hidden: true`
 
-### P3 — Operational
-- ⏳ Rename GitHub repo: `wanderlist-app` → `wandermark-app`
-- ⏳ Deploy legal pages site (Privacy/Terms) — App Store requirement
+### 🔴 P0 — Frontend admin UI (90 min)
+4. **admin/reports.tsx — content action buttons** between Resolve and Dismiss:
+   - "🗑️ Hide content" (soft-delete) — calls `/api/admin/content/{type}/{id}/hide`
+   - "Delete permanently" (super-admin only) — calls DELETE
+   - Confirmation dialogs with reason input
+5. **admin/reports.tsx — warn user button** for user-type reports:
+   - "⚠️ Warn user" yellow button → input modal for reason+message
+6. **admin/users.tsx — moderation indicators**:
+   - Show warning_count badge on user row
+   - Show "Suspended until X" if suspended
+   - Filter "Has warnings" + "Suspended"
+7. **admin/users/[user_id]/moderation.tsx — NEW page** showing:
+   - Warning history with reasons
+   - Reports against this user
+   - Action buttons: Warn, Suspend, Unsuspend, Send message
+8. **admin/moderator-activity.tsx — NEW page** (super-admin only):
+   - Fetches `/api/admin/moderator-activity?days=30`
+   - Renders table sorted by reports_reviewed
+   - Columns: name, role, reports handled, avg response time, warnings issued, content removed, last active
 
-### P4 — Future
-- ⏳ "Nearby travelers" geographical discovery
-- ⏳ Data-cleanup session for 12 remaining "activity-like" landmarks
+### 🟡 P1 — Notifications
+9. Add notification handlers in app for new types: `content_hidden`, `warning_issued`, `account_suspended`, `moderator_message`
+
+### 🟡 P1 — Owner UI for hidden content
+10. `visit-detail` + `country-visit-detail`: show "⚠️ Hidden by moderator. Reason: X" badge for own visits where `hidden: true`
+
+## Future Backlog
+- P2: "Mitt år i reise" yearly summary
+- P2: Block user UI in ContentMenu
+- P3: Repo rename, Privacy/Terms pages
+- P4: "Nearby travelers" discovery
 
 ## Key Test Credentials
 - Super Admin: `test@wandermark.app` / `Test1234!`
-- Pro user: `testpro@wandermark.app` / `Test1234!`
+- Pro: `testpro@wandermark.app` / `Test1234!`
 
-## Key API Endpoints (added/modified)
-- `GET /api/community-highlights/top?limit=10&scope=all|month&continent=Europe`
-- `POST /api/reports` — supports `report_type=diary`, 5/hr per-user rate limit
-- `GET /api/admin/reports` — now enriches with `content_preview` + audit fields
-- `PUT /api/admin/reports/{report_id}` — stores `reviewed_by_*` audit fields
-- `POST /api/admin/make-moderator/{user_id}` — NEW (super-admin only)
-- `POST /api/admin/demote-to-user/{user_id}` — NEW (super-admin only)
-- `POST /api/admin/recalculate-leaderboard-points` — NOW super-admin only
-- `PUT /api/admin/users/{user_id}/strip-verified` — NOW super-admin only
-
-## Critical Notes
-- **3-tier role system**: `admin` (super), `moderator`, `user` (default null/missing)
-- **Super-admin only**: role changes, leaderboard recalc, strip verified, bug-reports
-- **Moderator scope**: stats, users (ban/tier only), reports moderation, blocks, notifications, analytics
-- See `/app/memory/ADMIN_ROLES.md` for complete role matrix
-- ContentMenu hides itself when `isOwnContent={true}`
-- Backend rate-limit env vars: `RATE_LIMIT_DEFAULT_RPM` (prod 120), `RATE_LIMIT_AUTH_RPM` (prod 20)
-- **RN-Web pitfalls**: Use `testID` (camelCase) NOT `data-testid`. Avoid nested `<TouchableOpacity>`.
+## Critical Notes for Next Agent
+- **moderation.py created but NOT wired** — must add to server.py first thing
+- **Models updated** — User now has `warning_count`, `warnings[]`, `suspended_until`. Backend reload may have happened, verify with `curl /api/auth/me`.
+- **`utils/notifications.create_notification`** is the helper used in moderation.py — verify signature matches existing implementation
+- **Auth-block for suspended users** is the riskiest pending change — test with admin un-suspending themselves immediately if locked out
+- See `/app/memory/ADMIN_ROLES.md` for role matrix
+- RN-Web: use `testID` not `data-testid`, avoid nested `<TouchableOpacity>`

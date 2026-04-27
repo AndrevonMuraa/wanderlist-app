@@ -14,7 +14,7 @@ import os
 import pytest
 import requests
 
-BASE_URL = os.environ.get("EXPO_PUBLIC_BACKEND_URL", "https://wandermark-build83.preview.emergentagent.com").rstrip("/")
+BASE_URL = os.environ.get("EXPO_PUBLIC_BACKEND_URL", "https://report-hub-128.preview.emergentagent.com").rstrip("/")
 
 ADMIN_EMAIL = "test@wandermark.app"
 PRO_EMAIL = "testpro@wandermark.app"

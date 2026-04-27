@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from datetime import datetime
 
 
@@ -24,6 +24,12 @@ class User(BaseModel):
     is_banned: bool = False
     banned_at: Optional[datetime] = None
     ban_reason: Optional[str] = None
+    # Moderation: warning + suspension system (April 2026)
+    warning_count: int = 0
+    last_warning_at: Optional[datetime] = None
+    warnings: List[Dict[str, Any]] = []  # [{ reason, related_report_id, issued_by, issued_at, message }]
+    suspended_until: Optional[datetime] = None
+    suspension_reason: Optional[str] = None
     created_at: datetime
 
 

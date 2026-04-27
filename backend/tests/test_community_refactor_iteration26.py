@@ -18,7 +18,7 @@ import requests
 
 BASE_URL = os.environ.get(
     "BASE_URL",
-    "https://wandermark-build83.preview.emergentagent.com",
+    "https://report-hub-128.preview.emergentagent.com",
 ).rstrip("/")
 API = f"{BASE_URL}/api"
 
