@@ -32,7 +32,7 @@
 - Created Apr-2026 to verify Free users can access `/api/messages/*` after Pro-gate removal.
 
 ## Backend URL
-- Preview: `https://report-hub-128.preview.emergentagent.com`
+- Preview: `https://memory-recap-2026.preview.emergentagent.com`
 - All endpoints prefixed with `/api/`
 
 ## Notes

@@ -26,7 +26,7 @@ from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
-BASE_URL = "https://report-hub-128.preview.emergentagent.com"
+BASE_URL = "https://memory-recap-2026.preview.emergentagent.com"
 ADMIN = ("test@wandermark.app", "Test1234!")
 PRO = ("testpro@wandermark.app", "Test1234!")
 MOD = ("mod@wandermark.app", "Test1234!")
