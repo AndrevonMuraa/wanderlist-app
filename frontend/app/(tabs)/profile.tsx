@@ -18,6 +18,7 @@ import { DefaultAvatar } from '../../components/DefaultAvatar';
 import Constants from 'expo-constants';
 import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 import ShareJourneyCard from '../../components/ShareJourneyCard';
+import { TrustBadge } from '../../components/TrustBadge';
 import { getToken } from '../../utils/token';
 
 
@@ -208,6 +209,7 @@ export default function ProfileScreen() {
               <View style={styles.userDetails}>
                 <View style={styles.nameEditRow}>
                   <Text style={[styles.userNameLarge, { color: colors.text }]}>{user?.name}</Text>
+                  <TrustBadge trusted={!!(user as any)?.trusted_traveler} ownerOnly size={16} />
                   <TouchableOpacity 
                     onPress={() => {
                       router.push('/edit-profile');

@@ -13,7 +13,7 @@ from routes import (
     leaderboard, friends, messages, stats, feed,
     collections, notifications, country_visits, photos,
     achievements, subscription, reports, push, legal, promo, shares,
-    compare, leaderboards, moderation, support,
+    compare, leaderboards, moderation, support, trust,
 )
 
 # Configure logging
@@ -68,6 +68,7 @@ api_router.include_router(compare.router)
 api_router.include_router(leaderboards.router)
 api_router.include_router(moderation.router)
 api_router.include_router(support.router)
+api_router.include_router(trust.router)
 
 app.include_router(api_router)
 

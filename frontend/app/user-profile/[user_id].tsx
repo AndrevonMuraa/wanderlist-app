@@ -9,6 +9,7 @@ import theme, { gradients } from '../../styles/theme';
 import { BACKEND_URL } from '../../utils/config';
 import { useAuth } from '../../contexts/AuthContext';
 import RankBadge from '../../components/RankBadge';
+import { TrustBadge } from '../../components/TrustBadge';
 import { getUserRank } from '../../utils/rankSystem';
 import { DefaultAvatar } from '../../components/DefaultAvatar';
 import { PersistentTabBar } from '../../components/PersistentTabBar';
@@ -24,6 +25,7 @@ interface UserProfile {
   bio?: string;
   location?: string;
   is_premium: boolean;
+  trusted?: boolean;
   points: number;
   leaderboard_points: number;
   friendship_status: 'none' | 'friends' | 'pending_sent' | 'pending_received';
@@ -168,7 +170,10 @@ export default function UserProfileScreen() {
               <DefaultAvatar name={profile.name} size={72} />
             )}
             <View style={styles.nameCol}>
-              <Text style={styles.name} data-testid="profile-name">{profile.name}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Text style={styles.name} data-testid="profile-name">{profile.name}</Text>
+                <TrustBadge trusted={!!profile.trusted} size={16} />
+              </View>
               {profile.username && <Text style={styles.username}>@{profile.username}</Text>}
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 6 }}>
                 {profile.is_premium && (

@@ -61,6 +61,23 @@ Frontend:
 
 ## ⏳ Current backlog
 
+### April 28, 2026 — Trusted Traveler ✅
+Backend (`utils/trust.py` + `routes/trust.py`):
+- 6 criteria: account 90+d, 10+ verified visits, 0 warnings/90d, 0 hidden/90d, not banned/suspended, ≥1 friend OR ≥5 likes
+- `trusted_traveler` cached on user doc, refreshed on warn/suspend/unsuspend/hide events
+- `GET /api/users/me/trust` (full progress + breakdown), `GET /api/users/{id}/trust` (boolean only)
+- `POST /api/admin/trust/grandfather` (super-admin one-time job)
+- `trust_events` audit collection
+- First-time earn → `trusted_traveler_earned` notification
+- `trusted` field exposed on user profile + leaderboard rows; `trusted_traveler` on `UserPublic`/`/auth/me`
+
+Frontend:
+- `components/TrustBadge.tsx` — universal: 1 small filled emerald `shield-checkmark` icon, tap → bottom sheet with criteria checklist (own profile shows progress; others' profile shows badge meaning)
+- Wired into `(tabs)/profile.tsx` (own — owner-only mode shows progress) and `user-profile/[user_id].tsx` (others — only renders if trusted=true)
+- Notifications page handles `trusted_traveler_earned` icon + routing
+- Backend regression: 42/42 moderation+admin tests green
+- Grandfathering ran on lansering: 16 users evaluated, 0 currently qualified (test users er for ferske)
+
 ### P2 — Engagement
 - "Mitt år i reise" (Year in Travel) auto-summary with shareable cards
 - Block user directly from ContentMenu

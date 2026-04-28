@@ -48,6 +48,7 @@ class UserPublic(BaseModel):
     role: str = "user"
     points: int = 0
     leaderboard_points: int = 0
+    trusted_traveler: bool = False
 
 
 class ProfileUpdate(BaseModel):

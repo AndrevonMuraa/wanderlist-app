@@ -122,10 +122,12 @@ export default function NotificationsScreen() {
       case 'rank_up':
         router.push('/(tabs)/journey');
         break;
+      case 'moderator_message':
       case 'content_removed':
       case 'content_hidden':
       case 'warning_issued':
       case 'account_suspended':
+      case 'trusted_traveler_earned':
         router.push('/terms-of-service?section=guidelines');
         break;
       case 'moderator_message':
@@ -172,6 +174,8 @@ export default function NotificationsScreen() {
         return { name: 'lock-closed', color: '#F97316' };
       case 'moderator_message':
         return { name: 'mail', color: '#3B82F6' };
+      case 'trusted_traveler_earned':
+        return { name: 'shield-checkmark', color: '#10B981' };
       default:
         return { name: 'notifications', color: theme.colors.textSecondary };
     }

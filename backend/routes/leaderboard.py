@@ -67,6 +67,7 @@ async def get_enhanced_leaderboard(
                 "name": user["name"],
                 "picture": user.get("picture"),
                 "username": user.get("username"),
+                "trusted": bool(user.get("trusted_traveler", False)),
                 "value": user.get(sort_field, 0),
                 "verified_points": user.get("leaderboard_points", 0),
                 "total_points": user.get("points", 0),

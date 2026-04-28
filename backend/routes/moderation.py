@@ -21,6 +21,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from models.all import User
 from utils.auth import get_admin_user, get_super_admin_user
 from utils.helpers import create_notification
+from utils.trust import refresh_trust_for_user
 
 router = APIRouter()
 
@@ -96,6 +97,13 @@ async def hide_content(
         owner_id = doc.get("user_id") if doc else None
 
     await _audit(admin_user, f"hide_{ctype}", target_id, {"reason": body.reason})
+
+    # Refresh trust status — hiding content can revoke Trusted Traveler
+    if owner_id:
+        try:
+            await refresh_trust_for_user(owner_id)
+        except Exception:
+            pass
 
     if body.notify_owner and owner_id and owner_id != admin_user.user_id:
         await create_notification(
@@ -266,6 +274,11 @@ async def warn_user(
         related_id=warning["warning_id"],
     )
 
+    try:
+        await refresh_trust_for_user(user_id)
+    except Exception:
+        pass
+
     return {
         "message": "Warning issued",
         "warning_count": (user.get("warning_count") or 0) + 1,
@@ -295,6 +308,12 @@ async def suspend_user(
         raise HTTPException(status_code=404, detail="User not found")
 
     await _audit(admin_user, "suspend_user", user_id, {"days": days, "reason": body.reason})
+
+    try:
+        await refresh_trust_for_user(user_id)
+    except Exception:
+        pass
+
     await create_notification(
         user_id=user_id,
         notif_type="account_suspended",
@@ -318,6 +337,10 @@ async def unsuspend_user(
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="User not found")
     await _audit(admin_user, "unsuspend_user", user_id)
+    try:
+        await refresh_trust_for_user(user_id)
+    except Exception:
+        pass
     return {"message": "Suspension lifted"}
 
 
