@@ -130,16 +130,15 @@ export default function NotificationsScreen() {
         }
         break;
       case 'moderator_message':
+        // Personal moderator message — open a modal so user can read the full text
+        setModMessage(notification);
+        break;
       case 'content_removed':
       case 'content_hidden':
       case 'warning_issued':
       case 'account_suspended':
       case 'trusted_traveler_earned':
         router.push('/terms-of-service?section=guidelines');
-        break;
-      case 'moderator_message':
-        // Personal moderator message — open a modal so user can read the full text
-        setModMessage(notification);
         break;
     }
   };

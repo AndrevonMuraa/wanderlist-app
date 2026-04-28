@@ -104,10 +104,24 @@ Frontend:
 - Backend regression: 42/42 moderation+admin tests green
 - Grandfathering ran on lansering: 16 users evaluated, 0 currently qualified (test users er for ferske)
 
-### P2 — Engagement
-- "Mitt år i reise" (Year in Travel) auto-summary with shareable cards
-- Block user directly from ContentMenu
-- Community trust score badge (clean record 90d → "Trusted Traveler")
+### April 28, 2026 — "Your 2026 on WanderMark" (Year in Travel) ✅
+Backend (`routes/year_in_travel.py`):
+- `GET /api/me/year-in-travel?year=YYYY` — Spotify Wrapped style aggregation
+  - `created_at` based (memories *added* this year), with `visited_at` fallback for `trips_actually_taken`
+  - Returns: memories_added, photos_uploaded, countries_count, new_countries[], top_continent, busiest_month, oldest_memory (time-traveler), top_landmarks[3], hero_photo
+- `POST /api/me/year-in-travel/dispatch-notification` — idempotent in-app `year_recap_ready` notification (one per user per year). Returns `{dispatched, reason}`. Skipped when no memories that year.
+- Default recap year = `current_year - 1` (Spotify Wrapped convention) for the dispatcher; default for GET = current year.
+- Tests: `tests/test_year_in_travel.py` 6/6 ✅; moderation regression 26/26 ✅
+
+Frontend:
+- `app/year-in-travel.tsx` — full Stories-style multi-slide carousel (intro → memories → countries → continent → busiest month → time-travel oldest memory → top 3 landmarks → finale share card). Auto-progressing top progress bars (Animated.timing), tap-left = previous, tap-right = next, long-press = pause. Year picker bottom sheet with last 4 years. Empty state when no memories. Final slide is a 9:16 hero share card (captureRef) with native Share + Save-to-Photos buttons.
+- `components/YearInTravelBanner.tsx` — gradient hero banner with shimmering "2025" badge; injected as `ListHeaderComponent` of the Community Feed.
+- `app/notifications.tsx` — added `year_recap_ready` case routing to `/year-in-travel?year={related_id}`; cleaned a pre-existing duplicate `moderator_message` switch case (modal path was unreachable).
+- Feed mount triggers a one-shot best-effort dispatch — server is idempotent so safe to call repeatedly.
+- Seed helper `scripts/seed_year_recap_test.py` produces 14 visits for testpro with Time-Traveler trigger (1995 visit added in 2025).
+- Packages added: `expo-media-library@~18.2.1` (save-to-photos on native; web gracefully falls back to Share).
+
+
 
 ### P3 — Ops
 - Rename GitHub repo `wanderlist-app` → `wandermark-app`
