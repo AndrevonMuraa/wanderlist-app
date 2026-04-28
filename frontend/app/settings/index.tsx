@@ -231,6 +231,41 @@ export default function SettingsScreen() {
           </View>
         </View>
 
+        {/* Community Safety */}
+        <View style={[styles.section, { backgroundColor: colors.surface }]}>
+          <View style={styles.sectionHeader}>
+            <View style={[styles.sectionIconCircle, { backgroundColor: '#10B98115' }]}>
+              <Ionicons name="shield-checkmark" size={22} color="#10B981" />
+            </View>
+            <View style={styles.sectionHeaderText}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Community Safety</Text>
+              <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>How we keep WanderMark safe</Text>
+            </View>
+          </View>
+
+          <View style={[styles.settingsList, { backgroundColor: colors.background }]}>
+            <TouchableOpacity
+              style={styles.settingItem}
+              onPress={() => router.push('/settings/community-safety' as any)}
+              activeOpacity={0.7}
+              testID="settings-community-safety"
+            >
+              <View style={styles.settingItemLeft}>
+                <View style={[styles.settingIcon, { backgroundColor: 'rgba(16, 185, 129, 0.1)' }]}>
+                  <Ionicons name="shield-checkmark-outline" size={18} color="#10B981" />
+                </View>
+                <View style={styles.settingTexts}>
+                  <Text style={[styles.settingLabel, { color: colors.text }]}>Safety tools & policies</Text>
+                  <Text style={[styles.settingDescription, { color: colors.textSecondary }]}>
+                    Reporting, blocking, moderation, trust badges
+                  </Text>
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
         {/* Account Settings */}
         <View style={[styles.section, { backgroundColor: colors.surface }]}>
           <View style={styles.sectionHeader}>

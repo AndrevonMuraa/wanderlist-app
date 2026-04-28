@@ -59,6 +59,14 @@ Backend (`routes/visits.py`):
 Frontend:
 - `visit-detail/[visit_id].tsx` and `custom-visit-detail/[visit_id].tsx` — show amber "⚠️ Hidden by moderator" banner at top when owner views their hidden visit. Banner includes reason + link to community guidelines.
 
+### April 28, 2026 — Community Safety side ✅
+Frontend (`/app/frontend/app/settings/community-safety.tsx`):
+- Dedikert side under Settings → Community Safety, lenkbar fra hovedinnstillinger
+- 11 forklaringskort i 3 seksjoner: "Tools you can use", "How we protect the community", "Your data and account"
+- Dekker: rapportering, blokkering, privacy-nivåer, moderator-kontakt, trent moderasjon, strike-system, hidden content, Trusted Traveler, kontosikkerhet, privacy policy, nødsrapportering (mailto:safety@wandermark.app)
+- Hver kort har ikon + 1-linjes forklaring + handlingslenke (CTA)
+- Designet for å la App Review-team enkelt forstå alle sikkerhets-features uten teknisk bakgrunn
+
 ## ⏳ Current backlog
 
 ### April 28, 2026 — Trusted Traveler ✅
