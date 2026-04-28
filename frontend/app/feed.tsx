@@ -13,6 +13,7 @@ import ReportModal from '../components/ReportModal';
 import ContentMenu from '../components/ContentMenu';
 import FeedCardHeader from '../components/FeedCardHeader';
 import FeedCardActions from '../components/FeedCardActions';
+import YearInTravelBanner from '../components/YearInTravelBanner';
 import { useAuth } from '../contexts/AuthContext';interface Activity {
   activity_id: string;
   user_id: string;
@@ -107,6 +108,23 @@ export default function FeedScreen() {
     if (activeTab === 'friends') loadFeed();
     else loadCommunity();
   }, [loadFeed, activeTab]);
+
+  // Best-effort: trigger a one-time "year recap ready" notification.
+  // The backend endpoint is idempotent — duplicate calls are safe.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const token = await getToken();
+        if (!token || cancelled) return;
+        await fetch(`${BACKEND_URL}/api/me/year-in-travel/dispatch-notification`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch (_) { /* silent */ }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   const loadCommunity = async () => {
     setLoading(true);
@@ -454,6 +472,7 @@ export default function FeedScreen() {
           keyExtractor={(item) => item.visit_id}
           contentContainerStyle={styles.listContent}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          ListHeaderComponent={<YearInTravelBanner />}
           ListEmptyComponent={!loading ? renderEmpty : null}
           showsVerticalScrollIndicator={false}
         />

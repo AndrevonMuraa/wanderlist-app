@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 import os
+import uuid
 from collections import Counter
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -19,6 +20,11 @@ from utils.auth import get_current_user
 router = APIRouter()
 client = AsyncIOMotorClient(os.environ["MONGO_URL"])
 db = client[os.environ["DB_NAME"]]
+
+
+# Default recap year = last completed year (Spotify Wrapped convention).
+def _default_recap_year() -> int:
+    return datetime.now(timezone.utc).year - 1
 
 
 def _aware(dt):
@@ -60,9 +66,14 @@ async def year_in_travel(year: Optional[int] = None, current_user: User = Depend
     if landmark_ids:
         async for lm in db.landmarks.find(
             {"landmark_id": {"$in": landmark_ids}},
-            {"_id": 0, "landmark_id": 1, "name": 1, "country": 1, "continent": 1},
+            {"_id": 0, "landmark_id": 1, "name": 1, "country_name": 1, "continent": 1},
         ):
-            landmarks[lm["landmark_id"]] = lm
+            landmarks[lm["landmark_id"]] = {
+                "landmark_id": lm.get("landmark_id"),
+                "name": lm.get("name"),
+                "country": lm.get("country_name"),
+                "continent": lm.get("continent"),
+            }
 
     # Hero stats
     memories_added = len(added_visits)
@@ -155,3 +166,58 @@ async def year_in_travel(year: Optional[int] = None, current_user: User = Depend
         "trips_actually_taken": len(taken_visits),
         "show_taken_section": len(taken_visits) >= 3,
     }
+
+
+@router.post("/me/year-in-travel/dispatch-notification")
+async def dispatch_year_recap_notification(
+    year: Optional[int] = None,
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Idempotently create an in-app "year_recap_ready" notification so the
+    user sees a Spotify-Wrapped-style nudge in their notification tray.
+    Safe to call from any client: multiple calls in the same year do not
+    create duplicates.
+
+    Only fires if the user has at least 1 memory added in that year.
+    """
+    if year is None:
+        year = _default_recap_year()
+
+    year_start = datetime(year, 1, 1, tzinfo=timezone.utc)
+    year_end = datetime(year + 1, 1, 1, tzinfo=timezone.utc)
+
+    has_memories = await db.visits.find_one(
+        {
+            "user_id": current_user.user_id,
+            "created_at": {"$gte": year_start, "$lt": year_end},
+        },
+        {"_id": 1},
+    )
+    if not has_memories:
+        return {"dispatched": False, "reason": "no_memories"}
+
+    existing = await db.notifications.find_one(
+        {
+            "user_id": current_user.user_id,
+            "type": "year_recap_ready",
+            "related_id": str(year),
+        },
+        {"_id": 1},
+    )
+    if existing:
+        return {"dispatched": False, "reason": "already_sent"}
+
+    await db.notifications.insert_one({
+        "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
+        "user_id": current_user.user_id,
+        "type": "year_recap_ready",
+        "title": f"Your {year} recap is ready ✨",
+        "message": "Tap to relive your year of memories on WanderMark.",
+        "related_id": str(year),
+        "related_user_id": None,
+        "related_user_name": None,
+        "is_read": False,
+        "created_at": datetime.now(timezone.utc),
+    })
+    return {"dispatched": True, "year": year}

@@ -1,0 +1,38 @@
+{
+  "summary": "Iteration 32 — end-to-end testing of 'Your 2026 on WanderMark' (Year-in-Travel) feature. Backend: 6/6 year-in-travel pytest cases pass; 26/26 moderation regression pytest cases pass (no regression from iter31). Live API verified against seed: memories=14, photos=40, countries=7, top_continent=Europe(11), busiest_month=March(3), oldest_memory=30 years ago (Eiffel Tower 1995), top_landmarks=Grand Canyon/Mt Fuji/Eiffel. Frontend (Expo Web, mobile viewport): YearInTravelBanner renders at top of /feed with testID 'year-in-travel-banner' and correct copy ('Your 2025 on WanderMark · Watch your recap'); /year-in-travel?year=2025 route mounts the Spotify-Wrapped carousel; all required testIDs present (year-in-travel-screen, recap-tap-prev, recap-tap-next, recap-close, recap-year-picker-open, recap-share-btn, recap-save-btn, recap-year-option-2024/2025); right-zone tap advances through 8 slides to the finale where Share + Save buttons are visible; left-zone tap navigates back; year-picker opens bottom sheet listing 2026/2025/2024/2023; no page errors or runtime exceptions in console. Notification routing for type 'year_recap_ready' verified by code review (notifications.tsx switch case routes to /year-in-travel?year={related_id}).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_year_in_travel.py",
+    "/app/test_reports/pytest/iter32_year_in_travel.xml",
+    "/app/test_reports/pytest/iter32_moderation_regression.xml"
+  ],
+  "action_items": [
+    "[OPTIONAL/UNRELATED] /app/frontend/app/notifications.tsx has a duplicate `case 'moderator_message':` in the switch (lines 132 & 140). The second case is unreachable because the first matches first. The intended behavior (open modal vs navigate to terms-of-service) is ambiguous — the modal-opening logic at line 140-143 will NEVER fire. Recommend removing the navigation case at line 132-139 if the modal is desired (modMessage state UI is already wired up below). This is pre-existing code, not introduced by year-in-travel iteration, but it affects the moderator-message UX.",
+    "[OPTIONAL/PERF] /app/backend/routes/year_in_travel.py 'new_countries' detection (lines 88-96) issues N sequential awaited find_one() queries (one per country). For users with many countries this is O(N) round-trips. Could be collapsed into a single aggregation pipeline, but acceptable at current scale (typical user <30 countries/year)."
+  ],
+  "critical_code_review_comments": [
+    "Idempotency of dispatch-notification is correctly implemented via `related_id=str(year)` lookup before insert — multiple concurrent calls in the same year cannot create duplicates (verified by test_dispatch_notification_idempotent).",
+    "no_memories short-circuit (lines 197-198) correctly prevents notifications for years with zero visits — verified for year=1990.",
+    "_aware() helper handles MongoDB tz-naive datetimes for oldest_memory comparison — does not repeat the iter31 moderation tz-naive bug.",
+    "Default recap year for dispatch (= current year - 1, Spotify Wrapped convention) differs from default for the GET endpoint (= current year). Documented in code comment line 25-27. Frontend banner hardcodes DEFAULT_RECAP_YEAR=2025, matching the dispatch default but not the GET default. This is intentional per PRD ('default year 2025') but worth flagging if the year rolls to 2026.",
+    "year_in_travel.py = 223 lines, single responsibility, well within 700-line guideline.",
+    "Banner's useEffect Animated.loop is properly created with a cleanup-friendly Animated.Value ref — no memory leak.",
+    "All interactive elements on year-in-travel screen and banner have the required data-testid attributes per the request contract."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (6/6 year-in-travel + 26/26 moderation regression)", "frontend": "100% (banner render, screen mount, 8-slide advance, year picker, share/save buttons, no errors)"},
+  "test_credentials": "testpro@wandermark.app / Test1234! (used for both backend and frontend testing — data already seeded by /app/backend/scripts/seed_year_recap_test.py)",
+  "seed_data_creation": "No additional seed data created — relied on the 14 visits already seeded by main agent's seed script for user_6ef7ed0c470a in 2025.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Year-in-Travel feature is GREEN end-to-end. Backend endpoints (GET /api/me/year-in-travel and POST /api/me/year-in-travel/dispatch-notification) verified live against the preview URL. Frontend banner + screen + year picker verified via Playwright mobile viewport (390x844). To re-run frontend tests, login via the API to get a JWT, set it as `localStorage.setItem('auth_token', token)` then navigate to /feed and /year-in-travel?year=2025 — Expo Web reads token from localStorage as the AsyncStorage backend. Note the unrelated duplicate switch-case bug in notifications.tsx (see action_items) — it is pre-existing and does not affect year-in-travel routing because 'year_recap_ready' has a unique case.",
+  "rca of the issue": "No bugs found in the year-in-travel implementation."
+}

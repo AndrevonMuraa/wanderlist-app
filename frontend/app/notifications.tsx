@@ -122,6 +122,13 @@ export default function NotificationsScreen() {
       case 'rank_up':
         router.push('/(tabs)/journey');
         break;
+      case 'year_recap_ready':
+        if (notification.related_id) {
+          router.push(`/year-in-travel?year=${notification.related_id}`);
+        } else {
+          router.push('/year-in-travel');
+        }
+        break;
       case 'moderator_message':
       case 'content_removed':
       case 'content_hidden':
