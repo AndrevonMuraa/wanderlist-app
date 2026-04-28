@@ -55,6 +55,7 @@ export default function AdminDashboard() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [refreshSignal, setRefreshSignal] = useState(0);
   const [tick, setTick] = useState(0); // forces "X ago" to re-render every 15s
+  const [ticketUnread, setTicketUnread] = useState(0);
 
   // Relative-time ticker for "Updated Xs/Xm ago"
   useEffect(() => {
@@ -96,6 +97,13 @@ export default function AdminDashboard() {
         setStats(data);
         setError(null);
         setLastUpdated(new Date());
+        // Fire-and-forget unread ticket count
+        fetch(`${BACKEND_URL}/api/admin/tickets?status=open`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => { if (d) setTicketUnread(d.unread_count || 0); })
+          .catch(() => {});
       } else {
         setError('Failed to load stats');
       }
@@ -334,10 +342,11 @@ export default function AdminDashboard() {
           )}
           <MenuCard
             title="Support Inbox"
-            description="Reply to user support tickets"
+            description={ticketUnread > 0 ? `${ticketUnread} unread ticket${ticketUnread === 1 ? '' : 's'}` : 'Reply to user support tickets'}
             icon="mail-open-outline"
             color="#3B82F6"
             onPress={() => router.push('/admin/tickets' as any)}
+            badge={ticketUnread}
           />
         </View>
 

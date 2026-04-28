@@ -49,14 +49,17 @@ Backend (`routes/support.py` wired into `server.py`):
 Frontend:
 - `notifications.tsx` — Reply button now opens in-app compose pane (TextInput, Send/Cancel) that posts to `/api/support/tickets`
 - `admin/tickets.tsx` (NEW) — inbox with Open/Closed/All filters, iMessage-style chat thread (user = grey left, mod = blue right), reply input with Send / Reply & Close
-- Admin home has "Support Inbox" menu card
+- Admin home has "Support Inbox" menu card with **live unread badge** (fetched from `/api/admin/tickets?status=open`)
 - End-to-end verified via curl + Playwright (264/3 pytest green, no regressions)
 
-## ⏳ Current backlog
+### April 28, 2026 — Hidden-by-moderator UX ✅
+Backend (`routes/visits.py`):
+- `GET /api/visits/{visit_id}` — now 404s for non-owners when `hidden: true`; owner still receives the full doc with `hidden` + `hidden_reason`
 
-### P1 — Core polish
-- "⚠️ Hidden by moderator" badge on owner's `visit-detail` / `country-visit-detail`
-- Unread badge on admin home for pending tickets
+Frontend:
+- `visit-detail/[visit_id].tsx` and `custom-visit-detail/[visit_id].tsx` — show amber "⚠️ Hidden by moderator" banner at top when owner views their hidden visit. Banner includes reason + link to community guidelines.
+
+## ⏳ Current backlog
 
 ### P2 — Engagement
 - "Mitt år i reise" (Year in Travel) auto-summary with shareable cards

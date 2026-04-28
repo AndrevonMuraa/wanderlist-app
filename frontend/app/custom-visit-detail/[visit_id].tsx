@@ -34,6 +34,8 @@ interface CustomVisit {
   visibility: string;
   visited_at: string;
   created_at: string;
+  hidden?: boolean;
+  hidden_reason?: string;
 }
 
 export default function CustomVisitDetailScreen() {
@@ -269,6 +271,22 @@ export default function CustomVisitDetailScreen() {
       <UniversalHeader title="Custom visit" onBack={() => safeGoBack(router)} />
 
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+        {visit.hidden && isOwner && (
+          <View style={styles.hiddenBanner} testID="custom-visit-hidden-banner">
+            <Ionicons name="eye-off" size={20} color="#92400E" />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.hiddenBannerTitle}>Hidden by moderator</Text>
+              <Text style={styles.hiddenBannerBody}>
+                {visit.hidden_reason
+                  ? `This visit is no longer visible to other users. Reason: ${visit.hidden_reason}`
+                  : 'This visit is no longer visible to other users.'}
+              </Text>
+              <Text style={styles.hiddenBannerLink} onPress={() => router.push('/terms-of-service?section=guidelines' as any)}>
+                Review community guidelines →
+              </Text>
+            </View>
+          </View>
+        )}
         {/* Hero / Photo carousel */}
         {allPhotos.length > 0 ? (
           <View style={styles.photoSection}>
@@ -552,4 +570,8 @@ const styles = StyleSheet.create({
   uploadingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 8 },
   uploadingText: { fontSize: 13, color: theme.colors.textLight },
   diaryInput: { borderWidth: 1, borderColor: theme.colors.border, borderRadius: 8, padding: 12, fontSize: 15, minHeight: 120, color: theme.colors.text, textAlignVertical: 'top' },
+  hiddenBanner: { flexDirection: 'row', gap: 10, backgroundColor: '#FEF3C7', borderLeftWidth: 4, borderLeftColor: '#F59E0B', padding: 14, marginHorizontal: 16, marginTop: 16, borderRadius: 10, alignItems: 'flex-start' },
+  hiddenBannerTitle: { fontSize: 14, fontWeight: '700', color: '#92400E', marginBottom: 4 },
+  hiddenBannerBody: { fontSize: 13, color: '#92400E', lineHeight: 18 },
+  hiddenBannerLink: { fontSize: 13, color: '#B45309', fontWeight: '600', marginTop: 6, textDecorationLine: 'underline' },
 });

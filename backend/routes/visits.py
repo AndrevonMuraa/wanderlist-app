@@ -227,6 +227,9 @@ async def get_visit_details(visit_id: str, current_user: User = Depends(get_curr
     
     # Enforce visibility for non-owners
     if not is_owner:
+        # Hidden by moderator — not visible to anyone except owner
+        if visit.get("hidden"):
+            raise HTTPException(status_code=404, detail="Visit not found")
         visibility = visit.get("visibility", "public")
         if visibility == "private":
             raise HTTPException(status_code=404, detail="Visit not found")

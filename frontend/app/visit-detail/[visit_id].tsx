@@ -49,6 +49,8 @@ interface VisitDetail {
   share_diary?: boolean;
   activity_id?: string;
   comments_count?: number;
+  hidden?: boolean;
+  hidden_reason?: string;
 }
 
 export default function VisitDetailScreen() {
@@ -286,6 +288,22 @@ export default function VisitDetailScreen() {
         title={visit.landmark_name || 'Visit Details'}
       />
       <ScrollView style={styles.scrollView}>
+        {visit.hidden && isOwner && (
+          <View style={styles.hiddenBanner} testID="visit-hidden-banner">
+            <Ionicons name="eye-off" size={20} color="#92400E" />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.hiddenBannerTitle}>Hidden by moderator</Text>
+              <Text style={styles.hiddenBannerBody}>
+                {visit.hidden_reason
+                  ? `This visit is no longer visible to other users. Reason: ${visit.hidden_reason}`
+                  : 'This visit is no longer visible to other users.'}
+              </Text>
+              <Text style={styles.hiddenBannerLink} onPress={() => router.push('/terms-of-service?section=guidelines' as any)}>
+                Review community guidelines →
+              </Text>
+            </View>
+          </View>
+        )}
 
         {/* Photo Gallery or Add Photo CTA */}
         {photos.length > 0 ? (
@@ -1040,5 +1058,35 @@ const styles = StyleSheet.create({
   uploadingText: {
     fontSize: 13,
     color: theme.colors.textLight,
+  },
+  hiddenBanner: {
+    flexDirection: 'row',
+    gap: 10,
+    backgroundColor: '#FEF3C7',
+    borderLeftWidth: 4,
+    borderLeftColor: '#F59E0B',
+    padding: 14,
+    marginHorizontal: 16,
+    marginTop: 16,
+    borderRadius: 10,
+    alignItems: 'flex-start',
+  },
+  hiddenBannerTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#92400E',
+    marginBottom: 4,
+  },
+  hiddenBannerBody: {
+    fontSize: 13,
+    color: '#92400E',
+    lineHeight: 18,
+  },
+  hiddenBannerLink: {
+    fontSize: 13,
+    color: '#B45309',
+    fontWeight: '600',
+    marginTop: 6,
+    textDecorationLine: 'underline',
   },
 });
