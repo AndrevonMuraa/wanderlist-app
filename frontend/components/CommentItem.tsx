@@ -4,12 +4,14 @@ import { Text, Avatar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import theme from '../styles/theme';
 import ContentMenu from './ContentMenu';
+import { TrustBadge } from './TrustBadge';
 
 interface Comment {
   comment_id: string;
   user_id: string;
   user_name: string;
   user_picture?: string;
+  user_trusted?: boolean;
   content: string;
   parent_comment_id?: string;
   reply_to_user?: string;
@@ -81,6 +83,7 @@ export default function CommentItem({
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.userName}>{comment.user_name}</Text>
+          <TrustBadge trusted={!!comment.user_trusted} size={11} />
           <Text style={styles.timestamp}>{formatTimeAgo(comment.created_at)}</Text>
         </View>
 

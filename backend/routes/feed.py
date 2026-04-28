@@ -48,7 +48,7 @@ async def get_activity_feed(current_user: User = Depends(get_current_user), limi
             "localField": "user_id",
             "foreignField": "user_id",
             "as": "_user",
-            "pipeline": [{"$project": {"_id": 0, "name": 1, "picture": 1}}]
+            "pipeline": [{"$project": {"_id": 0, "name": 1, "picture": 1, "trusted_traveler": 1}}]
         }},
         # Lookup likes
         {"$lookup": {
@@ -94,6 +94,7 @@ async def get_activity_feed(current_user: User = Depends(get_current_user), limi
                     {"$arrayElemAt": ["$_user.picture", 0]}
                 ]
             },
+            "user_trusted": {"$ifNull": [{"$arrayElemAt": ["$_user.trusted_traveler", 0]}, False]},
             "activity_type": 1,
             "landmark_id": 1,
             "landmark_name": 1,
@@ -256,6 +257,7 @@ async def add_comment(activity_id: str, data: CommentCreate, current_user: User 
         "user_id": current_user.user_id,
         "user_name": current_user.name,
         "user_picture": current_user.picture,
+        "user_trusted": bool(getattr(current_user, "trusted_traveler", False)),
         "content": data.content,
         "parent_comment_id": data.parent_comment_id,
         "reply_to_user": reply_to_user,

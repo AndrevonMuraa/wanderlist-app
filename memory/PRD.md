@@ -67,6 +67,21 @@ Frontend (`/app/frontend/app/settings/community-safety.tsx`):
 - Hver kort har ikon + 1-linjes forklaring + handlingslenke (CTA)
 - Designet for å la App Review-team enkelt forstå alle sikkerhets-features uten teknisk bakgrunn
 
+### April 28, 2026 — Trust badge wired across feed/comments/leaderboard ✅
+Backend:
+- `routes/feed.py` — activities aggregation lookups `trusted_traveler` from users; expose as `user_trusted` on each activity
+- `routes/feed.py` — comment-creation copies `user_trusted` snapshot at insert time (denormalized for performance)
+- `routes/leaderboard.py` — leaderboard rows include `trusted` from user doc
+- `models/all.py` — `Activity.user_trusted: bool` and `Comment.user_trusted: bool`
+
+Frontend:
+- `components/FeedCardHeader.tsx` — small `TrustBadge` (12px) inline after name, before privacy dot
+- `components/CommentItem.tsx` — `TrustBadge` (11px) inline after name in comment header
+- `app/leaderboard.tsx` — `TrustBadge` in both full and compact leaderboard rows
+- TrustBadge gracefully renders nothing for non-trusted users (zero noise)
+
+Outcome: Trusted Traveler shield now appears as a tiny, tappable signal everywhere users encounter each other — but **only when earned**. Tap → the same universal bottom sheet with criteria checklist.
+
 ## ⏳ Current backlog
 
 ### April 28, 2026 — Trusted Traveler ✅

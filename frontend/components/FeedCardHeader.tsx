@@ -4,6 +4,7 @@ import { Avatar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import theme from '../styles/theme';
 import { formatTimeAgo } from '../utils/formatTime';
+import { TrustBadge } from './TrustBadge';
 
 const PRIVACY_META: Record<string, { icon: string; color: string }> = {
   public: { icon: 'globe-outline', color: '#4CAF50' },
@@ -15,6 +16,7 @@ interface FeedCardHeaderProps {
   userId?: string;
   userName: string;
   userPicture?: string;
+  userTrusted?: boolean;
   timestamp?: string;
   visibility?: 'public' | 'friends' | 'private';
   onPress?: () => void;
@@ -22,12 +24,13 @@ interface FeedCardHeaderProps {
 
 /**
  * Shared header used by Friends- and Community-feed cards.
- * Renders avatar, name, privacy dot and "time ago".
+ * Renders avatar, name, trust badge, privacy dot and "time ago".
  */
 export default function FeedCardHeader({
   userId,
   userName,
   userPicture,
+  userTrusted,
   timestamp,
   visibility = 'public',
   onPress,
@@ -40,7 +43,7 @@ export default function FeedCardHeader({
       onPress={onPress}
       activeOpacity={onPress ? 0.7 : 1}
       disabled={!onPress}
-      data-testid={userId ? `feed-card-header-${userId}` : 'feed-card-header'}
+      testID={userId ? `feed-card-header-${userId}` : 'feed-card-header'}
     >
       {userPicture ? (
         <View style={styles.avatarGlow}>
@@ -56,6 +59,7 @@ export default function FeedCardHeader({
       <View style={styles.info}>
         <View style={styles.nameRow}>
           <Text style={styles.name} numberOfLines={1}>{userName}</Text>
+          <TrustBadge trusted={!!userTrusted} size={12} />
           <Ionicons
             name={privacy.icon as any}
             size={12}
@@ -102,6 +106,7 @@ const styles = StyleSheet.create({
   nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 6,
   },
   name: {
     fontSize: 15,
@@ -110,7 +115,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   privacyIcon: {
-    marginLeft: 6,
+    marginLeft: 0,
   },
   time: {
     fontSize: 12,

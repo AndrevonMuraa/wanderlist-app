@@ -207,6 +207,7 @@ class Activity(BaseModel):
     user_id: str
     user_name: str
     user_picture: Optional[str] = None
+    user_trusted: bool = False
     activity_type: str
     landmark_id: Optional[str] = None
     landmark_name: Optional[str] = None
@@ -243,6 +244,7 @@ class Comment(BaseModel):
     user_id: str
     user_name: str
     user_picture: Optional[str] = None
+    user_trusted: bool = False
     content: str
     parent_comment_id: Optional[str] = None
     reply_to_user: Optional[str] = None

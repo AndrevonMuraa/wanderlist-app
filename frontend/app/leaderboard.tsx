@@ -14,6 +14,7 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../styles/theme';
 import RankBadge from '../components/RankBadge';
+import { TrustBadge } from '../components/TrustBadge';
 import { getUserRank } from '../utils/rankSystem';
 import UniversalHeader from '../components/UniversalHeader';
 import ShareRankCard from '../components/ShareRankCard';
@@ -27,6 +28,7 @@ interface LeaderboardEntry {
   name: string;
   picture?: string;
   username?: string;
+  trusted?: boolean;
   value: number;
   verified_points?: number;
   total_points?: number;
@@ -190,7 +192,10 @@ export default function LeaderboardScreen() {
 
           {/* Name + Username */}
           <View style={styles.userInfo}>
-            <Text style={styles.userName} numberOfLines={1}>{entry.name}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+              <Text style={styles.userName} numberOfLines={1}>{entry.name}</Text>
+              <TrustBadge trusted={!!entry.trusted} size={12} />
+            </View>
             {entry.username && (
               <Text style={styles.username} numberOfLines={1}>@{entry.username}</Text>
             )}
@@ -221,6 +226,7 @@ export default function LeaderboardScreen() {
           <Avatar.Text size={28} label={entry.name.substring(0, 2).toUpperCase()} style={styles.compactAvatar} />
         )}
         <Text style={[styles.compactName, isMe && styles.compactTextBold]} numberOfLines={1}>{entry.name}</Text>
+        <TrustBadge trusted={!!entry.trusted} size={11} />
         <Text style={[styles.compactValue, isMe && styles.compactTextBold]}>{entry.value.toLocaleString()}</Text>
       </View>
     );
