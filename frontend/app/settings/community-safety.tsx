@@ -1,15 +1,15 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Platform, Linking } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Platform, StatusBar, Linking } from 'react-native';
 import { Text } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { safeGoBack } from '../../utils/navigation';
+import theme, { gradients } from '../../styles/theme';
 import { useTheme } from '../../contexts/ThemeContext';
-import { useAuth } from '../../contexts/AuthContext';
+import { HeaderBranding } from '../../components/BrandedGlobeIcon';
 
-interface SafetyCardProps {
+interface ItemRow {
   icon: any;
   iconColor: string;
   title: string;
@@ -17,180 +17,260 @@ interface SafetyCardProps {
   cta?: { label: string; onPress: () => void };
 }
 
-const SafetyCard: React.FC<SafetyCardProps> = ({ icon, iconColor, title, body, cta }) => {
-  const { colors } = useTheme();
-  return (
-    <View style={[styles.card, { backgroundColor: colors.surface }]} testID={`safety-card-${title}`}>
-      <View style={[styles.iconCircle, { backgroundColor: iconColor + '20' }]}>
-        <Ionicons name={icon} size={22} color={iconColor} />
-      </View>
-      <View style={{ flex: 1 }}>
-        <Text style={[styles.cardTitle, { color: colors.text }]}>{title}</Text>
-        <Text style={[styles.cardBody, { color: colors.textSecondary }]}>{body}</Text>
-        {cta && (
-          <TouchableOpacity onPress={cta.onPress} style={styles.ctaBtn}>
-            <Text style={styles.ctaText}>{cta.label} →</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    </View>
-  );
-};
+interface SectionDef {
+  icon: any;
+  iconColor: string;
+  title: string;
+  subtitle: string;
+  items: ItemRow[];
+}
 
 export default function CommunitySafetyScreen() {
   const router = useRouter();
-  const { colors } = useTheme();
-  const { user } = useAuth();
+  const insets = useSafeAreaInsets();
+  const { colors, gradientColors } = useTheme();
+  const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
+
+  const sections: SectionDef[] = [
+    {
+      icon: 'hand-right',
+      iconColor: '#3B82F6',
+      title: 'Tools you can use',
+      subtitle: 'Take control of your experience',
+      items: [
+        {
+          icon: 'flag',
+          iconColor: '#EF4444',
+          title: 'Report content or users',
+          body: 'See something inappropriate? Tap the ••• menu on any photo, comment, visit, or profile to report it. Our moderators review every report. False reports are rate-limited.',
+          cta: { label: 'See community guidelines', onPress: () => router.push('/terms-of-service?section=guidelines' as any) },
+        },
+        {
+          icon: 'ban',
+          iconColor: '#F97316',
+          title: 'Block other users',
+          body: "Block someone to prevent them from seeing your content, messaging you, or appearing in your feed. Blocking is private — they're not notified.",
+        },
+        {
+          icon: 'lock-closed',
+          iconColor: '#6366F1',
+          title: 'Private and friends-only posts',
+          body: 'Choose visibility per post: Public, Friends only, or Private (only you). Default visibility can be set in Privacy settings.',
+          cta: { label: 'Open Privacy settings', onPress: () => router.push('/settings/privacy' as any) },
+        },
+        {
+          icon: 'mail',
+          iconColor: '#3B82F6',
+          title: 'Contact a moderator',
+          body: "Need help with something a report can't fix? Send a moderator a direct message via the in-app support inbox. We typically respond within 48 hours.",
+        },
+      ],
+    },
+    {
+      icon: 'shield-checkmark',
+      iconColor: '#10B981',
+      title: 'How we protect the community',
+      subtitle: 'Human moderation, transparent rules',
+      items: [
+        {
+          icon: 'shield',
+          iconColor: '#8B5CF6',
+          title: 'Trained moderators',
+          body: 'Reports are reviewed by humans, not algorithms. Our team can hide content (soft-delete), warn users, or temporarily suspend accounts that violate our community guidelines.',
+        },
+        {
+          icon: 'warning',
+          iconColor: '#F59E0B',
+          title: 'Strike system',
+          body: 'Three warnings within 90 days triggers an automatic 7-day suspension. Five warnings ever triggers a 30-day suspension. Severe violations can result in immediate account termination.',
+        },
+        {
+          icon: 'eye-off',
+          iconColor: '#F59E0B',
+          title: 'Hidden content',
+          body: 'Content that breaks our rules is hidden from public view. The original poster is notified and shown a clear reason. They can appeal via the moderator support inbox.',
+        },
+        {
+          icon: 'shield-checkmark',
+          iconColor: '#10B981',
+          title: 'Trusted Traveler badge',
+          body: 'Members with 90+ days of clean contribution and verified visits earn a Trusted Traveler badge. Their reports are prioritized in our moderation queue, helping us catch bad behaviour faster.',
+          cta: { label: 'See your status', onPress: () => router.push('/(tabs)/profile' as any) },
+        },
+      ],
+    },
+    {
+      icon: 'key',
+      iconColor: '#0EA5E9',
+      title: 'Your data and account',
+      subtitle: 'Control what we keep, and how',
+      items: [
+        {
+          icon: 'key',
+          iconColor: '#0EA5E9',
+          title: 'Account control',
+          body: 'Change your password, manage email, or delete your account permanently at any time. We never sell your data. Read our full privacy policy for details.',
+          cta: { label: 'Account settings', onPress: () => router.push('/settings/account' as any) },
+        },
+        {
+          icon: 'document-text',
+          iconColor: '#6B7280',
+          title: 'Privacy policy & Terms',
+          body: "Our policies in plain English. We collect only what's needed to make WanderMark work, store data securely, and never share location with advertisers.",
+          cta: { label: 'Read policies', onPress: () => router.push('/privacy-policy' as any) },
+        },
+        {
+          icon: 'alert-circle',
+          iconColor: '#EF4444',
+          title: 'Emergency reporting',
+          body: "If you encounter something that endangers anyone's safety — including child safety concerns or imminent threats — email us immediately at safety@wandermark.app. We respond within 24 hours.",
+          cta: {
+            label: 'Email safety team',
+            onPress: () => Linking.openURL('mailto:safety@wandermark.app?subject=Safety%20concern').catch(() => {}),
+          },
+        },
+      ],
+    },
+  ];
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
-      <LinearGradient colors={['#10B981', '#0F766E']} style={styles.header}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      {/* Header — matches /settings/privacy */}
+      <LinearGradient
+        colors={gradientColors}
+        start={gradients.horizontal.start}
+        end={gradients.horizontal.end}
+        style={[styles.header, { paddingTop: topPadding }]}
+      >
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => safeGoBack(router)} style={styles.headerBack} testID="safety-back">
-            <Ionicons name="arrow-back" size={22} color="#fff" />
+          <View style={styles.headerLeft}>
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={styles.backButton}
+              testID="safety-back"
+            >
+              <Ionicons name="arrow-back" size={24} color="#fff" />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Community Safety</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.brandingContainer}
+            onPress={() => router.push('/about')}
+            activeOpacity={0.7}
+          >
+            <HeaderBranding size={18} textColor="#2A2A2A" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Community Safety</Text>
-          <View style={{ width: 36 }} />
         </View>
-        <Text style={styles.headerSub}>How WanderMark keeps you safe</Text>
       </LinearGradient>
 
-      <ScrollView contentContainerStyle={{ padding: 16, gap: 12 }}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={[styles.intro, { color: colors.textSecondary }]}>
           WanderMark gives you full control over your experience. Every photo, post, and interaction is governed by transparent rules and tools designed to keep the community safe.
         </Text>
 
-        {/* TOOLS YOU CAN USE */}
-        <Text style={[styles.sectionLabel, { color: colors.text }]}>Tools you can use</Text>
+        {sections.map((section) => (
+          <View key={section.title} style={[styles.section, { backgroundColor: colors.surface }]}>
+            <View style={styles.sectionHeader}>
+              <View style={[styles.sectionIconCircle, { backgroundColor: section.iconColor + '15' }]}>
+                <Ionicons name={section.icon} size={22} color={section.iconColor} />
+              </View>
+              <View style={styles.sectionHeaderText}>
+                <Text style={[styles.sectionTitle, { color: colors.text }]}>{section.title}</Text>
+                <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>{section.subtitle}</Text>
+              </View>
+            </View>
 
-        <SafetyCard
-          icon="flag"
-          iconColor="#EF4444"
-          title="Report content or users"
-          body="See something inappropriate? Tap the ⋯ menu on any photo, comment, visit, or profile to report it. Our moderators review every report. False reports are rate-limited."
-          cta={{ label: 'See community guidelines', onPress: () => router.push('/terms-of-service?section=guidelines' as any) }}
-        />
-
-        <SafetyCard
-          icon="ban"
-          iconColor="#F97316"
-          title="Block other users"
-          body="Block someone to prevent them from seeing your content, messaging you, or appearing in your feed. Blocking is private — they're not notified."
-        />
-
-        <SafetyCard
-          icon="lock-closed"
-          iconColor="#6366F1"
-          title="Private and friends-only posts"
-          body="Choose visibility per post: Public, Friends only, or Private (only you). Default visibility can be set in Privacy settings."
-          cta={{ label: 'Open Privacy settings', onPress: () => router.push('/settings/privacy' as any) }}
-        />
-
-        <SafetyCard
-          icon="mail"
-          iconColor="#3B82F6"
-          title="Contact a moderator"
-          body="Need help with something a report can't fix? Send a moderator a direct message via the in-app support inbox. We typically respond within 48 hours."
-        />
-
-        {/* HOW WE PROTECT */}
-        <Text style={[styles.sectionLabel, { color: colors.text, marginTop: 16 }]}>How we protect the community</Text>
-
-        <SafetyCard
-          icon="shield"
-          iconColor="#8B5CF6"
-          title="Trained moderators"
-          body="Reports are reviewed by humans, not algorithms. Our team can hide content (soft-delete), warn users, or temporarily suspend accounts that violate our community guidelines."
-        />
-
-        <SafetyCard
-          icon="warning"
-          iconColor="#F59E0B"
-          title="Strike system"
-          body="Three warnings within 90 days triggers an automatic 7-day suspension. Five warnings ever triggers a 30-day suspension. Severe violations can result in immediate account termination."
-        />
-
-        <SafetyCard
-          icon="eye-off"
-          iconColor="#F59E0B"
-          title="Hidden content"
-          body="Content that breaks our rules is hidden from public view. The original poster is notified and shown a clear reason. They can appeal via the moderator support inbox."
-        />
-
-        <SafetyCard
-          icon="shield-checkmark"
-          iconColor="#10B981"
-          title="Trusted Traveler badge"
-          body="Members with 90+ days of clean contribution and verified visits earn a Trusted Traveler badge. Their reports are prioritized in our moderation queue, helping us catch bad behaviour faster."
-          cta={{ label: 'See your status', onPress: () => router.push('/(tabs)/profile' as any) }}
-        />
-
-        {/* YOUR DATA */}
-        <Text style={[styles.sectionLabel, { color: colors.text, marginTop: 16 }]}>Your data and account</Text>
-
-        <SafetyCard
-          icon="key"
-          iconColor="#0EA5E9"
-          title="Account control"
-          body="Change your password, manage email, or delete your account permanently at any time. We never sell your data. Read our full privacy policy for details."
-          cta={{ label: 'Account settings', onPress: () => router.push('/settings/account' as any) }}
-        />
-
-        <SafetyCard
-          icon="document-text"
-          iconColor="#6B7280"
-          title="Privacy policy & Terms"
-          body="Our policies in plain English. We collect only what's needed to make WanderMark work, store data securely, and never share location with advertisers."
-          cta={{ label: 'Read policies', onPress: () => router.push('/privacy-policy' as any) }}
-        />
-
-        <SafetyCard
-          icon="alert-circle"
-          iconColor="#EF4444"
-          title="Emergency reporting"
-          body="If you encounter something that endangers anyone's safety — including child safety concerns or imminent threats — email us immediately at safety@wandermark.app. We respond within 24 hours."
-          cta={{
-            label: 'Email safety team',
-            onPress: () => Linking.openURL('mailto:safety@wandermark.app?subject=Safety%20concern').catch(() => {}),
-          }}
-        />
+            <View style={[styles.itemList, { backgroundColor: colors.background }]}>
+              {section.items.map((item, idx) => (
+                <View
+                  key={item.title}
+                  style={[
+                    styles.itemRow,
+                    idx < section.items.length - 1 && { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
+                  ]}
+                  testID={`safety-card-${item.title}`}
+                >
+                  <View style={[styles.itemIcon, { backgroundColor: item.iconColor + '15' }]}>
+                    <Ionicons name={item.icon} size={18} color={item.iconColor} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.itemTitle, { color: colors.text }]}>{item.title}</Text>
+                    <Text style={[styles.itemBody, { color: colors.textSecondary }]}>{item.body}</Text>
+                    {item.cta && (
+                      <TouchableOpacity onPress={item.cta.onPress} style={styles.itemCta}>
+                        <Text style={[styles.itemCtaText, { color: colors.primary }]}>{item.cta.label} →</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+        ))}
 
         <Text style={[styles.footer, { color: colors.textSecondary }]}>
           We take community safety seriously. If you ever feel unsafe, please reach out — we&apos;re here to help.
         </Text>
-
-        <View style={{ height: 40 }} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { paddingHorizontal: 16, paddingVertical: 14 },
-  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  headerBack: { width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.18)', justifyContent: 'center', alignItems: 'center' },
-  headerTitle: { fontSize: 17, fontWeight: '700', color: '#fff' },
-  headerSub: { fontSize: 12, color: 'rgba(255,255,255,0.85)', marginTop: 8, marginLeft: 4 },
-  intro: { fontSize: 13, lineHeight: 19, paddingHorizontal: 4, marginBottom: 8 },
-  sectionLabel: { fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.6, paddingHorizontal: 4, marginBottom: 4 },
-  card: {
-    flexDirection: 'row',
-    gap: 14,
-    padding: 16,
-    borderRadius: 14,
-    alignItems: 'flex-start',
-  },
-  iconCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  header: { paddingHorizontal: 16, paddingBottom: 16 },
+  headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', minHeight: 32 },
+  headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  backButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  cardTitle: { fontSize: 15, fontWeight: '700', marginBottom: 4 },
-  cardBody: { fontSize: 13, lineHeight: 19 },
-  ctaBtn: { marginTop: 10 },
-  ctaText: { fontSize: 13, fontWeight: '700', color: '#10B981' },
-  footer: { fontSize: 12, fontStyle: 'italic', textAlign: 'center', marginTop: 16, paddingHorizontal: 12 },
+  headerTitle: { fontSize: 22, fontWeight: '800', color: '#fff' },
+  brandingContainer: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  scrollView: { flex: 1 },
+  scrollContent: { paddingTop: 16, paddingBottom: 40, paddingHorizontal: 16, gap: 16 },
+  intro: { fontSize: 13, lineHeight: 19, paddingHorizontal: 4 },
+  section: {
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    padding: 16,
+  },
+  sectionIconCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sectionHeaderText: { flex: 1 },
+  sectionTitle: { fontSize: 17, fontWeight: '700' },
+  sectionSubtitle: { fontSize: 12, marginTop: 2 },
+  itemList: { borderRadius: 12, marginHorizontal: 12, marginBottom: 12, padding: 4 },
+  itemRow: {
+    flexDirection: 'row',
+    gap: 12,
+    padding: 12,
+    alignItems: 'flex-start',
+  },
+  itemIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  itemTitle: { fontSize: 14, fontWeight: '700', marginBottom: 4 },
+  itemBody: { fontSize: 12.5, lineHeight: 18 },
+  itemCta: { marginTop: 8 },
+  itemCtaText: { fontSize: 13, fontWeight: '700' },
+  footer: { fontSize: 12, fontStyle: 'italic', textAlign: 'center', marginTop: 8, paddingHorizontal: 12 },
 });
