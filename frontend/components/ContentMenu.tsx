@@ -98,6 +98,11 @@ export default function ContentMenu({
     );
   };
 
+  const handleSafetyPress = () => {
+    closeSheet();
+    router.push('/settings/community-safety' as any);
+  };
+
   const buttonStyle = [
     styles.touchTarget,
     variant === 'overlay' && styles.overlayButton,
@@ -149,6 +154,16 @@ export default function ContentMenu({
               <Ionicons name="flag-outline" size={20} color="#E53935" />
               <Text style={[styles.rowText, styles.destructive]}>
                 {REPORT_LABEL[contentType]}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.row, styles.subtleRow]}
+              onPress={handleSafetyPress}
+              testID="content-menu-safety"
+            >
+              <Ionicons name="shield-checkmark-outline" size={18} color={theme.colors.textLight} />
+              <Text style={[styles.rowText, styles.subtleText]}>
+                Why we moderate
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -227,6 +242,14 @@ const styles = StyleSheet.create({
   },
   destructive: {
     color: '#E53935',
+  },
+  subtleRow: {
+    paddingVertical: 12,
+  },
+  subtleText: {
+    fontSize: 14,
+    color: theme.colors.textLight,
+    fontWeight: '500',
   },
   cancelText: {
     fontSize: 16,
