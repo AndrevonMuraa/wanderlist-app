@@ -59,8 +59,9 @@ async def create_report(report_data: ReportCreate, current_user: User = Depends(
     if report_data.report_type == "user" and report_data.target_id == current_user.user_id:
         raise HTTPException(status_code=400, detail="You cannot report yourself")
     
-    # Create the report
-    report = Report(
+    # Create the report — Trusted Travelers' reports are flagged high-priority
+    is_trusted = bool(getattr(current_user, "trusted_traveler", False))
+    report_dict = Report(
         report_id=str(uuid.uuid4()),
         reporter_id=current_user.user_id,
         report_type=report_data.report_type,
@@ -69,11 +70,13 @@ async def create_report(report_data: ReportCreate, current_user: User = Depends(
         reason=report_data.reason,
         status="pending",
         created_at=datetime.now(timezone.utc)
-    )
-    
-    await db.reports.insert_one(report.model_dump())
-    
-    return {"message": "Report submitted successfully", "report_id": report.report_id}
+    ).model_dump()
+    report_dict["priority"] = "high" if is_trusted else "normal"
+    report_dict["reporter_trusted"] = is_trusted
+
+    await db.reports.insert_one(report_dict)
+
+    return {"message": "Report submitted successfully", "report_id": report_dict["report_id"], "priority": report_dict["priority"]}
 
 @router.get("/reports/my-reports")
 async def get_my_reports(current_user: User = Depends(get_current_user)):

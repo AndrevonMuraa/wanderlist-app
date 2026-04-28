@@ -71,9 +71,12 @@ Backend (`utils/trust.py` + `routes/trust.py`):
 - First-time earn → `trusted_traveler_earned` notification
 - `trusted` field exposed on user profile + leaderboard rows; `trusted_traveler` on `UserPublic`/`/auth/me`
 
+**Trusted-bonus**: Reports submitted by Trusted Travelers get `priority: "high"` and `reporter_trusted: true` automatically. Admin reports endpoint sorts these first. Admin reports UI shows a green "Trusted reporter — prioritized" banner on these cards.
+
 Frontend:
 - `components/TrustBadge.tsx` — universal: 1 small filled emerald `shield-checkmark` icon, tap → bottom sheet with criteria checklist (own profile shows progress; others' profile shows badge meaning)
 - Wired into `(tabs)/profile.tsx` (own — owner-only mode shows progress) and `user-profile/[user_id].tsx` (others — only renders if trusted=true)
+- `admin/reports.tsx` — green banner + automatic prioritization when reporter is trusted
 - Notifications page handles `trusted_traveler_earned` icon + routing
 - Backend regression: 42/42 moderation+admin tests green
 - Grandfathering ran on lansering: 16 users evaluated, 0 currently qualified (test users er for ferske)

@@ -317,7 +317,15 @@ async def get_admin_reports(
     total = await db.reports.count_documents(query)
     
     skip = (page - 1) * limit
-    reports = await db.reports.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    # Trusted reports first, then newest. Use {priority: 1 for high, 0 for normal} via aggregation field.
+    reports = await db.reports.aggregate([
+        {"$match": query},
+        {"$addFields": {"_priority_rank": {"$cond": [{"$eq": ["$priority", "high"]}, 1, 0]}}},
+        {"$sort": {"_priority_rank": -1, "created_at": -1}},
+        {"$skip": skip},
+        {"$limit": limit},
+        {"$project": {"_id": 0, "_priority_rank": 0}},
+    ]).to_list(limit)
     
     # Enrich with reporter info + auto-flag state (3+ pending reports on same target)
     from utils.auto_flag import get_flagged_target_ids, AUTO_FLAG_THRESHOLD

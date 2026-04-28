@@ -35,6 +35,8 @@ interface ReportItem {
   reviewed_by_role?: string;
   auto_flagged?: boolean;
   pending_report_count?: number;
+  priority?: 'high' | 'normal';
+  reporter_trusted?: boolean;
   reporter?: {
     name: string;
     email: string;
@@ -347,6 +349,16 @@ export default function AdminReportsScreen() {
           <Ionicons name="shield" size={13} color="#FFF" />
           <Text style={styles.autoFlagBannerText}>
             Auto-hidden — {report.pending_report_count} pending reports
+          </Text>
+        </View>
+      )}
+
+      {/* Trusted reporter banner — surfaces high-priority reports */}
+      {report.reporter_trusted && !report.auto_flagged && (
+        <View style={[styles.autoFlagBanner, { backgroundColor: '#10B981' }]}>
+          <Ionicons name="shield-checkmark" size={13} color="#FFF" />
+          <Text style={styles.autoFlagBannerText}>
+            Trusted reporter — prioritized
           </Text>
         </View>
       )}
