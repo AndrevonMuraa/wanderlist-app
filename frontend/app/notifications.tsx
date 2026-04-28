@@ -9,6 +9,9 @@ import {
   StatusBar,
   Modal,
   Linking,
+  TextInput,
+  Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -44,6 +47,9 @@ export default function NotificationsScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [modMessage, setModMessage] = useState<Notification | null>(null);
+  const [replyOpen, setReplyOpen] = useState(false);
+  const [replyText, setReplyText] = useState('');
+  const [replyBusy, setReplyBusy] = useState(false);
 
   const topPadding = Platform.OS === 'ios' ? insets.top : (StatusBar.currentHeight || 20);
 
@@ -336,12 +342,8 @@ export default function NotificationsScreen() {
               <TouchableOpacity
                 style={[styles.modalBtn, styles.modalBtnSecondary]}
                 onPress={() => {
-                  const subject = encodeURIComponent(`Re: ${modMessage?.title || 'Moderator message'}`);
-                  const body = encodeURIComponent(
-                    `\n\n---\nReply reference: ${modMessage?.notification_id || ''}\nOriginal message:\n${modMessage?.message || ''}`
-                  );
-                  Linking.openURL(`mailto:support@wandermark.app?subject=${subject}&body=${body}`).catch(() => {});
-                  setModMessage(null);
+                  setReplyText('');
+                  setReplyOpen(true);
                 }}
                 testID="moderator-message-reply"
               >
@@ -356,6 +358,69 @@ export default function NotificationsScreen() {
                 <Text style={styles.modalBtnText}>OK</Text>
               </TouchableOpacity>
             </View>
+
+            {replyOpen && (
+              <View style={styles.replyPane}>
+                <Text style={styles.replyLabel}>Your reply</Text>
+                <TextInput
+                  style={styles.replyInput}
+                  multiline
+                  value={replyText}
+                  onChangeText={setReplyText}
+                  placeholder="Type your message to the moderator…"
+                  placeholderTextColor={theme.colors.textSecondary}
+                  maxLength={4000}
+                  editable={!replyBusy}
+                  testID="moderator-message-reply-input"
+                />
+                <View style={styles.modalButtonRow}>
+                  <TouchableOpacity
+                    style={[styles.modalBtn, styles.modalBtnSecondary]}
+                    onPress={() => { setReplyOpen(false); setReplyText(''); }}
+                    disabled={replyBusy}
+                    testID="moderator-message-reply-cancel"
+                  >
+                    <Text style={[styles.modalBtnText, styles.modalBtnTextSecondary]}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.modalBtn, styles.modalBtnPrimary, (!replyText.trim() || replyBusy) && { opacity: 0.5 }]}
+                    onPress={async () => {
+                      if (!replyText.trim() || !modMessage) return;
+                      setReplyBusy(true);
+                      try {
+                        const token = await getToken();
+                        const res = await fetch(`${BACKEND_URL}/api/support/tickets`, {
+                          method: 'POST',
+                          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            subject: `Re: ${modMessage.title || 'Moderator message'}`,
+                            message: replyText.trim(),
+                            related_notification_id: modMessage.notification_id,
+                          }),
+                        });
+                        if (res.ok) {
+                          setReplyOpen(false);
+                          setReplyText('');
+                          setModMessage(null);
+                          Alert.alert('Reply sent', 'A moderator will get back to you soon.');
+                        } else {
+                          const d = await res.json().catch(() => ({}));
+                          Alert.alert('Error', d.detail || 'Failed to send reply');
+                        }
+                      } catch {
+                        Alert.alert('Error', 'Network error');
+                      } finally {
+                        setReplyBusy(false);
+                      }
+                    }}
+                    disabled={!replyText.trim() || replyBusy}
+                    testID="moderator-message-reply-send"
+                  >
+                    <Text style={styles.modalBtnText}>{replyBusy ? 'Sending…' : 'Send'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
           </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
@@ -550,14 +615,59 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   modalBtn: {
-    backgroundColor: '#3B82F6',
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  modalBtnPrimary: {
+    flex: 1.2,
+    backgroundColor: '#3B82F6',
+  },
+  modalBtnSecondary: {
+    flex: 1,
+    backgroundColor: '#EFF6FF',
+    borderWidth: 1,
+    borderColor: '#DBEAFE',
+  },
+  modalButtonRow: {
+    flexDirection: 'row',
+    gap: 10,
   },
   modalBtnText: {
     color: '#FFF',
     fontSize: 15,
     fontWeight: '700',
+  },
+  modalBtnTextSecondary: {
+    color: '#3B82F6',
+  },
+  replyPane: {
+    marginTop: 16,
+    paddingTop: 16,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#E5E7EB',
+  },
+  replyLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: theme.colors.textSecondary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 8,
+  },
+  replyInput: {
+    minHeight: 100,
+    maxHeight: 200,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    padding: 12,
+    fontSize: 14,
+    color: theme.colors.text,
+    textAlignVertical: 'top',
+    marginBottom: 12,
   },
 });

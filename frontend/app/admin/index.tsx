@@ -332,6 +332,13 @@ export default function AdminDashboard() {
               onPress={() => router.push('/admin/moderator-activity' as any)}
             />
           )}
+          <MenuCard
+            title="Support Inbox"
+            description="Reply to user support tickets"
+            icon="mail-open-outline"
+            color="#3B82F6"
+            onPress={() => router.push('/admin/tickets' as any)}
+          />
         </View>
 
         {/* Activity Summary */}

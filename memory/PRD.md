@@ -10,62 +10,66 @@ Bring "WanderMark" travel app (React Native + Expo + FastAPI + MongoDB) to a pro
 
 ## What's been implemented (completed sessions)
 
-### April 2026 — Build 83 + DB cleanup
-- Build 83 EAS build → TestFlight
-- Production DB: 1500 landmarks / 100 countries (300/20 per continent)
-- Icon system unified, pytest 205/205
+### April 2026 — Build 83 + DB cleanup + Community + Moderation foundations
+- TestFlight Build 83, DB at 1500/100 balance, icon system unified
+- Community tab refactor with TopHighlightsList, ContentMenu everywhere
+- Admin/moderator roles split, destructive ops gated to super-admin
+- Explore CTA polish, admin/reports modernized
 
-### April 2026 — Community refactor + reporting overhaul
-- Shape-shifting bug fixed (Community Highlight hero direct nav)
-- Deleted dedicated highlights pages; TopHighlightsList numbered top 1-10
-- ContentMenu universal (••• bottom sheet) — 8 surfaces
-- Backend report rate limit (5/hr/user), diary report type
-- RN-Web pitfalls fixed (testID + sibling-overlay)
-
-### April 2026 — Admin/moderator polish
-- Explore CTA compressed; admin/reports type-color icons + content_preview + audit trail
-- Destructive ops gated to super-admin (recalculate, strip-verified, role changes)
-- make-moderator, demote-to-user endpoints
-- Role-aware admin header (Super Admin / Moderator)
-- `/app/memory/ADMIN_ROLES.md` documentation
-
-### April 2026 — Moderator power tools (COMPLETE) ✅
-Backend (`/app/backend/routes/moderation.py` wired in `server.py`):
-- `POST /api/admin/content/{ctype}/{id}/hide` — soft-delete (moderator+)
-- `POST /api/admin/content/{ctype}/{id}/restore` — un-hide
-- `DELETE /api/admin/content/{ctype}/{id}` — hard-delete (super-admin only)
-- `POST /api/admin/users/{id}/warn` — issue warning + auto-escalation (3 in 30d → 7d suspend; 5+ ever → 30d)
-- `POST /api/admin/users/{id}/suspend` — manual N-day suspension
-- `POST /api/admin/users/{id}/unsuspend` — clear suspension
-- `POST /api/admin/users/{id}/message` — send moderator message
-- `GET /api/admin/users/{id}/moderation-history` — per-user history
-- `GET /api/admin/moderator-activity?days=30` — super-admin dashboard
-- Auth: `get_current_user` enforces `suspended_until` (returns 403 w/ reason); super-admin bypasses to self-unsuspend
+### April 2026 — Moderator power tools ✅
+Backend (`routes/moderation.py` wired into `server.py`):
+- `POST /api/admin/content/{type}/{id}/hide`, `restore`, `delete`
+- `POST /api/admin/users/{id}/warn` (auto-escalation 3/30d → 7d, 5+ → 30d)
+- `POST /api/admin/users/{id}/suspend`, `unsuspend`, `message`
+- `GET /api/admin/users/{id}/moderation-history`
+- `GET /api/admin/moderator-activity?days=N` (super-admin only)
+- Auth: suspension enforced in `get_current_user`; super-admin self-bypass
 - Public feeds filter `hidden: true` (highlight_scoring, feed, comments)
-- Admin user listing filters: `has_warnings=true`, `suspended=true`
-- User model extended: `warning_count`, `warnings[]`, `last_warning_at`, `suspended_until`, `suspension_reason`
-- All destructive actions audit-logged via `admin_logs` collection
+- Admin user filters: `has_warnings`, `suspended`
+- Tz-naive datetime bug in warn_user caught by testing agent + fixed
 
 Frontend:
-- `admin/reports.tsx` — Hide / Delete (super-admin) / Warn action buttons on report cards
-- `admin/users.tsx` — Warnings + Suspended badges + filters; user row click routes to new moderation page
-- `admin/user-moderation.tsx` (NEW) — full per-user moderation console: warn/suspend/unsuspend/message, warning history, reports list
-- `admin/moderator-activity.tsx` (NEW, super-admin only) — per-moderator stats: reports reviewed, avg response time, warnings/suspensions/content actions
-- Admin home gets super-admin-only link to moderator activity
+- `admin/reports.tsx` — Hide/Delete/Warn action buttons
+- `admin/users.tsx` — warnings + suspended badges + filters
+- `admin/user-moderation.tsx` (NEW) — per-user console
+- `admin/moderator-activity.tsx` (NEW) — moderator dashboard
+- `notifications.tsx` — icons + routing for `content_hidden`, `warning_issued`, `account_suspended`, `moderator_message`; modal opens for moderator messages with Reply button
+- Testing agent: 26/26 moderation tests + 264/265 full regression green
 
-### Testing (Apr 2026)
-- Pytest 238 passed, 3 skipped (no regressions, e2e-verified suspend/unsuspend flow)
+### April 28, 2026 — In-app Support Inbox (ticket system) ✅
+Backend (`routes/support.py` wired into `server.py`):
+- `POST /api/support/tickets` — user creates a ticket (called from Reply button)
+- `GET /api/support/tickets` + `/{id}` — user reads own threads
+- `GET /api/admin/tickets?status=open|closed` — admin lists with unread count
+- `GET /api/admin/tickets/{id}` — admin reads + auto-marks read
+- `POST /api/admin/tickets/{id}/reply` — admin reply; auto-creates `moderator_message` notification + audit log
+- `POST /api/admin/tickets/{id}/close` — close ticket
+- Data: `support_tickets` collection with messages[] array
 
-## ⏳ P1 backlog
-- Notification handlers in app for new types: `content_hidden`, `warning_issued`, `account_suspended`, `moderator_message`
-- `visit-detail` / `country-visit-detail`: "⚠️ Hidden by moderator" badge on own hidden content
+Frontend:
+- `notifications.tsx` — Reply button now opens in-app compose pane (TextInput, Send/Cancel) that posts to `/api/support/tickets`
+- `admin/tickets.tsx` (NEW) — inbox with Open/Closed/All filters, iMessage-style chat thread (user = grey left, mod = blue right), reply input with Send / Reply & Close
+- Admin home has "Support Inbox" menu card
+- End-to-end verified via curl + Playwright (264/3 pytest green, no regressions)
 
-## Future Backlog
-- P2: "Mitt år i reise" yearly summary with shareable cards
-- P2: Block user directly from ContentMenu (currently routed via profile)
-- P3: Repo rename `wanderlist-app` → `wandermark-app`
-- P4: Deploy Privacy/Terms website
-- P4: "Nearby travelers" discovery
+## ⏳ Current backlog
+
+### P1 — Core polish
+- "⚠️ Hidden by moderator" badge on owner's `visit-detail` / `country-visit-detail`
+- Unread badge on admin home for pending tickets
+
+### P2 — Engagement
+- "Mitt år i reise" (Year in Travel) auto-summary with shareable cards
+- Block user directly from ContentMenu
+- Community trust score badge (clean record 90d → "Trusted Traveler")
+
+### P3 — Ops
+- Rename GitHub repo `wanderlist-app` → `wandermark-app`
+
+### P4 — App Store
+- Deploy Privacy/Terms-pages
+- Inbound email (SendGrid/Postmark Parse) → auto-ingest into support_tickets
+- "Nearby travelers" discovery
 
 ## Key Test Credentials
 - Super Admin: `test@wandermark.app` / `Test1234!`
@@ -73,6 +77,7 @@ Frontend:
 - Moderator: `mod@wandermark.app` / `Test1234!`
 
 ## Critical Notes
-- **RN-Web**: use `testID` not `data-testid`; avoid nested `<TouchableOpacity>`
-- **Suspension bypass**: Super-admins (`role === "admin"`) can still call `/me` while suspended — prevents lockout
+- **RN-Web**: use `testID` not `data-testid`
+- **Suspension bypass**: super-admins can still call `/me` while suspended (prevents self-lockout)
+- **Expo CI mode**: new route files need `sudo supervisorctl restart expo` to register
 - See `/app/memory/ADMIN_ROLES.md` for full role matrix
