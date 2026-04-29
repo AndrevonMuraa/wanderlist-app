@@ -8,6 +8,7 @@ from datetime import datetime, timezone, timedelta
 from utils.db import db
 from utils.auth import get_admin_user, get_super_admin_user
 from utils.helpers import create_notification
+from utils.lockdown import assert_not_locked_down
 from utils.sentry import IMAGE_NORM_COUNTERS
 from models.all import User, AdminUserUpdate, AdminReportUpdate, AdminNotificationRequest
 
@@ -214,7 +215,7 @@ async def get_admin_user_detail(user_id: str, admin_user: User = Depends(get_adm
         "reports_by": reports_by
     }
 
-@router.put("/admin/users/{user_id}")
+@router.put("/admin/users/{user_id}", dependencies=[Depends(assert_not_locked_down)])
 async def update_admin_user(
     user_id: str, 
     update_data: AdminUserUpdate,
@@ -316,7 +317,7 @@ async def _enforce_tier_quota(admin_user: User):
     )
 
 
-@router.put("/admin/users/{user_id}/tier")
+@router.put("/admin/users/{user_id}/tier", dependencies=[Depends(assert_not_locked_down)])
 async def update_user_tier(
     user_id: str,
     request: dict,
@@ -615,7 +616,7 @@ async def get_admin_logs(
         "pages": (total + limit - 1) // limit
     }
 
-@router.post("/admin/make-admin/{user_id}")
+@router.post("/admin/make-admin/{user_id}", dependencies=[Depends(assert_not_locked_down)])
 async def make_user_admin(user_id: str, admin_user: User = Depends(get_super_admin_user)):
     """Promote a user to admin (super admin only)"""
     result = await db.users.update_one(
@@ -639,7 +640,7 @@ async def make_user_admin(user_id: str, admin_user: User = Depends(get_super_adm
     return {"message": f"User {user_id} promoted to admin"}
 
 
-@router.post("/admin/make-moderator/{user_id}")
+@router.post("/admin/make-moderator/{user_id}", dependencies=[Depends(assert_not_locked_down)])
 async def make_user_moderator(user_id: str, admin_user: User = Depends(get_super_admin_user)):
     """Promote a user to moderator (super admin only).
 
@@ -664,7 +665,7 @@ async def make_user_moderator(user_id: str, admin_user: User = Depends(get_super
     return {"message": f"User {user_id} promoted to moderator"}
 
 
-@router.post("/admin/demote-to-user/{user_id}")
+@router.post("/admin/demote-to-user/{user_id}", dependencies=[Depends(assert_not_locked_down)])
 async def demote_to_user(user_id: str, admin_user: User = Depends(get_super_admin_user)):
     """Remove admin/moderator role from a user (super admin only)."""
     if user_id == admin_user.user_id:

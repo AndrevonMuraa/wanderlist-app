@@ -175,6 +175,28 @@ Frontend:
 
 Net effect: backed-up password leak alone now grants the attacker exactly nothing.
 
+### April 29, 2026 — Emergency Lockdown (break-glass kill switch) ✅
+Goal: One-click freeze of every moderator/admin write action across the app, for the worst case where you spot suspicious activity in audit logs.
+
+Backend:
+- `utils/lockdown.py` — `assert_not_locked_down()` raises 503 with `{admin_lockdown: true}` when the global flag is on. Stored on `system_flags._id == "global"`.
+- `routes/lockdown.py`:
+  - `GET /admin/lockdown/status` — current state (super-admin only)
+  - `POST /admin/lockdown/enable` — super-admin only
+  - `POST /admin/lockdown/disable` — super-admin only AND requires a fresh TOTP/backup code (stored 2FA must be enabled — guidance returned otherwise). Compromised password alone cannot un-freeze.
+- All enable/disable events audit-logged in `admin_logs` (`action: lockdown_enabled` / `lockdown_disabled`).
+- 13 high-risk write endpoints now declare `dependencies=[Depends(assert_not_locked_down)]`:
+  - admin.py: `PUT /admin/users/{id}`, `PUT /admin/users/{id}/tier`, `POST /admin/make-admin`, `POST /admin/make-moderator`, `POST /admin/demote-to-user`
+  - moderation.py: `POST /admin/content/{type}/{id}/hide`, `/restore`, `DELETE /admin/content/{type}/{id}`, `POST /admin/users/{id}/warn`, `/suspend`, `/unsuspend`, `/message`
+- Reads remain open during lockdown so the operator can audit logs and decide what to do next.
+- Tests: 9 new pytest cases — moderator-blocked / lockdown-blocks-write / lockdown-allows-read / disable-without-2FA-rejected / disable-with-valid-totp-succeeds / wrong-code-rejected.
+
+Frontend:
+- New screen `app/admin/lockdown.tsx` — big red "Freeze all admin actions" button when healthy, lift form requiring TOTP code when locked. Status hero card flips green ↔ red.
+
+### Total backend pytest now: 64+ ✅
+Critical security surface covered: tier lockdown (10), 2FA (11), lockdown (9), year-recap (8), moderation regression (26).
+
 
 
 ### P3 — Ops

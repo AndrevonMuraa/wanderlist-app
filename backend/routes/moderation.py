@@ -21,6 +21,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from models.all import User
 from utils.auth import get_admin_user, get_super_admin_user
 from utils.helpers import create_notification
+from utils.lockdown import assert_not_locked_down
 from utils.trust import refresh_trust_for_user
 
 router = APIRouter()
@@ -59,7 +60,7 @@ class HideContentRequest(BaseModel):
     notify_owner: bool = True
 
 
-@router.post("/admin/content/{ctype}/{target_id}/hide")
+@router.post("/admin/content/{ctype}/{target_id}/hide", dependencies=[Depends(assert_not_locked_down)])
 async def hide_content(
     ctype: str,
     target_id: str,
@@ -126,7 +127,7 @@ async def hide_content(
     return {"message": f"{ctype} hidden", "target_id": target_id}
 
 
-@router.post("/admin/content/{ctype}/{target_id}/restore")
+@router.post("/admin/content/{ctype}/{target_id}/restore", dependencies=[Depends(assert_not_locked_down)])
 async def restore_content(
     ctype: str,
     target_id: str,
@@ -153,7 +154,7 @@ async def restore_content(
     return {"message": f"{ctype} restored", "target_id": target_id}
 
 
-@router.delete("/admin/content/{ctype}/{target_id}")
+@router.delete("/admin/content/{ctype}/{target_id}", dependencies=[Depends(assert_not_locked_down)])
 async def delete_content(
     ctype: str,
     target_id: str,
@@ -196,7 +197,7 @@ class MessageUserRequest(BaseModel):
     title: Optional[str] = "A message from the WanderMark team"
 
 
-@router.post("/admin/users/{user_id}/warn")
+@router.post("/admin/users/{user_id}/warn", dependencies=[Depends(assert_not_locked_down)])
 async def warn_user(
     user_id: str,
     body: WarnUserRequest,
@@ -292,7 +293,7 @@ async def warn_user(
     }
 
 
-@router.post("/admin/users/{user_id}/suspend")
+@router.post("/admin/users/{user_id}/suspend", dependencies=[Depends(assert_not_locked_down)])
 async def suspend_user(
     user_id: str,
     body: SuspendUserRequest,
@@ -329,7 +330,7 @@ async def suspend_user(
     return {"message": f"User suspended for {days} days", "suspended_until": suspended_until}
 
 
-@router.post("/admin/users/{user_id}/unsuspend")
+@router.post("/admin/users/{user_id}/unsuspend", dependencies=[Depends(assert_not_locked_down)])
 async def unsuspend_user(
     user_id: str,
     admin_user: User = Depends(get_admin_user)
@@ -349,7 +350,7 @@ async def unsuspend_user(
     return {"message": "Suspension lifted"}
 
 
-@router.post("/admin/users/{user_id}/message")
+@router.post("/admin/users/{user_id}/message", dependencies=[Depends(assert_not_locked_down)])
 async def message_user(
     user_id: str,
     body: MessageUserRequest,
