@@ -54,6 +54,8 @@ async def get_enhanced_leaderboard(
                 {"default_privacy": "public"},
                 {"default_privacy": {"$exists": False}}
             ]
+            # Stealth: hide super-admin from public leaderboards
+            query["role"] = {"$ne": "admin"}
         
         # Friends leaderboard: sort by total points (trust among friends)
         # Global leaderboard: sort by leaderboard_points (anti-cheat, photo-verified)
@@ -84,7 +86,10 @@ async def get_enhanced_leaderboard(
         if not user_filter:
             # Get public user IDs first
             public_users = await db.users.find(
-                {"$or": [{"default_privacy": "public"}, {"default_privacy": {"$exists": False}}]},
+                {
+                    "$or": [{"default_privacy": "public"}, {"default_privacy": {"$exists": False}}],
+                    "role": {"$ne": "admin"},  # Stealth: hide super-admin
+                },
                 {"_id": 0, "user_id": 1}
             ).to_list(500)
             public_ids = [u["user_id"] for u in public_users]
@@ -129,7 +134,10 @@ async def get_enhanced_leaderboard(
         privacy_match = {}
         if not user_filter:
             public_users = await db.users.find(
-                {"$or": [{"default_privacy": "public"}, {"default_privacy": {"$exists": False}}]},
+                {
+                    "$or": [{"default_privacy": "public"}, {"default_privacy": {"$exists": False}}],
+                    "role": {"$ne": "admin"},  # Stealth: hide super-admin
+                },
                 {"_id": 0, "user_id": 1}
             ).to_list(500)
             public_ids = [u["user_id"] for u in public_users]
@@ -181,9 +189,12 @@ async def get_rising_stars(limit: int = 10, current_user: User = Depends(get_cur
     """Get users with biggest point gains this week"""
     week_ago = datetime.now(timezone.utc) - timedelta(days=7)
     
-    # Only include public users
+    # Only include public users (and exclude super-admin for stealth)
     public_users = await db.users.find(
-        {"$or": [{"default_privacy": "public"}, {"default_privacy": {"$exists": False}}]},
+        {
+            "$or": [{"default_privacy": "public"}, {"default_privacy": {"$exists": False}}],
+            "role": {"$ne": "admin"},
+        },
         {"_id": 0, "user_id": 1}
     ).to_list(500)
     public_ids = [u["user_id"] for u in public_users]

@@ -73,7 +73,7 @@ const CONTINENTS = [
   },
   {
     id: 'oceania',
-    name: 'Oceania',
+    name: 'Oceania++',
     subtitle: '& other island paradises',
     apiName: 'Oceania',
     countries: 20,

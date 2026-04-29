@@ -220,17 +220,28 @@ async def update_admin_user(
     update_data: AdminUserUpdate,
     admin_user: User = Depends(get_admin_user)
 ):
-    """Update user details (tier, role, ban status)"""
+    """Update user details (tier, role, ban status).
+
+    Tier and role mutations require Super Admin (`role == "admin"`).
+    Moderators may toggle ban status only — this prevents a rogue/compromised
+    moderator from causing revenue loss by bulk-downgrading or bulk-upgrading.
+    """
     update_fields = {}
-    
+
     if update_data.subscription_tier is not None:
+        if admin_user.role != "admin":
+            raise HTTPException(
+                status_code=403,
+                detail="Only Super Admin can change subscription tier"
+            )
         if update_data.subscription_tier not in ["free", "pro"]:
             raise HTTPException(status_code=400, detail="Invalid tier. Must be 'free' or 'pro'")
+        # Daily quota guard (defense-in-depth even for super-admin)
+        await _enforce_tier_quota(admin_user)
         update_fields["subscription_tier"] = update_data.subscription_tier
-        # Set expiration for pro (1 year from now)
         if update_data.subscription_tier == "pro":
             update_fields["subscription_expires_at"] = datetime.now(timezone.utc) + timedelta(days=365)
-    
+
     if update_data.role is not None:
         # Only super admins can change roles
         if admin_user.role != "admin":
@@ -238,7 +249,7 @@ async def update_admin_user(
         if update_data.role not in ["user", "moderator", "admin"]:
             raise HTTPException(status_code=400, detail="Invalid role")
         update_fields["role"] = update_data.role
-    
+
     if update_data.is_banned is not None:
         update_fields["is_banned"] = update_data.is_banned
         if update_data.is_banned:
@@ -247,18 +258,18 @@ async def update_admin_user(
         else:
             update_fields["banned_at"] = None
             update_fields["ban_reason"] = None
-    
+
     if not update_fields:
         raise HTTPException(status_code=400, detail="No valid fields to update")
-    
+
     result = await db.users.update_one(
         {"user_id": user_id},
         {"$set": update_fields}
     )
-    
+
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="User not found")
-    
+
     # Log admin action
     await db.admin_logs.insert_one({
         "log_id": f"log_{uuid.uuid4().hex[:12]}",
@@ -269,33 +280,129 @@ async def update_admin_user(
         "changes": update_fields,
         "created_at": datetime.now(timezone.utc)
     })
-    
+
     return {"message": "User updated successfully", "changes": update_fields}
+
+
+# --- Tier change quota (defense-in-depth) ---
+TIER_QUOTA_DEFAULT = 25  # max tier changes per super-admin per UTC day
+
+
+async def _enforce_tier_quota(admin_user: User):
+    """Hard-cap tier changes per super-admin per UTC day.
+
+    Prevents catastrophic damage from a compromised super-admin account.
+    Quota can be raised manually via POST /admin/tier-quota/reset.
+    """
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    quota_doc = await db.tier_quota.find_one(
+        {"admin_id": admin_user.user_id, "date": today},
+        {"_id": 0},
+    )
+    used = (quota_doc or {}).get("used", 0)
+    limit = (quota_doc or {}).get("limit", TIER_QUOTA_DEFAULT)
+    if used >= limit:
+        raise HTTPException(
+            status_code=429,
+            detail=(
+                f"Daily tier-change limit reached ({used}/{limit}). "
+                "Use POST /admin/tier-quota/reset to raise the quota."
+            ),
+        )
+    await db.tier_quota.update_one(
+        {"admin_id": admin_user.user_id, "date": today},
+        {"$inc": {"used": 1}, "$setOnInsert": {"limit": limit, "admin_id": admin_user.user_id, "date": today}},
+        upsert=True,
+    )
+
 
 @router.put("/admin/users/{user_id}/tier")
 async def update_user_tier(
     user_id: str,
     request: dict,
-    admin_user: User = Depends(get_admin_user)
+    admin_user: User = Depends(get_super_admin_user),
 ):
-    """Admin endpoint to upgrade/downgrade user subscription tier"""
+    """Super-Admin-only: upgrade/downgrade subscription tier.
+
+    Audited and rate-limited via TIER_QUOTA_DEFAULT/day.
+    """
     tier = request.get("tier")
     if not tier or tier not in ["free", "pro"]:
         raise HTTPException(status_code=400, detail="Invalid tier. Must be 'free' or 'pro'")
-    
+
+    await _enforce_tier_quota(admin_user)
+
     update_fields = {"subscription_tier": tier}
     if tier == "pro":
         update_fields["subscription_expires_at"] = datetime.now(timezone.utc) + timedelta(days=365)
-    
+
     result = await db.users.update_one(
         {"user_id": user_id},
         {"$set": update_fields}
     )
-    
+
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="User not found")
-    
+
+    # Audit log
+    await db.admin_logs.insert_one({
+        "log_id": f"log_{uuid.uuid4().hex[:12]}",
+        "admin_id": admin_user.user_id,
+        "admin_name": admin_user.name,
+        "action": "tier_change",
+        "target_id": user_id,
+        "changes": update_fields,
+        "created_at": datetime.now(timezone.utc),
+    })
+
     return {"message": f"User {user_id} upgraded to {tier} tier", "tier": tier}
+
+
+@router.get("/admin/tier-quota")
+async def get_tier_quota(admin_user: User = Depends(get_super_admin_user)):
+    """Return today's tier-change quota usage for the calling super-admin."""
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    doc = await db.tier_quota.find_one(
+        {"admin_id": admin_user.user_id, "date": today}, {"_id": 0}
+    )
+    return {
+        "date": today,
+        "used": (doc or {}).get("used", 0),
+        "limit": (doc or {}).get("limit", TIER_QUOTA_DEFAULT),
+    }
+
+
+@router.post("/admin/tier-quota/reset")
+async def reset_tier_quota(
+    payload: dict,
+    admin_user: User = Depends(get_super_admin_user),
+):
+    """Super-Admin only: raise the daily tier-change quota for today.
+
+    Body: {"limit": int}.  Auditable.
+    """
+    new_limit = payload.get("limit")
+    if not isinstance(new_limit, int) or new_limit < 1 or new_limit > 1000:
+        raise HTTPException(
+            status_code=400,
+            detail="`limit` must be an integer between 1 and 1000.",
+        )
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    await db.tier_quota.update_one(
+        {"admin_id": admin_user.user_id, "date": today},
+        {"$set": {"limit": new_limit}, "$setOnInsert": {"used": 0, "admin_id": admin_user.user_id, "date": today}},
+        upsert=True,
+    )
+    await db.admin_logs.insert_one({
+        "log_id": f"log_{uuid.uuid4().hex[:12]}",
+        "admin_id": admin_user.user_id,
+        "admin_name": admin_user.name,
+        "action": "tier_quota_reset",
+        "target_id": admin_user.user_id,
+        "changes": {"limit": new_limit, "date": today},
+        "created_at": datetime.now(timezone.utc),
+    })
+    return {"date": today, "limit": new_limit}
 
 @router.get("/admin/reports")
 async def get_admin_reports(

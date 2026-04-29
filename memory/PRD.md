@@ -136,6 +136,28 @@ Frontend:
 
 Net: when the dispatch endpoint fires for a user who has push opted in, they receive both an in-app notification AND a phone push. Tapping either deep-links straight into the recap.
 
+### April 29, 2026 — Admin Hardening: Tier Lockdown + Stealth Mode ✅
+Goal: Eliminate revenue-loss risk from rogue/compromised moderators, and keep super-admin presence discreet on public surfaces (App Store-compliant).
+
+Subscription tier lockdown (P0):
+- `routes/admin.py PUT /admin/users/{id}` — `subscription_tier` mutation now requires `role == "admin"` (super-admin). Moderators get 403 with explicit message.
+- `routes/admin.py PUT /admin/users/{id}/tier` — switched dependency from `get_admin_user` → `get_super_admin_user`. Now audit-logged via `admin_logs` (`action: tier_change`).
+- New defense-in-depth quota: `tier_quota` collection, `TIER_QUOTA_DEFAULT = 25`/UTC day per super-admin. 26th tier-change returns 429.
+- New endpoints: `GET /admin/tier-quota` (status), `POST /admin/tier-quota/reset` (super-admin can raise the cap with `{limit: int}` payload — useful for legitimate bulk migrations).
+- Frontend `app/admin/users.tsx` — upgrade/downgrade arrow icons hidden unless `currentUser.role === 'admin'`.
+
+Super-admin stealth mode (P1):
+- `routes/moderation.py` — all moderator-issued user-facing strings now sign as `WanderMark Safety Team` (constant `SAFETY_TEAM_NAME`): `hidden_by_name`, `issued_by_name` on warnings, mod-message signatures.
+- `routes/support.py` — admin replies in support tickets show `from_name: WanderMark Safety Team` and `related_user_name: WanderMark Safety Team` on the user-facing notification. Internal `admin_user_id` / `admin_user_name` (real) preserved in audit log.
+- `routes/leaderboard.py` — all 4 public-leaderboard queries now exclude `role: admin` (points/visits/countries/rising-stars). Friends-only mode unaffected.
+- `routes/friends.py search_users` — excludes `role: admin` from results.
+- Internal admin tooling (admin reports, moderator activity dashboard) still shows real names — auditors need them.
+
+Tests: `tests/test_admin_security.py` — 10 new tests covering moderator-blocked / super-admin-allowed / 25-cap / quota-bump / audit-log / search-stealth / leaderboard-stealth / message-anonymization. Total backend pytest: **44/44 ✅**.
+
+### April 29, 2026 — UX: Oceania++ filter labels ✅
+- `components/TopHighlightsList.tsx`, `app/continents.tsx`, `app/year-in-travel.tsx ContinentSlide` now display `Oceania++` (continuing the convention from `app/(tabs)/journey.tsx` and `app/explore-countries.tsx`) to signal that island paradises outside the strict UN definition are mixed into this filter. API value remains `Oceania` (no backend change).
+
 
 
 ### P3 — Ops

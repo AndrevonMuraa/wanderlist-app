@@ -505,10 +505,13 @@ const CountriesSlide: React.FC<{ data: YearStats }> = ({ data }) => {
 
 const ContinentSlide: React.FC<{ data: YearStats }> = ({ data }) => {
   if (!data.top_continent) return null;
+  const displayName = data.top_continent.name === 'Oceania'
+    ? 'Oceania++'
+    : data.top_continent.name;
   return (
     <SlideShell colors={['#143d2b', '#1e6b4a', '#3aa674']}>
       <EyebrowText>YOUR FAVORITE CONTINENT</EyebrowText>
-      <Text style={styles.continentName}>{data.top_continent.name}</Text>
+      <Text style={styles.continentName}>{displayName}</Text>
       <Text style={styles.bigLabel}>
         {data.top_continent.count} {data.top_continent.count === 1 ? 'memory' : 'memories'}{'\n'}lived here
       </Text>

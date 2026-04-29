@@ -32,6 +32,11 @@ VALID_CONTENT_TYPES = ("photo", "diary", "comment", "activity")
 WARN_TO_SUSPEND_THRESHOLD = 3  # 3 warnings in 30d → 7d suspension
 HARD_BAN_THRESHOLD = 5         # 5+ warnings ever → 30d suspension
 
+# Public-facing identity for any moderator/admin action.
+# Real `admin_id` and `admin_role` are still recorded in admin_logs for
+# internal audit/SOC2 — only the user-facing display name is anonymized.
+SAFETY_TEAM_NAME = "WanderMark Safety Team"
+
 
 async def _audit(admin_user: User, action: str, target_id: str, meta: dict = None):
     """Append entry to admin_logs."""
@@ -71,7 +76,7 @@ async def hide_content(
         "hidden": True,
         "hidden_at": datetime.now(timezone.utc),
         "hidden_by_user_id": admin_user.user_id,
-        "hidden_by_name": admin_user.name,
+        "hidden_by_name": SAFETY_TEAM_NAME,
         "hidden_reason": body.reason,
     }
 
@@ -211,7 +216,7 @@ async def warn_user(
         "related_report_id": body.related_report_id,
         "message": body.message,
         "issued_by_user_id": admin_user.user_id,
-        "issued_by_name": admin_user.name,
+        "issued_by_name": SAFETY_TEAM_NAME,
         "issued_at": now,
     }
 
@@ -358,7 +363,7 @@ async def message_user(
         user_id=user_id,
         notif_type="moderator_message",
         title=body.title or "A message from the WanderMark team",
-        message=f"{body.message}\n\n— {admin_user.name}, WanderMark moderator",
+        message=f"{body.message}\n\n— {SAFETY_TEAM_NAME}",
     )
     await _audit(admin_user, "message_user", user_id)
     return {"message": "Message sent"}

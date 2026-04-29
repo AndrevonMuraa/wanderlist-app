@@ -17,6 +17,10 @@ from models.all import User
 from utils.auth import get_current_user, get_admin_user
 from utils.helpers import create_notification
 
+# Public-facing display name for any moderator/admin reply.
+# Real admin_id is still recorded for internal audit.
+SAFETY_TEAM_NAME = "WanderMark Safety Team"
+
 router = APIRouter()
 client = AsyncIOMotorClient(os.environ["MONGO_URL"])
 db = client[os.environ["DB_NAME"]]
@@ -124,7 +128,7 @@ async def admin_reply(ticket_id: str, body: TicketReply, admin_user: User = Depe
     msg = {
         "message_id": f"msg_{uuid.uuid4().hex[:10]}",
         "from_user_id": admin_user.user_id,
-        "from_name": admin_user.name,
+        "from_name": SAFETY_TEAM_NAME,
         "from_role": "moderator",
         "body": body.message,
         "created_at": now,
@@ -148,7 +152,7 @@ async def admin_reply(ticket_id: str, body: TicketReply, admin_user: User = Depe
         message=body.message,
         related_id=ticket_id,
         related_user_id=admin_user.user_id,
-        related_user_name=admin_user.name,
+        related_user_name=SAFETY_TEAM_NAME,
     )
     # Audit
     await db.admin_logs.insert_one({

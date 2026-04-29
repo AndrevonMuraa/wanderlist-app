@@ -273,7 +273,10 @@ async def search_users(q: str, current_user: User = Depends(get_current_user)):
     blocked_ids.discard(current_user.user_id)
     
     results = await db.users.find(
-        {"username": {"$regex": q, "$options": "i"}},
+        {
+            "username": {"$regex": q, "$options": "i"},
+            "role": {"$ne": "admin"},  # Super-admin stealth: hide from search
+        },
         {"_id": 0, "password_hash": 0}
     ).limit(20).to_list(20)
     return [

@@ -114,7 +114,9 @@ export default function TopHighlightsList() {
               style={[styles.continentChip, continent === c && styles.continentChipActive]}
               data-testid={`top-continent-${c.toLowerCase()}`}
             >
-              <Text style={[styles.continentText, continent === c && styles.continentTextActive]}>{c}</Text>
+              <Text style={[styles.continentText, continent === c && styles.continentTextActive]}>
+                {c === 'Oceania' ? 'Oceania++' : c}
+              </Text>
             </TouchableOpacity>
           ))}
         </ScrollView>

@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as SecureStore from 'expo-secure-store';
 import theme, { gradients } from '../../styles/theme';
 import { useTheme } from '../../contexts/ThemeContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { BACKEND_URL } from '../../utils/config';
 
 const getToken = async (): Promise<string | null> => {
@@ -38,6 +39,7 @@ export default function AdminUsersScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { colors } = useTheme();
+  const { user: currentUser } = useAuth();
   const [users, setUsers] = useState<UserItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -158,6 +160,7 @@ export default function AdminUsersScreen() {
   };
 
   const UserCard = ({ user }: { user: UserItem }) => {
+    const isSuperAdmin = currentUser?.role === 'admin';
     const isSuspended = !!(user.suspended_until && new Date(user.suspended_until) > new Date());
     const warningCount = user.warning_count || 0;
     return (
@@ -302,20 +305,24 @@ export default function AdminUsersScreen() {
           </TouchableOpacity>
         )}
         
-        {user.subscription_tier === 'free' ? (
-          <TouchableOpacity 
-            style={[styles.actionButton, { backgroundColor: '#f59e0b' + '20' }]}
-            onPress={() => handleUserAction(user.user_id, 'upgrade')}
-          >
-            <Ionicons name="arrow-up-circle-outline" size={16} color="#f59e0b" />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity 
-            style={[styles.actionButton, { backgroundColor: colors.textSecondary + '20' }]}
-            onPress={() => handleUserAction(user.user_id, 'downgrade')}
-          >
-            <Ionicons name="arrow-down-circle-outline" size={16} color={colors.textSecondary} />
-          </TouchableOpacity>
+        {isSuperAdmin && (
+          user.subscription_tier === 'free' ? (
+            <TouchableOpacity 
+              style={[styles.actionButton, { backgroundColor: '#f59e0b' + '20' }]}
+              onPress={() => handleUserAction(user.user_id, 'upgrade')}
+              testID={`admin-tier-upgrade-${user.user_id}`}
+            >
+              <Ionicons name="arrow-up-circle-outline" size={16} color="#f59e0b" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity 
+              style={[styles.actionButton, { backgroundColor: colors.textSecondary + '20' }]}
+              onPress={() => handleUserAction(user.user_id, 'downgrade')}
+              testID={`admin-tier-downgrade-${user.user_id}`}
+            >
+              <Ionicons name="arrow-down-circle-outline" size={16} color={colors.textSecondary} />
+            </TouchableOpacity>
+          )
         )}
         
         <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
