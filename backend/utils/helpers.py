@@ -241,6 +241,25 @@ async def notify_new_message(sender_name: str, target_user_id: str, preview: str
     )
 
 
+async def notify_year_recap_ready(target_user_id: str, year: int, first_name: str | None = None):
+    """Notify the user that their Spotify-Wrapped-style year recap is ready.
+
+    Respects `year_recap_enabled` in push_settings (default True).
+    The data payload carries `type=year_recap_ready` and the year so the
+    frontend response-listener can deep-link straight into /year-in-travel.
+    """
+    settings = await db.push_settings.find_one({"user_id": target_user_id})
+    if settings and not settings.get("year_recap_enabled", True):
+        return
+    greeting = f"{first_name}, " if first_name else ""
+    await send_push_notification(
+        user_id=target_user_id,
+        title=f"✨ Your {year} recap is ready",
+        body=f"{greeting}tap to relive your year of memories.",
+        data={"type": "year_recap_ready", "year": year},
+    )
+
+
 
 
 async def recalculate_user_points(user_id: str):

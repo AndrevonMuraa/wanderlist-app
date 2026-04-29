@@ -122,3 +122,35 @@ def test_dispatch_notification_no_memories(headers):
 def test_year_in_travel_unauthenticated():
     r = requests.get(f"{API_URL}/api/me/year-in-travel", timeout=10)
     assert r.status_code in (401, 403)
+
+
+def test_year_recap_enabled_in_push_settings(headers):
+    r = requests.get(f"{API_URL}/api/push-settings", headers=headers, timeout=10)
+    assert r.status_code == 200
+    data = r.json()
+    # Default for users with no settings doc OR fresh field default = True
+    assert data.get("year_recap_enabled", True) is True
+
+
+def test_year_recap_setting_can_be_toggled(headers):
+    # Disable
+    r1 = requests.put(
+        f"{API_URL}/api/push-settings",
+        json={"year_recap_enabled": False},
+        headers=headers,
+        timeout=10,
+    )
+    assert r1.status_code == 200
+    r2 = requests.get(f"{API_URL}/api/push-settings", headers=headers, timeout=10)
+    assert r2.json().get("year_recap_enabled") is False
+
+    # Re-enable to keep test idempotent for next runs
+    r3 = requests.put(
+        f"{API_URL}/api/push-settings",
+        json={"year_recap_enabled": True},
+        headers=headers,
+        timeout=10,
+    )
+    assert r3.status_code == 200
+    r4 = requests.get(f"{API_URL}/api/push-settings", headers=headers, timeout=10)
+    assert r4.json().get("year_recap_enabled") is True

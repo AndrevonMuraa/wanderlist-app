@@ -111,7 +111,7 @@ Backend (`routes/year_in_travel.py`):
   - Returns: memories_added, photos_uploaded, countries_count, new_countries[], top_continent, busiest_month, oldest_memory (time-traveler), top_landmarks[3], hero_photo
 - `POST /api/me/year-in-travel/dispatch-notification` — idempotent in-app `year_recap_ready` notification (one per user per year). Returns `{dispatched, reason}`. Skipped when no memories that year.
 - Default recap year = `current_year - 1` (Spotify Wrapped convention) for the dispatcher; default for GET = current year.
-- Tests: `tests/test_year_in_travel.py` 6/6 ✅; moderation regression 26/26 ✅
+- Tests: `tests/test_year_in_travel.py` 8/8 ✅; moderation regression 26/26 ✅
 
 Frontend:
 - `app/year-in-travel.tsx` — full Stories-style multi-slide carousel (intro → memories → countries → continent → busiest month → time-travel oldest memory → top 3 landmarks → finale share card). Auto-progressing top progress bars (Animated.timing), tap-left = previous, tap-right = next, long-press = pause. Year picker bottom sheet with last 4 years. Empty state when no memories. Final slide is a 9:16 hero share card (captureRef) with native Share + Save-to-Photos buttons.
@@ -120,6 +120,21 @@ Frontend:
 - Feed mount triggers a one-shot best-effort dispatch — server is idempotent so safe to call repeatedly.
 - Seed helper `scripts/seed_year_recap_test.py` produces 14 visits for testpro with Time-Traveler trigger (1995 visit added in 2025).
 - Packages added: `expo-media-library@~18.2.1` (save-to-photos on native; web gracefully falls back to Share).
+
+### April 29, 2026 — Year Recap real Push Notifications ✅
+Goal: Spotify-Wrapped-grade virality — buzz the user's phone the moment the recap is ready.
+
+Backend:
+- `utils/helpers.py:notify_year_recap_ready()` — sends the Expo push using the existing `send_push_notification()` infra. Title `"✨ Your {year} recap is ready"`, body greets by first name, `data={type:'year_recap_ready', year}` for deep-link routing. Respects new `year_recap_enabled` push setting (default True).
+- `routes/year_in_travel.py` dispatch endpoint: after the in-app notification insert, fires the push best-effort (try/except, never blocks the response). On second call → idempotent return → no duplicate push.
+- `routes/push.py`: added `year_recap_enabled` to defaults + allowed update keys.
+- Tests: `tests/test_year_in_travel.py` now 8 cases (added GET-default and toggle round-trip for `year_recap_enabled`).
+
+Frontend:
+- `components/PushTapRouter.tsx` — single-source-of-truth for push deep-linking. Listens for both `getLastNotificationResponseAsync()` (cold-start) and `addNotificationResponseReceivedListener` (warm). Routes `type=year_recap_ready` → `/year-in-travel?year=Y`. Mounted once in `app/_layout.tsx` above the Stack. Web is a no-op.
+- `app/notification-settings.tsx` — new "Year in travel" toggle with sparkles icon (test-id `toggle-year-recap`).
+
+Net: when the dispatch endpoint fires for a user who has push opted in, they receive both an in-app notification AND a phone push. Tapping either deep-links straight into the recap.
 
 
 

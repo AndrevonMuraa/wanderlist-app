@@ -16,6 +16,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from models.all import User
 from utils.auth import get_current_user
+from utils.helpers import notify_year_recap_ready
 
 router = APIRouter()
 client = AsyncIOMotorClient(os.environ["MONGO_URL"])
@@ -220,4 +221,12 @@ async def dispatch_year_recap_notification(
         "is_read": False,
         "created_at": datetime.now(timezone.utc),
     })
+
+    # Best-effort native push (no-op if user has no token / opted out)
+    try:
+        first_name = (current_user.name or "").split(" ")[0] or None
+        await notify_year_recap_ready(current_user.user_id, year, first_name)
+    except Exception:
+        pass
+
     return {"dispatched": True, "year": year}

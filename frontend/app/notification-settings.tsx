@@ -17,7 +17,8 @@ type PushKey =
   | 'comments_enabled'
   | 'friend_requests_enabled'
   | 'achievements_enabled'
-  | 'weekly_summary_enabled';
+  | 'weekly_summary_enabled'
+  | 'year_recap_enabled';
 
 type PushSettings = Record<PushKey, boolean>;
 
@@ -28,6 +29,7 @@ const DEFAULT_SETTINGS: PushSettings = {
   friend_requests_enabled: true,
   achievements_enabled: true,
   weekly_summary_enabled: true,
+  year_recap_enabled: true,
 };
 
 interface ToggleRow {
@@ -88,6 +90,14 @@ const ROWS: ToggleRow[] = [
     accent: '#B8956A',
     testId: 'toggle-weekly',
   },
+  {
+    key: 'year_recap_enabled',
+    title: 'Year in travel',
+    subtitle: 'Your annual Spotify-Wrapped style recap',
+    icon: 'sparkles',
+    accent: '#FFD700',
+    testId: 'toggle-year-recap',
+  },
 ];
 
 export default function NotificationSettingsScreen() {
@@ -122,6 +132,7 @@ export default function NotificationSettingsScreen() {
           friend_requests_enabled: data.friend_requests_enabled ?? true,
           achievements_enabled: data.achievements_enabled ?? true,
           weekly_summary_enabled: data.weekly_summary_enabled ?? true,
+          year_recap_enabled: data.year_recap_enabled ?? true,
         });
       }
     } catch {

@@ -53,7 +53,8 @@ async def get_push_settings(current_user: User = Depends(get_current_user)):
             "friend_requests_enabled": True,
             "messages_enabled": True,
             "achievements_enabled": True,
-            "weekly_summary_enabled": True
+            "weekly_summary_enabled": True,
+            "year_recap_enabled": True,
         }
     
     return settings
@@ -66,7 +67,8 @@ async def update_push_settings(
     """Update push notification settings for the current user."""
     allowed_keys = [
         "likes_enabled", "comments_enabled", "friend_requests_enabled",
-        "messages_enabled", "achievements_enabled", "weekly_summary_enabled"
+        "messages_enabled", "achievements_enabled", "weekly_summary_enabled",
+        "year_recap_enabled",
     ]
     
     # Filter only allowed settings
