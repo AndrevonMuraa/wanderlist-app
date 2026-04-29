@@ -158,6 +158,23 @@ Tests: `tests/test_admin_security.py` — 10 new tests covering moderator-blocke
 ### April 29, 2026 — UX: Oceania++ filter labels ✅
 - `components/TopHighlightsList.tsx`, `app/continents.tsx`, `app/year-in-travel.tsx ContinentSlide` now display `Oceania++` (continuing the convention from `app/(tabs)/journey.tsx` and `app/explore-countries.tsx`) to signal that island paradises outside the strict UN definition are mixed into this filter. API value remains `Oceania` (no backend change).
 
+### April 29, 2026 — Two-Factor Authentication (TOTP) for super-admin ✅
+Goal: Last-mile defense against compromised super-admin credentials. Combined with the 25/day tier-quota cap, worst-case damage from a single-credential leak is near-zero.
+
+Backend:
+- New `routes/two_factor.py`: `/2fa/setup`, `/2fa/confirm`, `/2fa/disable`, `/2fa/status`, `/2fa/regenerate-backup-codes`. Uses `pyotp` for RFC-6238 compliance (works with Google Authenticator, 1Password, Authy, etc.) and `qrcode` to render an inline base64 PNG.
+- 10 single-use backup codes, stored as SHA-256 hashes (DB leak ≠ code leak). Codes are formatted `XXXX-XXXX`.
+- `routes/auth.py login`: respects `totp_enabled`. Without 2FA enabled, super-admin gets a 7-day grace period (`TWO_FA_GRACE_DAYS`) to enroll. After that, login returns 403 with `requires_2fa_setup: true`.
+- All enable/disable events written to `admin_logs` (`action: 2fa_enabled` / `2fa_disabled`).
+- Tests: 11 new pytest cases covering setup → confirm → login challenge → backup-code consumption → disable proof-of-possession → grace-period expiry → non-admin bypass.
+
+Frontend:
+- New screen `app/admin/2fa-setup.tsx`: full enrollment flow (QR scan → manual key fallback → 6-digit confirm → backup-code reveal-once panel with copy-all). Also handles already-enabled state (disable + regenerate-codes). Uses the existing theme.
+- `contexts/AuthContext.tsx login()` accepts an optional `totpCode`; surfaces structured `requires_2fa` / `requires_2fa_setup` errors for the UI.
+- `app/(auth)/login.tsx`: when backend returns the 2FA challenge, the screen renders an additional 2FA code input + button label flips to "Verify & Login" — same screen, no new route needed.
+
+Net effect: backed-up password leak alone now grants the attacker exactly nothing.
+
 
 
 ### P3 — Ops

@@ -92,7 +92,40 @@ async def login(data: LoginRequest):
     
     if not verify_password(data.password, user_doc["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    
+
+    # Two-factor enforcement
+    from routes.two_factor import (
+        verify_totp_or_backup_async,
+        is_super_admin_grace_expired,
+    )
+    if user_doc.get("totp_enabled"):
+        if not data.totp_code:
+            raise HTTPException(
+                status_code=401,
+                detail={"requires_2fa": True, "message": "2FA code required"},
+            )
+        if not await verify_totp_or_backup_async(user_doc, data.totp_code):
+            raise HTTPException(
+                status_code=401,
+                detail={"requires_2fa": True, "message": "Invalid 2FA code"},
+            )
+    elif user_doc.get("role") == "admin":
+        # Super-admin without 2FA: check grace period
+        if is_super_admin_grace_expired(user_doc):
+            raise HTTPException(
+                status_code=403,
+                detail={
+                    "requires_2fa_setup": True,
+                    "message": "Super-admin accounts must enable 2FA before logging in.",
+                },
+            )
+        # Start the grace clock if first time
+        if not user_doc.get("totp_grace_started_at"):
+            await db.users.update_one(
+                {"user_id": user_doc["user_id"]},
+                {"$set": {"totp_grace_started_at": datetime.now(timezone.utc)}},
+            )
+
     # Reactivate if deactivated
     reactivated = False
     if user_doc.get("is_active") is False:

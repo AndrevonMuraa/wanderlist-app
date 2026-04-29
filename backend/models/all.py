@@ -71,6 +71,7 @@ class RegisterRequest(BaseModel):
 class LoginRequest(BaseModel):
     email: str
     password: str
+    totp_code: Optional[str] = None  # 6-digit TOTP or single-use backup code
 
 
 class GoogleTokenRequest(BaseModel):

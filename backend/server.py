@@ -14,6 +14,7 @@ from routes import (
     collections, notifications, country_visits, photos,
     achievements, subscription, reports, push, legal, promo, shares,
     compare, leaderboards, moderation, support, trust, year_in_travel,
+    two_factor,
 )
 
 # Configure logging
@@ -70,6 +71,7 @@ api_router.include_router(moderation.router)
 api_router.include_router(support.router)
 api_router.include_router(trust.router)
 api_router.include_router(year_in_travel.router)
+api_router.include_router(two_factor.router)
 
 app.include_router(api_router)
 

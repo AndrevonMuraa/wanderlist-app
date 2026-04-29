@@ -20,6 +20,8 @@ export default function LoginScreen() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [loginMode, setLoginMode] = useState<'main' | 'magic'>('main');
   const [magicCodeSent, setMagicCodeSent] = useState(false);
+  const [twoFAChallenge, setTwoFAChallenge] = useState(false);
+  const [totpCode, setTotpCode] = useState('');
   const { login, sendMagicCode, verifyMagicCode, loginWithApple, isAppleSignInAvailable } = useAuth();
   const router = useRouter();
 
@@ -45,13 +47,24 @@ export default function LoginScreen() {
       setError('Please fill in all fields');
       return;
     }
+    if (twoFAChallenge && !totpCode) {
+      setError('Please enter the 2FA code from your authenticator app');
+      return;
+    }
     setLoading(true);
     setError('');
     try {
-      await login(email, password);
+      await login(email, password, twoFAChallenge ? totpCode : undefined);
       router.replace('/(tabs)/explore');
     } catch (err: any) {
-      setError(err.message || 'Login failed');
+      if (err?.requires_2fa) {
+        setTwoFAChallenge(true);
+        setError(twoFAChallenge ? 'Invalid 2FA code. Try again.' : '');
+      } else if (err?.requires_2fa_setup) {
+        setError('This account must enable 2FA before logging in. Contact admin.');
+      } else {
+        setError(err.message || 'Login failed');
+      }
     } finally {
       setLoading(false);
     }
@@ -153,6 +166,24 @@ export default function LoginScreen() {
                   data-testid="login-password-input"
                 />
 
+                {twoFAChallenge && (
+                  <TextInput
+                    label="2FA code"
+                    value={totpCode}
+                    onChangeText={setTotpCode}
+                    mode="outlined"
+                    keyboardType="default"
+                    autoCapitalize="characters"
+                    placeholder="6-digit code or backup"
+                    returnKeyType="done"
+                    style={styles.input}
+                    outlineColor={theme.colors.border}
+                    activeOutlineColor={theme.colors.primary}
+                    textColor={theme.colors.text}
+                    data-testid="login-totp-input"
+                  />
+                )}
+
                 <Button
                   mode="contained"
                   onPress={handleLogin}
@@ -163,7 +194,7 @@ export default function LoginScreen() {
                   textColor="#fff"
                   data-testid="login-button"
                 >
-                  Login
+                  {twoFAChallenge ? 'Verify & Login' : 'Login'}
                 </Button>
 
                 <TouchableOpacity

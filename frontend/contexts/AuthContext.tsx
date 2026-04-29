@@ -20,7 +20,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, totpCode?: string) => Promise<void>;
   register: (email: string, password: string, name: string, username?: string) => Promise<void>;
   sendMagicCode: (email: string) => Promise<void>;
   verifyMagicCode: (email: string, code: string) => Promise<void>;
@@ -122,17 +122,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, totpCode?: string) => {
     const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password, totp_code: totpCode })
     });
 
     if (!response.ok) {
       const error = await response.json();
+      // Surface the structured 2FA challenge so the UI can prompt for a code
+      if (error.detail && typeof error.detail === 'object' && (error.detail.requires_2fa || error.detail.requires_2fa_setup)) {
+        const err = new Error(error.detail.message || 'Two-factor authentication required') as any;
+        err.requires_2fa = !!error.detail.requires_2fa;
+        err.requires_2fa_setup = !!error.detail.requires_2fa_setup;
+        throw err;
+      }
       throw new Error(error.detail || 'Login failed');
     }
 
