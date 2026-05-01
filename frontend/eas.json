@@ -6,6 +6,9 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_BACKEND_URL": "https://memory-recap-2026.preview.emergentagent.com"
+      },
       "ios": {
         "simulator": false,
         "resourceClass": "default"
@@ -13,11 +16,17 @@
     },
     "preview": {
       "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_BACKEND_URL": "https://memory-recap-2026.preview.emergentagent.com"
+      },
       "ios": {
         "simulator": false
       }
     },
     "production": {
+      "env": {
+        "EXPO_PUBLIC_BACKEND_URL": "https://memory-recap-2026.preview.emergentagent.com"
+      },
       "ios": {
         "simulator": false
       }

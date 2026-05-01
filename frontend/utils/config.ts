@@ -1,7 +1,9 @@
 import { Platform } from 'react-native';
 
-// Production backend URL - hardcoded as fallback to ensure it's always available
-const PRODUCTION_BACKEND_URL = 'https://api.wandermark.app';
+// Production backend URL — used as fallback when the build-time env var
+// EXPO_PUBLIC_BACKEND_URL is missing. Must match the value wired in eas.json
+// so EAS builds always hit a reachable backend even if env injection fails.
+const PRODUCTION_BACKEND_URL = 'https://memory-recap-2026.preview.emergentagent.com';
 
 // Determine the correct backend URL based on environment
 const getBackendURL = () => {
