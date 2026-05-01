@@ -48,6 +48,7 @@ export default function AdminDashboard() {
   const router = useRouter();
   const { colors, gradientColors } = useTheme();
   const { user } = useAuth();
+  const isSuperAdmin = user?.role === 'admin';
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -348,6 +349,24 @@ export default function AdminDashboard() {
             onPress={() => router.push('/admin/tickets' as any)}
             badge={ticketUnread}
           />
+          {isSuperAdmin && (
+            <>
+              <MenuCard
+                title="Two-Factor Auth"
+                description="Enroll in TOTP 2FA or manage backup codes"
+                icon="shield-half-outline"
+                color="#10B981"
+                onPress={() => router.push('/admin/2fa-setup' as any)}
+              />
+              <MenuCard
+                title="Emergency Lockdown"
+                description="Freeze all moderator/admin write actions in one tap"
+                icon="lock-closed-outline"
+                color="#DC2626"
+                onPress={() => router.push('/admin/lockdown' as any)}
+              />
+            </>
+          )}
         </View>
 
         {/* Activity Summary */}

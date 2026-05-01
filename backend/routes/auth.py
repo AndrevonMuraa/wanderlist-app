@@ -86,11 +86,23 @@ async def register(data: RegisterRequest):
 
 @router.post("/auth/login")
 async def login(data: LoginRequest):
+    # Per-user brute-force lockout (complements IP rate limiter)
+    from utils.auth import check_user_locked, register_failed_login, clear_failed_logins
+    locked = await check_user_locked(data.email)
+    if locked:
+        seconds_left = int((locked - datetime.now(timezone.utc)).total_seconds())
+        raise HTTPException(
+            status_code=429,
+            detail=f"Account temporarily locked. Try again in {max(1, seconds_left)}s.",
+        )
+
     user_doc = await db.users.find_one({"email": data.email}, {"_id": 0})
     if not user_doc or not user_doc.get("password_hash"):
+        await register_failed_login(data.email)
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     if not verify_password(data.password, user_doc["password_hash"]):
+        await register_failed_login(data.email)
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     # Two-factor enforcement
@@ -105,6 +117,7 @@ async def login(data: LoginRequest):
                 detail={"requires_2fa": True, "message": "2FA code required"},
             )
         if not await verify_totp_or_backup_async(user_doc, data.totp_code):
+            await register_failed_login(data.email)
             raise HTTPException(
                 status_code=401,
                 detail={"requires_2fa": True, "message": "Invalid 2FA code"},
@@ -134,7 +147,10 @@ async def login(data: LoginRequest):
             {"$unset": {"deactivated_at": "", "scheduled_deletion_at": ""}, "$set": {"is_active": True}}
         )
         reactivated = True
-    
+
+    # Successful login — reset any lockout state
+    await clear_failed_logins(user_doc["user_id"])
+
     access_token, expires_at = create_access_token({"sub": user_doc["user_id"]})
     
     return {

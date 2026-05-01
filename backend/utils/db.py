@@ -87,7 +87,19 @@ async def create_indexes():
         
         # Notifications
         await db.notifications.create_index([("user_id", 1), ("created_at", -1)])
-        
+
+        # Admin & security audit collections
+        await db.users.create_index("email", unique=True, sparse=True)
+        await db.users.create_index("locked_until", sparse=True)
+        await db.users.create_index("role", sparse=True)
+        await db.admin_logs.create_index([("created_at", -1)])
+        await db.admin_logs.create_index([("admin_id", 1), ("created_at", -1)])
+        await db.admin_logs.create_index([("action", 1), ("created_at", -1)])
+        await db.tier_quota.create_index([("admin_id", 1), ("date", 1)], unique=True)
+        await db.support_tickets.create_index("ticket_id", unique=True, sparse=True)
+        await db.support_tickets.create_index([("user_id", 1), ("updated_at", -1)])
+        await db.support_tickets.create_index([("status", 1), ("updated_at", -1)])
+
         logger.info("Database indexes created successfully")
     except Exception as e:
         logger.warning(f"Index creation warning: {e}")

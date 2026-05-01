@@ -194,6 +194,31 @@ Backend:
 Frontend:
 - New screen `app/admin/lockdown.tsx` — big red "Freeze all admin actions" button when healthy, lift form requiring TOTP code when locked. Status hero card flips green ↔ red.
 
+### May 1, 2026 — Full Production Hardening pass ✅
+Goal: systematic pre-launch audit — security, performance, observability, code quality.
+
+**Phase 1 — Security (P0):**
+- Rate-limiter coverage expanded to ALL high-risk endpoints (`utils/rate_limit.py`): auth/login, register, forgot/reset-password, 2FA confirm/disable/regenerate, lockdown enable/disable. Default 120 rpm; auth bucket 10 rpm per IP+path.
+- Per-user progressive brute-force lockout (`utils/auth.py`): 3 failures → 1 min, 5 → 10 min, 10 → 1 h, 15 → 24 h. `check_user_locked` / `register_failed_login` / `clear_failed_logins` helpers. Wired into `POST /auth/login`. Successful login always clears the counter.
+- Tests: new `tests/test_brute_force_lockout.py` — 3-failure lockout trigger + counter-reset on successful login.
+
+**Phase 2 — DB performance (P1):**
+- Added indexes: `users.email` (unique, sparse), `users.locked_until` (sparse), `users.role` (sparse), `admin_logs` (created_at, admin_id+created_at, action+created_at), `tier_quota` (admin_id+date, unique), `support_tickets.ticket_id`, `support_tickets` (user_id+updated_at), `support_tickets` (status+updated_at). All auto-created at backend startup via `utils/db.py`.
+
+**Phase 3 — App Store readiness (P2):**
+- `LogBox.ignoreLogs([...])` in `app/_layout.tsx` silences the SDK 54 deprecation warnings (`shadow*`, `textShadow*`, `pointerEvents` prop) — these still function on native and will be migrated for SDK 56.
+- Production `console.log/warn/info/debug` stripped via a `__DEV__` guard in `_layout.tsx` (prevents PII/data leakage in release builds). `console.error` still fires so Sentry captures real errors.
+
+**Phase 4 — Cleanup (P3):**
+- Deleted unused components: `ReportButton.tsx`, `ShareTopMonthCard.tsx`.
+- Admin dashboard (`app/admin/index.tsx`) now surfaces super-admin-only links to `/admin/2fa-setup` (Two-Factor Auth) and `/admin/lockdown` (Emergency Lockdown).
+
+**Phase 5 — Testing:** Ran full critical-path suite: brute-force (2), 2FA (11), admin-security (10), lockdown (9), year-in-travel (8), moderation regression (26) = **66 tests green** ✅.
+
+### Current total backend pytest: 66+ passing
+- Security: tier lockdown (10), 2FA (11), lockdown (9), brute-force (2)
+- Features: year-recap (8), moderation (26)
+
 ### Total backend pytest now: 64+ ✅
 Critical security surface covered: tier lockdown (10), 2FA (11), lockdown (9), year-recap (8), moderation regression (26).
 

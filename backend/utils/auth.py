@@ -42,6 +42,60 @@ def is_user_pro(user: User) -> bool:
     return True
 
 
+# --- Per-user brute-force lockout ---
+# Progressive backoff: 3 failures → 1min, 5 → 10min, 10 → 1h, 15 → 24h.
+_LOCKOUT_TIERS = [
+    (3, timedelta(minutes=1)),
+    (5, timedelta(minutes=10)),
+    (10, timedelta(hours=1)),
+    (15, timedelta(hours=24)),
+]
+
+
+async def check_user_locked(email: str) -> Optional[datetime]:
+    """Return `locked_until` datetime if the account is currently locked, else None."""
+    doc = await db.users.find_one(
+        {"email": email},
+        {"_id": 0, "locked_until": 1},
+    )
+    if not doc:
+        return None
+    locked_until = doc.get("locked_until")
+    if not locked_until:
+        return None
+    if locked_until.tzinfo is None:
+        locked_until = locked_until.replace(tzinfo=timezone.utc)
+    if locked_until > datetime.now(timezone.utc):
+        return locked_until
+    return None
+
+
+async def register_failed_login(email: str) -> None:
+    """Increment `failed_login_attempts` and apply progressive lockout."""
+    user = await db.users.find_one(
+        {"email": email},
+        {"_id": 0, "user_id": 1, "failed_login_attempts": 1},
+    )
+    if not user:
+        return
+    attempts = (user.get("failed_login_attempts") or 0) + 1
+    update = {"failed_login_attempts": attempts, "last_failed_login_at": datetime.now(timezone.utc)}
+    # Find the highest threshold crossed — most strict wins.
+    for threshold, duration in reversed(_LOCKOUT_TIERS):
+        if attempts >= threshold:
+            update["locked_until"] = datetime.now(timezone.utc) + duration
+            break
+    await db.users.update_one({"user_id": user["user_id"]}, {"$set": update})
+
+
+async def clear_failed_logins(user_id: str) -> None:
+    """Reset lockout state after a successful login."""
+    await db.users.update_one(
+        {"user_id": user_id},
+        {"$unset": {"failed_login_attempts": "", "locked_until": "", "last_failed_login_at": ""}},
+    )
+
+
 LIMITS = {
     "free": {
         "max_friends": 5,

@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import { LogBox } from 'react-native';
 import * as Sentry from '@sentry/react-native';
 import { AuthProvider } from '../contexts/AuthContext';
 import { ThemeProvider } from '../contexts/ThemeContext';
@@ -11,6 +12,26 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 import PushTapRouter from '../components/PushTapRouter';
 import { initSentry } from '../utils/sentry';
 import '../i18n'; // Initialize i18n
+
+// Suppress known SDK 54 deprecation warnings that are cosmetic-only on native
+// (shadow*, textShadow*, pointerEvents prop still function). Migrating every
+// component to the new APIs is tracked in the backlog for SDK 56.
+LogBox.ignoreLogs([
+  /"shadow\*" style props are deprecated/i,
+  /"textShadow\*" style props are deprecated/i,
+  /props\.pointerEvents is deprecated/i,
+  /\[expo-notifications\] Listening to push token changes is not yet fully supported on web/i,
+]);
+
+// Strip all console.log/warn/info in production builds to prevent PII/data
+// leakage. console.error continues to Sentry for real issues.
+// eslint-disable-next-line no-undef
+if (!__DEV__) {
+  console.log = () => {};
+  console.warn = () => {};
+  console.info = () => {};
+  console.debug = () => {};
+}
 
 // Initialise Sentry as early as possible (safe no-op if DSN missing).
 initSentry();
