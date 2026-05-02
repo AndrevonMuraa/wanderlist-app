@@ -17,7 +17,7 @@ import requests
 
 BASE_URL = os.environ.get("EXPO_PUBLIC_BACKEND_URL") or os.environ.get(
     "REACT_APP_BACKEND_URL",
-    "https://memory-recap-2026.preview.emergentagent.com",
+    "http://localhost:8001",
 )
 BASE_URL = BASE_URL.rstrip("/")
 

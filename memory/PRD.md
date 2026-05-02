@@ -222,6 +222,14 @@ Goal: systematic pre-launch audit — security, performance, observability, code
 ### Total backend pytest now: 64+ ✅
 Critical security surface covered: tier lockdown (10), 2FA (11), lockdown (9), year-recap (8), moderation regression (26).
 
+### May 2, 2026 — Security Dashboard verified + test-infra cleanup ✅
+- Security Dashboard (`routes/security_dashboard.py` + `app/admin/security-dashboard.tsx`) verified end-to-end:
+  - Backend pytest: 3/3 PASS (`test_security_dashboard.py`)
+  - Frontend screenshot confirmed: 2FA coverage card, active-lockouts card, lockdown status card, staff 2FA list with role badges, last 10 admin actions, 30-day action counts, lockdown history — all rendering correctly with live data
+- Full backend regression: **307/307 product tests PASS** (testing_agent_v3_fork iteration_33). Zero critical, zero frontend issues.
+- Test-infra cleanup: replaced stale hardcoded preview URL `memory-recap-2026.preview.emergentagent.com` with `http://localhost:8001` default in 10 legacy test files (test_admin_moderator_iteration29, test_community_features_iteration17, test_community_highlight_iteration19, test_community_refactor_iteration26, test_feed_parity_iteration18, test_friends_hub_iteration21, test_refactor_regression_iteration23, test_shares_compare_iteration22, test_visit_crud_iteration16, test_wandermark_comprehensive_iteration15). Verified: 40 passed / 16 legitimately skipped on representative subset.
+- Known minor: rate-limiter (10 req/min/IP on /auth/login) can trigger 429s during full single-shot pytest runs. Not a product bug — mitigation options noted in iteration_33 (cache login token via session-scoped fixture, exempt loopback IPs, or bump dev RPM).
+
 
 
 ### P3 — Ops

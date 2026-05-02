@@ -21,7 +21,7 @@ import requests
 
 BASE_URL = os.environ.get(
     "EXPO_PUBLIC_BACKEND_URL",
-    "https://memory-recap-2026.preview.emergentagent.com",
+    "http://localhost:8001",
 ).rstrip("/")
 
 ADMIN_EMAIL = "test@wandermark.app"
