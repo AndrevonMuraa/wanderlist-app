@@ -352,6 +352,13 @@ export default function AdminDashboard() {
           {isSuperAdmin && (
             <>
               <MenuCard
+                title="Security Dashboard"
+                description="Live view of 2FA coverage, lockouts, admin actions & lockdown"
+                icon="speedometer-outline"
+                color="#8b5cf6"
+                onPress={() => router.push('/admin/security-dashboard' as any)}
+              />
+              <MenuCard
                 title="Two-Factor Auth"
                 description="Enroll in TOTP 2FA or manage backup codes"
                 icon="shield-half-outline"

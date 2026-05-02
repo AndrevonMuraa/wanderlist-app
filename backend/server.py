@@ -14,7 +14,7 @@ from routes import (
     collections, notifications, country_visits, photos,
     achievements, subscription, reports, push, legal, promo, shares,
     compare, leaderboards, moderation, support, trust, year_in_travel,
-    two_factor, lockdown,
+    two_factor, lockdown, security_dashboard,
 )
 
 # Configure logging
@@ -73,6 +73,7 @@ api_router.include_router(trust.router)
 api_router.include_router(year_in_travel.router)
 api_router.include_router(two_factor.router)
 api_router.include_router(lockdown.router)
+api_router.include_router(security_dashboard.router)
 
 app.include_router(api_router)
 
