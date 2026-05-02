@@ -1,0 +1,42 @@
+{
+  "summary": "Full backend regression executed across /app/backend/tests/. When run in two batches (security/non-2FA suite, then test_two_factor.py and test_lockdown.py individually) ALL backend tests pass: 287+11+9 = 307 PASS, 0 product failures. Three stale-URL test failures in test_friends_hub_iteration21.py and test_shares_compare_iteration22.py were diagnosed as test-config drift (hardcoded preview URL `memory-recap-2026.preview.emergentagent.com`, current pod is `lockdown-command.preview.emergentagent.com`); overriding with `EXPO_PUBLIC_BACKEND_URL=http://localhost:8001` makes them pass. test_moderation_iteration31.py had the same hardcoded URL and was patched to use env var (verified all 26 tests pass). The other 14 transient failures during the single-shot full run are caused by IP rate-limit (10 req/min on /api/auth/login in utils/rate_limit.py) being exhausted by per-class fixture re-logins — NOT product bugs; tests pass when grouped/spaced.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/auth/login (rate limiter)", "issue": "Aggressive 10 req/min per IP rate-limit on auth endpoints triggers cascading 429s when running the full pytest suite in one shot (multiple test files re-login per class). Not a product bug, but blocks CI single-shot runs. Consider a TEST-mode env flag or higher dev RPM, or share/cache login tokens across test classes."}
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_security_dashboard.py",
+    "/app/backend/tests/test_two_factor.py",
+    "/app/backend/tests/test_lockdown.py",
+    "/app/backend/tests/test_admin_security.py",
+    "/app/backend/tests/test_brute_force_lockout.py",
+    "/app/backend/tests/test_moderation_iteration31.py",
+    "/app/test_reports/pytest/iteration_33_results.xml"
+  ],
+  "action_items": [
+    "Update stale preview URL `https://memory-recap-2026.preview.emergentagent.com` -> use env var with localhost default in: tests/test_friends_hub_iteration21.py, tests/test_shares_compare_iteration22.py, tests/test_admin_moderator_iteration29.py, tests/test_community_features_iteration17.py, tests/test_community_highlight_iteration19.py, tests/test_community_refactor_iteration26.py, tests/test_feed_parity_iteration18.py, tests/test_refactor_regression_iteration23.py, tests/test_visit_crud_iteration16.py, tests/test_wandermark_comprehensive_iteration15.py (already done for test_moderation_iteration31.py)",
+    "Optional: bump auth_rpm in utils/rate_limit.py for non-prod, OR cache the `_login` token across test files via session-scoped conftest fixture, so a full `pytest` run doesn't trip 429s.",
+    "All security-critical paths (Security Dashboard, 2FA, lockdown, brute-force lockout, moderation gating, super-admin tier mutation) — verified WORKING."
+  ],
+  "critical_code_review_comments": [
+    "utils/rate_limit.py uses an in-memory dict (defaultdict). Will not survive process restart and is per-pod (not cluster-aware). For production scale, move to Redis-backed limiter.",
+    "routes/moderation.py:140 uses `$unset: {... '': ''}` syntax which works but the empty-string field name pattern is non-standard; mongo accepts it but consider moving to canonical {field: ''} form for clarity (current code already correct).",
+    "Auth login rate-limit (10/min/IP) is appropriate for production but blocks legitimate test runs from a single CI agent — consider exempting `127.0.0.1` or `RUN_MODE=test`."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_moderation_iteration31.py (replaced hardcoded preview URL with env-overridable localhost default)"
+  ],
+  "success_rate": {
+    "backend": "100% on real product code (307/307 in isolated runs); 95.4% (287/301) on single-shot run, 14 known-test-infra failures",
+    "frontend": "skipped per request"
+  },
+  "test_credentials": "Used credentials from /app/memory/test_credentials.md — admin/super-admin test@wandermark.app, mod@wandermark.app, testpro@wandermark.app — all working.",
+  "seed_data_creation": "None — used existing seeded users; tests self-seed/cleanup TEST_-prefixed visits/comments via fixtures.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "To run full backend suite cleanly: either (a) use `pytest -v` per file with 60s sleep between auth-heavy files, or (b) export EXPO_PUBLIC_BACKEND_URL=http://localhost:8001 and run files individually. Stale-preview-URL hardcoded in 10 legacy test files (see action_items). Security-critical files (test_security_dashboard, test_two_factor, test_lockdown, test_admin_security, test_brute_force_lockout) are clean and authoritative.",
+  "rca of the issue": "Two distinct test-infrastructure issues caused the only failures observed: (1) stale preview URL `memory-recap-2026.preview.emergentagent.com` hardcoded in 10 legacy test files — this pod is now `lockdown-command.preview.emergentagent.com`, so test fixtures insert seed rows into THIS pod's mongo while API calls hit the OTHER pod, returning 404 'Visit not found' / empty payloads. Mitigation: tests should read EXPO_PUBLIC_BACKEND_URL from env or default to http://localhost:8001 (already applied to test_moderation_iteration31.py). (2) IP rate-limit of 10 req/min on /api/auth/login (utils/rate_limit.py) gets exhausted during full-suite runs because multiple test classes re-login on fixture setup; this manifests as 429 errors in test_lockdown.py and test_two_factor.py when they run AFTER other auth-heavy files. Mitigation: either bump dev RPM, exempt loopback IPs, or refactor tests to share a session-scoped login fixture. Neither is a product bug — Security Dashboard, 2FA, lockdown circuit-breaker, brute-force lockout, moderation gating, and super-admin tier mutation enforcement all verified WORKING."
+}
