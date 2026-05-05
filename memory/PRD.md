@@ -235,8 +235,17 @@ Critical security surface covered: tier lockdown (10), 2FA (11), lockdown (9), y
 ### P3 — Ops
 - Rename GitHub repo `wanderlist-app` → `wandermark-app`
 
-### P4 — App Store
-- Deploy Privacy/Terms-pages
+### May 5, 2026 — Trust Center (Privacy + Terms) ✅
+- `/app/trust-center/privacy.md` written from scratch (13 sections, 209 lines) — GDPR/CCPA compliant, covers 2FA secrets, admin action logs with IP, trust events, brute-force lockout data, RevenueCat subscription data, Expo push tokens, MongoDB Atlas + Render EU hosting, 30-day deactivation grace period, automated decision-making (Trusted Traveler) disclosure
+- `/app/trust-center/terms.md` written from scratch (20 sections) — App Store 3.1.2 compliant EULA with Apple-specific clauses (§11), subscription auto-renewal, Norwegian governing law + Oslo tingrett venue, mandatory consumer carve-out for EU/EEA/UK/Swiss, DSA appeal rights, EU ODR platform link
+- `/app/trust-center/README.md` — deployment + in-app linking checklist
+
+### P4 — App Store (remaining)
+- Deploy Trust Center to static host (Vercel / Cloudflare Pages) with `/privacy` and `/terms` URLs
+- Link Privacy + Terms on registration screen (required checkbox), Settings → Legal, Pro purchase screen
+- Add Privacy URL + EULA URL in App Store Connect metadata
+- User to run EAS iOS Build 86 with `--clear-cache` to verify data-integrity fixes
+- Seed admin + run `repair_legacy_visits.py` on production Render MongoDB
 - Inbound email (SendGrid/Postmark Parse) → auto-ingest into support_tickets
 - "Nearby travelers" discovery
 
