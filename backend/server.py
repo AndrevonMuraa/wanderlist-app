@@ -76,6 +76,8 @@ api_router.include_router(lockdown.router)
 api_router.include_router(security_dashboard.router)
 from routes import photo_health  # noqa: E402
 api_router.include_router(photo_health.router)
+from routes import store_readiness  # noqa: E402
+api_router.include_router(store_readiness.router)
 
 app.include_router(api_router)
 
