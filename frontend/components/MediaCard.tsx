@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, Pressable, Animated, Platform } from 're
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import SmartImage from './SmartImage';
 import theme from '../styles/theme';
 
 export interface MediaCardProps {
@@ -79,7 +80,13 @@ export default function MediaCard({
         testID={testID}
       >
         {photoUrl ? (
-          <Image source={{ uri: photoUrl }} style={StyleSheet.absoluteFillObject} resizeMode="cover" />
+          <SmartImage
+            uri={photoUrl}
+            style={StyleSheet.absoluteFillObject as any}
+            resizeMode="cover"
+            fallbackIcon="image-outline"
+            containerStyle={StyleSheet.absoluteFillObject}
+          />
         ) : (
           <View style={[StyleSheet.absoluteFillObject, { backgroundColor: theme.colors.border }]} />
         )}

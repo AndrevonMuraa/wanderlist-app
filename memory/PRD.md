@@ -240,7 +240,32 @@ Critical security surface covered: tier lockdown (10), 2FA (11), lockdown (9), y
 - `/app/trust-center/terms.md` written from scratch (20 sections) — App Store 3.1.2 compliant EULA with Apple-specific clauses (§11), subscription auto-renewal, Norwegian governing law + Oslo tingrett venue, mandatory consumer carve-out for EU/EEA/UK/Swiss, DSA appeal rights, EU ODR platform link
 - `/app/trust-center/README.md` — deployment + in-app linking checklist
 
-### May 5, 2026 — Live Trust Center integration (no-resubmit legal updates) ✅
+### May 5, 2026 — Photo system robustness (Plan C: Full opprydding) ✅
+**Bug**: Ingrid Berg's "French Riviera" community highlight + visit detail rendered empty white (light bg) and empty black (fullscreen viewer dark bg). Root cause: 2 dead Unsplash URLs (`photo-1568797629192-...` + `photo-1543349689-...`) silently 404 → `<Image>` failed without `onError` handler → background bled through. The 2nd dead URL was used as cover photo on **20 seed visits** (Eiffel, Louvre, Colosseum, Mount Fuji, Grand Canyon, Statue of Liberty, etc).
+
+**Backend** (`/app/backend/`):
+- `utils/photo_health.py` — async URL probe utility with per-host concurrency limit (6), global concurrency cap (30), 8s timeout, falls back to GET-range if HEAD returns 403/405. Defensive: any exception = treat as broken.
+- `routes/photo_health.py` — super-admin-only endpoints:
+  - `GET /api/admin/photos/healthcheck` — read-only scan, returns broken URLs grouped by collection
+  - `POST /api/admin/photos/healthcheck/repair` — scan + remove broken URLs from `visits.photos`, `user_created_visits.photos|photo_url`, `country_visits.photos`, `landmarks.image_url`, `users.photo_url`. Auto-revokes `verified=False` on visits that lose their last photo and have no `photo_base64`. Recomputes points for every affected user.
+- `scripts/cleanup_broken_photos.py` — same logic as CLI for production Render shells (`python -m scripts.cleanup_broken_photos [--apply]`)
+- Wired into `server.py` as `photo_health.router`
+- **Migration run on local/preview DB**: 20 visits patched, 4 lost verified status, 5 users had points recomputed. Rerun confirms 0 broken URLs remain.
+- `tests/test_photo_health.py` — 6/6 pytest green (covers HTTP/HTTPS detection, base64/file/empty rejection, 200/404/503 status mapping, network exception handling, empty input)
+
+**Frontend** (`/app/frontend/`):
+- `components/SmartImage.tsx` — drop-in `<Image>` replacement: pulsing skeleton while loading, fallback panel with icon on error/missing URL, configurable `silentWhenMissing`. `testID`-aware. Solves the "background bleeds through" class of bug forever.
+- Replaced bare `<Image>` with `<SmartImage>` in the highest-impact rendering paths:
+  - `components/PhotoViewer.tsx` (fullscreen viewer — fixes the "1/2 black box" symptom)
+  - `components/CommunityHighlightHero.tsx` (community highlight card — fixes the "white box on Community page" symptom)
+  - `components/TopHighlightsList.tsx` (trending landmarks rank list)
+  - `components/MediaCard.tsx` (used by feed cards)
+  - `app/visit-detail/[visit_id].tsx` (main photo + thumbnail strip — fixes the "tap to zoom blank" symptom)
+- TypeScript clean on all 5 changed files
+
+**Why this is permanent fix**: even if Unsplash deletes more images tomorrow, users see an elegant placeholder ("image unavailable" with icon) instead of empty boxes; admins can run `/admin/photos/healthcheck/repair` periodically to keep the DB clean.
+
+
 Goal: let you update privacy/terms on the CDN and have every installed app pick them up on next launch — no App Store re-submission.
 
 Architecture:

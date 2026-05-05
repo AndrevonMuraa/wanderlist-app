@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import theme from '../styles/theme';
+import SmartImage from './SmartImage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -122,10 +123,12 @@ export default function PhotoViewer({
                 showsVerticalScrollIndicator={false}
                 centerContent={true}
               >
-                <Image
-                  source={{ uri: item }}
+                <SmartImage
+                  uri={item}
                   style={styles.photo}
                   resizeMode="contain"
+                  fallbackIcon="image-outline"
+                  containerStyle={{ backgroundColor: 'transparent' }}
                 />
               </ScrollView>
             </View>
@@ -162,7 +165,7 @@ export default function PhotoViewer({
                   onPress={() => goToPhoto(index)}
                   style={[styles.thumbnail, currentIndex === index && styles.thumbnailActive]}
                 >
-                  <Image source={{ uri: photo }} style={styles.thumbnailImage} />
+                  <SmartImage uri={photo} style={styles.thumbnailImage} fallbackIcon="image-outline" />
                 </TouchableOpacity>
               ))}
             </ScrollView>

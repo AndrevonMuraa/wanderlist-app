@@ -6,6 +6,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import theme from '../../styles/theme';
+import SmartImage from '../../components/SmartImage';
 import { BACKEND_URL } from '../../utils/config';
 import { lightHaptic } from '../../utils/haptics';
 import { invalidateCacheGroup } from '../../utils/apiCache';
@@ -319,10 +320,11 @@ export default function VisitDetailScreen() {
                 }}
                 activeOpacity={0.9}
               >
-                <Image
-                  source={{ uri: photos[selectedPhoto] }}
+                <SmartImage
+                  uri={photos[selectedPhoto]}
                   style={styles.mainPhoto}
                   resizeMode="cover"
+                  fallbackIcon="image-outline"
                 />
                 {/* Tap to zoom hint */}
                 <View style={styles.zoomHint}>

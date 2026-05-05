@@ -74,6 +74,8 @@ api_router.include_router(year_in_travel.router)
 api_router.include_router(two_factor.router)
 api_router.include_router(lockdown.router)
 api_router.include_router(security_dashboard.router)
+from routes import photo_health  # noqa: E402
+api_router.include_router(photo_health.router)
 
 app.include_router(api_router)
 

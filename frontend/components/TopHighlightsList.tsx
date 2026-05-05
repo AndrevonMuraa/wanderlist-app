@@ -14,6 +14,7 @@ import { BACKEND_URL } from '../utils/config';
 import { getToken } from '../utils/token';
 import theme from '../styles/theme';
 import ContentMenu from './ContentMenu';
+import SmartImage from './SmartImage';
 import { useAuth } from '../contexts/AuthContext';
 
 type Scope = 'all' | 'month';
@@ -147,7 +148,7 @@ export default function TopHighlightsList() {
               >
                 {renderRankBadge(rank)}
                 <View style={[styles.imageWrap, isFirst && styles.imageWrapFirst]}>
-                  <Image source={{ uri: item.photo_url }} style={styles.image} />
+                  <SmartImage uri={item.photo_url} style={styles.image} fallbackIcon="image-outline" />
                   <View style={styles.menuOverlay}>
                     <ContentMenu
                       contentType="photo"

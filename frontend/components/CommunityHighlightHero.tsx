@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from 'rea
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import theme from '../styles/theme';
+import SmartImage from './SmartImage';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -50,11 +51,13 @@ export default function CommunityHighlightHero({
       testID="community-highlight-hero"
     >
       {/* Photo */}
-      {highlight.photo_url ? (
-        <Image source={{ uri: highlight.photo_url }} style={StyleSheet.absoluteFillObject} resizeMode="cover" />
-      ) : (
-        <View style={[StyleSheet.absoluteFillObject, { backgroundColor: theme.colors.border }]} />
-      )}
+      <SmartImage
+        uri={highlight.photo_url}
+        style={StyleSheet.absoluteFillObject as any}
+        resizeMode="cover"
+        fallbackIcon="image-outline"
+        containerStyle={StyleSheet.absoluteFillObject}
+      />
 
       {/* Matte inner frame — "penthouse window" edge */}
       <View pointerEvents="none" style={styles.innerFrame} />
