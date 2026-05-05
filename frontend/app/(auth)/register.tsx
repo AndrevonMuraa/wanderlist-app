@@ -15,6 +15,7 @@ export default function RegisterScreen() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { register, loginWithApple, isAppleSignInAvailable } = useAuth();
@@ -23,6 +24,10 @@ export default function RegisterScreen() {
   const handleAppleSignUp = async () => {
     if (Platform.OS !== 'ios') {
       setError('Apple Sign-In is only available on iOS devices');
+      return;
+    }
+    if (!acceptedTerms) {
+      setError('Please accept the Privacy Policy and Terms of Service to continue');
       return;
     }
     setLoading(true);
@@ -57,6 +62,11 @@ export default function RegisterScreen() {
 
     if (password.length < 6) {
       setError('Password must be at least 6 characters');
+      return;
+    }
+
+    if (!acceptedTerms) {
+      setError('Please accept the Privacy Policy and Terms of Service to continue');
       return;
     }
 
@@ -144,14 +154,43 @@ export default function RegisterScreen() {
                 textColor={theme.colors.text}
               />
 
+              <TouchableOpacity
+                style={styles.consentRow}
+                onPress={() => setAcceptedTerms((v) => !v)}
+                activeOpacity={0.7}
+                testID="register-accept-terms"
+              >
+                <View style={[styles.checkbox, acceptedTerms && styles.checkboxChecked]}>
+                  {acceptedTerms && <Ionicons name="checkmark" size={14} color="#fff" />}
+                </View>
+                <Text style={styles.consentText}>
+                  I&apos;ve read and agree to the{' '}
+                  <Text
+                    style={styles.consentLink}
+                    onPress={() => router.push('/privacy-policy')}
+                  >
+                    Privacy Policy
+                  </Text>
+                  {' '}and{' '}
+                  <Text
+                    style={styles.consentLink}
+                    onPress={() => router.push('/terms-of-service')}
+                  >
+                    Terms of Service
+                  </Text>
+                  .
+                </Text>
+              </TouchableOpacity>
+
               <Button
                 mode="contained"
                 onPress={handleRegister}
                 loading={loading}
-                disabled={loading}
+                disabled={loading || !acceptedTerms}
                 style={styles.button}
                 buttonColor={theme.colors.primary}
                 textColor="#fff"
+                testID="register-submit-btn"
               >
                 Sign Up
               </Button>
@@ -255,6 +294,40 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: theme.spacing.md,
     backgroundColor: theme.colors.surface,
+  },
+  consentRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    marginTop: 4,
+    marginBottom: theme.spacing.sm,
+    paddingHorizontal: 2,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 5,
+    borderWidth: 1.5,
+    borderColor: theme.colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 2,
+    backgroundColor: 'transparent',
+  },
+  checkboxChecked: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
+  },
+  consentText: {
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 18,
+    color: theme.colors.textSecondary,
+  },
+  consentLink: {
+    color: theme.colors.primary,
+    fontWeight: '700',
+    textDecorationLine: 'underline',
   },
   button: {
     marginTop: theme.spacing.sm,

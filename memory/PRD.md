@@ -283,6 +283,29 @@ Architecture:
 
 Verified on `/privacy-policy` web preview: markdown renders correctly with the new May 5 content, "Bundled with app" badge shown (CDN at wandermark.app not yet live), TypeScript compiles clean on all 5 new/changed files.
 
+### May 5, 2026 — App Store readiness audit + P0 fixes ✅
+Comprehensive audit against Apple Review Guidelines 5.1.1, 3.1.2, 2.1, 2.5.1.
+
+**Auto-fixed in this pass (P0):**
+- `app.json` — added `ios.config.usesNonExemptEncryption: false` (avoids the "encryption export compliance" question on every TestFlight upload) and bumped `buildNumber` 85 → 86
+- `app/(auth)/register.tsx` — added required Privacy/Terms acceptance checkbox; `Sign Up` button + Apple sign-up are blocked until accepted; checkbox links open `/privacy-policy` and `/terms-of-service` viewers (Guideline 5.1.1 — affirmative consent before account creation)
+- `app/subscription.tsx` — replaced minimal `Cancel anytime` with full Apple-compliant disclosure: subscription length, exact price, auto-renewal mechanic, manage-in-iTunes pointer, and **functional Privacy Policy + Terms of Use (EULA) links right next to the purchase CTA** (Guideline 3.1.2(a) — top-3 paywall rejection reason)
+
+**Items deferred (need user decision or external action):**
+- 🔴 `eas.json` — production env still points to a `.preview.emergentagent.com` URL. Must swap to the final Render production URL before submitting Build 86 (1-line fix once URL is known)
+- 🟡 `PrivacyInfo.xcprivacy` for the app itself (not just SDKs) — required since May 2024 if using Required Reasons APIs. Expo can autogenerate via `ios.privacyManifests` config, but needs careful iOS testing
+- 🟡 App Store Connect privacy nutrition labels — fill in App Store Connect; declare: Email, Coarse Location, Photos, User Content, Identifiers (user_id), Diagnostics (Sentry), Usage Data (visits)
+- 🟡 Reviewer demo credentials — add `test@wandermark.app` / `Test1234!` to App Store Connect "App Review" section
+- 🟢 Norwegian (`nb`) localization — currently English-only. Optional for approval but expands Norway market reach
+
+**Already strong (verified):**
+- Sign In with Apple integrated (frontend + `/api/auth/apple/callback`)
+- Account deactivation + 30-day delete pipeline (Guideline 5.1.1(v))
+- Restore Purchases button on subscription screen (Guideline 3.1.1)
+- Sentry crash tracking on both frontend (`expo-sentry`) and backend
+- Camera/Photo permission strings present in Info.plist
+- 2FA, lockdown, moderation tooling → strong trust & safety story for App Review
+
 ### May 5, 2026 — Photo Health daily scheduler + alerts ✅
 Backend (`utils/photo_health_scheduler.py`):
 - Daily background asyncio task (interval `PHOTO_HEALTH_INTERVAL_HOURS`, default 24h)

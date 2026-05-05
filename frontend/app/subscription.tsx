@@ -398,8 +398,21 @@ export default function SubscriptionScreen() {
             </TouchableOpacity>
 
             <Text style={styles.disclaimer}>
-              Payment will be processed securely. Cancel anytime.
+              Auto-renewable subscription. Your iTunes Account will be charged{' '}
+              <Text style={{ fontWeight: '700' }}>
+                ${selectedPlan === 'yearly' ? '29.99/year' : '3.99/month'}
+              </Text>
+              {' '}at confirmation of purchase. Subscription automatically renews unless cancelled at least 24 hours before the end of the current period. Manage or cancel anytime in your iTunes Account Settings.
             </Text>
+            <View style={styles.legalRow}>
+              <TouchableOpacity onPress={() => router.push('/privacy-policy')}>
+                <Text style={styles.legalLink}>Privacy Policy</Text>
+              </TouchableOpacity>
+              <Text style={styles.legalDivider}>·</Text>
+              <TouchableOpacity onPress={() => router.push('/terms-of-service')}>
+                <Text style={styles.legalLink}>Terms of Use (EULA)</Text>
+              </TouchableOpacity>
+            </View>
 
             {/* Mock Mode Indicator */}
             {isMockMode && (
@@ -743,9 +756,29 @@ const styles = StyleSheet.create({
   },
   disclaimer: {
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 11,
+    lineHeight: 16,
     color: theme.colors.textLight,
     marginTop: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.sm,
+  },
+  legalRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 6,
+    marginBottom: theme.spacing.sm,
+  },
+  legalLink: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: theme.colors.primary,
+    textDecorationLine: 'underline',
+  },
+  legalDivider: {
+    color: theme.colors.textLight,
+    fontSize: 12,
   },
   // Preview
   previewCard: {
