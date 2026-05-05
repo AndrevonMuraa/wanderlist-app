@@ -240,12 +240,31 @@ Critical security surface covered: tier lockdown (10), 2FA (11), lockdown (9), y
 - `/app/trust-center/terms.md` written from scratch (20 sections) — App Store 3.1.2 compliant EULA with Apple-specific clauses (§11), subscription auto-renewal, Norwegian governing law + Oslo tingrett venue, mandatory consumer carve-out for EU/EEA/UK/Swiss, DSA appeal rights, EU ODR platform link
 - `/app/trust-center/README.md` — deployment + in-app linking checklist
 
+### May 5, 2026 — Live Trust Center integration (no-resubmit legal updates) ✅
+Goal: let you update privacy/terms on the CDN and have every installed app pick them up on next launch — no App Store re-submission.
+
+Architecture:
+- `yarn add react-native-markdown-display` (no native deps, works with Expo Go + EAS)
+- `/app/frontend/constants/legal.ts` (AUTO-GENERATED) — ships bundled markdown as build-time fallback
+- `/app/frontend/assets/legal/privacy.md` + `terms.md` — source-of-truth copies synced from `/app/trust-center/`
+- `/app/frontend/scripts/sync-legal.sh` — regenerates `constants/legal.ts` from `/app/trust-center/*.md` in one command
+- `/app/frontend/utils/legalContent.ts` — CDN-first fetcher:
+  1. Read AsyncStorage cache → return immediately if < 6h old
+  2. Else fetch from `EXPO_PUBLIC_TRUST_CENTER_URL` (default `https://wandermark.app`) with 8s timeout, sanity-check (≥500 chars + heading), cache on success
+  3. Any failure → fall through to last cache → bundled
+  4. `refreshLegalContent()` for pull-to-refresh bypass
+- `/app/frontend/components/LegalMarkdownViewer.tsx` — shared RN component rendering markdown via `react-native-markdown-display`, keeps existing gradient header + branding, shows a "Live · just updated" / "Last synced X" / "Bundled with app" provenance badge, pull-to-refresh
+- `/app/frontend/app/privacy-policy.tsx` and `/app/frontend/app/terms-of-service.tsx` — reduced to 16-line wrappers that pass doc-specific props to the viewer
+
+Verified on `/privacy-policy` web preview: markdown renders correctly with the new May 5 content, "Bundled with app" badge shown (CDN at wandermark.app not yet live), TypeScript compiles clean on all 5 new/changed files.
+
 ### P4 — App Store (remaining)
-- Deploy Trust Center to static host (Vercel / Cloudflare Pages) with `/privacy` and `/terms` URLs
+- Deploy Trust Center to static host (Vercel / Cloudflare Pages) with `/privacy` and `/terms` URLs — after deploy, remember to add `EXPO_PUBLIC_TRUST_CENTER_URL=https://wandermark.app` (or the CDN domain) to `frontend/.env`
 - Link Privacy + Terms on registration screen (required checkbox), Settings → Legal, Pro purchase screen
 - Add Privacy URL + EULA URL in App Store Connect metadata
-- User to run EAS iOS Build 86 with `--clear-cache` to verify data-integrity fixes
+- User to run EAS iOS Build 86 with `--clear-cache` to verify data-integrity fixes + live-legal integration
 - Seed admin + run `repair_legacy_visits.py` on production Render MongoDB
+- App Store Connect submission
 - Inbound email (SendGrid/Postmark Parse) → auto-ingest into support_tickets
 - "Nearby travelers" discovery
 
