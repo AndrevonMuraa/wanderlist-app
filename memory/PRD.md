@@ -296,9 +296,10 @@ Backend (`utils/photo_health_scheduler.py`):
 
 Frontend:
 - `app/admin/photo-health.tsx` — new "Daily auto-scan" card showing relative timestamp, scanned/broken counts, alert delivery info; "Run scheduler now" link triggers manual cycle and refreshes both scan and last-run state
+- `components/AdminSystemHealth.tsx` — added 5th "Photo Health" tile in the admin dashboard System Health grid; severity goes alert when `broken >= threshold`, warn when `broken > 0`, ok otherwise. Tile is silently hidden for moderators (last-run endpoint returns 401). Tap routes to `/admin/photo-health`.
 - `app/notifications.tsx` — `photo_health_alert` notification type now has sky-blue `images` icon and taps through to `/admin/photo-health`
 
-Verified: scheduler logs `photo_health scheduler started (interval=24.0h, alert_threshold=10)` on startup; `POST /run-now` returned `{scanned:14, broken_count:0, alerted_admins:0}` and is reflected on the dashboard ("Last run 3m ago — scanned 14, 0 broken").
+Verified: scheduler logs `photo_health scheduler started (interval=24.0h, alert_threshold=10)` on startup; `POST /run-now` returned `{scanned:14, broken_count:0, alerted_admins:0}` and is reflected on the dashboard ("Last run 3m ago — scanned 14, 0 broken") + new System Health tile shows "0 · clean · 6m ago".
 
 ### May 5, 2026 — Photo Health system + admin repair UI ✅
 Backend (`routes/photo_health.py`, `utils/photo_health.py`):

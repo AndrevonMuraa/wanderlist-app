@@ -11,6 +11,15 @@ interface ImageNormData {
   thresholds: { auto_resize_above_mb: number; reject_above_mb: number };
 }
 
+interface PhotoHealthLastRun {
+  has_run: boolean;
+  scanned?: number;
+  broken_count?: number;
+  alerted_admins?: number;
+  threshold?: number;
+  finished_at?: string;
+}
+
 interface AdminStatsShape {
   users: { banned: number; total: number; new_this_week: number };
   reports: { pending: number; total: number };
@@ -30,6 +39,17 @@ function severityColor(s: Severity) {
     case 'info': return '#3b82f6';
     default: return '#10b981';
   }
+}
+
+function formatRelative(iso?: string): string {
+  if (!iso) return 'never';
+  const ts = Date.parse(iso);
+  if (Number.isNaN(ts)) return 'never';
+  const diffSec = Math.max(0, Math.round((Date.now() - ts) / 1000));
+  if (diffSec < 60) return 'just now';
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
+  return `${Math.floor(diffSec / 86400)}d ago`;
 }
 
 /**
@@ -53,6 +73,7 @@ export default function AdminSystemHealth({
   const { colors } = useTheme();
   const router = useRouter();
   const [imageNorm, setImageNorm] = useState<ImageNormData | null>(null);
+  const [photoHealth, setPhotoHealth] = useState<PhotoHealthLastRun | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchImageNorm = useCallback(async () => {
@@ -65,7 +86,19 @@ export default function AdminSystemHealth({
     } catch {} finally { setLoading(false); }
   }, []);
 
-  useEffect(() => { fetchImageNorm(); }, [fetchImageNorm, refreshSignal]);
+  const fetchPhotoHealth = useCallback(async () => {
+    // Super-admin only — silently 401s for moderators, in which case we omit the tile
+    try {
+      const token = await getToken();
+      const r = await fetch(`${BACKEND_URL}/api/admin/photos/healthcheck/last-run`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (r.ok) setPhotoHealth(await r.json());
+      else setPhotoHealth(null);
+    } catch { setPhotoHealth(null); }
+  }, []);
+
+  useEffect(() => { fetchImageNorm(); fetchPhotoHealth(); }, [fetchImageNorm, fetchPhotoHealth, refreshSignal]);
 
   if (loading || !imageNorm || !adminStats) {
     return (
@@ -122,6 +155,32 @@ export default function AdminSystemHealth({
       onPress: () => router.push('/admin/reports'),
       testId: 'health-moderation',
     },
+  ];
+
+  // Photo Health — only visible if last-run endpoint responded (super-admin)
+  if (photoHealth) {
+    const broken = photoHealth.broken_count ?? 0;
+    const threshold = photoHealth.threshold ?? 10;
+    const photoSeverity: Severity =
+      broken >= threshold ? 'alert' : broken > 0 ? 'warn' : 'ok';
+    const subtitle = !photoHealth.has_run
+      ? 'awaiting first scan'
+      : broken > 0
+        ? `broken · ${formatRelative(photoHealth.finished_at)}`
+        : `clean · ${formatRelative(photoHealth.finished_at)}`;
+    tiles.push({
+      key: 'photo-health',
+      icon: 'images-outline',
+      label: 'Photo health',
+      value: broken,
+      subtitle,
+      severity: photoSeverity,
+      onPress: () => router.push('/admin/photo-health' as any),
+      testId: 'health-photo',
+    });
+  }
+
+  tiles.push(
     {
       key: 'banned',
       icon: 'ban-outline',
@@ -142,7 +201,7 @@ export default function AdminSystemHealth({
       onPress: () => router.push('/admin/users'),
       testId: 'health-growth',
     },
-  ];
+  );
 
   return (
     <View style={styles.grid}>
