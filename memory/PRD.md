@@ -283,6 +283,22 @@ Architecture:
 
 Verified on `/privacy-policy` web preview: markdown renders correctly with the new May 5 content, "Bundled with app" badge shown (CDN at wandermark.app not yet live), TypeScript compiles clean on all 5 new/changed files.
 
+### May 5, 2026 — Photo Health system + admin repair UI ✅
+Backend (`routes/photo_health.py`, `utils/photo_health.py`):
+- `GET /api/admin/photos/healthcheck` — read-only scan of every photo URL across `visits`, `user_created_visits`, `country_visits`, `landmarks`, `users`; returns broken count + per-collection breakdown
+- `POST /api/admin/photos/healthcheck/repair` — destructive repair: removes broken URLs, flips `verified=False` on visits that lose their last proof (no `photo_base64`), recalculates points for affected users
+- Both gated to super-admin only (`get_super_admin_user`)
+- `utils/photo_health.check_urls()` HEAD-checks URLs in parallel with bounded concurrency
+- 6 backend pytest tests in `tests/test_photo_health.py` (all green)
+- Migration script `scripts/cleanup_broken_photos.py` already repaired 20 legacy visits in DB
+
+Frontend:
+- `components/SmartImage.tsx` — drop-in `<Image>` replacement with placeholder fallback when remote URL 404s; rolled out to PhotoViewer, CommunityHighlightHero, TopHighlightsList, ShareVisitCard, MediaCard, visit-detail (no more blank/black screens)
+- `app/admin/photo-health.tsx` (NEW) — super-admin two-step flow: auto-scans on mount → shows "All photos healthy" or "N broken URLs" + per-collection breakdown → "Repair N" button with destructive Alert confirmation → renders repair receipt (URLs removed, visits unverified, users recomputed) → automatic rescan
+- `app/admin/index.tsx` — added "Photo Health" MenuCard (sky-blue `images-outline`, super-admin block, between "Two-Factor Auth" and "Emergency Lockdown")
+
+Verified: `/api/admin/photos/healthcheck` returns 200 with `scanned: 14, broken_count: 0` for super-admin; `/admin/photo-health` web preview renders the green healthy state with Rescan button.
+
 ### P4 — App Store (remaining)
 - Deploy Trust Center to static host (Vercel / Cloudflare Pages) with `/privacy` and `/terms` URLs — after deploy, remember to add `EXPO_PUBLIC_TRUST_CENTER_URL=https://wandermark.app` (or the CDN domain) to `frontend/.env`
 - Link Privacy + Terms on registration screen (required checkbox), Settings → Legal, Pro purchase screen

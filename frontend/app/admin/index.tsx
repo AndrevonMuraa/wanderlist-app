@@ -366,6 +366,13 @@ export default function AdminDashboard() {
                 onPress={() => router.push('/admin/2fa-setup' as any)}
               />
               <MenuCard
+                title="Photo Health"
+                description="Scan & repair broken Unsplash / external image URLs"
+                icon="images-outline"
+                color="#0EA5E9"
+                onPress={() => router.push('/admin/photo-health' as any)}
+              />
+              <MenuCard
                 title="Emergency Lockdown"
                 description="Freeze all moderator/admin write actions in one tap"
                 icon="lock-closed-outline"
