@@ -299,6 +299,11 @@ Frontend:
 - `components/AdminSystemHealth.tsx` — added 5th "Photo Health" tile in the admin dashboard System Health grid; severity goes alert when `broken >= threshold`, warn when `broken > 0`, ok otherwise. Tile is silently hidden for moderators (last-run endpoint returns 401). Tap routes to `/admin/photo-health`.
 - `app/notifications.tsx` — `photo_health_alert` notification type now has sky-blue `images` icon and taps through to `/admin/photo-health`
 
+Sentry observability (`utils/sentry.py`):
+- `track_photo_health_run(scanned, broken, by_collection, trigger)` — breadcrumb on every scheduler run with per-collection broken counts as data fields, queryable in Sentry's discover view for long-term trend charting
+- `track_photo_health_alert(broken, threshold, by_collection, alerted_admins)` — captures a tagged warning (`photo_health=threshold_breach`) when `broken_count >= threshold`, surfacing as a Sentry issue with extras for chart/alert routing
+- Wired into `photo_health_scheduler.run_once()`; tests verify breadcrumb fires every run and capture_message only fires above threshold
+
 Verified: scheduler logs `photo_health scheduler started (interval=24.0h, alert_threshold=10)` on startup; `POST /run-now` returned `{scanned:14, broken_count:0, alerted_admins:0}` and is reflected on the dashboard ("Last run 3m ago — scanned 14, 0 broken") + new System Health tile shows "0 · clean · 6m ago".
 
 ### May 5, 2026 — Photo Health system + admin repair UI ✅

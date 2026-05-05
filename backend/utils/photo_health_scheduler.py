@@ -24,6 +24,7 @@ from datetime import datetime, timezone
 from utils.db import db
 from utils.helpers import create_notification, send_push_notification
 from utils.photo_health import check_urls
+from utils.sentry import track_photo_health_alert, track_photo_health_run
 
 logger = logging.getLogger(__name__)
 
@@ -110,16 +111,32 @@ async def run_once() -> dict:
     broken_by_collection: dict[str, list[str]] = {
         col: sorted(urls & broken) for col, urls in by_collection.items()
     }
+    broken_counts = {k: len(v) for k, v in broken_by_collection.items()}
+
+    # Sentry breadcrumb on every run — long-term trend data
+    track_photo_health_run(
+        scanned=len(all_urls),
+        broken=len(broken),
+        by_collection=broken_counts,
+        trigger="scheduler",
+    )
 
     notified = 0
     if len(broken) >= ALERT_THRESHOLD:
         notified = await _alert_super_admins(len(broken), broken_by_collection)
+        # High-signal Sentry issue when threshold is breached
+        track_photo_health_alert(
+            broken=len(broken),
+            threshold=ALERT_THRESHOLD,
+            by_collection=broken_counts,
+            alerted_admins=notified,
+        )
 
     run_doc = {
         "run_id": f"phr_{uuid.uuid4().hex[:12]}",
         "scanned": len(all_urls),
         "broken_count": len(broken),
-        "broken_by_collection": {k: len(v) for k, v in broken_by_collection.items()},
+        "broken_by_collection": broken_counts,
         "alerted_admins": notified,
         "threshold": ALERT_THRESHOLD,
         "started_at": started,

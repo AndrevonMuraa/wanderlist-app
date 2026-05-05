@@ -141,3 +141,54 @@ def track_image_rejected(size_bytes: int, limit_bytes: int) -> None:
             )
     except Exception:
         pass
+
+
+# ---------- Photo Health observability ----------
+# Every daily scan → breadcrumb (low-signal trend data, queryable in Sentry).
+# Threshold-breach scans → capture_message (high-signal, surfaces as an issue
+# with tags so you can chart "broken URLs over time" in Sentry's dashboard).
+def track_photo_health_run(
+    scanned: int,
+    broken: int,
+    by_collection: dict,
+    trigger: str,
+) -> None:
+    """Breadcrumb on every photo-health scheduler run."""
+    try:
+        sentry_sdk.add_breadcrumb(
+            category="photo_health.scan",
+            level="info" if broken == 0 else "warning",
+            message=f"Photo health scan: {broken}/{scanned} broken",
+            data={
+                "scanned": scanned,
+                "broken": broken,
+                "trigger": trigger,
+                **{f"broken_{k}": v for k, v in by_collection.items()},
+            },
+        )
+    except Exception:
+        pass
+
+
+def track_photo_health_alert(
+    broken: int,
+    threshold: int,
+    by_collection: dict,
+    alerted_admins: int,
+) -> None:
+    """Captures a Sentry issue when the alert threshold is breached. Tagged so
+    you can build a 'broken photos over time' chart in Sentry dashboards."""
+    try:
+        with sentry_sdk.new_scope() as scope:
+            scope.set_tag("photo_health", "threshold_breach")
+            scope.set_extra("broken_count", broken)
+            scope.set_extra("threshold", threshold)
+            scope.set_extra("alerted_admins", alerted_admins)
+            for k, v in by_collection.items():
+                scope.set_extra(f"broken_{k}", v)
+            sentry_sdk.capture_message(
+                f"Photo health alert: {broken} broken URLs (threshold {threshold})",
+                level="warning",
+            )
+    except Exception:
+        pass

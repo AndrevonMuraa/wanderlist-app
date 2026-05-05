@@ -41,7 +41,9 @@ def test_run_once_persists_and_skips_alert_below_threshold(fake_collect, monkeyp
     with patch.object(sched, "_collect_all_urls", new=AsyncMock(return_value=fake_collect)), \
          patch.object(sched, "check_urls", new=AsyncMock(return_value={"https://broken.example.com/b.jpg"})), \
          patch.object(sched, "db", fake_db), \
-         patch.object(sched, "_alert_super_admins", new=AsyncMock(return_value=0)) as alert_mock:
+         patch.object(sched, "_alert_super_admins", new=AsyncMock(return_value=0)) as alert_mock, \
+         patch.object(sched, "track_photo_health_run") as run_track, \
+         patch.object(sched, "track_photo_health_alert") as alert_track:
         run_doc = _run(sched.run_once())
 
     assert run_doc["scanned"] == 2
@@ -50,6 +52,8 @@ def test_run_once_persists_and_skips_alert_below_threshold(fake_collect, monkeyp
     assert run_doc["broken_by_collection"]["visits"] == 1
     assert inserted["run_id"] == run_doc["run_id"]
     alert_mock.assert_not_awaited()
+    run_track.assert_called_once()         # breadcrumb every run
+    alert_track.assert_not_called()        # no Sentry issue below threshold
 
 
 def test_run_once_alerts_when_at_or_above_threshold(fake_collect, monkeypatch):
@@ -64,11 +68,15 @@ def test_run_once_alerts_when_at_or_above_threshold(fake_collect, monkeypatch):
     with patch.object(sched, "_collect_all_urls", new=AsyncMock(return_value=fake_collect)), \
          patch.object(sched, "check_urls", new=AsyncMock(return_value={"https://broken.example.com/b.jpg"})), \
          patch.object(sched, "db", fake_db), \
-         patch.object(sched, "_alert_super_admins", new=AsyncMock(return_value=2)) as alert_mock:
+         patch.object(sched, "_alert_super_admins", new=AsyncMock(return_value=2)) as alert_mock, \
+         patch.object(sched, "track_photo_health_run") as run_track, \
+         patch.object(sched, "track_photo_health_alert") as alert_track:
         run_doc = _run(sched.run_once())
 
     assert run_doc["alerted_admins"] == 2
     alert_mock.assert_awaited_once()
+    run_track.assert_called_once()         # breadcrumb every run
+    alert_track.assert_called_once()       # Sentry issue when threshold breached
 
 
 def test_alert_super_admins_calls_create_notification_and_push():
