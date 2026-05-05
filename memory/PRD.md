@@ -283,6 +283,23 @@ Architecture:
 
 Verified on `/privacy-policy` web preview: markdown renders correctly with the new May 5 content, "Bundled with app" badge shown (CDN at wandermark.app not yet live), TypeScript compiles clean on all 5 new/changed files.
 
+### May 5, 2026 — Photo Health daily scheduler + alerts ✅
+Backend (`utils/photo_health_scheduler.py`):
+- Daily background asyncio task (interval `PHOTO_HEALTH_INTERVAL_HOURS`, default 24h)
+- On each run: collects URLs, calls `check_urls`, persists `{run_id, scanned, broken_count, broken_by_collection, alerted_admins, threshold, started_at, finished_at, trigger}` to `photo_health_runs` collection
+- When `broken_count >= PHOTO_HEALTH_ALERT_THRESHOLD` (default 10): in-app `photo_health_alert` notification + Expo push to every super-admin (`role: admin`)
+- Started from `server.py` `@app.on_event("startup")`; killable via `PHOTO_HEALTH_SCHEDULER_DISABLED=1`
+- New endpoints (super-admin only):
+  - `GET /api/admin/photos/healthcheck/last-run` — latest persisted run summary
+  - `POST /api/admin/photos/healthcheck/run-now` — manually trigger one full scheduler cycle (scan + persist + alert if threshold hit)
+- 3 new pytest tests in `tests/test_photo_health_scheduler.py` (all 9 photo-health tests green)
+
+Frontend:
+- `app/admin/photo-health.tsx` — new "Daily auto-scan" card showing relative timestamp, scanned/broken counts, alert delivery info; "Run scheduler now" link triggers manual cycle and refreshes both scan and last-run state
+- `app/notifications.tsx` — `photo_health_alert` notification type now has sky-blue `images` icon and taps through to `/admin/photo-health`
+
+Verified: scheduler logs `photo_health scheduler started (interval=24.0h, alert_threshold=10)` on startup; `POST /run-now` returned `{scanned:14, broken_count:0, alerted_admins:0}` and is reflected on the dashboard ("Last run 3m ago — scanned 14, 0 broken").
+
 ### May 5, 2026 — Photo Health system + admin repair UI ✅
 Backend (`routes/photo_health.py`, `utils/photo_health.py`):
 - `GET /api/admin/photos/healthcheck` — read-only scan of every photo URL across `visits`, `user_created_visits`, `country_visits`, `landmarks`, `users`; returns broken count + per-collection breakdown

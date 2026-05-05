@@ -32,12 +32,32 @@ type RepairReport = {
   users_recomputed: number;
 };
 
+type LastRun = {
+  has_run: boolean;
+  scanned?: number;
+  broken_count?: number;
+  alerted_admins?: number;
+  threshold?: number;
+  finished_at?: string;
+};
+
 const COLLECTION_LABELS: Record<string, string> = {
   visits: 'Verified visits',
   user_created_visits: 'Custom visits',
   country_visits: 'Country visits',
   landmarks: 'Landmark covers',
   users: 'Profile photos',
+};
+
+const formatRelative = (iso?: string): string => {
+  if (!iso) return 'never';
+  const ts = Date.parse(iso);
+  if (Number.isNaN(ts)) return 'never';
+  const diffSec = Math.max(0, Math.round((Date.now() - ts) / 1000));
+  if (diffSec < 60) return `${diffSec}s ago`;
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
+  return `${Math.floor(diffSec / 86400)}d ago`;
 };
 
 const api = {
@@ -72,9 +92,19 @@ export default function PhotoHealthScreen() {
 
   const [scan, setScan] = useState<ScanReport | null>(null);
   const [repair, setRepair] = useState<RepairReport | null>(null);
+  const [lastRun, setLastRun] = useState<LastRun | null>(null);
   const [scanning, setScanning] = useState(false);
   const [repairing, setRepairing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const refreshLastRun = useCallback(async () => {
+    try {
+      const r = await api.get('/api/admin/photos/healthcheck/last-run');
+      setLastRun(r);
+    } catch {
+      // non-fatal — the manual scan already gives us what we need
+    }
+  }, []);
 
   const runScan = useCallback(async () => {
     setScanning(true); setError(null); setRepair(null);
@@ -88,7 +118,7 @@ export default function PhotoHealthScreen() {
     }
   }, []);
 
-  useEffect(() => { runScan(); }, [runScan]);
+  useEffect(() => { runScan(); refreshLastRun(); }, [runScan, refreshLastRun]);
 
   const confirmRepair = () => {
     if (!scan || scan.broken_count === 0) return;
@@ -204,6 +234,36 @@ export default function PhotoHealthScreen() {
 
       {error && <Text style={styles.error} testID="photo-health-error">{error}</Text>}
 
+      {/* Daily scheduler info */}
+      <View style={[styles.card, { backgroundColor: colors.surface }]} testID="photo-health-scheduler-card">
+        <View style={styles.schedRow}>
+          <Ionicons name="time-outline" size={18} color={colors.textSecondary} />
+          <Text style={[styles.schedTitle, { color: colors.text }]}>Daily auto-scan</Text>
+        </View>
+        <Text style={[styles.cardBody, { color: colors.textSecondary }]}>
+          {lastRun?.has_run
+            ? `Last run ${formatRelative(lastRun.finished_at)} — scanned ${(lastRun.scanned ?? 0).toLocaleString()}, ${lastRun.broken_count ?? 0} broken${(lastRun.alerted_admins ?? 0) > 0 ? `, alerted ${lastRun.alerted_admins} admin${lastRun.alerted_admins === 1 ? '' : 's'}` : ''}.`
+            : 'No automatic run yet. The scheduler runs every 24 hours and pings super-admins when ≥10 broken URLs are found.'}
+        </Text>
+        <TouchableOpacity
+          style={[styles.linkBtn, repairing && styles.disabled]}
+          disabled={repairing || scanning}
+          onPress={async () => {
+            try {
+              await api.post('/api/admin/photos/healthcheck/run-now');
+              await refreshLastRun();
+              await runScan();
+            } catch (e: any) {
+              setError(e?.message || 'Manual run failed');
+            }
+          }}
+          testID="photo-health-run-scheduler-btn"
+        >
+          <Ionicons name="play" size={14} color={colors.primary} />
+          <Text style={[styles.linkBtnText, { color: colors.primary }]}>Run scheduler now</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Actions */}
       <View style={styles.actions}>
         <TouchableOpacity
@@ -264,6 +324,14 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   cardTitle: { fontSize: 16, fontWeight: '800', marginBottom: 8 },
+
+  schedRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 },
+  schedTitle: { fontSize: 15, fontWeight: '800' },
+  linkBtn: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    alignSelf: 'flex-start', paddingVertical: 6,
+  },
+  linkBtnText: { fontWeight: '700', fontSize: 13 },
 
   row: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',

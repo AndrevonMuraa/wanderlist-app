@@ -27,6 +27,7 @@ from utils.auth import get_super_admin_user
 from utils.db import db
 from utils.helpers import recalculate_user_points
 from utils.photo_health import check_urls
+from utils.photo_health_scheduler import run_once as scheduler_run_once
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -214,3 +215,34 @@ async def photo_healthcheck_repair(_: User = Depends(get_super_admin_user)) -> d
         "verified_revoked": verified_revoked,
         "users_recomputed": len(affected_user_ids),
     }
+
+
+# ---------------------------------------------------------------------------
+# GET /api/admin/photos/healthcheck/last-run — latest scheduler run summary
+# ---------------------------------------------------------------------------
+@router.get("/admin/photos/healthcheck/last-run")
+async def photo_healthcheck_last_run(_: User = Depends(get_super_admin_user)) -> dict[str, Any]:
+    doc = await db.photo_health_runs.find_one(
+        {},
+        sort=[("finished_at", -1)],
+        projection={"_id": 0},
+    )
+    if not doc:
+        return {"has_run": False}
+    # Serialize datetimes to ISO strings so JSON is clean
+    for k in ("started_at", "finished_at"):
+        if doc.get(k):
+            doc[k] = doc[k].isoformat()
+    return {"has_run": True, **doc}
+
+
+# ---------------------------------------------------------------------------
+# POST /api/admin/photos/healthcheck/run-now — manually trigger scheduler cycle
+# ---------------------------------------------------------------------------
+@router.post("/admin/photos/healthcheck/run-now")
+async def photo_healthcheck_run_now(_: User = Depends(get_super_admin_user)) -> dict[str, Any]:
+    run_doc = await scheduler_run_once()
+    for k in ("started_at", "finished_at"):
+        if run_doc.get(k):
+            run_doc[k] = run_doc[k].isoformat()
+    return run_doc
