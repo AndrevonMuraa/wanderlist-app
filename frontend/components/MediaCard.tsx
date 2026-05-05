@@ -76,7 +76,7 @@ export default function MediaCard({
         onPressOut={pressOut}
         delayLongPress={450}
         style={[styles.card, { width, height }]}
-        data-testid={testID}
+        testID={testID}
       >
         {photoUrl ? (
           <Image source={{ uri: photoUrl }} style={StyleSheet.absoluteFillObject} resizeMode="cover" />

@@ -232,7 +232,7 @@ export default function FeedScreen() {
           <TouchableOpacity 
             onPress={() => activity.visit_id ? router.push(`/visit-detail/${activity.visit_id}`) : null}
             activeOpacity={0.9}
-            data-testid={`feed-photo-${activity.activity_id}`}
+            testID={`feed-photo-${activity.activity_id}`}
           >
             <Image 
               source={{ uri: activity.photo_url }} 
@@ -356,7 +356,7 @@ export default function FeedScreen() {
           <TouchableOpacity
             onPress={() => item.landmark_id ? router.push(`/landmark-community-photos/${item.landmark_id}?name=${encodeURIComponent(item.landmark_name)}`) : null}
             activeOpacity={0.9}
-            data-testid={`community-photo-${item.visit_id}`}
+            testID={`community-photo-${item.visit_id}`}
           >
             <Image source={{ uri: item.photo_url }} style={styles.activityPhoto} resizeMode="cover" />
           </TouchableOpacity>
@@ -438,7 +438,7 @@ export default function FeedScreen() {
         <TouchableOpacity
           style={[styles.tab, activeTab === 'community' && styles.tabActive]}
           onPress={() => setActiveTab('community')}
-          data-testid="tab-community"
+          testID="tab-community"
         >
           <Ionicons name="earth-outline" size={16} color={activeTab === 'community' ? '#fff' : theme.colors.textSecondary} />
           <Text style={[styles.tabText, activeTab === 'community' && styles.tabTextActive]}>Community</Text>
@@ -446,7 +446,7 @@ export default function FeedScreen() {
         <TouchableOpacity
           style={[styles.tab, activeTab === 'friends' && styles.tabActive]}
           onPress={() => setActiveTab('friends')}
-          data-testid="tab-friends"
+          testID="tab-friends"
         >
           <Ionicons name="people-outline" size={16} color={activeTab === 'friends' ? '#fff' : theme.colors.textSecondary} />
           <Text style={[styles.tabText, activeTab === 'friends' && styles.tabTextActive]}>Friends</Text>

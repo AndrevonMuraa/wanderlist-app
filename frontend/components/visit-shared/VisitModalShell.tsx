@@ -30,7 +30,7 @@ export default function VisitModalShell({ visible, onClose, title, subtitle, chi
         >
           <View style={styles.headerRow}>
             <View style={styles.headerLeft}>
-              <TouchableOpacity onPress={onClose} style={styles.closeButton} data-testid="visit-modal-close">
+              <TouchableOpacity onPress={onClose} style={styles.closeButton} testID="visit-modal-close">
                 <Ionicons name="close" size={24} color="#fff" />
               </TouchableOpacity>
               <View style={styles.headerTitleContainer}>

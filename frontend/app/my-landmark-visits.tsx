@@ -67,7 +67,7 @@ const AnimatedCard = ({ item, index, onPress, formatDate }: {
         style={styles.visitCard}
         onPress={onPress}
         activeOpacity={0.7}
-        data-testid={`landmark-visit-${item.visit_id}`}
+        testID={`landmark-visit-${item.visit_id}`}
       >
         <View style={styles.visitSurface}>
           <View style={styles.visitImageContainer}>
@@ -187,7 +187,7 @@ export default function MyLandmarkVisits() {
     <TouchableOpacity
       style={[styles.sortChip, sortBy === value && styles.sortChipActive]}
       onPress={() => setSortBy(value)}
-      data-testid={`sort-${value}`}
+      testID={`sort-${value}`}
     >
       <Ionicons name={icon} size={13} color={sortBy === value ? '#fff' : theme.colors.textSecondary} />
       <Text style={[styles.sortChipText, sortBy === value && styles.sortChipTextActive]}>{label}</Text>
@@ -304,7 +304,7 @@ export default function MyLandmarkVisits() {
             <TouchableOpacity
               style={styles.emptyCta}
               onPress={() => router.push('/(tabs)/explore' as any)}
-              data-testid="start-exploring-btn"
+              testID="start-exploring-btn"
             >
               <Ionicons name="compass" size={18} color="#fff" />
               <Text style={styles.emptyCtaText}>Start Exploring</Text>

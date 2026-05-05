@@ -830,7 +830,7 @@ export default function DestinationVisitDetailScreen() {
                   }}
                   onPress={() => lm.user_created_visit_id && router.push(`/custom-visit-detail/${lm.user_created_visit_id}`)}
                   activeOpacity={0.7}
-                  data-testid={`custom-landmark-${index}`}
+                  testID={`custom-landmark-${index}`}
                 >
                   {lm.photo ? (
                     <Image

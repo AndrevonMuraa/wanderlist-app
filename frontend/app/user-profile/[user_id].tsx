@@ -153,7 +153,7 @@ export default function UserProfileScreen() {
         end={gradients.horizontal.end}
         style={[styles.header, { paddingTop: topPadding + 8 }]}
       >
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} data-testid="profile-back-btn">
+        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} testID="profile-back-btn">
           <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{profile.name}</Text>
@@ -171,7 +171,7 @@ export default function UserProfileScreen() {
             )}
             <View style={styles.nameCol}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                <Text style={styles.name} data-testid="profile-name">{profile.name}</Text>
+                <Text style={styles.name} testID="profile-name">{profile.name}</Text>
                 <TrustBadge trusted={!!profile.trusted} size={16} />
               </View>
               {profile.username && <Text style={styles.username}>@{profile.username}</Text>}
@@ -203,7 +203,7 @@ export default function UserProfileScreen() {
         </Surface>
 
         {/* Stats */}
-        <Surface style={styles.statsCard} data-testid="profile-stats">
+        <Surface style={styles.statsCard} testID="profile-stats">
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
               <Ionicons name="location" size={20} color="#E87850" />
@@ -244,7 +244,7 @@ export default function UserProfileScreen() {
                 ]}
                 onPress={handleFriendAction}
                 disabled={actionLoading || profile.friendship_status === 'pending_sent'}
-                data-testid="friend-action-btn"
+                testID="friend-action-btn"
               >
                 <Ionicons name={btn.icon} size={18} color={btn.style === 'friends' ? theme.colors.primary : '#fff'} />
                 <Text style={[styles.actionBtnText, btn.style === 'friends' && { color: theme.colors.primary }]}>
@@ -257,7 +257,7 @@ export default function UserProfileScreen() {
               <TouchableOpacity
                 style={styles.messageBtn}
                 onPress={() => router.push(`/messages/${profile.user_id}?name=${encodeURIComponent(profile.name)}`)}
-                data-testid="message-btn"
+                testID="message-btn"
               >
                 <Ionicons name="chatbubble-outline" size={18} color="#fff" />
               </TouchableOpacity>
@@ -265,7 +265,7 @@ export default function UserProfileScreen() {
             <TouchableOpacity
               onPress={handleBlockUser}
               style={{ width: 36, height: 36, borderRadius: 12, justifyContent: 'center', alignItems: 'center' }}
-              data-testid="block-user-btn"
+              testID="block-user-btn"
             >
               <Ionicons
                 name={profile.is_blocked_by_me ? 'close-circle' : 'close-circle-outline'}
@@ -333,7 +333,7 @@ export default function UserProfileScreen() {
                   style={styles.photoGridItem}
                   onPress={() => router.push(`/visit-detail/${v.visit_id}`)}
                   activeOpacity={0.85}
-                  data-testid={`profile-photo-${v.visit_id}`}
+                  testID={`profile-photo-${v.visit_id}`}
                 >
                   <Image source={{ uri: v.photo_url }} style={styles.photoGridImage} resizeMode="cover" />
                   <View style={styles.photoGridOverlay}>

@@ -279,7 +279,7 @@ export default function FriendsScreen() {
 
   const renderFriend = ({ item }: { item: User }) => (
     <View style={styles.friendCard}>
-      <TouchableOpacity style={styles.friendInfo} onPress={() => router.push(`/user-profile/${item.user_id}`)} data-testid={`friend-${item.user_id}`}>
+      <TouchableOpacity style={styles.friendInfo} onPress={() => router.push(`/user-profile/${item.user_id}`)} testID={`friend-${item.user_id}`}>
         {item.picture ? (
           <Image source={{ uri: item.picture }} style={styles.avatar} />
         ) : (
@@ -329,14 +329,14 @@ export default function FriendsScreen() {
         <TouchableOpacity
           style={styles.acceptButton}
           onPress={() => handleAcceptRequest(item.friendship_id)}
-          data-testid={`accept-${item.friendship_id}`}
+          testID={`accept-${item.friendship_id}`}
         >
           <Text style={styles.acceptButtonText}>Accept</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.rejectButton}
           onPress={() => handleRejectRequest(item.friendship_id)}
-          data-testid={`reject-${item.friendship_id}`}
+          testID={`reject-${item.friendship_id}`}
         >
           <Ionicons name="close" size={18} color="#E53935" />
         </TouchableOpacity>
@@ -367,7 +367,7 @@ export default function FriendsScreen() {
               }}
               style={[styles.groupToggle, groupMode && styles.groupToggleActive]}
               activeOpacity={0.85}
-              data-testid="group-mode-toggle"
+              testID="group-mode-toggle"
             >
               <Ionicons name={groupMode ? 'close-circle' : 'people-circle'} size={16} color={groupMode ? '#FFF' : theme.colors.primary} />
               <Text style={[styles.groupToggleText, groupMode && { color: '#FFF' }]}>
@@ -379,7 +379,7 @@ export default function FriendsScreen() {
                 style={styles.compareGroupBtn}
                 onPress={() => setGroupModalOpen(true)}
                 activeOpacity={0.85}
-                data-testid="compare-group-btn"
+                testID="compare-group-btn"
               >
                 <Ionicons name="stats-chart" size={15} color="#1a1a2e" />
                 <Text style={styles.compareGroupText}>
@@ -401,7 +401,7 @@ export default function FriendsScreen() {
             style={styles.messagesInboxCard}
             onPress={() => router.push('/messages')}
             activeOpacity={0.85}
-            data-testid="friends-messages-inbox"
+            testID="friends-messages-inbox"
           >
             <View style={[styles.sectionIconCircle, { backgroundColor: 'rgba(77, 184, 216, 0.14)' }]}>
               <Ionicons name="chatbubbles" size={20} color={theme.colors.primary} />
@@ -443,7 +443,7 @@ export default function FriendsScreen() {
               autoCorrect={false}
               returnKeyType="search"
               placeholderTextColor={theme.colors.textLight}
-              data-testid="user-search-input"
+              testID="user-search-input"
             />
             {searchUsername.length > 0 && (
               <TouchableOpacity onPress={() => { setSearchUsername(''); setSearchResults([]); }}>
@@ -475,7 +475,7 @@ export default function FriendsScreen() {
                   style={styles.addButton}
                   onPress={() => handleSendRequestToUser(u.username)}
                   disabled={sending}
-                  data-testid={`add-${u.user_id}`}
+                  testID={`add-${u.user_id}`}
                 >
                   <Ionicons name="person-add-outline" size={16} color="#fff" />
                 </TouchableOpacity>
@@ -567,7 +567,7 @@ export default function FriendsScreen() {
 
       {/* Friends Filter */}
       {friends.length > 3 && (
-        <View style={styles.friendsFilterContainer} data-testid="friends-filter">
+        <View style={styles.friendsFilterContainer} testID="friends-filter">
           <Ionicons name="search-outline" size={16} color={theme.colors.textLight} />
           <TextInput
             placeholder="Filter friends..."
@@ -576,7 +576,7 @@ export default function FriendsScreen() {
             style={styles.friendsFilterInput}
             autoCapitalize="none"
             placeholderTextColor={theme.colors.textLight}
-            data-testid="friends-filter-input"
+            testID="friends-filter-input"
           />
           {friendsFilter.length > 0 && (
             <TouchableOpacity onPress={() => setFriendsFilter('')}>

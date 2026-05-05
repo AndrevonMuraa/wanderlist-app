@@ -306,7 +306,7 @@ export default function TermsOfServiceScreen() {
         <Surface style={styles.card}>
           <Section title="10. Limitation of Liability">
             <Text style={styles.paragraph}>
-              TO THE MAXIMUM EXTENT PERMITTED BY LAW, WANDERLIST SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING:
+              TO THE MAXIMUM EXTENT PERMITTED BY LAW, WANDERMARK SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING:
             </Text>
             <BulletPoint text="Loss of profits, data, or goodwill" />
             <BulletPoint text="Service interruption or computer damage" />

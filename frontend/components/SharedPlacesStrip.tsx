@@ -36,7 +36,7 @@ export default function SharedPlacesStrip() {
   if (items.length === 0) return null;
 
   return (
-    <View style={styles.card} data-testid="shared-places-strip">
+    <View style={styles.card} testID="shared-places-strip">
       <Text style={styles.title}>Places you've been — together</Text>
       <Text style={styles.hint}>Tap a place to compare your visit with a friend's</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.strip}>
@@ -54,7 +54,7 @@ export default function SharedPlacesStrip() {
                   router.push(`/landmark-detail/${it.landmark_id}`);
                 }
               }}
-              data-testid={`shared-tile-${it.landmark_id}`}
+              testID={`shared-tile-${it.landmark_id}`}
             >
               <View style={styles.imgWrap}>
                 {it.photo_url ? (

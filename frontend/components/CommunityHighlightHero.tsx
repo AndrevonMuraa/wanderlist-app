@@ -47,7 +47,7 @@ export default function CommunityHighlightHero({
       activeOpacity={0.92}
       onPress={onPress}
       style={[styles.container, { width, height }]}
-      data-testid="community-highlight-hero"
+      testID="community-highlight-hero"
     >
       {/* Photo */}
       {highlight.photo_url ? (

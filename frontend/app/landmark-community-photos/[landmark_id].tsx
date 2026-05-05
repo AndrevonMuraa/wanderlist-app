@@ -90,7 +90,7 @@ export default function LandmarkCommunityPhotosScreen() {
   };
 
   const renderPhoto = useCallback(({ item }: { item: CommunityPhoto }) => (
-    <Surface style={styles.photoCard} data-testid={`community-photo-${item.photo_id}`}>
+    <Surface style={styles.photoCard} testID={`community-photo-${item.photo_id}`}>
       <Image source={{ uri: item.photo_url }} style={styles.photoImage} resizeMode="cover" />
       <View style={styles.photoInfo}>
         <TouchableOpacity style={styles.userRow} onPress={() => router.push(`/user-profile/${item.user_id}`)} activeOpacity={0.7}>
@@ -118,7 +118,7 @@ export default function LandmarkCommunityPhotosScreen() {
             <TouchableOpacity
               onPress={() => handleUpvote(item.photo_id)}
               style={styles.upvoteButton}
-              data-testid={`upvote-btn-${item.photo_id}`}
+              testID={`upvote-btn-${item.photo_id}`}
             >
               <Ionicons
                 name={item.user_upvoted ? 'heart' : 'heart-outline'}
@@ -133,7 +133,7 @@ export default function LandmarkCommunityPhotosScreen() {
               <TouchableOpacity
                 onPress={() => setDiaryModal({ visible: true, text: item.diary_notes || '', userName: item.user_name })}
                 style={styles.diaryButton}
-                data-testid={`diary-btn-${item.photo_id}`}
+                testID={`diary-btn-${item.photo_id}`}
               >
                 <Ionicons name="book-outline" size={16} color={theme.colors.primary} />
               </TouchableOpacity>
@@ -165,7 +165,7 @@ export default function LandmarkCommunityPhotosScreen() {
   ), [isPremium]);
 
   const renderUpgradePrompt = () => (
-    <Surface style={styles.upgradeCard} data-testid="upgrade-prompt">
+    <Surface style={styles.upgradeCard} testID="upgrade-prompt">
       <LinearGradient
         colors={[theme.colors.accent, '#D4A574']}
         start={{ x: 0, y: 0 }}
@@ -181,7 +181,7 @@ export default function LandmarkCommunityPhotosScreen() {
         <Text style={styles.upgradeSubtitle}>
           Upgrade to Premium to see all community photos
         </Text>
-        <TouchableOpacity style={styles.upgradeButton} data-testid="upgrade-button">
+        <TouchableOpacity style={styles.upgradeButton} testID="upgrade-button">
           <Text style={styles.upgradeButtonText}>Upgrade to Pro</Text>
         </TouchableOpacity>
       </LinearGradient>
@@ -212,18 +212,18 @@ export default function LandmarkCommunityPhotosScreen() {
         columnWrapperStyle={styles.row}
         ListHeaderComponent={
           <View style={styles.headerSection}>
-            <Text style={styles.landmarkName} data-testid="landmark-name">
+            <Text style={styles.landmarkName} testID="landmark-name">
               {name || 'Landmark'}
             </Text>
             <Text style={styles.countryName}>{country || ''}</Text>
             <Text style={styles.photoCount}>
               {totalCount} {totalCount === 1 ? 'photo' : 'photos'} from the community
             </Text>
-            <View style={styles.sortRow} data-testid="sort-toggle">
+            <View style={styles.sortRow} testID="sort-toggle">
               <TouchableOpacity
                 style={[styles.sortBtn, sortBy === 'popular' && styles.sortBtnActive]}
                 onPress={() => setSortBy('popular')}
-                data-testid="sort-popular"
+                testID="sort-popular"
               >
                 <Ionicons name="flame" size={14} color={sortBy === 'popular' ? '#fff' : theme.colors.textSecondary} />
                 <Text style={[styles.sortBtnText, sortBy === 'popular' && styles.sortBtnTextActive]}>Most liked</Text>
@@ -231,7 +231,7 @@ export default function LandmarkCommunityPhotosScreen() {
               <TouchableOpacity
                 style={[styles.sortBtn, sortBy === 'newest' && styles.sortBtnActive]}
                 onPress={() => setSortBy('newest')}
-                data-testid="sort-newest"
+                testID="sort-newest"
               >
                 <Ionicons name="time" size={14} color={sortBy === 'newest' ? '#fff' : theme.colors.textSecondary} />
                 <Text style={[styles.sortBtnText, sortBy === 'newest' && styles.sortBtnTextActive]}>Newest</Text>
@@ -241,7 +241,7 @@ export default function LandmarkCommunityPhotosScreen() {
         }
         ListFooterComponent={null}
         ListEmptyComponent={
-          <View style={styles.emptyContainer} data-testid="empty-state">
+          <View style={styles.emptyContainer} testID="empty-state">
             <Ionicons name="camera-outline" size={64} color={theme.colors.textSecondary} />
             <Text style={styles.emptyTitle}>No community photos yet</Text>
             <Text style={styles.emptySubtitle}>
@@ -263,7 +263,7 @@ export default function LandmarkCommunityPhotosScreen() {
           activeOpacity={1}
           onPress={() => setDiaryModal({ visible: false, text: '', userName: '' })}
         >
-          <View style={styles.diaryModalContent} data-testid="diary-modal">
+          <View style={styles.diaryModalContent} testID="diary-modal">
             <View style={styles.diaryModalHeader}>
               <Ionicons name="book" size={20} color={theme.colors.primary} />
               <Text style={styles.diaryModalTitle}>Travel Diary</Text>

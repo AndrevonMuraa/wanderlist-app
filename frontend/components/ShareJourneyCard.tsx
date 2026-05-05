@@ -70,7 +70,7 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
         {/* Modal Header */}
         <View style={styles.modalHeader}>
           <Text style={[styles.modalTitle, { color: colors.text }]}>Share your journey</Text>
-          <TouchableOpacity onPress={onDismiss} data-testid="share-journey-close">
+          <TouchableOpacity onPress={onDismiss} testID="share-journey-close">
             <Ionicons name="close" size={24} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
@@ -173,7 +173,7 @@ export default function ShareJourneyCard({ visible, onDismiss, stats, userName }
           onPress={handleShare}
           disabled={sharing}
           activeOpacity={0.85}
-          data-testid="share-journey-button"
+          testID="share-journey-button"
         >
           <LinearGradient
             colors={['#C9A961', '#E8DCC8']}

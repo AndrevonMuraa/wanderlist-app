@@ -400,7 +400,7 @@ export default function LeaderboardScreen() {
             style={styles.shareRankButton}
             onPress={() => setShowShareRank(true)}
             activeOpacity={0.7}
-            data-testid="share-ranking-button"
+            testID="share-ranking-button"
           >
             <Ionicons name="share-social-outline" size={16} color={theme.colors.primary} />
             <Text style={styles.shareRankText}>Share my ranking</Text>
@@ -458,7 +458,7 @@ export default function LeaderboardScreen() {
                 style={styles.expandButton}
                 onPress={() => setExpanded(false)}
                 activeOpacity={0.7}
-                data-testid="show-less-btn"
+                testID="show-less-btn"
               >
                 <Ionicons name="chevron-up" size={16} color={theme.colors.primary} />
                 <Text style={styles.expandButtonText}>Show Less</Text>
@@ -473,7 +473,7 @@ export default function LeaderboardScreen() {
                   style={styles.expandButton}
                   onPress={() => setExpanded(true)}
                   activeOpacity={0.7}
-                  data-testid="show-full-rankings-btn"
+                  testID="show-full-rankings-btn"
                 >
                   <Ionicons name="list-outline" size={16} color={theme.colors.primary} />
                   <Text style={styles.expandButtonText}>Show Full Rankings ({leaderboard.length})</Text>

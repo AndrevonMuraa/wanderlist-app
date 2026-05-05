@@ -57,7 +57,7 @@ export default function FeedCardActions({
         onPress={handleLike}
         disabled={likeDisabled}
         activeOpacity={0.7}
-        data-testid={likeTestId}
+        testID={likeTestId}
       >
         <Animated.View style={{ transform: [{ scale: likeScale }] }}>
           <Ionicons
@@ -78,7 +78,7 @@ export default function FeedCardActions({
         onPress={handleComment}
         disabled={commentDisabled}
         activeOpacity={0.7}
-        data-testid={commentTestId}
+        testID={commentTestId}
       >
         <Ionicons name="chatbubble-outline" size={19} color={theme.colors.textSecondary} />
         {commentsCount > 0 && (

@@ -126,7 +126,7 @@ export default function ShareRankCard({ visible, onDismiss, rank, totalUsers, ca
           onPress={handleShare}
           disabled={sharing}
           activeOpacity={0.8}
-          data-testid="share-rank-card-button"
+          testID="share-rank-card-button"
         >
           <LinearGradient
             colors={['#2E9AB5', '#4DB8D8']}

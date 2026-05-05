@@ -47,7 +47,7 @@ export default function GroupStatsModal({ visible, onDismiss, selectedFriendIds 
       <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={styles.modal}>
         <View style={styles.header}>
           <Text style={styles.title}>Group stats</Text>
-          <TouchableOpacity onPress={onDismiss} data-testid="group-stats-close">
+          <TouchableOpacity onPress={onDismiss} testID="group-stats-close">
             <Ionicons name="close" size={24} color={theme.colors.textSecondary} />
           </TouchableOpacity>
         </View>
@@ -67,7 +67,7 @@ export default function GroupStatsModal({ visible, onDismiss, selectedFriendIds 
                     onDismiss();
                     router.push(`/user-profile/${r.user_id}`);
                   }}
-                  data-testid={`group-avatar-${r.user_id}`}
+                  testID={`group-avatar-${r.user_id}`}
                 >
                   {r.picture ? (
                     <Image source={{ uri: r.picture }} style={styles.avatar} />

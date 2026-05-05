@@ -431,7 +431,7 @@ export default function VisitDetailScreen() {
                       ]);
                     }}
                     disabled={uploadingPhotos}
-                    data-testid="add-photo-action-btn"
+                    testID="add-photo-action-btn"
                   >
                     {uploadingPhotos ? (
                       <ActivityIndicator size="small" color={theme.colors.primary} />
@@ -450,7 +450,7 @@ export default function VisitDetailScreen() {
                       paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20,
                     }}
                     onPress={() => setShowProLock(true)}
-                    data-testid="add-more-photos-pro-btn"
+                    testID="add-more-photos-pro-btn"
                   >
                     <Ionicons name="camera" size={18} color={theme.colors.accentTeal} />
                     <Text style={{ color: theme.colors.accentTeal, fontWeight: '600', fontSize: 14 }}>Add More Photos</Text>
@@ -500,7 +500,7 @@ export default function VisitDetailScreen() {
                 alignItems: 'center',
                 gap: 6,
               }}
-              data-testid="add-photo-empty-btn"
+              testID="add-photo-empty-btn"
             >
               <Ionicons name="add-circle" size={18} color="#fff" />
               <Text style={{ color: '#fff', fontWeight: '600', fontSize: 14 }}>Add Photo</Text>
@@ -587,7 +587,7 @@ export default function VisitDetailScreen() {
         )}
 
         {/* Visibility Control */}
-        <View style={styles.visibilityCard} data-testid="visit-visibility-section">
+        <View style={styles.visibilityCard} testID="visit-visibility-section">
           <View style={styles.sectionHeader}>
             <Ionicons name="shield-checkmark" size={24} color={theme.colors.primary} />
             <Text style={styles.sectionTitle}>Visibility</Text>
@@ -601,7 +601,7 @@ export default function VisitDetailScreen() {
                   style={[styles.visChip, isActive && { borderColor: meta.color, backgroundColor: meta.color + '15' }]}
                   onPress={() => handleChangeVisibility(key)}
                   activeOpacity={0.7}
-                  data-testid={`visit-visibility-${key}`}
+                  testID={`visit-visibility-${key}`}
                 >
                   <Ionicons name={meta.icon as any} size={16} color={isActive ? meta.color : theme.colors.textLight} />
                   <Text style={[styles.visChipText, isActive && { color: meta.color, fontWeight: '700' }]}>
@@ -626,7 +626,7 @@ export default function VisitDetailScreen() {
 
         {/* Social Comments Section */}
         {visit.activity_id && user && (
-          <View style={styles.socialCommentsCard} data-testid="comments-section">
+          <View style={styles.socialCommentsCard} testID="comments-section">
             <CommentsSection
               activityId={visit.activity_id}
               commentsCount={commentsCount}
@@ -641,7 +641,7 @@ export default function VisitDetailScreen() {
           style={styles.shareVisitButton}
           onPress={handleShare}
           activeOpacity={0.7}
-          data-testid="share-visit-button"
+          testID="share-visit-button"
         >
           <Ionicons name="share-social-outline" size={18} color={theme.colors.primary} />
           <Text style={styles.shareVisitText}>Share This Visit</Text>
@@ -653,7 +653,7 @@ export default function VisitDetailScreen() {
             onPress={() => setShowDeleteDialog(true)}
             style={styles.deleteVisitButton}
             activeOpacity={0.7}
-            data-testid="delete-visit-button"
+            testID="delete-visit-button"
           >
             <Ionicons name="trash-outline" size={16} color="#E53935" />
             <Text style={styles.deleteVisitText}>Delete Visit</Text>

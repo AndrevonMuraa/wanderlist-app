@@ -149,7 +149,7 @@ export default function LoginScreen() {
                   outlineColor={theme.colors.border}
                   activeOutlineColor={theme.colors.primary}
                   textColor={theme.colors.text}
-                  data-testid="login-email-input"
+                  testID="login-email-input"
                 />
 
                 <TextInput
@@ -163,7 +163,7 @@ export default function LoginScreen() {
                   outlineColor={theme.colors.border}
                   activeOutlineColor={theme.colors.primary}
                   textColor={theme.colors.text}
-                  data-testid="login-password-input"
+                  testID="login-password-input"
                 />
 
                 {twoFAChallenge && (
@@ -180,7 +180,7 @@ export default function LoginScreen() {
                     outlineColor={theme.colors.border}
                     activeOutlineColor={theme.colors.primary}
                     textColor={theme.colors.text}
-                    data-testid="login-totp-input"
+                    testID="login-totp-input"
                   />
                 )}
 
@@ -192,7 +192,7 @@ export default function LoginScreen() {
                   style={styles.button}
                   buttonColor={theme.colors.primary}
                   textColor="#fff"
-                  data-testid="login-button"
+                  testID="login-button"
                 >
                   {twoFAChallenge ? 'Verify & Login' : 'Login'}
                 </Button>
@@ -207,7 +207,7 @@ export default function LoginScreen() {
                     handleSendMagicCode();
                   }}
                   style={styles.linkContainer}
-                  data-testid="forgot-password-link"
+                  testID="forgot-password-link"
                 >
                   <Text style={styles.forgotPasswordText}>Forgot password?</Text>
                 </TouchableOpacity>
@@ -272,7 +272,7 @@ export default function LoginScreen() {
                       activeOutlineColor={theme.colors.primary}
                       textColor={theme.colors.text}
                       maxLength={6}
-                      data-testid="magic-code-input"
+                      testID="magic-code-input"
                     />
 
                     <Button
@@ -283,7 +283,7 @@ export default function LoginScreen() {
                       style={styles.button}
                       buttonColor={theme.colors.primary}
                       textColor="#fff"
-                      data-testid="verify-code-button"
+                      testID="verify-code-button"
                     >
                       Verify & Login
                     </Button>

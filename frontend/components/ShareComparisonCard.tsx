@@ -119,7 +119,7 @@ export default function ShareComparisonCard({
           {/* Modal header */}
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Share this memory</Text>
-            <TouchableOpacity onPress={onDismiss} data-testid="share-comparison-close">
+            <TouchableOpacity onPress={onDismiss} testID="share-comparison-close">
               <Ionicons name="close" size={24} color={theme.colors.textSecondary} />
             </TouchableOpacity>
           </View>
@@ -260,7 +260,7 @@ export default function ShareComparisonCard({
             onPress={handleShare}
             disabled={sharing}
             activeOpacity={0.88}
-            data-testid="share-comparison-button"
+            testID="share-comparison-button"
           >
             <LinearGradient
               colors={['#C9A961', '#E8DCC8']}

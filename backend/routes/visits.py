@@ -28,11 +28,12 @@ async def get_visits_list(current_user: User = Depends(get_current_user), limit:
             "localField": "landmark_id",
             "foreignField": "landmark_id",
             "as": "_lm",
-            "pipeline": [{"$project": {"_id": 0, "name": 1, "country_name": 1}}]
+            "pipeline": [{"$project": {"_id": 0, "name": 1, "country_name": 1, "points": 1}}]
         }},
         {"$addFields": {
             "landmark_name": {"$ifNull": ["$landmark_name", {"$arrayElemAt": ["$_lm.name", 0]}]},
             "country_name": {"$ifNull": ["$country_name", {"$arrayElemAt": ["$_lm.country_name", 0]}]},
+            "points_earned": {"$ifNull": ["$points_earned", {"$arrayElemAt": ["$_lm.points", 0]}, 10]},
             "has_photo": {"$or": [
                 {"$gt": [{"$size": {"$ifNull": ["$photos", []]}}, 0]},
                 {"$and": [{"$ne": ["$photo_base64", None]}, {"$ne": ["$photo_base64", ""]}]}
@@ -691,7 +692,7 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
             "visit_id": v.get("visit_id"),
             "name": v.get("landmark_name", "Unknown"),
             "country": v.get("country_name", ""),
-            "points": v.get("points_earned", 0),
+            "points": v.get("points_earned") or 0,
             "verified": v.get("verified", False),
         })
     
@@ -711,7 +712,7 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
         countries.append({
             "country_visit_id": cv.get("country_visit_id"),
             "name": cv.get("country_name", "Unknown"),
-            "points": cv.get("points_earned", 0),
+            "points": cv.get("points_earned") or 0,
             "source": cv.get("source", "manual"),
             "verified": has_photos or has_verified_landmark,
         })

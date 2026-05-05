@@ -154,7 +154,7 @@ export default function AdminSystemHealth({
             style={[styles.tile, { backgroundColor: colors.surface }]}
             onPress={t.onPress}
             activeOpacity={0.75}
-            data-testid={t.testId}
+            testID={t.testId}
           >
             <View style={styles.tileHeader}>
               <View style={[styles.iconCircle, { backgroundColor: color + '18' }]}>

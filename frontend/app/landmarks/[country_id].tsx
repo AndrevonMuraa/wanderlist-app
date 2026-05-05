@@ -473,7 +473,7 @@ export default function LandmarksScreen() {
               style={styles.communityPhotosLink}
               onPress={() => router.push(`/country-community-photos/${country_id}?name=${encodeURIComponent(String(name || ''))}`)}
               activeOpacity={0.7}
-              data-testid="country-community-photos-btn"
+              testID="country-community-photos-btn"
             >
               <LinearGradient
                 colors={[theme.colors.primary, theme.colors.primaryDark]}
@@ -506,7 +506,7 @@ export default function LandmarksScreen() {
           style={styles.fab}
           onPress={handleDestinationVisitAction}
           activeOpacity={0.8}
-          data-testid="country-visit-fab"
+          testID="country-visit-fab"
         >
           <LinearGradient
             colors={getFabConfig().colors}

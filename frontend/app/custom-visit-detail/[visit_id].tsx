@@ -425,7 +425,7 @@ export default function CustomVisitDetailScreen() {
             <TouchableOpacity
               onPress={() => setShowShareCard(true)}
               style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 12 }}
-              data-testid="share-custom-visit-btn"
+              testID="share-custom-visit-btn"
             >
               <Ionicons name="share-social-outline" size={16} color={theme.colors.primary} />
               <Text style={{ fontSize: 13, color: theme.colors.primary }}>Share</Text>

@@ -47,7 +47,7 @@ export const PersistentTabBar: React.FC = () => {
             style={styles.tab}
             onPress={() => handlePress(tab.route)}
             activeOpacity={0.7}
-            data-testid={`persistent-tab-${tab.name.toLowerCase().replace(' ', '-')}`}
+            testID={`persistent-tab-${tab.name.toLowerCase().replace(' ', '-')}`}
           >
             <View>
               <Ionicons
@@ -56,7 +56,7 @@ export const PersistentTabBar: React.FC = () => {
                 color={active ? theme.colors.primary : theme.colors.textLight}
               />
               {tab.showBadge && total > 0 && (
-                <View style={styles.badgeDot} data-testid="persistent-tab-badge" />
+                <View style={styles.badgeDot} testID="persistent-tab-badge" />
               )}
             </View>
             <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>

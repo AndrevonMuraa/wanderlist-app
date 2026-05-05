@@ -40,11 +40,11 @@ export default function CommentsModal({
         <SafeAreaView style={styles.sheet} edges={['bottom']}>
           <View style={styles.handle} />
           <View style={styles.header}>
-            <Text style={styles.title} data-testid="comments-modal-title">Comments</Text>
+            <Text style={styles.title} testID="comments-modal-title">Comments</Text>
             <TouchableOpacity
               onPress={onClose}
               style={styles.closeBtn}
-              data-testid="comments-modal-close"
+              testID="comments-modal-close"
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
               <Ionicons name="close" size={22} color={theme.colors.text} />

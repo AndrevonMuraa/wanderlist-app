@@ -199,7 +199,7 @@ export default function SocialHubScreen() {
     const userRank = getUserRank(entry.value || 0);
     
     return (
-      <TouchableOpacity key={index} style={styles.leaderboardItem} onPress={() => router.push(`/user-profile/${entry.user_id}`)} data-testid={`lb-${entry.user_id}`}>
+      <TouchableOpacity key={index} style={styles.leaderboardItem} onPress={() => router.push(`/user-profile/${entry.user_id}`)} testID={`lb-${entry.user_id}`}>
         <View style={styles.leaderboardLeft}>
           <View style={[
             styles.rankBadge,
@@ -306,7 +306,7 @@ export default function SocialHubScreen() {
         </View>
 
         {/* Community Feed Section */}
-        <View style={styles.section} data-testid="community-feed-section">
+        <View style={styles.section} testID="community-feed-section">
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
               <Ionicons name="newspaper" size={24} color={theme.colors.primary} />
@@ -383,7 +383,7 @@ export default function SocialHubScreen() {
             style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 10, marginTop: 4 }}
             onPress={() => router.push('/community')}
             activeOpacity={0.7}
-            data-testid="explore-community-link"
+            testID="explore-community-link"
           >
             <Ionicons name="people" size={16} color={theme.colors.primary} />
             <Text style={{ fontSize: 13, fontWeight: '600', color: theme.colors.primary }}>Explore community</Text>

@@ -156,7 +156,7 @@ export default function PrivacySettingsScreen() {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]} data-testid="privacy-settings-screen">
+    <View style={[styles.container, { backgroundColor: colors.background }]} testID="privacy-settings-screen">
       {/* Header */}
       <LinearGradient
         colors={gradientColors}
@@ -166,7 +166,7 @@ export default function PrivacySettingsScreen() {
       >
         <View style={styles.headerRow}>
           <View style={styles.headerLeft}>
-            <TouchableOpacity onPress={() => router.back()} style={styles.backButton} data-testid="privacy-back-button">
+            <TouchableOpacity onPress={() => router.back()} style={styles.backButton} testID="privacy-back-button">
               <Ionicons name="arrow-back" size={24} color="#fff" />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Privacy</Text>
@@ -210,7 +210,7 @@ export default function PrivacySettingsScreen() {
                   onPress={() => updatePrivacy(option.value)}
                   activeOpacity={0.7}
                   disabled={saving}
-                  data-testid={`privacy-option-${option.value}`}
+                  testID={`privacy-option-${option.value}`}
                 >
                   <View
                     style={[
@@ -355,7 +355,7 @@ export default function PrivacySettingsScreen() {
                     } catch (e) { }
                   }}
                   activeOpacity={0.7}
-                  data-testid={`comment-perm-${opt.value}`}
+                  testID={`comment-perm-${opt.value}`}
                 >
                   <View style={[styles.privacyIconCircle, { backgroundColor: colors.background }, isSelected && { backgroundColor: opt.color }]}>
                     <Ionicons name={opt.icon as any} size={20} color={isSelected ? '#fff' : opt.color} />

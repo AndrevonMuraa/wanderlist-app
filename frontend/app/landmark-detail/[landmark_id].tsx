@@ -357,7 +357,7 @@ export default function LandmarkDetailScreen() {
             style={styles.communityPhotosButton}
             onPress={() => router.push(`/landmark-community-photos/${landmark.landmark_id}?name=${encodeURIComponent(landmark.name)}&country=${encodeURIComponent(landmark.country_name)}`)}
             activeOpacity={0.7}
-            data-testid="community-photos-button"
+            testID="community-photos-button"
           >
             <LinearGradient
               colors={[theme.colors.primary, theme.colors.primaryDark]}
@@ -387,7 +387,7 @@ export default function LandmarkDetailScreen() {
                 style={styles.fabSecondary}
                 onPress={() => visitId ? router.push(`/visit-detail/${visitId}`) : null}
                 activeOpacity={0.8}
-                data-testid="view-visit-btn"
+                testID="view-visit-btn"
               >
                 <Surface style={styles.fabSecondaryInner}>
                   <Ionicons name="eye" size={20} color={theme.colors.primary} />
@@ -398,7 +398,7 @@ export default function LandmarkDetailScreen() {
                 style={styles.fabPrimary}
                 onPress={handleUnmarkVisit}
                 activeOpacity={0.8}
-                data-testid="visited-status-btn"
+                testID="visited-status-btn"
               >
                 <LinearGradient
                   colors={['#4CAF50', '#66BB6A']}
@@ -417,7 +417,7 @@ export default function LandmarkDetailScreen() {
                 style={styles.fab}
                 onPress={handleMarkAsVisited}
                 activeOpacity={0.8}
-                data-testid="mark-visited-btn"
+                testID="mark-visited-btn"
               >
                 <LinearGradient
                   colors={[theme.colors.primary, theme.colors.secondary]}

@@ -63,7 +63,7 @@ export default function FriendsVisitedStrip({ landmarkId }: FriendsVisitedStripP
       style={styles.card}
       onPress={() => friends[0]?.user_id && router.push(`/user-profile/${friends[0].user_id}`)}
       activeOpacity={0.88}
-      data-testid="friends-visited-strip"
+      testID="friends-visited-strip"
     >
       <View style={styles.avatarStack}>
         {friends.slice(0, 4).map((f, idx) => (

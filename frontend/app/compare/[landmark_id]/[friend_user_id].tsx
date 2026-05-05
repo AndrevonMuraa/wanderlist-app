@@ -34,7 +34,7 @@ function PersonCard({ side, isMe, accentColor }: { side: Side; isMe: boolean; ac
   const firstName = (side.name || '').split(' ')[0] || (isMe ? 'You' : 'Friend');
   const label = isMe ? 'You' : firstName;
   return (
-    <View style={[styles.personCard, { borderTopColor: accentColor }]} data-testid={isMe ? 'compare-me' : 'compare-friend'}>
+    <View style={[styles.personCard, { borderTopColor: accentColor }]} testID={isMe ? 'compare-me' : 'compare-friend'}>
       <View style={styles.personHead}>
         {side.picture ? (
           <Image source={{ uri: side.picture }} style={styles.personAvatar} />
@@ -150,7 +150,7 @@ export default function CompareLandmark() {
             onPress={() => setShareOpen(true)}
             style={styles.headerShareBtn}
             activeOpacity={0.85}
-            data-testid="compare-share-open"
+            testID="compare-share-open"
           >
             <Ionicons name="share-social" size={18} color="#FFF" />
           </TouchableOpacity>
@@ -158,7 +158,7 @@ export default function CompareLandmark() {
       />
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
         {/* Hero */}
-        <View style={styles.hero} data-testid="compare-hero">
+        <View style={styles.hero} testID="compare-hero">
           <View style={styles.heroBadge}>
             <Ionicons name="people" size={12} color="#FFD700" />
             <Text style={styles.heroBadgeText}>Both of you have been here</Text>
@@ -176,7 +176,7 @@ export default function CompareLandmark() {
                 style={styles.heroAvatarWrap}
                 activeOpacity={0.8}
                 onPress={() => router.push(`/user-profile/${s.user_id}`)}
-                data-testid={`hero-avatar-${s.user_id}`}
+                testID={`hero-avatar-${s.user_id}`}
               >
                 {s.picture ? (
                   <Image source={{ uri: s.picture }} style={styles.heroAvatar} />
@@ -194,7 +194,7 @@ export default function CompareLandmark() {
             style={styles.shareCta}
             onPress={() => setShareOpen(true)}
             activeOpacity={0.88}
-            data-testid="compare-share-cta"
+            testID="compare-share-cta"
           >
             <Ionicons name="share-social" size={14} color={theme.colors.primary} />
             <Text style={styles.shareCtaText}>Share this memory</Text>

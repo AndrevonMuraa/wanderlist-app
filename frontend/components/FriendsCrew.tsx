@@ -37,7 +37,7 @@ export default function FriendsCrew({ friends, loading, pendingCount = 0, select
   if (friends.length === 0) return null;
 
   return (
-    <View style={styles.card} data-testid="friends-crew">
+    <View style={styles.card} testID="friends-crew">
       <View style={styles.headerRow}>
         <Text style={styles.title}>Your crew</Text>
         <Text style={styles.count}>{friends.length} {friends.length === 1 ? 'friend' : 'friends'}</Text>
@@ -67,7 +67,7 @@ export default function FriendsCrew({ friends, loading, pendingCount = 0, select
                 if (selectMode) onToggleSelect?.(f.user_id);
                 else router.push(`/user-profile/${f.user_id}`);
               }}
-              data-testid={`crew-avatar-${f.user_id}`}
+              testID={`crew-avatar-${f.user_id}`}
             >
               <View style={[styles.avatarWrap, selected && styles.avatarWrapSelected]}>
                 {f.picture ? (

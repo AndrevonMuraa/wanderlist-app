@@ -100,7 +100,7 @@ export default function PhotoSection({
       </View>
 
       {showGuidelines && (
-        <View style={styles.guidelines} data-testid="photo-guidelines">
+        <View style={styles.guidelines} testID="photo-guidelines">
           <Ionicons name="shield-checkmark" size={16} color={theme.colors.primary} />
           <Text style={styles.guidelinesText}>
             Take a personal photo of yourself at the landmark to earn verified points. Photos without you in them may result in verified points being removed.
@@ -119,11 +119,11 @@ export default function PhotoSection({
         ))}
         {canAddMore && (
           <View style={styles.photoButtonsColumn}>
-            <TouchableOpacity style={styles.libraryButtonPrimary} onPress={pickImages} data-testid="pick-photo-btn">
+            <TouchableOpacity style={styles.libraryButtonPrimary} onPress={pickImages} testID="pick-photo-btn">
               <Ionicons name="images" size={28} color="#fff" />
               <Text style={styles.libraryButtonPrimaryText}>Add Photo</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cameraButtonSecondary} onPress={takePhoto} data-testid="take-photo-btn">
+            <TouchableOpacity style={styles.cameraButtonSecondary} onPress={takePhoto} testID="take-photo-btn">
               <Ionicons name="camera-outline" size={16} color={theme.colors.textSecondary} />
               <Text style={styles.cameraButtonSecondaryText}>Take Photo Instead</Text>
             </TouchableOpacity>
@@ -142,7 +142,7 @@ export default function PhotoSection({
       </ScrollView>
 
       {showDisclaimer && photos.length > 0 && (
-        <View style={styles.disclaimer} data-testid="photo-disclaimer">
+        <View style={styles.disclaimer} testID="photo-disclaimer">
           <Ionicons name="information-circle-outline" size={14} color={theme.colors.textSecondary} />
           <Text style={styles.disclaimerText}>
             Only personal photos where you are visible count toward verified points. Using photos from the internet or without yourself in them may lead to removal of verified points.

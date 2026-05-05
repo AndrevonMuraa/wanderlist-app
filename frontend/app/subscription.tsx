@@ -434,13 +434,13 @@ export default function SubscriptionScreen() {
                 autoCapitalize="characters"
               returnKeyType="done"
                 editable={!promoLoading}
-                data-testid="redeem-promo-input"
+                testID="redeem-promo-input"
               />
               <TouchableOpacity
                 style={[styles.promoButton, (!promoCode.trim() || promoLoading) && styles.promoButtonDisabled]}
                 onPress={handleRedeemPromo}
                 disabled={!promoCode.trim() || promoLoading}
-                data-testid="redeem-promo-btn"
+                testID="redeem-promo-btn"
               >
                 {promoLoading ? (
                   <ActivityIndicator color="#fff" size="small" />

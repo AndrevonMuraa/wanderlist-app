@@ -43,7 +43,7 @@ export default function FriendStatsCompare({ friendUserId, friendFirstName }: Pr
   if (!data) return null;
 
   return (
-    <View style={styles.card} data-testid="friend-stats-compare">
+    <View style={styles.card} testID="friend-stats-compare">
       <Text style={styles.kicker}>HOW YOU COMPARE</Text>
       <View style={styles.headerRow}>
         <View style={{ flex: 1 }} />
@@ -57,7 +57,7 @@ export default function FriendStatsCompare({ friendUserId, friendFirstName }: Pr
         const meWins = myVal > friendVal;
         const friendWins = friendVal > myVal;
         return (
-          <View key={def.key} style={styles.row} data-testid={`stat-row-${def.key}`}>
+          <View key={def.key} style={styles.row} testID={`stat-row-${def.key}`}>
             <View style={[styles.iconWrap, { backgroundColor: `${def.color}18` }]}>
               <Ionicons name={def.icon as any} size={16} color={def.color} />
             </View>

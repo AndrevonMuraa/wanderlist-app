@@ -223,7 +223,7 @@ export default function AdminDashboard() {
             onPress={onRefresh}
             style={styles.headerBackButton}
             disabled={refreshing}
-            data-testid="admin-refresh-btn"
+            testID="admin-refresh-btn"
           >
             <Ionicons
               name="refresh"
@@ -247,7 +247,7 @@ export default function AdminDashboard() {
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Overview</Text>
           <Text
             style={[styles.sectionTimestamp, { color: colors.textSecondary }]}
-            data-testid="admin-last-updated"
+            testID="admin-last-updated"
           >
             {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
             {tick >= 0 && formatRelative(lastUpdated)}

@@ -79,7 +79,7 @@ export default function UserVisitsScreen() {
         style={[styles.visitCard, { backgroundColor: colors.surface }]}
         onPress={() => router.push(`/visit-detail/${item.visit_id}`)}
         activeOpacity={0.7}
-        data-testid={`user-visit-${item.visit_id}`}
+        testID={`user-visit-${item.visit_id}`}
       >
         {item.photo_url && (
           <View style={styles.photoContainer}>
@@ -107,7 +107,7 @@ export default function UserVisitsScreen() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]} data-testid="user-visits-screen">
+    <View style={[styles.container, { backgroundColor: colors.background }]} testID="user-visits-screen">
       <UniversalHeader
         title={`${user_name || 'User'}'s Visits`}
         subtitle={`${total} visits`}

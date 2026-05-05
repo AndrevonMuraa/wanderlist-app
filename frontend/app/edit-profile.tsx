@@ -282,7 +282,7 @@ export default function EditProfileScreen() {
             style={styles.saveButtonMain}
             disabled={saving}
             activeOpacity={0.8}
-            data-testid="save-profile-button"
+            testID="save-profile-button"
           >
             <Text style={styles.saveButtonMainText}>
               {saving ? 'Saving...' : 'Save Changes'}

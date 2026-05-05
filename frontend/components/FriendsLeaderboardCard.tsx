@@ -38,7 +38,7 @@ export default function FriendsLeaderboardCard() {
   const medal = (r: number) => (r === 1 ? '🥇' : r === 2 ? '🥈' : r === 3 ? '🥉' : '');
 
   return (
-    <View style={styles.card} data-testid="friends-leaderboard">
+    <View style={styles.card} testID="friends-leaderboard">
       <Text style={styles.title}>Who's leading?</Text>
       <View style={styles.pills}>
         {STAT_DEFS.map((s) => {
@@ -49,7 +49,7 @@ export default function FriendsLeaderboardCard() {
               onPress={() => setMetric(s.key)}
               style={[styles.pill, active && { borderColor: s.color, backgroundColor: `${s.color}14` }]}
               activeOpacity={0.8}
-              data-testid={`leaderboard-pill-${s.key}`}
+              testID={`leaderboard-pill-${s.key}`}
             >
               <Ionicons name={s.icon as any} size={13} color={active ? s.color : theme.colors.textSecondary} />
               <Text style={[styles.pillText, active && { color: s.color }]}>{s.label}</Text>
@@ -67,7 +67,7 @@ export default function FriendsLeaderboardCard() {
               style={[styles.row, r.is_me && styles.rowMe]}
               onPress={() => !r.is_me && router.push(`/user-profile/${r.user_id}`)}
               activeOpacity={r.is_me ? 1 : 0.85}
-              data-testid={`leaderboard-row-${r.user_id}`}
+              testID={`leaderboard-row-${r.user_id}`}
             >
               <Text style={styles.medal}>{medal(r.rank) || `${r.rank}.`}</Text>
               {r.picture ? (

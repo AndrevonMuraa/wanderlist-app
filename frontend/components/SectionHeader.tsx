@@ -32,7 +32,7 @@ export default function SectionHeader({
         <TouchableOpacity
           onPress={onSeeAll}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          data-testid={seeAllTestId}
+          testID={seeAllTestId}
         >
           <Text style={styles.link}>See all →</Text>
         </TouchableOpacity>

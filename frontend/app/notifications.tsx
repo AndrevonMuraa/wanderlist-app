@@ -248,7 +248,7 @@ export default function NotificationsScreen() {
                 onPress={handleMarkAllRead}
                 style={styles.markAllButton}
                 activeOpacity={0.7}
-                data-testid="mark-all-read-btn"
+                testID="mark-all-read-btn"
               >
                 <Ionicons name="checkmark-done" size={22} color="#fff" />
               </TouchableOpacity>

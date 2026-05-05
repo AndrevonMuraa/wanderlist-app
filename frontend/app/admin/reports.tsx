@@ -341,7 +341,7 @@ export default function AdminReportsScreen() {
         { backgroundColor: colors.surface },
         report.auto_flagged && styles.autoFlaggedCard,
       ]}
-      data-testid={`report-card-${report.report_id}`}
+      testID={`report-card-${report.report_id}`}
     >
       {/* Auto-flag banner */}
       {report.auto_flagged && (

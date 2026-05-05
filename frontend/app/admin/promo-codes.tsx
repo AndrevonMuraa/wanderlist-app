@@ -492,7 +492,7 @@ export default function AdminPromoCodes() {
           <TouchableOpacity
             onPress={() => setShowCreate(!showCreate)}
             style={styles.headerAdd}
-            data-testid="create-promo-btn"
+            testID="create-promo-btn"
           >
             <Ionicons name={showCreate ? 'close' : 'add'} size={24} color="#fff" />
           </TouchableOpacity>
@@ -504,7 +504,7 @@ export default function AdminPromoCodes() {
         <TouchableOpacity
           style={[styles.tab, activeTab === 'codes' && styles.tabActive]}
           onPress={() => setActiveTab('codes')}
-          data-testid="tab-codes"
+          testID="tab-codes"
         >
           <Ionicons name="ticket-outline" size={16} color={activeTab === 'codes' ? '#f59e0b' : colors.textSecondary} />
           <Text style={[styles.tabText, activeTab === 'codes' && styles.tabTextActive]}>Codes</Text>
@@ -512,7 +512,7 @@ export default function AdminPromoCodes() {
         <TouchableOpacity
           style={[styles.tab, activeTab === 'history' && styles.tabActive]}
           onPress={() => { setActiveTab('history'); fetchEmailHistory(); }}
-          data-testid="tab-history"
+          testID="tab-history"
         >
           <Ionicons name="time-outline" size={16} color={activeTab === 'history' ? '#f59e0b' : colors.textSecondary} />
           <Text style={[styles.tabText, activeTab === 'history' && styles.tabTextActive]}>Dispatch History</Text>
@@ -520,7 +520,7 @@ export default function AdminPromoCodes() {
         <TouchableOpacity
           style={[styles.tab, activeTab === 'template' && styles.tabActive]}
           onPress={() => { setActiveTab('template'); fetchTemplate(); }}
-          data-testid="tab-template"
+          testID="tab-template"
         >
           <Ionicons name="mail-outline" size={16} color={activeTab === 'template' ? '#f59e0b' : colors.textSecondary} />
           <Text style={[styles.tabText, activeTab === 'template' && styles.tabTextActive]}>Email Template</Text>
@@ -535,7 +535,7 @@ export default function AdminPromoCodes() {
       >
         {/* Create Form */}
         {showCreate && (
-          <View style={[styles.createForm, { backgroundColor: colors.surface }]} data-testid="create-promo-form">
+          <View style={[styles.createForm, { backgroundColor: colors.surface }]} testID="create-promo-form">
             <Text style={[styles.formTitle, { color: colors.text }]}>Create new promo code</Text>
 
             <Text style={[styles.label, { color: colors.textSecondary }]}>Code</Text>
@@ -546,7 +546,7 @@ export default function AdminPromoCodes() {
               placeholder="e.g. WANDERMARK-VIP-2026"
               placeholderTextColor={colors.textLight}
               autoCapitalize="characters"
-              data-testid="promo-code-input"
+              testID="promo-code-input"
             />
 
             <Text style={[styles.label, { color: colors.textSecondary }]}>Description</Text>
@@ -556,7 +556,7 @@ export default function AdminPromoCodes() {
               onChangeText={setNewDescription}
               placeholder="e.g. For travel blogger @username"
               placeholderTextColor={colors.textLight}
-              data-testid="promo-desc-input"
+              testID="promo-desc-input"
             />
 
             <Text style={[styles.label, { color: colors.textSecondary }]}>Type</Text>
@@ -564,7 +564,7 @@ export default function AdminPromoCodes() {
               <TouchableOpacity
                 style={[styles.typeBtn, newType === 'lifetime_premium' && styles.typeBtnActive]}
                 onPress={() => setNewType('lifetime_premium')}
-                data-testid="type-lifetime-btn"
+                testID="type-lifetime-btn"
               >
                 <Ionicons name="infinite" size={16} color={newType === 'lifetime_premium' ? '#fff' : colors.text} />
                 <Text style={[styles.typeBtnText, newType === 'lifetime_premium' && styles.typeBtnTextActive]}>
@@ -574,7 +574,7 @@ export default function AdminPromoCodes() {
               <TouchableOpacity
                 style={[styles.typeBtn, newType === 'timed_premium' && styles.typeBtnActive]}
                 onPress={() => setNewType('timed_premium')}
-                data-testid="type-timed-btn"
+                testID="type-timed-btn"
               >
                 <Ionicons name="time" size={16} color={newType === 'timed_premium' ? '#fff' : colors.text} />
                 <Text style={[styles.typeBtnText, newType === 'timed_premium' && styles.typeBtnTextActive]}>
@@ -593,7 +593,7 @@ export default function AdminPromoCodes() {
                   placeholder="e.g. 30, 90, 365"
                   placeholderTextColor={colors.textLight}
                   keyboardType="numeric"
-                  data-testid="promo-duration-input"
+                  testID="promo-duration-input"
                 />
               </>
             )}
@@ -606,14 +606,14 @@ export default function AdminPromoCodes() {
               placeholder="1 = single use, 0 = unlimited"
               placeholderTextColor={colors.textLight}
               keyboardType="numeric"
-              data-testid="promo-maxuses-input"
+              testID="promo-maxuses-input"
             />
 
             <TouchableOpacity
               style={[styles.createBtn, creating && styles.createBtnDisabled]}
               onPress={handleCreate}
               disabled={creating}
-              data-testid="submit-promo-btn"
+              testID="submit-promo-btn"
             >
               <LinearGradient colors={['#f59e0b', '#d97706']} style={styles.createBtnGradient}>
                 {creating ? (
@@ -634,7 +634,7 @@ export default function AdminPromoCodes() {
           <TouchableOpacity
             style={[styles.batchBtn, { backgroundColor: colors.surface }]}
             onPress={() => { setShowBatch(!showBatch); setShowCreate(false); }}
-            data-testid="batch-create-btn"
+            testID="batch-create-btn"
           >
             <Ionicons name="layers-outline" size={18} color="#8b5cf6" />
             <Text style={[styles.batchBtnText, { color: colors.text }]}>Batch create</Text>
@@ -642,7 +642,7 @@ export default function AdminPromoCodes() {
           <TouchableOpacity
             style={[styles.batchBtn, { backgroundColor: colors.surface }]}
             onPress={handleExportCSV}
-            data-testid="export-csv-btn"
+            testID="export-csv-btn"
           >
             <Ionicons name="download-outline" size={18} color="#10b981" />
             <Text style={[styles.batchBtnText, { color: colors.text }]}>Export CSV</Text>
@@ -651,7 +651,7 @@ export default function AdminPromoCodes() {
 
         {/* Batch Create Form */}
         {showBatch && (
-          <View style={[styles.createForm, { backgroundColor: colors.surface }]} data-testid="batch-create-form">
+          <View style={[styles.createForm, { backgroundColor: colors.surface }]} testID="batch-create-form">
             <Text style={[styles.formTitle, { color: colors.text }]}>Batch create promo codes</Text>
             <Text style={[styles.formSubtitle, { color: colors.textSecondary }]}>
               Generate multiple unique codes with a prefix. Format: PREFIX-001, PREFIX-002, etc.
@@ -665,7 +665,7 @@ export default function AdminPromoCodes() {
               placeholder="e.g. INFLUENCER, BLOGGER"
               placeholderTextColor={colors.textLight}
               autoCapitalize="characters"
-              data-testid="batch-prefix-input"
+              testID="batch-prefix-input"
             />
 
             <Text style={[styles.label, { color: colors.textSecondary }]}>Number of codes</Text>
@@ -676,7 +676,7 @@ export default function AdminPromoCodes() {
               placeholder="10"
               placeholderTextColor={colors.textLight}
               keyboardType="numeric"
-              data-testid="batch-count-input"
+              testID="batch-count-input"
             />
 
             <Text style={[styles.label, { color: colors.textSecondary }]}>Description (optional)</Text>
@@ -738,7 +738,7 @@ export default function AdminPromoCodes() {
               style={[styles.createBtn, batchCreating && styles.createBtnDisabled]}
               onPress={handleBatchCreate}
               disabled={batchCreating}
-              data-testid="submit-batch-btn"
+              testID="submit-batch-btn"
             >
               <LinearGradient colors={['#8b5cf6', '#7c3aed']} style={styles.createBtnGradient}>
                 {batchCreating ? (
@@ -796,7 +796,7 @@ export default function AdminPromoCodes() {
           </View>
         ) : (
           codes.map(code => (
-            <View key={code.code_id} style={[styles.codeCard, { backgroundColor: colors.surface }]} data-testid={`promo-card-${code.code_id}`}>
+            <View key={code.code_id} style={[styles.codeCard, { backgroundColor: colors.surface }]} testID={`promo-card-${code.code_id}`}>
               <View style={styles.codeCardHeader}>
                 <View style={styles.codeCardLeft}>
                   <View style={styles.codeNameRow}>
@@ -852,7 +852,7 @@ export default function AdminPromoCodes() {
                 <TouchableOpacity
                   style={styles.actionBtn}
                   onPress={() => handleDelete(code.code_id, code.code)}
-                  data-testid={`delete-promo-${code.code_id}`}
+                  testID={`delete-promo-${code.code_id}`}
                 >
                   <Ionicons name="trash-outline" size={16} color="#ef4444" />
                   <Text style={[styles.actionBtnText, { color: '#ef4444' }]}>Delete</Text>
@@ -861,7 +861,7 @@ export default function AdminPromoCodes() {
                   <TouchableOpacity
                     style={styles.actionBtn}
                     onPress={() => openEmailModal(code.code_id)}
-                    data-testid={`send-email-${code.code_id}`}
+                    testID={`send-email-${code.code_id}`}
                   >
                     <Ionicons name="mail-outline" size={16} color="#f59e0b" />
                     <Text style={[styles.actionBtnText, { color: '#f59e0b' }]}>Send email</Text>
@@ -921,7 +921,7 @@ export default function AdminPromoCodes() {
               style={[styles.historyCard, { backgroundColor: colors.surface }]}
               onPress={() => setExpandedLog(expandedLog === log.log_id ? null : log.log_id)}
               activeOpacity={0.7}
-              data-testid={`history-card-${log.log_id}`}
+              testID={`history-card-${log.log_id}`}
             >
               <View style={styles.historyCardHeader}>
                 <View style={styles.historyCardLeft}>
@@ -1020,7 +1020,7 @@ export default function AdminPromoCodes() {
                 onChangeText={(v) => updateTemplateField('subject', v)}
                 placeholder="Email subject line"
                 placeholderTextColor={colors.textLight}
-                data-testid="template-subject-input"
+                testID="template-subject-input"
               />
 
               <Text style={[styles.label, { color: colors.textSecondary }]}>Heading</Text>
@@ -1030,7 +1030,7 @@ export default function AdminPromoCodes() {
                 onChangeText={(v) => updateTemplateField('heading', v)}
                 placeholder="e.g. You're invited!"
                 placeholderTextColor={colors.textLight}
-                data-testid="template-heading-input"
+                testID="template-heading-input"
               />
 
               <Text style={[styles.label, { color: colors.textSecondary }]}>Subheading</Text>
@@ -1040,7 +1040,7 @@ export default function AdminPromoCodes() {
                 onChangeText={(v) => updateTemplateField('subheading', v)}
                 placeholder="e.g. Explore the world. Collect memories."
                 placeholderTextColor={colors.textLight}
-                data-testid="template-subheading-input"
+                testID="template-subheading-input"
               />
 
               <Text style={[styles.label, { color: colors.textSecondary }]}>Body text</Text>
@@ -1053,7 +1053,7 @@ export default function AdminPromoCodes() {
                 placeholderTextColor={colors.textLight}
                 multiline
                 numberOfLines={4}
-                data-testid="template-body-input"
+                testID="template-body-input"
               />
 
               <Text style={[styles.label, { color: colors.textSecondary }]}>Code label</Text>
@@ -1063,7 +1063,7 @@ export default function AdminPromoCodes() {
                 onChangeText={(v) => updateTemplateField('code_label', v)}
                 placeholder="e.g. Your promo code"
                 placeholderTextColor={colors.textLight}
-                data-testid="template-code-label-input"
+                testID="template-code-label-input"
               />
 
               <Text style={[styles.label, { color: colors.textSecondary }]}>Steps title</Text>
@@ -1073,7 +1073,7 @@ export default function AdminPromoCodes() {
                 onChangeText={(v) => updateTemplateField('steps_title', v)}
                 placeholder="e.g. How to use your code:"
                 placeholderTextColor={colors.textLight}
-                data-testid="template-steps-title-input"
+                testID="template-steps-title-input"
               />
 
               <Text style={[styles.label, { color: colors.textSecondary }]}>Steps</Text>
@@ -1086,7 +1086,7 @@ export default function AdminPromoCodes() {
                     onChangeText={(v) => updateTemplateStep(i, v)}
                     placeholder={`Step ${i + 1}`}
                     placeholderTextColor={colors.textLight}
-                    data-testid={`template-step-${i}-input`}
+                    testID={`template-step-${i}-input`}
                   />
                   {template.steps.length > 1 && (
                     <TouchableOpacity onPress={() => removeTemplateStep(i)} style={styles.templateStepRemove}>
@@ -1095,7 +1095,7 @@ export default function AdminPromoCodes() {
                   )}
                 </View>
               ))}
-              <TouchableOpacity onPress={addTemplateStep} style={styles.templateAddStep} data-testid="template-add-step-btn">
+              <TouchableOpacity onPress={addTemplateStep} style={styles.templateAddStep} testID="template-add-step-btn">
                 <Ionicons name="add-circle-outline" size={18} color="#f59e0b" />
                 <Text style={[styles.templateAddStepText, { color: '#f59e0b' }]}>Add step</Text>
               </TouchableOpacity>
@@ -1107,7 +1107,7 @@ export default function AdminPromoCodes() {
                 onChangeText={(v) => updateTemplateField('footer_text', v)}
                 placeholder="Footer text"
                 placeholderTextColor={colors.textLight}
-                data-testid="template-footer-input"
+                testID="template-footer-input"
               />
 
               <Text style={[styles.label, { color: colors.textSecondary }]}>Support text (HTML allowed)</Text>
@@ -1117,14 +1117,14 @@ export default function AdminPromoCodes() {
                 onChangeText={(v) => updateTemplateField('support_text', v)}
                 placeholder="Contact support text"
                 placeholderTextColor={colors.textLight}
-                data-testid="template-support-input"
+                testID="template-support-input"
               />
 
               <TouchableOpacity
                 style={[styles.createBtn, !templateDirty && styles.createBtnDisabled]}
                 onPress={saveTemplate}
                 disabled={!templateDirty || templateSaving}
-                data-testid="save-template-btn"
+                testID="save-template-btn"
               >
                 <LinearGradient colors={['#f59e0b', '#d97706']} style={styles.createBtnGradient}>
                   {templateSaving ? (
@@ -1141,7 +1141,7 @@ export default function AdminPromoCodes() {
               <TouchableOpacity
                 style={styles.previewBtn}
                 onPress={() => setShowPreview(true)}
-                data-testid="preview-template-btn"
+                testID="preview-template-btn"
               >
                 <LinearGradient colors={['#3b82f6', '#2563eb']} style={styles.createBtnGradient}>
                   <Ionicons name="eye-outline" size={18} color="#fff" />
@@ -1152,7 +1152,7 @@ export default function AdminPromoCodes() {
               <TouchableOpacity
                 style={styles.resetBtn}
                 onPress={resetTemplate}
-                data-testid="reset-template-btn"
+                testID="reset-template-btn"
               >
                 <View style={styles.resetBtnInner}>
                   <Ionicons name="refresh-outline" size={16} color="#ef4444" />
@@ -1179,13 +1179,13 @@ export default function AdminPromoCodes() {
       {/* Email Preview Modal */}
       <Modal visible={showPreview} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
-          <View style={[styles.previewModalContent, { backgroundColor: colors.surface }]} data-testid="preview-modal">
+          <View style={[styles.previewModalContent, { backgroundColor: colors.surface }]} testID="preview-modal">
             <View style={styles.modalHeader}>
               <View style={styles.modalHeaderLeft}>
                 <Ionicons name="eye" size={22} color="#3b82f6" />
                 <Text style={[styles.modalTitle, { color: colors.text }]}>Email Preview</Text>
               </View>
-              <TouchableOpacity onPress={() => setShowPreview(false)} data-testid="close-preview-modal">
+              <TouchableOpacity onPress={() => setShowPreview(false)} testID="close-preview-modal">
                 <Ionicons name="close" size={24} color={colors.textSecondary} />
               </TouchableOpacity>
             </View>
@@ -1217,13 +1217,13 @@ export default function AdminPromoCodes() {
       {/* Email Send Modal */}
       <Modal visible={showEmailModal} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: colors.surface }]} data-testid="email-modal">
+          <View style={[styles.modalContent, { backgroundColor: colors.surface }]} testID="email-modal">
             <View style={styles.modalHeader}>
               <View style={styles.modalHeaderLeft}>
                 <Ionicons name="mail" size={22} color="#f59e0b" />
                 <Text style={[styles.modalTitle, { color: colors.text }]}>Send promo code</Text>
               </View>
-              <TouchableOpacity onPress={() => setShowEmailModal(false)} data-testid="close-email-modal">
+              <TouchableOpacity onPress={() => setShowEmailModal(false)} testID="close-email-modal">
                 <Ionicons name="close" size={24} color={colors.textSecondary} />
               </TouchableOpacity>
             </View>
@@ -1238,7 +1238,7 @@ export default function AdminPromoCodes() {
                 placeholderTextColor={colors.textLight}
                 multiline
                 numberOfLines={4}
-                data-testid="email-recipients-input"
+                testID="email-recipients-input"
               />
 
               <Text style={[styles.label, { color: colors.textSecondary }]}>Subject (optional)</Text>
@@ -1248,7 +1248,7 @@ export default function AdminPromoCodes() {
                 onChangeText={setEmailSubject}
                 placeholder="You've received exclusive WanderMark Premium access!"
                 placeholderTextColor={colors.textLight}
-                data-testid="email-subject-input"
+                testID="email-subject-input"
               />
 
               <Text style={[styles.label, { color: colors.textSecondary }]}>Personal message (optional)</Text>
@@ -1260,7 +1260,7 @@ export default function AdminPromoCodes() {
                 placeholderTextColor={colors.textLight}
                 multiline
                 numberOfLines={3}
-                data-testid="email-message-input"
+                testID="email-message-input"
               />
 
               {emailResult && (
@@ -1280,7 +1280,7 @@ export default function AdminPromoCodes() {
                 style={[styles.createBtn, emailSending && styles.createBtnDisabled]}
                 onPress={handleSendEmails}
                 disabled={emailSending}
-                data-testid="submit-email-btn"
+                testID="submit-email-btn"
               >
                 <LinearGradient colors={['#f59e0b', '#d97706']} style={styles.createBtnGradient}>
                   {emailSending ? (

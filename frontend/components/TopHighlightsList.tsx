@@ -90,14 +90,14 @@ export default function TopHighlightsList() {
           <TouchableOpacity
             onPress={() => setScope('all')}
             style={[styles.scopeChip, scope === 'all' && styles.scopeChipActive]}
-            data-testid="top-scope-all"
+            testID="top-scope-all"
           >
             <Text style={[styles.scopeText, scope === 'all' && styles.scopeTextActive]}>All-time</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setScope('month')}
             style={[styles.scopeChip, scope === 'month' && styles.scopeChipActive]}
-            data-testid="top-scope-month"
+            testID="top-scope-month"
           >
             <Text style={[styles.scopeText, scope === 'month' && styles.scopeTextActive]}>This month</Text>
           </TouchableOpacity>
@@ -112,7 +112,7 @@ export default function TopHighlightsList() {
               key={c}
               onPress={() => setContinent(c)}
               style={[styles.continentChip, continent === c && styles.continentChipActive]}
-              data-testid={`top-continent-${c.toLowerCase()}`}
+              testID={`top-continent-${c.toLowerCase()}`}
             >
               <Text style={[styles.continentText, continent === c && styles.continentTextActive]}>
                 {c === 'Oceania' ? 'Oceania++' : c}
@@ -143,7 +143,7 @@ export default function TopHighlightsList() {
                 style={[styles.row, isFirst && styles.rowFirst]}
                 onPress={() => goToItem(item)}
                 activeOpacity={0.85}
-                data-testid={`top-rank-${rank}`}
+                testID={`top-rank-${rank}`}
               >
                 {renderRankBadge(rank)}
                 <View style={[styles.imageWrap, isFirst && styles.imageWrapFirst]}>

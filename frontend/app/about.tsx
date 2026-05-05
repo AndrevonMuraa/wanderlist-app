@@ -549,7 +549,7 @@ You can filter by destination.`}
             <TouchableOpacity
               onPress={() => setShowBugReport(true)}
               style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 12 }}
-              data-testid="report-bug-link"
+              testID="report-bug-link"
             >
               <Ionicons name="bug-outline" size={16} color={theme.colors.primary} />
               <Text style={{ fontSize: 13, fontWeight: '600', color: theme.colors.primary }}>Report an issue or bug</Text>

@@ -469,7 +469,7 @@ export default function PointsSummary() {
           style={styles.ctaButton} 
           onPress={() => router.push('/leaderboard')}
           activeOpacity={0.8}
-          data-testid="view-leaderboard-btn"
+          testID="view-leaderboard-btn"
         >
           <LinearGradient
             colors={[theme.colors.primary, theme.colors.secondary]}

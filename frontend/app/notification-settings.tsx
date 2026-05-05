@@ -207,7 +207,7 @@ export default function NotificationSettingsScreen() {
               setPermissionGranted(granted);
             }}
             activeOpacity={0.85}
-            data-testid="notif-permission-warning"
+            testID="notif-permission-warning"
           >
             <Ionicons name="warning" size={22} color="#b45309" />
             <View style={styles.permissionTextContainer}>
@@ -228,7 +228,7 @@ export default function NotificationSettingsScreen() {
           <View
             key={row.key}
             style={[styles.row, { backgroundColor: colors.surface }]}
-            data-testid={`${row.testId}-row`}
+            testID={`${row.testId}-row`}
           >
             <View style={[styles.iconContainer, { backgroundColor: row.accent + '1F' }]}>
               <Ionicons name={row.icon} size={20} color={row.accent} />
@@ -244,7 +244,7 @@ export default function NotificationSettingsScreen() {
               onValueChange={() => handleToggle(row.key)}
               disabled={savingKey === row.key}
               color={theme.colors.primary}
-              data-testid={row.testId}
+              testID={row.testId}
             />
           </View>
         ))}

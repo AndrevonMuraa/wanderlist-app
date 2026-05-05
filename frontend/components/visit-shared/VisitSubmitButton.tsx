@@ -28,7 +28,7 @@ export default function VisitSubmitButton({
       disabled={disabled || loading}
       activeOpacity={0.9}
       style={styles.container}
-      data-testid="visit-submit-button"
+      testID="visit-submit-button"
     >
       <LinearGradient
         colors={active ? [theme.colors.primary, theme.colors.secondary] : ['#78909C', '#546E7A']}

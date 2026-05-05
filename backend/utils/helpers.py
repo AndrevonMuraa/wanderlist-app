@@ -270,9 +270,9 @@ async def recalculate_user_points(user_id: str):
         {"_id": 0, "landmark_id": 1, "points_earned": 1, "verified": 1}
     ).to_list(10000)
 
-    landmark_points = sum(v.get("points_earned", 0) for v in visits)
+    landmark_points = sum((v.get("points_earned") or 0) for v in visits)
     verified_landmark_points = sum(
-        v.get("points_earned", 0) for v in visits if v.get("verified")
+        (v.get("points_earned") or 0) for v in visits if v.get("verified")
     )
 
     # 2. Find countries with landmark visits

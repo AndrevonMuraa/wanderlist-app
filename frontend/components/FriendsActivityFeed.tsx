@@ -36,7 +36,7 @@ export default function FriendsActivityFeed() {
   if (items.length === 0) return null;
 
   return (
-    <View style={styles.card} data-testid="friends-activity-feed">
+    <View style={styles.card} testID="friends-activity-feed">
       <Text style={styles.title}>Recent from your crew</Text>
       <View style={styles.list}>
         {items.map((a) => {
@@ -47,12 +47,12 @@ export default function FriendsActivityFeed() {
               style={styles.row}
               activeOpacity={0.85}
               onPress={() => a.visit_id && router.push(`/visit-detail/${a.visit_id}`)}
-              data-testid={`activity-row-${a.visit_id}`}
+              testID={`activity-row-${a.visit_id}`}
             >
               <TouchableOpacity
                 onPress={() => router.push(`/user-profile/${a.user_id}`)}
                 activeOpacity={0.7}
-                data-testid={`activity-avatar-${a.user_id}`}
+                testID={`activity-avatar-${a.user_id}`}
               >
                 {a.user_picture ? (
                   <Image source={{ uri: a.user_picture }} style={styles.avatar} />

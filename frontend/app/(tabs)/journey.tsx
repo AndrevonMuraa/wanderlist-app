@@ -263,7 +263,7 @@ export default function JourneyScreen() {
               <TouchableOpacity
                 onPress={() => setShowShareJourney(true)}
                 activeOpacity={0.7}
-                data-testid="share-journey-btn"
+                testID="share-journey-btn"
                 style={styles.shareIconBtn}
               >
                 <Ionicons name="share-outline" size={20} color={colors.primary} />
@@ -275,7 +275,7 @@ export default function JourneyScreen() {
                 style={[styles.statBoxCompact, { backgroundColor: '#4CAF5010' }]}
                 onPress={() => router.push('/continents')}
                 activeOpacity={0.7}
-                data-testid="stat-continents"
+                testID="stat-continents"
               >
                 <Ionicons name="earth" size={20} color="#4CAF50" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
@@ -288,7 +288,7 @@ export default function JourneyScreen() {
                 style={[styles.statBoxCompact, { backgroundColor: '#4DB8D810' }]}
                 onPress={() => router.push('/my-country-visits')}
                 activeOpacity={0.7}
-                data-testid="stat-countries"
+                testID="stat-countries"
               >
                 <Ionicons name="flag" size={20} color="#4DB8D8" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
@@ -301,7 +301,7 @@ export default function JourneyScreen() {
                 style={[styles.statBoxCompact, { backgroundColor: '#E8785010' }]}
                 onPress={() => router.push('/my-landmark-visits')}
                 activeOpacity={0.7}
-                data-testid="stat-landmarks"
+                testID="stat-landmarks"
               >
                 <Ionicons name="location" size={20} color="#E87850" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.overall.visited}</Text>
@@ -312,7 +312,7 @@ export default function JourneyScreen() {
                 style={[styles.statBoxCompact, { backgroundColor: '#FFD70010' }]}
                 onPress={() => router.push('/points-summary')}
                 activeOpacity={0.7}
-                data-testid="stat-points"
+                testID="stat-points"
               >
                 <Ionicons name="star" size={20} color="#FFD700" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>{progressStats.totalPoints || 0}</Text>
@@ -323,7 +323,7 @@ export default function JourneyScreen() {
                 style={[styles.statBoxCompact, { backgroundColor: rankProgress.currentRank.color + '15' }]}
                 onPress={() => router.push('/ranks')}
                 activeOpacity={0.7}
-                data-testid="stat-rank-level"
+                testID="stat-rank-level"
               >
                 <Ionicons name={rankProgress.currentRank.icon as any} size={32} color={rankProgress.currentRank.color} />
                 <Text style={[styles.statValueCompact, { color: colors.text, fontSize: 14 }]}>{rankProgress.currentRank.name}</Text>
@@ -334,7 +334,7 @@ export default function JourneyScreen() {
                 style={[styles.statBoxCompact, { backgroundColor: '#FFD70010' }]}
                 onPress={() => router.push('/leaderboard')}
                 activeOpacity={0.7}
-                data-testid="stat-leaderboard"
+                testID="stat-leaderboard"
               >
                 <Ionicons name="trophy" size={20} color="#FFD700" />
                 <Text style={[styles.statValueCompact, { color: colors.text }]}>
@@ -458,7 +458,7 @@ export default function JourneyScreen() {
             style={styles.sectionCardRow}
             onPress={() => router.push('/my-landmark-visits')}
             activeOpacity={0.7}
-            data-testid="nav-my-landmark-visits"
+            testID="nav-my-landmark-visits"
           >
             <View style={styles.sectionCardLeft}>
               <View style={[styles.sectionCardIcon, { backgroundColor: '#E8785015' }]}>
@@ -534,7 +534,7 @@ export default function JourneyScreen() {
             style={styles.sectionCardRow}
             onPress={() => router.push('/points-summary')}
             activeOpacity={0.7}
-            data-testid="nav-points-summary"
+            testID="nav-points-summary"
           >
             <View style={styles.sectionCardLeft}>
               <View style={[styles.sectionCardIcon, { backgroundColor: colors.accentYellow + '20' }]}>

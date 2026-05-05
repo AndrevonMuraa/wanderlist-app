@@ -181,7 +181,7 @@ export default function SettingsScreen() {
               style={styles.settingItem}
               onPress={() => router.push('/settings/privacy')}
               activeOpacity={0.7}
-              data-testid="privacy-settings-link"
+              testID="privacy-settings-link"
             >
               <View style={styles.settingItemLeft}>
                 <View style={[styles.settingIcon, { backgroundColor: 'rgba(39, 174, 96, 0.1)' }]}>

@@ -128,7 +128,7 @@ export default function ShareVisitCard({
           onPress={handleShare}
           disabled={sharing}
           activeOpacity={0.85}
-          data-testid="share-visit-card-button"
+          testID="share-visit-card-button"
         >
           <LinearGradient
             colors={['#2E9AB5', '#4DB8D8']}

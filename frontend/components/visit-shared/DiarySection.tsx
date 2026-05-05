@@ -30,7 +30,7 @@ export default function DiarySection({
         <TouchableOpacity
           style={styles.shareDiaryToggle}
           onPress={() => onShareDiaryChange(!shareDiary)}
-          data-testid="share-diary-toggle"
+          testID="share-diary-toggle"
         >
           <Ionicons
             name={shareDiary ? 'eye' : 'eye-off'}

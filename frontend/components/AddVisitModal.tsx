@@ -123,7 +123,7 @@ export default function AddVisitModal({
       {/* Visibility Section */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Who Can See This Visit?</Text>
-        <View style={styles.visibilityRow} data-testid="visibility-selector">
+        <View style={styles.visibilityRow} testID="visibility-selector">
           {VISIBILITY_OPTIONS.map((opt) => {
             const isActive = visibility === opt.value;
             return (
@@ -132,7 +132,7 @@ export default function AddVisitModal({
                 style={[styles.visibilityChip, isActive && styles.visibilityChipActive]}
                 onPress={() => setVisibility(opt.value)}
                 activeOpacity={0.7}
-                data-testid={`visibility-option-${opt.value}`}
+                testID={`visibility-option-${opt.value}`}
               >
                 <Ionicons
                   name={opt.icon}

@@ -66,7 +66,7 @@ export default function FriendOverlap({ friendUserId, friendName }: FriendOverla
   const firstName = (friendName || '').split(' ')[0] || 'They';
 
   return (
-    <View style={styles.card} data-testid="friend-overlap-card">
+    <View style={styles.card} testID="friend-overlap-card">
       <View style={styles.headerRow}>
         <View style={styles.iconWrap}>
           <Ionicons name="footsteps" size={17} color={theme.colors.primary} />
@@ -90,7 +90,7 @@ export default function FriendOverlap({ friendUserId, friendName }: FriendOverla
             style={styles.tile}
             onPress={() => router.push(`/compare/${it.landmark_id}/${friendUserId}`)}
             activeOpacity={0.85}
-            data-testid={`overlap-${it.landmark_id}`}
+            testID={`overlap-${it.landmark_id}`}
           >
             <View style={styles.tileImageWrap}>
               {it.their_photo_url ? (

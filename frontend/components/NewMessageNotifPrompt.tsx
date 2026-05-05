@@ -106,7 +106,7 @@ export const NewMessageNotifPrompt: React.FC = () => {
   if (!visible) return null;
 
   return (
-    <View style={styles.card} data-testid="new-message-notif-prompt">
+    <View style={styles.card} testID="new-message-notif-prompt">
       <LinearGradient
         colors={['rgba(77, 184, 216, 0.10)', 'rgba(232, 220, 200, 0.20)']}
         start={{ x: 0, y: 0 }}
@@ -127,7 +127,7 @@ export const NewMessageNotifPrompt: React.FC = () => {
               disabled={busy}
               activeOpacity={0.85}
               style={styles.enableBtn}
-              data-testid="notif-prompt-enable-btn"
+              testID="notif-prompt-enable-btn"
             >
               <Text style={styles.enableText}>{busy ? 'Enabling…' : 'Turn on'}</Text>
             </TouchableOpacity>
@@ -135,7 +135,7 @@ export const NewMessageNotifPrompt: React.FC = () => {
               onPress={handleDismiss}
               activeOpacity={0.7}
               style={styles.laterBtn}
-              data-testid="notif-prompt-later-btn"
+              testID="notif-prompt-later-btn"
             >
               <Text style={styles.laterText}>Not now</Text>
             </TouchableOpacity>
