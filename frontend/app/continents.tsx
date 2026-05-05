@@ -270,17 +270,15 @@ export default function ContinentsScreen() {
                       <Text style={styles.statsText}>
                         {continent.countries} Countries  |  {continent.landmarks} Landmarks
                       </Text>
-                      {/* Show progress bar for all continents */}
-                      {continent.visited !== undefined && (
-                        <View style={styles.progressRow}>
-                          <View style={styles.progressBarContainer}>
-                            <View style={[styles.progressBarFill, { width: `${continent.percentage || 0}%` }]} />
-                          </View>
-                          <Text style={styles.progressLabel}>
-                            {continent.visited || 0}/{continent.countries} visited
-                          </Text>
+                      {/* Progress bar — always rendered (defaults to 0 if backend hasn't returned stats yet) */}
+                      <View style={styles.progressRow}>
+                        <View style={styles.progressBarContainer}>
+                          <View style={[styles.progressBarFill, { width: `${continent.percentage || 0}%` }]} />
                         </View>
-                      )}
+                        <Text style={styles.progressLabel}>
+                          {continent.visited || 0}/{continent.countries} visited
+                        </Text>
+                      </View>
                     </View>
                     <View style={[styles.arrowCircle, { backgroundColor: continent.accentColor }]}>
                       <Ionicons name="arrow-forward" size={20} color="#fff" />
@@ -428,13 +426,14 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: theme.colors.primary,
   },
-  // Guide CTA
+  // Guide CTA — compact framing so the strip doesn't dominate the spacing
+  // between the Tabs and the Continent cards (≈55% less vertical room than before)
   guideCta: {
     marginHorizontal: theme.spacing.md,
-    marginTop: 8,
-    marginBottom: 8,
+    marginTop: 4,
+    marginBottom: 4,
     paddingHorizontal: 14,
-    paddingVertical: 10,
+    paddingVertical: 4,
     backgroundColor: theme.colors.primary + '08',
     borderRadius: 12,
   },
