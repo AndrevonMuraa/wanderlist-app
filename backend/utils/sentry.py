@@ -192,3 +192,32 @@ def track_photo_health_alert(
             )
     except Exception:
         pass
+
+
+# ---------- Store Readiness watchdog ----------
+# Fires once per incident when the App Store readiness checklist has had at
+# least one *failure* (red blocker) for longer than the grace window — gives
+# you time to fix transient problems (e.g. backend redeploying, photo health
+# scheduler not yet run) before paging anyone.
+def track_store_readiness_alert(
+    failures: int,
+    warnings: int,
+    failed_check_ids: list,
+    failing_since_iso: str,
+    hours_failing: float,
+) -> None:
+    try:
+        with sentry_sdk.new_scope() as scope:
+            scope.set_tag("store_readiness", "sustained_failure")
+            scope.set_extra("failures", failures)
+            scope.set_extra("warnings", warnings)
+            scope.set_extra("failed_check_ids", failed_check_ids)
+            scope.set_extra("failing_since", failing_since_iso)
+            scope.set_extra("hours_failing", round(hours_failing, 1))
+            sentry_sdk.capture_message(
+                f"Store readiness: {failures} blocker(s) failing for "
+                f"{hours_failing:.1f}h — {', '.join(failed_check_ids) or 'unknown'}",
+                level="warning",
+            )
+    except Exception:
+        pass

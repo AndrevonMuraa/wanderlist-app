@@ -237,6 +237,27 @@ Critical security surface covered: tier lockdown (10), 2FA (11), lockdown (9), y
 - `/app/trust-center/terms.md` written from scratch (20 sections) — App Store 3.1.2 compliant EULA with Apple-specific clauses (§11), subscription auto-renewal, Norwegian governing law + Oslo tingrett venue, mandatory consumer carve-out for EU/EEA/UK/Swiss, DSA appeal rights, EU ODR platform link
 - `/app/trust-center/README.md` — deployment + in-app linking checklist
 
+### May 5, 2026 — Store Readiness watchdog (Sentry + push paging) ✅
+Goal: catch readiness regressions (CDN goes down, demo account deleted, photo health stale, Sentry DSN cleared, ...) before App Review does. Layered on top of the dashboard so the same checks now run on a schedule and *page* if they stay broken.
+
+Backend:
+- `routes/store_readiness.py` — extracted `compute_readiness()` from the route handler so the scheduler can reuse the exact same logic. Added `GET /admin/store-readiness/watchdog` (state: failing_since / alerted / last counts / interval / grace) and `POST /admin/store-readiness/watchdog/run-now` (manual trigger for paging dry-runs).
+- `utils/store_readiness_scheduler.py` — async background task that runs every `STORE_READINESS_INTERVAL_HOURS` (default 6h). State machine on `store_readiness_state` (single doc, `_id="global"`):
+  - failures==0 → fully reset (`failing_since=null`, `alerted=false`)
+  - failures>0 first time → stamp `failing_since=now`, no page yet
+  - failures>0 repeat → keep `failing_since`, only page if elapsed ≥ `STORE_READINESS_ALERT_AFTER_HOURS` (default 24h) AND `alerted=false`
+  - one page per incident: Sentry warning + in-app notif + Expo push to every super-admin, then `alerted=true` so we don't re-page
+- `utils/sentry.py:track_store_readiness_alert()` — tagged `store_readiness=sustained_failure` with extras (failed_check_ids, hours_failing, failing_since) so you can chart "blocker incidents over time" in Sentry dashboards.
+- Wired into `server.py` startup; killable via `STORE_READINESS_SCHEDULER_DISABLED=1`.
+
+Frontend:
+- `app/admin/store-readiness.tsx` — new "Sentry watchdog" card right under the hero. Shows current state ("All clear · next scan in Xh" / "Failure timer started Xh ago, will page after Yh" / "Paged super-admins N times — won't re-page until clear") plus one-tap "Run watchdog now" link.
+- `app/notifications.tsx` — added `store_readiness_alert` notification type with orange `rocket` icon; tapping deep-links to `/admin/store-readiness`.
+
+Tests: `tests/test_store_readiness_watchdog.py` — 4 cases covering all state machine transitions (no-op reset, first-failure no-page, within-grace no-page, past-grace single-page-with-no-double-page). All 4 + the original 3 readiness tests = **7/7 green**.
+
+End-to-end verified: `POST /watchdog/run-now` returns the persisted state, dashboard reflects it instantly, watchdog starts on backend boot (`store_readiness watchdog started (interval=6.0h, grace=24.0h)`).
+
 ### May 5, 2026 — Store Readiness dashboard ✅
 Goal: single super-admin screen that answers "can we ship Build N today?" — no more cross-checking 6 spreadsheets.
 

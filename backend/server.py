@@ -87,6 +87,8 @@ async def startup_db_indexes():
     await create_indexes()
     from utils.photo_health_scheduler import start_scheduler
     start_scheduler()
+    from utils.store_readiness_scheduler import start_scheduler as start_readiness_scheduler
+    start_readiness_scheduler()
 
 
 @app.on_event("shutdown")

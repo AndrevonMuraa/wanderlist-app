@@ -31,8 +31,9 @@ def _check(id_: str, label: str, ok: bool, *, hint: str = "", warn: bool = False
     return {"id": id_, "label": label, "status": "warn" if warn else "fail", "hint": hint}
 
 
-@router.get("/admin/store-readiness")
-async def store_readiness(_: User = Depends(get_super_admin_user)) -> dict[str, Any]:
+async def compute_readiness() -> dict[str, Any]:
+    """Run all server-side readiness checks. Used by both the API endpoint and
+    the background watchdog scheduler."""
     checks: list[dict[str, Any]] = []
 
     # ---- Legal / privacy ------------------------------------------------
@@ -126,3 +127,41 @@ async def store_readiness(_: User = Depends(get_super_admin_user)) -> dict[str, 
         },
         "generated_at": datetime.now(timezone.utc).isoformat(),
     }
+
+
+@router.get("/admin/store-readiness")
+async def store_readiness(_: User = Depends(get_super_admin_user)) -> dict[str, Any]:
+    return await compute_readiness()
+
+
+@router.get("/admin/store-readiness/watchdog")
+async def store_readiness_watchdog_state(
+    _: User = Depends(get_super_admin_user),
+) -> dict[str, Any]:
+    """Returns the current watchdog state — `failing_since`, whether an alert
+    was already paged for the active incident, etc. Surfaced on the dashboard
+    so the operator knows when the next Sentry/push will fire."""
+    from utils.store_readiness_scheduler import GRACE_HOURS, INTERVAL_HOURS
+
+    state = await db.store_readiness_state.find_one(
+        {"_id": "global"}, {"_id": 0},
+    ) or {}
+    return {
+        "interval_hours": INTERVAL_HOURS,
+        "grace_hours": GRACE_HOURS,
+        "state": state,
+    }
+
+
+@router.post("/admin/store-readiness/watchdog/run-now")
+async def store_readiness_watchdog_run_now(
+    _: User = Depends(get_super_admin_user),
+) -> dict[str, Any]:
+    """Manually trigger one watchdog cycle — useful for verifying paging works
+    end-to-end without waiting for the 6-hour interval."""
+    from utils.store_readiness_scheduler import evaluate_once
+
+    state = await evaluate_once()
+    # Strip _id for JSON
+    state.pop("_id", None)
+    return {"state": state}

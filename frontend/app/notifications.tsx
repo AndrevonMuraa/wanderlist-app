@@ -136,6 +136,9 @@ export default function NotificationsScreen() {
       case 'photo_health_alert':
         router.push('/admin/photo-health' as any);
         break;
+      case 'store_readiness_alert':
+        router.push('/admin/store-readiness' as any);
+        break;
       case 'content_removed':
       case 'content_hidden':
       case 'warning_issued':
@@ -185,6 +188,8 @@ export default function NotificationsScreen() {
         return { name: 'mail', color: '#3B82F6' };
       case 'photo_health_alert':
         return { name: 'images', color: '#0EA5E9' };
+      case 'store_readiness_alert':
+        return { name: 'rocket', color: '#F97316' };
       case 'trusted_traveler_earned':
         return { name: 'shield-checkmark', color: '#10B981' };
       default:

@@ -31,6 +31,18 @@ type Summary = {
 };
 type Report = { checks: Check[]; summary: Summary; generated_at: string };
 
+type WatchdogState = {
+  last_check_at?: string;
+  last_failures?: number;
+  last_warnings?: number;
+  last_failed_ids?: string[];
+  failing_since?: string | null;
+  alerted?: boolean;
+  alerted_at?: string;
+  alerted_admin_count?: number;
+};
+type WatchdogPayload = { interval_hours: number; grace_hours: number; state: WatchdogState };
+
 const STATUS_META: Record<CheckStatus, { icon: keyof typeof Ionicons.glyphMap; color: string; label: string }> = {
   ok:   { icon: 'checkmark-circle', color: '#10b981', label: 'Pass' },
   warn: { icon: 'alert-circle',     color: '#f59e0b', label: 'Warn' },
@@ -120,6 +132,8 @@ export default function StoreReadinessScreen() {
   const router = useRouter();
 
   const [report, setReport] = useState<Report | null>(null);
+  const [watchdog, setWatchdog] = useState<WatchdogPayload | null>(null);
+  const [running, setRunning] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -130,16 +144,25 @@ export default function StoreReadinessScreen() {
     setError(null);
     try {
       const token = await getToken();
-      const r = await fetch(`${BACKEND_URL}/api/admin/store-readiness`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!r.ok) {
-        let detail = `HTTP ${r.status}`;
-        try { const j = await r.json(); detail = typeof j.detail === 'string' ? j.detail : detail; } catch (_e) { /* ignore */ }
+      const [rRep, rWd] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/admin/store-readiness`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch(`${BACKEND_URL}/api/admin/store-readiness/watchdog`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+      if (!rRep.ok) {
+        let detail = `HTTP ${rRep.status}`;
+        try { const j = await rRep.json(); detail = typeof j.detail === 'string' ? j.detail : detail; } catch (_e) { /* ignore */ }
         throw new Error(detail);
       }
-      const data: Report = await r.json();
+      const data: Report = await rRep.json();
       setReport(data);
+      if (rWd.ok) {
+        const wd: WatchdogPayload = await rWd.json();
+        setWatchdog(wd);
+      }
     } catch (e: any) {
       setError(e?.message || 'Failed to load readiness');
     } finally {
@@ -147,6 +170,22 @@ export default function StoreReadinessScreen() {
       setRefreshing(false);
     }
   }, []);
+
+  const runWatchdog = useCallback(async () => {
+    setRunning(true);
+    try {
+      const token = await getToken();
+      await fetch(`${BACKEND_URL}/api/admin/store-readiness/watchdog/run-now`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      await fetchReport();
+    } catch (e: any) {
+      setError(e?.message || 'Watchdog run failed');
+    } finally {
+      setRunning(false);
+    }
+  }, [fetchReport]);
 
   useEffect(() => { fetchReport(); }, [fetchReport]);
 
@@ -238,6 +277,43 @@ export default function StoreReadinessScreen() {
         </View>
       ) : null}
 
+      {/* Watchdog status — paging policy */}
+      {watchdog ? (
+        <View style={[styles.card, { backgroundColor: colors.surface, paddingHorizontal: 16, paddingVertical: 14 }]} testID="readiness-watchdog-card">
+          <View style={styles.schedRow}>
+            <Ionicons
+              name={watchdog.state.alerted ? 'notifications' : 'pulse'}
+              size={18}
+              color={watchdog.state.alerted ? '#dc2626' : colors.textSecondary}
+            />
+            <Text style={[styles.schedTitle, { color: colors.text }]}>Sentry watchdog</Text>
+          </View>
+          <Text style={[styles.checkHint, { color: colors.textSecondary, marginTop: 2 }]}>
+            {watchdog.state.alerted
+              ? `Paged super-admins ${watchdog.state.alerted_admin_count ?? 0} time(s). Will not re-page until incident clears.`
+              : watchdog.state.failing_since
+              ? `Failure timer started ${formatRelative(watchdog.state.failing_since)}. Will page Sentry + super-admins after ${watchdog.grace_hours}h.`
+              : `All clear. Next scheduled scan every ${watchdog.interval_hours}h. Pages super-admins if any blocker stays red for ${watchdog.grace_hours}h.`}
+          </Text>
+          {watchdog.state.last_check_at ? (
+            <Text style={[styles.checkHint, { color: colors.textSecondary, marginTop: 4, opacity: 0.7 }]}>
+              Last check {formatRelative(watchdog.state.last_check_at)} · {watchdog.state.last_failures ?? 0} blocker{(watchdog.state.last_failures ?? 0) === 1 ? '' : 's'} · {watchdog.state.last_warnings ?? 0} warning{(watchdog.state.last_warnings ?? 0) === 1 ? '' : 's'}
+            </Text>
+          ) : null}
+          <TouchableOpacity
+            style={[styles.linkBtn, running && styles.disabled]}
+            disabled={running}
+            onPress={runWatchdog}
+            testID="readiness-watchdog-run-btn"
+          >
+            <Ionicons name="play" size={14} color={colors.primary} />
+            <Text style={[styles.linkBtnText, { color: colors.primary }]}>
+              {running ? 'Running…' : 'Run watchdog now'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
+
       {/* Server-side checks */}
       <Text style={[styles.sectionTitle, { color: colors.text }]}>Server checks</Text>
       <View style={[styles.card, { backgroundColor: colors.surface }]} testID="readiness-server-card">
@@ -324,6 +400,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fee2e2', padding: 10, borderRadius: 10, marginBottom: 12,
   },
   errorText: { color: '#7f1d1d', fontSize: 13, fontWeight: '700', flex: 1 },
+
+  schedRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  schedTitle: { fontSize: 15, fontWeight: '800' },
+  linkBtn: {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    alignSelf: 'flex-start', paddingVertical: 6, marginTop: 4,
+  },
+  linkBtnText: { fontWeight: '700', fontSize: 13 },
+  disabled: { opacity: 0.5 },
 
   footnote: { fontSize: 12, lineHeight: 18, fontStyle: 'italic', marginTop: 4 },
 });
