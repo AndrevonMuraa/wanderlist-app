@@ -232,13 +232,36 @@ Critical security surface covered: tier lockdown (10), 2FA (11), lockdown (9), y
 
 
 
-### P3 — Ops
-- Rename GitHub repo `wanderlist-app` → `wandermark-app`
-
 ### May 5, 2026 — Trust Center (Privacy + Terms) ✅
 - `/app/trust-center/privacy.md` written from scratch (13 sections, 209 lines) — GDPR/CCPA compliant, covers 2FA secrets, admin action logs with IP, trust events, brute-force lockout data, RevenueCat subscription data, Expo push tokens, MongoDB Atlas + Render EU hosting, 30-day deactivation grace period, automated decision-making (Trusted Traveler) disclosure
 - `/app/trust-center/terms.md` written from scratch (20 sections) — App Store 3.1.2 compliant EULA with Apple-specific clauses (§11), subscription auto-renewal, Norwegian governing law + Oslo tingrett venue, mandatory consumer carve-out for EU/EEA/UK/Swiss, DSA appeal rights, EU ODR platform link
 - `/app/trust-center/README.md` — deployment + in-app linking checklist
+
+### May 5, 2026 — Store Readiness dashboard ✅
+Goal: single super-admin screen that answers "can we ship Build N today?" — no more cross-checking 6 spreadsheets.
+
+Backend (`routes/store_readiness.py`):
+- `GET /api/admin/store-readiness` (super-admin only) — runs 9 server-side checks in one request:
+  - `legal-privacy`, `legal-terms` — file-existence on `/app/trust-center/`
+  - `legal-cdn` (warn) — `EXPO_PUBLIC_TRUST_CENTER_URL` set
+  - `auth-reviewer-account` — `test@wandermark.app` exists in `users`
+  - `auth-super-admin` — at least one `role: admin`
+  - `moderation-queue` (warn) — pending reports count < 10
+  - `photo-health-fresh` (warn) — `photo_health_runs` last finished < 25h ago (with naive→UTC tz coercion to handle Mongo strip)
+  - `sentry-backend` — `SENTRY_DSN` env var set
+  - `subscription-pro-tier` (warn) — at least one Pro user (so reviewers can verify entitlement)
+- Returns `{checks[], summary{total,passed,warnings,failures,ready_to_submit}, generated_at}`
+- 3 new pytest tests in `tests/test_store_readiness.py` (auth gate, moderator block, payload shape) — all green
+
+Frontend (`app/admin/store-readiness.tsx`):
+- Hero card: rocket icon, "Ready to submit" / "Ready — with warnings" / "N blockers before submit", color-coded green/amber/red
+- Two grouped sections: "Server checks" (live from API) + "Build & environment" (read from `Constants.expoConfig`/`process.env`)
+- Build checks gracefully degrade on web/Android: iOS-only fields show "(verified at EAS build)" warn instead of false-fail when running on non-iOS
+- "Manual checklist" card lists App Store Connect tasks the dashboard cannot self-verify (privacy nutrition labels, screenshots, demo creds in App Review section, etc)
+- Pull-to-refresh, status pills (Pass/Warn/Fail), full `testID` coverage on every check row
+- Wired into `app/admin/index.tsx` as orange `rocket-outline` MenuCard above Security Dashboard, super-admin only
+
+Verified end-to-end: backend pytest 3/3 green, screenshot confirms the screen renders with hero + 9 server checks + 4 build checks; admin index shows the new Store Readiness tile.
 
 ### May 5, 2026 — Photo system robustness (Plan C: Full opprydding) ✅
 **Bug**: Ingrid Berg's "French Riviera" community highlight + visit detail rendered empty white (light bg) and empty black (fullscreen viewer dark bg). Root cause: 2 dead Unsplash URLs (`photo-1568797629192-...` + `photo-1543349689-...`) silently 404 → `<Image>` failed without `onError` handler → background bled through. The 2nd dead URL was used as cover photo on **20 seed visits** (Eiffel, Louvre, Colosseum, Mount Fuji, Grand Canyon, Statue of Liberty, etc).

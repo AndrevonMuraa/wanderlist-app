@@ -352,6 +352,13 @@ export default function AdminDashboard() {
           {isSuperAdmin && (
             <>
               <MenuCard
+                title="Store Readiness"
+                description="Live App Store launch checklist — can we submit Build N?"
+                icon="rocket-outline"
+                color="#F97316"
+                onPress={() => router.push('/admin/store-readiness' as any)}
+              />
+              <MenuCard
                 title="Security Dashboard"
                 description="Live view of 2FA coverage, lockouts, admin actions & lockdown"
                 icon="speedometer-outline"
