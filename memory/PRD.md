@@ -1,5 +1,8 @@
 # WanderMark — Product Requirements Document
 
+> **Production URLs & hosting**: see `/app/memory/PRODUCTION_URLS.md` (single source of truth — Render API, Atlas, Sentry, Trust Center CDN, GitHub).
+> Future agents must read that file before asking the user for any URL.
+
 ## Original Problem Statement
 Bring "WanderMark" travel app (React Native + Expo + FastAPI + MongoDB) to a production-ready state for App Store launch.
 

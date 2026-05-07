@@ -1,5 +1,7 @@
 # WanderMark — Build & Deploy Guide
 
+> **All production URLs (Render, Atlas, Sentry, Trust Center, GitHub) live in `/app/memory/PRODUCTION_URLS.md` — read that first.**
+
 ## Oversikt: Hva skjer hvor?
 
 | System | Hva | Hvordan |
