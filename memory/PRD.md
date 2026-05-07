@@ -389,6 +389,24 @@ Frontend:
 
 Verified: `/api/admin/photos/healthcheck` returns 200 with `scanned: 14, broken_count: 0` for super-admin; `/admin/photo-health` web preview renders the green healthy state with Rescan button.
 
+### May 7, 2026 — E2E Testing Package (seed script + GitHub-ready checklist) ✅
+Goal: ship a self-contained, idempotent QA package for Build 86 — one command to seed a realistic production-shaped DB + one Markdown file pasteable into a GitHub Issue.
+
+Backend:
+- `/app/backend/scripts/seed_e2e_data.py` — production-safe, namespaced via `_seed_source: "e2e"`. Supports `--dry-run` and `--wipe`. Idempotent: re-seeding wipes prior seed artifacts before recreating.
+- 7 personas seeded/refreshed: Admin, Pro (heavy), Pro #2, Free, Suspended (suspended_until=+30d), Brand-new (empty), Moderator
+- Realistic data spread: 50+ landmark visits across 5 continents (privacy mix public/friends/private), 4 country visits, 6 custom user-created visits, 3 mutual friendships + 2 pending requests, 8 pending reports (4 reasons), 3 open support tickets, 2 hidden visits (mod-banner UX), points recomputed for all e2e users
+- Verified locally: 4× login curl checks pass (free/pro2/new); suspended login OK but `/auth/me` returns 403 with expected banner
+
+Docs:
+- `/app/E2E_TEST_PLAN.md` — full rewrite for Build 86. ~250 lines, organised by persona (Brand-new / Free / Pro / Pro #2 / Moderator / Super-admin) + cross-cutting flows (push, privacy, Trust Center, rate limiting, Sentry, anti-cheat, App Store compliance) + 1-min smoke regression. Pasteable as GitHub Issue with `- [ ]` checkboxes.
+- `/app/memory/test_credentials.md` — fully refreshed with new personas, post-seed state (visit counts, points, friendships), and re-seed instructions for both local + Render shell.
+
+How to run on Render:
+```
+cd /opt/render/project/src/backend && python -m scripts.seed_e2e_data
+```
+
 ### P4 — App Store (remaining)
 - Deploy Trust Center to static host (Vercel / Cloudflare Pages) with `/privacy` and `/terms` URLs — after deploy, remember to add `EXPO_PUBLIC_TRUST_CENTER_URL=https://wandermark.app` (or the CDN domain) to `frontend/.env`
 - Link Privacy + Terms on registration screen (required checkbox), Settings → Legal, Pro purchase screen

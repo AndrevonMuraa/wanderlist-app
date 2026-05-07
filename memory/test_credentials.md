@@ -1,42 +1,88 @@
 # WanderMark test credentials
 
-## Active accounts (use for testing)
+> Last updated: May 2026 — Build 86 — populated by `scripts/seed_e2e_data.py`.
+> All accounts marked `seed_source: "e2e"` are namespaced and safe to wipe via
+> `python -m scripts.seed_e2e_data --wipe`.
 
-### Admin (superadmin)
+## Active accounts
+
+### Super Admin (super-admin)
 - **Email**: `test@wandermark.app`
 - **Password**: `Test1234!`
-- Role: superadmin — has full admin panel access
+- Role: `admin` (super-admin) — full admin panel + 2FA + lockdown
 - `user_id`: `user_dd46a314f120`
+- `subscription_tier`: `pro`
+- `trusted_traveler`: true
 
-### Pro user (most test data)
+### Pro user — heavy traveller (most data)
 - **Email**: `testpro@wandermark.app`
 - **Password**: `Test1234!`
-- Has multiple visits, photos, diary entries — good for feed/compare/overlap testing
 - `user_id`: `user_6ef7ed0c470a`
-- Username: `protester`
-- `subscription_tier`: `pro` (confirmed/patched Apr-2026 — prior seed had free)
+- Username: `testpro`
+- `subscription_tier`: `pro`
+- `trusted_traveler`: true
+- ~28 verified visits, 3 country visits, 4 custom visits, 370 pts (post-seed)
+
+### Pro user #2 — friend graph
+- **Email**: `testpro2@wandermark.app`
+- **Password**: `Test1234!`
+- `subscription_tier`: `pro`
+- ~12 verified visits, 2 custom visits — friend of testpro + testfree
+
+### Free user — Freemium gate testing
+- **Email**: `testfree@wandermark.app`
+- **Password**: `Test1234!`
+- `subscription_tier`: `free`
+- 8 visits, 1 country visit — friend of testpro + testpro2
+- Has 3 open support tickets + 8 pending reports as reporter
+- Has pending friend request to admin
+
+### Suspended user — moderation/auth flow
+- **Email**: `testsuspended@wandermark.app`
+- **Password**: `Test1234!`
+- Login succeeds, but `/auth/me` returns 403 with suspension banner.
+- `suspended_until`: now + 30 days
+- `suspended_reason`: "E2E test — suspension flow validation"
+
+### Brand-new user — empty-state flows
+- **Email**: `testnew@wandermark.app`
+- **Password**: `Test1234!`
+- No visits, no friends, no points — exercises empty-state UI everywhere.
 
 ### Moderator
 - **Email**: `mod@wandermark.app`
 - **Password**: `Test1234!`
-- Role: moderator — can moderate reports
+- Role: `moderator`
 - `user_id`: `user_d2cee3abc41d`
 
-### Social Tester (admin's only friend in seed)
-- **user_id**: `user_ff9a3f370f6b`
+## Friend graph (after seed)
+- testpro ↔ testpro2 (accepted)
+- testpro ↔ testfree (accepted)
+- testpro2 ↔ testfree (accepted)
+- testfree → admin (pending request)
+- testpro2 → admin (pending request)
 
-### Free tier test user (for Pro-gate regression)
-- **Email**: `freetestuser_msg@wandermark.app`
-- **Password**: `Free1234!`
-- `subscription_tier`: `free`
-- Created Apr-2026 to verify Free users can access `/api/messages/*` after Pro-gate removal.
+## Seed artifacts
+- 8 pending reports filed by `testfree` against pro/pro2 visits (covers all 4 reasons)
+- 3 open support tickets from `testfree` (photo upload / subscription / lost visits)
+- 2 visits flagged `hidden=true` (covers the "hidden by moderator" banner UX)
 
-## Backend URL
-- Preview: `https://memory-recap-2026.preview.emergentagent.com`
+## Backend
 - All endpoints prefixed with `/api/`
+- MongoDB: `MONGO_URL` from `/app/backend/.env`
+
+## How to (re)seed
+```bash
+# Local / preview
+cd /app/backend && python -m scripts.seed_e2e_data
+
+# Wipe all e2e data (does NOT delete users — only their seeded content)
+cd /app/backend && python -m scripts.seed_e2e_data --wipe
+
+# Production Render shell
+cd /opt/render/project/src/backend && python -m scripts.seed_e2e_data
+```
 
 ## Notes
-- Admin (test@) is friends ONLY with Social Tester (`user_ff9a3f370f6b`) — NOT with testpro. Verify via `GET /api/friends`.
-- Admin currently has 0 shared-landmark visits in seed — happy-path compare tests require seeding a shared visit first.
-- For compare-page testing: admin (test@) → /compare/{shared_landmark_id}/user_ff9a3f370f6b
-- Sentry is ACTIVE (DSN configured) — test events appear in aarum/wandermark-api project.
+- Sentry DSN configured in preview env — events appear in `aarum/wandermark-api`.
+- Suspension reason text shown on UI may differ from DB — UI surfaces the friendly fallback "Violation of community guidelines" for App-Store-friendly tone; the DB still stores the precise reason for audit.
