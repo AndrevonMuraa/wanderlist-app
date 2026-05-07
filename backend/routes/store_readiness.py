@@ -110,6 +110,28 @@ async def compute_readiness() -> dict[str, Any]:
         warn=True,
     ))
 
+    # ---- E2E seed cleanliness ------------------------------------------
+    # Count namespaced e2e CONTENT artefacts. We deliberately skip the
+    # `users` collection — the wipe endpoint preserves login credentials by
+    # design so the operator can re-seed without recreating accounts. Inert
+    # user docs without visits/reports never surface on public pages.
+    e2e_content_total = 0
+    for coll in (
+        "visits", "user_created_visits", "country_visits",
+        "friends", "friend_requests", "reports", "support_tickets",
+    ):
+        e2e_content_total += await db[coll].count_documents({"_seed_source": "e2e"})
+    checks.append(_check(
+        "e2e-data-clean", "Production DB free of e2e seed content",
+        e2e_content_total == 0,
+        hint=(
+            f"{e2e_content_total} namespaced e2e content document(s) live — wipe via /admin/e2e-status before submitting"
+            if e2e_content_total
+            else "No _seed_source='e2e' content artefacts in DB (dormant user logins preserved)"
+        ),
+        warn=True,
+    ))
+
     # ---- Summary --------------------------------------------------------
     total = len(checks)
     ok = sum(1 for c in checks if c["status"] == "ok")
