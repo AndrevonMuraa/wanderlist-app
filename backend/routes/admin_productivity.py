@@ -82,7 +82,7 @@ async def explain_user(
     # Counts the same signals the trust calculator uses
     verified_visits = await db.visits.count_documents({"user_id": user_id, "verified": True})
     warnings_recent = await db.admin_logs.count_documents({
-        "target_user_id": user_id, "action": "warn",
+        "target_user_id": user_id, "action": {"$in": ["warn", "bulk_warn"]},
         "created_at": {"$gte": now - timedelta(days=90)},
     })
     hidden_recent = await db.visits.count_documents({

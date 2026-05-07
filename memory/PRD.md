@@ -441,6 +441,27 @@ Frontend (`app/admin/e2e-status.tsx`):
 - Pro: `testpro@wandermark.app` / `Test1234!`
 - Moderator: `mod@wandermark.app` / `Test1234!`
 
+### May 2026 — Admin Productivity (Batches A-F) ✅
+Backend (`routes/admin_productivity.py` wired at `/api`):
+- `GET /api/admin/recent-activity?limit=N` — denormalised admin_logs feed (admin & moderator-readable)
+- `GET /api/admin/users/{user_id}/explain` — per-user trust criteria + suspension state
+- `POST /api/admin/users/bulk-action` — batched suspend/unsuspend/warn/message (≤200 uids)
+- Explainer counts both `warn` and `bulk_warn` admin_log actions for `no_warnings_90d` criterion
+
+Frontend wiring (web + native):
+- `components/AdminProductivity.tsx` — `<ActivityTicker>`, `<UserExplainer>`, `<ExportButton>`, `<SplitView>`
+- `components/CommandPalette.tsx` — Cmd+K palette, `g r/s/e/u/t/h/d` shortcuts, `?` overlay (web only)
+- `components/ToastHost.tsx` — global toast w/ Undo (mounted once in `_layout.tsx`)
+- `utils/biometricGate.ts` — `useBiometricGate()` hook; FaceID on iOS, no-op on web
+- `app/admin/users.tsx` — bulk-select toggle, multi-select checkboxes, bulk action bar (Warn/Suspend 7d/Message), inline `<UserExplainer>` modal via "?" button per row, ExportButton (CSV/JSON)
+- `app/admin/reports.tsx` — `<ExportButton>` for super-admin
+- `app/admin/index.tsx` — `<ActivityTicker limit=8>` under "Activity Summary"
+- `app/admin/e2e-status.tsx` — `useBiometricGate()` wraps wipe (FaceID on device, web confirm)
+- `app/admin/lockdown.tsx` — `useBiometricGate()` wraps enable
+
+Testing (iteration_34): 17/17 backend pytest + 6/6 frontend Playwright flows GREEN.
+Pending: Batch G (Lock-screen widget via WidgetKit) deferred to separate thread before EAS prod build.
+
 ## Critical Notes
 - **RN-Web**: use `testID` not `data-testid`
 - **Suspension bypass**: super-admins can still call `/me` while suspended (prevents self-lockout)
