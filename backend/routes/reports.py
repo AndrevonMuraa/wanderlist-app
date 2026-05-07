@@ -6,6 +6,7 @@ from datetime import datetime, timezone, timedelta
 from utils.db import db
 from utils.auth import get_current_user
 from utils.image_validate import normalize_photos
+from utils.helpers import send_push_notification
 from models.all import User, ReportCreate, Report
 
 
@@ -75,6 +76,31 @@ async def create_report(report_data: ReportCreate, current_user: User = Depends(
     report_dict["reporter_trusted"] = is_trusted
 
     await db.reports.insert_one(report_dict)
+
+    # Notify all admins/moderators with a categorised push so they can act
+    # inline (Hide / Warn / Dismiss) right from the iOS notification banner.
+    try:
+        staff = db.users.find(
+            {"role": {"$in": ["admin", "moderator"]}},
+            {"_id": 0, "user_id": 1},
+        )
+        async for s in staff:
+            await send_push_notification(
+                user_id=s["user_id"],
+                title="🚩 New report" + (" · trusted reporter" if is_trusted else ""),
+                body=f"{report_data.reason} — {report_data.target_name[:40]}",
+                data={
+                    "type": "report_received",
+                    "report_id": report_dict["report_id"],
+                    "content_type": report_data.report_type,
+                    "content_id": report_data.target_id,
+                    "target_user_id": report_dict.get("target_user_id", ""),
+                    "categoryIdentifier": "report_received",
+                },
+            )
+    except Exception:
+        # Notification best-effort — never block report creation
+        pass
 
     return {"message": "Report submitted successfully", "report_id": report_dict["report_id"], "priority": report_dict["priority"]}
 

@@ -166,6 +166,9 @@ async def send_push_notification(user_id: str, title: str, body: str, data: dict
         "body": body,
         "data": data or {},
     }
+    # Forward iOS notification category for inline action buttons (Hide/Warn/etc.)
+    if data and data.get("categoryIdentifier"):
+        message["categoryId"] = data["categoryIdentifier"]
 
     try:
         async with httpx.AsyncClient() as http_client:

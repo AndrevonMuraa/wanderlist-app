@@ -12,6 +12,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { BACKEND_URL } from '../../utils/config';
 import AdminSystemHealth from '../../components/AdminSystemHealth';
+import { ActivityTicker } from '../../components/AdminProductivity';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -399,6 +400,7 @@ export default function AdminDashboard() {
 
         {/* Activity Summary */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>Activity Summary</Text>
+        <ActivityTicker limit={8} />
         <View style={[styles.summaryCard, { backgroundColor: colors.surface }]}>
           <View style={styles.summaryRow}>
             <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>New users this month</Text>

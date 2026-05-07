@@ -10,6 +10,8 @@ import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import PushTapRouter from '../components/PushTapRouter';
+import ToastHost from '../components/ToastHost';
+import CommandPalette from '../components/CommandPalette';
 import { initSentry } from '../utils/sentry';
 import '../i18n'; // Initialize i18n
 
@@ -56,6 +58,8 @@ function RootLayout() {
                 <PurchaseProvider>
                   <UnreadCountsProvider>
                     <PushTapRouter />
+                    <ToastHost />
+                    <CommandPalette />
                     <Stack screenOptions={{ headerShown: false }} />
                   </UnreadCountsProvider>
                 </PurchaseProvider>
