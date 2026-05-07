@@ -1,0 +1,16 @@
+{
+  "type": "widget",
+  "icon": "../../assets/images/icon.png",
+  "colors": {
+    "$accent": { "color": "#4DB8D8", "darkColor": "#20B2AA" },
+    "widgetBackground": { "color": "#FFFFFF", "darkColor": "#0F172A" },
+    "wmRed": { "color": "#DC2626", "darkColor": "#F87171" },
+    "wmAmber": { "color": "#F59E0B", "darkColor": "#FBBF24" },
+    "wmInk": { "color": "#0F172A", "darkColor": "#F1F5F9" }
+  },
+  "deploymentTarget": "16.4",
+  "frameworks": ["SwiftUI", "WidgetKit"],
+  "entitlements": {
+    "com.apple.security.application-groups": ["group.com.wandermark.app.adminwidget"]
+  }
+}

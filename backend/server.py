@@ -82,6 +82,8 @@ from routes import e2e_status  # noqa: E402
 api_router.include_router(e2e_status.router)
 from routes import admin_productivity  # noqa: E402
 api_router.include_router(admin_productivity.router)
+from routes import admin_widget  # noqa: E402
+api_router.include_router(admin_widget.router)
 
 app.include_router(api_router)
 

@@ -13,6 +13,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { BACKEND_URL } from '../../utils/config';
 import AdminSystemHealth from '../../components/AdminSystemHealth';
 import { ActivityTicker } from '../../components/AdminProductivity';
+import { setupWidgetBackgroundFetch, refreshWidgetSnapshot } from '../../utils/widgetBridge';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -80,6 +81,11 @@ export default function AdminDashboard() {
       return;
     }
     fetchStats();
+    // Keep iOS lock-screen / home-screen widget data fresh for super-admins.
+    if (user?.role === 'admin') {
+      setupWidgetBackgroundFetch();
+      refreshWidgetSnapshot();
+    }
   }, [user]);
 
   const fetchStats = async () => {
