@@ -11,6 +11,8 @@ import theme, { gradients } from '../../styles/theme';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { BACKEND_URL } from '../../utils/config';
+import { UserExplainer, ExportButton } from '../../components/AdminProductivity';
+import { showToast } from '../../components/ToastHost';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -47,10 +49,97 @@ export default function AdminUsersScreen() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [filter, setFilter] = useState<string | null>(params.filter as string || null);
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
+  const [explainUserId, setExplainUserId] = useState<string | null>(null);
+  const isSuperAdmin = currentUser?.role === 'admin';
 
   useEffect(() => {
     fetchUsers();
   }, [page, filter]);
+
+  const toggleSelect = (uid: string) => {
+    setSelected((s) => {
+      const n = new Set(s);
+      n.has(uid) ? n.delete(uid) : n.add(uid);
+      return n;
+    });
+  };
+
+  const exitSelectionMode = () => { setSelectionMode(false); setSelected(new Set()); };
+
+  const runBulk = async (action: 'suspend' | 'unsuspend' | 'warn' | 'message') => {
+    if (selected.size === 0) return;
+    let reason: string | null = null;
+    let body: string | null = null;
+    let durationDays: number | undefined;
+    if (action === 'message') {
+      body = Platform.OS === 'web'
+        // eslint-disable-next-line no-alert
+        ? window.prompt(`Send message to ${selected.size} user(s):`)
+        : await new Promise<string | null>((resolve) => {
+            Alert.prompt?.('Bulk message', `Send to ${selected.size} user(s):`, [
+              { text: 'Cancel', style: 'cancel', onPress: () => resolve(null) },
+              { text: 'Send', onPress: (t?: string) => resolve(t || null) },
+            ]);
+          });
+      if (!body) return;
+    } else if (action === 'suspend' || action === 'warn') {
+      reason = Platform.OS === 'web'
+        // eslint-disable-next-line no-alert
+        ? window.prompt(`Reason for ${action} (${selected.size} users):`, '')
+        : await new Promise<string | null>((resolve) => {
+            Alert.prompt?.(`Bulk ${action}`, `Reason (${selected.size} users):`, [
+              { text: 'Cancel', style: 'cancel', onPress: () => resolve(null) },
+              { text: 'Confirm', onPress: (t?: string) => resolve(t || '') },
+            ]);
+          });
+      if (reason === null) return;
+      if (action === 'suspend') durationDays = 7;
+    } else {
+      const ok = Platform.OS === 'web'
+        // eslint-disable-next-line no-alert
+        ? window.confirm(`Unsuspend ${selected.size} user(s)?`)
+        : await new Promise<boolean>((resolve) => {
+            Alert.alert('Unsuspend', `Unsuspend ${selected.size} user(s)?`, [
+              { text: 'Cancel', style: 'cancel', onPress: () => resolve(false) },
+              { text: 'Unsuspend', onPress: () => resolve(true) },
+            ]);
+          });
+      if (!ok) return;
+    }
+    setBulkBusy(true);
+    try {
+      const token = await getToken();
+      const res = await fetch(`${BACKEND_URL}/api/admin/users/bulk-action`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_ids: Array.from(selected),
+          action,
+          reason: reason ?? undefined,
+          body: body ?? undefined,
+          duration_days: durationDays,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        showToast({
+          message: `${data.succeeded ?? 0} ${action} OK${data.failed ? ` · ${data.failed} failed` : ''}`,
+          severity: data.failed ? 'warn' : 'success',
+        });
+        exitSelectionMode();
+        fetchUsers();
+      } else {
+        showToast({ message: data.detail || `Bulk ${action} failed`, severity: 'error' });
+      }
+    } catch (e: any) {
+      showToast({ message: e?.message || 'Network error', severity: 'error' });
+    } finally {
+      setBulkBusy(false);
+    }
+  };
 
   const fetchUsers = async (search?: string) => {
     try {
@@ -163,21 +252,47 @@ export default function AdminUsersScreen() {
     const isSuperAdmin = currentUser?.role === 'admin';
     const isSuspended = !!(user.suspended_until && new Date(user.suspended_until) > new Date());
     const warningCount = user.warning_count || 0;
+    const isSelected = selected.has(user.user_id);
     return (
     <TouchableOpacity 
-      style={[styles.userCard, { backgroundColor: colors.surface }]}
-      onPress={() => router.push(`/admin/user-moderation?id=${user.user_id}` as any)}
+      style={[
+        styles.userCard,
+        { backgroundColor: colors.surface },
+        selectionMode && isSelected && { borderWidth: 2, borderColor: colors.primary },
+      ]}
+      onPress={() => {
+        if (selectionMode) toggleSelect(user.user_id);
+        else router.push(`/admin/user-moderation?id=${user.user_id}` as any);
+      }}
+      onLongPress={() => {
+        if (!selectionMode) { setSelectionMode(true); toggleSelect(user.user_id); }
+      }}
       activeOpacity={0.7}
       testID={`admin-user-card-${user.user_id}`}
     >
       <View style={styles.userHeader}>
-        <View style={[styles.avatar, { backgroundColor: colors.primary + '30' }]}>
-          {user.picture ? (
-            <Text style={styles.avatarText}>{user.name.charAt(0).toUpperCase()}</Text>
-          ) : (
-            <Ionicons name="person" size={24} color={colors.primary} />
-          )}
-        </View>
+        {selectionMode ? (
+          <View
+            style={[
+              styles.checkbox,
+              {
+                backgroundColor: isSelected ? colors.primary : 'transparent',
+                borderColor: isSelected ? colors.primary : colors.border,
+              },
+            ]}
+            testID={`bulk-checkbox-${user.user_id}`}
+          >
+            {isSelected && <Ionicons name="checkmark" size={16} color="#fff" />}
+          </View>
+        ) : (
+          <View style={[styles.avatar, { backgroundColor: colors.primary + '30' }]}>
+            {user.picture ? (
+              <Text style={styles.avatarText}>{user.name.charAt(0).toUpperCase()}</Text>
+            ) : (
+              <Ionicons name="person" size={24} color={colors.primary} />
+            )}
+          </View>
+        )}
         <View style={styles.userInfo}>
           <View style={styles.nameRow}>
             <Text style={[styles.userName, { color: colors.text }]} numberOfLines={1}>
@@ -325,6 +440,16 @@ export default function AdminUsersScreen() {
           )
         )}
         
+        {isSuperAdmin && (
+          <TouchableOpacity
+            style={[styles.actionButton, { backgroundColor: colors.primary + '20' }]}
+            onPress={(e) => { (e as any).stopPropagation?.(); setExplainUserId(user.user_id); }}
+            testID={`explain-user-${user.user_id}`}
+          >
+            <Ionicons name="help-circle-outline" size={16} color={colors.primary} />
+          </TouchableOpacity>
+        )}
+
         <Ionicons name="chevron-forward" size={20} color={colors.textLight} />
       </View>
     </TouchableOpacity>
@@ -358,7 +483,17 @@ export default function AdminUsersScreen() {
             <Ionicons name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>User Management</Text>
-          <View style={{ width: 40 }} />
+          {isSuperAdmin ? (
+            <TouchableOpacity
+              onPress={() => (selectionMode ? exitSelectionMode() : setSelectionMode(true))}
+              style={styles.headerBackButton}
+              testID="bulk-toggle-btn"
+            >
+              <Ionicons name={selectionMode ? 'close' : 'checkbox-outline'} size={22} color="#fff" />
+            </TouchableOpacity>
+          ) : (
+            <View style={{ width: 40 }} />
+          )}
         </View>
       </LinearGradient>
 
@@ -381,7 +516,64 @@ export default function AdminUsersScreen() {
             </TouchableOpacity>
           )}
         </View>
+        {isSuperAdmin && users.length > 0 && (
+          <View style={{ marginTop: 8 }}>
+            <ExportButton
+              data={users}
+              columns={[
+                { key: 'user_id', label: 'user_id' },
+                { key: 'email', label: 'email' },
+                { key: 'name', label: 'name' },
+                { key: 'username', label: 'username' },
+                { key: 'role', label: 'role' },
+                { key: 'subscription_tier', label: 'tier' },
+                { key: 'is_banned', label: 'banned' },
+                { key: 'visit_count', label: 'visits' },
+                { key: 'points', label: 'points' },
+                { key: 'created_at', label: 'created_at' },
+              ]}
+              filename={`users-page-${page}`}
+              testID="users-export"
+            />
+          </View>
+        )}
       </View>
+
+      {/* Bulk action toolbar */}
+      {selectionMode && (
+        <View style={[styles.bulkBar, { backgroundColor: colors.primary }]} testID="bulk-action-bar">
+          <Text style={styles.bulkBarCount}>{selected.size} selected</Text>
+          <View style={styles.bulkBarActions}>
+            <TouchableOpacity
+              style={[styles.bulkBtn, { opacity: selected.size === 0 || bulkBusy ? 0.5 : 1 }]}
+              disabled={selected.size === 0 || bulkBusy}
+              onPress={() => runBulk('warn')}
+              testID="bulk-warn-btn"
+            >
+              <Ionicons name="warning-outline" size={14} color="#fff" />
+              <Text style={styles.bulkBtnText}>Warn</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.bulkBtn, { opacity: selected.size === 0 || bulkBusy ? 0.5 : 1 }]}
+              disabled={selected.size === 0 || bulkBusy}
+              onPress={() => runBulk('suspend')}
+              testID="bulk-suspend-btn"
+            >
+              <Ionicons name="pause-circle-outline" size={14} color="#fff" />
+              <Text style={styles.bulkBtnText}>Suspend 7d</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.bulkBtn, { opacity: selected.size === 0 || bulkBusy ? 0.5 : 1 }]}
+              disabled={selected.size === 0 || bulkBusy}
+              onPress={() => runBulk('message')}
+              testID="bulk-message-btn"
+            >
+              <Ionicons name="chatbubble-outline" size={14} color="#fff" />
+              <Text style={styles.bulkBtnText}>Message</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
 
       {/* Filters */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersScroll}>
@@ -439,6 +631,9 @@ export default function AdminUsersScreen() {
           <View style={styles.bottomSpacer} />
         </ScrollView>
       )}
+      {explainUserId ? (
+        <UserExplainer userId={explainUserId} onClose={() => setExplainUserId(null)} />
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -627,5 +822,48 @@ const styles = StyleSheet.create({
   },
   bottomSpacer: {
     height: 40,
+  },
+  checkbox: {
+    width: 28,
+    height: 28,
+    borderRadius: 6,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 8,
+  },
+  bulkBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    gap: 10,
+  },
+  bulkBarCount: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '800',
+    letterSpacing: 0.3,
+  },
+  bulkBarActions: {
+    flexDirection: 'row',
+    gap: 6,
+    flexWrap: 'wrap',
+    justifyContent: 'flex-end',
+  },
+  bulkBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  bulkBtnText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '800',
   },
 });

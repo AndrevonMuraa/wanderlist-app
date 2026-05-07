@@ -1,0 +1,38 @@
+{
+  "summary": "Iteration 34 — Admin Productivity wiring (bulk-actions, ExportButton, UserExplainer, ActivityTicker, CommandPalette, ToastHost, biometric gate). Backend: 17/17 pytest pass on https://wandermark-legal.preview.emergentagent.com targeting routes/admin_productivity.py + lockdown/e2e regression. Frontend (web): all 6 critical flows pass — bulk mode w/ 2 selections shows action bar; UserExplainer modal renders criteria + explainer-close; CSV export triggers real download (users-page-1-2026-05-07.csv); /admin ActivityTicker renders 8 ticker rows; Cmd+K palette opens, filters 'reports' → 'Reports queue', Escape closes; /admin/reports has reports-export+export-csv. No console errors observed.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/admin/users/bulk-action (warn) vs /api/admin/users/{id}/explain", "issue": "Bulk endpoint inserts admin_logs.action='bulk_warn' but explain endpoint counts only action='warn' for the no_warnings_90d criterion. Result: bulk-warn does not flip the explainer's 'no warnings in 90d' indicator. Single-user warn endpoint (routes/moderation.py) is unaffected. Suggested fix: change explain query to `action: {$in: ['warn','bulk_warn']}` OR have bulk store action='warn' with a separate `source: 'bulk'` field."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_admin_productivity.py",
+    "/app/test_reports/pytest/iteration_34_admin_productivity.xml"
+  ],
+  "action_items": [
+    "(Minor) Reconcile bulk-warn vs warn action naming so explainer 'no_warnings_90d' counter reflects bulk warnings — change either explain query or bulk insert label.",
+    "All other wired features (bulk-actions UI, ExportButton CSV/JSON, UserExplainer modal, ActivityTicker, CommandPalette Meta/Ctrl+K, ToastHost, biometric noop on web for wipe/lockdown) verified WORKING end-to-end."
+  ],
+  "critical_code_review_comments": [
+    "routes/admin_productivity.py:158 — moderator-vs-admin guard logic uses `target.get('role')=='admin' and actor.role!='admin'`. This correctly blocks moderators from bulk-touching admins, but a 'super_admin' role variant (if added later) would also need to bypass; current code is admin-vs-admin only. Acceptable for current role model.",
+    "routes/admin_productivity.py:84-86 — explain endpoint counts only `action: 'warn'` in admin_logs. Inconsistent with bulk endpoint (writes 'bulk_warn'). See backend_issues.minor.",
+    "routes/admin_productivity.py:186 — notification_id uses `now.timestamp()` + uid prefix: not strictly unique under burst inserts in same millisecond for same uid; uuid4() preferred for production scale.",
+    "routes/admin_productivity.py — recent-activity uses `target_user_id` but elsewhere the codebase uses `target_id`. Pre-existing data quirk noted in agent_to_agent_context_note; target_name renders empty for legacy rows. Consider a one-time migration."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_admin_productivity.py (new — 17 tests)"
+  ],
+  "success_rate": {"backend": "100% (17/17)", "frontend": "100% (6/6 critical flows)"},
+  "test_credentials": "Used /app/memory/test_credentials.md credentials: test@wandermark.app, mod@wandermark.app, testpro@wandermark.app — all working.",
+  "seed_data_creation": "None — bulk-action tests issued real warn/suspend/unsuspend/message against testpro@wandermark.app; all auto-clean (unsuspend+test_message intent reset). One stray notification + admin_logs row remains under target_user=user_6ef7ed0c470a (testpro) — harmless audit trail.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend test file /app/backend/tests/test_admin_productivity.py is the authoritative regression for admin_productivity.py — run with `BASE_URL=https://wandermark-legal.preview.emergentagent.com python -m pytest tests/test_admin_productivity.py -v`. Frontend admin pages on web require localStorage seeding of `auth_token`/`access_token`/`token`+`user`+`onboarding_complete` keys after a fetch /api/auth/login, then navigate to /admin/users etc. CommandPalette responds to both Meta+K and Ctrl+K. CSV export DOES emit a real browser download event (verified via page.expect_download).",
+  "rca_of_the_issue": "Only finding: bulk-warn does not increment the explainer's 'no_warnings_90d' counter because the bulk endpoint logs action='bulk_warn' while the explain query filters action='warn'. RCA: divergent action vocabulary between routes/admin_productivity.py (bulk_*) and routes/moderation.py (single, plain action names). Reproduce: POST /api/admin/users/bulk-action with action='warn' against any uid → GET /api/admin/users/{uid}/explain → criteria.no_warnings_90d.value remains unchanged. Mitigation: union the action filter OR normalize the stored action label."
+}

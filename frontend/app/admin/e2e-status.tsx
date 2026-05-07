@@ -18,6 +18,7 @@ import { useRouter } from 'expo-router';
 import { BACKEND_URL } from '../../utils/config';
 import { getToken } from '../../utils/token';
 import { useTheme } from '../../contexts/ThemeContext';
+import { useBiometricGate } from '../../utils/biometricGate';
 
 type Count = { collection: string; label: string; count: number };
 type Persona = {
@@ -66,6 +67,7 @@ export default function E2EStatusScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [wiping, setWiping] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const guard = useBiometricGate();
 
   const fetchStatus = useCallback(async () => {
     try {
@@ -89,9 +91,10 @@ export default function E2EStatusScreen() {
 
   const confirmWipe = () => {
     const message = `This will permanently delete ALL namespaced e2e seed data:\n\n• ${data?.total ?? 0} document(s) across ${data?.counts.length ?? 0} collections\n• ${data?.hidden_visits ?? 0} hidden visit(s)\n\nUser accounts (logins) will be PRESERVED. Real production users are never touched.\n\nThis cannot be undone. Continue?`;
+    const proceed = () => guard('Confirm e2e seed-data wipe', doWipe);
     if (Platform.OS === 'web') {
       // eslint-disable-next-line no-alert
-      if (window.confirm(message)) doWipe();
+      if (window.confirm(message)) proceed();
       return;
     }
     Alert.alert(
@@ -99,7 +102,7 @@ export default function E2EStatusScreen() {
       message,
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Wipe', style: 'destructive', onPress: doWipe },
+        { text: 'Wipe', style: 'destructive', onPress: proceed },
       ],
     );
   };

@@ -11,6 +11,7 @@ import theme from '../../styles/theme';
 import { useTheme } from '../../contexts/ThemeContext';
 import { BACKEND_URL } from '../../utils/config';
 import { useAuth } from '../../contexts/AuthContext';
+import { ExportButton } from '../../components/AdminProductivity';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -664,6 +665,28 @@ export default function AdminReportsScreen() {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
           }
         >
+          {isSuperAdmin && (
+            <View style={{ marginBottom: 8 }}>
+              <ExportButton
+                data={reports}
+                columns={[
+                  { key: 'report_id', label: 'report_id' },
+                  { key: 'report_type', label: 'type' },
+                  { key: 'reason', label: 'reason' },
+                  { key: 'status', label: 'status' },
+                  { key: 'priority', label: 'priority' },
+                  { key: 'reporter_id', label: 'reporter_id' },
+                  { key: 'target_id', label: 'target_id' },
+                  { key: 'target_name', label: 'target' },
+                  { key: 'created_at', label: 'created_at' },
+                  { key: 'reviewed_at', label: 'reviewed_at' },
+                  { key: 'reviewed_by_name', label: 'reviewed_by' },
+                ]}
+                filename={`reports-${statusFilter ?? 'all'}`}
+                testID="reports-export"
+              />
+            </View>
+          )}
           {reports.map((report) => (
             <ReportCard key={report.report_id} report={report} />
           ))}

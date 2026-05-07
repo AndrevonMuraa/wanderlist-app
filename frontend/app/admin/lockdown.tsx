@@ -13,6 +13,7 @@ import { useRouter } from 'expo-router';
 import { BACKEND_URL } from '../../utils/config';
 import { getToken } from '../../utils/token';
 import { useTheme } from '../../contexts/ThemeContext';
+import { useBiometricGate } from '../../utils/biometricGate';
 
 type LockdownState = {
   admin_lockdown: boolean;
@@ -51,6 +52,7 @@ export default function LockdownScreen() {
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const guard = useBiometricGate();
 
   const refresh = useCallback(async () => {
     try {
@@ -71,7 +73,7 @@ export default function LockdownScreen() {
         {
           text: 'Freeze everything',
           style: 'destructive',
-          onPress: async () => {
+          onPress: () => guard('Confirm emergency lockdown', async () => {
             setBusy(true); setError(null);
             try {
               const next = await api.post('/api/admin/lockdown/enable');
@@ -79,7 +81,7 @@ export default function LockdownScreen() {
             } catch (e: any) {
               setError(e?.message || 'Could not enable');
             } finally { setBusy(false); }
-          },
+          }),
         },
       ],
     );
