@@ -380,6 +380,13 @@ export default function AdminDashboard() {
                 onPress={() => router.push('/admin/photo-health' as any)}
               />
               <MenuCard
+                title="E2E Seed Data"
+                description="Inspect & wipe seeded test personas before App Store review"
+                icon="flask-outline"
+                color="#14B8A6"
+                onPress={() => router.push('/admin/e2e-status' as any)}
+              />
+              <MenuCard
                 title="Emergency Lockdown"
                 description="Freeze all moderator/admin write actions in one tap"
                 icon="lock-closed-outline"

@@ -78,6 +78,8 @@ from routes import photo_health  # noqa: E402
 api_router.include_router(photo_health.router)
 from routes import store_readiness  # noqa: E402
 api_router.include_router(store_readiness.router)
+from routes import e2e_status  # noqa: E402
+api_router.include_router(e2e_status.router)
 
 app.include_router(api_router)
 

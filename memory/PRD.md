@@ -407,6 +407,22 @@ How to run on Render:
 cd /opt/render/project/src/backend && python -m scripts.seed_e2e_data
 ```
 
+### May 7, 2026 — Admin E2E Status panel + Wipe button ✅
+Goal: super-admin can see at a glance how much e2e seed data is live in prod and wipe it in one tap before App Store review.
+
+Backend (`routes/e2e_status.py`):
+- `GET  /api/admin/e2e-status` — per-collection counts (users / visits / custom / country / friends / requests / reports / tickets), hidden visit count, full personas roster (email, role, tier, trusted, suspended). Super-admin only.
+- `POST /api/admin/e2e-status/wipe` — destructive: removes every `_seed_source: "e2e"` doc from 11 collections, KEEPS user logins. Super-admin only.
+- 5 pytest cases (auth gate / mod 403 / shape / wipe gate / wipe-then-clean roundtrip) — all green.
+
+Frontend (`app/admin/e2e-status.tsx`):
+- Hero card flips green ("Clean — no e2e data live") / teal (`N e2e document(s) live · M personas · K hidden`).
+- Per-collection counts list with 0/active pill colouring.
+- Persona roster with role/tier/trusted/suspended badge column.
+- Render shell + CLI wipe code blocks (selectable on web).
+- Big red destructive "Wipe all N e2e document(s)" button with native Alert (`Platform.OS === 'web'` falls back to `window.confirm`).
+- Wired into admin index as `flask-outline` MenuCard (super-admin only).
+
 ### P4 — App Store (remaining)
 - Deploy Trust Center to static host (Vercel / Cloudflare Pages) with `/privacy` and `/terms` URLs — after deploy, remember to add `EXPO_PUBLIC_TRUST_CENTER_URL=https://wandermark.app` (or the CDN domain) to `frontend/.env`
 - Link Privacy + Terms on registration screen (required checkbox), Settings → Legal, Pro purchase screen
