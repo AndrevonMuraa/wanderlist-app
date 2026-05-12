@@ -182,7 +182,7 @@ struct SmallView: View {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text("\(p)")
                     .font(.system(size: 36, weight: .heavy, design: .rounded))
-                    .foregroundStyle(p > 0 ? Color("wmRed") : Color("wmInk"))
+                    .foregroundStyle(p > 0 ? Color.red : Color.primary)
                 Text("reports")
                     .font(.system(size: 11, weight: .semibold))
                     .foregroundStyle(.secondary)
@@ -190,7 +190,7 @@ struct SmallView: View {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text("\(t)")
                     .font(.system(size: 18, weight: .heavy, design: .rounded))
-                    .foregroundStyle(Color("wmAmber"))
+                    .foregroundStyle(t > 0 ? Color.orange : Color.primary)
                 Text("tickets")
                     .font(.system(size: 10, weight: .semibold))
                     .foregroundStyle(.secondary)
@@ -219,12 +219,12 @@ struct MediumView: View {
                 Spacer(minLength: 4)
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text("\(p)").font(.system(size: 32, weight: .heavy, design: .rounded))
-                        .foregroundStyle(p > 0 ? Color("wmRed") : Color("wmInk"))
+                        .foregroundStyle(p > 0 ? Color.red : Color.primary)
                     Text("reports").font(.system(size: 11)).foregroundStyle(.secondary)
                 }
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text("\(t)").font(.system(size: 18, weight: .heavy, design: .rounded))
-                        .foregroundStyle(Color("wmAmber"))
+                        .foregroundStyle(t > 0 ? Color.orange : Color.primary)
                     Text("tickets").font(.system(size: 10)).foregroundStyle(.secondary)
                 }
             }
@@ -280,13 +280,13 @@ struct LargeView: View {
                 StatBlock(
                     label: "PENDING REPORTS",
                     value: p,
-                    color: p > 0 ? Color("wmRed") : Color("wmInk"),
+                    color: p > 0 ? Color.red : Color.primary,
                     icon: "flag.fill"
                 )
                 StatBlock(
                     label: "OPEN TICKETS",
                     value: t,
-                    color: t > 0 ? Color("wmAmber") : Color("wmInk"),
+                    color: t > 0 ? Color.orange : Color.primary,
                     icon: "envelope.fill"
                 )
             }
@@ -341,7 +341,7 @@ private struct StatBlock: View {
         .padding(10)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color("widgetBackground").opacity(0.6))
+                .fill(Color.secondary.opacity(0.12))
         )
     }
 }
@@ -366,8 +366,8 @@ struct WMEntryView: View {
         }
         .widgetURL(deepLinkURL())
         .containerBackground(for: .widget) {
-            // Lock-screen families ignore this; home-screen families use it.
-            Color("widgetBackground")
+            // Use system widget background that auto-adapts to light/dark.
+            Color(uiColor: .systemBackground)
         }
     }
 }
