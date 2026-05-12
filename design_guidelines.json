@@ -1,232 +1,140 @@
 {
-  "project": "WanderMark",
-  "version": "2.0",
-  "status_analysis": {
-    "philosophy": "Clean, light, and neutral ('ren, lys, nøytral') with a 'Penthouse window looking out over the Maldivean sea' aesthetic. Premium, calm, interactive, with sand-to-ocean gradient accents.",
-    "surfaces_audit": [
-      {
-        "surface": "1. Community tab (/community.tsx)",
-        "current": "Uses a solid gradient CTA block to link to the highlight. Followed by 3 horizontal carousels.",
-        "issue": "User explicitly requested the highlight to be an integrated section, not just a link.",
-        "recommendation": "Replace the 'Featured Link' gradient box with the actual CommunityHighlightHero card at the very top. This integrates the 'View of the day' directly into the page. Apply 'Window Card' styling to the carousels below."
-      },
-      {
-        "surface": "2. Community Highlight dedicated page (/community-highlights.tsx)",
-        "current": "Standard hero image, user row, Bulky action bar for like/comment.",
-        "issue": "Action bar feels heavy. User row shadow is generic black. Lacks the 'premium penthouse' framing.",
-        "recommendation": "Apply the 'Penthouse Window' treatment to the user row. Convert the Like/Comment action bar into floating, glass-like pills (white with 90% opacity, barely-there sand border). Add a 'matte-frame' inner border to the Hero image."
-      },
-      {
-        "surface": "3. Top 10 all-time page (/community-highlights/top.tsx)",
-        "current": "2-column MediaCard grid with basic dark rank badges.",
-        "issue": "Lacks the premium 'wow' factor suitable for an all-time leaderboard.",
-        "recommendation": "Upgrade MediaCard to 'Window Card' DNA. Make the top 3 rank badges use the ocean-to-sand gradient background, and add a subtle gold/sand glow behind them."
-      },
-      {
-        "surface": "4. Social tab (/(tabs)/social.tsx)",
-        "current": "Contains CommunityHighlightHero, Leaderboard, Feed preview with standard shadows.",
-        "issue": "Card shadows use standard black (#000), which feels slightly heavy and contrasts with the light/neutral goal.",
-        "recommendation": "Replace all standard Surface shadows with the warm 'Sand Shadow' (shadowColor: '#C9A961' or '#E8DCC8'). Add the 1px sand-tinted inner border to all cards to mimic framed glass."
-      },
-      {
-        "surface": "5. Explore tab (/continents.tsx)",
-        "current": "Continent cards and a Community CTA banner at the bottom.",
-        "issue": "The Community CTA banner is a flat, heavy gradient block.",
-        "recommendation": "Elevate the Community CTA banner to feel like a premium glass window. Use the 'Window Card' DNA with a light sand background and ocean-blue text, or a very light gradient with a sand border."
-      },
-      {
-        "surface": "6. Feed (/feed.tsx)",
-        "current": "Activity cards with generic shadow, spacing, and styling.",
-        "issue": "Cards feel utilitarian rather than like premium memories.",
-        "recommendation": "Apply 'Window Card' DNA. Increase padding to 20px. Add a soft glow behind user avatars. Use a subtle 1px sand-colored divider between the header and the content."
-      },
-      {
-        "surface": "7. Universal card patterns (MediaCard, FeedCardHeader, etc.)",
-        "current": "Standard radii, generic black shadow, flat borders without depth.",
-        "issue": "Inconsistent 'premium' feel across the app.",
-        "recommendation": "Enforce the 'Window Card' globally: 16px-24px radii, 1px inner border using 'rgba(232, 220, 200, 0.5)', warm sand shadow, and pure white backgrounds on top of the warm cream app background."
-      }
-    ]
-  },
-  "theme": {
-    "archetype": "1 (Organic & Earthy)",
-    "description": "Premium travel app with a coastal, sandy, and nautical vibe. Focus on generous spacing, elegant typography, and iOS-native aesthetics.",
-    "signature_gradient": {
-      "name": "Ocean to Sand",
-      "colors": ["#4DB8D8", "#E8DCC8"],
-      "usage": "Headers, premium badges, top 3 rank highlights"
-    },
-    "colors": {
-      "background": "#F5F3F0",
-      "surface": "#FFFFFF",
-      "surface_tinted": "#FAF8F5",
-      "primary": "#4DB8D8",
-      "primary_dark": "#2E9AB5",
-      "accent_sand": "#E8DCC8",
-      "accent_gold": "#C9A961",
-      "text_primary": "#2A2A2A",
-      "text_secondary": "#6B6B6B",
-      "border_sand": "rgba(232, 220, 200, 0.5)",
-      "border_glass": "rgba(255, 255, 255, 0.8)",
-      "shadow_warm": "#C9A961"
-    }
+  "theme": "Dark",
+  "archetype": "Archetype 4: Swiss & High-Contrast (IDE-Inspired variant)",
+  "rationale": "For a mobile-native moderation and admin suite, the interface must feel like a precision command center, not a consumer playground. We are utilizing a deep navy base (#0B1120, #0F172A) with high-contrast structural borders (#1E293B) to provide absolute clarity and professional calm. The teal/cyan (#4DB8D8) acts as our kinetic trigger for active states, while warm amber (#F59E0B) and critical red (#DC2626) command immediate attention. Monospace numerals will anchor the data points to enforce a strict 'Control Room' aesthetic.",
+  "colors": {
+    "background": "#0B1120",
+    "surface": "#0F172A",
+    "surface_elevated": "#1E293B",
+    "border": "#334155",
+    "primary": "#4DB8D8",
+    "warning": "#F59E0B",
+    "critical": "#DC2626",
+    "success": "#10B981",
+    "text_main": "#F8FAFC",
+    "text_muted": "#94A3B8"
   },
   "typography": {
-    "font_family_display": "Playfair Display, 'New York', serif",
-    "font_family_body": "System, 'SF Pro Text', sans-serif",
-    "scale": {
-      "h1_hero": {
-        "size": 32,
-        "weight": "700",
-        "family": "display",
-        "line_height": 38,
-        "letter_spacing": 0.5
-      },
-      "h2_section": {
-        "size": 20,
-        "weight": "700",
-        "family": "body",
-        "line_height": 26,
-        "letter_spacing": -0.5
-      },
-      "h3_card_title": {
-        "size": 18,
-        "weight": "600",
-        "family": "body",
-        "line_height": 24,
-        "letter_spacing": -0.2
-      },
-      "body": {
-        "size": 16,
-        "weight": "400",
-        "family": "body",
-        "line_height": 24,
-        "letter_spacing": 0
-      }
+    "headings": "Chivo or Work Sans (font-semibold, tracking-tight)",
+    "body": "IBM Plex Sans or Inter (font-normal)",
+    "stats_numbers": "IBM Plex Mono or JetBrains Mono (font-bold)",
+    "sizes": {
+      "h1": "text-2xl sm:text-3xl",
+      "h2": "text-xl",
+      "h3": "text-lg",
+      "body": "text-base",
+      "sm": "text-sm",
+      "xs": "text-xs"
     }
   },
-  "spacing": {
-    "xs": 4,
-    "sm": 8,
-    "md": 16,
-    "lg": 24,
-    "xl": 32,
-    "xxl": 48,
-    "screen_margin": 16
+  "layout_spacing": {
+    "screen_padding": "px-4 py-6",
+    "grid_gap": "gap-4",
+    "card_padding": "p-4",
+    "radius": "rounded-xl"
   },
-  "components": {
-    "window_card_dna": {
-      "border_radius": 20,
-      "background_color": "#FFFFFF",
-      "border_width": 1,
-      "border_color": "rgba(232, 220, 200, 0.5)",
-      "shadow": {
-        "ios": {
-          "shadowColor": "#C9A961",
-          "shadowOffset": { "width": 0, "height": 8 },
-          "shadowOpacity": 0.08,
-          "shadowRadius": 16
-        },
-        "android": {
-          "elevation": 3
-        }
-      },
-      "overflow": "hidden"
+  "before_after_rationale": [
+    {
+      "issue": "Inconsistent Card Layout & Asymmetry",
+      "before": "The 2x2 grid features cards with varying info structures—some missing totals, others with erratic icon placements. This breaks visual balance and forces the eye to hunt for meaning.",
+      "after": "Implementation of a strict 'Control Room Bento' grid layout. Every stat card uses a fixed, predictable flex column structure: Header (Icon + Label), Middle (Massive Value), Footer (Delta Badge). Predictable scanning, no asymmetry."
     },
-    "window_hero_dna": {
-      "aspect_ratio": 0.8,
-      "border_radius": 24,
-      "inner_frame": {
-        "border_width": 1,
-        "border_color": "rgba(255, 255, 255, 0.4)",
-        "margin": 4,
-        "border_radius": 20
-      },
-      "gradient_overlay": ["transparent", "rgba(0,0,0,0.6)"]
+    {
+      "issue": "Vertical Number Wrapping ('1500')",
+      "before": "The flex container is too narrow for raw strings, causing '1500' to snap character-by-character into three vertical lines, breaking the UI.",
+      "after": "Apply `numberOfLines={1}` and `adjustsFontSizeToFit` to the stat values. Integate a `formatCompactNumber()` utility (e.g., converting 1,500 to 1.5K) to guarantee numbers never overflow their container constraints."
     },
-    "floating_glass_action_bar": {
-      "background": "rgba(255, 255, 255, 0.9)",
-      "border_width": 1,
-      "border_color": "rgba(232, 220, 200, 0.4)",
-      "shadowColor": "#C9A961",
-      "shadowOpacity": 0.08
+    {
+      "issue": "Truncated Delta Text & Missing Context ('+0 this week')",
+      "before": "Long strings truncate abruptly to '+0 this', which looks like a bug. Some cards lack delta entirely.",
+      "after": "Shift to compact Delta Badges (Pills). Instead of verbose text, use a directional arrow + percentage/number (e.g., '↗ 12'). For '+0', render a muted, icon-less gray pill ('— 0') to reduce cognitive noise. Ensure every card has a delta indicator for consistency."
     }
-  },
-  "layouts": {
-    "community_page": {
-      "description": "Unified page with an integrated hero at the top.",
-      "structure": [
-        "Community Highlight Hero (Integrated rendering, not just a CTA link)",
-        "Section Header with 'See all' to Top 10",
-        "Section: Trending Landmarks (Carousel)",
-        "Section: Recent Photos (Carousel)",
-        "Section: Most Popular (Carousel)"
-      ]
-    },
-    "dedicated_highlight_page": {
-      "path": "/community-highlights",
-      "structure": [
-        "Window Hero Image (Parallax scroll with inner matte frame)",
-        "Floating Glass Action Bar (Like, Comment, Share)",
-        "User Profile Row (Window Card DNA)",
-        "Why this photo? Info Card",
-        "Large CTA Button: 'See the top 10 all time →'"
-      ]
-    }
-  },
-  "motion_and_interactions": {
-    "card_press": {
-      "activeOpacity": 0.95,
-      "transform": [{ "scale": 0.98 }],
-      "animation": "spring, damping 15"
-    },
-    "parallax_hero": {
-      "description": "Image scales up and moves slightly down on pull-to-refresh / downward scroll."
-    }
-  },
-  "micro_polish_list": [
-    "1. Replace harsh #000 shadows with warm #C9A961 or #E8DCC8 shadows at 8% opacity.",
-    "2. Add a 1px inner border (rgba(232, 220, 200, 0.5)) to all white cards to create a 'framed glass' edge.",
-    "3. Implement the 'matte frame' on Hero images: a 1px semi-transparent white border inset by 4px.",
-    "4. Top 10 rank badges (1-3) should use the oceanToSand gradient as their background.",
-    "5. Add a subtle, soft glow (warm shadow) behind user avatars in the feed and highlight pages.",
-    "6. Convert the flat 'Like/Comment' action buttons into unified, pill-shaped glassmorphism elements.",
-    "7. Use a very subtle divider (1px, rgba(232, 220, 200, 0.3)) between feed card headers and the main image.",
-    "8. Apply a light haptic bump when pressing 'Like' or 'Comment'.",
-    "9. In the Community tab, remove the solid gradient 'Featured' box and replace it with the actual Hero image card.",
-    "10. Ensure the main background is #F5F3F0 (warm cream), allowing pure white #FFFFFF cards to pop naturally."
   ],
-  "action_plan": {
-    "P0_must_ship": [
-      "Update theme.ts and components to use the 'Window Card' DNA (warm shadow, sand border, white surface).",
-      "Integrate Community Highlight directly into the Community tab as a hero section, replacing the gradient CTA.",
-      "Update MediaCard to use the new Window Card styling globally."
-    ],
-    "P1_wow_add": [
-      "Implement 'matte-frame' inner borders on Hero images.",
-      "Add gradient backgrounds and soft glows to Top 10 rank badges.",
-      "Refactor the action bar in community-highlights.tsx to use floating glass pills."
-    ],
-    "P2_nice_to_have": [
-      "Parallax scroll effect on the Community Highlight dedicated page hero.",
-      "Spring physics animations on card press.",
-      "Soft shadow glows behind user avatars."
+  "component_blueprints": {
+    "OverviewStatCard": {
+      "container": "w-[48%] bg-[#0F172A] border border-[#1E293B] rounded-xl p-4 flex-col justify-between h-32 mb-4",
+      "header": "flex-row items-center gap-2 mb-2",
+      "icon": "lucide-react-native icon, size 16, color #94A3B8",
+      "label": "text-sm text-[#94A3B8] font-medium numberOfLines={1}",
+      "value_container": "flex-1 justify-center",
+      "value": "text-3xl text-white font-bold tracking-tight numberOfLines={1} adjustsFontSizeToFit",
+      "footer": "flex-row items-center mt-2",
+      "delta_badge": "See DeltaBadge component",
+      "testID": "overview-stat-card-{id}"
+    },
+    "DeltaBadge": {
+      "container": "flex-row items-center px-2 py-1 rounded-md",
+      "positive": "bg-[#10B981]/10 text-[#10B981]",
+      "negative": "bg-[#DC2626]/10 text-[#DC2626]",
+      "neutral": "bg-[#1E293B] text-[#94A3B8]",
+      "icon_size": "12",
+      "text": "text-xs font-medium ml-1"
+    },
+    "SystemHealthCard": {
+      "container": "flex-row items-center justify-between bg-[#0F172A] border border-[#1E293B] rounded-xl p-4 mb-3",
+      "left_col": "flex-row items-center gap-3",
+      "status_dot": "w-2 h-2 rounded-full (Dynamic color based on status)",
+      "content": "flex-col",
+      "label": "text-base text-white font-medium numberOfLines={1}",
+      "timestamp": "text-xs text-[#94A3B8]",
+      "right_col": "flex-row items-center gap-3",
+      "count": "text-lg text-white font-bold",
+      "arrow": "lucide-react-native ChevronRight size 16 color #64748B",
+      "testID": "system-health-card-{id}",
+      "empty_state": "When 0, dim count to #64748B, status_dot to #10B981 (all clean), update text to 'Queue Empty'"
+    },
+    "ManagementRow": {
+      "container": "flex-row items-center justify-between py-4 border-b border-[#1E293B]",
+      "left": "flex-row items-center gap-3",
+      "icon_wrapper": "w-8 h-8 rounded-lg bg-[#1E293B] items-center justify-center",
+      "label": "text-base text-[#F8FAFC]",
+      "arrow": "lucide-react-native ChevronRight size 20 color #64748B",
+      "testID": "management-row-{id}"
+    },
+    "AdminHeader": {
+      "container": "bg-[#0F172A] pt-12 pb-4 px-4 flex-row items-center justify-between border-b border-[#1E293B]",
+      "left": "flex-row items-center gap-3",
+      "title_row": "flex-row items-center gap-2",
+      "title": "text-xl text-white font-bold tracking-tight",
+      "subtitle": "text-xs text-[#4DB8D8] uppercase tracking-widest",
+      "right": "flex-row items-center gap-4",
+      "testID": "admin-header"
+    },
+    "ActionTicker": {
+      "container": "bg-[#0B1120] py-2 px-4 border-b border-[#1E293B] flex-row items-center",
+      "text": "text-xs text-[#94A3B8] font-mono numberOfLines={1}",
+      "highlight": "text-[#4DB8D8] font-bold",
+      "testID": "action-ticker"
+    },
+    "BulkActionBar": {
+      "container": "absolute bottom-6 left-4 right-4 bg-[#1E293B] border border-[#334155] rounded-2xl p-4 flex-row items-center justify-between shadow-lg shadow-black/50 z-50",
+      "selected_text": "text-sm text-white font-medium",
+      "actions": "flex-row items-center gap-2",
+      "button": "bg-[#0B1120] px-4 py-2 rounded-lg border border-[#334155]",
+      "button_primary": "bg-[#4DB8D8] px-4 py-2 rounded-lg",
+      "button_text": "text-sm font-medium text-white",
+      "testID": "bulk-action-bar"
+    }
+  },
+  "file_structure": {
+    "blueprints": [
+      "/app/frontend/components/admin/OverviewStatCard.js",
+      "/app/frontend/components/admin/SystemHealthCard.js",
+      "/app/frontend/components/admin/ManagementRow.js",
+      "/app/frontend/components/admin/AdminHeader.js",
+      "/app/frontend/components/admin/ActionTicker.js",
+      "/app/frontend/components/admin/BulkActionBar.js",
+      "/app/frontend/components/admin/DeltaBadge.js",
+      "/app/frontend/utils/formatters.js"
     ]
   },
   "instructions_to_main_agent": [
-    "Read the 'micro_polish_list' and 'action_plan' carefully.",
-    "Do NOT use raw #000 for shadows anymore. Use the 'shadow_warm' color defined in the theme for all standard card elevations.",
-    "For the 'Community tab', you MUST replace the 'featuredLink' component with a rendering of the 'CommunityHighlightHero' component (or an inline equivalent) that shows the actual photo of the day.",
-    "Implement the 'matte frame' by adding a View with absolute positioning, 4px margin, rounded corners, and a 1px border inside hero images.",
-    "All cards must have the 1px 'border_sand' to achieve the penthouse window feel."
-  ],
-  "media": {
-    "image_urls": [
-      {
-        "category": "hero_landmark",
-        "url": "https://images.pexels.com/photos/18471697/pexels-photo-18471697.jpeg",
-        "description": "Tourist exploring Colosseum - use for Community Highlight testing"
-      }
-    ]
-  }
+    "OUTPUT FORMAT: Use strictly NativeWind classes (`className=`) or React Native StyleSheet. Do not use CSS variables, calc(), or web-only pseudo-classes (like :hover) as this is a mobile touch interface.",
+    "GRID IMPLEMENTATION: Since React Native doesn't support CSS Grid, implement the 2x2 grid using `flex-row flex-wrap justify-between` on the container, and `w-[48%] mb-4` on the individual OverviewStatCards.",
+    "NUMBER FORMATTING: Create a formatter in `/app/frontend/utils/formatters.js` utilizing `Intl.NumberFormat('en-US', { notation: 'compact' })` to safely abbreviate values (e.g., '1.5K' instead of '1500'). Apply this strictly to prevent text wrapping.",
+    "TEXT SIZING & OVERFLOW: Inject `numberOfLines={1}` and `adjustsFontSizeToFit` into all large number `<Text>` components to scale down elegantly instead of wrapping vertically.",
+    "EMPTY STATES: When processing empty queues in SystemHealthCard, dim the text to #64748B, set the status_dot to the success color (#10B981), and present '0' with clear messaging (e.g., 'All Clean').",
+    "ICONS: Utilize `lucide-react-native` strictly. Under no circumstances should emojis be used for UI icons.",
+    "TEST IDS: Every interactive element (TouchableOpacity, Pressable) and stat card MUST include `testID='...'`."
+  ]
 }
