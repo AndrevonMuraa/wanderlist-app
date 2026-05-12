@@ -11,7 +11,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.wandermark.app",
-      "buildNumber": "86",
+      "buildNumber": "87",
       "usesAppleSignIn": true,
       "config": {
         "usesNonExemptEncryption": false

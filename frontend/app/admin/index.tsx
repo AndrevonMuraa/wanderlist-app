@@ -14,6 +14,7 @@ import { BACKEND_URL } from '../../utils/config';
 import AdminSystemHealth from '../../components/AdminSystemHealth';
 import { ActivityTicker } from '../../components/AdminProductivity';
 import { setupWidgetBackgroundFetch, refreshWidgetSnapshot } from '../../utils/widgetBridge';
+import OverviewStatCard from '../../components/admin/OverviewStatCard';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -155,23 +156,6 @@ export default function AdminDashboard() {
     );
   }
 
-  const StatCard = ({ title, value, icon, color, subtitle }: { 
-    title: string; 
-    value: number; 
-    icon: keyof typeof Ionicons.glyphMap; 
-    color: string;
-    subtitle?: string;
-  }) => (
-    <View style={[styles.statCard, { backgroundColor: colors.surface }]}>
-      <View style={[styles.statIconContainer, { backgroundColor: color + '20' }]}>
-        <Ionicons name={icon} size={24} color={color} />
-      </View>
-      <Text style={[styles.statValue, { color: colors.text }]}>{value.toLocaleString()}</Text>
-      <Text style={[styles.statTitle, { color: colors.textSecondary }]}>{title}</Text>
-      {subtitle && <Text style={[styles.statSubtitle, { color: color }]}>{subtitle}</Text>}
-    </View>
-  );
-
   const MenuCard = ({ title, description, icon, color, onPress, badge }: {
     title: string;
     description: string;
@@ -261,31 +245,49 @@ export default function AdminDashboard() {
           </Text>
         </View>
         <View style={styles.statsGrid}>
-          <StatCard 
-            title="Total Users" 
-            value={stats?.users.total || 0} 
-            icon="people" 
-            color="#3b82f6"
-            subtitle={`+${stats?.users.new_this_week || 0} this week`}
+          <OverviewStatCard
+            title="Total Users"
+            value={stats?.users.total ?? 0}
+            icon="people"
+            accentColor="#3b82f6"
+            delta={stats?.users.new_this_week ?? 0}
+            deltaSuffix="this week"
+            surfaceColor={colors.surface}
+            textColor={colors.text}
+            mutedColor={colors.textSecondary}
+            testID="overview-stat-total-users"
           />
-          <StatCard 
-            title="Pro Users" 
-            value={stats?.users.pro || 0} 
-            icon="diamond" 
-            color="#f59e0b"
+          <OverviewStatCard
+            title="Pro Users"
+            value={stats?.users.pro ?? 0}
+            icon="diamond"
+            accentColor="#f59e0b"
+            surfaceColor={colors.surface}
+            textColor={colors.text}
+            mutedColor={colors.textSecondary}
+            testID="overview-stat-pro-users"
           />
-          <StatCard 
-            title="Total Visits" 
-            value={stats?.visits.total || 0} 
-            icon="location" 
-            color="#10b981"
-            subtitle={`+${stats?.visits.this_week || 0} this week`}
+          <OverviewStatCard
+            title="Total Visits"
+            value={stats?.visits.total ?? 0}
+            icon="location"
+            accentColor="#10b981"
+            delta={stats?.visits.this_week ?? 0}
+            deltaSuffix="this week"
+            surfaceColor={colors.surface}
+            textColor={colors.text}
+            mutedColor={colors.textSecondary}
+            testID="overview-stat-total-visits"
           />
-          <StatCard 
-            title="Landmarks" 
-            value={stats?.content.landmarks || 0} 
-            icon="flag" 
-            color="#8b5cf6"
+          <OverviewStatCard
+            title="Landmarks"
+            value={stats?.content.landmarks ?? 0}
+            icon="flag"
+            accentColor="#8b5cf6"
+            surfaceColor={colors.surface}
+            textColor={colors.text}
+            mutedColor={colors.textSecondary}
+            testID="overview-stat-landmarks"
           />
         </View>
 
