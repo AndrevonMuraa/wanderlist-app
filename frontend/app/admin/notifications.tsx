@@ -10,6 +10,7 @@ import * as SecureStore from 'expo-secure-store';
 import theme from '../../styles/theme';
 import { useTheme } from '../../contexts/ThemeContext';
 import { BACKEND_URL } from '../../utils/config';
+import { formatCompactNumber } from '../../utils/formatters';
 
 const getToken = async (): Promise<string | null> => {
   if (Platform.OS === 'web') {
@@ -189,7 +190,14 @@ export default function AdminNotificationsScreen() {
       <View style={[styles.statIcon, { backgroundColor: color + '20' }]}>
         <Ionicons name={icon} size={18} color={color} />
       </View>
-      <Text style={[styles.statValue, { color: colors.text }]}>{value}</Text>
+      <Text
+        style={[styles.statValue, { color: colors.text }]}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.6}
+      >
+        {formatCompactNumber(value)}
+      </Text>
       <Text style={[styles.statTitle, { color: colors.textSecondary }]}>{title}</Text>
     </View>
   );

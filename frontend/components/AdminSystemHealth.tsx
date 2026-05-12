@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { BACKEND_URL } from '../utils/config';
 import { useTheme } from '../contexts/ThemeContext';
+import { formatCompactNumber } from '../utils/formatters';
 
 interface ImageNormData {
   counters: { auto_resized: number; rejected: number };
@@ -230,11 +231,16 @@ export default function AdminSystemHealth({
               />
             </View>
             <View style={styles.tileValueRow}>
-              <Text style={[
-                styles.tileValue,
-                { color: t.severity === 'alert' ? color : colors.text },
-              ]}>
-                {typeof t.value === 'number' ? t.value.toLocaleString() : t.value}
+              <Text
+                style={[
+                  styles.tileValue,
+                  { color: t.severity === 'alert' ? color : colors.text },
+                ]}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                minimumFontScale={0.6}
+              >
+                {typeof t.value === 'number' ? formatCompactNumber(t.value) : t.value}
               </Text>
               {t.severity === 'alert' && (
                 <View style={[styles.severityDot, { backgroundColor: color }]} />

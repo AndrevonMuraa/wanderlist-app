@@ -164,38 +164,49 @@ struct RectangularView: View {
     }
 }
 
-// MARK: - Home Screen — Small (just two big numbers)
+// MARK: - Home Screen — Small (Concept A: Traffic-light stack)
 struct SmallView: View {
     let entry: WMEntry
     var body: some View {
         let p = entry.payload.pending_reports
         let t = entry.payload.open_tickets
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Image(systemName: "shield.lefthalf.filled")
-                Text("WanderMark")
-                    .font(.system(size: 11, weight: .heavy))
-                    .tracking(0.4)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer(minLength: 2)
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
+        VStack(alignment: .leading, spacing: 4) {
+            // Primary: pending reports — huge number, red if > 0
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Image(systemName: "flag.fill")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(p > 0 ? Color.red : .secondary)
                 Text("\(p)")
-                    .font(.system(size: 36, weight: .heavy, design: .rounded))
+                    .font(.system(size: 56, weight: .heavy, design: .rounded))
                     .foregroundStyle(p > 0 ? Color.red : Color.primary)
-                Text("reports")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(.secondary)
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(1)
             }
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
+            Text("reports")
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(.secondary)
+                .tracking(0.3)
+
+            Divider()
+                .background(Color.secondary.opacity(0.25))
+                .padding(.vertical, 2)
+
+            // Secondary: tickets — smaller number, orange if > 0
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Image(systemName: "envelope.fill")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(t > 0 ? Color.orange : .secondary)
                 Text("\(t)")
-                    .font(.system(size: 18, weight: .heavy, design: .rounded))
+                    .font(.system(size: 24, weight: .heavy, design: .rounded))
                     .foregroundStyle(t > 0 ? Color.orange : Color.primary)
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(1)
                 Text("tickets")
                     .font(.system(size: 10, weight: .semibold))
                     .foregroundStyle(.secondary)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .padding(12)
     }
 }
