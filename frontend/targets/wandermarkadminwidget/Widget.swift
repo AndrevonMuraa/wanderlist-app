@@ -366,9 +366,10 @@ struct WMEntryView: View {
         }
         .widgetURL(deepLinkURL())
         .containerBackground(for: .widget) {
-            // Use system widget background that auto-adapts to light/dark.
-            Color(uiColor: .systemBackground)
+            // Force the "command center" dark surface regardless of iOS theme.
+            Color(red: 0.06, green: 0.09, blue: 0.16) // #0F172A — deep navy
         }
+        .environment(\.colorScheme, .dark)
     }
 }
 
