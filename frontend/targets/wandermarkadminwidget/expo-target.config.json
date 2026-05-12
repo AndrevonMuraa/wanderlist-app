@@ -8,7 +8,7 @@
     "wmAmber": { "color": "#F59E0B", "darkColor": "#FBBF24" },
     "wmInk": { "color": "#0F172A", "darkColor": "#F1F5F9" }
   },
-  "deploymentTarget": "16.4",
+  "deploymentTarget": "17.0",
   "frameworks": ["SwiftUI", "WidgetKit"],
   "entitlements": {
     "com.apple.security.application-groups": ["group.com.wandermark.app.adminwidget"]
