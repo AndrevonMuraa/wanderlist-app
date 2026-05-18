@@ -1,5 +1,36 @@
 # WanderMark Changelog
 
+## May 18, 2026 — Explore "Your World Progress" Card (Build 88)
+
+### UX uplift
+- **Replaced passive "Track your visits, earn points, top the ranks." strip** on Explore tab with new **"Your World Progress"** card
+- Card mirrors the "Destination Progress" pattern from continent pages → consistent visual DNA across the hierarchy
+- 3 rows with semantic icons + colored progress bars:
+  - 🌍 **Continents Started** (Ocean teal `#3BB8C3`) — X/5 continents with ≥1 destination visit
+  - 🚩 **Destinations Visited** (Sky blue `#4DB8D8`) — sum across all 5 continents / 100 total
+  - ⭐ **Points** (Amber `#FFA726`) — totalPoints / 22 500
+- Top-right amber `★ pts` badge identical to country-page badge
+
+### Data sources (no new endpoints)
+- `/api/continent-stats` — aggregated client-side for continents started + destinations visited + grand totals
+- `/api/progress` — `totalPoints` field (authoritative, same source as Profile)
+- Parallel fetch via `Promise.all` + `cachedFetch` (5 min cache)
+
+### Why this lifts the app
+- New users see "0/100 destinations · 22 500 points to earn" — sparks curiosity
+- Experienced users see top-level mastery progress at a glance
+- Hierarchical consistency: Explore (global) → Continent (countries) → Country (landmarks)
+
+### Files touched
+- `/app/frontend/app/continents.tsx` — added `GlobalProgress` interface, dual fetch, progress card render, matching styles. Removed `guideCta` block + styles.
+- `/app/frontend/app.json` — iOS `buildNumber: 87 → 88`
+
+### Verified
+- Smoke test on preview env with testpro@: card renders correctly with live prod data (3/5 · 7/100 · 290/22 500)
+- Backend logs confirm `/api/continent-stats` + `/api/progress` called in parallel on tab focus
+
+---
+
 ## May 5, 2026 — Code Health Audit & Data Repair (Build 85)
 
 ### Critical fixes

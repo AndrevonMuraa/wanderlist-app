@@ -102,6 +102,14 @@ interface Continent {
   percentage?: number;
 }
 
+interface GlobalProgress {
+  continentsStarted: number;
+  totalContinents: number;
+  destinationsVisited: number;
+  totalDestinations: number;
+  earnedPoints: number;
+  totalPoints: number;
+}
 
 export default function ContinentsScreen() {
   const router = useRouter();
@@ -109,6 +117,7 @@ export default function ContinentsScreen() {
   const { colors, gradientColors } = useTheme();
   const { t } = useTranslation();
   const [continents, setContinents] = useState<Continent[]>(CONTINENTS);
+  const [globalProgress, setGlobalProgress] = useState<GlobalProgress | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCustomVisitModal, setShowCustomVisitModal] = useState(false);
   const [showProLock, setShowProLock] = useState(false);
@@ -139,38 +148,57 @@ export default function ContinentsScreen() {
   const fetchContinentStats = async () => {
     try {
       const token = await getToken();
-      
-      // Fetch dynamic continent stats from backend (cached for 5 min)
-      const response = await cachedFetch(
-        `${BACKEND_URL}/api/continent-stats`,
-        token || '',
-        'continent-stats'
-      );
 
-      if (response.ok) {
-        const data = await response.json();
-        
-        // Update continents with real-time stats from database
-        if (data.continents && Array.isArray(data.continents)) {
-          setContinents(prev => prev.map(continent => {
-            // Find matching continent stats by name
-            const stats = data.continents.find(
-              (s: any) => s.continent?.toLowerCase() === continent.apiName.toLowerCase()
-            );
-            
-            if (stats) {
-              return {
-                ...continent,
-                landmarks: stats.total_landmarks,
-                totalPoints: stats.total_points,
-                countries: stats.countries,
-                visited: stats.visited_countries,
-                percentage: stats.progress_percent,
-              };
-            }
-            return continent;
-          }));
-        }
+      // Fetch continent stats + user progress in parallel (both cached)
+      const [continentResponse, progressResponse] = await Promise.all([
+        cachedFetch(`${BACKEND_URL}/api/continent-stats`, token || '', 'continent-stats'),
+        cachedFetch(`${BACKEND_URL}/api/progress`, token || '', 'progress'),
+      ]);
+
+      let continentData: any = null;
+      let progressData: any = null;
+      if (continentResponse.ok) continentData = await continentResponse.json();
+      if (progressResponse.ok) progressData = await progressResponse.json();
+
+      // Update continents with real-time stats from database
+      if (continentData?.continents && Array.isArray(continentData.continents)) {
+        setContinents(prev => prev.map(continent => {
+          const stats = continentData.continents.find(
+            (s: any) => s.continent?.toLowerCase() === continent.apiName.toLowerCase()
+          );
+          if (stats) {
+            return {
+              ...continent,
+              landmarks: stats.total_landmarks,
+              totalPoints: stats.total_points,
+              countries: stats.countries,
+              visited: stats.visited_countries,
+              percentage: stats.progress_percent,
+            };
+          }
+          return continent;
+        }));
+
+        // Compute global aggregate progress
+        const stats = continentData.continents as any[];
+        const totalContinents = CONTINENTS.length; // Fixed 5 (Europe/Asia/Africa/Americas/Oceania)
+        const continentsStarted = stats.filter(s => (s.visited_countries || 0) > 0).length;
+        const destinationsVisited = stats.reduce((sum, s) => sum + (s.visited_countries || 0), 0);
+        const totalDestinations = continentData.grand_total?.countries
+          || stats.reduce((sum, s) => sum + (s.countries || 0), 0);
+        const totalPoints = continentData.grand_total?.points
+          || stats.reduce((sum, s) => sum + (s.total_points || 0), 0);
+        const earnedPoints = progressData?.totalPoints
+          ?? stats.reduce((sum, s) => sum + (s.visited_points || 0), 0);
+
+        setGlobalProgress({
+          continentsStarted,
+          totalContinents,
+          destinationsVisited,
+          totalDestinations,
+          earnedPoints,
+          totalPoints,
+        });
       }
     } catch (error) {
     } finally {
@@ -230,12 +258,106 @@ export default function ContinentsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Guide CTA — single-line punchy copy, no icon, no border */}
-        <View style={styles.guideCta}>
-          <Text style={styles.guideCtaText}>
-            Track your visits, earn points, top the ranks.
-          </Text>
-        </View>
+        {/* Global Progress Card — mirrors the "Destination Progress" pattern on continent pages */}
+        {globalProgress && (
+          <View style={styles.globalProgressContainer} testID="explore-global-progress">
+            <View style={styles.globalProgressCard}>
+              <View style={styles.globalProgressHeader}>
+                <Text style={styles.globalProgressTitle}>Your World Progress</Text>
+                <View style={styles.globalProgressPointsBadge}>
+                  <Ionicons name="star" size={14} color="#FFA726" />
+                  <Text style={styles.globalProgressPointsText}>
+                    {globalProgress.earnedPoints.toLocaleString()} pts
+                  </Text>
+                </View>
+              </View>
+
+              {/* Row 1: Continents Started */}
+              <View style={styles.globalProgressRow}>
+                <Ionicons name="earth" size={16} color="#3BB8C3" />
+                <View style={styles.globalProgressRowContent}>
+                  <View style={styles.globalProgressLabelRow}>
+                    <Text style={styles.globalProgressLabel}>
+                      {globalProgress.continentsStarted}/{globalProgress.totalContinents} Continents Started
+                    </Text>
+                    <Text style={styles.globalProgressPct}>
+                      {globalProgress.totalContinents > 0
+                        ? Math.round((globalProgress.continentsStarted / globalProgress.totalContinents) * 100)
+                        : 0}%
+                    </Text>
+                  </View>
+                  <View style={styles.globalProgressBarBg}>
+                    <View
+                      style={[
+                        styles.globalProgressBarFill,
+                        {
+                          width: `${Math.min(100, (globalProgress.continentsStarted / Math.max(1, globalProgress.totalContinents)) * 100)}%`,
+                          backgroundColor: '#3BB8C3',
+                        },
+                      ]}
+                    />
+                  </View>
+                </View>
+              </View>
+
+              {/* Row 2: Destinations Visited */}
+              <View style={styles.globalProgressRow}>
+                <Ionicons name="flag" size={16} color="#4DB8D8" />
+                <View style={styles.globalProgressRowContent}>
+                  <View style={styles.globalProgressLabelRow}>
+                    <Text style={styles.globalProgressLabel}>
+                      {globalProgress.destinationsVisited}/{globalProgress.totalDestinations} Destinations Visited
+                    </Text>
+                    <Text style={styles.globalProgressPct}>
+                      {globalProgress.totalDestinations > 0
+                        ? Math.round((globalProgress.destinationsVisited / globalProgress.totalDestinations) * 100)
+                        : 0}%
+                    </Text>
+                  </View>
+                  <View style={styles.globalProgressBarBg}>
+                    <View
+                      style={[
+                        styles.globalProgressBarFill,
+                        {
+                          width: `${Math.min(100, (globalProgress.destinationsVisited / Math.max(1, globalProgress.totalDestinations)) * 100)}%`,
+                          backgroundColor: '#4DB8D8',
+                        },
+                      ]}
+                    />
+                  </View>
+                </View>
+              </View>
+
+              {/* Row 3: Points */}
+              <View style={styles.globalProgressRow}>
+                <Ionicons name="star" size={16} color="#FFA726" />
+                <View style={styles.globalProgressRowContent}>
+                  <View style={styles.globalProgressLabelRow}>
+                    <Text style={styles.globalProgressLabel}>
+                      {globalProgress.earnedPoints.toLocaleString()}/{globalProgress.totalPoints.toLocaleString()} Points
+                    </Text>
+                    <Text style={styles.globalProgressPct}>
+                      {globalProgress.totalPoints > 0
+                        ? ((globalProgress.earnedPoints / globalProgress.totalPoints) * 100).toFixed(1)
+                        : '0.0'}%
+                    </Text>
+                  </View>
+                  <View style={styles.globalProgressBarBg}>
+                    <View
+                      style={[
+                        styles.globalProgressBarFill,
+                        {
+                          width: `${Math.min(100, (globalProgress.earnedPoints / Math.max(1, globalProgress.totalPoints)) * 100)}%`,
+                          backgroundColor: '#FFA726',
+                        },
+                      ]}
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        )}
 
         {/* Continent Cards */}
         <View style={styles.cardsContainer}>
@@ -426,22 +548,79 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: theme.colors.primary,
   },
-  // Guide CTA — compact framing so the strip doesn't dominate the spacing
-  // between the Tabs and the Continent cards (≈55% less vertical room than before)
-  guideCta: {
-    marginHorizontal: theme.spacing.md,
-    marginTop: 4,
-    marginBottom: 4,
-    paddingHorizontal: 14,
+  // Global Progress Card — mirrors the "Destination Progress" card on continent pages
+  // for visual & logical consistency across the hierarchy.
+  globalProgressContainer: {
+    paddingHorizontal: theme.spacing.md,
+    paddingTop: theme.spacing.sm,
+    paddingBottom: theme.spacing.sm,
+  },
+  globalProgressCard: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.xl,
+    padding: theme.spacing.lg,
+    ...theme.shadows.card,
+  },
+  globalProgressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  globalProgressTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  globalProgressPointsBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#FFF8E1',
+    paddingHorizontal: 10,
     paddingVertical: 4,
-    backgroundColor: theme.colors.primary + '08',
     borderRadius: 12,
   },
-  guideCtaText: {
+  globalProgressPointsText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#FFA726',
+  },
+  globalProgressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingVertical: 6,
+  },
+  globalProgressRowContent: {
+    flex: 1,
+  },
+  globalProgressLabelRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  globalProgressLabel: {
     fontSize: 12,
-    color: theme.colors.textSecondary,
-    textAlign: 'center',
-    fontWeight: '500',
+    fontWeight: '600',
+    color: theme.colors.text,
+  },
+  globalProgressPct: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: theme.colors.textLight,
+  },
+  globalProgressBarBg: {
+    height: 6,
+    backgroundColor: theme.colors.backgroundSecondary,
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  globalProgressBarFill: {
+    height: 6,
+    borderRadius: 3,
+    minWidth: 2,
   },
 
   // Community CTA (Window glass card, ocean-to-sand icon)
