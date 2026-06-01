@@ -17,14 +17,21 @@
         "usesNonExemptEncryption": false
       },
       "entitlements": {
-        "com.apple.security.application-groups": ["group.com.wandermark.app.adminwidget"]
+        "com.apple.security.application-groups": [
+          "group.com.wandermark.app.adminwidget"
+        ]
       },
       "infoPlist": {
         "NSCameraUsageDescription": "Take photos of landmarks you visit",
         "NSPhotoLibraryUsageDescription": "Save and share your travel photos",
         "NSPhotoLibraryAddUsageDescription": "Save your travel memories to your gallery",
-        "BGTaskSchedulerPermittedIdentifiers": ["wandermark.widget.background-fetch"],
-        "UIBackgroundModes": ["fetch", "remote-notification"]
+        "BGTaskSchedulerPermittedIdentifiers": [
+          "wandermark.widget.background-fetch"
+        ],
+        "UIBackgroundModes": [
+          "fetch",
+          "remote-notification"
+        ]
       }
     },
     "android": {
@@ -78,7 +85,8 @@
           "url": "https://sentry.io/"
         }
       ],
-      "@sentry/react-native"
+      "@sentry/react-native",
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true
