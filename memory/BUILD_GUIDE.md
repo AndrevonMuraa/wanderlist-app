@@ -2,6 +2,22 @@
 
 > **All production URLs (Render, Atlas, Sentry, Trust Center, GitHub) live in `/app/memory/PRODUCTION_URLS.md` — read that first.**
 
+## ⚠️ EAS profile policy (Jun 2026 onwards)
+
+| Profile | Backend URL | When to use |
+|---------|-------------|-------------|
+| `development` | Emergent preview (sandbox) | Local Xcode dev, Expo Go |
+| `preview` | Emergent preview (sandbox) | **Avoid for TestFlight** — use production instead |
+| `production` | Render production | **ALL TestFlight builds + App Store submission** |
+
+**Rule of thumb:** `eas build --platform ios --profile production` for any build going to TestFlight.
+
+Why? Dev/preview point to Emergent's sandbox DB to prevent accidental pollution of production data. Production is the single source of truth for shipping builds (incl. internal testing via TestFlight).
+
+⚠️ The Emergent preview URL can rotate between sessions — if dev/preview builds suddenly fail with network errors, check `eas.json` and update the URL.
+
+---
+
 ## Oversikt: Hva skjer hvor?
 
 | System | Hva | Hvordan |

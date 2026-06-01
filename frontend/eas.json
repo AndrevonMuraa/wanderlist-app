@@ -7,7 +7,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://wandermark-api.onrender.com"
+        "EXPO_PUBLIC_BACKEND_URL": "https://wandermark-legal.preview.emergentagent.com"
       },
       "ios": {
         "simulator": false,
@@ -17,7 +17,7 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://wandermark-api.onrender.com"
+        "EXPO_PUBLIC_BACKEND_URL": "https://wandermark-legal.preview.emergentagent.com"
       },
       "ios": {
         "simulator": false
