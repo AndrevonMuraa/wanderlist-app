@@ -5,6 +5,8 @@ import logging
 import uuid
 from datetime import datetime, timezone, timedelta
 
+import httpx
+
 from utils.db import db
 from utils.auth import get_admin_user, get_super_admin_user
 from utils.helpers import create_notification

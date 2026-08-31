@@ -50,26 +50,42 @@ async def main():
     ]
 
     inserted = 0
+    used: set = set()
     for lm_id, month, vyear, n_photos in plan:
         # Verify landmark exists; pick a fallback if not found
-        lm = await db.landmarks.find_one({"landmark_id": lm_id}, {"_id": 0, "landmark_id": 1})
-        if not lm:
-            lm = await db.landmarks.find_one({}, {"_id": 0, "landmark_id": 1})
+        lm = await db.landmarks.find_one(
+            {"landmark_id": lm_id},
+            {"_id": 0, "landmark_id": 1, "name": 1, "country_name": 1, "points": 1},
+        )
+        if not lm or lm_id in used:
+            lm = await db.landmarks.find_one(
+                {"landmark_id": {"$nin": list(used)}},
+                {"_id": 0, "landmark_id": 1, "name": 1, "country_name": 1, "points": 1},
+            )
             lm_id = lm["landmark_id"]
+        used.add(lm_id)
 
-        await db.visits.insert_one({
-            "visit_id": f"visit_{uuid.uuid4().hex[:12]}",
-            "user_id": user_id,
-            "landmark_id": lm_id,
-            "photos": sample_photos[:n_photos],
-            "visited_at": datetime(vyear, month, 12, 12, 0, tzinfo=timezone.utc),
-            "visibility": "public",
-            "is_public": True,
-            "created_at": datetime(2025, month, 15, 9, 30, tzinfo=timezone.utc),
-            "diary_notes": f"Test memory #{inserted+1}",
-            "share_diary": False,
-            "_seed_year_recap": True,
-        })
+        await db.visits.update_one(
+            {"user_id": user_id, "landmark_id": lm_id},
+            {
+                "$set": {
+                    "landmark_name": lm.get("name", ""),
+                    "country_name": lm.get("country_name", ""),
+                    "points_earned": lm.get("points", 10),
+                    "verified": n_photos > 0,
+                    "photos": sample_photos[:n_photos],
+                    "visited_at": datetime(vyear, month, 12, 12, 0, tzinfo=timezone.utc),
+                    "visibility": "public",
+                    "is_public": True,
+                    "created_at": datetime(2025, month, 15, 9, 30, tzinfo=timezone.utc),
+                    "diary_notes": f"Test memory #{inserted+1}",
+                    "share_diary": False,
+                    "_seed_year_recap": True,
+                },
+                "$setOnInsert": {"visit_id": f"visit_{uuid.uuid4().hex[:12]}"},
+            },
+            upsert=True,
+        )
         inserted += 1
 
     print(f"Seeded {inserted} test visits for {user_id}")

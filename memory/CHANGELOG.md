@@ -1,3 +1,40 @@
+## June 2026 — visits.py dead-code fix + seed schema fix + lint cleanup ✅
+
+### P0 — `POST /api/visits` lost its whole tail block
+Root cause: a large block (milestone activity → `check_and_award_badges` → rank-up notification → `country_completed` / `continent_completed` response flags) had been misplaced **after** the `return` in `get_points_breakdown`, i.e. unreachable dead code referencing undefined names (`visibility`, `old_rank`, `visit`, ...). `add_visit` simply returned the raw visit doc.
+Impact (silent, no crash): milestone activities were never created, badges were never re-awarded on visit creation, rank-up notifications never fired, and the frontend celebration logic in `app/add-visit/[landmark_id].tsx` (which reads `result.continent_completed` / `country_completed`) could never trigger.
+Fix:
+- Moved the block back to the end of `add_visit`; deleted the dead copy.
+- Removed `response_model=Visit` from `POST /visits` — Pydantic was stripping the extra flags (`ranked_up`, `new_rank`, `country_completed`, `continent_completed`, `completed_country_name`, `completed_continent`) from the response.
+- Verified live: `POST /api/visits` now returns `ranked_up`, `country_completed`, `continent_completed`.
+
+### P0 — E2E seed wrote malformed documents (also present in Render PROD)
+- `scripts/seed_e2e_data.py` wrote `country_visits` with a `country` key instead of `country_id` / `country_name` / `continent` / `points_earned` / `has_photos` / `source`, and `user_created_visits` with `user_visit_id` / `name` / `country` / `diary_notes` instead of `user_created_visit_id` / `country_name` / `country_id` / `landmarks[]` / `diary`.
+- Consequence: `recalculate_user_points` crashed with `KeyError: 'country_id'` for seeded personas, and seeded country/custom visits were invisible to the app.
+- Fixed the seed script to match real schema (looks country up by name in `countries`), plus defensive `.get("country_id")` in `utils/helpers.py` (3 places) so legacy malformed docs can never crash point recompute again.
+- **ACTION REQUIRED**: re-run the seed on Render prod after deploy to replace the malformed docs.
+
+### P1 — 99 blocking ruff errors cleared
+- Replaced `from ._social_common import *` with explicit imports in `routes/feed.py`, `stats.py`, `leaderboard.py`, `friends.py`, `messages.py` (F403/F405).
+- `routes/admin.py`: added missing `import httpx` (F821 — admin broadcast push would have crashed).
+- `routes/collections.py`: added missing `Landmark` import (F821 — collection landmark listing would have crashed).
+- `routes/community.py` + `routes/visits.py`: `{"$ne": None, "$ne": ""}` (silently dropped duplicate key) → `{"$nin": [None, ""]}` (F601 — diary filters were only applying the last condition).
+- `routes/country_visits.py`: 2× bare `except` → `except Exception` (E722).
+- `ruff check --select F821,F405,F403,F601,E722 .` → All checks passed.
+
+### Test-infra fixes
+- `scripts/seed_year_recap_test.py`: now upsert-based + excludes already-used landmarks + populates `landmark_name`/`country_name`/`points_earned`/`verified` (was crashing on the unique `(user_id, landmark_id)` index and breaking `test_data_integrity`).
+- `tests/test_moderation_iteration31.py`: `seeded_visit` fixture now picks a landmark the pro user has NOT visited (was colliding with the unique index).
+
+### Test results (all green)
+year-in-travel 8/8, photo-health 6/6, store-readiness 3/3, admin-security 10/10, moderation 26/26, lockdown 9/9, 2FA 11/11, e2e-status 5/5, seed-idempotency 19/19, admin-productivity 17/17, security-dashboard 3/3, visit-crud 17/17, data-integrity 9/9, feed-parity 10/10, comprehensive 24/24.
+
+### Build
+- `frontend/app.json` `buildNumber` 88 → **89**.
+
+---
+
+
 # WanderMark Changelog
 
 ## May 18, 2026 (later) — Seed script duplicate-key fix + index hardening

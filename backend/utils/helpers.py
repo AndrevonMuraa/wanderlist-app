@@ -294,7 +294,7 @@ async def recalculate_user_points(user_id: str):
         {"user_id": user_id, "source": "auto_landmark"},
         {"_id": 0, "country_visit_id": 1, "country_id": 1}
     ):
-        if cv["country_id"] not in countries_with_landmarks:
+        if cv.get("country_id") not in countries_with_landmarks:
             await db.country_visits.delete_one({"country_visit_id": cv["country_visit_id"]})
             await db.activities.delete_many({"country_visit_id": cv["country_visit_id"]})
 
@@ -342,6 +342,8 @@ async def recalculate_user_points(user_id: str):
         {"user_id": user_id, "source": {"$ne": "auto_landmark"}},
         {"_id": 0, "country_id": 1, "has_photos": 1}
     ):
+        if not cv.get("country_id"):
+            continue
         country_doc = await db.countries.find_one({"country_id": cv["country_id"]}, {"_id": 0, "continent": 1})
         if country_doc:
             continents_visited.add(country_doc["continent"])
@@ -383,7 +385,7 @@ async def recalculate_user_points(user_id: str):
         {"_id": 0, "country_id": 1, "photos": 1, "source": 1}
     ):
         has_photos = len(cv.get("photos", []) or []) > 0
-        user_cv_map[cv["country_id"]] = has_photos
+        user_cv_map[cv.get("country_id")] = has_photos
 
     # Group countries by continent
     continent_countries = {}

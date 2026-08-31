@@ -1,5 +1,15 @@
 """Activity feed, likes, and comments endpoints."""
-from ._social_common import *
+import logging
+import uuid
+from datetime import datetime, timezone
+from typing import List
+
+from fastapi import APIRouter, HTTPException, Depends
+
+from utils.db import db
+from utils.auth import get_current_user
+from utils.helpers import create_notification
+from models.all import User, Activity, Comment, CommentCreate
 
 router = APIRouter()
 

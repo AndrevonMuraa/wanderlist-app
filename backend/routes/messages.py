@@ -1,5 +1,12 @@
 """Messaging endpoints — available to all users (Free tier naturally capped by 5-friend limit)."""
-from ._social_common import *
+import uuid
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, HTTPException, Depends
+
+from utils.db import db
+from utils.auth import get_current_user
+from models.all import User, Message, MessageCreate
 from utils.image_validate import normalize_photo
 from utils.helpers import notify_new_message
 

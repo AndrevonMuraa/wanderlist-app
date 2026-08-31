@@ -281,7 +281,7 @@ async def get_visit_details(visit_id: str, current_user: User = Depends(get_curr
     
     return result
 
-@router.post("/visits", response_model=Visit)
+@router.post("/visits")
 async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_user)):
     landmark = await db.landmarks.find_one({"landmark_id": data.landmark_id}, {"_id": 0})
     if not landmark:
@@ -337,7 +337,7 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
             start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
             diary_count = await db.visits.count_documents({
                 "user_id": current_user.user_id,
-                "diary_notes": {"$exists": True, "$ne": None, "$ne": ""},
+                "diary_notes": {"$exists": True, "$nin": [None, ""]},
                 "created_at": {"$gte": start_of_month}
             })
             if diary_count >= diary_limit:
@@ -653,10 +653,54 @@ async def add_visit(data: VisitCreate, current_user: User = Depends(get_current_
     
     # Check for milestones and create activity if reached
     # Milestones adjusted for 520 total landmarks
+    visit_count = await db.visits.count_documents({"user_id": current_user.user_id})
+    if visit_count in [10, 25, 50, 100, 200, 350, 500]:
+        milestone_activity_id = f"activity_{uuid.uuid4().hex[:12]}"
+        milestone_activity = {
+            "activity_id": milestone_activity_id,
+            "user_id": current_user.user_id,
+            "user_name": current_user.name,
+            "user_picture": current_user.picture,
+            "activity_type": "milestone",
+            "milestone_count": visit_count,
+            "visibility": visibility,
+            "created_at": datetime.now(timezone.utc),
+            "likes_count": 0,
+            "comments_count": 0
+        }
+        await db.activities.insert_one(milestone_activity)
 
-    # Return the created visit (exclude MongoDB _id)
+    # Check and award badges
+    await check_and_award_badges(current_user.user_id)
+
+    # Check for rank-up notification
+    user_doc_after = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0, "points": 1})
+    new_points = user_doc_after.get("points", 0) if user_doc_after else 0
+    new_rank = get_rank_for_points(new_points)
+
+    ranked_up = new_rank != old_rank
+    if ranked_up:
+        await create_notification(
+            user_id=current_user.user_id,
+            notif_type="rank_up",
+            title="Rank Up!",
+            message=f"Congratulations! You've reached the rank of {new_rank}!",
+        )
+
+    # Create visit response with completion flags
     visit.pop("_id", None)
-    return visit
+    visit_dict = Visit(**visit).dict()
+    visit_dict["ranked_up"] = ranked_up
+    if ranked_up:
+        visit_dict["new_rank"] = new_rank
+    visit_dict["country_completed"] = country_completed
+    visit_dict["continent_completed"] = continent_completed
+    if country_completed:
+        visit_dict["completed_country_name"] = completed_country_name
+    if continent_completed:
+        visit_dict["completed_continent"] = completed_continent
+
+    return visit_dict
 
 
 @router.get("/points/breakdown")
@@ -840,55 +884,6 @@ async def get_points_breakdown(current_user: User = Depends(get_current_user)):
             "grand_total": lm_total + cv_total + cont_total + dest_comp_total + cont_comp_total,
         }
     }
-
-    visit_count = await db.visits.count_documents({"user_id": current_user.user_id})
-    if visit_count in [10, 25, 50, 100, 200, 350, 500]:
-        milestone_activity_id = f"activity_{uuid.uuid4().hex[:12]}"
-        milestone_activity = {
-            "activity_id": milestone_activity_id,
-            "user_id": current_user.user_id,
-            "user_name": current_user.name,
-            "user_picture": current_user.picture,
-            "activity_type": "milestone",
-            "milestone_count": visit_count,
-            "visibility": visibility,
-            "created_at": datetime.now(timezone.utc),
-            "likes_count": 0,
-            "comments_count": 0
-        }
-        await db.activities.insert_one(milestone_activity)
-    
-    # Check and award badges
-    newly_awarded_badges = await check_and_award_badges(current_user.user_id)
-    
-    # Check for rank-up notification
-    user_doc_after = await db.users.find_one({"user_id": current_user.user_id}, {"_id": 0, "points": 1})
-    new_points = user_doc_after.get("points", 0) if user_doc_after else 0
-    new_rank = get_rank_for_points(new_points)
-    
-    ranked_up = new_rank != old_rank
-    if ranked_up:
-        await create_notification(
-            user_id=current_user.user_id,
-            notif_type="rank_up",
-            title="Rank Up!",
-            message=f"Congratulations! You've reached the rank of {new_rank}!",
-        )
-    
-    # Create visit response with completion flags
-    visit_response = Visit(**visit)
-    visit_dict = visit_response.dict()
-    visit_dict["ranked_up"] = ranked_up
-    if ranked_up:
-        visit_dict["new_rank"] = new_rank
-    visit_dict["country_completed"] = country_completed
-    visit_dict["continent_completed"] = continent_completed
-    if country_completed:
-        visit_dict["completed_country_name"] = completed_country_name
-    if continent_completed:
-        visit_dict["completed_continent"] = completed_continent
-    
-    return visit_dict
 
 # ============= ADMIN ENDPOINTS =============
 

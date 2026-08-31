@@ -808,7 +808,7 @@ async def get_country_travel_diaries(
             "landmark_id": {"$in": landmark_ids},
             "visibility": "public",
             "share_diary": True,
-            "diary_notes": {"$exists": True, "$ne": None, "$ne": ""}
+            "diary_notes": {"$exists": True, "$nin": [None, ""]}
         }},
         {"$lookup": {
             "from": "users",

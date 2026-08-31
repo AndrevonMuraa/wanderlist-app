@@ -65,7 +65,7 @@ async def create_country_visit(data: CountryVisitCreate, current_user: User = De
     if data.visited_at:
         try:
             visited_at = datetime.fromisoformat(data.visited_at.replace('Z', '+00:00'))
-        except:
+        except Exception:
             pass
     
     # Determine visibility (use provided or user's default)
@@ -601,7 +601,7 @@ async def create_user_created_visit(data: UserCreatedVisitCreate, current_user: 
     if data.visited_at:
         try:
             visited_at = datetime.fromisoformat(data.visited_at.replace('Z', '+00:00'))
-        except:
+        except Exception:
             pass
     
     # Determine visibility

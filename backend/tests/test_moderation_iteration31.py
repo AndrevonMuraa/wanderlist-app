@@ -72,7 +72,10 @@ def seeded_visit():
     """Insert a TEST_ visit owned by pro user, yield visit_id, cleanup after."""
     db = _mongo()
     vid = f"TEST_visit_{uuid.uuid4().hex[:10]}"
-    landmark = db.landmarks.find_one({}, {"_id": 0, "landmark_id": 1, "name": 1, "country_name": 1})
+    taken = [v["landmark_id"] for v in db.visits.find({"user_id": PRO_USER_ID}, {"_id": 0, "landmark_id": 1})]
+    landmark = db.landmarks.find_one(
+        {"landmark_id": {"$nin": taken}}, {"_id": 0, "landmark_id": 1, "name": 1, "country_name": 1}
+    )
     assert landmark, "no landmarks seeded"
     now = datetime.now(timezone.utc)
     db.visits.insert_one({

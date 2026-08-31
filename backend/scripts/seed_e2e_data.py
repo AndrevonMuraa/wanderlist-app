@@ -157,7 +157,7 @@ async def pick_landmark(db, continent: str, exclude_ids: set | None = None):
             continue
         lm = await db.landmarks.find_one(
             {"landmark_id": lm_id},
-            {"_id": 0, "landmark_id": 1, "name": 1, "country": 1, "continent": 1},
+            {"_id": 0, "landmark_id": 1, "name": 1, "country_id": 1, "country_name": 1, "continent": 1},
         )
         if lm:
             return lm
@@ -167,7 +167,7 @@ async def pick_landmark(db, continent: str, exclude_ids: set | None = None):
         query["landmark_id"] = {"$nin": list(exclude_ids)}
     return await db.landmarks.find_one(
         query,
-        {"_id": 0, "landmark_id": 1, "name": 1, "country": 1, "continent": 1},
+        {"_id": 0, "landmark_id": 1, "name": 1, "country_id": 1, "country_name": 1, "continent": 1},
     )
 
 
@@ -201,7 +201,7 @@ async def seed_visits_for(db, user_id: str, plan: list, dry_run=False):
             "user_id": user_id,
             "landmark_id": lm["landmark_id"],
             "landmark_name": lm.get("name", ""),
-            "country": lm.get("country", ""),
+            "country_name": lm.get("country_name", ""),
             "continent": lm.get("continent", continent),
             "photos": photos,
             "visited_at": visited_at,
@@ -233,16 +233,30 @@ async def seed_visits_for(db, user_id: str, plan: list, dry_run=False):
 async def seed_country_visits_for(db, user_id: str, countries: list, dry_run=False):
     inserted = 0
     for c in countries:
+        country_doc = await db.countries.find_one(
+            {"name": c}, {"_id": 0, "country_id": 1, "name": 1, "continent": 1}
+        )
+        if not country_doc:
+            continue
         if dry_run:
             inserted += 1
             continue
+        visited_at = datetime.now(timezone.utc) - timedelta(days=random.randint(30, 720))
         await db.country_visits.insert_one({
             "country_visit_id": f"cv_{uuid.uuid4().hex[:10]}",
             "user_id": user_id,
-            "country": c,
-            "visited_at": datetime.now(timezone.utc) - timedelta(days=random.randint(30, 720)),
+            "country_id": country_doc["country_id"],
+            "country_name": country_doc["name"],
+            "continent": country_doc.get("continent", "Unknown"),
+            "visited_at": visited_at,
+            "created_at": visited_at,
             "photos": [],
-            "diary_notes": f"E2E country visit: {c}",
+            "has_photos": False,
+            "diary": f"E2E country visit: {c}",
+            "visibility": "public",
+            "points_earned": 50,
+            "leaderboard_points_earned": 0,
+            "source": "manual",
             "_seed_source": SEED_TAG,
         })
         inserted += 1
@@ -262,16 +276,25 @@ async def seed_custom_visits_for(db, user_id: str, count: int, dry_run=False):
         if dry_run:
             inserted += 1
             continue
+        country_doc = await db.countries.find_one(
+            {"name": country}, {"_id": 0, "country_id": 1, "name": 1, "continent": 1}
+        )
+        visited_at = datetime.now(timezone.utc) - timedelta(days=random.randint(10, 365))
+        photos = UNSPLASH_PHOTOS[:2] if i % 2 == 0 else []
         await db.user_created_visits.insert_one({
-            "user_visit_id": f"ucv_{uuid.uuid4().hex[:10]}",
+            "user_created_visit_id": f"ucv_{uuid.uuid4().hex[:12]}",
             "user_id": user_id,
-            "name": name,
-            "country": country,
-            "continent": continent,
-            "photos": UNSPLASH_PHOTOS[:2] if i % 2 == 0 else [],
-            "visited_at": datetime.now(timezone.utc) - timedelta(days=random.randint(10, 365)),
+            "country_name": country_doc["name"] if country_doc else country,
+            "country_id": country_doc["country_id"] if country_doc else None,
+            "continent": country_doc.get("continent", continent) if country_doc else continent,
+            "matched_country": bool(country_doc),
+            "landmarks": [{"name": name, "photo": photos[0] if photos else None}],
+            "photos": photos,
+            "visited_at": visited_at,
+            "created_at": visited_at,
             "visibility": "friends",
-            "diary_notes": "E2E custom visit",
+            "diary": "E2E custom visit",
+            "share_diary": True,
             "_seed_source": SEED_TAG,
         })
         inserted += 1

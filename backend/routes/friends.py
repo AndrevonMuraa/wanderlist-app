@@ -4,8 +4,16 @@ Companion modules:
 - /app/backend/routes/compare.py — overlap, compare-stats, side-by-side landmark
 - /app/backend/routes/leaderboards.py — friends leaderboard
 """
-from ._social_common import *
-from fastapi import Query
+import uuid
+from datetime import datetime, timezone
+from typing import List
+
+from fastapi import APIRouter, HTTPException, Depends, Request, Query
+
+from utils.db import db
+from utils.auth import get_current_user, get_user_limits
+from utils.helpers import check_and_award_badges, create_notification
+from models.all import User, UserPublic, Friend, FriendRequest
 from utils.social_stats import friend_ids, user_stats, assert_friends_or_self
 
 router = APIRouter()

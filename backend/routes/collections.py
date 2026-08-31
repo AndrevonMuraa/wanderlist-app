@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 
 from utils.db import db
 from utils.auth import get_current_user
-from models.all import User, BucketListCreate, Collection, CollectionCreate
+from models.all import User, BucketListCreate, Collection, CollectionCreate, Landmark
 
 
 router = APIRouter()

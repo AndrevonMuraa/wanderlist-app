@@ -462,6 +462,14 @@ Frontend wiring (web + native):
 Testing (iteration_34): 17/17 backend pytest + 6/6 frontend Playwright flows GREEN.
 Pending: Batch G (Lock-screen widget via WidgetKit) deferred to separate thread before EAS prod build.
 
+### June 2026 — visits.py dead-code fix + seed schema fix + full lint cleanup ✅
+See `/app/memory/CHANGELOG.md` (top entry) for the full write-up. Summary:
+- `POST /api/visits` had lost its entire tail block (milestones, badge re-award, rank-up notification, completion flags) to unreachable dead code inside `get_points_breakdown`. Restored + `response_model=Visit` removed so the flags reach the frontend.
+- `scripts/seed_e2e_data.py` wrote schema-invalid `country_visits` (`country` instead of `country_id`/`country_name`) and `user_created_visits` — this broke `recalculate_user_points` (KeyError) and hid seeded data. Fixed, plus defensive guards in `utils/helpers.py`.
+- All 99 blocking ruff errors cleared (star imports, missing `httpx`/`Landmark` imports, F601 duplicate Mongo dict keys, bare excepts). Two of these were real latent 500s (admin broadcast push, collection landmark listing).
+- Build number bumped to **89**.
+- ⚠️ Render PROD DB still contains malformed seed docs — re-run `python -m scripts.seed_e2e_data` after deploy.
+
 ## Critical Notes
 - **RN-Web**: use `testID` not `data-testid`
 - **Suspension bypass**: super-admins can still call `/me` while suspended (prevents self-lockout)

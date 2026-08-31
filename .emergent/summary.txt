@@ -1,134 +1,156 @@
-<analysis>**original_problem_statement**: The primary goal is to bring WanderMark to a production-ready state. New product requirements in this session included completing the App Store-compliant Content Moderation & Warning system (hide/restore content, warn/suspend users), building an in-app Support Inbox for moderator-user communication, introducing a Trusted Traveler community badge to incentivize good behavior, deploying a Community Safety settings page for App Review compliance, and initiating a Your 2026 on WanderMark feature (a Spotify Wrapped-style yearly review distinguishing between memories *added* vs trips *taken*). 
+<analysis>**original_problem_statement**: The primary goal is to bring the WanderMark travel app to a production-ready state for an App Store launch. In this session, the user requested replacing passive text on the Explore page with a dynamic Your World Progress stat card, updating the Trust Center (HTML and Markdown) on their live GitHub Pages site, adjusting  to isolate preview/dev builds from the production database, and fixing the E2E seed script to populate the production database for final App Store testing. PRODUCT REQUIREMENTS: App Store compliance, isolated testing environments, E2E testing readiness.
 
 **User's preferred language**: Norwegian
-*(You MUST automatically detect the user's primary language from their messages inside the <trajectory> tag and INSTRUCT next agent to respond in the user's preferred language only. Alle svar til brukeren SKAL være på norsk.)*
+*(You MUST automatically detect the user's primary language from their messages inside the <trajectory> tag and INSTRUCT next agent to respond in the user's preferred language only. All responses to the user MUST be in Norwegian. Du SKAL svare brukeren på norsk.)*
 
-**what currently exists?**: Highly polished full-stack app (React Native/Expo + FastAPI/MongoDB). 100% perfectly balanced production DB. Comprehensive App-store compliant moderation system is fully built and tested (backend + frontend). In-app support ticketing system is live. A Trusted Traveler algorithm evaluates user safety standing and integrates an emerald shield-checkmark into the UI across the app. The backend for Your 2026 on WanderMark has just been implemented. 
+**what currently exists?**: A fully functional, production-ready travel app. A new Your World Progress card is implemented on the Explore page. The Trust Center legal pages (HTML and Markdown) are live on GitHub Pages.  is configured to route  and  builds to the Emergent sandbox, protecting the Render production database. The production database is successfully seeded with 7 test personas and realistic visit data for E2E testing.
 
-**Last working item**:
-- Last item agent was working: Your 2026 on WanderMark (Year in Travel) feature. The agent just finished building the backend endpoint () which aggregates a user's yearly stats (memories added, continents visited, busiest month, oldest trip added, etc.) based on  vs  logic. 
-- Status: IN PROGRESS
-- Agent Testing Done: Y (Backend tested via bash script and returns correct aggregated JSON)
-- Which testing method agent to use?: Frontend testing agent/screenshot tool for the upcoming UI implementation.
-- User Testing Done: N
+**Last working item**: 
+- Last item agent was working: Preparing to bump the iOS build number to 89 and instructing the user to run a new EAS build using the  profile for final E2E testing.
+- Status: USER VERIFICATION PENDING
+- Agent Testing Done: Y
+- Which testing method agent to use?: NA (User needs to respond to the prompt about bumping the build number)
+- User Testing Done: Y (User verified seed script success on Render shell)
 
 **All Pending/In progress Issue list**:
-None.
+  Issue 1: Crash in  on milestone visits (P1)
+     - Attempted fixes: None yet. Identified during a linting check.
+     - Next debug checklist: Check . Variables like , , , ,  are used without being defined in scope when a user hits a milestone (10, 25, 50 visits etc.), causing a .
+     - Why fix this issue and what will be achieved with the fix?: Prevents the backend from crashing when highly active users hit visit milestones.
+     - Status: NOT STARTED
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix? Backend
+     - Blocked on other issue: None
+
+  Issue 2: Pre-existing Lint Errors (P2)
+     - Attempted fixes: None.
+     - Next debug checklist: 99  blocking lint errors (mostly  and ) exist across , , etc.
+     - Why fix this issue and what will be achieved with the fix?: Code health and allowing the main agent to successfully use the  tool without being blocked by strict platform linting rules.
+     - Status: NOT STARTED
+     - Is recurring issue? Y
+     - Should Test frontend/backend/both after fix? Backend
+     - Blocked on other issue: None
 
 **In progress Task List**:
-Task 1: Your 2026 on WanderMark Frontend UI
-- Where to resume: Build the frontend for the Year in Travel feature. The backend endpoint exists, but the UI needs to be created. The user explicitly requested a full detailed Spotify style implementation (likely a multi-screen carousel or immersive scroll view) with a shareable hero card. 
-- What will be achieved with this? High engagement, viral shareability, and a delightful recap of the user's memories.
-- Status: IN PROGRESS
-- Should Test frontend/backend/both after fix? Frontend.
-- Blocked on something: Nothing, backend is ready.
+None actively in progress by the agent. Waiting for user input.
 
-**Upcoming and Future Tasks**:
-Upcoming Tasks:
-- P3: Deploy legal pages (Privacy/Terms website) - Critical for App Store. Set up a lightweight static Next.js project or HTML page on Vercel/Cloudflare Pages so Apple has a valid URL.
-- P3: Setup Expo Web deployment (Vercel/Cloudflare Pages) to keep the web-version and app-version perfectly synced.
-- P4: Rename GitHub Repository from  to .
+**Upcoming and Future Tasks**
+    Upcoming Tasks:
+    - P0: Bump  to 89 in .
+    - P0: User to run  to generate the release-candidate build.
+    - P0: User to execute the full E2E Test Plan () using the seeded personas on TestFlight.
+    - P1: Submit Build 89 to App Store Connect for Apple Review.
+    - P1: Run  on Render Prod DB *after* Apple Review to remove test data.
+    Future Tasks:
+    - P2 (UX): Make Your World Progress card interactive (tap to scroll to next unvisited continent).
+    - P2 (UX): Implement 2FA enrollment flow directly on the login screen instead of just showing a 403 error for admins.
 
-**Completed work in this session**:
-- Moderation Backend & Frontend complete: wired endpoints to hide/restore/delete content, warn/suspend/unsuspend users, and update feed pipelines to exclude  content (DONE)
-- Implemented frontend notification handlers and modals for , , , and  (DONE)
-- Built In-App Support Inbox (, ), allowing users to read and reply to moderator messages natively (DONE)
-- Built Trusted Traveler community badge: backend evaluation logic (), caching, auto-grandfathering script, and frontend integration () injected into Profiles, Feed cards, Comments, and Leaderboards (DONE)
-- Granted high priority status to reports submitted by Trusted Travelers (DONE)
-- Created  (Community Safety page) to cleanly present moderation policies to users and Apple Reviewers, styled consistently with the rest of the Settings pages (DONE)
-- Wired a Why we moderate link into the universal  (DONE)
-- Built  backend logic for the yearly recap (DONE)
+**Completed work in this session**
+- Implemented Your World Progress card on Explore page () (DONE)
+- Bumped build to 88 (DONE)
+- Guided user to manually deploy , , , and  to external  repository (DONE)
+- Updated  to route  and  profiles to Emergent URL, leaving  on Render (DONE)
+- Updated  to reflect new EAS profile rules (DONE)
+- Fixed  bug in  (DONE)
+- Seeded Render Production DB with E2E test data (7 personas, 50+ visits) (DONE)
+- Handled minor index hardening in  (DONE)
+- Updated  with 2FA note (DONE)
 
-**Earlier issues found/mentioned but not fixed**:
-None.
+**Earlier issues found/mentioned but not fixed**
+   Issue 1:  in 
+   - Debug checklist:  uses undefined variables during milestone logic.
+   - Why to solve this issue and what will be achieved with this? Prevents 500 errors for power users.
+   - Should Test frontend/backend/both after fix: Backend
+   - Is recurring issue? N
 
-**Known issue recurrence from previous fork**:
-- Issue recurrence in previous fork: None
-- Recurrence count: 0
-- Status: RESOLVED
+**Known issue recurrence from previous fork**
+  - Issue recurrence in previous fork: None
+  - Recurrence count: 0
+  - Status: RESOLVED
 
-**Code Architecture**:
-- Frontend: React Native with Expo Router (). Heavily componentized. Uses a unified  for context actions. Strict adherence to  and .
-- Backend: FastAPI & MongoDB (). Modular routers in . Dedicated  for isolated logic (e.g., , , ).
+**Code Architecture**
+- Frontend: React Native with Expo Router ().
+- Backend: FastAPI & MongoDB ().
+- Scripts: Database management scripts in .
+- Trust Center: Markdown legal pages and python build script to generate HTML (). Deployed externally.
 
-**Key Technical Concepts**:
-- **Trusted Traveler System**: Users earn an emerald  if they meet strict criteria (90 days account age, 10+ verified visits, 0 warnings/hidden content in last 90 days). It is designed to be highly minimalist: zero text, just the icon, which opens a bottom sheet explaining the criteria upon tap.
-- **Year in Travel Logic**: Differentiates between  (when a memory was added to WanderMark) and  (when the trip actually took place). The recap focuses heavily on Memories added in 2026, avoiding the claim that a user *traveled* to a 1995 destination this year.
-- **TestIDs**: React Native requires , NOT .
+**Key Technical Concepts**
+- **Environment Management via EAS**:  now heavily relies on the  flag.  and  intentionally point to the Emergent sandbox. ONLY  points to the Render backend and Atlas DB.
+- **In-App Legal Docs**: The app fetches  and  from the live CDN (GitHub pages) and falls back to bundled versions if network fails.
+- **E2E Seeding**: The  script tags all generated documents with . This allows safe wiping () from the production database later.
 
-**key DB schema**:
-- : Includes , , ,  (boolean), .
-- : New collection to track user-moderator inbox conversations.
+**key DB schema**
+  - :  (, , ).  (               total        used        free      shared  buff/cache   available
+Mem:        32812428     4288804     9824068       45760    19128520    28523624
+Swap:              0           0           0, ).
+  - : Combined with  for test data isolation.
 
-**changes in tech stack**:
-None.
+**changes in tech stack**
+  - None
 
-**All files of reference**:
--  (Created, ready for frontend integration)
--  (Created, support inbox endpoints)
--  (Created, trust badge endpoints)
--  (Created, trust evaluation logic)
--  (Created)
--  (Created, safety showcase)
--  (Created, admin inbox)
--  (Updated with new modals/types)
--  (Updated with safety link)
--  (Updated)
+**All files of reference** 
+-  (Updated for Your World Progress)
+-  (Updated profile env vars)
+-  &  (Pushed to external CDN)
+-  (Fixed bug, used to seed prod)
+-  (Updated rules)
+-  (Next step for user)
+-  (Contains unfixed NameError bug)
 
 **Areas that need refactoring**:
-None. Code is modular and strictly follows established conventions.
+-  (Fix milestone NameErrors).
+- General Backend Linting (Address the 99 F821/F405  errors to allow clean agent finishes).
 
-**key api endpoints**:
--  (Defined in )
--  
+**key api endpoints**
 - 
-
-**Critical Info for New Agent**:
-- **Language**: You MUST speak Norwegian.
-- **Current Goal**: You must immediately start building the frontend for Your 2026 on WanderMark. The backend  is fully wired. The user requested a full detailed Spotify Wrapped style UI. This means immersive screens, engaging stats, animations (if possible within React Native/Expo), and a final shareable hero card.
-- **React Native UI Rules**: Use  (not ). Do not use . Use the existing  and Shadcn-inspired React Native components.
-
-**documents and test reports created in this job**:
 - 
 - 
 
-**Last 10 User Messages and any pending HUMAN messages**:
-1. User confirmed preference for In-app reply for moderator messages.
-2. User reviewed the Trusted Traveler concept and asked for a more minimalist design (no text, just an icon).
-3. Agent proposed One Icon. One Tap. Zero Friction bottom sheet concept. User approved.
-4. Agent implemented the Trusted Traveler backend and frontend logic.
-5. User approved adding a Trusted Reporter priority boost to the backend.
-6. User approved adding a Community Safety settings page for App Review compliance.
-7. User noticed the Community Safety page had a different gradient than the rest of the Settings pages and requested it be fixed for consistency.
-8. Agent fixed the design to match the app's standard styling.
-9. Agent asked if they should proceed with Your 2026 on WanderMark (Year in Travel recap) and explained how to handle  vs  logic. 
-10. User enthusiastically approved: Ja blå alt foreslått, og ha full detaljert Spotify stil i tankene! 🔥🚀. 
+**Critical Info for New Agent**
+- **Language**: You MUST speak Norwegian to the user.
+- **Workflow State**: The production database is heavily seeded with test data right now. The next immediate step is to build EAS Build 89 with the  flag so the user can execute .
+- **EAS Profiles**: Remind the user that  will NOT hit production data anymore. They MUST use  for their final TestFlight E2E test.
+- **Testing Agent**: Testing agent successfully verified the seed script fix in iteration 35.
+
+**documents and test reports created in this job**
+  - 
+  -  (Updated)
+
+**Last 10 User Messages and any pending HUMAN messages** 
+ 1. User asked to proceed with seeding Prod DB for E2E testing.
+ 2. Agent provided instructions to run  on Render.
+ 3. User ran it, got DuplicateKeyError for .
+ 4. Agent fixed script, ran , and asked user to pull/re-run on Render.
+ 5. Agent tried to use  tool but was blocked by 99 pre-existing lint errors in .
+ 6. Agent identified a real NameError bug in , but deferred it to next session.
+ 7. User lost Render shell session, asked how to proceed.
+ 8. Agent gave exact commands to re-enter shell, pull, and run seed.
+ 9. User verified fix was deployed ( showed 6 results).
+ 10. User ran dry-run and actual seed successfully, outputting the final recomputed points. Agent verified logins and asked if they should bump buildNumber to 89 on Emergent or if user wants to do it locally. (Pending human response).
 
 **Project Health Check:**
-Healthy. Pytest suite is at 100% (264/264 tests passing after moderation changes). No mocked features. 
+Broken (Linting). 99  lint errors exist in the backend that block the  tool. The app functions, but a  exists in  for milestone achievements.
 
-**3rd Party Integrations**:
-- Sentry (Error Tracking) — requires User DSN
-- Expo Notifications — configured
+**3rd Party Integrations**
+- Apple App Store / TestFlight
+- RevenueCat
+- Sentry
+- Expo Notifications
 
-**Testing status**:
-- Testing agent used after significant changes: YES (iteration 31 verified the moderation suite)
-- Troubleshoot agent used after agent stuck in loop: NO
-- Test files created: 
-- Known regressions: None
+**Testing status**
+  - Testing agent used after significant changes: YES (Iteration 35 for backend script fix)
+  - Troubleshoot agent used after agent stuck in loop: NO
+  - Test files created: None
+  - Known regressions:  milestone crash (pre-existing, discovered via lint).
 
-**Credentials to test flow**:
-- Admin:  / 
-- Pro User:  / 
-- Moderator:  / 
+**Credentials to test flow:**
+(All passwords: )
+- Admin:  (Requires 2FA)
+- Pro User (Heavy): 
+- Pro User 2: 
+- Free User: 
+- Suspended: 
+- Moderator: 
 
-**What agent forgot to execute**:
-The agent built and tested the  backend endpoint but ran out of steps before building the Spotify Wrapped style React Native frontend UI.
-
-**Debugging checklist for current issue**
-Issue: Your 2026 on WanderMark Frontend UI pending
-Frontend files to create/check:
--  (Needs to be created as the main wrapper/carousel)
-- Ensure fetching uses .
-Backend files to check: 
--  (Verify the exact JSON structure it outputs to map it correctly in the frontend).</analysis>
+**What agent forgot to execute**
+The agent was unable to properly use the  tool due to strict platform linting blocking the action, though the requested work was fully completed. The agent left the  milestone bug for the next session.</analysis>

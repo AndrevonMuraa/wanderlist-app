@@ -104,6 +104,6 @@ admin/operator-only widgets. If reviewers ask, point them at the
 ## Backend test
 
 ```bash
-BASE_URL=https://wandermark-legal.preview.emergentagent.com python -m pytest \
+BASE_URL=https://travel-e2e-test.preview.emergentagent.com python -m pytest \
   /app/backend/tests/test_admin_widget.py -v
 ```

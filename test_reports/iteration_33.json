@@ -17,7 +17,7 @@
     "/app/test_reports/pytest/iteration_33_results.xml"
   ],
   "action_items": [
-    "Update stale preview URL `https://memory-recap-2026.preview.emergentagent.com` -> use env var with localhost default in: tests/test_friends_hub_iteration21.py, tests/test_shares_compare_iteration22.py, tests/test_admin_moderator_iteration29.py, tests/test_community_features_iteration17.py, tests/test_community_highlight_iteration19.py, tests/test_community_refactor_iteration26.py, tests/test_feed_parity_iteration18.py, tests/test_refactor_regression_iteration23.py, tests/test_visit_crud_iteration16.py, tests/test_wandermark_comprehensive_iteration15.py (already done for test_moderation_iteration31.py)",
+    "Update stale preview URL `https://travel-e2e-test.preview.emergentagent.com` -> use env var with localhost default in: tests/test_friends_hub_iteration21.py, tests/test_shares_compare_iteration22.py, tests/test_admin_moderator_iteration29.py, tests/test_community_features_iteration17.py, tests/test_community_highlight_iteration19.py, tests/test_community_refactor_iteration26.py, tests/test_feed_parity_iteration18.py, tests/test_refactor_regression_iteration23.py, tests/test_visit_crud_iteration16.py, tests/test_wandermark_comprehensive_iteration15.py (already done for test_moderation_iteration31.py)",
     "Optional: bump auth_rpm in utils/rate_limit.py for non-prod, OR cache the `_login` token across test files via session-scoped conftest fixture, so a full `pytest` run doesn't trip 429s.",
     "All security-critical paths (Security Dashboard, 2FA, lockdown, brute-force lockout, moderation gating, super-admin tier mutation) — verified WORKING."
   ],

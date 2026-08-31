@@ -1,5 +1,12 @@
 """Stats and progress endpoints."""
-from ._social_common import *
+import asyncio
+
+from fastapi import APIRouter, Depends
+
+from utils.db import db
+from utils.auth import get_current_user
+from models.all import User
+from ._social_common import _get_static_geo_data
 
 router = APIRouter()
 
