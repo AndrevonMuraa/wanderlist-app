@@ -1,4 +1,4 @@
-# WanderMark — E2E Manual Test Plan (Build 86)
+# WanderMark — E2E Manual Test Plan (Build 88 / rc)
 
 > Paste this entire file into a new GitHub Issue. Tick checkboxes as you go.
 > Tests are organised by **persona** so a single tester can complete a full pass.
@@ -7,7 +7,7 @@
 ## Pre-flight
 - [ ] Render production DB has been seeded with `python -m scripts.seed_e2e_data` (verify via `/admin/users` showing 7 e2e accounts)
 - [ ] Backend health check `GET /api/health` → 200
-- [ ] iOS Build 86 installed on a real device via TestFlight
+- [ ] iOS Build 88 installed on a real device via TestFlight
 - [ ] App opens to login screen with no crash
 - [ ] Sentry receives a startup breadcrumb (verify in Sentry → `wandermark-frontend`)
 
@@ -17,8 +17,8 @@
 
 | Persona | Email | Password | Role | Tier | Expected state |
 |---|---|---|---|---|---|
-| Super Admin | `test@wandermark.app` | `Test1234!` | admin | pro | Trusted, 2 visits, full admin panel |
-| Pro (heavy) | `testpro@wandermark.app` | `Test1234!` | user | pro | Trusted, ~28 visits, 370 pts |
+| Super Admin | `test@wandermark.app` | `Test1234!` | admin | pro | 2 visits, 50 pts, full admin panel (requires 2FA) |
+| Pro (heavy) | `testpro@wandermark.app` | `Test1234!` | user | pro | 28 visits, 250 pts, 3 country visits (Norway/Sweden/Iceland), 4 custom visits |
 | Pro #2 | `testpro2@wandermark.app` | `Test1234!` | user | pro | ~12 visits, 120 pts |
 | Free | `testfree@wandermark.app` | `Test1234!` | user | free | 8 visits, 60 pts, 3 tickets, 8 reports |
 | Suspended | `testsuspended@wandermark.app` | `Test1234!` | user | free | Login OK, /me 403 |
@@ -335,3 +335,21 @@
 - [ ] Once 100% green: tag release `v1.0.0-rc.86`, then submit to App Store Connect
 
 > Wipe e2e seed data after the pass: `python -m scripts.seed_e2e_data --wipe`
+
+---
+
+## 8. Regression focus for Build 88 (code that was dead until June 2026)
+
+The whole tail of `POST /api/visits` was unreachable dead code before this build.
+These flows have literally never executed in a shipped build — test them first.
+
+- [ ] **Rank-up notification**: log in as `testfree@wandermark.app` (60 pts), add landmark visits with photos until points cross a rank threshold → expect the "Rank Up!" notification in `/notifications` AND the celebration screen in add-visit
+- [ ] **Country completed**: pick a destination with few landmarks, visit all of them → expect "COUNTRY COMPLETED" celebration + 50 bonus points
+- [ ] **Continent completed**: (hard to hit manually — skip unless a small continent is close) → expect 200 bonus points
+- [ ] **Milestone activity**: `testpro2@wandermark.app` has 12 visits. Add visits up to 25 → expect a `milestone` card in the Community feed
+- [ ] **Badge re-award**: after adding a visit, open Achievements → new rank badges should appear without needing app restart
+- [ ] **Seeded country visits visible**: `testpro` → Journey/Explore should show Norway, Sweden and Iceland as visited destinations (these were invisible in the previous seed due to a schema bug)
+- [ ] **Seeded custom visits visible**: `testpro` → 4 custom visits ("My grandmother's village", "That little cafe in Paris", ...) render with landmark names
+- [ ] **Admin broadcast push**: super-admin → send a broadcast notification (this path had a missing `httpx` import and would have 500'd)
+- [ ] **Collections / bucket list**: open a collection with landmarks (this path had a missing `Landmark` import and would have 500'd)
+- [ ] **Shared diary filters**: Community → landmark diary tips still render (the Mongo `$ne` duplicate-key bug silently dropped a filter condition)
