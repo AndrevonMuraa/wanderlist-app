@@ -437,6 +437,9 @@ Frontend (`app/admin/e2e-status.tsx`):
 - "Nearby travelers" discovery
 
 ## Key Test Credentials
+> **Prod DB (Render/Atlas) re-seeded June 2026** with schema-correct data. Prod user_ids:
+> admin `user_93975dd6c00c` · mod `user_c1613f5eefd1` · testpro `user_24c1f1d364ed` · testfree `user_5e61c4a36310` · testpro2 `user_07de9eb0ea1e` · suspended `user_711a30fe9974` · new `user_7ec1fcfb42d7`
+> Verified on prod: all 6 logins 200, suspended `/auth/me` → 403, 8 pending reports, `country_visits` all have `country_id`/`country_name`/`continent`/`points_earned: 50`.
 - Super Admin: `test@wandermark.app` / `Test1234!`
 - Pro: `testpro@wandermark.app` / `Test1234!`
 - Moderator: `mod@wandermark.app` / `Test1234!`
