@@ -28,78 +28,80 @@ else:
 db = client[os.environ.get('DB_NAME', 'wandermark')]
 
 async def create_indexes():
-    """Create database indexes for better query performance."""
-    try:
+    """Create database indexes for better query performance.
+
+    Each index is created inside its own try/except so a single conflict
+    (e.g. an existing index with different options) does not skip the rest.
+    """
+    index_specs = [
         # User lookups
-        await db.users.create_index("user_id", unique=True)
-        await db.users.create_index("default_privacy")
-        await db.users.create_index([("leaderboard_points", -1)])
-        await db.users.create_index([("points", -1)])
-        await db.users.create_index("username")
-        
+        ("users", "user_id", {"unique": True}),
+        ("users", "default_privacy", {}),
+        ("users", [("leaderboard_points", -1)], {}),
+        ("users", [("points", -1)], {}),
+        ("users", "username", {}),
         # Visit lookups
-        await db.visits.create_index("user_id")
-        await db.visits.create_index("landmark_id")
-        await db.visits.create_index("visit_id", unique=True)
-        await db.visits.create_index([("user_id", 1), ("landmark_id", 1)], unique=True)
-        await db.visits.create_index("visibility")
-        await db.visits.create_index([("visibility", 1), ("visited_at", -1)])
-        
+        ("visits", "user_id", {}),
+        ("visits", "landmark_id", {}),
+        ("visits", "visit_id", {"unique": True}),
+        ("visits", [("user_id", 1), ("landmark_id", 1)], {"unique": True}),
+        ("visits", "visibility", {}),
+        ("visits", [("visibility", 1), ("visited_at", -1)], {}),
         # Country visits
-        await db.country_visits.create_index("user_id")
-        await db.country_visits.create_index("country_visit_id", unique=True)
-        await db.country_visits.create_index([("user_id", 1), ("country_id", 1)])
-        
+        ("country_visits", "user_id", {}),
+        ("country_visits", "country_visit_id", {"unique": True}),
+        ("country_visits", [("user_id", 1), ("country_id", 1)], {}),
         # Activities / feed
-        await db.activities.create_index([("created_at", -1)])
-        await db.activities.create_index("user_id")
-        await db.activities.create_index("activity_id")
-        await db.activities.create_index([("user_id", 1), ("created_at", -1)])
-        
+        ("activities", [("created_at", -1)], {}),
+        ("activities", "user_id", {}),
+        ("activities", "activity_id", {}),
+        ("activities", [("user_id", 1), ("created_at", -1)], {}),
+        ("activities", "visit_id", {}),
         # Landmarks
-        await db.landmarks.create_index("landmark_id")
-        await db.landmarks.create_index("country_id")
-        await db.landmarks.create_index("continent")
-        await db.landmarks.create_index([("country_id", 1), ("category", 1)])
-        
-        # Social - FIXED: use db.friends (matches route code), not db.friendships
-        await db.friends.create_index("user_id")
-        await db.friends.create_index("friend_id")
-        await db.friends.create_index([("user_id", 1), ("status", 1)])
-        await db.friends.create_index([("friend_id", 1), ("status", 1)])
-        
+        ("landmarks", "landmark_id", {}),
+        ("landmarks", "country_id", {}),
+        ("landmarks", "continent", {}),
+        ("landmarks", [("country_id", 1), ("category", 1)], {}),
+        # Social — db.friends (matches route code), not db.friendships
+        ("friends", "user_id", {}),
+        ("friends", "friend_id", {}),
+        ("friends", [("user_id", 1), ("status", 1)], {}),
+        ("friends", [("friend_id", 1), ("status", 1)], {}),
         # Likes & comments
-        await db.likes.create_index("activity_id")
-        await db.likes.create_index([("activity_id", 1), ("user_id", 1)])
-        await db.comments.create_index("activity_id")
-        await db.comments.create_index("comment_id", unique=True)
-        
-        # Activities - visit_id lookup (for visit-detail comments)
-        await db.activities.create_index("visit_id")
-        
-        # Photo upvotes (was completely missing!)
-        await db.photo_upvotes.create_index("photo_id")
-        await db.photo_upvotes.create_index([("photo_id", 1), ("user_id", 1)])
-        
-        # User-created visits (was completely missing!)
-        await db.user_created_visits.create_index("user_id")
-        await db.user_created_visits.create_index([("visibility", 1), ("visited_at", -1)])
-        
+        ("likes", "activity_id", {}),
+        ("likes", [("activity_id", 1), ("user_id", 1)], {}),
+        ("comments", "activity_id", {}),
+        ("comments", "comment_id", {"unique": True}),
+        # Photo upvotes
+        ("photo_upvotes", "photo_id", {}),
+        ("photo_upvotes", [("photo_id", 1), ("user_id", 1)], {}),
+        # User-created visits
+        ("user_created_visits", "user_id", {}),
+        ("user_created_visits", [("visibility", 1), ("visited_at", -1)], {}),
         # Notifications
-        await db.notifications.create_index([("user_id", 1), ("created_at", -1)])
-
+        ("notifications", [("user_id", 1), ("created_at", -1)], {}),
         # Admin & security audit collections
-        await db.users.create_index("email", unique=True, sparse=True)
-        await db.users.create_index("locked_until", sparse=True)
-        await db.users.create_index("role", sparse=True)
-        await db.admin_logs.create_index([("created_at", -1)])
-        await db.admin_logs.create_index([("admin_id", 1), ("created_at", -1)])
-        await db.admin_logs.create_index([("action", 1), ("created_at", -1)])
-        await db.tier_quota.create_index([("admin_id", 1), ("date", 1)], unique=True)
-        await db.support_tickets.create_index("ticket_id", unique=True, sparse=True)
-        await db.support_tickets.create_index([("user_id", 1), ("updated_at", -1)])
-        await db.support_tickets.create_index([("status", 1), ("updated_at", -1)])
+        ("users", "email", {"unique": True, "sparse": True}),
+        ("users", "locked_until", {"sparse": True}),
+        ("users", "role", {"sparse": True}),
+        ("admin_logs", [("created_at", -1)], {}),
+        ("admin_logs", [("admin_id", 1), ("created_at", -1)], {}),
+        ("admin_logs", [("action", 1), ("created_at", -1)], {}),
+        ("tier_quota", [("admin_id", 1), ("date", 1)], {"unique": True}),
+        ("support_tickets", "ticket_id", {"unique": True, "sparse": True}),
+        ("support_tickets", [("user_id", 1), ("updated_at", -1)], {}),
+        ("support_tickets", [("status", 1), ("updated_at", -1)], {}),
+    ]
 
-        logger.info("Database indexes created successfully")
-    except Exception as e:
-        logger.warning(f"Index creation warning: {e}")
+    created = 0
+    skipped = 0
+    for collection, keys, options in index_specs:
+        try:
+            await db[collection].create_index(keys, **options)
+            created += 1
+        except Exception as e:
+            # Index conflict, name clash, or offline collection — never fail startup.
+            skipped += 1
+            logger.warning(f"Skipped index on {collection}({keys}): {e}")
+
+    logger.info(f"Database indexes: {created} created, {skipped} skipped")

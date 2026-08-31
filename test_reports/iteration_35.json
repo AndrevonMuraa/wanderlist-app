@@ -1,0 +1,35 @@
+{
+  "summary": "Backend-only verification of the idempotency fix in /app/backend/scripts/seed_e2e_data.py. Reproduced the exact prod pre-condition (untagged historical visits on fallback landmarks + UNIQUE index on visits.user_id_1_landmark_id_1), then ran --dry-run, two consecutive real runs, a harsh collision run (ALL 17 fallback landmarks pre-taken untagged for testfree), --wipe and re-seed. No DuplicateKeyError, no crash, zero duplicate (user_id, landmark_id) visits, stable counts across runs. 18 passed / 1 skipped (super-admin 2FA gate, by design).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "utils/db.py::create_indexes", "issue": "Index creation is wrapped in ONE try/except. The compound visits(user_id,landmark_id) index already existed as NON-unique in the preview DB, so create_index(unique=True) raised IndexKeySpecsConflict (code 86) and silently aborted ALL subsequent index creations (visits.visibility, country_visits, activities, landmarks, friends, notifications, users.email unique, support_tickets, tier_quota). Fix: per-index try/except (or a named index + drop-and-recreate on conflict). Environment note: I dropped/recreated the index as unique to mirror prod, so the warning is gone now, but the code defect remains."},
+      {"endpoint": "POST /api/auth/login (test@wandermark.app)", "issue": "Super-admin login returns 403 {requires_2fa_setup:true} with the correct seeded password (wrong password correctly returns 401). Credentials are valid; this is the by-design 2FA enrolment gate. Requirement 'all 7 personas can login' is therefore satisfied only in the credential sense — worth documenting in test_credentials.md."}
+    ]
+  },
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_seed_idempotency_iteration35.py",
+    "/app/test_reports/pytest/seed_iteration35.xml"
+  ],
+  "action_items": [
+    "Optional hardening: split utils/db.py create_indexes() into per-index try/except so one IndexKeySpecsConflict no longer skips the remaining ~20 indexes (production Render DB may be missing indexes for the same reason).",
+    "Consider adding a one-time migration/guard in the seed script (or a scripts/dedupe_visits.py) that drops the non-unique compound index and recreates it as unique after deduping — prod DBs seeded before the unique index existed can still hold duplicates.",
+    "Document the super-admin 2FA login gate (403 requires_2fa_setup) in /app/memory/test_credentials.md so App-Store reviewers/testers don't read it as a broken account."
+  ],
+  "critical_code_review_comments": [
+    "seed_visits_for(): pre-load of existing landmark_ids + `taken` set + $nin exclusion + DuplicateKeyError safety net all verified present and effective — verified empirically, not just by reading code.",
+    "pick_landmark(): fallback query correctly applies {'landmark_id': {'$nin': [...]}} and returns None when nothing is available; the caller skips that plan entry instead of crashing. Silent skip means visit counts can silently shrink on a heavily-visited user — acceptable but consider printing a warning when a plan entry is skipped.",
+    "wipe_seed() only deletes _seed_source='e2e' docs; confirmed users and 36 pre-existing non-seed visits survived --wipe, so login credentials remain intact."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_seed_idempotency_iteration35.py (new regression suite)"
+  ],
+  "success_rate": {"backend": "100% (18 passed, 1 by-design skip)", "frontend": "not tested (per request)"},
+  "seed_data_creation": "Ran seed_e2e_data multiple times against test_database. Final state: testpro 28 seed verified visits (37 total incl. 9 real historical), testpro2 12, testfree 8, testadmin 2, 3 accepted friendships, 2 pending friend requests, 8 pending reports, 3 support tickets, 4 country visits, 6 custom visits, 2 hidden visits. Also deduped 5 stale duplicate eiffel-tower visits and recreated visits(user_id,landmark_id) as a UNIQUE index to match prod. All temporary probe scripts deleted.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "7 personas / Test1234!; test@wandermark.app is behind mandatory super-admin 2FA (login returns 403 requires_2fa_setup)",
+  "context_for_next_testing_agent": "The DuplicateKeyError bug is FIXED and verified under three collision scenarios: (1) 3 untagged fallback-landmark visits, (2) two back-to-back real runs, (3) all 17 fallback landmarks pre-taken untagged for a persona (seed still produced full 8 visits via the $nin fallback path). Local visits index is now UNIQUE like prod, so future dupes will surface immediately. Regression suite: /app/backend/tests/test_seed_idempotency_iteration35.py (uses EXPO_PUBLIC_BACKEND_URL from /app/frontend/.env — note this repo is Expo, NOT REACT_APP_BACKEND_URL). Frontend intentionally untested.",
+  "rca_of_the_issue": "Original prod crash: wipe_seed() removes only _seed_source='e2e' docs, so testpro's real historical visits to france_eiffel_tower etc. survived; seed_visits_for() then re-picked the same deterministic LANDMARK_FALLBACKS ids and insert_one violated the unique (user_id, landmark_id) index. The fix pre-loads every existing landmark_id for the user into a `taken` set, excludes it from both the deterministic fallback list and the $nin continent query, adds each newly-picked id to `taken` within the same run, and catches DuplicateKeyError as a last-resort no-op. Verified: no crash, no duplicates, idempotent counts across repeated runs."
+}

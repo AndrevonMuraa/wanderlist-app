@@ -1,5 +1,33 @@
 # WanderMark Changelog
 
+## May 18, 2026 (later) — Seed script duplicate-key fix + index hardening
+
+### Bug (P0)
+`scripts/seed_e2e_data.py` crashed on production Render Shell with `DuplicateKeyError` on the `visits.user_id_1_landmark_id_1` unique index. Root cause: `pick_landmark()` always returned the first landmark from `LANDMARK_FALLBACKS_BY_CONTINENT` for a given continent, and `seed_visits_for()` inserted without checking for existing user+landmark pairs. Users like `testpro@` had real historical visits (not tagged `_seed_source: "e2e"`) that overlapped with the seed's picks — but the `wipe_seed()` step only removes tagged docs, so real visits remained and caused collisions on re-seed.
+
+### Fix (verified)
+- `pick_landmark(db, continent, exclude_ids)` — new `exclude_ids` param filters out landmarks the user already has (both from fallback list AND `$nin`-based DB fallback)
+- `seed_visits_for()` now:
+  1. Pre-loads all existing `landmark_id`s for the user (seed + real historical)
+  2. Passes them as `exclude_ids` on every pick
+  3. Tracks in-loop picks (`taken` set) to avoid picking same landmark twice per plan
+  4. Wraps `insert_one` in try/except `DuplicateKeyError` as a final safety net
+- Fully idempotent — verified via testing_agent under 3 collision scenarios (18/18 pass, iteration_35.json)
+
+### Adjacent hardening
+- `utils/db.py::create_indexes()` — refactored from one giant try/except to per-index try/except. Previously an `IndexKeySpecsConflict` on visits(user_id,landmark_id) silently aborted the remaining ~20 index creations. Now every index is attempted independently and skips are logged individually. Prevents silent under-indexing on prod DBs seeded before the unique index existed.
+
+### Docs
+- `/app/memory/test_credentials.md` — documented super-admin 2FA gate (login returns 403 requires_2fa_setup by design)
+
+### Files
+- `/app/backend/scripts/seed_e2e_data.py`
+- `/app/backend/utils/db.py`
+- `/app/backend/tests/test_seed_idempotency_iteration35.py` (new regression suite)
+- `/app/memory/test_credentials.md`
+
+---
+
 ## May 18, 2026 — Explore "Your World Progress" Card (Build 88)
 
 ### UX uplift

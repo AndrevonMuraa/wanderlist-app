@@ -1,8 +1,10 @@
 # WanderMark test credentials
 
-> Last updated: May 2026 — Build 86 — populated by `scripts/seed_e2e_data.py`.
-> All accounts marked `seed_source: "e2e"` are namespaced and safe to wipe via
+> Last updated: **May 18, 2026** — Build 88+ — populated by `scripts/seed_e2e_data.py`.
+> All accounts marked `_seed_source: "e2e"` are namespaced and safe to wipe via
 > `python -m scripts.seed_e2e_data --wipe`.
+
+> ⚠️ **Super-admin 2FA gate**: `test@wandermark.app` returns **HTTP 403** with `{"requires_2fa_setup": true}` on login until 2FA is enrolled. This is **by design** (super-admin accounts must have 2FA before use). Password is still `Test1234!` — the credentials are correct. To enroll: visit `/admin/2fa-setup` in the app after regular login. For automated tests that don't need admin, use `testpro@wandermark.app` instead.
 
 ## Active accounts
 

@@ -149,21 +149,50 @@ async def wipe_seed(db):
     return total
 
 
-async def pick_landmark(db, continent: str):
+async def pick_landmark(db, continent: str, exclude_ids: set | None = None):
+    exclude_ids = exclude_ids or set()
+    # Try named fallbacks first (deterministic, popular landmarks) — skip any already taken.
     for lm_id in LANDMARK_FALLBACKS_BY_CONTINENT.get(continent, []):
-        lm = await db.landmarks.find_one({"landmark_id": lm_id}, {"_id": 0, "landmark_id": 1, "name": 1, "country": 1, "continent": 1})
+        if lm_id in exclude_ids:
+            continue
+        lm = await db.landmarks.find_one(
+            {"landmark_id": lm_id},
+            {"_id": 0, "landmark_id": 1, "name": 1, "country": 1, "continent": 1},
+        )
         if lm:
             return lm
-    # Fallback: any landmark on that continent
-    return await db.landmarks.find_one({"continent": continent}, {"_id": 0, "landmark_id": 1, "name": 1, "country": 1, "continent": 1})
+    # Fallback: any landmark on that continent the user hasn't taken yet.
+    query = {"continent": continent}
+    if exclude_ids:
+        query["landmark_id"] = {"$nin": list(exclude_ids)}
+    return await db.landmarks.find_one(
+        query,
+        {"_id": 0, "landmark_id": 1, "name": 1, "country": 1, "continent": 1},
+    )
 
 
 async def seed_visits_for(db, user_id: str, plan: list, dry_run=False):
-    """Create verified landmark visits per plan. Plan items: (continent, n_photos, privacy, days_ago)."""
+    """Create verified landmark visits per plan. Plan items: (continent, n_photos, privacy, days_ago).
+
+    Idempotent w.r.t. the unique index (user_id, landmark_id):
+      * Pre-loads all landmark_ids already visited by this user (seed OR real historical data).
+      * Excludes them from pick_landmark so seed picks fresh landmarks.
+      * Also tracks landmarks picked earlier in the same run (in-loop exclusion).
+      * Catches DuplicateKeyError as a final safety net (skips and continues instead of crashing).
+    """
+    from pymongo.errors import DuplicateKeyError
     inserted = 0
+    # Pre-load all existing landmark_ids for this user (real + seed) so we don't collide.
+    existing = await db.visits.find(
+        {"user_id": user_id},
+        {"_id": 0, "landmark_id": 1},
+    ).to_list(length=10000)
+    taken: set = {v["landmark_id"] for v in existing if v.get("landmark_id")}
+
     for continent, n_photos, privacy, days_ago in plan:
-        lm = await pick_landmark(db, continent)
+        lm = await pick_landmark(db, continent, exclude_ids=taken)
         if not lm:
+            # No available landmark on this continent — skip this plan entry.
             continue
         photos = UNSPLASH_PHOTOS[:n_photos] if n_photos > 0 else []
         visited_at = datetime.now(timezone.utc) - timedelta(days=days_ago)
@@ -186,10 +215,18 @@ async def seed_visits_for(db, user_id: str, plan: list, dry_run=False):
             "_seed_source": SEED_TAG,
         }
         if dry_run:
+            taken.add(lm["landmark_id"])
             inserted += 1
             continue
-        await db.visits.insert_one(doc)
-        inserted += 1
+        try:
+            await db.visits.insert_one(doc)
+            taken.add(lm["landmark_id"])
+            inserted += 1
+        except DuplicateKeyError:
+            # Another process (or a race) already took this landmark for this user.
+            # Skip and continue — seed remains idempotent.
+            taken.add(lm["landmark_id"])
+            continue
     return inserted
 
 
